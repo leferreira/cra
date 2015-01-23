@@ -16,16 +16,16 @@
 		<wicket.version>6.18.0</wicket.version>
 		<spring.version>4.1.4.RELEASE</spring.version>
 		<slf4j-log4j12.version>1.7.10</slf4j-log4j12.version>
-		<hibernate-core-version>4.1.7.Final</hibernate-core-version>
+		<hibernate-core.version>4.1.7.Final</hibernate-core.version>
 		<javassist.version>3.9.0.GA</javassist.version>
 		<junit.version>4.10</junit.version>
 		<c3p0.version>0.9.1.2</c3p0.version>
-		<mysql.version>5.1.21</mysql.version>
 		<joda-time.version>2.2</joda-time.version>
 		<commons-codec.version>1.7</commons-codec.version>
 		<commons-lang.version>2.6</commons-lang.version>
 		<commons-beanutils.version>1.8.3</commons-beanutils.version>
 		<commons-collections.version>3.2.1</commons-collections.version>
+		<postgresql.version>9.1-901.jdbc4</postgresql.version>
 	</properties>
 
 	<dependencies>
@@ -90,7 +90,7 @@
 			<artifactId>commons-codec</artifactId>
 			<version>${commons-codec.version}</version>
 		</dependency>
-		
+
 		<!-- Jakarta Commons -->
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -112,7 +112,20 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate-core-version}</version>
+			<version>${hibernate-core.version}</version>
+		</dependency>
+
+		<!-- PostgreSql -->
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>${c3p0.version}</version>
 		</dependency>
 
 	</dependencies>
