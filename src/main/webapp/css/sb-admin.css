@@ -1,10 +1,36 @@
+@charset 'UTF-8';
+@import url("../font-awesome/css/font-awesome.min.css");
 /* Global Styles */
 
 /* ------------------------------- */
 
+/*
+===================================================================
+---- Fonts
+===================================================================
+*/
+
+@font-face {
+	font-family: 'WebFont';
+	src: url('../font-awesome/fonts/fontawesome-webfont.eot');
+	src: /*local('../font-awesome/fonts/Futura PT Web Bold'), local('../font-awesome/fonts/FuturaPTWebBold'),*/
+	     url('../font-awesome/fonts/fontawesome-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('../font-awesome/fonts/fontawesome-webfont.woff') format('woff'),
+	     url('../font-awesome/fonts/fontawesome-webfont.ttf') format('truetype'),
+	     url('../font-awesome/fonts/fontawesome-webfont.svg#FuturaWeb') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face{
+	font-family: 'FuturaWeb';
+	src: url('../font-awesome/fonts/font.ttf') format('truetype');
+}
+
 body {
     padding-top: 100px;
-    background-color: #00a779;
+    background-color: #3d8cbe;
+    font-family: sans-serif;
 }
 
 @media(min-width:768px) {
@@ -60,9 +86,9 @@ body {
 
 .navbar-default{
 	background-color: #fff;
-	color: #00a779;
-	border-color: #00a779;
-	border-bottom-width: 2px;
+	color: #3d8cbe;
+	border-bottom: 1px solid #d9d9d9;
+	box-shadow: 0 1px #f4f4f4;
 }
 
 .navbar-top-links .dropdown-menu li {
@@ -78,7 +104,7 @@ body {
 }
 
 .green{
-	color:#00a779;
+	color:#3d8cbe;
 }
 
 .ola {
