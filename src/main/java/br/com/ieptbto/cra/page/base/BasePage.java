@@ -10,6 +10,8 @@ import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.app.IWebApplication;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
+import br.com.ieptbto.cra.page.login.LoginPage;
+import br.com.ieptbto.cra.page.login.TrocaSenhaPanel;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
 
 /**
@@ -55,7 +57,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	}
 
 	private void adicionarTrocaSenha() {
-		// TODO add(new TrocaSenhaPanel("trocaSenhaPanel", getUser()));
+		add(new TrocaSenhaPanel("trocaSenhaPanel", getUser()));
 	}
 
 	private void addLogout() {
@@ -65,7 +67,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 			@Override
 			public void onClick() {
 				getSession().invalidateNow();
-				// TODO setResponsePage(LoginPage.class);
+				setResponsePage(LoginPage.class);
 			}
 		});
 	}

@@ -27,6 +27,12 @@
 	src: url('../font-awesome/fonts/font.ttf') format('truetype');
 }
 
+@font-face {
+	font-family: 'TitilliumWebRegular';
+	src: url('../fonts/TitilliumWebRegular.eot');
+	src: local('TitilliumWebRegular'), url('../fonts/TitilliumWebRegular.woff') format('woff'), url('../fonts/TitilliumWebRegular.ttf') format('truetype');
+}
+
 body {
     padding-top: 100px;
     background-color: #3d8cbe;
@@ -110,6 +116,7 @@ body {
 .ola {
 	margin-left: 2%;
 	margin-top:  1%;
+	font-family: 'TitilliumWebRegular';
 }
 
 .navbar-top-links .dropdown-menu li:last-child {

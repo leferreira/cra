@@ -22,6 +22,7 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
+import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.security.ISecureApplication;
 import br.com.ieptbto.cra.security.UserRoleAuthorizationStrategy;
 import br.com.ieptbto.cra.security.UserRolesAuthorizer;
@@ -57,8 +58,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	// page for auth
 	@Override
 	public Class<? extends Page> getLoginPage() {
-		// return LoginPage.class;
-		return HomePage.class;
+		return LoginPage.class;
 	}
 
 	@Override
@@ -74,7 +74,6 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
-		getMarkupSettings().setStripWicketTags(true);
 
 		getRequestCycleSettings().setTimeout(Duration.minutes(10));
 
@@ -98,6 +97,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	}
 
 	private void montaPaginas() {
+		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
 
 	}
