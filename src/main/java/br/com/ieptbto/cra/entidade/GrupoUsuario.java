@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.entidade;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -27,8 +28,8 @@ public class GrupoUsuario extends AbstractEntidade<GrupoUsuario> {
 	 * @return the id
 	 */
 	@Id
-	@Column(name = "ID_GRUPO_USUARIO")
-	@GeneratedValue
+	@Column(name = "ID_GRUPO_USUARIO", columnDefinition = "serial")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}

@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.entidade;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -31,8 +32,8 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, 
 
 	@Override
 	@Id
-	@Column(name = "ID_USUARIO")
-	@GeneratedValue
+	@Column(name = "ID_USUARIO", columnDefinition = "serial")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int getId() {
 		return this.id;
 	}

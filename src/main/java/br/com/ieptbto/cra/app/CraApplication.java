@@ -27,6 +27,7 @@ import br.com.ieptbto.cra.security.ISecureApplication;
 import br.com.ieptbto.cra.security.UserRoleAuthorizationStrategy;
 import br.com.ieptbto.cra.security.UserRolesAuthorizer;
 import br.com.ieptbto.cra.security.UserSession;
+import br.com.ieptbto.cra.util.CargaInicialPage;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
 
@@ -99,6 +100,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	private void montaPaginas() {
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
+		mountPage("CargaInicial", CargaInicialPage.class);
 
 	}
 
