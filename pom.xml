@@ -126,6 +126,13 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate-core.version}</version>
 		</dependency>
+		
+		<!-- Hibernate Audit -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-envers</artifactId>
+			<version>${hibernate-core.version}</version>
+		</dependency>
 
 		<!-- PostgreSql -->
 		<dependency>
