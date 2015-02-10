@@ -14,11 +14,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.util.io.IClusterable;
 import org.apache.wicket.util.string.Strings;
+import org.hibernate.envers.Audited;
 
 import br.com.ieptbto.cra.security.IAuthModel;
 
 @SuppressWarnings("serial")
 @Entity
+@Audited
 @Table(name = "USUARIO")
 @org.hibernate.annotations.Table(appliesTo = "USUARIO")
 public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, IAuthModel {

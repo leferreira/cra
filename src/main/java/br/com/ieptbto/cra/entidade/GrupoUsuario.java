@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
+import org.hibernate.envers.Audited;
 
 /**
  * 
@@ -15,6 +16,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.Roles;
  * 
  */
 @Entity
+@Audited
 @Table(name = "GRUPO_USUARIO")
 @org.hibernate.annotations.Table(appliesTo = "GRUPO_USUARIO")
 public class GrupoUsuario extends AbstractEntidade<GrupoUsuario> {
