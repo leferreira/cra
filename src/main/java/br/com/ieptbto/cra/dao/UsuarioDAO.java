@@ -26,6 +26,8 @@ public class UsuarioDAO extends AbstractBaseDAO {
 
 	@Autowired
 	GrupoUsuarioDAO grupoUsuarioDAO;
+	@Autowired
+	InstituicaoDAO instituicaoDAO;
 
 	public Usuario buscarUsuarioPorLogin(String login) {
 		Criteria criteria = getCriteria(Usuario.class);
@@ -43,6 +45,7 @@ public class UsuarioDAO extends AbstractBaseDAO {
 			usuario.setNome("Teste");
 			usuario.setSenha(Usuario.cryptPass("teste1234"));
 			usuario.setGrupoUsuario(grupoUsuarioDAO.buscarGrupoInicial("Super Administrador"));
+			usuario.setInstituicao(instituicaoDAO.buscarInstituicaoInicial("CRA"));
 			save(usuario);
 			transaction.commit();
 

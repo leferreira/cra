@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -31,6 +32,7 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, 
 	private String senha;
 	private String email;
 	private GrupoUsuario grupoUsuario;
+	private Instituicao instituicao;
 
 	@Override
 	@Id
@@ -60,6 +62,15 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, 
 	public GrupoUsuario getGrupoUsuario() {
 		return grupoUsuario;
 	}
+	
+	/*
+	 * EDIT
+	 * **/
+	@ManyToOne
+	@JoinColumn(name="INSTITUICAO_ID")
+	public Instituicao getInstituicao() {
+		return instituicao;
+	}
 
 	@Column(name = "EMAIL")
 	public String getEmail() {
@@ -88,6 +99,10 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, 
 
 	public void setGrupoUsuario(GrupoUsuario grupoUsuario) {
 		this.grupoUsuario = grupoUsuario;
+	}
+	
+	public void setInstituicao(Instituicao instituicao) {
+		this.instituicao = instituicao;
 	}
 
 	public boolean isSenha(String pass) {
