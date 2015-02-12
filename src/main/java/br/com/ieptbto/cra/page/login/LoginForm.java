@@ -25,12 +25,11 @@ public class LoginForm extends BaseForm<Usuario> {
 	@Override
 	public void onSubmit() {
 		Usuario usuario = usuarioMediator.autenticar(getModelObject().getLogin(), getModelObject().getSenha());
-
+		
 		if (usuario != null) {
 			getSession().setUser(usuario);
 			setResponsePage(getApp().getHomePage());
 		}
-
 		transError("Login ou senha inválido(s).");
 	}
 }

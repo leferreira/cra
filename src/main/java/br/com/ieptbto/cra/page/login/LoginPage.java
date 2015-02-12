@@ -54,5 +54,4 @@ public class LoginPage extends AbstractWebPage<Usuario> {
 	protected IModel<Usuario> getModel() {
 		return new CompoundPropertyModel<Usuario>(usuario);
 	}
-
 }
