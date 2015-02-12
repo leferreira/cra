@@ -1,5 +1,7 @@
 package br.com.ieptbto.cra.page.login;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.util.tester.FormTester;
@@ -20,7 +22,7 @@ import br.com.ieptbto.cra.base.BaseTest;
 public class LoginPageTest extends BaseTest {
 	private final String loginLinkPath = "anonymPanel:url_login";
 	private final String logoutLinkPath = "url_logout";
-	private final String formPath = "loginPanel:loginForm";
+	private final String formPath = "loginForm";
 
 	private FormTester form;
 
@@ -30,6 +32,8 @@ public class LoginPageTest extends BaseTest {
 		tester.startPage(LoginPage.class);
 		tester.assertNoErrorMessage();
 		tester.assertNoInfoMessage();
+
+		form = tester.newFormTester(formPath);
 	}
 
 	@Test
@@ -40,5 +44,34 @@ public class LoginPageTest extends BaseTest {
 		tester.assertRenderedPage(LoginPage.class);
 		tester.assertComponent("loginForm:login", RequiredTextField.class);
 		tester.assertComponent("loginForm:senha", PasswordTextField.class);
+	}
+
+	@Test
+	public void testLoginUserFailInvalideUser() {
+
+		form.setValue("login", "1" + usuario.getLogin());
+		form.setValue("senha", usuario.getSenha());
+		form.submit();
+
+		// check errors
+		tester.assertErrorMessages(new String[] { "Login ou senha inválido(s)." });
+		tester.assertNoInfoMessage();
+	}
+
+	@Test
+	public void testLoginUserSuccessful() {
+
+		form.setValue("login", USUARIO_TESTE);
+		form.setValue("senha", SENHA_TESTE);
+		form.submit();
+
+		tester.assertNoErrorMessage();
+		tester.assertNoInfoMessage();
+
+		assertEquals(usuario, session.getUser());
+
+		// tester.assertVisible(logoutLinkPath);
+
+		// tester.assertLabel("userGreeting", "Guten Tag, test@test.test!");
 	}
 }

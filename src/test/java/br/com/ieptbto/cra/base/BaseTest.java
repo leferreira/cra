@@ -26,8 +26,8 @@ import br.com.ieptbto.cra.security.UserSession;
  */
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public class BaseTest extends AbstractJUnit4SpringContextTests {
-	public static final String USUARIO_TESTE = "Teste";
-	public static final String SENHA_TESTE = "senha";
+	public static final String USUARIO_TESTE = "teste";
+	public static final String SENHA_TESTE = "teste1234";
 	protected WicketTester tester;
 	protected UserSession<Usuario> session;
 	protected Usuario usuario;
