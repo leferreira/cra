@@ -81,5 +81,4 @@ public class GrupoUsuarioDAO extends AbstractBaseDAO {
 		criteria.add(Restrictions.eq("grupo", grupo));
 		return GrupoUsuario.class.cast(criteria.uniqueResult());
 	}
-
 }

@@ -1,0 +1,36 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR">
+	<fieldset>
+		<legend>Dados de Usuario</legend>
+		<div class="panel-body-right">
+			<!-- Text input Nome -->
+			<div class="form-group">
+				<label for="nome">Nome:</label> <input id="nome" name="nome"
+					onkeyup="this.value = this.value.toUpperCase()" type="text"
+					wicket:id="nome" placeholder="Nome" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="nome">Login</label> <input id="loginUsuario"
+					name="loginUsuario" type="text" wicket:id="login"
+					placeholder="Login" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="senha">Senha:</label> <input
+					id="senha" name="senha" type="password" wicket:id="senha"
+					placeholder="Senha" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="email">E-mail:</label> <input id="email" name="email"
+					type="text" placeholder="E-mail" wicket:id="email"
+					class="form-control" />
+			</div>
+		</div>
+		<!--<div class="panel-body-left">
+				<div class="form-group">
+					<label for="confirmarSenha">Confimar Senha:</label> 
+					<input id="confirmarSenha" name="confirmarSenha" type="password" placeholder="Repita a senha" wicket:id="confirmarSenha"
+						class="form-control" />
+				</div>
+			</div>
+			-->
+	</fieldset>
+</wicket:panel>
