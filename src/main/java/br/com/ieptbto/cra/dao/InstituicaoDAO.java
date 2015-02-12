@@ -7,11 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 
-@SuppressWarnings({ "unchecked" })
 @Repository
 public class InstituicaoDAO extends AbstractBaseDAO {
 
-	public void inserirInstituicaoInicial(){
+	public void inserirInstituicaoInicial() {
 		Transaction transaction = getBeginTransation();
 		try {
 			Instituicao instituicao = new Instituicao();
@@ -26,8 +25,8 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		}
 
 	}
-	
-	public Instituicao buscarInstituicaoInicial(String instituicao){
+
+	public Instituicao buscarInstituicaoInicial(String instituicao) {
 		inserirInstituicaoInicial();
 		Criteria criteria = getCriteria(Instituicao.class);
 		criteria.add(Restrictions.eq("instituicao", instituicao));

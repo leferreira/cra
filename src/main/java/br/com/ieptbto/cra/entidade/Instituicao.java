@@ -16,7 +16,7 @@ import org.hibernate.envers.Audited;
 @Audited
 @Table(name = "INSTITUICAO")
 @org.hibernate.annotations.Table(appliesTo = "INSTITUICAO")
-public class Instituicao extends AbstractEntidade<Instituicao>{
+public class Instituicao extends AbstractEntidade<Instituicao> {
 
 	private static final long serialVersionUID = 1L;
 	private int id;
@@ -24,38 +24,37 @@ public class Instituicao extends AbstractEntidade<Instituicao>{
 	private String cnpj;
 	private List<Usuario> listaUsuarios;
 	private TipoInstituicao tipoInstituicao;
-	
+
 	@Id
 	@Column(name = "ID_INSTITUICAO", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
-	
+
 	@Column(name = "INSTITUICAO")
 	public String getInstituicao() {
 		return instituicao;
 	}
-	
+
 	@Column(name = "CNPJ")
 	public String getCnpj() {
 		return cnpj;
 	}
-	
-	@OneToMany(mappedBy="instituicao")
+
+	@OneToMany(mappedBy = "instituicao")
 	public List<Usuario> getListaUsuarios() {
 		return listaUsuarios;
 	}
 
-	
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public void setInstituicao(String instituicao) {
 		this.instituicao = instituicao;
 	}
-	
+
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
 	}
@@ -63,7 +62,7 @@ public class Instituicao extends AbstractEntidade<Instituicao>{
 	public void setListaUsuarios(List<Usuario> listaUsuarios) {
 		this.listaUsuarios = listaUsuarios;
 	}
-	
+
 	@Override
 	public int compareTo(Instituicao entidade) {
 		// TODO Auto-generated method stub

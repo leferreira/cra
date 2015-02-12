@@ -9,7 +9,7 @@ import org.apache.wicket.model.Model;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.util.EmailValidator;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "unused" })
 public class UsuarioInputPanel extends Panel {
 
 	private Usuario usuario;
@@ -19,8 +19,8 @@ public class UsuarioInputPanel extends Panel {
 		this.usuario = usuario;
 		adicionarCampos();
 	}
-	
-	public UsuarioInputPanel(String id){
+
+	public UsuarioInputPanel(String id) {
 		super(id);
 		adicionarCampos();
 	}
@@ -30,7 +30,7 @@ public class UsuarioInputPanel extends Panel {
 		add(campoLogin());
 		add(campoSenha());
 		add(campoEmail());
-		//add(campoConfirmarSenha());
+		// add(campoConfirmarSenha());
 	}
 
 	private TextField<String> campoNome() {
@@ -48,7 +48,6 @@ public class UsuarioInputPanel extends Panel {
 		textField.setOutputMarkupId(true);
 		return textField;
 	}
-	
 
 	private TextField<String> campoSenha() {
 		PasswordTextField senha = new PasswordTextField("senha");
@@ -58,14 +57,14 @@ public class UsuarioInputPanel extends Panel {
 		return senha;
 	}
 
-	/*private TextField<String> campoConfirmarSenha(){
-		PasswordTextField confirmarSenha = new PasswordTextField("confirmarSenha");
-		confirmarSenha.setLabel(new Model<String>("Confimar Senha"));
-		//confirmarSenha.setOutputMarkupId(true);
-		confirmarSenha.setRequired(true);
-		return confirmarSenha;
-	}*/
-	
+	/*
+	 * private TextField<String> campoConfirmarSenha(){ PasswordTextField
+	 * confirmarSenha = new PasswordTextField("confirmarSenha");
+	 * confirmarSenha.setLabel(new Model<String>("Confimar Senha"));
+	 * //confirmarSenha.setOutputMarkupId(true);
+	 * confirmarSenha.setRequired(true); return confirmarSenha; }
+	 */
+
 	private TextField<String> campoEmail() {
 		TextField<String> textField = new TextField<String>("email");
 		textField.setLabel(new Model<String>("E-mail"));

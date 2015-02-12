@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.entidade;
 
-public class TipoInstituicao extends AbstractEntidade<TipoInstituicao>{
+@SuppressWarnings("serial")
+public class TipoInstituicao extends AbstractEntidade<TipoInstituicao> {
 
 	@Override
 	public int getId() {

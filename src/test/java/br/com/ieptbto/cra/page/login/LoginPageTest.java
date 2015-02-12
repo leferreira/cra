@@ -16,6 +16,7 @@ import br.com.ieptbto.cra.base.BaseTest;
  *
  */
 
+@SuppressWarnings("unused")
 public class LoginPageTest extends BaseTest {
 	private final String loginLinkPath = "anonymPanel:url_login";
 	private final String logoutLinkPath = "url_logout";
