@@ -1,7 +1,5 @@
 package br.com.ieptbto.cra.page.login;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.util.tester.FormTester;
@@ -68,10 +66,8 @@ public class LoginPageTest extends BaseTest {
 		tester.assertNoErrorMessage();
 		tester.assertNoInfoMessage();
 
-		assertEquals(usuario, session.getUser());
+		tester.assertVisible(logoutLinkPath);
 
-		// tester.assertVisible(logoutLinkPath);
-
-		// tester.assertLabel("userGreeting", "Guten Tag, test@test.test!");
+		tester.assertLabel("userGreeting", "Olá Teste");
 	}
 }
