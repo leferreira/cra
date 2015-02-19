@@ -24,12 +24,14 @@ import br.com.ieptbto.cra.security.IAuthModel;
 @Audited
 @Table(name = "USUARIO")
 @org.hibernate.annotations.Table(appliesTo = "USUARIO")
-public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, IAuthModel {
+public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
+		IAuthModel {
 
 	private int id;
 	private String nome;
 	private String login;
 	private String senha;
+	private String contato;
 	private String email;
 	private GrupoUsuario grupoUsuario;
 	private Instituicao instituicao;
@@ -57,17 +59,19 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, 
 		return senha;
 	}
 
+	@Column(name = "CONTATO")
+	public String getContato() {
+		return contato;
+	}
+
 	@OneToOne
 	@JoinColumn(name = "ID_GRUPO_USUARIO")
 	public GrupoUsuario getGrupoUsuario() {
 		return grupoUsuario;
 	}
-	
-	/*
-	 * EDIT
-	 * **/
+
 	@ManyToOne
-	@JoinColumn(name="INSTITUICAO_ID")
+	@JoinColumn(name = "INSTITUICAO_ID")
 	public Instituicao getInstituicao() {
 		return instituicao;
 	}
@@ -97,10 +101,14 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, 
 		this.senha = senha;
 	}
 
+	public void setContato(String contato) {
+		this.contato = contato;
+	}
+
 	public void setGrupoUsuario(GrupoUsuario grupoUsuario) {
 		this.grupoUsuario = grupoUsuario;
 	}
-	
+
 	public void setInstituicao(Instituicao instituicao) {
 		this.instituicao = instituicao;
 	}
@@ -152,5 +160,4 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, 
 	public boolean hasRole(String role) {
 		return this.grupoUsuario.getRoles().hasRole(role);
 	}
-
 }
