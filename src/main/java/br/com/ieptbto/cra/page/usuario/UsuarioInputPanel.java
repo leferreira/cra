@@ -1,18 +1,33 @@
 package br.com.ieptbto.cra.page.usuario;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.entidade.GrupoUsuario;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.mediator.GrupoUsuarioMediator;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.EmailValidator;
 
 @SuppressWarnings({ "serial", "unused" })
 public class UsuarioInputPanel extends Panel {
 
 	private Usuario usuario;
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	private GrupoUsuarioMediator grupoUsuarioMediator;
+	private DropDownChoice<Instituicao> comboInstituicao;
+	private DropDownChoice<GrupoUsuario> comboGrupoUsuario;
 
 	public UsuarioInputPanel(String id, IModel<Usuario> model, Usuario usuario) {
 		super(id, model);
@@ -30,7 +45,10 @@ public class UsuarioInputPanel extends Panel {
 		add(campoLogin());
 		add(campoSenha());
 		add(campoEmail());
-		// add(campoConfirmarSenha());
+		//add(campoConfirmarSenha());
+		add(campoContato());
+		add(comboInstituicao());
+		add(comboGrupoDoUsuario());
 	}
 
 	private TextField<String> campoNome() {
@@ -57,18 +75,44 @@ public class UsuarioInputPanel extends Panel {
 		return senha;
 	}
 
-	/*
-	 * private TextField<String> campoConfirmarSenha(){ PasswordTextField
-	 * confirmarSenha = new PasswordTextField("confirmarSenha");
-	 * confirmarSenha.setLabel(new Model<String>("Confimar Senha"));
-	 * //confirmarSenha.setOutputMarkupId(true);
-	 * confirmarSenha.setRequired(true); return confirmarSenha; }
-	 */
+	private TextField<String> campoConfirmarSenha() {
+		PasswordTextField confirmarSenha = new PasswordTextField(
+				"confirmarSenha");
+		confirmarSenha.setOutputMarkupId(true);
+		confirmarSenha.setRequired(true);
+		return confirmarSenha;
+	}
 
 	private TextField<String> campoEmail() {
 		TextField<String> textField = new TextField<String>("email");
 		textField.setLabel(new Model<String>("E-mail"));
 		textField.add(new EmailValidator());
 		return textField;
+	}
+
+	private TextField<String> campoContato() {
+		TextField<String> textField = new TextField<String>("contato");
+		textField.setLabel(new Model<String>("Contato"));
+		textField.add(new EmailValidator());
+		return textField;
+	}
+
+	private Component comboInstituicao() {
+		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>(
+				"instituicao");
+		comboInstituicao = new DropDownChoice<Instituicao>(
+				"instituicao",
+				instituicaoMediator.listaDeInstituicao(), renderer);
+		comboInstituicao.setOutputMarkupId(true);
+		comboInstituicao.setRequired(true);
+		return comboInstituicao;
+	}
+
+	private Component comboGrupoDoUsuario() {
+		IChoiceRenderer<GrupoUsuario> renderer = new ChoiceRenderer<GrupoUsuario>("grupo");
+		comboGrupoUsuario = new DropDownChoice<GrupoUsuario>(
+				"grupoUsuario", grupoUsuarioMediator.listaDeGrupos() , renderer);
+		comboGrupoUsuario.setOutputMarkupId(true);
+		return comboGrupoUsuario;
 	}
 }

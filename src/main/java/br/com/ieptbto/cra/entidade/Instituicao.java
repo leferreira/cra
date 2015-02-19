@@ -23,7 +23,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	private String instituicao;
 	private String cnpj;
 	private List<Usuario> listaUsuarios;
-	private TipoInstituicao tipoInstituicao;
+	//private TipoInstituicao tipoInstituicao;
 
 	@Id
 	@Column(name = "ID_INSTITUICAO", columnDefinition = "serial")
@@ -67,5 +67,10 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	public int compareTo(Instituicao entidade) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public String toString() {
+		return "Instituicao [instituicao=" + instituicao + "]";
 	}
 }

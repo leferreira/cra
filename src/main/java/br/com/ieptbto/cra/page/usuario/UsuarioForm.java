@@ -23,7 +23,25 @@ public class UsuarioForm extends BaseForm<Usuario> {
 	}
 	
 	@Override
-	public void onSubmit(){
-		
+	public void onSubmit() {
+		Usuario usuario = getModelObject();
+		if (getModelObject().getId() != 0) {
+			Usuario usuarioSalvo = usuarioMediator.alterar(usuario);
+			if (usuarioSalvo != null) {
+				info("Usuário alterado com sucesso.");
+				//setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
+			} else {
+				error("Usuario não alterado");
+			}
+		} else {
+
+			Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
+			if (usuarioSalvo != null) {
+				info("Usuário criado com sucesso");
+				//setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
+			} else {
+				error("Usuario não criado");
+			}
+		}
 	}
 }
