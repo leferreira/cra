@@ -38,7 +38,6 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 
 	@Override
 	protected IModel<Usuario> getModel() {
-		// TODO Auto-generated method stub
 		return new CompoundPropertyModel<Usuario>(usuario);
 	}
 }

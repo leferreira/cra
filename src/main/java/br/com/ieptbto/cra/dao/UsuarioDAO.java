@@ -44,8 +44,10 @@ public class UsuarioDAO extends AbstractBaseDAO {
 			usuario.setLogin("teste");
 			usuario.setNome("Teste");
 			usuario.setSenha(Usuario.cryptPass("teste1234"));
-			usuario.setGrupoUsuario(grupoUsuarioDAO.buscarGrupoInicial("Super Administrador"));
-			usuario.setInstituicao(instituicaoDAO.buscarInstituicaoInicial("CRA"));
+			usuario.setGrupoUsuario(grupoUsuarioDAO
+					.buscarGrupoInicial("Super Administrador"));
+			usuario.setInstituicao(instituicaoDAO
+					.buscarInstituicaoInicial("CRA"));
 			save(usuario);
 			transaction.commit();
 
@@ -72,6 +74,7 @@ public class UsuarioDAO extends AbstractBaseDAO {
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
+			usuario.setSenha(Usuario.cryptPass(usuario.getSenha()));
 			session.update(usuario);
 			transaction.commit();
 
@@ -82,6 +85,10 @@ public class UsuarioDAO extends AbstractBaseDAO {
 		return usuario;
 	}
 
+	public void delete(){
+		
+	}
+	
 	public List<Usuario> buscarUsuario(String login, String nome) {
 		Criteria criteria = getCriteria(Usuario.class);
 
@@ -100,4 +107,11 @@ public class UsuarioDAO extends AbstractBaseDAO {
 		return listaUsuario;
 	}
 
+	public List<Usuario> listarTodosUsuarios() {
+		Criteria criteria = getCriteria(Usuario.class);
+		criteria.addOrder(Order.asc("nome"));
+
+		List<Usuario> listaUsuario = criteria.list();
+		return listaUsuario;
+	}
 }

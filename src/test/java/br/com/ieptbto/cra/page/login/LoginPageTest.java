@@ -64,7 +64,6 @@ public class LoginPageTest extends BaseTest {
 		form.submit();
 
 		tester.assertNoErrorMessage();
-		tester.assertNoInfoMessage();
 
 		tester.assertVisible(logoutLinkPath);
 

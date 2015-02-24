@@ -23,6 +23,7 @@ import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
+import br.com.ieptbto.cra.page.usuario.ListaUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.IncluirUsuarioPage;
 import br.com.ieptbto.cra.security.ISecureApplication;
 import br.com.ieptbto.cra.security.UserRoleAuthorizationStrategy;
@@ -103,6 +104,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("HomePage", HomePage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
 		mountPage("IncluirUsuario", IncluirUsuarioPage.class);
+		mountPage("ListaUsuario", ListaUsuarioPage.class);
 	}
 
 	/**

@@ -16,10 +16,9 @@ import br.com.ieptbto.cra.dao.UsuarioDAO;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.page.base.HomePage;
-import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.security.UserSession;
 
-/**
+/** 
  * 
  * @author Lefer
  *
@@ -65,6 +64,5 @@ public class BaseTest extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void testInit() {
 		tester.startPage(HomePage.class);
-		tester.assertRenderedPage(LoginPage.class);
 	}
 }

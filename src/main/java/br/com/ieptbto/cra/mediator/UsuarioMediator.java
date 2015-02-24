@@ -29,8 +29,7 @@ public class UsuarioMediator {
 	}
 
 	public Usuario alterar(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return null;
+		return usuarioDao.alterar(usuario);
 	}
 
 	public Usuario salvar(Usuario usuario) {
@@ -40,6 +39,9 @@ public class UsuarioMediator {
 		return null;
 	}
 
+	public void remover(Usuario usuario) {
+	}
+
 	/**
 	 * Verifica se o login que será criado não existe no sistema
 	 * 
@@ -47,14 +49,16 @@ public class UsuarioMediator {
 	 * @return
 	 */
 	private boolean isLoginNaoExiste(Usuario usuario) {
-		Usuario usuarioPesquisado = usuarioDao.buscarUsuarioPorLogin(usuario.getLogin());
+		Usuario usuarioPesquisado = usuarioDao.buscarUsuarioPorLogin(usuario
+				.getLogin());
 		if (usuarioPesquisado == null) {
 			return true;
 		}
 		return false;
 	}
 
-	public boolean trocarSenha(String senha, String novaSenha, String confirmaSenha, Usuario usuario) {
+	public boolean trocarSenha(String senha, String novaSenha,
+			String confirmaSenha, Usuario usuario) {
 		return false;
 
 	}
@@ -62,6 +66,10 @@ public class UsuarioMediator {
 	public void cargaInicial() {
 		usuarioDao.incluirUsuarioDeTeste();
 
+	}
+
+	public List<Usuario> listarTodos() {
+		return usuarioDao.listarTodosUsuarios();
 	}
 
 }
