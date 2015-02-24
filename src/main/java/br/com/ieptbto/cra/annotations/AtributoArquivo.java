@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @author Lefer
  *
  */
-@Target(value = ElementType.FIELD)
+@Target(value = { ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface AtributoArquivo {
@@ -25,11 +25,19 @@ public @interface AtributoArquivo {
 	int tamanho();
 
 	/**
-	 * Defina a posição inicial dos campos
+	 * Define a posição inicial dos campos
 	 * 
 	 * @return
 	 */
 	int posicao();
+
+	/**
+	 * 
+	 * Define a ordem do campo
+	 * 
+	 * @return
+	 */
+	int ordem();
 
 	/**
 	 * Definição das validações dos campos
