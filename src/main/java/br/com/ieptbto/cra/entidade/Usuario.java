@@ -33,6 +33,7 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
 	private String senha;
 	private String contato;
 	private String email;
+	private boolean status;
 	private GrupoUsuario grupoUsuario;
 	private Instituicao instituicao;
 
@@ -54,7 +55,7 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
 		return login;
 	}
 
-	@Column(name = "SENHA")
+	@Column(name = "SENHA", nullable = false)
 	public String getSenha() {
 		return senha;
 	}
@@ -65,7 +66,7 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
 	}
 
 	@OneToOne
-	@JoinColumn(name = "ID_GRUPO_USUARIO")
+	@JoinColumn(name = "GRUPO_USUARIO_ID")
 	public GrupoUsuario getGrupoUsuario() {
 		return grupoUsuario;
 	}
@@ -79,6 +80,11 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
 	@Column(name = "EMAIL")
 	public String getEmail() {
 		return email;
+	}
+
+	@Column(name = "STATUS")
+	public boolean isStatus() {
+		return status;
 	}
 
 	public void setEmail(String email) {
@@ -111,6 +117,10 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
 
 	public void setInstituicao(Instituicao instituicao) {
 		this.instituicao = instituicao;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	public boolean isSenha(String pass) {

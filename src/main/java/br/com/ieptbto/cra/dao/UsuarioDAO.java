@@ -44,10 +44,12 @@ public class UsuarioDAO extends AbstractBaseDAO {
 			usuario.setLogin("teste");
 			usuario.setNome("Teste");
 			usuario.setSenha(Usuario.cryptPass("teste1234"));
+			usuario.setContato("99999999");
+			usuario.setStatus(true);
 			usuario.setGrupoUsuario(grupoUsuarioDAO
 					.buscarGrupoInicial("Super Administrador"));
 			usuario.setInstituicao(instituicaoDAO
-					.buscarInstituicaoInicial("CRA"));
+					.buscarInstituicao("CRA"));
 			save(usuario);
 			transaction.commit();
 

@@ -1,10 +1,14 @@
 package br.com.ieptbto.cra.page.usuario;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -28,6 +32,7 @@ public class UsuarioInputPanel extends Panel {
 	private GrupoUsuarioMediator grupoUsuarioMediator;
 	private DropDownChoice<Instituicao> comboInstituicao;
 	private DropDownChoice<GrupoUsuario> comboGrupoUsuario;
+	private RadioChoice<String> radioStatus;
 
 	public UsuarioInputPanel(String id, IModel<Usuario> model, Usuario usuario) {
 		super(id, model);
@@ -47,6 +52,7 @@ public class UsuarioInputPanel extends Panel {
 		add(campoEmail());
 		//add(campoConfirmarSenha());
 		add(campoContato());
+		//add(campoStatus());
 		add(comboInstituicao());
 		add(comboGrupoDoUsuario());
 	}
@@ -96,6 +102,11 @@ public class UsuarioInputPanel extends Panel {
 		return textField;
 	}
 
+	private Component campoStatus(){
+		List<String> status = Arrays.asList(new String[]{"Sim", "Não"});
+		return new RadioChoice<String>("status", status);
+	}
+	
 	private Component comboInstituicao() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>(
 				"instituicao");
