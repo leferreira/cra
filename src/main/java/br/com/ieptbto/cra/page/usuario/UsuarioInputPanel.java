@@ -112,6 +112,7 @@ public class UsuarioInputPanel extends Panel {
 		comboGrupoUsuario = new DropDownChoice<GrupoUsuario>(
 				"grupoUsuario", grupoUsuarioMediator.listaDeGrupos() , renderer);
 		comboGrupoUsuario.setOutputMarkupId(true);
+		comboGrupoUsuario.setRequired(true);
 		return comboGrupoUsuario;
 	}
 }

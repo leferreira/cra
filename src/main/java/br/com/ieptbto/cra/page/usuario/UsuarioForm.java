@@ -10,37 +10,40 @@ import br.com.ieptbto.cra.page.base.BaseForm;
 
 @SuppressWarnings("serial")
 public class UsuarioForm extends BaseForm<Usuario> {
-	
+
 	@SpringBean
 	UsuarioMediator usuarioMediator;
 
 	public UsuarioForm(String id, IModel<Usuario> model) {
 		super(id, model);
 	}
-	
-	public UsuarioForm(String id, Usuario colaboradorModel){
+
+	public UsuarioForm(String id, Usuario colaboradorModel) {
 		this(id, new CompoundPropertyModel<Usuario>(colaboradorModel));
 	}
-	
+
 	@Override
-	public void onSubmit(){
+	public void onSubmit() {
 		Usuario usuario = getModelObject();
-		if(getModelObject().getId()!=0){
-			System.out.println("Update");
+		if (getModelObject().getId() != 0) {
 			Usuario usuarioSalvo = usuarioMediator.alterar(usuario);
-			if(usuarioSalvo != null){
+			if (usuarioSalvo != null) {
 				info("Usuário alterado com sucesso.");
 				setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
-			}else{
-				error("Usuario não alterado");
+			} else {
+				error("Usuário não alterado");
 			}
 		} else {
-			Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
-			if (usuarioSalvo != null) {
-				info("Usuário criado com sucesso");
-				setResponsePage(new DetalharUsuarioPage(usuario));
+			if (usuarioMediator.isLoginNaoExiste(usuario)) {
+				Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
+				if (usuarioSalvo != null) {
+					info("Usuário criado com sucesso");
+					setResponsePage(new DetalharUsuarioPage(usuario));
+				} else {
+					error("Usuário não criado");
+				}
 			} else {
-				error("Usuario não criado");
+				error("Usuário não criado. O login já existe!");
 			}
 		}
 	}

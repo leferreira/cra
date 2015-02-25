@@ -48,7 +48,7 @@ public class UsuarioMediator {
 	 * @param usuario
 	 * @return
 	 */
-	private boolean isLoginNaoExiste(Usuario usuario) {
+	public boolean isLoginNaoExiste(Usuario usuario) {
 		Usuario usuarioPesquisado = usuarioDao.buscarUsuarioPorLogin(usuario
 				.getLogin());
 		if (usuarioPesquisado == null) {
