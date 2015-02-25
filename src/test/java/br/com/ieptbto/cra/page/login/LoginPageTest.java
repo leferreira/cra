@@ -52,7 +52,7 @@ public class LoginPageTest extends BaseTest {
 		form.submit();
 
 		// check errors
-		tester.assertErrorMessages(new String[] { "Login ou senha inválido(s)." });
+		tester.assertErrorMessages(new String[] { "Login ou senha inválido(s) ou não está ativo." });
 		tester.assertNoInfoMessage();
 	}
 

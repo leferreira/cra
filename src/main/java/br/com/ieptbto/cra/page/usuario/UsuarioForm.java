@@ -35,6 +35,7 @@ public class UsuarioForm extends BaseForm<Usuario> {
 			}
 		} else {
 			if (usuarioMediator.isLoginNaoExiste(usuario)) {
+				usuario.setStatus(true);
 				Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
 				if (usuarioSalvo != null) {
 					info("Usuário criado com sucesso");

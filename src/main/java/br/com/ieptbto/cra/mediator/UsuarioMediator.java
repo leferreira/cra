@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.ieptbto.cra.dao.GrupoUsuarioDAO;
+import br.com.ieptbto.cra.dao.InstituicaoDAO;
+import br.com.ieptbto.cra.dao.TipoInstituicaoDAO;
 import br.com.ieptbto.cra.dao.UsuarioDAO;
 import br.com.ieptbto.cra.entidade.Usuario;
 
@@ -14,11 +17,19 @@ public class UsuarioMediator {
 
 	@Autowired
 	UsuarioDAO usuarioDao;
+	@Autowired
+	InstituicaoDAO instituicaoDao;
+	@Autowired
+	TipoInstituicaoDAO tipoInstituicaoDao;
+	@Autowired
+	GrupoUsuarioDAO grupoUsuarioDao;
 
 	public Usuario autenticar(String login, String senha) {
 		Usuario usuario = usuarioDao.buscarUsuarioPorLogin(login);
 		if (usuario != null && usuario.isSenha(senha)) {
-			return usuario;
+			if(usuario.isStatus()==true){
+				return usuario;
+			}
 		}
 		return null;
 	}
@@ -37,9 +48,6 @@ public class UsuarioMediator {
 			return usuarioDao.criarUsuario(usuario);
 		}
 		return null;
-	}
-
-	public void remover(Usuario usuario) {
 	}
 
 	/**
@@ -64,6 +72,9 @@ public class UsuarioMediator {
 	}
 
 	public void cargaInicial() {
+		tipoInstituicaoDao.inserirTipoInstituicaoInicial();
+		instituicaoDao.inserirInstituicaoInicial();
+		grupoUsuarioDao.inserirGruposCargaInicial();
 		usuarioDao.incluirUsuarioDeTeste();
 
 	}

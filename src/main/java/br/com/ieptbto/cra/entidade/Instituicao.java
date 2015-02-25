@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,7 +25,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	private String instituicao;
 	private String cnpj;
 	private List<Usuario> listaUsuarios;
-	//private TipoInstituicao tipoInstituicao;
+	private TipoInstituicao tipoInstituicao;
 
 	@Id
 	@Column(name = "ID_INSTITUICAO", columnDefinition = "serial")
@@ -32,14 +34,20 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return id;
 	}
 
-	@Column(name = "INSTITUICAO")
+	@Column(name = "INSTITUICAO", nullable=false)
 	public String getInstituicao() {
 		return instituicao;
 	}
 
-	@Column(name = "CNPJ")
+	@Column(name = "CNPJ", nullable=false)
 	public String getCnpj() {
 		return cnpj;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "TIPO_INSTITUICAO_ID")
+	public TipoInstituicao getTipoInstituicao() {
+		return tipoInstituicao;
 	}
 
 	@OneToMany(mappedBy = "instituicao")
@@ -65,12 +73,15 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 
 	@Override
 	public int compareTo(Instituicao entidade) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public String toString() {
 		return "Instituicao [instituicao=" + instituicao + "]";
+	}
+
+	public void setTipoInstituicao(TipoInstituicao tipoInstituicao) {
+		this.tipoInstituicao = tipoInstituicao;
 	}
 }

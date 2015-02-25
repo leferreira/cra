@@ -1,7 +1,8 @@
 <head>
-<meta charset="UTF8"> 
+<meta charset="UTF8">
 </head>
-<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR"
+	charset="UTF8">
 	<fieldset style="text-align: left;">
 		<legend>Dados de Usuário</legend>
 		<div class="panel-body-right"
@@ -27,9 +28,9 @@
 			</div>
 			<div class="form-group">
 				<label for="confirmarSenha">Confimar Senha:</label>
-<!-- 				 <input	id="confirmarSenha" name="confirmarSenha" type="password" -->
-<!-- 					placeholder="Repita a senha" wicket:id="confirmarSenha" -->
-<!-- 					class="form-control" /> -->
+				<!-- 				 <input	id="confirmarSenha" name="confirmarSenha" type="password" -->
+				<!-- 					placeholder="Repita a senha" wicket:id="confirmarSenha" -->
+				<!-- 					class="form-control" /> -->
 			</div>
 		</div>
 	</fieldset>
@@ -43,6 +44,13 @@
 					type="text" placeholder="E-mail" wicket:id="email"
 					class="form-control" />
 			</div>
+			<div class="control-group">
+				<label class="control-label" for="instituicao">Instituição:</label>
+				<div class="controls">
+					<select wicket:id="instituicao" id="instituicao"
+						class="form-control"></select>
+				</div>
+			</div>
 		</div>
 		<div class="panel-body-left"
 			style="float: left; width: 45%; margin-right: 15px;">
@@ -52,22 +60,21 @@
 					name="contato" type="text" placeholder="Contato"
 					wicket:id="contato" class="form-control" />
 			</div>
-		</div>
-		<div class="panel-body-right"
-			style="float: left; width: 45%; margin-right: 15px;">
 			<div class="control-group">
-				<label class="control-label" for="instituicao">Instituição:</label>
-				<div class="controls">
-					<select wicket:id="instituicao" id="instituicao" class="form-control"></select>
-				</div>
-			</div>
-			<br />
-			<div class="control-group">
-				<label class="control-label" for="grupoUsuario">Grupo do Usuário:</label>
+				<label class="control-label" for="grupoUsuario">Grupo do
+					Usuário:</label>
 				<div class="controls">
 					<select wicket:id="grupoUsuario" id="grupo" class="form-control"></select>
 				</div>
 			</div>
 		</div>
+<!-- 		<br /> -->
+<!-- 		<div class="panel-body-right" -->
+<!-- 			style="float: left; width: 45%; margin-right: 15px; margin-top: 15px;"> -->
+<!-- 			<div class="form-group"> -->
+<!-- 				<label for="ativo">Ativo:</label> <br /> -->
+<!-- 					<span wicket:id="status"></span> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
 	</fieldset>
 </wicket:panel>

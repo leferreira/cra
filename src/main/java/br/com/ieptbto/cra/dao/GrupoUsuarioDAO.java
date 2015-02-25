@@ -76,7 +76,6 @@ public class GrupoUsuarioDAO extends AbstractBaseDAO {
 	}
 
 	public GrupoUsuario buscarGrupoInicial(String grupo) {
-		inserirGruposCargaInicial();
 		Criteria criteria = getCriteria(GrupoUsuario.class);
 		criteria.add(Restrictions.eq("grupo", grupo));
 		return GrupoUsuario.class.cast(criteria.uniqueResult());
