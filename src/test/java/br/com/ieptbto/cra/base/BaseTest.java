@@ -14,11 +14,13 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import br.com.ieptbto.cra.app.CraApplication;
 import br.com.ieptbto.cra.dao.UsuarioDAO;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
+import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.security.UserSession;
 
-/** 
+/**
  * 
  * @author Lefer
  *
@@ -52,6 +54,14 @@ public class BaseTest extends AbstractJUnit4SpringContextTests {
 		usuario.setLogin(USUARIO_TESTE);
 		usuario.setSenha(SENHA_TESTE);
 		usuario.setGrupoUsuario(getGrupo("Administrador", Roles.ADMIN));
+		usuario.setInstituicao(getInstituicao());
+	}
+
+	private Instituicao getInstituicao() {
+		Instituicao instituicao = new Instituicao();
+		instituicao.setInstituicao("CRA TESTE");
+		instituicao.setTipoInstituicao(new TipoInstituicao());
+		return instituicao;
 	}
 
 	private GrupoUsuario getGrupo(String nomeGrupo, String roles) {
