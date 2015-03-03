@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Target(value = { ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface AtributoArquivo {
+public @interface IAtributoArquivo {
 
 	/**
 	 * Define o tamanho do campo

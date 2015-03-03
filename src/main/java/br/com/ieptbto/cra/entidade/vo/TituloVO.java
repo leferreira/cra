@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
-import br.com.ieptbto.cra.annotations.AtributoArquivo;
+import br.com.ieptbto.cra.annotations.IAtributoArquivo;
 
 /**
  * 
@@ -15,212 +15,212 @@ import br.com.ieptbto.cra.annotations.AtributoArquivo;
 public class TituloVO {
 
 	@XmlAttribute(name = "t01")
-	@AtributoArquivo(ordem = 1, posicao = 1, tamanho = 1, descricao = "Identificar o Registro Transação no arquivo. Constante 1", obrigatoriedade = true, validacao = "1", tipo = Integer.class)
+	@IAtributoArquivo(ordem = 1, posicao = 1, tamanho = 1, descricao = "Identificar o Registro Transação no arquivo. Constante 1", obrigatoriedade = true, validacao = "1", tipo = Integer.class)
 	private String identificacaoRegistro;
 
 	@XmlAttribute(name = "t02")
-	@AtributoArquivo(ordem = 2, posicao = 2, tamanho = 3, descricao = "Identificar o código do banco/portador.Preencher com o código de compensação do Banco ou o número de identificação do portador", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 2, posicao = 2, tamanho = 3, descricao = "Identificar o código do banco/portador.Preencher com o código de compensação do Banco ou o número de identificação do portador", obrigatoriedade = true)
 	private String codigoPortador;
 
 	@XmlAttribute(name = "t03")
-	@AtributoArquivo(ordem = 3, posicao = 5, tamanho = 15, descricao = "Identificar a Agência e Código do Cedente do Título/Cliente", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 3, posicao = 5, tamanho = 15, descricao = "Identificar a Agência e Código do Cedente do Título/Cliente", obrigatoriedade = true)
 	private String agenciaCodigoCedente;
 
 	@XmlAttribute(name = "t04")
-	@AtributoArquivo(ordem = 4, posicao = 20, tamanho = 45, descricao = "Identificar o Cedente/Favorecido", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 4, posicao = 20, tamanho = 45, descricao = "Identificar o Cedente/Favorecido", obrigatoriedade = true)
 	private String nomeCedenteFavorecido;
 
 	@XmlAttribute(name = "t05")
-	@AtributoArquivo(ordem = 5, posicao = 65, tamanho = 45, descricao = "Identificar o Sacador/Vendedor. Repetir o nome do cedente se não houver sacador.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 5, posicao = 65, tamanho = 45, descricao = "Identificar o Sacador/Vendedor. Repetir o nome do cedente se não houver sacador.", obrigatoriedade = true)
 	private String nomeSacadorVendedor;
 
 	@XmlAttribute(name = "t06")
-	@AtributoArquivo(ordem = 6, posicao = 110, tamanho = 14, descricao = "Identificar o número do documento do Sacador. Informar o número do documento do cedente, se não houver sacador.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 6, posicao = 110, tamanho = 14, descricao = "Identificar o número do documento do Sacador. Informar o número do documento do cedente, se não houver sacador.", obrigatoriedade = true)
 	private String documentoSacador;
 
 	@XmlAttribute(name = "t07")
-	@AtributoArquivo(ordem = 7, posicao = 124, tamanho = 45, descricao = "Identificar o endereço do Sacador/Vendedor. Informar o endereço do cedente se não houver sacador.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 7, posicao = 124, tamanho = 45, descricao = "Identificar o endereço do Sacador/Vendedor. Informar o endereço do cedente se não houver sacador.", obrigatoriedade = true)
 	private String enderecoSacadorVendedor;
 
 	@XmlAttribute(name = "t08")
-	@AtributoArquivo(ordem = 8, posicao = 169, tamanho = 8, descricao = "Identificar o CEP do Sacador/Vendedor. Informar o CEP do cedente se não houver sacador.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 8, posicao = 169, tamanho = 8, descricao = "Identificar o CEP do Sacador/Vendedor. Informar o CEP do cedente se não houver sacador.", obrigatoriedade = true)
 	private String cepSacadorVendedor;
 	
 	@XmlAttribute(name = "t09")
-	@AtributoArquivo(ordem = 9, posicao = 177, tamanho = 20, descricao = "Identificar a cidade do Sacador/Devedor. Informar a cidade do cedente se não houver sacador.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 9, posicao = 177, tamanho = 20, descricao = "Identificar a cidade do Sacador/Devedor. Informar a cidade do cedente se não houver sacador.", obrigatoriedade = true)
 	private String cidadeSacadorVendedor;
 	
 	@XmlAttribute(name = "t10")
-	@AtributoArquivo(ordem = 10, posicao = 197, tamanho = 2, descricao = "Identificar a Unidade da Federeção do Sacador/Vendedor. Informar a UF do cedente se não houver sacador.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 10, posicao = 197, tamanho = 2, descricao = "Identificar a Unidade da Federeção do Sacador/Vendedor. Informar a UF do cedente se não houver sacador.", obrigatoriedade = true)
 	private String ufSacadorVendedor;
 	
 	@XmlAttribute(name = "t11")
-	@AtributoArquivo(ordem = 11, posicao = 199, tamanho = 15, descricao = "Identificar o título do cedente.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 11, posicao = 199, tamanho = 15, descricao = "Identificar o título do cedente.", obrigatoriedade = true)
 	private String nossoNumero;
 	
 	@XmlAttribute(name = "t12")
-	@AtributoArquivo(ordem = 12, posicao = 214, tamanho = 3, descricao = "Identificar a sigla de identificação da espécie do título.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 12, posicao = 214, tamanho = 3, descricao = "Identificar a sigla de identificação da espécie do título.", obrigatoriedade = true)
 	private String especieTitulo;
 	
 	@XmlAttribute(name = "t13")
-	@AtributoArquivo(ordem = 13, posicao = 217, tamanho = 11, descricao = "Identificar o número do título.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 13, posicao = 217, tamanho = 11, descricao = "Identificar o número do título.", obrigatoriedade = true)
 	private String numeroTitulo;
 	
 	@XmlAttribute(name = "t14")
-	@AtributoArquivo(ordem = 14, posicao = 228, tamanho = 8, descricao = "Identificar a data da emissão do título, no formato DDMMAAAA. ", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 14, posicao = 228, tamanho = 8, descricao = "Identificar a data da emissão do título, no formato DDMMAAAA. ", obrigatoriedade = true)
 	private String dataEmissaoTitulo;
 	
 	@XmlAttribute(name = "t15")
-	@AtributoArquivo(ordem = 15, posicao = 236, tamanho = 8, descricao = "Identificar a data do vencimento do título, no formato DDMMAAA. Para vencimentos à vista preencher com 99999999.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 15, posicao = 236, tamanho = 8, descricao = "Identificar a data do vencimento do título, no formato DDMMAAA. Para vencimentos à vista preencher com 99999999.", obrigatoriedade = true)
 	private String dataVencimentoTitulo;
 	
 	@XmlAttribute(name = "t16")
-	@AtributoArquivo(ordem = 16, posicao = 244, tamanho = 3, descricao = "Identificar o tipo da moeda corrente. 001 - Real", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 16, posicao = 244, tamanho = 3, descricao = "Identificar o tipo da moeda corrente. 001 - Real", obrigatoriedade = true)
 	private String tipoMoeda;
 	
 	@XmlAttribute(name = "t17")
-	@AtributoArquivo(ordem = 17, posicao = 247, tamanho = 14, descricao = "Informar o valor do título.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 17, posicao = 247, tamanho = 14, descricao = "Informar o valor do título.", obrigatoriedade = true)
 	private String valorTitulo;
 	
 	@XmlAttribute(name = "t18")
-	@AtributoArquivo(ordem = 18, posicao = 261, tamanho = 14, descricao = "Informar ao cartório sobre principais descontos/abatimentos ou pagamentos parciais. Preencher com o valor remanescente.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 18, posicao = 261, tamanho = 14, descricao = "Informar ao cartório sobre principais descontos/abatimentos ou pagamentos parciais. Preencher com o valor remanescente.", obrigatoriedade = true)
 	private String saldoTitulo;
 	
 	@XmlAttribute(name = "t19")
-	@AtributoArquivo(ordem = 19, posicao = 275, tamanho = 20, descricao = "Informar a praça em que o título será protestado.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 19, posicao = 275, tamanho = 20, descricao = "Informar a praça em que o título será protestado.", obrigatoriedade = true)
 	private String pracaProtesto;
 	
 	@XmlAttribute(name = "t20")
-	@AtributoArquivo(ordem = 20, posicao = 295, tamanho = 1, descricao = "Identificar o tipo de endosso do título. M - Endosso Mandato/T - Endosso Translativo", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 20, posicao = 295, tamanho = 1, descricao = "Identificar o tipo de endosso do título. M - Endosso Mandato/T - Endosso Translativo", obrigatoriedade = true)
 	private String tipoEndoso;
 	
 	@XmlAttribute(name = "t21")
-	@AtributoArquivo(ordem = 21, posicao = 296, tamanho = 1, descricao = "Informar ao cartótio se o título foi aceito pelo devedor.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 21, posicao = 296, tamanho = 1, descricao = "Informar ao cartótio se o título foi aceito pelo devedor.", obrigatoriedade = true)
 	private String informacaoSobreAceite;
 	
 	@XmlAttribute(name = "t22")
-	@AtributoArquivo(ordem = 22, posicao = 297, tamanho = 1, descricao = "Identificar a quantidade de devedor(es) ou endereço(s) complementar(es) do título. 1 - Para primeiro devedor/2 - Para segundo devedor ou endereços.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 22, posicao = 297, tamanho = 1, descricao = "Identificar a quantidade de devedor(es) ou endereço(s) complementar(es) do título. 1 - Para primeiro devedor/2 - Para segundo devedor ou endereços.", obrigatoriedade = true)
 	private String numeroControleDevedor;
 	
 	@XmlAttribute(name = "t23")
-	@AtributoArquivo(ordem = 23, posicao = 298, tamanho = 45, descricao = "Identificar o nome do devedor.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 23, posicao = 298, tamanho = 45, descricao = "Identificar o nome do devedor.", obrigatoriedade = true)
 	private String nomeDevedor;
 	
 	@XmlAttribute(name = "t24")
-	@AtributoArquivo(ordem = 24, posicao = 343, tamanho = 3, descricao = "Identificar o tipo do documento. 001 - CNPJ/002 - CPF", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 24, posicao = 343, tamanho = 3, descricao = "Identificar o tipo do documento. 001 - CNPJ/002 - CPF", obrigatoriedade = true)
 	private String tipoIdentificacaoDevedor;
 	
 	@XmlAttribute(name = "t25")
-	@AtributoArquivo(ordem = 25, posicao = 346, tamanho = 14, descricao = "Identificar o número do documento do devedor. Se o documento for diferente de CNPJ ou CPF, preencher com zeros, sendo obrigatório o campo 26.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 25, posicao = 346, tamanho = 14, descricao = "Identificar o número do documento do devedor. Se o documento for diferente de CNPJ ou CPF, preencher com zeros, sendo obrigatório o campo 26.", obrigatoriedade = true)
 	private String numeroIdentificacaoDevedor;
 	
 	@XmlAttribute(name = "t26")
-	@AtributoArquivo(ordem = 26, posicao = 360, tamanho = 11, descricao = "Identificar a data da emissão do título, no formato DDMMAAAA. ", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 26, posicao = 360, tamanho = 11, descricao = "Identificar a data da emissão do título, no formato DDMMAAAA. ", obrigatoriedade = true)
 	private String documentoDevedor;
 	
 	@XmlAttribute(name = "t27")
-	@AtributoArquivo(ordem = 27, posicao = 371, tamanho = 45, descricao = "Identificar o endereço do devedor.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 27, posicao = 371, tamanho = 45, descricao = "Identificar o endereço do devedor.", obrigatoriedade = true)
 	private String enderecoDevedor;
 	
 	@XmlAttribute(name = "t28")
-	@AtributoArquivo(ordem = 28, posicao = 416, tamanho = 8, descricao = "Identificar o CEP do devedor.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 28, posicao = 416, tamanho = 8, descricao = "Identificar o CEP do devedor.", obrigatoriedade = true)
 	private String cepDevedor;
 	
 	@XmlAttribute(name = "t29")
-	@AtributoArquivo(ordem = 29, posicao = 424, tamanho = 20, descricao = "Identificar a cidade do devedor.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 29, posicao = 424, tamanho = 20, descricao = "Identificar a cidade do devedor.", obrigatoriedade = true)
 	private String cidadeDevedor;
 	
 	@XmlAttribute(name = "t30")
-	@AtributoArquivo(ordem = 30, posicao = 444, tamanho = 2, descricao = "Identificar a Unidade Federal do devedor.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 30, posicao = 444, tamanho = 2, descricao = "Identificar a Unidade Federal do devedor.", obrigatoriedade = true)
 	private String ufDevedor;
 	/*Descrições 
 	 * */
 	@XmlAttribute(name = "t31")
-	@AtributoArquivo(ordem = 31, posicao = 446, tamanho = 2, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 31, posicao = 446, tamanho = 2, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
 	private String codigoCartorio;
 	
 	@XmlAttribute(name = "t32")
-	@AtributoArquivo(ordem = 32, posicao = 448, tamanho = 10, descricao = "Uso restrito do serviço de distribuição.Preencher com brancos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 32, posicao = 448, tamanho = 10, descricao = "Uso restrito do serviço de distribuição.Preencher com brancos.", obrigatoriedade = true)
 	private String numeroProtocoloCartorio;
 	
 	@XmlAttribute(name = "t33")
-	@AtributoArquivo(ordem = 33, posicao = 458, tamanho = 1, descricao = "Uso restrito do serviço de distribuição.Preencher com brancos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 33, posicao = 458, tamanho = 1, descricao = "Uso restrito do serviço de distribuição.Preencher com brancos.", obrigatoriedade = true)
 	private String tipoOcorrencia;
 	
 	@XmlAttribute(name = "t34")
-	@AtributoArquivo(ordem = 34, posicao = 459, tamanho = 8, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 34, posicao = 459, tamanho = 8, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
 	private String dataProtocolo;
 	
 	@XmlAttribute(name = "t35")
-	@AtributoArquivo(ordem = 35, posicao = 467, tamanho = 10, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 35, posicao = 467, tamanho = 10, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
 	private String valorCustaCartorio;
 	
 	@XmlAttribute(name = "t36")
-	@AtributoArquivo(ordem = 36, posicao = 477, tamanho = 1, descricao = "", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 36, posicao = 477, tamanho = 1, descricao = "", obrigatoriedade = true)
 	private String declaracaoPortador;
 	
 	@XmlAttribute(name = "t37")
-	@AtributoArquivo(ordem = 37, posicao = 478, tamanho = 8, descricao = "", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 37, posicao = 478, tamanho = 8, descricao = "", obrigatoriedade = true)
 	private String dataOcorrencia;
 	
 	@XmlAttribute(name = "t38")
-	@AtributoArquivo(ordem = 38, posicao = 486, tamanho = 2, descricao = "", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 38, posicao = 486, tamanho = 2, descricao = "", obrigatoriedade = true)
 	private String codigoIrregularidade;
 	
 	@XmlAttribute(name = "t39")
-	@AtributoArquivo(ordem = 39, posicao = 488, tamanho = 20, descricao = "Identiticar o bairro do devedor.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 39, posicao = 488, tamanho = 20, descricao = "Identiticar o bairro do devedor.", obrigatoriedade = true)
 	private String bairroDevedor;
 	
 	@XmlAttribute(name = "t40")
-	@AtributoArquivo(ordem = 40, posicao = 508, tamanho = 10, descricao = "Uso restrito do serviço de distribuição.Preencher com brancos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 40, posicao = 508, tamanho = 10, descricao = "Uso restrito do serviço de distribuição.Preencher com brancos.", obrigatoriedade = true)
 	private String valorCustasCartorioDistribuidor;
 	
 	@XmlAttribute(name = "t41")
-	@AtributoArquivo(ordem = 41, posicao = 518, tamanho = 6, descricao = "Uso restrito do 7º Ofício do Rio de Janeiro. Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 41, posicao = 518, tamanho = 6, descricao = "Uso restrito do 7º Ofício do Rio de Janeiro. Preencher com zeros.", obrigatoriedade = true)
 	private String registroDistribuicao;
 	
 	@XmlAttribute(name = "t42")
-	@AtributoArquivo(ordem = 42, posicao = 524, tamanho = 10, descricao = "Uso restrito da Centralizadora de Rmessas de Arquivos (CRA). Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 42, posicao = 524, tamanho = 10, descricao = "Uso restrito da Centralizadora de Rmessas de Arquivos (CRA). Preencher com zeros.", obrigatoriedade = true)
 	private String valorGravacaoEletronica;
 	
 	@XmlAttribute(name = "t43")
-	@AtributoArquivo(ordem = 43, posicao = 534, tamanho = 5, descricao = "Identificar o número da operação - exclusivo para protesto de letra de câmbio. Os bancos que não usarem devem preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 43, posicao = 534, tamanho = 5, descricao = "Identificar o número da operação - exclusivo para protesto de letra de câmbio. Os bancos que não usarem devem preencher com zeros.", obrigatoriedade = true)
 	private String numeroOperacaoBanco;
 	
 	@XmlAttribute(name = "t44")
-	@AtributoArquivo(ordem = 44, posicao = 539, tamanho = 15, descricao = "Identificar o número do contrato - exclusivo para protesto de letra de câmbio.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 44, posicao = 539, tamanho = 15, descricao = "Identificar o número do contrato - exclusivo para protesto de letra de câmbio.", obrigatoriedade = true)
 	private String numeroContratoBanco;
 	
 	@XmlAttribute(name = "t45")
-	@AtributoArquivo(ordem = 45, posicao = 554, tamanho = 3, descricao = "Identificar o número de parcelas do contrato - exclusivo para protesto de letra de câmbio.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 45, posicao = 554, tamanho = 3, descricao = "Identificar o número de parcelas do contrato - exclusivo para protesto de letra de câmbio.", obrigatoriedade = true)
 	private String numeroParcelaContrato;
 	
 	@XmlAttribute(name = "t46")
-	@AtributoArquivo(ordem = 46, posicao = 557, tamanho = 1, descricao = "Identificar o logotipo do banco na letra de câmbio, quando existir mais bancos no conglomerado.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 46, posicao = 557, tamanho = 1, descricao = "Identificar o logotipo do banco na letra de câmbio, quando existir mais bancos no conglomerado.", obrigatoriedade = true)
 	private String tipoLetraCambio;
 	
 	@XmlAttribute(name = "t47")
-	@AtributoArquivo(ordem = 47, posicao = 558, tamanho = 8, descricao = "Uso restrito do serviço de distribuição. Preencher com bancos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 47, posicao = 558, tamanho = 8, descricao = "Uso restrito do serviço de distribuição. Preencher com bancos.", obrigatoriedade = true)
 	private String complementoCodigoIrregularidade;
 	
 	@XmlAttribute(name = "t48")
-	@AtributoArquivo(ordem = 48, posicao = 566, tamanho = 1, descricao = "Informar ao cartório se o título será protestado para fins falimentares.Preencher com a letra 'F',caso contrario brancos. ", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 48, posicao = 566, tamanho = 1, descricao = "Informar ao cartório se o título será protestado para fins falimentares.Preencher com a letra 'F',caso contrario brancos. ", obrigatoriedade = true)
 	private String protestoMotivoFalencia;
 	
 	@XmlAttribute(name = "t49")
-	@AtributoArquivo(ordem = 49, posicao = 567, tamanho = 1, descricao = "Informar a letra 'I' para solicitação ao cartório a emissão da 2ª via do Instrumento de Protesto.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 49, posicao = 567, tamanho = 1, descricao = "Informar a letra 'I' para solicitação ao cartório a emissão da 2ª via do Instrumento de Protesto.", obrigatoriedade = true)
 	private String instrumentoProtesto;
 	
 	@XmlAttribute(name = "t50")
-	@AtributoArquivo(ordem = 50, posicao = 568, tamanho = 10, descricao = "Uso restrito dos cartórios. Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 50, posicao = 568, tamanho = 10, descricao = "Uso restrito dos cartórios. Preencher com zeros.", obrigatoriedade = true)
 	private String valorDemaisDespesas;
 	
 	@XmlAttribute(name = "t51")
-	@AtributoArquivo(ordem = 51, posicao = 578, tamanho = 19, descricao = "Espaço reservado para futuras implementações. Preencher com brancos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 51, posicao = 578, tamanho = 19, descricao = "Espaço reservado para futuras implementações. Preencher com brancos.", obrigatoriedade = true)
 	private String complementoRegistro;
 	
 	@XmlAttribute(name = "t52")
-	@AtributoArquivo(ordem = 52, posicao = 597, tamanho = 4, descricao = "Número sequêncial do registro do arquivo, independente da quantidade de praças dentro do arquivo.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 52, posicao = 597, tamanho = 4, descricao = "Número sequêncial do registro do arquivo, independente da quantidade de praças dentro do arquivo.", obrigatoriedade = true)
 	private String numeroSequencialArquivo;
 
 	public String getIdentificacaoRegistro() {
