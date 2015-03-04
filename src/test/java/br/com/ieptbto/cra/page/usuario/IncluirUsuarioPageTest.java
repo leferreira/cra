@@ -41,7 +41,7 @@ public class IncluirUsuarioPageTest extends BaseTest {
 	public void testInsertUserFail() {
 		tester.startPage(IncluirUsuarioPage.class);
 		form = tester.newFormTester("formUsuario");
-		form.setValue("usuarioInputPanel:nome", "Teste");
+		form.setValue("usuarioInputPanel:nome", "Teste1");
 		form.setValue("usuarioInputPanel:login", "teste");
 		form.setValue("usuarioInputPanel:senha", "123");
 		form.setValue("usuarioInputPanel:email", "e@mail.com");
@@ -60,7 +60,7 @@ public class IncluirUsuarioPageTest extends BaseTest {
 		tester.startPage(IncluirUsuarioPage.class);
 		form = tester.newFormTester("formUsuario");
 		form.setValue("usuarioInputPanel:nome", "Teste");
-		form.setValue("usuarioInputPanel:login", "test1");
+		form.setValue("usuarioInputPanel:login", "test");
 		form.setValue("usuarioInputPanel:senha", "123456");
 		form.setValue("usuarioInputPanel:email", "e@mail.com");
 		form.setValue("usuarioInputPanel:contato", "1234");
@@ -69,6 +69,5 @@ public class IncluirUsuarioPageTest extends BaseTest {
 		form.submit();
 		tester.assertErrorMessages();
 		tester.assertInfoMessages();
-
 	}
 }

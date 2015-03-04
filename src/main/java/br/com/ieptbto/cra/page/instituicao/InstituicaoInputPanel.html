@@ -1,0 +1,78 @@
+<head>
+<meta charset="UTF8">
+</head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR"
+	charset="UTF8">
+	<div class="panel-body-right"
+		style="float: left; width: 45%; margin-right: 15px;">
+		<div class="form-group">
+			<label for="instituicao">Intituicao:&nbsp;<small>(Nome
+					Fantasia)</small></label> <input id="instituicao"
+				onkeyup="this.value = this.value.toUpperCase()" name="instituicao"
+				type="text" wicket:id="instituicao" placeholder="Instituição"
+				class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="razaoSocial">Razão Social:</label> <input
+				id="razaoSocial" name="razaoSocial" type="text"
+				wicket:id="razaoSocial" placeholder="Razão Social"
+				class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="cnpj">CNPJ:</label> <input id="cnpj" name="cnpj"
+				type="text" wicket:id="cnpj" placeholder="CNPJ" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="codCompensacao">Código Compensação:</label> <input
+				id="codCompensacao" name="codCompensacao" type="text"
+				wicket:id="codCompensacao" placeholder="Código Compensação"
+				class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="responsavel">Agência Centralizadora:</label> <input
+				id="agenciaCentralizadora" name="agenciaCentralizadora" type="text"
+				wicket:id="agenciaCentralizadora"
+				placeholder="Agência Centralizadora" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="valorConfirmacao">Vlr. Confirmação:</label> <input
+				id="valorConfirmacao" name="valorConfirmacao" type="text"
+				wicket:id="valorConfirmacao" placeholder="Valor Confirmação"
+				class="form-control" />
+		</div>
+
+
+	</div>
+	<div class="panel-body-left"
+		style="float: left; width: 45%; margin-right: 15px;">
+		<div class="control-group">
+			<label class="control-label" for="tipoInstituicao">Tipo
+				Instituição:</label>
+			<div class="controls">
+				<select wicket:id="tipoInstituicao" id="tipoInstituicao"
+					class="form-control"></select>
+			</div>
+			&nbsp;
+		</div>
+		<div class="form-group">
+			<label for="email">Email:</label> <input id="email" name="email"
+				type="text" wicket:id="email" placeholder="Email"
+				class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="contato">Contato:</label> <input id="contato"
+				name="contato" type="text" wicket:id="contato" placeholder="Contato"
+				class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="responsavel">Responsável:</label> <input id="responsavel"
+				name="responsavel" type="text" wicket:id="responsavel"
+				placeholder="Responsável" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="endereco">Endereço:</label>
+			<textarea id="endereco" name="endereco" wicket:id="endereco"
+				placeholder="Endereço" class="form-control"></textarea>
+		</div>
+	</div>
+</wicket:panel>

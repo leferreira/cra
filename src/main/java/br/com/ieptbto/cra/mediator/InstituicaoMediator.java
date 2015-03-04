@@ -14,6 +14,28 @@ public class InstituicaoMediator {
 	@Autowired
 	InstituicaoDAO instituicaoDAO;
 
+	public Instituicao salvar(Instituicao instituicao) {
+		return instituicaoDAO.salvar(instituicao);
+	}
+
+	public Instituicao alterar(Instituicao instituicao) {
+		return instituicaoDAO.alterar(instituicao);
+	}
+	
+	/**
+	 * Verifica se a instituicao não está cadastrada
+	 * 
+	 * @param instituicao
+	 * @return
+	 */
+	public boolean isInstituicaoNaoExiste(Instituicao instituicao) {
+		Instituicao instituicaoNova = instituicaoDAO.buscarInstituicao(instituicao.getInstituicao());
+		if (instituicaoNova == null) {
+			return true;
+		}
+		return false;
+	}
+	
 	public Instituicao buscarInstituicao(String instituicao) {
 		return instituicaoDAO.buscarInstituicao(instituicao);
 	}

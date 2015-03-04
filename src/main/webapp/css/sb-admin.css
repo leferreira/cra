@@ -432,3 +432,29 @@ span.goto {
 legend{
 	font-size: 16px;
 }
+.feedbackPanel {
+	margin-top: 5px;
+	margin-left: -40px;
+}
+
+.feedbackPanelINFO {
+	list-style-type: none;
+	color: #3c763d;
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.feedbackPanelERROR {
+	list-style-type: none;
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}

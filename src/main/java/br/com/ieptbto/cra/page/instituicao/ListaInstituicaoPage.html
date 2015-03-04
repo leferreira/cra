@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:wicket="http://wicket.apache.org/">
 <head>
 <meta charset="UTF8">
@@ -6,36 +6,33 @@
 <body>
 	<wicket:extend>
 		<div class="panel panel-primary">
-			<div class="panel-heading">Usuários</div>
+			<div class="panel-heading">Instituições</div>
 			<div class="panel-body" wicket:id="divListView">
-				<table wicket:id="dataTableUsuario"
+				<table wicket:id="dataTableInstituicao"
 					class="table table-striped table-bordered table-hover">
 					<thead>
 						<tr>
-							<th>Nome</th>
-							<th>Login</th>
-							<th>Email</th>
+							<th>Nome Fantasia</th>
+							<th>Tipo</th>
+							<th>Responsável</th>
 							<th>Contato</th>
-							<th>Local</th>
 							<th>Ativo</th>
 							<th colspan="2">Ações</th>
-
 						</tr>
 					</thead>
 					<tbody>
-						<tr wicket:id="listViewUsuario">
-							<td wicket:id="nomeUsuario"></td>
-							<td wicket:id="loginUsuario"></td>
-							<td wicket:id="emailUsuario"></td>
+						<tr wicket:id="listViewInstituicao">
+							<td wicket:id="instituicao"></td>
+							<td wicket:id="tipoInstituicao"></td>
+							<td wicket:id="responsavel"></td>
 							<td wicket:id="contato"></td>
-							<td wicket:id="instituicaoUsuario"></td>
-							<td wicket:id="status"></td>
-
+							<td wicket:id="situacao"></td>
+							
 							<td style="text-align: center;"><a href="#"
-								title="Alterar Usuário" wicket:id="detalharUsuario"
+								title="Alterar Usuário" wicket:id="detalharInstituicao"
 								class="link glyphicon glyphicon-refresh"></a></td>
 							<td style="text-align: center;"><a href="#"
-								title="Excluir Usuário" wicket:id="excluirUsuario"
+								title="Excluir Usuário" wicket:id="desativarInstituicao"
 								class="link glyphicon glyphicon-trash"></a></td>
 						</tr>
 					</tbody>
@@ -47,6 +44,7 @@
 					</tfoot>
 				</table>
 			</div>
+			<div class="panel-footer"></div>
 		</div>
 	</wicket:extend>
 </body>
