@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
-import br.com.ieptbto.cra.annotations.AtributoArquivo;
+import br.com.ieptbto.cra.annotations.IAtributoArquivo;
 
 /**
  * 
@@ -15,35 +15,35 @@ import br.com.ieptbto.cra.annotations.AtributoArquivo;
 public class RodapeVO {
 
 	@XmlAttribute(name = "t01")
-	@AtributoArquivo(ordem = 1, posicao = 1, tamanho = 1, descricao = "Identificar o registro trailler no arquivo. Constante 9.", obrigatoriedade = true, validacao = "9", tipo = Integer.class)
+	@IAtributoArquivo(ordem = 1, posicao = 1, tamanho = 1, descricao = "Identificar o registro trailler no arquivo. Constante 9.", obrigatoriedade = true, validacao = "9", tipo = Integer.class)
 	private String identificacaoRegistro;
 	
 	@XmlAttribute(name = "t02")
-	@AtributoArquivo(ordem = 2, posicao = 2, tamanho = 3, descricao = "Identificar o código do banco/portador. Preencher com o código compensação do Banco ou número de identificação do portador.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 2, posicao = 2, tamanho = 3, descricao = "Identificar o código do banco/portador. Preencher com o código compensação do Banco ou número de identificação do portador.", obrigatoriedade = true)
 	private String numeroCodigoPortador;
 	
 	@XmlAttribute(name = "t03")
-	@AtributoArquivo(ordem = 3, posicao = 5, tamanho = 40, descricao = "Preencher com o nome do Portador.('Razão Social')", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 3, posicao = 5, tamanho = 40, descricao = "Preencher com o nome do Portador.('Razão Social')", obrigatoriedade = true)
 	private String nomePortador;
 	
 	@XmlAttribute(name = "t04")
-	@AtributoArquivo(ordem = 4, posicao = 45, tamanho = 8, descricao = "Informar a data do envio da remessa ao Serviço de Distribuição de Títulos, no formato DDMMAAAA.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 4, posicao = 45, tamanho = 8, descricao = "Informar a data do envio da remessa ao Serviço de Distribuição de Títulos, no formato DDMMAAAA.", obrigatoriedade = true)
 	private String dataMovimento;
 	
 	@XmlAttribute(name = "t05")
-	@AtributoArquivo(ordem = 5, posicao = 53, tamanho = 5, descricao = "Informar o somatório dos registros. Conforme a regra estabelecida para os campos do registro header. Campos 09,10,11 e 12.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 5, posicao = 53, tamanho = 5, descricao = "Informar o somatório dos registros. Conforme a regra estabelecida para os campos do registro header. Campos 09,10,11 e 12.", obrigatoriedade = true)
 	private String somatorioQtdRemessa;
 	
 	@XmlAttribute(name = "t06")
-	@AtributoArquivo(ordem = 6, posicao = 58, tamanho = 19, descricao = "Informar o somatório do Saldos dos Títulos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 6, posicao = 58, tamanho = 19, descricao = "Informar o somatório do Saldos dos Títulos.", obrigatoriedade = true)
 	private String somatorioValorRemessa;
 	
 	@XmlAttribute(name = "t07")
-	@AtributoArquivo(ordem = 7, posicao = 76, tamanho = 521, descricao = "Ajusatar o tamanho do registro do trailler com o tamanho do registro de transação. Preencher com brancos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 7, posicao = 76, tamanho = 521, descricao = "Ajusatar o tamanho do registro do trailler com o tamanho do registro de transação. Preencher com brancos.", obrigatoriedade = true)
 	private String complementoRegistro;
 	
 	@XmlAttribute(name = "t08")
-	@AtributoArquivo(ordem = 8, posicao = 597, tamanho = 04, descricao = "Informar o número sequêncial do registro.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 8, posicao = 597, tamanho = 04, descricao = "Informar o número sequêncial do registro.", obrigatoriedade = true)
 	private String numeroSequencialRegistroArquivo;
 	
 	public String getIdentificacaoRegistro() {
