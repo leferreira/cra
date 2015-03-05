@@ -10,13 +10,26 @@
 				<div class="panel panel-primary">
 					<div class="panel-heading">Enviar Arquivo</div>
 					<div class="panel-body">
-						<p></p>
+						<div class="row">
+							<div class="col-lg-8 col-md-offset-2">
+								<input wicket:id="file" type="file" class="filestyle" data-buttonText="Procurar">
+							</div>
+						</div>
+						<br/>
+						<div class="row">
+							<button wicket:id="enviarArquivo" class="btn btn-primary">Enviar</button>
+						</div>
 					</div>
 					<div class="panel-footer"></div>
 				</div>
 			</div>
-
 		</form>
+<script type="text/javascript" src="js/bootstrap-filestyle.min.js" charset="utf-8"></script>
+<script>
+$( document ).ready(function() {
+	$(":file").filestyle({buttonText: "Procurar"});
+});	
+</script>
 	</wicket:extend>
 </body>
 </html>

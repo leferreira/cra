@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.entidade;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
 
@@ -28,6 +31,8 @@ public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 	private int id;
 	private String constante; // Constante ex: B-Remessa
 	private String tipoArquivo;
+	private Date horaEnvioInicio;
+	private Date horaEnvioFim;
 	private List<TipoInstituicao> listaTipoInstituicao;
 
 	@Id
@@ -37,19 +42,39 @@ public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 		return id;
 	}
 
-	@Column(name = "CONSTANTE")
+	@Column(name = "CONSTANTE", length = 2)
 	public String getConstante() {
-		return constante;
+		return constante.trim().toUpperCase();
 	}
 
-	@Column(name = "TIPO_ARQUIVO")
+	@Column(name = "TIPO_ARQUIVO", length = 30)
 	public String getTipoArquivo() {
-		return tipoArquivo;
+		return tipoArquivo.trim();
 	}
 
-	@ManyToMany(mappedBy="arquivosEnvioPermitido")
+	@ManyToMany(mappedBy = "arquivosEnvioPermitido")
 	public List<TipoInstituicao> getListaTipoInstituicao() {
 		return listaTipoInstituicao;
+	}
+
+	@Column(name = "HORA_ENVIO_FIM")
+	@Temporal(TemporalType.TIME)
+	public Date getHoraEnvioFim() {
+		return horaEnvioFim;
+	}
+
+	@Column(name = "HORA_ENVIO_INICIO")
+	@Temporal(TemporalType.TIME)
+	public Date getHoraEnvioInicio() {
+		return horaEnvioInicio;
+	}
+
+	public void setHoraEnvioFim(Date horaEnvioFim) {
+		this.horaEnvioFim = horaEnvioFim;
+	}
+
+	public void setHoraEnvioInicio(Date horaEnvioInicio) {
+		this.horaEnvioInicio = horaEnvioInicio;
 	}
 
 	public void setId(int id) {
@@ -64,8 +89,7 @@ public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 		this.tipoArquivo = tipoArquivo;
 	}
 
-	public void setListaTipoInstituicao(
-			List<TipoInstituicao> listaTipoInstituicao) {
+	public void setListaTipoInstituicao(List<TipoInstituicao> listaTipoInstituicao) {
 		this.listaTipoInstituicao = listaTipoInstituicao;
 	}
 
