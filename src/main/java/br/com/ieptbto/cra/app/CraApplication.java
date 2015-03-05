@@ -20,6 +20,7 @@ import org.joda.time.DateTimeZone;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
+import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
@@ -127,8 +128,8 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 	@Override
 	public Component createMenuSistema(AbstractWebPage<?> page, String containerId) {
-		// return new OrcamentoMenu("menu");
-		return null;
+		// return new CraMenu("menu");
+		return new CraMenu("menu");
 	}
 
 	@Override
