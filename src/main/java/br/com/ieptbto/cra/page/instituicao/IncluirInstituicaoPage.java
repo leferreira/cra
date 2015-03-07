@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.page.instituicao;
 
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
@@ -31,7 +30,6 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 	public void setForm(){
 		form = new InstituicaoForm("form", getModel());
 		form.add(new InstituicaoInputPanel("instituicaoInputPanel", getModel()));
-		form.add(new Button("botaoSalvar"));
 		add(form);
 	}
 	

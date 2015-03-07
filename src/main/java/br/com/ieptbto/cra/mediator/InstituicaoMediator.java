@@ -29,7 +29,7 @@ public class InstituicaoMediator {
 	 * @return
 	 */
 	public boolean isInstituicaoNaoExiste(Instituicao instituicao) {
-		Instituicao instituicaoNova = instituicaoDAO.buscarInstituicao(instituicao.getInstituicao());
+		Instituicao instituicaoNova = instituicaoDAO.buscarInstituicao(instituicao.getNomeFantasia());
 		if (instituicaoNova == null) {
 			return true;
 		}

@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -22,7 +24,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private String instituicao;
+	private String nomeFantasia;
 	private String razaoSocial;
 	private String cnpj;
 	private String codCompensacao;
@@ -34,6 +36,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	private String agenciaCentralizadora;
 	private boolean situacao;
 	private List<Usuario> listaUsuarios;
+	private List<Municipio> listaMunicipios;
 	private TipoInstituicao tipoInstituicao;
 
 	@Id
@@ -43,9 +46,9 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return id;
 	}
 
-	@Column(name = "INSTITUICAO", nullable = false, unique=true, length=50)
-	public String getInstituicao() {
-		return instituicao;
+	@Column(name = "NOME_FANTASIA", nullable = false, unique=true, length=50)
+	public String getNomeFantasia() {
+		return nomeFantasia;
 	}
 
 	@Column(name = "CNPJ", nullable = false, unique=true, length=50)
@@ -98,6 +101,14 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return situacao;
 	}
 
+	@ManyToMany
+	@JoinTable(name="INSTITUICAO_MUNICIPIO", 
+			joinColumns= @JoinColumn(name="INSTITUICAO_ID"),
+			inverseJoinColumns = @JoinColumn(name="MUNICIPIO_ID"))
+	public List<Municipio> getListaMunicipios() {
+		return listaMunicipios;
+	}
+	
 	@ManyToOne
 	@JoinColumn(name = "TIPO_INSTITUICAO_ID")
 	public TipoInstituicao getTipoInstituicao() {
@@ -113,8 +124,8 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		this.id = id;
 	}
 
-	public void setInstituicao(String instituicao) {
-		this.instituicao = instituicao;
+	public void setNomeFantasia(String nomeFantasia) {
+		this.nomeFantasia = nomeFantasia;
 	}
 
 	public void setCnpj(String cnpj) {
@@ -132,7 +143,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 
 	@Override
 	public String toString() {
-		return "Instituicao [instituicao=" + instituicao + "]";
+		return "Instituicao [Nome Fantasia=" + nomeFantasia + "]";
 	}
 
 	public void setTipoInstituicao(TipoInstituicao tipoInstituicao) {
@@ -173,5 +184,25 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 
 	public void setSituacao(boolean situacao) {
 		this.situacao = situacao;
+	}
+
+	public void setListaMunicipios(List<Municipio> listaMunicipios) {
+		this.listaMunicipios = listaMunicipios;
+	}
+	
+	public String getStatus(){
+		if(isSituacao() == true){
+			return "Ativo";
+		}else{
+			return "Não Ativo";
+		}
+	}
+	
+	public void setStatus(String status){
+		if(status == "Ativo"){
+			setSituacao(true);
+		}else{
+			setSituacao(false);
+		}
 	}
 }

@@ -50,7 +50,8 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		Transaction transaction = getBeginTransation();
 		try {
 			Instituicao instituicao = new Instituicao();
-			instituicao.setInstituicao("CRA");
+			instituicao.setNomeFantasia("CRA");
+			instituicao.setSituacao(true);
 			instituicao.setCnpj("123");
 			instituicao.setTipoInstituicao(tipoInstituicaoDAO.buscarTipoInstituicao("CRA"));
 			save(instituicao);
@@ -62,9 +63,9 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 
 	}
 
-	public Instituicao buscarInstituicao(String instituicao) {
+	public Instituicao buscarInstituicao(String nomeFantasia) {
 		Criteria criteria = getCriteria(Instituicao.class);
-		criteria.add(Restrictions.eq("instituicao", instituicao));
+		criteria.add(Restrictions.eq("nomeFantasia", nomeFantasia));
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 	
@@ -75,9 +76,9 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 	
-	public Instituicao buscarInstituicaoInicial(String instituicao) {
+	public Instituicao buscarInstituicaoInicial(String nomeFantasia) {
 		Criteria criteria = getCriteria(Instituicao.class);
-		criteria.add(Restrictions.eq("instituicao", instituicao));
+		criteria.add(Restrictions.eq("nomeFantasia", nomeFantasia));
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 }

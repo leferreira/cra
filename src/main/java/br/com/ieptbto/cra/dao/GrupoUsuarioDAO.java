@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.dao;
 
 import java.util.List;
 
-import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.hibernate.Criteria;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -37,25 +36,10 @@ public class GrupoUsuarioDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
-	public void inserirGruposCargaInicial() {
+	public void inserirGruposCargaInicial(GrupoUsuario grupo) {
 		Transaction transaction = getBeginTransation();
 		try {
-			GrupoUsuario grupo = new GrupoUsuario();
-			grupo.setGrupo("Super Administrador");
-			String[] roles = { CraRoles.ADMIN, CraRoles.USER, CraRoles.SUPER };
-			grupo.setRoles(new Roles(roles));
 			save(grupo);
-
-			String[] roles1 = { Roles.ADMIN, CraRoles.USER };
-			grupo.setGrupo("Administrador");
-			grupo.setRoles(new Roles(roles1));
-			save(grupo);
-
-			String[] roles2 = { CraRoles.USER };
-			grupo.setGrupo("Usuário");
-			grupo.setRoles(new Roles(roles2));
-			save(grupo);
-
 			transaction.commit();
 		} catch (Exception ex) {
 			transaction.rollback();

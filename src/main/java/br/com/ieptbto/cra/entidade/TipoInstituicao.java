@@ -64,7 +64,7 @@ public class TipoInstituicao extends AbstractEntidade<TipoInstituicao> {
 		this.listaInstituicoes = listaInstituicoes;
 	}
 
-	public void setarquivosEnvioPermitido(List<TipoArquivo> arquivosEnvioPermitido) {
+	public void setArquivosEnvioPermitido(List<TipoArquivo> arquivosEnvioPermitido) {
 		this.arquivosEnvioPermitido = arquivosEnvioPermitido;
 	}
 	

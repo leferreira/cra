@@ -37,7 +37,7 @@ public class UsuarioLabelPanel<Usuario> extends Panel {
 	}
 	
 	public Component campoInstituicao(){
-		return new Label("instituicao.instituicao");
+		return new Label("instituicao.nomeFantasia");
 	}
 	
 	public Component campoContato(){

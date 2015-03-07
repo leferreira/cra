@@ -126,19 +126,17 @@ body {
 	margin-right: 0;
 }
 
-@media(min-width:768px) {
-    .sidebar {
-        z-index: 1;
-        position: absolute;
-        width: 250px;
-        margin-top: 51px;
-    }
-
-    .navbar-top-links .dropdown-messages,
-    .navbar-top-links .dropdown-tasks,
-    .navbar-top-links .dropdown-alerts {
-        margin-left: auto;
-    }
+@media ( min-width :768px) {
+	.sidebar {
+		z-index: 1;
+		position: absolute;
+		width: 250px;
+		margin-top: 51px;
+	}
+	.navbar-top-links .dropdown-messages, .navbar-top-links .dropdown-tasks,
+		.navbar-top-links .dropdown-alerts {
+		margin-left: auto;
+	}
 }
 
 .navbar-top-links .dropdown-menu li a {
@@ -444,9 +442,28 @@ span.goto {
 	background-color: #fff;
 	border: 1px solid #ddd;
 }
-legend{
+
+legend {
 	font-size: 16px;
 }
+
+button {
+	float: right;
+}
+
+.panel-body-right {
+	float: left;
+	width: 45%;
+	margin-right: 15px;
+}
+
+.panel-body-left {
+	margin-left: 3%;
+	float: left;
+	width: 45%;
+	margin-right: 15px;
+}
+
 .feedbackPanel {
 	margin-top: 5px;
 	margin-left: -40px;
@@ -472,4 +489,11 @@ legend{
 	margin-bottom: 20px;
 	border: 1px solid transparent;
 	border-radius: 4px;
+}
+
+.radio {
+	position: relative;
+	display: block;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }

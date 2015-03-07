@@ -35,7 +35,9 @@ public class InstituicaoForm extends BaseForm<Instituicao> {
 			}
 		} else {
 			if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
-				instituicao.setSituacao(true);
+				if(!instituicao.isSituacao()){
+					instituicao.setSituacao(true);
+				}
 				Instituicao instituicaoSalvo = instituicaoMediator
 						.salvar(instituicao);
 				if (instituicaoSalvo != null) {

@@ -29,17 +29,17 @@ public class UsuarioForm extends BaseForm<Usuario> {
 			Usuario usuarioSalvo = usuarioMediator.alterar(usuario);
 			if (usuarioSalvo != null) {
 				info("Usuário alterado com sucesso.");
-				setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
 			} else {
 				error("Usuário não alterado");
 			}
 		} else {
 			if (usuarioMediator.isLoginNaoExiste(usuario)) {
-				usuario.setStatus(true);
+				if(!usuario.isStatus()){
+					usuario.setStatus(true);
+				}
 				Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
 				if (usuarioSalvo != null) {
 					info("Usuário criado com sucesso");
-					setResponsePage(new DetalharUsuarioPage(usuario));
 				} else {
 					error("Usuário não criado");
 				}
@@ -47,5 +47,6 @@ public class UsuarioForm extends BaseForm<Usuario> {
 				error("Usuário não criado. O login já existe!");
 			}
 		}
+		usuario=null;
 	}
 }

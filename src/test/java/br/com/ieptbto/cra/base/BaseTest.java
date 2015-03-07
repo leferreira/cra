@@ -76,7 +76,7 @@ public class BaseTest extends AbstractJUnit4SpringContextTests {
 
 	private Instituicao getInstituicao() {
 		Instituicao instituicao = new Instituicao();
-		instituicao.setInstituicao("CRA");
+		instituicao.setNomeFantasia("CRA");
 		instituicao.setTipoInstituicao(new TipoInstituicao());
 		instituicao.setSituacao(true);
 		return instituicao;

@@ -24,7 +24,7 @@ public class IncluirInstituicaoPageTest extends BaseTest{
 	public void testCarregarIncluirInstituicaoPage() {
 		tester.startPage(IncluirInstituicaoPage.class);
 		form = tester.newFormTester("form");
-		tester.assertComponent("form:instituicaoInputPanel:instituicao", TextField.class);
+		tester.assertComponent("form:instituicaoInputPanel:nomeFantasia", TextField.class);
 		tester.assertComponent("form:instituicaoInputPanel:razaoSocial", TextField.class);
 		tester.assertComponent("form:instituicaoInputPanel:cnpj", TextField.class);
 		tester.assertComponent("form:instituicaoInputPanel:codCompensacao", TextField.class);
@@ -32,6 +32,7 @@ public class IncluirInstituicaoPageTest extends BaseTest{
 		tester.assertComponent("form:instituicaoInputPanel:contato", TextField.class);
 		tester.assertComponent("form:instituicaoInputPanel:endereco", TextArea.class);
 		tester.assertComponent("form:instituicaoInputPanel:responsavel", TextField.class);
+		tester.assertComponent("form:instituicaoInputPanel:status", Component.class);
 		tester.assertComponent("form:instituicaoInputPanel:tipoInstituicao", Component.class);
 		tester.assertNoErrorMessage();
 	}
@@ -43,10 +44,11 @@ public class IncluirInstituicaoPageTest extends BaseTest{
 	public void testInsertInstituicaoFail() {
 		tester.startPage(IncluirInstituicaoPage.class);
 		form = tester.newFormTester("form");
-		form.setValue("instituicaoInputPanel:instituicao", "CRA");
+		form.setValue("instituicaoInputPanel:nomeFantasia", "CRA");
 		form.setValue("instituicaoInputPanel:cnpj", "123");
 		form.setValue("instituicaoInputPanel:email", "e@mail.com");
 		form.setValue("instituicaoInputPanel:contato", "1234");
+		form.setValue("instituicaoInputPanel:status", "Ativo");
 		form.setValue("instituicaoInputPanel:tipoInstituicao", "0");
 		form.submit();
 
@@ -58,7 +60,7 @@ public class IncluirInstituicaoPageTest extends BaseTest{
 	public void testInsertInstituicaoSuccessful() {
 		tester.startPage(IncluirInstituicaoPage.class);
 		form = tester.newFormTester("form");
-		form.setValue("instituicaoInputPanel:instituicao", "INSTITUICAO TESTE");
+		form.setValue("instituicaoInputPanel:nomeFantasia", "INSTITUICAO TESTE");
 		form.setValue("instituicaoInputPanel:razaoSocial", "Instituicao Teste");
 		form.setValue("instituicaoInputPanel:cnpj", "99.999.999/9999-99");
 		form.setValue("instituicaoInputPanel:codCompensacao", "000");
@@ -66,6 +68,7 @@ public class IncluirInstituicaoPageTest extends BaseTest{
 		form.setValue("instituicaoInputPanel:contato", "1234");
 		form.setValue("instituicaoInputPanel:endereco", "AV. Teste");
 		form.setValue("instituicaoInputPanel:responsavel", "TESTE");
+		form.setValue("instituicaoInputPanel:status", "Ativo");
 		form.setValue("instituicaoInputPanel:tipoInstituicao", "0");
 		form.submit();
 

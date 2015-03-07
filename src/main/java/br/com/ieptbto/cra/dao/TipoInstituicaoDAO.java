@@ -2,9 +2,11 @@ package br.com.ieptbto.cra.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -41,31 +43,35 @@ public class TipoInstituicaoDAO extends AbstractBaseDAO {
 		}
 		return tipo;
 	}
-	
-	public void inserirTipoInstituicaoInicial(){
+
+	public void inserirTipoInstituicaoInicial(String tipo) {
 		Transaction transaction = getBeginTransation();
 		try {
 			TipoInstituicao tipoInstituicao = new TipoInstituicao();
-			tipoInstituicao.setTipoInstituicao("CRA");
+			tipoInstituicao.setTipoInstituicao(tipo);
 			save(tipoInstituicao);
-
 			transaction.commit();
 		} catch (Exception ex) {
 			transaction.rollback();
 			System.out.println(ex.getMessage());
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<TipoInstituicao> buscarListaTipoInstituicao(){
+	public List<TipoInstituicao> buscarListaTipoInstituicao() {
 		Criteria criteria = getCriteria(TipoInstituicao.class);
+		criteria.add(Restrictions.ne("tipoInstituicao","Cartório"));
 		criteria.addOrder(Order.asc("tipoInstituicao"));
 		return criteria.list();
 	}
-	
-	public TipoInstituicao buscarTipoInstituicao(String tipoInstituicao){
+
+	public TipoInstituicao buscarTipoInstituicao(String tipoInstituicao) {
 		Criteria criteria = getCriteria(TipoInstituicao.class);
-		criteria.add(Restrictions.eq("tipoInstituicao", tipoInstituicao));
+		if (StringUtils.isNotBlank(tipoInstituicao)) {
+			criteria.add(Restrictions.like("tipoInstituicao", tipoInstituicao,
+					MatchMode.ANYWHERE));
+		}
+		criteria.addOrder(Order.asc("tipoInstituicao"));
 		return TipoInstituicao.class.cast(criteria.uniqueResult());
 	}
 }

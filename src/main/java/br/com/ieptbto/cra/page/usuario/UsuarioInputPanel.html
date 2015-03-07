@@ -3,13 +3,12 @@
 </head>
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR"
 	charset="UTF8">
-	<div class="panel-body-right"
-		style="float: left; width: 45%; margin-right: 15px;">
+	<div class="panel-body-right">
 		<!-- Text input Nome -->
 		<div class="form-group">
-			<label for="nome">Nome:</label> <input id="nome" name="nome"
-				onkeyup="this.value = this.value.toUpperCase()" type="text"
-				wicket:id="nome" placeholder="Nome" class="form-control" />
+			<label for="nome">Nome:</label> <input id="nome"
+				name="nome" onkeyup="this.value = this.value.toUpperCase()"
+				type="text" wicket:id="nome" placeholder="Nome" class="form-control" />
 		</div>
 		<div class="form-group">
 			<label for="nome">Login:</label> <input id="loginUsuario"
@@ -17,23 +16,20 @@
 				placeholder="Login" class="form-control" />
 		</div>
 	</div>
-	<div class="panel-body-left"
-		style="float: left; width: 45%; margin-right: 15px;">
+	<div class="panel-body-left">
 		<div class="form-group">
 			<label class="control-label" for="senha">Senha:</label> <input
 				id="senha" name="senha" type="password" wicket:id="senha"
 				placeholder="Senha" class="form-control" />
 		</div>
 		<div class="form-group">
-			<label for="confirmarSenha">Confimar Senha:</label>
-			<!-- 				 <input	id="confirmarSenha" name="confirmarSenha" type="password" -->
-			<!-- 					placeholder="Repita a senha" wicket:id="confirmarSenha" -->
-			<!-- 					class="form-control" /> -->
+			<label for="confirmarSenha">Confimar Senha:</label> <input
+				id="confirmarSenha" name="confirmarSenha" type="password"
+				placeholder="Repita a senha" class="form-control" />
 		</div>
 	</div>
-	<br style="clear: both;"/>
-	<div class="panel-body-right"
-		style="float: left; width: 45%; margin-right: 15px;">
+	<br style="clear: both;" />
+	<div class="panel-body-right">
 		<div class="form-group">
 			<label for="email">E-mail:</label> <input id="email" name="email"
 				type="text" placeholder="E-mail" wicket:id="email"
@@ -47,9 +43,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="panel-body-left"
-		style="float: left; width: 45%; margin-right: 15px;">
-
+	<div class="panel-body-left">
 		<div class="form-group">
 			<label for="contato">Contato:</label> <input id="contato"
 				name="contato" type="text" placeholder="Contato" wicket:id="contato"
@@ -63,4 +57,19 @@
 			</div>
 		</div>
 	</div>
+	<div class="panel-body-right">
+		<br class="clear: both;" />
+		<div class="form-group">
+			<label class="control-label" for="situacao">Situação:</label><br
+				style="clear: both;" />
+			<div class="radio" style="margin-left: 30px;">
+				<span wicket:id="situacao"></span>
+			</div>
+		</div>
+	</div>
+	<div class="panel-body-left" style="margin-top: 40px;">
+		<br style="clear: both;" />
+		<button wicket:id="botaoSalvar" type="submit" class="btn btn-primary">Salvar</button>
+	</div>
+
 </wicket:panel>

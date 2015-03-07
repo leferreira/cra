@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.instituicao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -59,12 +60,12 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 	
 	private PageableListView<Instituicao> getListViewInstituicao() {
 		return new PageableListView<Instituicao>("listViewInstituicao",
-				listAllInstituicao(), 10) {
+				listInstituicoes(), 10) {
 			@Override
 			protected void populateItem(ListItem<Instituicao> item) {
 				Instituicao instituicaoLista = item.getModelObject();
-				item.add(new Label("instituicao", instituicaoLista
-						.getInstituicao()));
+				item.add(new Label("nomeFantasia", instituicaoLista
+						.getNomeFantasia()));
 				item.add(new Label("tipoInstituicao", instituicaoLista
 						.getTipoInstituicao().getTipoInstituicao()));
 				item.add(new Label("responsavel", instituicaoLista
@@ -101,11 +102,17 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 		};
 	}
 	
-	public IModel<List<Instituicao>> listAllInstituicao() {
+	public IModel<List<Instituicao>> listInstituicoes() {
 		return new LoadableDetachableModel<List<Instituicao>>() {
 			@Override
 			protected List<Instituicao> load() {
 				List<Instituicao> list = instituicaoMediator.listaDeInstituicao();
+				List<Instituicao> listInstituicao = new ArrayList<Instituicao>();
+				for (Instituicao i: list){
+					if (i.getTipoInstituicao().getTipoInstituicao() != "Cartório"){
+						listInstituicao.add(i);
+					}
+				}
 				return list;
 			}
 		};

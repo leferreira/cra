@@ -29,6 +29,7 @@ public class IncluirUsuarioPageTest extends BaseTest {
 		tester.assertComponent("formUsuario:usuarioInputPanel:email", TextField.class);
 		tester.assertComponent("formUsuario:usuarioInputPanel:contato", TextField.class);
 		tester.assertComponent("formUsuario:usuarioInputPanel:instituicao", Component.class);
+		tester.assertComponent("formUsuario:usuarioInputPanel:situacao", Component.class);
 		tester.assertComponent("formUsuario:usuarioInputPanel:grupoUsuario", Component.class);
 		tester.assertNoErrorMessage();
 	}
@@ -46,6 +47,7 @@ public class IncluirUsuarioPageTest extends BaseTest {
 		form.setValue("usuarioInputPanel:senha", "123");
 		form.setValue("usuarioInputPanel:email", "e@mail.com");
 		form.setValue("usuarioInputPanel:contato", "1234");
+		form.setValue("usuarioInputPanel:situacao", "Ativo");
 		form.setValue("usuarioInputPanel:instituicao", "0");
 		form.setValue("usuarioInputPanel:grupoUsuario", "0");
 		form.submit();
@@ -64,10 +66,11 @@ public class IncluirUsuarioPageTest extends BaseTest {
 		form.setValue("usuarioInputPanel:senha", "123456");
 		form.setValue("usuarioInputPanel:email", "e@mail.com");
 		form.setValue("usuarioInputPanel:contato", "1234");
+		form.setValue("usuarioInputPanel:situacao", "Ativo");
 		form.setValue("usuarioInputPanel:instituicao", "0");
 		form.setValue("usuarioInputPanel:grupoUsuario", "0");
 		form.submit();
-		tester.assertErrorMessages();
-		tester.assertInfoMessages();
+		tester.assertNoErrorMessage();
+		tester.assertInfoMessages(new String[] { "Usuário criado com sucesso" });
 	}
 }

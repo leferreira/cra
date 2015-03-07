@@ -7,9 +7,9 @@
 		style="float: left; width: 45%; margin-right: 15px;">
 		<div class="form-group">
 			<label for="instituicao">Intituicao:&nbsp;<small>(Nome
-					Fantasia)</small></label> <input id="instituicao"
-				onkeyup="this.value = this.value.toUpperCase()" name="instituicao"
-				type="text" wicket:id="instituicao" placeholder="Instituição"
+					Fantasia)</small></label> <input id="nomeFantasia"
+				onkeyup="this.value = this.value.toUpperCase()" name="nomeFantasia"
+				type="text" wicket:id="nomeFantasia" placeholder="Nome Fantasia"
 				class="form-control" />
 		</div>
 		<div class="form-group">
@@ -41,7 +41,13 @@
 				class="form-control" />
 		</div>
 
-
+		<div class="form-group">
+			<label class="control-label" for="situacao">Situação:</label><br
+				style="clear: both;" />
+			<div class="radio" style="margin-left: 30px;">
+				<span wicket:id="status"></span>
+			</div>
+		</div>
 	</div>
 	<div class="panel-body-left"
 		style="float: left; width: 45%; margin-right: 15px;">
@@ -71,8 +77,10 @@
 		</div>
 		<div class="form-group">
 			<label for="endereco">Endereço:</label>
-			<textarea id="endereco" name="endereco" wicket:id="endereco"
+			<textarea id="endereco" name="endereco" rows="4" wicket:id="endereco"
 				placeholder="Endereço" class="form-control"></textarea>
+			<br style="clear: both;" />
+			<button wicket:id="botaoSalvar" type="submit" class="btn btn-primary" style="margin-top: 40px;">Salvar</button>
 		</div>
 	</div>
 </wicket:panel>

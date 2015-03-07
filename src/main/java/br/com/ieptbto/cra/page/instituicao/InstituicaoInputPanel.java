@@ -1,11 +1,14 @@
 package br.com.ieptbto.cra.page.instituicao;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -18,13 +21,14 @@ import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.util.EmailValidator;
 
-@SuppressWarnings( {"serial" ,"unused" })
+@SuppressWarnings({ "serial", "unused" })
 public class InstituicaoInputPanel extends Panel {
 
 	@SpringBean
 	private TipoInstituicaoMediator tipoMediator;
 	private List<TipoInstituicao> listComboTipo;
 	private DropDownChoice<TipoInstituicao> combo;
+	private Component button;
 
 	public InstituicaoInputPanel(String id, IModel<Instituicao> model) {
 		super(id, model);
@@ -37,7 +41,7 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	public void adicionarCampos() {
-		add(campoInstituicao());
+		add(campoNomeFantasia());
 		add(campoRazaoSocial());
 		add(comboTipoInstituicao());
 		add(campoCnpj());
@@ -48,11 +52,13 @@ public class InstituicaoInputPanel extends Panel {
 		add(campoEndereco());
 		add(campoResponsavel());
 		add(campoAgenciaCentralizadora());
+		add(campoStatus());
+		add(botaoSalvar());
 	}
 
-	private TextField<String> campoInstituicao() {
-		TextField<String> textField = new TextField<String>("instituicao");
-		textField.setLabel(new Model<String>("Instituição"));
+	private TextField<String> campoNomeFantasia() {
+		TextField<String> textField = new TextField<String>("nomeFantasia");
+		textField.setLabel(new Model<String>("Nome Fantasia"));
 		textField.setRequired(true);
 		textField.setOutputMarkupId(true);
 		return textField;
@@ -116,13 +122,26 @@ public class InstituicaoInputPanel extends Panel {
 		return text;
 	}
 
+	private Component campoStatus() {
+		List<String> status = Arrays
+				.asList(new String[] { "Ativo", "Não Ativo" });
+		return new RadioChoice<String>("status", status);
+	}
+	
 	private Component comboTipoInstituicao() {
 		IChoiceRenderer<TipoInstituicao> renderer = new ChoiceRenderer<TipoInstituicao>(
 				"tipoInstituicao");
 		combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao",
 				tipoMediator.listaTipoInstituicao(), renderer);
+		combo.setLabel(new Model<String>("Tipo Instituição"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
 		return combo;
+	}
+
+	private Component botaoSalvar() {
+		button = new Button("botaoSalvar") {
+		};
+		return button;
 	}
 }

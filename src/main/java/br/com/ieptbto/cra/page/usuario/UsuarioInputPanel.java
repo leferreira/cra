@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -33,6 +34,7 @@ public class UsuarioInputPanel extends Panel {
 	private DropDownChoice<Instituicao> comboInstituicao;
 	private DropDownChoice<GrupoUsuario> comboGrupoUsuario;
 	private RadioChoice<String> radioStatus;
+	private Component button;
 
 	public UsuarioInputPanel(String id, IModel<Usuario> model, Usuario usuario) {
 		super(id, model);
@@ -50,9 +52,10 @@ public class UsuarioInputPanel extends Panel {
 		add(campoLogin());
 		add(campoSenha());
 		add(campoEmail());
-		//add(campoConfirmarSenha());
+		// add(campoConfirmarSenha());
+		add(botaoSalvar());
 		add(campoContato());
-		//add(campoStatus());
+		add(campoStatus());
 		add(comboInstituicao());
 		add(comboGrupoDoUsuario());
 	}
@@ -102,28 +105,37 @@ public class UsuarioInputPanel extends Panel {
 		return textField;
 	}
 
-	private Component campoStatus(){
-		List<String> status = Arrays.asList(new String[]{"Sim", "Não"});
-		return new RadioChoice<String>("status", status);
+	private Component campoStatus() {
+		List<String> status = Arrays
+				.asList(new String[] { "Ativo", "Não Ativo" });
+		return new RadioChoice<String>("situacao", status);
 	}
-	
+
 	private Component comboInstituicao() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>(
-				"instituicao");
-		comboInstituicao = new DropDownChoice<Instituicao>(
-				"instituicao",
+				"nomeFantasia");
+		comboInstituicao = new DropDownChoice<Instituicao>("instituicao",
 				instituicaoMediator.listaDeInstituicao(), renderer);
+		comboInstituicao.setLabel(new Model<String>("Instituição"));
 		comboInstituicao.setOutputMarkupId(true);
 		comboInstituicao.setRequired(true);
 		return comboInstituicao;
 	}
 
 	private Component comboGrupoDoUsuario() {
-		IChoiceRenderer<GrupoUsuario> renderer = new ChoiceRenderer<GrupoUsuario>("grupo");
-		comboGrupoUsuario = new DropDownChoice<GrupoUsuario>(
-				"grupoUsuario", grupoUsuarioMediator.listaDeGrupos() , renderer);
+		IChoiceRenderer<GrupoUsuario> renderer = new ChoiceRenderer<GrupoUsuario>(
+				"grupo");
+		comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario",
+				grupoUsuarioMediator.listaDeGrupos(), renderer);
 		comboGrupoUsuario.setOutputMarkupId(true);
+		comboGrupoUsuario.setLabel(new Model<String>("Grupo Usuário"));
 		comboGrupoUsuario.setRequired(true);
 		return comboGrupoUsuario;
+	}
+
+	private Component botaoSalvar() {
+		button = new Button("botaoSalvar") {
+		};
+		return button;
 	}
 }

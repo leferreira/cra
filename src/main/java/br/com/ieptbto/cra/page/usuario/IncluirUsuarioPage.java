@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.page.usuario;
 
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
@@ -32,7 +31,6 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 	private void setFormulario() {
 		form = new UsuarioForm("formUsuario", getModel());
 		form.add(new UsuarioInputPanel("usuarioInputPanel", getModel(), getUser()));
-		form.add(new Button("botaoSalvar"));
 		add(form);
 	}
 

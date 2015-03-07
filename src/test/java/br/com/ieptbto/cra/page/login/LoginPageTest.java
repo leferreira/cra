@@ -52,7 +52,7 @@ public class LoginPageTest extends BaseTest {
 		form.submit();
 
 		// check errors
-		tester.assertErrorMessages(new String[] { "Login ou senha inválido(s) ou não está ativo." });
+		tester.assertErrorMessages(new String[] { "Login ou senha inválido(s) ou não ativo." });
 		tester.assertNoInfoMessage();
 	}
 
@@ -62,9 +62,7 @@ public class LoginPageTest extends BaseTest {
 		form.setValue("login", USUARIO_TESTE);
 		form.setValue("senha", SENHA_TESTE);
 		form.submit();
-
 		tester.assertNoErrorMessage();
-
 		tester.assertVisible(logoutLinkPath);
 
 		tester.assertLabel("userGreeting", "Olá Teste");

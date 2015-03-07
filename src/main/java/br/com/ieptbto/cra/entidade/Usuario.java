@@ -170,4 +170,20 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
 	public boolean hasRole(String role) {
 		return this.grupoUsuario.getRoles().hasRole(role);
 	}
+	
+	public String getSituacao(){
+		if(isStatus() == true){
+			return "Ativo";
+		}else{
+			return "Não Ativo";
+		}
+	}
+	
+	public void setSituacao(String situacao){
+		if(situacao == "Ativo"){
+			setStatus(true);
+		}else{
+			setStatus(false);
+		}
+	}
 }
