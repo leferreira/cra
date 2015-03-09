@@ -15,6 +15,7 @@ import java.util.List;
 
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.InstituicaoMunicipio;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
@@ -47,6 +48,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(TipoInstituicao.class);
 		classesHibernate.add(Municipio.class);
 		classesHibernate.add(TipoArquivo.class);
+		classesHibernate.add(InstituicaoMunicipio.class);
 		// classesHibernate.add(Atendimento.class);
 		// classesHibernate.add(Aluno.class);
 		// classesHibernate.add(Turma.class);

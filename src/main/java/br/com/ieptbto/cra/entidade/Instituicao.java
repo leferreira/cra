@@ -1,18 +1,20 @@
 package br.com.ieptbto.cra.entidade;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.envers.Audited;
 
@@ -34,9 +36,14 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	private String endereco;
 	private String responsavel;
 	private String agenciaCentralizadora;
+	private String favorecido;
+	private String bancoContaCorrente;
+	private String agenciaContaCorrente;
+	private String numContaCorrente;
+	private Municipio comarcaCartorio;
 	private boolean situacao;
-	private List<Usuario> listaUsuarios;
-	private List<Municipio> listaMunicipios;
+	private List<Usuario> listaUsuarios = new ArrayList<Usuario>();
+	private List<InstituicaoMunicipio> instituicaoMunicipio = new ArrayList<InstituicaoMunicipio>();
 	private TipoInstituicao tipoInstituicao;
 
 	@Id
@@ -46,52 +53,52 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return id;
 	}
 
-	@Column(name = "NOME_FANTASIA", nullable = false, unique=true, length=50)
+	@Column(name = "NOME_FANTASIA", nullable = false, unique = true, length = 50)
 	public String getNomeFantasia() {
 		return nomeFantasia;
 	}
 
-	@Column(name = "CNPJ", nullable = false, unique=true, length=50)
+	@Column(name = "CNPJ", nullable = false, unique = true, length = 50)
 	public String getCnpj() {
 		return cnpj;
 	}
 
-	@Column(name = "RAZAO_SOCIAL", length=50)
+	@Column(name = "RAZAO_SOCIAL", length = 50)
 	public String getRazaoSocial() {
 		return razaoSocial;
 	}
 
-	@Column(name = "CODIGO_COMPENSACAO", length=3)
+	@Column(name = "CODIGO_COMPENSACAO", length = 3)
 	public String getCodCompensacao() {
 		return codCompensacao;
 	}
 
-	@Column(name = "EMAIL", length=50)
+	@Column(name = "EMAIL", length = 50)
 	public String getEmail() {
 		return email;
 	}
 
-	@Column(name = "CONTATO", length=20)
+	@Column(name = "CONTATO", length = 20)
 	public String getContato() {
 		return contato;
 	}
 
-	@Column(name = "VALOR_CONFIRMACAO", precision=2)
+	@Column(name = "VALOR_CONFIRMACAO", precision = 2)
 	public Double getValorConfirmacao() {
 		return valorConfirmacao;
 	}
 
-	@Column(name = "ENDERECO", length=50)
+	@Column(name = "ENDERECO", length = 50)
 	public String getEndereco() {
 		return endereco;
 	}
 
-	@Column(name = "RESPOSAVEL", length=20)
+	@Column(name = "RESPOSAVEL", length = 20)
 	public String getResponsavel() {
 		return responsavel;
 	}
 
-	@Column(name = "AGENCIA_CENTRALIZADORA", length=50)
+	@Column(name = "AGENCIA_CENTRALIZADORA", length = 50)
 	public String getAgenciaCentralizadora() {
 		return agenciaCentralizadora;
 	}
@@ -101,12 +108,34 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return situacao;
 	}
 
-	@ManyToMany
-	@JoinTable(name="INSTITUICAO_MUNICIPIO", 
-			joinColumns= @JoinColumn(name="INSTITUICAO_ID"),
-			inverseJoinColumns = @JoinColumn(name="MUNICIPIO_ID"))
-	public List<Municipio> getListaMunicipios() {
-		return listaMunicipios;
+	@Column(name = "FAVOREcIDO")
+	public String getFavorecido() {
+		return favorecido;
+	}
+
+	@Column(name = "BANCO_CONTA_CORRENTE")
+	public String getBancoContaCorrente() {
+		return bancoContaCorrente;
+	}
+
+	@Column(name = "AGENCIA_CONTA_CORRENTE")
+	public String getAgenciaContaCorrente() {
+		return agenciaContaCorrente;
+	}
+
+	@Column(name = "NUM_CONTA_CORRENTE")
+	public String getNumContaCorrente() {
+		return numContaCorrente;
+	}
+
+	@Transient
+	public Municipio getComarcaCartorio() {
+		return comarcaCartorio;
+	}
+
+	@OneToMany(mappedBy = "instituicao", fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+	public List<InstituicaoMunicipio> getInstituicaoMunicipio() {
+		return instituicaoMunicipio;
 	}
 	
 	@ManyToOne
@@ -139,11 +168,6 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	@Override
 	public int compareTo(Instituicao entidade) {
 		return 0;
-	}
-
-	@Override
-	public String toString() {
-		return "Instituicao [Nome Fantasia=" + nomeFantasia + "]";
 	}
 
 	public void setTipoInstituicao(TipoInstituicao tipoInstituicao) {
@@ -185,24 +209,46 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	public void setSituacao(boolean situacao) {
 		this.situacao = situacao;
 	}
-
-	public void setListaMunicipios(List<Municipio> listaMunicipios) {
-		this.listaMunicipios = listaMunicipios;
-	}
 	
-	public String getStatus(){
-		if(isSituacao() == true){
+	public void setComarcaCartorio(Municipio municipio) {
+		this.comarcaCartorio = municipio;
+	}
+
+	public String getStatus() {
+		if (isSituacao() == true) {
 			return "Ativo";
-		}else{
+		} else {
 			return "Não Ativo";
 		}
 	}
-	
-	public void setStatus(String status){
-		if(status == "Ativo"){
+
+	public void setStatus(String status) {
+		if (status == "Ativo") {
 			setSituacao(true);
-		}else{
+		} else {
 			setSituacao(false);
 		}
+	}
+
+	public void setFavorecido(String favorecido) {
+		this.favorecido = favorecido;
+	}
+
+	public void setBancoContaCorrente(String bancoContaCorrente) {
+		this.bancoContaCorrente = bancoContaCorrente;
+	}
+
+	public void setAgenciaContaCorrente(String agenciaContaCorrente) {
+		this.agenciaContaCorrente = agenciaContaCorrente;
+	}
+
+	public void setNumContaCorrente(String numContaCorrente) {
+		this.numContaCorrente = numContaCorrente;
+	}
+
+
+	public void setInstituicaoMunicipio(
+			List<InstituicaoMunicipio> instituicaoMunicipio) {
+		this.instituicaoMunicipio = instituicaoMunicipio;
 	}
 }

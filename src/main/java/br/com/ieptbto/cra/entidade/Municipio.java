@@ -1,13 +1,16 @@
 package br.com.ieptbto.cra.entidade;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
@@ -23,7 +26,7 @@ public class Municipio extends AbstractEntidade<Municipio>{
 	private String nomeMunicipio;
 	private char[] uf;
 	private Integer codIBGE;
-	private List<Instituicao> listInstituicao;
+	private List<InstituicaoMunicipio> instituicaoMunicipio = new ArrayList<InstituicaoMunicipio>();
 	private boolean situacao;
 
 	@Id
@@ -48,9 +51,9 @@ public class Municipio extends AbstractEntidade<Municipio>{
 		return codIBGE;
 	}
 
-	@ManyToMany(mappedBy = "listaMunicipios")
-	public List<Instituicao> getListInstituicao() {
-		return listInstituicao;
+	@OneToMany(mappedBy = "municipio", fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+	public List<InstituicaoMunicipio> getInstituicaoMunicipio() {
+		return instituicaoMunicipio;
 	}
 
 	@Column(name = "SITUACAO")
@@ -74,17 +77,17 @@ public class Municipio extends AbstractEntidade<Municipio>{
 		this.codIBGE = codIBGE;
 	}
 
-	public void setListInstituicao(List<Instituicao> listInstituicao) {
-		this.listInstituicao = listInstituicao;
-	}
-
 	public void setSituacao(boolean situacao) {
 		this.situacao = situacao;
 	}
 
+	public void setInstituicaoMunicipio(
+			List<InstituicaoMunicipio> instituicaoMunicipio) {
+		this.instituicaoMunicipio = instituicaoMunicipio;
+	}
+	
 	@Override
 	public int compareTo(Municipio entidade) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 }

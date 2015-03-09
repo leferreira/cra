@@ -24,6 +24,7 @@ import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
+import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.instituicao.IncluirInstituicaoPage;
 import br.com.ieptbto.cra.page.instituicao.ListaInstituicaoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
@@ -111,6 +112,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("ListaUsuario", ListaUsuarioPage.class);
 		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
 		mountPage("ListaInstituicao", ListaInstituicaoPage.class);
+		mountPage("IncluirCartorio", IncluirCartorioPage.class);
 		mountPage("EnviarArquivo", EnviarArquivoPage.class);
 	}
 
