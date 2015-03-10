@@ -1,5 +1,6 @@
-package br.com.ieptbto.cra.page.instituicao;
+package br.com.ieptbto.cra.page.cartorio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -17,26 +18,31 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.InstituicaoMunicipio;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.InstituicaoMunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 @SuppressWarnings("serial")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN,
 		CraRoles.SUPER, })
-public class ListaInstituicaoPage extends BasePage<Instituicao> {
+public class ListaCartorioPage extends BasePage<Instituicao> {
 
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	private InstituicaoMunicipioMediator imMediator;
 	
-	private final Instituicao instituicao;
+	private final Instituicao cartorio;
 	private WebMarkupContainer divListRetorno;
 	private WebMarkupContainer divListaInstituicao;
 	private WebMarkupContainer dataTableInstituicao;
+	List<InstituicaoMunicipio> imLista = new ArrayList<InstituicaoMunicipio>();
 	
-	public ListaInstituicaoPage() {
+	public ListaCartorioPage() {
 		super();
-		instituicao = new Instituicao();
+		cartorio = new Instituicao();
 		adicionarCampos();
 	}
 
@@ -65,10 +71,15 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 				Instituicao instituicaoLista = item.getModelObject();
 				item.add(new Label("nomeFantasia", instituicaoLista
 						.getNomeFantasia()));
-				item.add(new Label("tipoInstituicao", instituicaoLista
-						.getTipoInstituicao().getTipoInstituicao()));
+				imLista = instituicaoLista.getInstituicaoMunicipio();
+				for(InstituicaoMunicipio im: imLista){
+					item.add(new Label("municipioComarca", im.getMunicipio().getNomeMunicipio() ));
+					break;
+				}
 				item.add(new Label("responsavel", instituicaoLista
 						.getResponsavel()));
+				item.add(new Label("email", instituicaoLista
+						.getEmail()));
 				item.add(new Label("contato", instituicaoLista.getContato()));
 				if (instituicaoLista.isSituacao()) {
 					item.add(new Label("situacao", "Sim"));
@@ -76,36 +87,36 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 					item.add(new Label("situacao", "Não"));
 				}
 
-				item.add(detalharInstituicao(instituicaoLista));
-				item.add(desativarInstituicao(instituicaoLista));
+				item.add(detalharCartorio(instituicaoLista));
+				item.add(desativarCartorio(instituicaoLista));
 			}
 
-			private Component detalharInstituicao(final Instituicao instituicao) {
-				return new Link<Instituicao>("detalharInstituicao") {
+			private Component detalharCartorio(final Instituicao cartorio) {
+				return new Link<Instituicao>("detalharCartorio") {
 					@Override
 					public void onClick() {
-						setResponsePage(new IncluirInstituicaoPage(instituicao));
+						setResponsePage(new IncluirCartorioPage(cartorio));
 					}
 				};
 			}
 
-			private Component desativarInstituicao(final Instituicao instituicao) {
-				return new Link<Instituicao>("desativarInstituicao") {
+			private Component desativarCartorio(final Instituicao cartorio) {
+				return new Link<Instituicao>("desativarCartorio") {
 					@Override
 					public void onClick() {
-						instituicao.setSituacao(false);
-						instituicaoMediator.alterar(instituicao);
+						cartorio.setSituacao(false);
+						instituicaoMediator.alterar(cartorio);
 					}
 				};
 			}
 		};
 	}
 	
-	public IModel<List<Instituicao>> listInstituicoes() {
+	public IModel<List<Instituicao>> listInstituicoes(){
 		return new LoadableDetachableModel<List<Instituicao>>() {
 			@Override
 			protected List<Instituicao> load() {
-				List<Instituicao> list = instituicaoMediator.listaDeInstituicao();
+				List<Instituicao> list = instituicaoMediator.listaDeCartorio();
 				return list;
 			}
 		};
@@ -113,6 +124,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 	
 	@Override
 	protected IModel<Instituicao> getModel() {
-		return new CompoundPropertyModel<Instituicao>(instituicao);
+		return new CompoundPropertyModel<Instituicao>(cartorio);
 	}
+
 }

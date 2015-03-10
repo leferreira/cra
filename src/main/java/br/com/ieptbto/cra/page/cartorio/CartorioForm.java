@@ -9,7 +9,7 @@ import br.com.ieptbto.cra.entidade.InstituicaoMunicipio;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.InstituicaoMunicipioMediadiator;
+import br.com.ieptbto.cra.mediator.InstituicaoMunicipioMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
 
@@ -21,7 +21,7 @@ public class CartorioForm extends BaseForm<Instituicao> {
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	InstituicaoMunicipioMediadiator imMediator;
+	InstituicaoMunicipioMediator imMediator;
  
 	public CartorioForm(String id, IModel<Instituicao> model) {
 		super(id, model);

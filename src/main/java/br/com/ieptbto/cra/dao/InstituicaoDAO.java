@@ -73,6 +73,15 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 	public List<Instituicao> buscarListaInstituicao(){
 		Criteria criteria = getCriteria(Instituicao.class);
 		criteria.addOrder(Order.asc("id"));
+		criteria.add(Restrictions.ne("tipoInstituicao.id", 2));
+		return criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Instituicao> buscarListaCartorio(){
+		Criteria criteria = getCriteria(Instituicao.class);
+		criteria.addOrder(Order.asc("id"));
+		criteria.add(Restrictions.eq("tipoInstituicao.id", 2));
 		return criteria.list();
 	}
 	

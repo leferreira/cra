@@ -7,7 +7,7 @@ import br.com.ieptbto.cra.dao.InstituicaoMunicipioDAO;
 import br.com.ieptbto.cra.entidade.InstituicaoMunicipio;
 
 @Service
-public class InstituicaoMunicipioMediadiator {
+public class InstituicaoMunicipioMediator {
 
 	@Autowired
 	InstituicaoMunicipioDAO daoIM;

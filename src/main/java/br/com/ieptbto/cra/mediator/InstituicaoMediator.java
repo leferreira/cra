@@ -48,4 +48,9 @@ public class InstituicaoMediator {
 		List<Instituicao> lista = instituicaoDAO.buscarListaInstituicao();
 		return lista;
 	}
+	
+	public List<Instituicao> listaDeCartorio() {
+		List<Instituicao> lista = instituicaoDAO.buscarListaCartorio();
+		return lista;
+	}
 }
