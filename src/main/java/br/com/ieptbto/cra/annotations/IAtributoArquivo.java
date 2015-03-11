@@ -75,6 +75,14 @@ public @interface IAtributoArquivo {
 	String descricao();
 
 	/**
+	 * Quando se tratar de um campo multivalorado (lista), deverá ser informado
+	 * a quantidade máxima de itens.
+	 * 
+	 * @return
+	 */
+	int quantidadeItens() default 1;
+
+	/**
 	 * Definite o tipo do campo
 	 * 
 	 * @return

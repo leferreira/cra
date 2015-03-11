@@ -42,7 +42,7 @@ public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 		return id;
 	}
 
-	@Column(name = "CONSTANTE", length = 2)
+	@Column(name = "CONSTANTE", length = 2, unique = true)
 	public String getConstante() {
 		return constante.trim().toUpperCase();
 	}

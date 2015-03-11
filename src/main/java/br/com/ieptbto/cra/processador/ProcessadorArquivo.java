@@ -19,10 +19,8 @@ public class ProcessadorArquivo extends Processador {
 		if (uploadedFile != null) {
 
 			verificaDiretorio(usuario);
-			File novoArquivo = new File(ConfiguracaoBase.DIRETORIO_TEMP_BASE);
-			if (novoArquivo.exists()) {
-				new InfraException("Arquivo já armazenado. Por favor verifique o nome do arquivo");
-			}
+			// File novoArquivo = new
+			// File(ConfiguracaoBase.DIRETORIO_TEMP_BASE);
 
 		} else {
 			new InfraException("O arquivo enviado não pode ser processado.");

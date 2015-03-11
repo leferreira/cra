@@ -15,6 +15,7 @@ import org.apache.wicket.util.lang.Bytes;
 import org.joda.time.DateTime;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 
@@ -50,7 +51,15 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			protected void onSubmit() {
 				final FileUpload uploadedFile = fileUploadField.getFileUpload();
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
-				arquivoMediator.salvar(arquivo, uploadedFile);
+
+				try {
+					arquivoMediator.salvar(arquivo, uploadedFile);
+					info("Arquivo enviado com sucesso.");
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				} catch (Exception e) {
+					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
+				}
 
 			}
 		};
@@ -64,6 +73,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 	private FileUploadField campoArquivo() {
 		fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
+		fileUploadField.setRequired(true);
 		return fileUploadField;
 	}
 
@@ -81,6 +91,11 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				target.add(getFeedbackPanel());
+			}
+
+			@Override
+			protected void finalize() throws Throwable {
+				super.finalize();
 			}
 
 		};

@@ -6,7 +6,7 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
-import br.com.ieptbto.cra.entidade.vo.AbstractRegistro;
+import br.com.ieptbto.cra.entidade.vo.AbstractArquivo;
 import br.com.ieptbto.cra.util.CraConstructorUtils;
 
 /**
@@ -16,7 +16,7 @@ import br.com.ieptbto.cra.util.CraConstructorUtils;
  * @param <R>
  * @param <E>
  */
-public abstract class AbstractConversorArquivo<R extends AbstractRegistro, E extends AbstractEntidade<?>> {
+public abstract class AbstractConversorArquivo<R extends AbstractArquivo, E extends AbstractEntidade<?>> {
 
 	/**
 	 * @param entidade
