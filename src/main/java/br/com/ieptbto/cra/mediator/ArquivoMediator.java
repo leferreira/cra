@@ -32,7 +32,7 @@ public class ArquivoMediator {
 	}
 
 	private void processarArquivo(Arquivo arquivo, FileUpload uploadedFile) throws InfraException {
-		ProcessadorArquivo.processarArquivo(uploadedFile, arquivo.getUsuarioEnvio());
+		new ProcessadorArquivo().processarArquivo(uploadedFile, arquivo.getUsuarioEnvio());
 	}
 
 }
