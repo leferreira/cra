@@ -31,4 +31,8 @@ public class TipoInstituicaoMediator {
 	public List<TipoInstituicao> listaTipoInstituicao() {
 		return tipoInstituicaoDao.buscarListaTipoInstituicao();
 	}
+	
+	public List<TipoInstituicao> listarTipos() {
+		return tipoInstituicaoDao.listarTodos();
+	}
 }

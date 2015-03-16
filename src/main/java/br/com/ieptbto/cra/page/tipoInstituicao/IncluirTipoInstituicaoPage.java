@@ -29,7 +29,7 @@ public class IncluirTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 	
 	public void setForm(){
 		form = new TipoInstituicaoForm("form", getModel());
-		form.add(new TipoInstituicaoInputPanel("tipoInputPanel", getModel()));
+		form.add(new TipoInstituicaoInputPanel("tipoInputPanel", getModel(), tipoInstituicao));
 		add(form);
 	}
 	

@@ -65,6 +65,13 @@ public class TipoInstituicaoDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<TipoInstituicao> listarTodos() {
+		Criteria criteria = getCriteria(TipoInstituicao.class);
+		criteria.addOrder(Order.asc("tipoInstituicao"));
+		return criteria.list();
+	}
+	
 	public TipoInstituicao buscarTipoInstituicao(String tipoInstituicao) {
 		Criteria criteria = getCriteria(TipoInstituicao.class);
 		if (StringUtils.isNotBlank(tipoInstituicao)) {
