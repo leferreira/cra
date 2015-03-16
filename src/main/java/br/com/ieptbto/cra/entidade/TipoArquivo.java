@@ -5,15 +5,19 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
+
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 
 /**
  * 
@@ -29,11 +33,10 @@ public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 	/****/
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private String constante; // Constante ex: B-Remessa
-	private String tipoArquivo;
+	private TipoArquivoEnum tipoArquivo;
+	private List<PermissaoEnvio> arquivosEnvioPermitido;
 	private Date horaEnvioInicio;
 	private Date horaEnvioFim;
-	private List<TipoInstituicao> listaTipoInstituicao;
 
 	@Id
 	@Column(name = "ID_TIPO_ARQUIVO", columnDefinition = "serial")
@@ -42,19 +45,15 @@ public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 		return id;
 	}
 
-	@Column(name = "CONSTANTE", length = 2)
-	public String getConstante() {
-		return constante.trim().toUpperCase();
+	@Enumerated(EnumType.STRING)
+	@Column(name="TIPO_ARQUIVO")
+	public TipoArquivoEnum getTipoArquivo() {
+		return tipoArquivo;
 	}
 
-	@Column(name = "TIPO_ARQUIVO", length = 30)
-	public String getTipoArquivo() {
-		return tipoArquivo.trim();
-	}
-
-	@ManyToMany(mappedBy = "arquivosEnvioPermitido")
-	public List<TipoInstituicao> getListaTipoInstituicao() {
-		return listaTipoInstituicao;
+	@OneToMany(mappedBy = "tipoArquivo")
+	public List<PermissaoEnvio> getArquivosEnvioPermitido() {
+		return arquivosEnvioPermitido;
 	}
 
 	@Column(name = "HORA_ENVIO_FIM")
@@ -81,20 +80,18 @@ public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 		this.id = id;
 	}
 
-	public void setConstante(String constante) {
-		this.constante = constante;
-	}
-
-	public void setTipoArquivo(String tipoArquivo) {
+	public void setTipoArquivo(TipoArquivoEnum tipoArquivo) {
 		this.tipoArquivo = tipoArquivo;
 	}
 
-	public void setListaTipoInstituicao(List<TipoInstituicao> listaTipoInstituicao) {
-		this.listaTipoInstituicao = listaTipoInstituicao;
+	public void setArquivosEnvioPermitido(
+			List<PermissaoEnvio> arquivosEnvioPermitido) {
+		this.arquivosEnvioPermitido = arquivosEnvioPermitido;
 	}
 
 	@Override
 	public int compareTo(TipoArquivo entidade) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 

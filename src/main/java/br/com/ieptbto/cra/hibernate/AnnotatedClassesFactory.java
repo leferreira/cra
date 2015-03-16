@@ -13,6 +13,7 @@ package br.com.ieptbto.cra.hibernate;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ieptbto.cra.entidade.PermissaoEnvio;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstituicaoMunicipio;
@@ -48,6 +49,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(TipoInstituicao.class);
 		classesHibernate.add(Municipio.class);
 		classesHibernate.add(TipoArquivo.class);
+		classesHibernate.add(PermissaoEnvio.class);
 		classesHibernate.add(InstituicaoMunicipio.class);
 		// classesHibernate.add(Atendimento.class);
 		// classesHibernate.add(Aluno.class);

@@ -15,7 +15,8 @@ public class TipoInstituicaoMediator {
 	TipoInstituicaoDAO tipoInstituicaoDao;
 	
 	public TipoInstituicao salvar(TipoInstituicao tipo) {
-		return tipoInstituicaoDao.salvar(tipo);
+		TipoInstituicao tp = tipoInstituicaoDao.salvar(tipo);
+		return tp;
 	}
 	
 	public TipoInstituicao alterar(TipoInstituicao tipo) {

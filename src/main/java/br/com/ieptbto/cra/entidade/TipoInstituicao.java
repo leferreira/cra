@@ -7,9 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -25,7 +22,7 @@ public class TipoInstituicao extends AbstractEntidade<TipoInstituicao> {
 	private int id;
 	private String tipoInstituicao;
 	private List<Instituicao> listaInstituicoes;
-	private List<TipoArquivo> arquivosEnvioPermitido;
+	private List<PermissaoEnvio> arquivosEnvioPermitido;
 
 	@Id
 	@Column(name = "ID_TIPO_INSTITUICAO", columnDefinition = "serial")
@@ -44,14 +41,11 @@ public class TipoInstituicao extends AbstractEntidade<TipoInstituicao> {
 		return listaInstituicoes;
 	}
 	
-	@ManyToMany
-	@JoinTable(name="PERMISSAO_ENVIO_ARQUIVO", 
-			joinColumns= @JoinColumn(name="TIPO_INSTITUICAO_ID"),
-			inverseJoinColumns = @JoinColumn(name="TIPO_ARQUIVO_ID"))
-	public List<TipoArquivo> getArquivosEnvioPermitido() {
+	@OneToMany(mappedBy = "tipoInstituicao")
+	public List<PermissaoEnvio> getArquivosEnvioPermitido() {
 		return arquivosEnvioPermitido;
 	}
-
+	
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -62,15 +56,15 @@ public class TipoInstituicao extends AbstractEntidade<TipoInstituicao> {
 	
 	public void setListaInstituicoes(List<Instituicao> listaInstituicoes) {
 		this.listaInstituicoes = listaInstituicoes;
-	}
+	}	
 
-	public void setArquivosEnvioPermitido(List<TipoArquivo> arquivosEnvioPermitido) {
+	public void setArquivosEnvioPermitido(
+			List<PermissaoEnvio> arquivosEnvioPermitido) {
 		this.arquivosEnvioPermitido = arquivosEnvioPermitido;
 	}
-	
+
 	@Override
 	public int compareTo(TipoInstituicao entidade) {
 		return 0;
 	}
-
 }

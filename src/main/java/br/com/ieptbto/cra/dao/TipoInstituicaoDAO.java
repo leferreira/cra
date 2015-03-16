@@ -19,14 +19,14 @@ public class TipoInstituicaoDAO extends AbstractBaseDAO {
 
 	@Transactional(readOnly = true)
 	public TipoInstituicao salvar(TipoInstituicao tipoInstituicao) {
-		TipoInstituicao nova = new TipoInstituicao();
+		TipoInstituicao novo = new TipoInstituicao();
 		Transaction transaction = getBeginTransation();
 		try {
-			nova = save(tipoInstituicao);
+			novo = save(tipoInstituicao);	
 		} catch (Exception ex) {
 			transaction.rollback();
 		}
-		return nova;
+		return novo;
 	}
 
 	@Transactional(readOnly = true)
