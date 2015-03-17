@@ -14,6 +14,18 @@ public class MunicipioMediator {
 	@Autowired
 	MunicipioDAO municipioDao;
 	
+	public Municipio adicionarMunicipio(Municipio municipio){
+		return municipioDao.salvar(municipio);
+	}
+	
+	public Municipio alterarMunicipio(Municipio municipio){
+		return municipioDao.alterar(municipio);
+	}
+	
+	public boolean isMunicipioNaoExiste(Municipio municipio){
+		return true;
+	}
+	
 	public List<Municipio> listarTodos(){
 		return municipioDao.listarTodos();
 	}

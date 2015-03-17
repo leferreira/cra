@@ -24,7 +24,7 @@ public class Municipio extends AbstractEntidade<Municipio>{
 
 	private int id;
 	private String nomeMunicipio;
-	private char[] uf;
+	private String uf;
 	private Integer codIBGE;
 	private List<InstituicaoMunicipio> instituicaoMunicipio = new ArrayList<InstituicaoMunicipio>();
 	private boolean situacao;
@@ -41,8 +41,8 @@ public class Municipio extends AbstractEntidade<Municipio>{
 		return nomeMunicipio;
 	}
 
-	@Column(name = "UF", nullable=false)
-	public char[] getUf() {
+	@Column(name = "UF", nullable=false, length=2)
+	public String getUf() {
 		return uf;
 	}
 
@@ -69,7 +69,7 @@ public class Municipio extends AbstractEntidade<Municipio>{
 		this.nomeMunicipio = nomeMunicipio;
 	}
 
-	public void setUf(char[] uf) {
+	public void setUf(String uf) {
 		this.uf = uf;
 	}
 
