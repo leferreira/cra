@@ -214,6 +214,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		this.comarcaCartorio = municipio;
 	}
 
+	@Transient
 	public String getStatus() {
 		if (isSituacao() == true) {
 			return "Ativo";

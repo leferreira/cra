@@ -11,7 +11,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -56,7 +55,6 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 		dataTableInstituicao = new WebMarkupContainer("dataTableInstituicao");
 		PageableListView<Instituicao> listView = getListViewInstituicao();
 		dataTableInstituicao.setOutputMarkupId(true);
-		dataTableInstituicao.add(new PagingNavigator("navigation", listView));
 		dataTableInstituicao.add(listView);
 
 		divListaInstituicao.add(dataTableInstituicao);

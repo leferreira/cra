@@ -8,7 +8,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -45,7 +44,6 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 		dataTableMunicipio = new WebMarkupContainer("dataTableMunicipio");
 		PageableListView<Municipio> listView = getListViewMunicipio();
 		dataTableMunicipio.setOutputMarkupId(true);
-		dataTableMunicipio.add(new PagingNavigator("navigation", listView));
 		dataTableMunicipio.add(listView);
 
 		divListaMunicipio.add(dataTableMunicipio);
@@ -64,7 +62,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				item.add(new Label("codIBGE", municipioLista.getCodIBGE()));
 
 				item.add(detalharMunicipio(municipioLista));
-				item.add(desativarMunicipio(municipioLista));
+//				item.add(desativarMunicipio(municipioLista));
 			}
 
 			private Component detalharMunicipio(final Municipio m) {
@@ -77,17 +75,17 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				};
 			}
 
-			private Component desativarMunicipio(final Municipio m) {
-				return new Link<Municipio>("desativarMunicipio") {
-
-					@Override
-					public void onClick() {
-						m.setSituacao(false);
-						municipioMediator.alterarMunicipio(m);
-						info("Município desativado!");
-					}
-				};
-			}
+//			private Component desativarMunicipio(final Municipio m) {
+//				return new Link<Municipio>("desativarMunicipio") {
+//
+//					@Override
+//					public void onClick() {
+//						m.setSituacao(false);
+//						municipioMediator.alterarMunicipio(m);
+//						info("Município desativado!");
+//					}
+//				};
+//			}
 		};
 
 	}

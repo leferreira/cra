@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -50,7 +49,6 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 		dataTableInstituicao = new WebMarkupContainer("dataTableInstituicao");
 		PageableListView<Instituicao> listView = getListViewInstituicao();
 		dataTableInstituicao.setOutputMarkupId(true);
-		dataTableInstituicao.add(new PagingNavigator("navigation", listView));
 		dataTableInstituicao.add(listView);
 
 		divListaInstituicao.add(dataTableInstituicao);
@@ -59,7 +57,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 	
 	private PageableListView<Instituicao> getListViewInstituicao() {
 		return new PageableListView<Instituicao>("listViewInstituicao",
-				listInstituicoes(), 10) {
+				listarInstituicoes(), 10) {
 			@Override
 			protected void populateItem(ListItem<Instituicao> item) {
 				Instituicao instituicaoLista = item.getModelObject();
@@ -101,11 +99,11 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 		};
 	}
 	
-	public IModel<List<Instituicao>> listInstituicoes() {
+	public IModel<List<Instituicao>> listarInstituicoes() {
 		return new LoadableDetachableModel<List<Instituicao>>() {
 			@Override
 			protected List<Instituicao> load() {
-				List<Instituicao> list = instituicaoMediator.listaDeInstituicao();
+				List<Instituicao> list = instituicaoMediator.listarTodasInstituicoes();
 				return list;
 			}
 		};

@@ -29,9 +29,11 @@ public class UsuarioMediator {
 
 	public Usuario autenticar(String login, String senha) {
 		Usuario usuario = usuarioDao.buscarUsuarioPorLogin(login);
-		if (usuario != null && usuario.isSenha(senha)) {
-			if(usuario.isStatus()==true){
-				return usuario;
+		if (instituicaoDao.isInstituicaoAtiva(usuario.getInstituicao())) {
+			if (usuario != null && usuario.isSenha(senha)) {
+				if (usuario.isStatus() == true) {
+					return usuario;
+				}
 			}
 		}
 		return null;
@@ -60,15 +62,15 @@ public class UsuarioMediator {
 	 * @return
 	 * */
 	public boolean isSenhasIguais(Usuario usuario) {
-		if (usuario.getSenha().equals(usuario.getConfirmarSenha()) ){
+		if (usuario.getSenha().equals(usuario.getConfirmarSenha())) {
 			System.out.println("true");
 			return true;
-		}else{
+		} else {
 			System.out.println("false");
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Verifica se o login que será criado não existe no sistema
 	 * 
@@ -91,36 +93,41 @@ public class UsuarioMediator {
 	}
 
 	public void cargaInicial() {
-		/*Inserindo os Tipos da Instituição
-		 * */
+		/*
+		 * Inserindo os Tipos da Instituição
+		 */
 		tipoInstituicaoDao.inserirTipoInstituicaoInicial("CRA");
 		tipoInstituicaoDao.inserirTipoInstituicaoInicial("Cartório");
-		tipoInstituicaoDao.inserirTipoInstituicaoInicial("Instituições Financeiras");
-		
-		/*Inserindo a instituição CRA
-		 * */
+		tipoInstituicaoDao
+				.inserirTipoInstituicaoInicial("Instituições Financeiras");
+
+		/*
+		 * Inserindo a instituição CRA
+		 */
 		instituicaoDao.inserirInstituicaoInicial();
-		
-		/*Inserindo os Grupos dos Usuário e as Permissões
-		 * */
-		GrupoUsuario grupo = new GrupoUsuario();	
+
+		/*
+		 * Inserindo os Grupos dos Usuário e as Permissões
+		 */
+		GrupoUsuario grupo = new GrupoUsuario();
 		grupo.setGrupo("Super Administrador");
 		String[] roles = { CraRoles.ADMIN, CraRoles.USER, CraRoles.SUPER };
 		grupo.setRoles(new Roles(roles));
 		grupoUsuarioDao.inserirGruposCargaInicial(grupo);
-		
+
 		grupo.setGrupo("Administrador");
 		String[] roles1 = { Roles.ADMIN, CraRoles.USER };
 		grupo.setRoles(new Roles(roles1));
 		grupoUsuarioDao.inserirGruposCargaInicial(grupo);
-		
+
 		grupo.setGrupo("Usuário");
 		String[] roles2 = { CraRoles.USER };
 		grupo.setRoles(new Roles(roles2));
 		grupoUsuarioDao.inserirGruposCargaInicial(grupo);
-		
-		/*Inserindo o usuário de teste
-		 * */
+
+		/*
+		 * Inserindo o usuário de teste
+		 */
 		usuarioDao.incluirUsuarioDeTeste();
 	}
 

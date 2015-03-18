@@ -21,7 +21,7 @@ public class InstituicaoMediator {
 	public Instituicao alterar(Instituicao instituicao) {
 		return instituicaoDAO.alterar(instituicao);
 	}
-	
+
 	/**
 	 * Verifica se a instituicao não está cadastrada
 	 * 
@@ -29,26 +29,55 @@ public class InstituicaoMediator {
 	 * @return
 	 */
 	public boolean isInstituicaoNaoExiste(Instituicao instituicao) {
-		Instituicao instituicaoNova = instituicaoDAO.buscarInstituicao(instituicao.getNomeFantasia());
+		Instituicao instituicaoNova = instituicaoDAO
+				.buscarInstituicao(instituicao.getNomeFantasia());
 		if (instituicaoNova == null) {
 			return true;
 		}
 		return false;
 	}
-	
-	public Instituicao buscarInstituicao(String instituicao) {
+
+	/**
+	 * Busca uma instituicao cadastrada
+	 * 
+	 * @param instituicao
+	 * @return
+	 */
+	public Instituicao buscarInstituicao(Instituicao instituicao) {
 		return instituicaoDAO.buscarInstituicao(instituicao);
 	}
 
+	/**
+	 * Busca uma instituicao cadastrada
+	 * 
+	 * @param nomeFantasia
+	 * @return
+	 */
 	public Instituicao buscarInstituicaoIncial(String instituicao) {
 		return instituicaoDAO.buscarInstituicaoInicial(instituicao);
 	}
 
-	public List<Instituicao> listaDeInstituicao() {
+	/**
+	 * Busca as Instituicões ativas
+	 * 
+	 */
+	public List<Instituicao> listaDeInstituicoesAtivas() {
+		List<Instituicao> lista = instituicaoDAO.buscarListaInstituicaoAtivas();
+		return lista;
+	}
+
+	/**
+	 * Busca todas as Instituicões ativas ou não, menos cartórios.
+	 * 
+	 */
+	public List<Instituicao> listarTodasInstituicoes() {
 		List<Instituicao> lista = instituicaoDAO.buscarListaInstituicao();
 		return lista;
 	}
-	
+
+	/**
+	 * Busca todos os cartórios, ativos ou não
+	 */
 	public List<Instituicao> listaDeCartorio() {
 		List<Instituicao> lista = instituicaoDAO.buscarListaCartorio();
 		return lista;

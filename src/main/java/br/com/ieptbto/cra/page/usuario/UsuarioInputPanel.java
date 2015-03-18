@@ -116,7 +116,7 @@ public class UsuarioInputPanel extends Panel {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>(
 				"nomeFantasia");
 		comboInstituicao = new DropDownChoice<Instituicao>("instituicao",
-				instituicaoMediator.listaDeInstituicao(), renderer);
+				instituicaoMediator.listaDeInstituicoesAtivas(), renderer);
 		comboInstituicao.setLabel(new Model<String>("Instituição"));
 		comboInstituicao.setOutputMarkupId(true);
 		comboInstituicao.setRequired(true);

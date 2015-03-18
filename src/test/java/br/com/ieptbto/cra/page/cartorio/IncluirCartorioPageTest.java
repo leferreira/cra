@@ -51,7 +51,7 @@ public class IncluirCartorioPageTest extends BaseTest{
 		form.setValue("cartorioInputPanel:nomeFantasia", "CARTÓRIO TESTE");
 		form.setValue("cartorioInputPanel:razaoSocial", "Cartorio Teste");
 		form.setValue("cartorioInputPanel:cnpj", "123");
-		form.setValue("cartorioInputPanel:email", "cartorio");
+		form.setValue("cartorioInputPanel:email", "cartorio@mail.com");
 		form.setValue("cartorioInputPanel:favorecido", "Teste Favorecido");
 		form.setValue("cartorioInputPanel:bancoContaCorrente", "Banco Cartório");
 		form.setValue("cartorioInputPanel:numContaCorrente", "1234");
@@ -62,7 +62,7 @@ public class IncluirCartorioPageTest extends BaseTest{
 		form.setValue("cartorioInputPanel:status", "Ativo");
 		form.submit();
 
-		tester.assertErrorMessages(new String[] { "Cartório não criado!" });
+		tester.assertErrorMessages(new String[] { "Cartório não criado, pois já existe!" });
 		tester.assertNoInfoMessage();
 	}
 	

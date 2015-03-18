@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -56,7 +55,6 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 		dataTableTipo = new WebMarkupContainer("dataTableTipo");
 		PageableListView<TipoInstituicao> listView = getListViewTipoInstituicao();
 		dataTableTipo.setOutputMarkupId(true);
-		dataTableTipo.add(new PagingNavigator("navigation", listView));
 		dataTableTipo.add(listView);
 
 		divListaTipo.add(dataTableTipo);
@@ -97,7 +95,7 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 			@Override
 			protected List<TipoInstituicao> load() {
 				List<TipoInstituicao> list = tipoInstituicaoMediator
-						.listaTipoInstituicao();
+						.listarTipos();
 				return list;
 			}
 		};
