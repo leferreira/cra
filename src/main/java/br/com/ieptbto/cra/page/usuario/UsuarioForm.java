@@ -24,29 +24,34 @@ public class UsuarioForm extends BaseForm<Usuario> {
 
 	@Override
 	public void onSubmit() {
+		
 		Usuario usuario = getModelObject();
-		if (getModelObject().getId() != 0) {
-			Usuario usuarioSalvo = usuarioMediator.alterar(usuario);
-			if (usuarioSalvo != null) {
-				info("Usuário alterado com sucesso.");
-			} else {
-				error("Usuário não alterado");
-			}
-		} else {
-			if (usuarioMediator.isLoginNaoExiste(usuario)) {
-				if(!usuario.isStatus()){
-					usuario.setStatus(true);
-				}
-				Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
+		if(usuarioMediator.isSenhasIguais(usuario)){
+			if (getModelObject().getId() != 0) {
+				Usuario usuarioSalvo = usuarioMediator.alterar(usuario);
 				if (usuarioSalvo != null) {
-					info("Usuário criado com sucesso");
+					info("Usuário alterado com sucesso.");
 				} else {
-					error("Usuário não criado");
+					error("Usuário não alterado");
 				}
 			} else {
-				error("Usuário não criado. O login já existe!");
+				if (usuarioMediator.isLoginNaoExiste(usuario)) {
+					if(!usuario.isStatus()){
+						usuario.setStatus(true);
+					}
+					Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
+					if (usuarioSalvo != null) {
+						info("Usuário criado com sucesso");
+					} else {
+						error("Usuário não criado");
+					}
+				} else {
+					error("Usuário não criado. O login já existe!");
+				}
 			}
+			usuario=null;
+		}else{
+			error("As senhas não são iguais!");
 		}
-		usuario=null;
 	}
 }

@@ -26,6 +26,7 @@ public class IncluirUsuarioPageTest extends BaseTest {
 		tester.assertComponent("formUsuario:usuarioInputPanel:nome", TextField.class);
 		tester.assertComponent("formUsuario:usuarioInputPanel:login", TextField.class);
 		tester.assertComponent("formUsuario:usuarioInputPanel:senha", TextField.class);
+		tester.assertComponent("formUsuario:usuarioInputPanel:confirmarSenha", TextField.class);
 		tester.assertComponent("formUsuario:usuarioInputPanel:email", TextField.class);
 		tester.assertComponent("formUsuario:usuarioInputPanel:contato", TextField.class);
 		tester.assertComponent("formUsuario:usuarioInputPanel:instituicao", Component.class);
@@ -35,8 +36,7 @@ public class IncluirUsuarioPageTest extends BaseTest {
 	}
 
 	/**
-	 * Teste falho devido ao nome de usuário já existir e o email não segue o
-	 * padrão.
+	 * Teste falho devido ao nome de usuário já existir e as senhas não coinsidirem
 	 * */
 	@Test
 	public void testInsertUserFail() {
@@ -45,6 +45,7 @@ public class IncluirUsuarioPageTest extends BaseTest {
 		form.setValue("usuarioInputPanel:nome", "Teste1");
 		form.setValue("usuarioInputPanel:login", "teste");
 		form.setValue("usuarioInputPanel:senha", "123");
+		form.setValue("usuarioInputPanel:confirmarSenha", "1234"); // Senha diferente
 		form.setValue("usuarioInputPanel:email", "e@mail.com");
 		form.setValue("usuarioInputPanel:contato", "1234");
 		form.setValue("usuarioInputPanel:situacao", "Ativo");
@@ -53,17 +54,21 @@ public class IncluirUsuarioPageTest extends BaseTest {
 		form.submit();
 
 		// check errors
-		tester.assertErrorMessages(new String[] { "Usuário não criado. O login já existe!" });
+		tester.assertErrorMessages(new String[] { "As senhas não são iguais!" });
 		tester.assertNoInfoMessage();
 	}
 
+	/**
+	 * Teste de Sucesso do incluir usuário
+	 * */
 	@Test
 	public void testInsertUserSuccessful() {
 		tester.startPage(IncluirUsuarioPage.class);
 		form = tester.newFormTester("formUsuario");
-		form.setValue("usuarioInputPanel:nome", "Teste");
-		form.setValue("usuarioInputPanel:login", "test");
+		form.setValue("usuarioInputPanel:nome", "TESTE USUARIO");
+		form.setValue("usuarioInputPanel:login", "teste usuario");
 		form.setValue("usuarioInputPanel:senha", "123456");
+		form.setValue("usuarioInputPanel:confirmarSenha", "123456");
 		form.setValue("usuarioInputPanel:email", "e@mail.com");
 		form.setValue("usuarioInputPanel:contato", "1234");
 		form.setValue("usuarioInputPanel:situacao", "Ativo");

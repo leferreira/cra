@@ -31,6 +31,7 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
 	private String nome;
 	private String login;
 	private String senha;
+	private String confirmarSenha;
 	private String contato;
 	private String email;
 	private boolean status;
@@ -171,6 +172,7 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
 		return this.grupoUsuario.getRoles().hasRole(role);
 	}
 	
+	@Transient
 	public String getSituacao(){
 		if(isStatus() == true){
 			return "Ativo";
@@ -185,5 +187,14 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
 		}else{
 			setStatus(false);
 		}
+	}
+
+	@Transient
+	public String getConfirmarSenha() {
+		return confirmarSenha;
+	}
+
+	public void setConfirmarSenha(String confirmarSenha) {
+		this.confirmarSenha = confirmarSenha;
 	}
 }

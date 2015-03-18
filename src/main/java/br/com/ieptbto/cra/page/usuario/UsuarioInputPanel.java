@@ -52,7 +52,7 @@ public class UsuarioInputPanel extends Panel {
 		add(campoLogin());
 		add(campoSenha());
 		add(campoEmail());
-		// add(campoConfirmarSenha());
+		add(campoConfirmarSenha());
 		add(botaoSalvar());
 		add(campoContato());
 		add(campoStatus());
@@ -87,6 +87,7 @@ public class UsuarioInputPanel extends Panel {
 	private TextField<String> campoConfirmarSenha() {
 		PasswordTextField confirmarSenha = new PasswordTextField(
 				"confirmarSenha");
+		confirmarSenha.setLabel(new Model<String>("Confirmar Senha"));
 		confirmarSenha.setOutputMarkupId(true);
 		confirmarSenha.setRequired(true);
 		return confirmarSenha;

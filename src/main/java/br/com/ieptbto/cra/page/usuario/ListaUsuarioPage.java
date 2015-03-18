@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -51,7 +50,6 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 		dataTableUsuario = new WebMarkupContainer("dataTableUsuario");
 		PageableListView<Usuario> listView = getListViewUsuario();
 		dataTableUsuario.setOutputMarkupId(true);
-		dataTableUsuario.add(new PagingNavigator("navigation", listView));
 		dataTableUsuario.add(listView);
 
 		divListaUsuario.add(dataTableUsuario);
@@ -60,7 +58,7 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 
 	private PageableListView<Usuario> getListViewUsuario() {
 		return new PageableListView<Usuario>("listViewUsuario",
-				listAllUsuarios(), 10) {
+				buscarUsuarios(), 10) {
 			@Override
 			protected void populateItem(ListItem<Usuario> item) {
 				Usuario usuarioLista = item.getModelObject();
@@ -77,7 +75,7 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 				}
 
 				item.add(detalharUsuario(usuarioLista));
-				item.add(excluirUsuario(usuarioLista));
+				item.add(desativarUsuario(usuarioLista));
 			}
 
 			private Component detalharUsuario(final Usuario u) {
@@ -90,7 +88,7 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 				};
 			}
 
-			private Component excluirUsuario(final Usuario u) {
+			private Component desativarUsuario(final Usuario u) {
 				return new Link<Usuario>("excluirUsuario") {
 
 					@Override
@@ -110,7 +108,7 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 
 	}
 
-	public IModel<List<Usuario>> listAllUsuarios() {
+	public IModel<List<Usuario>> buscarUsuarios() {
 		return new LoadableDetachableModel<List<Usuario>>() {
 			@Override
 			protected List<Usuario> load() {
@@ -119,7 +117,7 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 			}
 		};
 	}
-
+	
 	@Override
 	protected IModel<Usuario> getModel() {
 		return new CompoundPropertyModel<Usuario>(usuario);

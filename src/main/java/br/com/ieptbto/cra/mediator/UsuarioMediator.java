@@ -54,6 +54,22 @@ public class UsuarioMediator {
 	}
 
 	/**
+	 * Verificar se as senha e a confirmação da senha coincidem
+	 * 
+	 * @param usuario
+	 * @return
+	 * */
+	public boolean isSenhasIguais(Usuario usuario) {
+		if (usuario.getSenha().equals(usuario.getConfirmarSenha()) ){
+			System.out.println("true");
+			return true;
+		}else{
+			System.out.println("false");
+			return false;
+		}
+	}
+	
+	/**
 	 * Verifica se o login que será criado não existe no sistema
 	 * 
 	 * @param usuario
