@@ -5,7 +5,9 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,13 @@ public class MunicipioDAO extends AbstractBaseDAO{
 			System.out.println(ex.getMessage());
 		}
 		return municipio;
+	}
+	
+	public Municipio buscarMunicipioPorNome(String nomeMunicipio) {
+		Criteria criteria = getCriteria(Municipio.class);
+		criteria.add(Restrictions.like("nomeMunicipio", nomeMunicipio, MatchMode.EXACT));
+
+		return Municipio.class.cast(criteria.uniqueResult());
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -46,6 +46,12 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		return instituicao;
 	}
 
+	public Instituicao buscarCartorioPorMunicipio(String nomeMunicipio) {
+		Criteria criteria = getCriteria(Instituicao.class);
+		criteria.add(Restrictions.eq("municipioCartorio", nomeMunicipio));
+		return Instituicao.class.cast(criteria.uniqueResult());
+	}
+
 	public boolean isInstituicaoAtiva(Instituicao instituicao) {
 		if (instituicao.isSituacao()) {
 			return true;

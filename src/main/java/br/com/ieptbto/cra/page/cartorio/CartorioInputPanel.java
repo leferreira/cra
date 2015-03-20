@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.cartorio;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,9 +34,11 @@ public class CartorioInputPanel extends Panel {
 	static TextField<String> campoInstituicao;
 	private DropDownChoice<Municipio> combo;
 	private Component button;
+	private Instituicao cartorio;
 
-	public CartorioInputPanel(String id, IModel<Instituicao> model) {
+	public CartorioInputPanel(String id, IModel<Instituicao> model, Instituicao cartorio) {
 		super(id, model);
+		this.cartorio = cartorio;
 		adicionarCampos();
 	}
 
@@ -113,36 +116,46 @@ public class CartorioInputPanel extends Panel {
 		text.setLabel(new Model<String>("Favorecido"));
 		return text;
 	}
+
 	private TextField<String> campoBanco() {
 		TextField<String> text = new TextField<String>("bancoContaCorrente");
 		text.setLabel(new Model<String>("Banco"));
 		return text;
 	}
-	
+
 	private TextField<String> campoContaCorrente() {
 		TextField<String> text = new TextField<String>("numContaCorrente");
 		text.setLabel(new Model<String>("Conta Corrente"));
 		return text;
 	}
-	
+
 	private TextField<String> campoAgenciaConta() {
 		TextField<String> text = new TextField<String>("agenciaContaCorrente");
 		text.setLabel(new Model<String>("Agência"));
 		return text;
 	}
-	
+
 	private Component campoStatus() {
 		List<String> status = Arrays
 				.asList(new String[] { "Ativo", "Não Ativo" });
 		return new RadioChoice<String>("status", status);
 	}
-	
+
 	private Component comboMunicipios() {
 
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>(
 				"nomeMunicipio");
-		combo = new DropDownChoice<Municipio>("comarcaCartorio",
-				municipioMediator.listarTodos(), renderer);
+		if (cartorio.getMunicipioCartorio() == null) {
+			combo = new DropDownChoice<Municipio>("comarcaCartorio",
+					municipioMediator.listarTodos(), renderer);
+		} else {
+			List<Municipio> lista = new ArrayList<Municipio>();
+			Municipio m =municipioMediator.buscarMunicipio(cartorio.getMunicipioCartorio());
+			lista.add(m);
+			combo = new DropDownChoice<Municipio>("comarcaCartorio", lista,
+					renderer);
+			combo.setEnabled(false);
+		}
 		combo.setLabel(new Model<String>("Município"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);

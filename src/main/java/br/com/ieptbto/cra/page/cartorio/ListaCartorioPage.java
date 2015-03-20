@@ -69,11 +69,7 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 				Instituicao instituicaoLista = item.getModelObject();
 				item.add(new Label("nomeFantasia", instituicaoLista
 						.getNomeFantasia()));
-				imLista = instituicaoLista.getInstituicaoMunicipio();
-				for(InstituicaoMunicipio im: imLista){
-					item.add(new Label("municipioComarca", im.getMunicipio().getNomeMunicipio() ));
-					break;
-				}
+				item.add(new Label("municipioCartorio", instituicaoLista.getMunicipioCartorio()  ));
 				item.add(new Label("responsavel", instituicaoLista
 						.getResponsavel()));
 				item.add(new Label("email", instituicaoLista

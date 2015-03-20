@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ieptbto.cra.dao.InstituicaoDAO;
 import br.com.ieptbto.cra.dao.MunicipioDAO;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 
 @Service
@@ -13,20 +15,64 @@ public class MunicipioMediator {
 
 	@Autowired
 	MunicipioDAO municipioDao;
-	
-	public Municipio adicionarMunicipio(Municipio municipio){
+	@Autowired
+	InstituicaoDAO instituicaoDao;
+
+	public Municipio adicionarMunicipio(Municipio municipio) {
 		return municipioDao.salvar(municipio);
 	}
-	
-	public Municipio alterarMunicipio(Municipio municipio){
+
+	public Municipio alterarMunicipio(Municipio municipio) {
 		return municipioDao.alterar(municipio);
 	}
-	
-	public boolean isMunicipioNaoExiste(Municipio municipio){
-		return true;
+
+	/**
+	 * Verificar se o município já está cadastrado
+	 * @param Municipio
+	 * @return
+	 * */
+	public boolean isMunicipioNaoExiste(Municipio municipio) {
+		Municipio municipioNovo = municipioDao.buscarMunicipioPorNome(municipio
+				.getNomeMunicipio());
+		if (municipioNovo == null) {
+			return true;
+		}
+		return false;
 	}
-	
-	public List<Municipio> listarTodos(){
+
+	/**
+	 * Verificar se o município tem um cartorio cadastrado
+	 * @param Municipio
+	 * @return
+	 * */
+	public boolean isMunicipioTemCartorio(Municipio municipio) {
+		Instituicao cartorio = instituicaoDao.buscarCartorioPorMunicipio(municipio
+				.getNomeMunicipio());
+		if (cartorio != null) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Retorna um município
+	 * 
+	 * @param String
+	 *            nomeMunicipio
+	 * @return
+	 * */
+	public Municipio buscarMunicipio(String nomeMunicipio) {
+		return municipioDao.buscarMunicipioPorNome(nomeMunicipio);
+	}
+
+	/**
+	 * Retorna a lista de todos os municípios
+	 * 
+	 * @param String
+	 *            nomeMunicipio
+	 * @return
+	 * */
+	public List<Municipio> listarTodos() {
 		return municipioDao.listarTodos();
 	}
 }

@@ -40,6 +40,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	private String bancoContaCorrente;
 	private String agenciaContaCorrente;
 	private String numContaCorrente;
+	private String municipioCartorio;
 	private Municipio comarcaCartorio;
 	private boolean situacao;
 	private List<Usuario> listaUsuarios = new ArrayList<Usuario>();
@@ -108,7 +109,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return situacao;
 	}
 
-	@Column(name = "FAVOREcIDO")
+	@Column(name = "FAVORECIDO")
 	public String getFavorecido() {
 		return favorecido;
 	}
@@ -133,11 +134,19 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return comarcaCartorio;
 	}
 
-	@OneToMany(mappedBy = "instituicao", fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+	/**
+	 * Instituições do tipo cartório estão em uma comarca
+	 * */
+	@Column(name="MUNICIPIO_CARTORIO", nullable=true, length=40, unique=true)
+	public String getMunicipioCartorio() {
+		return municipioCartorio;
+	}
+	
+	@OneToMany(mappedBy = "instituicao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	public List<InstituicaoMunicipio> getInstituicaoMunicipio() {
 		return instituicaoMunicipio;
 	}
-	
+
 	@ManyToOne
 	@JoinColumn(name = "TIPO_INSTITUICAO_ID")
 	public TipoInstituicao getTipoInstituicao() {
@@ -209,7 +218,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	public void setSituacao(boolean situacao) {
 		this.situacao = situacao;
 	}
-	
+
 	public void setComarcaCartorio(Municipio municipio) {
 		this.comarcaCartorio = municipio;
 	}
@@ -247,9 +256,12 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		this.numContaCorrente = numContaCorrente;
 	}
 
-
 	public void setInstituicaoMunicipio(
 			List<InstituicaoMunicipio> instituicaoMunicipio) {
 		this.instituicaoMunicipio = instituicaoMunicipio;
+	}
+
+	public void setMunicipioCartorio(String municipioCartorio) {
+		this.municipioCartorio = municipioCartorio;
 	}
 }

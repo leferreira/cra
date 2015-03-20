@@ -29,8 +29,8 @@ public class UsuarioMediator {
 
 	public Usuario autenticar(String login, String senha) {
 		Usuario usuario = usuarioDao.buscarUsuarioPorLogin(login);
-		if (instituicaoDao.isInstituicaoAtiva(usuario.getInstituicao())) {
-			if (usuario != null && usuario.isSenha(senha)) {
+		if (usuario != null && usuario.isSenha(senha)) {
+			if (instituicaoDao.isInstituicaoAtiva(usuario.getInstituicao())) {
 				if (usuario.isStatus() == true) {
 					return usuario;
 				}
@@ -39,10 +39,6 @@ public class UsuarioMediator {
 		return null;
 	}
 
-	@Transactional(readOnly = true)
-	public List<Usuario> buscarUsuario(String login, String nome) {
-		return usuarioDao.buscarUsuario(login, nome);
-	}
 
 	public Usuario alterar(Usuario usuario) {
 		return usuarioDao.alterar(usuario);
@@ -55,6 +51,11 @@ public class UsuarioMediator {
 		return null;
 	}
 
+	@Transactional(readOnly = true)
+	public List<Usuario> buscarUsuario(String login, String nome) {
+		return usuarioDao.buscarUsuario(login, nome);
+	}
+	
 	/**
 	 * Verificar se as senha e a confirmação da senha coincidem
 	 * 

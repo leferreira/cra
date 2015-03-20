@@ -29,7 +29,7 @@ public class IncluirCartorioPage extends BasePage<Instituicao> {
 	
 	public void setForm(){
 		form = new CartorioForm("form", getModel());
-		form.add(new CartorioInputPanel("cartorioInputPanel", getModel()));
+		form.add(new CartorioInputPanel("cartorioInputPanel", getModel(), cartorio));
 		//form.add(new Button("botaoSalvar"));
 		add(form);
 	}
