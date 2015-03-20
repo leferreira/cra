@@ -6,6 +6,8 @@ public enum ErroValidacao {
 	/** */
 	INSTITUICAO_BLOQUEADA("Instituição bloqueada para envio de arquivos.", 200),
 
+	SEM_PERMISSAO_DE_ACESSO_A_PAGINA("Você não tem permissão para acessar essa página.", 400),
+
 	/** */
 	NOME_DO_ARQUIVO_INVALIDO("O nome do arquivo inválido.", 300);
 

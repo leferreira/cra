@@ -9,7 +9,6 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Lefer
  *
  */
-@SuppressWarnings("unused")
 public class CraMenu extends Panel {
 
 	/**
@@ -29,12 +28,12 @@ public class CraMenu extends Panel {
 	}
 
 	private void adicionarMenuLateral(Menu menu) {
-		String[] rolesIncluir = { CraRoles.ADMIN, CraRoles.SUPER };
+		String[] rolesIncluir = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER };
 		String[] rolesPesquisar = { CraRoles.USER };
 
 		MenuItem menuLateral = menu.addItem("menuLateral", rolesPesquisar);
-		// menuLateral.addItem("incluirCliente", rolesIncluir);
-		// menuLateral.addItem("incluirItem", rolesIncluir);
+		menuLateral.addItem("EnviarArquivo", rolesIncluir);
+		menuLateral.addItem("IncluirUsuario", rolesPesquisar);
 		// menuLateral.addItem("incluirGrupo", rolesIncluir);
 		// menuLateral.addItem("incluirCotacao", rolesIncluir);
 		// menuLateral.addItem("incluirUsuario", rolesIncluir);

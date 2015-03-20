@@ -23,6 +23,9 @@ import org.apache.wicket.authroles.authorization.strategies.role.IRoleCheckingSt
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AnnotationsRoleAuthorizationStrategy;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.request.component.IRequestableComponent;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import br.com.ieptbto.cra.conversor.enumeration.ErroValidacao;
 
 public class UserRoleAuthorizationStrategy implements IAuthorizationStrategy {
 
@@ -62,7 +65,9 @@ public class UserRoleAuthorizationStrategy implements IAuthorizationStrategy {
 				// return true (codigo original)
 
 				ISecureApplication app = (ISecureApplication) Application.get();
-				throw new RestartResponseAtInterceptPageException(app.getLoginPage());
+				PageParameters parameters = new PageParameters();
+				parameters.add("error", ErroValidacao.SEM_PERMISSAO_DE_ACESSO_A_PAGINA.getMensagemErro());
+				throw new RestartResponseAtInterceptPageException(app.getHomePage(), parameters);
 
 			}
 		}

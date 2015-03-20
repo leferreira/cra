@@ -47,7 +47,8 @@ import br.com.ieptbto.cra.webpage.AbstractWebPage;
  * @author Lefer
  *
  */
-public class CraApplication extends WebApplication implements ISecureApplication, IWebApplication {
+public class CraApplication extends WebApplication implements
+		ISecureApplication, IWebApplication {
 
 	public CraApplication() {
 	}
@@ -80,11 +81,13 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	}
 
 	protected void initSpring() {
-		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+		getComponentInstantiationListeners().add(
+				new SpringComponentInjector(this));
 	}
 
 	private void initConfig() {
-		getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
+		getRequestCycleSettings().setRenderStrategy(
+				RenderStrategy.ONE_PASS_RENDER);
 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
@@ -96,7 +99,8 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		getApplicationSettings().setAccessDeniedPage(NotFoundPage.class);
 
 		// customized auth strategy
-		getSecuritySettings().setAuthorizationStrategy(new UserRoleAuthorizationStrategy(new UserRolesAuthorizer()));
+		getSecuritySettings().setAuthorizationStrategy(
+				new UserRoleAuthorizationStrategy(new UserRolesAuthorizer()));
 
 		// make markup friendly as in deployment-mode
 		getMarkupSettings().setStripWicketTags(true);
@@ -139,8 +143,8 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	}
 
 	@Override
-	public Component createMenuSistema(AbstractWebPage<?> page, String containerId) {
-		// return new CraMenu("menu");
+	public Component createMenuSistema(AbstractWebPage<?> page,
+			String containerId) {
 		return new CraMenu("menu");
 	}
 

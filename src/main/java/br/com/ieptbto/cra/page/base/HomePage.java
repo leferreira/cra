@@ -1,8 +1,8 @@
 package br.com.ieptbto.cra.page.base;
 
-import org.apache.wicket.authorization.Action;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 
@@ -12,7 +12,7 @@ import br.com.ieptbto.cra.entidade.AbstractEntidade;
  *
  * @param <T>
  */
-@AuthorizeAction(action = Action.RENDER, roles = { "USER" })
+@AuthorizeInstantiation(value = "USER")
 public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	/**
@@ -22,6 +22,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	public HomePage() {
 		super();
+
+	}
+
+	public HomePage(PageParameters parameters) {
+		error(parameters.get("error"));
 	}
 
 	/**
