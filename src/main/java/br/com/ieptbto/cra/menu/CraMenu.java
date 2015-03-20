@@ -9,7 +9,6 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Lefer
  *
  */
-@SuppressWarnings("unused")
 public class CraMenu extends Panel {
 
 	/**
