@@ -10,9 +10,15 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 
+/**
+ * 
+ * @author Lefer
+ *
+ */
 @Repository
 public class TipoArquivoDAO extends AbstractBaseDAO {
 
@@ -42,19 +48,26 @@ public class TipoArquivoDAO extends AbstractBaseDAO {
 		}
 		return tipoArquivo;
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
-	public List<TipoArquivo> buscarTiposArquivo(){
+	public List<TipoArquivo> buscarTiposArquivo() {
 		Criteria criteria = getCriteria(TipoArquivo.class);
 		criteria.addOrder(Order.asc("id"));
 		return criteria.list();
 	}
-	
-	public TipoArquivo buscarPorTipoArquivo(TipoArquivoEnum tipoArquivo){
+
+	public TipoArquivo buscarPorTipoArquivo(TipoArquivoEnum tipoArquivo) {
 		Criteria criteria = getCriteria(TipoArquivo.class);
 		criteria.add(Restrictions.eq("tipoArquivo", tipoArquivo));
 		criteria.addOrder(Order.asc("id"));
 		return TipoArquivo.class.cast(criteria.uniqueResult());
 	}
+
+	public TipoArquivo buscarTipoArquivo(Arquivo arquivo) {
+		Criteria criteria = getCriteria(TipoArquivo.class);
+		criteria.add(Restrictions.eq("constante", arquivo.getNomeArquivo()
+				.substring(0, 1).toUpperCase()));
+		return TipoArquivo.class.cast(criteria.uniqueResult());
+	}
+
 }

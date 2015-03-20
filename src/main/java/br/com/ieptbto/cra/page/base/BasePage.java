@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.page.base;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -12,6 +13,7 @@ import br.com.ieptbto.cra.app.IWebApplication;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.login.TrocaSenhaPanel;
+import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
 
 /**
@@ -22,10 +24,9 @@ import br.com.ieptbto.cra.webpage.AbstractWebPage;
  */
 public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWebPage<T> {
 
-	/**
-	 * 
-	 */
+	/****/
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
 	protected static final String WID_MENU = "menu";
 	private static final String SAUDACAO = "userGreeting";
 	private static final String URL_LOGOUT = "url_logout";
@@ -66,6 +67,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 
 			@Override
 			public void onClick() {
+				logger.info("O usuário <<" + getUser().getLogin() + ">> saiu do sistema.");
 				getSession().invalidateNow();
 				setResponsePage(LoginPage.class);
 			}

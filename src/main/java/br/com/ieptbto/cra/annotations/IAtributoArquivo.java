@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface IAtributoArquivo {
 
-	/**
+	/** 
 	 * Define o tamanho do campo
 	 * 
 	 * @return
@@ -73,6 +73,14 @@ public @interface IAtributoArquivo {
 	 * @return
 	 */
 	String descricao();
+
+	/**
+	 * Quando se tratar de um campo multivalorado (lista), deverá ser informado
+	 * a quantidade máxima de itens.
+	 * 
+	 * @return
+	 */
+	int quantidadeItens() default 1;
 
 	/**
 	 * Definite o tipo do campo
