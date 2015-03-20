@@ -15,4 +15,6 @@ import org.apache.wicket.Page;
 
 public interface ISecureApplication {
 	Class<? extends Page> getLoginPage();
+
+	Class<? extends Page> getHomePage();
 }

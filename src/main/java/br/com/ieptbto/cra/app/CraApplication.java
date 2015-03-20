@@ -132,7 +132,6 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 	@Override
 	public Component createMenuSistema(AbstractWebPage<?> page, String containerId) {
-		// return new CraMenu("menu");
 		return new CraMenu("menu");
 	}
 

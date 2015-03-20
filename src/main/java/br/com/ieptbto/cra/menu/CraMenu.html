@@ -12,7 +12,7 @@
 								<a href="#">Buscar Arquivo<span class="fa arrow"></span></a>
 							</li>
                         	<li>
-								<a href="#">Enviar Arquivo <span class="fa arrow"></span></a>
+								<a href="EnviarArquivo" wicket:id="EnviarArquivo">Enviar Arquivo <span class="fa arrow"></span></a>
 							</li>
 							<li >
                         		<a href="incluirGrupo">Criar Arquivo <span class="fa arrow"></span></a>
@@ -43,7 +43,15 @@
                         		<a href="pesquisarOrcamento">Comarcas</a>
                         	</li>
                         	<li >
-                        		<a href="pesquisarOrcamento">Usuários</a>
+                        		<a href="#">Usuários<span class="fa arrow"></span></a>
+								<ul class="nav nav-third-level">
+									<li wicket:id="IncluirUsuario">
+		                        		<a href="IncluirUsuario">Incluir Usuario</a>
+		                        	</li>
+									<li>
+		                        		<a href="pesquisarUsuario">Pesquisar Usuario</a>
+		                        	</li>
+								</ul>
                         	</li>
                         	<li >
                         		<a href="pesquisarOrcamento">Tipos de Arquivos</a>
