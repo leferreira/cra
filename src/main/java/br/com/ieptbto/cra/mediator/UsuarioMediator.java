@@ -20,8 +20,7 @@ import br.com.ieptbto.cra.security.CraRoles;
 @Service
 public class UsuarioMediator {
 
-	private static final Logger logger = Logger
-			.getLogger(ProcessadorArquivo.class);
+	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
 	@Autowired
 	UsuarioDAO usuarioDao;
 	@Autowired
@@ -36,8 +35,7 @@ public class UsuarioMediator {
 		if (usuario != null && usuario.isSenha(senha)) {
 			if (instituicaoDao.isInstituicaoAtiva(usuario.getInstituicao())) {
 				if (usuario.isStatus() == true) {
-					logger.info("O usuário <<" + usuario.getLogin()
-							+ ">> entrou na CRA.");
+					logger.info("O usuário <<" + usuario.getLogin() + ">> entrou na CRA.");
 					return usuario;
 				}
 			}
@@ -84,16 +82,14 @@ public class UsuarioMediator {
 	 * @return
 	 */
 	public boolean isLoginNaoExiste(Usuario usuario) {
-		Usuario usuarioPesquisado = usuarioDao.buscarUsuarioPorLogin(usuario
-				.getLogin());
+		Usuario usuarioPesquisado = usuarioDao.buscarUsuarioPorLogin(usuario.getLogin());
 		if (usuarioPesquisado == null) {
 			return true;
 		}
 		return false;
 	}
 
-	public boolean trocarSenha(String senha, String novaSenha,
-			String confirmaSenha, Usuario usuario) {
+	public boolean trocarSenha(String senha, String novaSenha, String confirmaSenha, Usuario usuario) {
 		return false;
 
 	}
@@ -104,8 +100,7 @@ public class UsuarioMediator {
 		 */
 		tipoInstituicaoDao.inserirTipoInstituicaoInicial("CRA");
 		tipoInstituicaoDao.inserirTipoInstituicaoInicial("Cartório");
-		tipoInstituicaoDao
-				.inserirTipoInstituicaoInicial("Instituições Financeiras");
+		tipoInstituicaoDao.inserirTipoInstituicaoInicial("Instituições Financeiras");
 
 		/*
 		 * Inserindo a instituição CRA

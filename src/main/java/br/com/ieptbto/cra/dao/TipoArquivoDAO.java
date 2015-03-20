@@ -19,7 +19,7 @@ import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
  * @author Lefer
  *
  */
-@Repository
+@Repository 
 public class TipoArquivoDAO extends AbstractBaseDAO {
 
 	@Transactional(readOnly = true)
