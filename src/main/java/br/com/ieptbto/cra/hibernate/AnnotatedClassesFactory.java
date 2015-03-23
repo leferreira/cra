@@ -13,13 +13,17 @@ package br.com.ieptbto.cra.hibernate;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.ieptbto.cra.entidade.PermissaoEnvio;
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Cabecalho;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstituicaoMunicipio;
 import br.com.ieptbto.cra.entidade.Municipio;
+import br.com.ieptbto.cra.entidade.PermissaoEnvio;
+import br.com.ieptbto.cra.entidade.Rodape;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
+import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.Usuario;
 
 /**
@@ -51,9 +55,10 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(TipoArquivo.class);
 		classesHibernate.add(PermissaoEnvio.class);
 		classesHibernate.add(InstituicaoMunicipio.class);
-		// classesHibernate.add(Atendimento.class);
-		// classesHibernate.add(Aluno.class);
-		// classesHibernate.add(Turma.class);
+		classesHibernate.add(Arquivo.class);
+		classesHibernate.add(Titulo.class);
+		classesHibernate.add(Cabecalho.class);
+		classesHibernate.add(Rodape.class);
 		// classesHibernate.add(KliniekRevisionEntity.class);
 	}
 

@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 
+import br.com.ieptbto.cra.conversor.arquivo.FabricaDeArquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
@@ -21,52 +22,68 @@ public class ProcessadorArquivo extends Processador {
 	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
 	private FileUpload file;
 	private Usuario usuario;
-	private File arquivo;
+	private File arquivoFisico;
+	private String pathInstituicao;
+	private String pathUsuario;
 
 	public void processarArquivo(FileUpload uploadedFile, Usuario usuario) {
 		this.file = uploadedFile;
 		this.usuario = usuario;
 
-		logger.info("Início do processamento do arquivo " + getFile().getClientFileName() + " do usuário " + getUsuario().getLogin());
+		logger.info("Início do processamento do arquivoFisico " + getFile().getClientFileName() + " do usuário " + getUsuario().getLogin());
 		if (getFile() != null) {
 
 			verificaDiretorio();
 			copiarArquivoParaDiretorioDoUsuario();
 			validarArquivo();
+			converterArquivo();
 
 		} else {
-			new InfraException("O arquivo " + getFile().getClientFileName() + "enviado não pode ser processado.");
+			throw new InfraException("O arquivoFisico " + getFile().getClientFileName() + "enviado não pode ser processado.");
 		}
 
 	}
 
+	private void converterArquivo() {
+		new FabricaDeArquivo(getArquivoFisico()).converter();
+
+	}
+
 	private void validarArquivo() {
-		logger.info("Iniciar validação do arquivo " + getFile().getClientFileName() + " enviado pelo usuário " + getUsuario().getLogin());
-		new FabricaValidacaoArquivo(getArquivo(), getUsuario()).validar();
+		logger.info("Iniciar validação do arquivoFisico " + getFile().getClientFileName() + " enviado pelo usuário "
+		        + getUsuario().getLogin());
+		new FabricaValidacaoArquivo(getArquivoFisico(), getUsuario()).validar();
 
 	}
 
 	private void copiarArquivoParaDiretorioDoUsuario() {
-		setArquivo(new File(ConfiguracaoBase.DIRETORIO_BASE + usuario.getId() + ConfiguracaoBase.BARRA + getFile().getClientFileName()));
+		setArquivoFisico(new File(pathUsuario + ConfiguracaoBase.BARRA + getFile().getClientFileName()));
 		try {
-			getArquivo().createNewFile();
-			getFile().writeTo(getArquivo());
+			getArquivoFisico().createNewFile();
+			getFile().writeTo(getArquivoFisico());
 		} catch (IOException e) {
-			throw new InfraException("Não foi possível criar arquivo temporário para o arquivo " + getFile().getClientFileName());
+			logger.error(e.getMessage());
+			throw new InfraException("Não foi possível criar arquivo Físico temporário para o arquivo " + getFile().getClientFileName());
 		}
 
 	}
 
 	private void verificaDiretorio() {
+		pathInstituicao = ConfiguracaoBase.DIRETORIO_BASE_INSTITUICAO + ConfiguracaoBase.BARRA + getUsuario().getInstituicao().getId();
+		pathUsuario = pathInstituicao + ConfiguracaoBase.BARRA + usuario.getId();
 		File diretorioTemp = new File(ConfiguracaoBase.DIRETORIO_TEMP_BASE);
 		File diretorioArquivo = new File(ConfiguracaoBase.DIRETORIO_BASE);
-		File diretorioUsuario = new File(ConfiguracaoBase.DIRETORIO_BASE_INSTITUICAO + getUsuario().getInstituicao().getId());
+		File diretorioInstituicao = new File(pathInstituicao);
+		File diretorioUsuario = new File(pathUsuario);
 
 		if (!diretorioTemp.exists()) {
 			diretorioTemp.mkdirs();
 		}
 		if (!diretorioArquivo.exists()) {
 			diretorioArquivo.mkdirs();
+		}
+		if (!diretorioInstituicao.exists()) {
+			diretorioInstituicao.mkdirs();
 		}
 		if (!diretorioUsuario.exists()) {
 			diretorioUsuario.mkdirs();
@@ -90,11 +107,11 @@ public class ProcessadorArquivo extends Processador {
 		this.file = file;
 	}
 
-	public File getArquivo() {
-		return arquivo;
+	public File getArquivoFisico() {
+		return arquivoFisico;
 	}
 
-	public void setArquivo(File arquivo) {
-		this.arquivo = arquivo;
+	public void setArquivoFisico(File arquivo) {
+		this.arquivoFisico = arquivo;
 	}
 }

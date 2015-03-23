@@ -22,10 +22,9 @@ import br.com.ieptbto.cra.security.IAuthModel;
 @SuppressWarnings("serial")
 @Entity
 @Audited
-@Table(name = "USUARIO")
-@org.hibernate.annotations.Table(appliesTo = "USUARIO")
-public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
-		IAuthModel {
+@Table(name = "TB_USUARIO")
+@org.hibernate.annotations.Table(appliesTo = "TB_USUARIO")
+public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, IAuthModel {
 
 	private int id;
 	private String nome;
@@ -171,20 +170,20 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable,
 	public boolean hasRole(String role) {
 		return this.grupoUsuario.getRoles().hasRole(role);
 	}
-	
+
 	@Transient
-	public String getSituacao(){
-		if(isStatus() == true){
+	public String getSituacao() {
+		if (isStatus() == true) {
 			return "Ativo";
-		}else{
+		} else {
 			return "Não Ativo";
 		}
 	}
-	
-	public void setSituacao(String situacao){
-		if(situacao == "Ativo"){
+
+	public void setSituacao(String situacao) {
+		if (situacao == "Ativo") {
 			setStatus(true);
-		}else{
+		} else {
 			setStatus(false);
 		}
 	}

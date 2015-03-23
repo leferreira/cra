@@ -1,5 +1,8 @@
 package br.com.ieptbto.cra.page.arquivo;
 
+import java.util.Date;
+
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -11,12 +14,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
-import org.joda.time.DateTime;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 
 /**
  * 
@@ -31,6 +34,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
+	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
 
 	private Arquivo arquivo;
 	private Form<Arquivo> form;
@@ -40,7 +44,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		arquivo = new Arquivo();
 		arquivo.setInstituicaoEnvio(getUser().getInstituicao());
 		arquivo.setUsuarioEnvio(getUser());
-		arquivo.setDataEnvio(new DateTime());
+		arquivo.setDataEnvio(new Date());
 
 		form = new Form<Arquivo>("form", getModel()) {
 			/****/
@@ -54,9 +58,12 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				try {
 					arquivoMediator.salvar(arquivo, uploadedFile);
 					info("Arquivo enviado com sucesso.");
+
 				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
 					error(ex.getMessage());
 				} catch (Exception e) {
+					logger.error(e.getMessage());
 					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
 				}
 
@@ -83,7 +90,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				info("Enviando Arquivo");
 				target.add(getFeedbackPanel());
 			}
 

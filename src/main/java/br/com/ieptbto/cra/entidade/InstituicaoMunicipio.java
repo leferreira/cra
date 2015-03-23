@@ -13,10 +13,9 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-@Table(name = "INSTITUICAO_MUNICIPIO")
-@org.hibernate.annotations.Table(appliesTo = "INSTITUICAO_MUNICIPIO")
-public class InstituicaoMunicipio extends
-		AbstractEntidade<InstituicaoMunicipio> {
+@Table(name = "TB_INSTITUICAO_MUNICIPIO")
+@org.hibernate.annotations.Table(appliesTo = "TB_INSTITUICAO_MUNICIPIO")
+public class InstituicaoMunicipio extends AbstractEntidade<InstituicaoMunicipio> {
 
 	/**
 	 * 

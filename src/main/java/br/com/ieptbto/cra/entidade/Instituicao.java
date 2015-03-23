@@ -20,8 +20,8 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-@Table(name = "INSTITUICAO")
-@org.hibernate.annotations.Table(appliesTo = "INSTITUICAO")
+@Table(name = "TB_INSTITUICAO")
+@org.hibernate.annotations.Table(appliesTo = "TB_INSTITUICAO")
 public class Instituicao extends AbstractEntidade<Instituicao> {
 
 	private static final long serialVersionUID = 1L;
@@ -137,11 +137,11 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	/**
 	 * Instituições do tipo cartório estão em uma comarca
 	 * */
-	@Column(name="MUNICIPIO_CARTORIO", nullable=true, length=40, unique=true)
+	@Column(name = "MUNICIPIO_CARTORIO", nullable = true, length = 40, unique = true)
 	public String getMunicipioCartorio() {
 		return municipioCartorio;
 	}
-	
+
 	@OneToMany(mappedBy = "instituicao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	public List<InstituicaoMunicipio> getInstituicaoMunicipio() {
 		return instituicaoMunicipio;
@@ -256,8 +256,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		this.numContaCorrente = numContaCorrente;
 	}
 
-	public void setInstituicaoMunicipio(
-			List<InstituicaoMunicipio> instituicaoMunicipio) {
+	public void setInstituicaoMunicipio(List<InstituicaoMunicipio> instituicaoMunicipio) {
 		this.instituicaoMunicipio = instituicaoMunicipio;
 	}
 

@@ -1,8 +1,5 @@
 package br.com.ieptbto.cra.processador;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 
 /**
  * 
@@ -11,6 +8,4 @@ import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
  */
 public abstract class Processador {
 
-	@SpringBean
-	protected ConfiguracaoBase configuracao;
 }

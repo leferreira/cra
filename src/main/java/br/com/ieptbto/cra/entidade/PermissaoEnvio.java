@@ -13,10 +13,9 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-@Table(name = "PERMISSAO_ENVIO")
-@org.hibernate.annotations.Table(appliesTo = "PERMISSAO_ENVIO")
-public class PermissaoEnvio extends
-		AbstractEntidade<PermissaoEnvio> {
+@Table(name = "TB_PERMISSAO_ENVIO")
+@org.hibernate.annotations.Table(appliesTo = "TB_PERMISSAO_ENVIO")
+public class PermissaoEnvio extends AbstractEntidade<PermissaoEnvio> {
 
 	/**
 	 * 
@@ -38,7 +37,7 @@ public class PermissaoEnvio extends
 	public TipoInstituicao getTipoInstituicao() {
 		return tipoInstituicao;
 	}
-	
+
 	@ManyToOne
 	@JoinColumn(name = "TIPO_ARQUIVO_ID")
 	public TipoArquivo getTipoArquivo() {

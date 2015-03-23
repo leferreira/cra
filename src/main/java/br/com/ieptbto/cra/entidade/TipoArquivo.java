@@ -26,8 +26,8 @@ import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
  */
 @Entity
 @Audited
-@Table(name = "TIPO_ARQUIVO")
-@org.hibernate.annotations.Table(appliesTo = "TIPO_ARQUIVO")
+@Table(name = "TB_TIPO_ARQUIVO")
+@org.hibernate.annotations.Table(appliesTo = "TB_TIPO_ARQUIVO")
 public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 
 	/****/
@@ -84,8 +84,7 @@ public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 		this.tipoArquivo = tipoArquivo;
 	}
 
-	public void setArquivosEnvioPermitido(
-			List<PermissaoEnvio> arquivosEnvioPermitido) {
+	public void setArquivosEnvioPermitido(List<PermissaoEnvio> arquivosEnvioPermitido) {
 		this.arquivosEnvioPermitido = arquivosEnvioPermitido;
 	}
 

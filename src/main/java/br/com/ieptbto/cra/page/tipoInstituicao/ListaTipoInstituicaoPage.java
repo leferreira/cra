@@ -23,8 +23,7 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 @SuppressWarnings("serial")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN,
-		CraRoles.SUPER, })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
 public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
 	@SpringBean
@@ -62,16 +61,14 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 	}
 
 	private PageableListView<TipoInstituicao> getListViewTipoInstituicao() {
-		return new PageableListView<TipoInstituicao>("listViewTipoInstituicao",
-				listaTiposInstituicao(), 10) {
+		return new PageableListView<TipoInstituicao>("listViewTipoInstituicao", listaTiposInstituicao(), 10) {
 			@Override
 			protected void populateItem(ListItem<TipoInstituicao> item) {
 				TipoInstituicao tipoLista = item.getModelObject();
-				item.add(new Label("tipoInstituicao", tipoLista
-						.getTipoInstituicao()));
+				item.add(new Label("tipoInstituicao", tipoLista.getTipoInstituicao()));
 				permissoes = permissaoMediator.permissoesPorTipoInstituicao(tipoLista);
-				for (PermissaoEnvio p: permissoes){
-					todasPermissoes += p.getTipoArquivo().getTipoArquivo().constante + " ";
+				for (PermissaoEnvio p : permissoes) {
+					todasPermissoes += p.getTipoArquivo().getTipoArquivo().getConstante() + " ";
 				}
 				item.add(new Label("permissaoEnvio", todasPermissoes));
 				todasPermissoes = "";
@@ -94,8 +91,7 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 		return new LoadableDetachableModel<List<TipoInstituicao>>() {
 			@Override
 			protected List<TipoInstituicao> load() {
-				List<TipoInstituicao> list = tipoInstituicaoMediator
-						.listarTipos();
+				List<TipoInstituicao> list = tipoInstituicaoMediator.listarTipos();
 				return list;
 			}
 		};

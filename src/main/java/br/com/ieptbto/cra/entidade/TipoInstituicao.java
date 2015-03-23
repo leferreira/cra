@@ -14,8 +14,8 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-@Table(name = "TIPO_INSTITUICAO")
-@org.hibernate.annotations.Table(appliesTo = "TIPO_INSTITUICAO")
+@Table(name = "TB_TIPO_INSTITUICAO")
+@org.hibernate.annotations.Table(appliesTo = "TB_TIPO_INSTITUICAO")
 public class TipoInstituicao extends AbstractEntidade<TipoInstituicao> {
 
 	private static final long serialVersionUID = 1L;
@@ -35,31 +35,30 @@ public class TipoInstituicao extends AbstractEntidade<TipoInstituicao> {
 	public String getTipoInstituicao() {
 		return tipoInstituicao;
 	}
-	
+
 	@OneToMany(mappedBy = "tipoInstituicao")
 	public List<Instituicao> getListaInstituicoes() {
 		return listaInstituicoes;
 	}
-	
+
 	@OneToMany(mappedBy = "tipoInstituicao")
 	public List<PermissaoEnvio> getArquivosEnvioPermitido() {
 		return arquivosEnvioPermitido;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public void setTipoInstituicao(String tipoInstituicao) {
 		this.tipoInstituicao = tipoInstituicao;
 	}
-	
+
 	public void setListaInstituicoes(List<Instituicao> listaInstituicoes) {
 		this.listaInstituicoes = listaInstituicoes;
-	}	
+	}
 
-	public void setArquivosEnvioPermitido(
-			List<PermissaoEnvio> arquivosEnvioPermitido) {
+	public void setArquivosEnvioPermitido(List<PermissaoEnvio> arquivosEnvioPermitido) {
 		this.arquivosEnvioPermitido = arquivosEnvioPermitido;
 	}
 

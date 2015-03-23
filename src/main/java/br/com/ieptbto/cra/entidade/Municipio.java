@@ -18,9 +18,9 @@ import org.hibernate.envers.Audited;
 @SuppressWarnings("serial")
 @Entity
 @Audited
-@Table(name = "MUNICIPIO")
-@org.hibernate.annotations.Table(appliesTo = "MUNICIPIO")
-public class Municipio extends AbstractEntidade<Municipio>{
+@Table(name = "TB_MUNICIPIO")
+@org.hibernate.annotations.Table(appliesTo = "TB_MUNICIPIO")
+public class Municipio extends AbstractEntidade<Municipio> {
 
 	private int id;
 	private String nomeMunicipio;
@@ -41,7 +41,7 @@ public class Municipio extends AbstractEntidade<Municipio>{
 		return nomeMunicipio;
 	}
 
-	@Column(name = "UF", nullable=false, length=2)
+	@Column(name = "UF", nullable = false, length = 2)
 	public String getUf() {
 		return uf;
 	}
@@ -51,7 +51,7 @@ public class Municipio extends AbstractEntidade<Municipio>{
 		return codIBGE;
 	}
 
-	@OneToMany(mappedBy = "municipio", fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+	@OneToMany(mappedBy = "municipio", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	public List<InstituicaoMunicipio> getInstituicaoMunicipio() {
 		return instituicaoMunicipio;
 	}
@@ -81,11 +81,10 @@ public class Municipio extends AbstractEntidade<Municipio>{
 		this.situacao = situacao;
 	}
 
-	public void setInstituicaoMunicipio(
-			List<InstituicaoMunicipio> instituicaoMunicipio) {
+	public void setInstituicaoMunicipio(List<InstituicaoMunicipio> instituicaoMunicipio) {
 		this.instituicaoMunicipio = instituicaoMunicipio;
 	}
-	
+
 	@Override
 	public int compareTo(Municipio entidade) {
 		return 0;

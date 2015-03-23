@@ -17,8 +17,8 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-@Table(name = "GRUPO_USUARIO")
-@org.hibernate.annotations.Table(appliesTo = "GRUPO_USUARIO")
+@Table(name = "TB_GRUPO_USUARIO")
+@org.hibernate.annotations.Table(appliesTo = "TB_GRUPO_USUARIO")
 public class GrupoUsuario extends AbstractEntidade<GrupoUsuario> {
 
 	private static final long serialVersionUID = 1L;
