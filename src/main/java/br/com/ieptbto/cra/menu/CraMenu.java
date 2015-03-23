@@ -34,14 +34,18 @@ public class CraMenu extends Panel {
 		MenuItem menuLateral = menu.addItem("menuLateral", rolesPesquisar);
 		menuLateral.addItem("EnviarArquivo", rolesIncluir);
 		menuLateral.addItem("IncluirUsuario", rolesPesquisar);
-		// menuLateral.addItem("incluirGrupo", rolesIncluir);
-		// menuLateral.addItem("incluirCotacao", rolesIncluir);
-		// menuLateral.addItem("incluirUsuario", rolesIncluir);
-		// menuLateral.addItem("pesquisarUsuario", rolesIncluir);
-		// menuLateral.addItem("pesquisarItem", rolesIncluir);
-		// menuLateral.addItem("pesquisarGrupo", rolesIncluir);
-		// menuLateral.addItem("incluirOrcamento", rolesIncluir);
-		// menuLateral.addItem("pesquisarOrcamento", rolesIncluir);
+		menuLateral.addItem("IncluirInstituicao", rolesIncluir);
+		menuLateral.addItem("ListaInstituicao", rolesIncluir);
+		menuLateral.addItem("IncluirMunicipio", rolesIncluir);
+		menuLateral.addItem("ListaMunicipio", rolesIncluir);
+		menuLateral.addItem("ListaUsuario", rolesIncluir);
+		menuLateral.addItem("IncluirTipoInstituicao", rolesIncluir);
+		menuLateral.addItem("ListaTipoInstituicao", rolesIncluir);
+		menuLateral.addItem("IncluirCartorio", rolesIncluir);
+		menuLateral.addItem("ListaCartorio", rolesIncluir);
+		// menuLateral.addItem("IncluirCartorio", rolesIncluir);
+		// menuLateral.addItem("IncluirCartorio", rolesIncluir);
+		// menuLateral.addItem("IncluirCartorio", rolesIncluir);
 
 	}
 
