@@ -30,9 +30,9 @@ public enum TipoRegistro {
 	 */
 	public static TipoRegistro get(String valor) {
 		TipoRegistro[] values = TipoRegistro.values();
-		for (TipoRegistro tipoArquivo : values) {
-			if (tipoArquivo.getConstante().startsWith(valor)) {
-				return tipoArquivo;
+		for (TipoRegistro tipoRegistro : values) {
+			if (valor.startsWith(tipoRegistro.getConstante())) {
+				return tipoRegistro;
 			}
 		}
 		throw new InfraException("Tipo de Registro desconhecido : " + valor);
