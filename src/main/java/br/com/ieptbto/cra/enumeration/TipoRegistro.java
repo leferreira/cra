@@ -22,18 +22,19 @@ public enum TipoRegistro {
 		return label;
 	}
 
-	public static TipoRegistro get(String linha) {
-
-		if (linha.startsWith(TipoRegistro.TITULO.getConstante())) {
-			return TipoRegistro.TITULO;
-		} else if (linha.startsWith(TipoRegistro.CABECALHO.getConstante())) {
-			return TipoRegistro.CABECALHO;
-		} else if (linha.startsWith(TipoRegistro.RODAPE.getConstante())) {
-			return TipoRegistro.RODAPE;
-		} else {
-			new InfraException("Tipo de Registro desconhecido : " + linha);
-			return null;
+	/**
+	 * retorna o tipo de arquivo dependendo do tipo informado
+	 * 
+	 * @param valor
+	 * @return tipo arquivo
+	 */
+	public static TipoRegistro get(String valor) {
+		TipoRegistro[] values = TipoRegistro.values();
+		for (TipoRegistro tipoArquivo : values) {
+			if (tipoArquivo.getConstante().startsWith(valor)) {
+				return tipoArquivo;
+			}
 		}
+		throw new InfraException("Tipo de Registro desconhecido : " + valor);
 	}
-
 }
