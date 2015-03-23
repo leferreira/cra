@@ -5,8 +5,8 @@ import javax.persistence.Entity;
 @Entity
 public enum TipoArquivoEnum {
 
-	Remessa("B"), Confirmação("C"), Retorno("R"), Cancelamento_de_Protesto("CP"), Devolução_de_Protesto(
-			"DP"), Autorização_de_Cancelamento("AC");
+	Remessa("B"), ConfirmaÃ§Ã£o("C"), Retorno("R"), Cancelamento_de_Protesto("CP"), DevoluÃ§Ã£o_de_Protesto("DP"), AutorizaÃ§Ã£o_de_Cancelamento(
+	        "AC");
 
 	public String constante;
 
@@ -25,7 +25,7 @@ public enum TipoArquivoEnum {
 			return TipoArquivoEnum.Remessa;
 		} else {
 			if (tipo.equals("C")) {
-				return TipoArquivoEnum.Confirmação;
+				return TipoArquivoEnum.ConfirmaÃ§Ã£o;
 			} else {
 				if (tipo.equals("R")) {
 					return TipoArquivoEnum.Retorno;
@@ -34,9 +34,9 @@ public enum TipoArquivoEnum {
 						return TipoArquivoEnum.Cancelamento_de_Protesto;
 					} else {
 						if (tipo.endsWith("DP")) {
-							return TipoArquivoEnum.Devolução_de_Protesto;
+							return TipoArquivoEnum.DevoluÃ§Ã£o_de_Protesto;
 						} else {
-							return TipoArquivoEnum.Autorização_de_Cancelamento;
+							return TipoArquivoEnum.AutorizaÃ§Ã£o_de_Cancelamento;
 						}
 					}
 				}
