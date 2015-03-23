@@ -35,7 +35,7 @@ public enum TipoArquivoEnum {
 	public static TipoArquivoEnum getTipoArquivoEnum(String valor) {
 		TipoArquivoEnum[] values = TipoArquivoEnum.values();
 		for (TipoArquivoEnum tipoArquivo : values) {
-			if (tipoArquivo.getConstante().startsWith(valor)) {
+			if (valor.startsWith(tipoArquivo.getConstante())) {
 				return tipoArquivo;
 			}
 		}
