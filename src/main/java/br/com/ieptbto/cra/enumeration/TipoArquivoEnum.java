@@ -2,45 +2,44 @@ package br.com.ieptbto.cra.enumeration;
 
 import javax.persistence.Entity;
 
+import br.com.ieptbto.cra.exception.InfraException;
+
 @Entity
 public enum TipoArquivoEnum {
 
-	Remessa("B"), Confirmação("C"), Retorno("R"), Cancelamento_de_Protesto("CP"), Devolução_de_Protesto("DP"), Autorização_de_Cancelamento(
-	        "AC");
+	REMESSA("B", "Remessa"), //
+	CONFIRMACAO("C", "Confirmação"), //
+	RETORNO("R", "Retorno"), //
+	CANCELAMENTO_DE_PROTESTO("CP", "Cancelamento de Protesto"), //
+	DEVOLUCAO_DE_PROTESTO("DP", "Devolução de Protesto"), //
+	AUTORIZACAO_DE_CANCELAMENTO("AC", "Autorização de Cancelamento");
 
 	public String constante;
+	public String label;
 
-	TipoArquivoEnum(String constante) {
+	TipoArquivoEnum(String constante, String label) {
 		this.constante = constante;
+		this.label = label;
 	}
 
 	public String getConstante() {
 		return constante;
 	}
 
-	@SuppressWarnings("unused")
-	private TipoArquivoEnum getTipoArquivo(String tipo) {
-
-		if (tipo.equals("B")) {
-			return TipoArquivoEnum.Remessa;
-		} else {
-			if (tipo.equals("C")) {
-				return TipoArquivoEnum.Confirmação;
-			} else {
-				if (tipo.equals("R")) {
-					return TipoArquivoEnum.Retorno;
-				} else {
-					if (tipo.equals("CP")) {
-						return TipoArquivoEnum.Cancelamento_de_Protesto;
-					} else {
-						if (tipo.endsWith("DP")) {
-							return TipoArquivoEnum.Devolução_de_Protesto;
-						} else {
-							return TipoArquivoEnum.Autorização_de_Cancelamento;
-						}
-					}
-				}
+	/**
+	 * retorna o tipo de arquivo dependendo do tipo informado
+	 * 
+	 * @param valor
+	 * @return tipo arquivo
+	 */
+	public static TipoArquivoEnum getTipoArquivoEnum(String valor) {
+		TipoArquivoEnum[] values = TipoArquivoEnum.values();
+		for (TipoArquivoEnum tipoArquivo : values) {
+			if (tipoArquivo.getConstante().startsWith(valor)) {
+				return tipoArquivo;
 			}
 		}
+		throw new InfraException("Tipo de Arquivo não encontrado: " + valor);
 	}
+
 }
