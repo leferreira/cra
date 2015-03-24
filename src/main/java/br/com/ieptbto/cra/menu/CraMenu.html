@@ -6,24 +6,24 @@
 			<div class="sidebar-nav navbar-collapse" wicket:id="menuLateral">
 				<ul class="nav" id="side-menu">
 					<li>
-						<a href="#"><i class="fa fa-edit fa-fw"></i> Arquivos <span class="fa arrow"></span></a>
+						<a href="#" style="text-align: center;"><span class="glyphicon glyphicon-file" style="font-size: 50px;"></span> <br>Arquivos <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                         	<li>
-								<a href="#">Buscar Arquivo<span class="fa arrow"></span></a>
+								<a href="#">Buscar Arquivo</a>
 							</li>
                         	<li>
-								<a href="EnviarArquivo" wicket:id="EnviarArquivo">Enviar Arquivo <span class="fa arrow"></span></a>
+								<a href="EnviarArquivo" wicket:id="EnviarArquivo">Enviar Arquivo</a>
 							</li>
 							<li >
-                        		<a href="incluirGrupo">Criar Arquivo <span class="fa arrow"></span></a>
+                        		<a href="incluirGrupo">Criar Arquivo</a>
                         	</li>
                         	<li >
-                        		<a href="incluirGrupo">Monitorar Arquivo <span class="fa arrow"></span></a>
+                        		<a href="incluirGrupo">Monitorar Arquivo</a>
                         	</li>
                         </ul>
 					</li>
 					<li>
-						<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Títulos <span class="fa arrow"></span></a>
+					<a href="#" style="text-align: center;"><span class="glyphicon glyphicon-align-left" style="font-size: 50px;"></span> <br>Títulos <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                         	<li >
                         		<a href="incluirCotacao">Buscar Título</a>
@@ -33,12 +33,22 @@
                         	</li>
                         </ul>
 					</li>
+					
 					<li>
-						<a href="#"><i class="fa fa-table fa-fw"></i> Administração <span class="fa arrow"></span></a>
+					<a href="#" style="text-align: center;"><span class="glyphicon glyphicon-list-alt" style="font-size: 50px;"></span> <br>Relat&oacute;rios <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
+                        	<li >
+                        		<a href="pesquisarOrcamento">Usuários</a>
+                        	</li>
                         	<li>
-				                <a href="ListaInstituicao">Instituições</a>
-				            </li>
+                        		<a href="pesquisarOrcamento">Tipos de Arquivos</a>
+                        	</li>
+                        </ul>
+					</li>
+					
+					<li>
+					<a href="#" style="text-align: center;"><span class="fa fa-gear" style="font-size: 50px;"></span> <br> Administração <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
                         	<li>
                         		<a href="#">Instituições<span class="fa arrow"></span></a> 
                         		<ul class="nav nav-third-level">
@@ -99,19 +109,9 @@
                         	</li>
                         </ul>
 					</li>
-					<li>
-						<a href="#"><i class="fa fa-table fa-fw"></i> Relat&oacute;rios <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                        	<li >
-                        		<a href="pesquisarOrcamento">Usuários</a>
-                        	</li>
-                        	<li >
-                        		<a href="pesquisarOrcamento">Tipos de Arquivos</a>
-                        	</li>
-                        </ul>
-					</li>
 				</ul>
 			</div>
+			<br style="clear: both;"/>
 		</div>
 	</wicket:panel>
 </body>

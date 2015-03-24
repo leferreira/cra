@@ -1,5 +1,7 @@
 package br.com.ieptbto.cra.mediator;
 
+import java.util.List;
+
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class ArquivoMediator {
 
 	@Autowired
 	private TipoArquivoDAO tipoArquivoDAO;
+	@Autowired
+	private TipoArquivoDAO arquivoDAO;
 
 	public void salvar(Arquivo arquivo, FileUpload uploadedFile) {
 		processarArquivo(arquivo, uploadedFile);
@@ -35,4 +39,7 @@ public class ArquivoMediator {
 		new ProcessadorArquivo().processarArquivo(uploadedFile, arquivo.getUsuarioEnvio());
 	}
 
+	public List<Arquivo> buscarArquivos(){
+		return arquivoDAO.buscarArquivos();
+	}
 }

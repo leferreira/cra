@@ -38,6 +38,8 @@ public class Remessa extends AbstractEntidade<Remessa>{
 	private Usuario usuarioRecebe;
 	private Instituicao instituicaoDestino;
 	private List<Titulo> titulos;
+	private Cabecalho cabecalho;
+	private Rodape rodape;
 
 	@Id
 	@Column(name = "ID_REMESSA", columnDefinition = "serial")
@@ -59,6 +61,7 @@ public class Remessa extends AbstractEntidade<Remessa>{
 	}
 
 	@OneToOne
+	@JoinColumn(name="USUARIO_ID")
 	public Usuario getUsuarioRecebe() {
 		return usuarioRecebe;
 	}
@@ -69,9 +72,21 @@ public class Remessa extends AbstractEntidade<Remessa>{
 		return instituicaoDestino;
 	}
 
+	@OneToOne
+	@JoinColumn(name="CABECALHO_ID")
+	public Cabecalho getCabecalho() {
+		return cabecalho;
+	}
+	
 	@OneToMany(mappedBy = "remessa", fetch = FetchType.LAZY)
 	public List<Titulo> getTitulos() {
 		return titulos;
+	}
+
+	@OneToOne
+	@JoinColumn(name="RODAPE_ID")
+	public Rodape getRodape() {
+		return rodape;
 	}
 
 	public void setId(int id) {
@@ -102,5 +117,14 @@ public class Remessa extends AbstractEntidade<Remessa>{
 	public int compareTo(Remessa entidade) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+
+	public void setCabecalho(Cabecalho cabecalho) {
+		this.cabecalho = cabecalho;
+	}
+
+	public void setRodape(Rodape rodape) {
+		this.rodape = rodape;
 	}
 }

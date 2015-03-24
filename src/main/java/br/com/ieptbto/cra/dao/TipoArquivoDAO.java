@@ -50,6 +50,13 @@ public class TipoArquivoDAO extends AbstractBaseDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public List<Arquivo> buscarArquivos(){
+		Criteria criteria = getCriteria(Arquivo.class);
+		criteria.addOrder(Order.asc("id"));
+		return criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<TipoArquivo> buscarTiposArquivo() {
 		Criteria criteria = getCriteria(TipoArquivo.class);
 		criteria.addOrder(Order.asc("id"));

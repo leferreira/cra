@@ -60,75 +60,92 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 		return 0;
 	}
 
-	@OneToOne
+	@OneToOne(mappedBy="cabecalho")
 	public Remessa getRemessa() {
 		return remessa;
 	}
 
+	@Column(name= "IDENTIFICACAO_REGISTRO")
 	public TipoRegistro getIdentificacaoRegistro() {
 		return identificacaoRegistro;
 	}
 
+	@Column(name= "NUMERO_CODIGO_PORTADOR")
 	public String getNumeroCodigoPortador() {
 		return numeroCodigoPortador;
 	}
 
+	@Column(name= "NOME_PORTADOR")
 	public String getNomePortador() {
 		return nomePortador;
 	}
 
+	@Column(name= "DATA_MOVIMENTO")
 	public Integer getDataMovimento() {
 		return dataMovimento;
 	}
 
+	@Column(name= "IDENTIFICAO_TRANSACAO_REMENTE")
 	public String getIdentificacaoTransacaoRemetente() {
 		return identificacaoTransacaoRemetente;
 	}
 
+	@Column(name= "IDENTIFICAO_TRANSACAO_DESTINATARIO")
 	public String getIdentificacaoTransacaoDestinatario() {
 		return identificacaoTransacaoDestinatario;
 	}
 
+	@Column(name= "IDENTIFICAO_TRANSACAO_TIPO")
 	public String getIdentificacaoTransacaoTipo() {
 		return identificacaoTransacaoTipo;
 	}
 
+	@Column(name= "NUMERO_SEQUENCIAL_REMESSA")
 	public Integer getNumeroSequencialRemessa() {
 		return numeroSequencialRemessa;
 	}
 
+	@Column(name= "QUANTIDADE_REGISTROS_REMESSA")
 	public Integer getQtdRegistrosRemessa() {
 		return qtdRegistrosRemessa;
 	}
 
+	@Column(name= "QUANTIDADE_TITULOS_REMESSA")
 	public Integer getQtdTitulosRemessa() {
 		return qtdTitulosRemessa;
 	}
 
+	@Column(name= "QUANTIDADE_INDICACOES_REMESSA")
 	public Integer getQtdIndicacoesRemessa() {
 		return qtdIndicacoesRemessa;
 	}
 
+	@Column(name= "QUANTIDADE_ORIGINAL_REMESSA")
 	public Integer getQtdOriginaisRemessa() {
 		return qtdOriginaisRemessa;
 	}
 
+	@Column(name= "AGENCIA_CENTRALIZADORA")
 	public String getAgenciaCentralizadora() {
 		return agenciaCentralizadora;
 	}
 
+	@Column(name= "VERSAO_LAYOUT")
 	public String getVersaoLayout() {
 		return versaoLayout;
 	}
 
+	@Column(name= "CODIGO_PRACA_PAGAMENTO")
 	public Integer getCodigoMunicipioPraçaPagamento() {
 		return codigoMunicipioPraçaPagamento;
 	}
 
+	@Column(name= "COMPLEMENTO_REGISTRO")
 	public String getComplementoRegistro() {
 		return complementoRegistro;
 	}
 
+	@Column(name= "NUMERO_SEQUENCIAL_ARQUIVO")
 	public String getNumeroSequencialRegistroArquivo() {
 		return numeroSequencialRegistroArquivo;
 	}

@@ -54,7 +54,7 @@ public class Rodape extends AbstractEntidade<Rodape> {
 		return id;
 	}
 
-	@OneToOne
+	@OneToOne(mappedBy="rodape")
 	public Remessa getRemessa() {
 		return remessa;
 	}

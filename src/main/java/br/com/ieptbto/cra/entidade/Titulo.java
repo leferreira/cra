@@ -102,38 +102,47 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return remessa;
 	}
 
+	@Column(name = "IDENTIFICACAO_REGISTRO")
 	public TipoRegistro getIdentificacaoRegistro() {
 		return identificacaoRegistro;
 	}
 
+	@Column(name = "CODIGO_PORTADOR")
 	public String getCodigoPortador() {
 		return codigoPortador;
 	}
-
+	
+	@Column(name = "AGENCIA_CODIGO_CEDENTE")
 	public String getAgenciaCodigoCedente() {
 		return agenciaCodigoCedente;
 	}
 
+	@Column(name = "NOME_CEDENTE_FAVORECIDO")
 	public String getNomeCedenteFavorecido() {
 		return nomeCedenteFavorecido;
 	}
 
+	@Column(name = "NOME_SACADOR_VENDEDOR")
 	public String getNomeSacadorVendedor() {
 		return nomeSacadorVendedor;
 	}
 
+	@Column(name = "DOCUMENTO_SACADOR")
 	public String getDocumentoSacador() {
 		return documentoSacador;
 	}
 
+	@Column(name = "ENDERECO_SACADOR_DEVEDOR")
 	public String getEnderecoSacadorVendedor() {
 		return enderecoSacadorVendedor;
 	}
 
+	@Column(name = "CEP_SACADOR_DEVEDOR")
 	public String getCepSacadorVendedor() {
 		return cepSacadorVendedor;
 	}
-
+	
+	@Column(name = "CIDADE_CIDADE")
 	public String getCidadeSacadorVendedor() {
 		return cidadeSacadorVendedor;
 	}
