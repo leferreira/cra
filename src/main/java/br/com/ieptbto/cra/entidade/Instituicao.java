@@ -1,9 +1,7 @@
 package br.com.ieptbto.cra.entidade;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -41,11 +39,13 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	private String agenciaContaCorrente;
 	private String numContaCorrente;
 	private String municipioCartorio;
-	private Municipio comarcaCartorio;
 	private boolean situacao;
-	private List<Usuario> listaUsuarios = new ArrayList<Usuario>();
-	private List<InstituicaoMunicipio> instituicaoMunicipio = new ArrayList<InstituicaoMunicipio>();
+
 	private TipoInstituicao tipoInstituicao;
+	private Municipio comarcaCartorio;
+	private List<Arquivo> arquivosEnviados;
+	private List<Usuario> listaUsuarios;
+	private List<InstituicaoMunicipio> instituicaoMunicipio;
 
 	@Id
 	@Column(name = "ID_INSTITUICAO", columnDefinition = "serial")
@@ -142,7 +142,12 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return municipioCartorio;
 	}
 
-	@OneToMany(mappedBy = "instituicao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "instituicaoEnvio", fetch = FetchType.LAZY)
+	public List<Arquivo> getArquivosEnviados() {
+		return arquivosEnviados;
+	}
+
+	@OneToMany(mappedBy = "instituicao", fetch = FetchType.LAZY)
 	public List<InstituicaoMunicipio> getInstituicaoMunicipio() {
 		return instituicaoMunicipio;
 	}
@@ -256,11 +261,16 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		this.numContaCorrente = numContaCorrente;
 	}
 
-	public void setInstituicaoMunicipio(List<InstituicaoMunicipio> instituicaoMunicipio) {
+	public void setInstituicaoMunicipio(
+			List<InstituicaoMunicipio> instituicaoMunicipio) {
 		this.instituicaoMunicipio = instituicaoMunicipio;
 	}
 
 	public void setMunicipioCartorio(String municipioCartorio) {
 		this.municipioCartorio = municipioCartorio;
+	}
+
+	public void setArquivosEnviados(List<Arquivo> arquivosEnviados) {
+		this.arquivosEnviados = arquivosEnviados;
 	}
 }

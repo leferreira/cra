@@ -20,6 +20,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstituicaoMunicipio;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
+import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Rodape;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
@@ -59,6 +60,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Titulo.class);
 		classesHibernate.add(Cabecalho.class);
 		classesHibernate.add(Rodape.class);
+		classesHibernate.add(Remessa.class);
 		// classesHibernate.add(KliniekRevisionEntity.class);
 	}
 

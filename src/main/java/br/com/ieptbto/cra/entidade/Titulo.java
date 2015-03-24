@@ -1,14 +1,13 @@
 package br.com.ieptbto.cra.entidade;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
@@ -30,6 +29,8 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	private static final long serialVersionUID = 1L;
 
 	private int id;
+	private Remessa remessa;
+
 	private TipoRegistro identificacaoRegistro;
 	private String codigoPortador;
 	private String agenciaCodigoCedente;
@@ -43,15 +44,15 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	private String nossoNumero;
 	private String especieTitulo;
 	private String numeroTitulo;
-	private String dataEmissaoTitulo;
-	private String dataVencimentoTitulo;
+	private Integer dataEmissaoTitulo; // As datas são passada assim: DDMMAAAA
+	private Integer dataVencimentoTitulo;
 	private String tipoMoeda;
-	private String valorTitulo;
-	private String saldoTitulo;
+	private BigDecimal valorTitulo;
+	private BigDecimal saldoTitulo;
 	private String pracaProtesto;
-	private String tipoEndoso;
-	private String informacaoSobreAceite;
-	private String numeroControleDevedor;
+	private char tipoEndoso;
+	private char informacaoSobreAceite;
+	private Integer numeroControleDevedor;
 	private String nomeDevedor;
 	private String tipoIdentificacaoDevedor;
 	private String numeroIdentificacaoDevedor;
@@ -60,80 +61,63 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	private String cepDevedor;
 	private String cidadeDevedor;
 	private String ufDevedor;
-	private String codigoCartorio;
+	private Integer codigoCartorio;
 	private String numeroProtocoloCartorio;
 	private String tipoOcorrencia;
-	private String dataProtocolo;
-	private String valorCustaCartorio;
+	private Integer dataProtocolo;
+	private BigDecimal valorCustaCartorio;
 	private String declaracaoPortador;
-	private String dataOcorrencia;
+	private Integer dataOcorrencia;
 	private String codigoIrregularidade;
 	private String bairroDevedor;
-	private String valorCustasCartorioDistribuidor;
-	private String registroDistribuicao;
-	private String valorGravacaoEletronica;
-	private String numeroOperacaoBanco;
-	private String numeroContratoBanco;
-	private String numeroParcelaContrato;
-	private String tipoLetraCambio;
+	private BigDecimal valorCustasCartorioDistribuidor;
+	private Integer registroDistribuicao;
+	private BigDecimal valorGravacaoEletronica;
+	private Integer numeroOperacaoBanco;
+	private Integer numeroContratoBanco;
+	private Integer numeroParcelaContrato;
+	private char tipoLetraCambio;
 	private String complementoCodigoIrregularidade;
-	private String protestoMotivoFalencia;
-	private String instrumentoProtesto;
-	private String valorDemaisDespesas;
+	private char protestoMotivoFalencia;
+	private char instrumentoProtesto;
+	private BigDecimal valorDemaisDespesas;
 	private String complementoRegistro;
 	private String numeroSequencialArquivo;
-	private Cabecalho cabecalho;
-	private Rodape rodape;
-	private Arquivo arquivo;
+
+	@Override
+	public int compareTo(Titulo entidade) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 	@Id
 	@Column(name = "ID_TITULO", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Override
 	public int getId() {
 		return id;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "ARQUIVO_ID")
-	public Arquivo getArquivo() {
-		return arquivo;
+	@OneToOne
+	public Remessa getRemessa() {
+		return remessa;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "CABECALHO_ID")
-	public Cabecalho getCabecalho() {
-		return cabecalho;
-	}
-
-	@ManyToOne
-	@JoinColumn(name = "RODAPE_ID")
-	public Rodape getRodape() {
-		return rodape;
-	}
-
-	@Column(name = "IDENTIFICACAO_REGISTRO")
-	@Enumerated(EnumType.STRING)
 	public TipoRegistro getIdentificacaoRegistro() {
 		return identificacaoRegistro;
 	}
 
-	@Column(name = "CODIGO_PORTADOR", length = 3)
 	public String getCodigoPortador() {
 		return codigoPortador;
 	}
 
-	@Column(name = "AGENCIA_CODIGO_CEDENTE", length = 15)
 	public String getAgenciaCodigoCedente() {
 		return agenciaCodigoCedente;
 	}
 
-	@Column(name = "NOME_CEDENTE_FAVORECIDO", length = 50)
 	public String getNomeCedenteFavorecido() {
 		return nomeCedenteFavorecido;
 	}
 
-	@Column(name = "NOME_SACADOR_VENDEDOR", length = 50)
 	public String getNomeSacadorVendedor() {
 		return nomeSacadorVendedor;
 	}
@@ -170,11 +154,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return numeroTitulo;
 	}
 
-	public String getDataEmissaoTitulo() {
+	public Integer getDataEmissaoTitulo() {
 		return dataEmissaoTitulo;
 	}
 
-	public String getDataVencimentoTitulo() {
+	public Integer getDataVencimentoTitulo() {
 		return dataVencimentoTitulo;
 	}
 
@@ -182,11 +166,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return tipoMoeda;
 	}
 
-	public String getValorTitulo() {
+	public BigDecimal getValorTitulo() {
 		return valorTitulo;
 	}
 
-	public String getSaldoTitulo() {
+	public BigDecimal getSaldoTitulo() {
 		return saldoTitulo;
 	}
 
@@ -194,15 +178,15 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return pracaProtesto;
 	}
 
-	public String getTipoEndoso() {
+	public char getTipoEndoso() {
 		return tipoEndoso;
 	}
 
-	public String getInformacaoSobreAceite() {
+	public char getInformacaoSobreAceite() {
 		return informacaoSobreAceite;
 	}
 
-	public String getNumeroControleDevedor() {
+	public Integer getNumeroControleDevedor() {
 		return numeroControleDevedor;
 	}
 
@@ -238,7 +222,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return ufDevedor;
 	}
 
-	public String getCodigoCartorio() {
+	public Integer getCodigoCartorio() {
 		return codigoCartorio;
 	}
 
@@ -250,11 +234,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return tipoOcorrencia;
 	}
 
-	public String getDataProtocolo() {
+	public Integer getDataProtocolo() {
 		return dataProtocolo;
 	}
 
-	public String getValorCustaCartorio() {
+	public BigDecimal getValorCustaCartorio() {
 		return valorCustaCartorio;
 	}
 
@@ -262,7 +246,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return declaracaoPortador;
 	}
 
-	public String getDataOcorrencia() {
+	public Integer getDataOcorrencia() {
 		return dataOcorrencia;
 	}
 
@@ -274,31 +258,31 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return bairroDevedor;
 	}
 
-	public String getValorCustasCartorioDistribuidor() {
+	public BigDecimal getValorCustasCartorioDistribuidor() {
 		return valorCustasCartorioDistribuidor;
 	}
 
-	public String getRegistroDistribuicao() {
+	public Integer getRegistroDistribuicao() {
 		return registroDistribuicao;
 	}
 
-	public String getValorGravacaoEletronica() {
+	public BigDecimal getValorGravacaoEletronica() {
 		return valorGravacaoEletronica;
 	}
 
-	public String getNumeroOperacaoBanco() {
+	public Integer getNumeroOperacaoBanco() {
 		return numeroOperacaoBanco;
 	}
 
-	public String getNumeroContratoBanco() {
+	public Integer getNumeroContratoBanco() {
 		return numeroContratoBanco;
 	}
 
-	public String getNumeroParcelaContrato() {
+	public Integer getNumeroParcelaContrato() {
 		return numeroParcelaContrato;
 	}
 
-	public String getTipoLetraCambio() {
+	public char getTipoLetraCambio() {
 		return tipoLetraCambio;
 	}
 
@@ -306,15 +290,15 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return complementoCodigoIrregularidade;
 	}
 
-	public String getProtestoMotivoFalencia() {
+	public char getProtestoMotivoFalencia() {
 		return protestoMotivoFalencia;
 	}
 
-	public String getInstrumentoProtesto() {
+	public char getInstrumentoProtesto() {
 		return instrumentoProtesto;
 	}
 
-	public String getValorDemaisDespesas() {
+	public BigDecimal getValorDemaisDespesas() {
 		return valorDemaisDespesas;
 	}
 
@@ -328,6 +312,10 @@ public class Titulo extends AbstractEntidade<Titulo> {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public void setRemessa(Remessa remessa) {
+		this.remessa = remessa;
 	}
 
 	public void setIdentificacaoRegistro(TipoRegistro identificacaoRegistro) {
@@ -382,11 +370,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.numeroTitulo = numeroTitulo;
 	}
 
-	public void setDataEmissaoTitulo(String dataEmissaoTitulo) {
+	public void setDataEmissaoTitulo(Integer dataEmissaoTitulo) {
 		this.dataEmissaoTitulo = dataEmissaoTitulo;
 	}
 
-	public void setDataVencimentoTitulo(String dataVencimentoTitulo) {
+	public void setDataVencimentoTitulo(Integer dataVencimentoTitulo) {
 		this.dataVencimentoTitulo = dataVencimentoTitulo;
 	}
 
@@ -394,11 +382,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.tipoMoeda = tipoMoeda;
 	}
 
-	public void setValorTitulo(String valorTitulo) {
+	public void setValorTitulo(BigDecimal valorTitulo) {
 		this.valorTitulo = valorTitulo;
 	}
 
-	public void setSaldoTitulo(String saldoTitulo) {
+	public void setSaldoTitulo(BigDecimal saldoTitulo) {
 		this.saldoTitulo = saldoTitulo;
 	}
 
@@ -406,15 +394,15 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.pracaProtesto = pracaProtesto;
 	}
 
-	public void setTipoEndoso(String tipoEndoso) {
+	public void setTipoEndoso(char tipoEndoso) {
 		this.tipoEndoso = tipoEndoso;
 	}
 
-	public void setInformacaoSobreAceite(String informacaoSobreAceite) {
+	public void setInformacaoSobreAceite(char informacaoSobreAceite) {
 		this.informacaoSobreAceite = informacaoSobreAceite;
 	}
 
-	public void setNumeroControleDevedor(String numeroControleDevedor) {
+	public void setNumeroControleDevedor(Integer numeroControleDevedor) {
 		this.numeroControleDevedor = numeroControleDevedor;
 	}
 
@@ -450,7 +438,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.ufDevedor = ufDevedor;
 	}
 
-	public void setCodigoCartorio(String codigoCartorio) {
+	public void setCodigoCartorio(Integer codigoCartorio) {
 		this.codigoCartorio = codigoCartorio;
 	}
 
@@ -462,11 +450,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.tipoOcorrencia = tipoOcorrencia;
 	}
 
-	public void setDataProtocolo(String dataProtocolo) {
+	public void setDataProtocolo(Integer dataProtocolo) {
 		this.dataProtocolo = dataProtocolo;
 	}
 
-	public void setValorCustaCartorio(String valorCustaCartorio) {
+	public void setValorCustaCartorio(BigDecimal valorCustaCartorio) {
 		this.valorCustaCartorio = valorCustaCartorio;
 	}
 
@@ -474,7 +462,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.declaracaoPortador = declaracaoPortador;
 	}
 
-	public void setDataOcorrencia(String dataOcorrencia) {
+	public void setDataOcorrencia(Integer dataOcorrencia) {
 		this.dataOcorrencia = dataOcorrencia;
 	}
 
@@ -486,47 +474,49 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.bairroDevedor = bairroDevedor;
 	}
 
-	public void setValorCustasCartorioDistribuidor(String valorCustasCartorioDistribuidor) {
+	public void setValorCustasCartorioDistribuidor(
+			BigDecimal valorCustasCartorioDistribuidor) {
 		this.valorCustasCartorioDistribuidor = valorCustasCartorioDistribuidor;
 	}
 
-	public void setRegistroDistribuicao(String registroDistribuicao) {
+	public void setRegistroDistribuicao(Integer registroDistribuicao) {
 		this.registroDistribuicao = registroDistribuicao;
 	}
 
-	public void setValorGravacaoEletronica(String valorGravacaoEletronica) {
+	public void setValorGravacaoEletronica(BigDecimal valorGravacaoEletronica) {
 		this.valorGravacaoEletronica = valorGravacaoEletronica;
 	}
 
-	public void setNumeroOperacaoBanco(String numeroOperacaoBanco) {
+	public void setNumeroOperacaoBanco(Integer numeroOperacaoBanco) {
 		this.numeroOperacaoBanco = numeroOperacaoBanco;
 	}
 
-	public void setNumeroContratoBanco(String numeroContratoBanco) {
+	public void setNumeroContratoBanco(Integer numeroContratoBanco) {
 		this.numeroContratoBanco = numeroContratoBanco;
 	}
 
-	public void setNumeroParcelaContrato(String numeroParcelaContrato) {
+	public void setNumeroParcelaContrato(Integer numeroParcelaContrato) {
 		this.numeroParcelaContrato = numeroParcelaContrato;
 	}
 
-	public void setTipoLetraCambio(String tipoLetraCambio) {
+	public void setTipoLetraCambio(char tipoLetraCambio) {
 		this.tipoLetraCambio = tipoLetraCambio;
 	}
 
-	public void setComplementoCodigoIrregularidade(String complementoCodigoIrregularidade) {
+	public void setComplementoCodigoIrregularidade(
+			String complementoCodigoIrregularidade) {
 		this.complementoCodigoIrregularidade = complementoCodigoIrregularidade;
 	}
 
-	public void setProtestoMotivoFalencia(String protestoMotivoFalencia) {
+	public void setProtestoMotivoFalencia(char protestoMotivoFalencia) {
 		this.protestoMotivoFalencia = protestoMotivoFalencia;
 	}
 
-	public void setInstrumentoProtesto(String instrumentoProtesto) {
+	public void setInstrumentoProtesto(char instrumentoProtesto) {
 		this.instrumentoProtesto = instrumentoProtesto;
 	}
 
-	public void setValorDemaisDespesas(String valorDemaisDespesas) {
+	public void setValorDemaisDespesas(BigDecimal valorDemaisDespesas) {
 		this.valorDemaisDespesas = valorDemaisDespesas;
 	}
 
@@ -536,24 +526,6 @@ public class Titulo extends AbstractEntidade<Titulo> {
 
 	public void setNumeroSequencialArquivo(String numeroSequencialArquivo) {
 		this.numeroSequencialArquivo = numeroSequencialArquivo;
-	}
-
-	public void setCabecalho(Cabecalho cabecalho) {
-		this.cabecalho = cabecalho;
-	}
-
-	public void setRodape(Rodape rodape) {
-		this.rodape = rodape;
-	}
-
-	public void setArquivo(Arquivo arquivo) {
-		this.arquivo = arquivo;
-	}
-
-	@Override
-	public int compareTo(Titulo entidade) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }
