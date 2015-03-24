@@ -31,7 +31,7 @@ public class Remessa extends AbstractEntidade<Remessa>{
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	
+
 	private int id;
 	private Arquivo arquivo;
 	private Date dataRecebimento;
