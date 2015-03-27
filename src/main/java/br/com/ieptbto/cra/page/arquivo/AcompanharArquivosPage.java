@@ -1,69 +1,80 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.util.DataUtil;
 
-/**
- * @author Thasso Araújo
- *
- */
-/**
- * @author Thasso Araújo
- *
- */
 /**
  * @author Thasso Araújo
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@SuppressWarnings({ "unused" })
+@SuppressWarnings("unused")
 public class AcompanharArquivosPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	
+	private static final Logger logger = Logger
+			.getLogger(AcompanharArquivosPage.class);
+
+	@SpringBean
+	private RemessaMediator remessasMediator;
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
-	
-	private Arquivo arquivo;
 
+	private Arquivo arquivo;
 	private Usuario user;
 	private Instituicao instituicao;
 	private Form<Arquivo> formFilters;
-	
-	private static final List<String> CHOISE_SITUACAO = Arrays.asList(new String[] { "Enviados", "Aguardando", "Recebidos" });
-	
-	private ArrayList<String> situacaoSelect = new ArrayList<String>();
-	private ArrayList<String> tipoSelect = new ArrayList<String>();
+
+	final CheckBox enviados = new CheckBox("enviados",
+			new PropertyModel<Boolean>(this, "enviados"));
+	final CheckBox recebidos = new CheckBox("recebidos",
+			new PropertyModel<Boolean>(this, "recebidos"));
+	final CheckBox aguardando = new CheckBox("aguardando",
+			new PropertyModel<Boolean>(this, "aguardando"));
+	final CheckBox b = new CheckBox("b", new PropertyModel<Boolean>(this, "b"));
+	final CheckBox c = new CheckBox("c", new PropertyModel<Boolean>(this, "c"));
+	final CheckBox r = new CheckBox("r", new PropertyModel<Boolean>(this, "r"));
+	final CheckBox cp = new CheckBox("cp", new PropertyModel<Boolean>(this,
+			"cp"));
+	final CheckBox dp = new CheckBox("dp", new PropertyModel<Boolean>(this,
+			"dp"));
+	final CheckBox ac = new CheckBox("ac", new PropertyModel<Boolean>(this,
+			"ac"));
+
 	private TextField<Date> dataEnvio = null;
 	private List<TipoArquivoEnum> enumLista = new ArrayList<TipoArquivoEnum>();
-	private List<String> choicesTipos = new ArrayList<String>();
-	
+
 	private WebMarkupContainer divTable;
 	private WebMarkupContainer divArquivos;
 	private WebMarkupContainer tabelaArquivos;
@@ -79,9 +90,7 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 
 			@Override
 			protected void onSubmit() {
-				System.out.println(situacaoSelect.toString());
-				System.out.println(tipoSelect.toString());
-				System.out.println(dataEnvio.getDefaultModelObject().toString());
+
 			}
 		};
 
@@ -95,39 +104,31 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 	/**
 	 * Adicionando os campos de filtros
 	 * */
-	private void adicionarFiltros(Form<?> form) {
-		form.add(comboSituacoes());
-		form.add(comboTiposArquivos());
+	private void adicionarFiltros(Form<Arquivo> form) {
 		form.add(campoDataEnvio());
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Component comboSituacoes() {
-		return new CheckBoxMultipleChoice<String>("situacao", new Model(
-				situacaoSelect), CHOISE_SITUACAO);
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Component comboTiposArquivos() {
-		enumLista = Arrays.asList(TipoArquivoEnum.values());
-		for (TipoArquivoEnum tipo : enumLista) {
-			choicesTipos.add(tipo.constante);
-		}
-		return new CheckBoxMultipleChoice<String>("tipos",
-				new Model(tipoSelect), choicesTipos);
+		form.add(enviados);
+		form.add(recebidos);
+		form.add(aguardando);
+		form.add(b);
+		form.add(c);
+		form.add(r);
+		form.add(cp);
+		form.add(dp);
+		form.add(ac);
 	}
 
-	public TextField<Date> campoDataEnvio(){
-		return dataEnvio = new TextField<Date>("dataEnvio", new Model<Date>(null));
+	public TextField<Date> campoDataEnvio() {
+		return dataEnvio = new TextField<Date>("dataEnvio", new Model<Date>(
+				null));
 	}
-	
+
 	/***
-	 * Criando tabela de arquivos
+	 * Criando tabela de remessas de arquivos
 	 * */
 	private WebMarkupContainer adicionarTableArquivos() {
 		divArquivos = new WebMarkupContainer("divListView");
 		tabelaArquivos = new WebMarkupContainer("tabelaArquivos");
-		PageableListView<Arquivo> listView = getListaViewArquivos();
+		PageableListView<Remessa> listView = getListaViewArquivos();
 		tabelaArquivos.setOutputMarkupId(true);
 		tabelaArquivos.add(listView);
 		divArquivos.add(tabelaArquivos);
@@ -135,38 +136,52 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 
 		return divArquivos;
 	}
-	
+
 	@SuppressWarnings("serial")
-	private PageableListView<Arquivo> getListaViewArquivos() {
-		return new PageableListView<Arquivo>("listViewArquivos", buscarListaArquivos(), 10) {
+	private PageableListView<Remessa> getListaViewArquivos() {
+		return new PageableListView<Remessa>("listViewArquivos",
+				buscarListaRemessas(), 10) {
 			@Override
-			protected void populateItem(ListItem<Arquivo> item) {
-				Arquivo solicitacaoDeServico = item.getModelObject();
-				item.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));
-				item.add(new Label("dataEnvio", arquivo.getDataEnvio()));
-				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("listViewArquivos", arquivo.getTipoArquivo().getTipoArquivo().constante));
+			protected void populateItem(ListItem<Remessa> item) {
+				Remessa remessa = item.getModelObject();
+				item.add(new Label("tipoArquivo", remessa.getArquivo()
+						.getTipoArquivo().getTipoArquivo().constante));
+				item.add(new Label("nomeArquivo", remessa.getArquivo()
+						.getNomeArquivo()));
+				item.add(new Label("dataEnvio", DataUtil.formatarData(remessa
+						.getArquivo().getDataEnvio())));
+				item.add(new Label("instituicao", remessa.getArquivo()
+						.getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("destino", remessa.getInstituicaoDestino()
+						.getNomeFantasia()));
+
+				item.add(downloadArquivo(remessa.getArquivo()));
+			}
+
+			private Component downloadArquivo(final Arquivo file) {
+				return new Link<Arquivo>("downloadArquivo") {
+
+					@Override
+					public void onClick() {
+					}
+				};
 			}
 		};
 	}
-	
+
+	/**
+	 * Método que recebe os parametros e buscará os arquivos
+	 * */
 	@SuppressWarnings("serial")
-	private IModel<List<Arquivo>> buscarListaArquivos() {
-		return new LoadableDetachableModel<List<Arquivo>>() {
+	private IModel<List<Remessa>> buscarListaRemessas() {
+		return new LoadableDetachableModel<List<Remessa>>() {
 			@Override
-			protected List<Arquivo> load() {
-//				List<Arquivo> lista = new ArrayList<Arquivo>();
-//			try{
-//				lista = arquivoMediator.buscarArquivos();
-//				return lista;
-//			} catch(NullPointerException)
-//				error("Não foi encontrado arquivos!");
-//			}
-				return arquivoMediator.buscarArquivos();
+			protected List<Remessa> load() {
+				return remessasMediator.buscarRemessa(instituicao);
 			}
 		};
 	}
-	
+
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(arquivo);

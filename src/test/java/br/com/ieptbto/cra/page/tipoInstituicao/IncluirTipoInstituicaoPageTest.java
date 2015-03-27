@@ -3,13 +3,10 @@ package br.com.ieptbto.cra.page.tipoInstituicao;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.TextField;
 import org.junit.Before;
-import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
-import br.com.ieptbto.cra.base.BaseTest;
+import br.com.ieptbto.cra.base.BaseTest; 
 
-public class IncluirTipoInstituicaoPageTest extends BaseTest {
+public class IncluirTipoInstituicaoPageTest extends BaseTest { 
 
 	@Before
 	public void setUp() {
@@ -17,9 +14,9 @@ public class IncluirTipoInstituicaoPageTest extends BaseTest {
 		logar();
 	}
 	
-	@Test
-	@Transactional
-	@Rollback(true)
+//	@Test
+//	@Transactional
+//	@Rollback(true)
 	public void testCarregarIncluirTipoInstituicaoPage() {
 		tester.startPage(IncluirTipoInstituicaoPage.class);
 		form = tester.newFormTester("form");

@@ -41,7 +41,8 @@
 
 body {
 	padding-top: 100px;
-	background-color: #3d8cbe;
+	/*background-color: #3d8cbe;*/
+	background-color: #f8f8f8;
 	font-family: sans-serif;
 }
 
@@ -66,8 +67,10 @@ body {
 
 @media ( min-width :768px) {
 	#page-wrapper {
+	 background-color: #337ab7 !important;
 		position: inherit;
-		margin: 0 0 0 250px;
+		/*margin: 0 0 0 250px;*/
+		    margin: 0px 0 0 16%;
 		padding: 0 30px;
 		min-height: auto;
 		border-left: 2px solid #e7e7e7;
@@ -96,8 +99,8 @@ body {
 .navbar-default {
 	/*background-color: #fff;*/
 	color: #3d8cbe;
-	border-bottom: 1px solid #d9d9d9;
-	box-shadow: 0 1px #f4f4f4;
+	/*border-bottom: 1px solid #d9d9d9;*/
+	/*box-shadow: 0 1px #f4f4f4;*/
 }
 
 .navbar-top-links .dropdown-menu li {
@@ -130,8 +133,10 @@ body {
 	.sidebar {
 		z-index: 1;
 		position: absolute;
-		width: 250px;
-		margin-top: 51px;
+		/*width: 250px;*/
+		width: 16%;
+		  margin-top: 40px;
+		  padding-top: 20PX;
 	}
 	.navbar-top-links .dropdown-messages, .navbar-top-links .dropdown-tasks,
 		.navbar-top-links .dropdown-alerts {
@@ -496,4 +501,61 @@ button {
 	display: block;
 	margin-top: 10px;
 	margin-bottom: 10px;
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
+
+.esquerda{
+	width: 32%;
+	float: left;
+}
+.centro{
+	width: 32%;
+	float: left;
 }

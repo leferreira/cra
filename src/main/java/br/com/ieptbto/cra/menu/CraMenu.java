@@ -33,6 +33,7 @@ public class CraMenu extends Panel {
 
 		MenuItem menuLateral = menu.addItem("menuLateral", rolesPesquisar);
 		menuLateral.addItem("EnviarArquivo", rolesIncluir);
+		menuLateral.addItem("AcompanharArquivos", rolesPesquisar);
 		menuLateral.addItem("IncluirUsuario", rolesPesquisar);
 		menuLateral.addItem("IncluirInstituicao", rolesIncluir);
 		menuLateral.addItem("ListaInstituicao", rolesIncluir);

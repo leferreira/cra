@@ -72,7 +72,7 @@ public class TipoInstituicaoInputPanel extends Panel {
 	public Component comboCidades() {
 		enumLista = Arrays.asList(TipoArquivoEnum.values());
 		for (TipoArquivoEnum tipo : enumLista) {
-			choices.add(tipo.toString().replace("_", " "));
+			choices.add(tipo.label);
 		}
 		return checkBox = new CheckBoxMultipleChoice<String>(
 				"arquivosEnvioPermitido", choices);

@@ -1,0 +1,13 @@
+#page-wrapper{
+	background-color: #3d8cbe;
+	  margin: 0 0 0 220px;
+}
+body{
+	background-color: #f8f8f8;
+}
+.sidebar{
+	width: 16%;
+}
+.dropdown-submenu>.dropdown-menu{
+	border-radius: 0 0px 0px 0px;
+}

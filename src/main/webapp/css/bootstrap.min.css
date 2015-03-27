@@ -3682,7 +3682,8 @@ tbody.collapse.in {
 	font-size: 14px;
 	text-align: left;
 	list-style: none;
-	background-color: #fff;
+	/*background-color: #fff;*/
+	background-color #f8f8f8;
 	-webkit-background-clip: padding-box;
 	background-clip: padding-box;
 	border: 1px solid #ccc;
@@ -3710,12 +3711,13 @@ tbody.collapse.in {
 	clear: both;
 	font-weight: 400;
 	line-height: 1.42857143;
-	color: #333;
+	/*color: #333;*/
+	color: #337AB7;
 	white-space: nowrap
 }
 
 .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover {
-	color: #262626;
+	color: #f8f8f8;
 	text-decoration: none;
 	background-color: #f5f5f5
 }
@@ -6072,6 +6074,8 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:focus,
 
 .panel-primary>.panel-heading {
 	color: #fff;
+	font-size: 15px;
+	font-style: bold;
 	background-color: #337ab7;
 	border-color: #337ab7
 }
@@ -7201,4 +7205,7 @@ button.close {
 	.hidden-print {
 		display: none !important
 	}
+}
+.dropdown-menu{
+  background-color: #f8f8f8;
 }

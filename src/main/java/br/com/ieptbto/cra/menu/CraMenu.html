@@ -2,116 +2,121 @@
 <body>
 	<wicket:panel>
 		<!-- MENU  -->
-		<div class="navbar-default sidebar" role="navigation" wicket:id="CraMenu">
+		<div class="navbar-default sidebar" role="navigation"
+			wicket:id="CraMenu">
 			<div class="sidebar-nav navbar-collapse" wicket:id="menuLateral">
+				<div class="nav">
 				<ul class="nav" id="side-menu">
-					<li>
-						<a href="#" style="text-align: center;"><span class="glyphicon glyphicon-file" style="font-size: 50px;"></span> <br>Arquivos <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                        	<li>
-								<a href="#">Buscar Arquivo</a>
-							</li>
-                        	<li>
-								<a href="EnviarArquivo" wicket:id="EnviarArquivo">Enviar Arquivo</a>
-							</li>
-							<li >
-                        		<a href="incluirGrupo">Criar Arquivo</a>
-                        	</li>
-                        	<li >
-                        		<a href="incluirGrupo">Monitorar Arquivo</a>
-                        	</li>
-                        </ul>
-					</li>
-					<li>
-					<a href="#" style="text-align: center;"><span class="glyphicon glyphicon-align-left" style="font-size: 50px;"></span> <br>Títulos <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                        	<li >
-                        		<a href="incluirCotacao">Buscar Título</a>
-                        	</li>
-                        	<li >
-                        		<a href="pesquisarItem">Monitorar Título</a>
-                        	</li>
-                        </ul>
+				
+					<li class="dropdown-submenu">
+						<a href="#" style="text-align: center;">
+							<span class="glyphicon glyphicon-file" style="font-size: 50px;"></span>
+							<br>Arquivos 
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Buscar Arquivo</a></li>
+							<li><a href="incluirGrupo">Criar Arquivo</a></li>
+							<li><a href="EnviarArquivo" wicket:id="EnviarArquivo">Enviar Arquivo</a></li>
+							<li class="divider"></li>
+							<li><a wicket:id="AcompanharArquivos" href="AcompanharArquivos">Monitorar Arquivo</a></li>
+						</ul>
 					</li>
 					
-					<li>
-					<a href="#" style="text-align: center;"><span class="glyphicon glyphicon-list-alt" style="font-size: 50px;"></span> <br>Relat&oacute;rios <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                        	<li >
-                        		<a href="pesquisarOrcamento">Usuários</a>
-                        	</li>
-                        	<li>
-                        		<a href="pesquisarOrcamento">Tipos de Arquivos</a>
-                        	</li>
-                        </ul>
+					<li class="dropdown-submenu">
+						<a href="#" style="text-align: center;">
+							<span class="glyphicon glyphicon-align-left" style="font-size: 50px;"></span>
+							<br>T&iacute;tulos
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="incluirCotacao">Buscar T&iacute;tulo</a></li>
+							<li><a href="pesquisarItem">Monitorar T&iacute;tulo</a></li>
+						</ul>
 					</li>
-					
+
+					<li class="dropdown-submenu">
+						<a href="#" style="text-align: center;">
+							<span class="glyphicon glyphicon-list-alt" style="font-size: 50px;"></span>
+							<br>Relat&oacute;rios
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Relat&oacute;rio</a></li>
+						</ul>
+					</li>
+
+					<li class="dropdown-submenu"><a style="text-align: center;" tabindex="-1" href="#">
+						<span class="fa fa-gear" style="font-size: 50px;"></span>
+								<br>Administra&ccedil;&atilde;o</a>
+							<ul class="dropdown-menu">
+								<li class="dropdown-submenu"><a href="#">Cart&oacute;rio</a>
+									<ul class="dropdown-menu">
+										<li wicket:id="IncluirCartorio">
+											<a href="IncluirCartorio">Incluir Cart&oacute;rio</a>
+										</li>
+										<li wicket:id="ListaCartorio">
+											<a href="ListaCartorio">Pesquisar Cart&oacute;rio</a>
+										</li>
+									</ul>
+								</li>
+								<li class="dropdown-submenu"><a href="#">Institui&ccedil;&otilde;es</a>
+									<ul class="dropdown-menu">
+										<li wicket:id="IncluirInstituicao">
+				                        	<a href="IncluirInstituicao">Incluir Institui&ccedil;&atilde;o</a>
+				                        </li>
+				                    	<li wicket:id="ListaInstituicao">
+				                    		<a href="ListaInstituicao">Pesquisar Institui&ccedil;&atilde;o</a>
+										</li>
+									</ul>
+								</li>
+								<li class="dropdown-submenu"><a href="#">Munic&iacute;pios</a>
+									<ul class="dropdown-menu">
+										<li wicket:id="IncluirMunicipio">
+											<a href="IncluirMunicipio">Incluir Munic&iacute;pio</a>
+										</li>
+										<li wicket:id="ListaMunicipio">
+											<a href="ListaMunicipio">Pesquisar Munic&iacute;pio</a>
+										</li>
+									</ul>
+								</li>
+								<li class="dropdown-submenu"><a href="#">SLIPS</a>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="#">Slip</a>
+										</li>
+									</ul>
+								</li>
+								<li class="dropdown-submenu"><a href="#">Tipo de Institui&atilde;&otilde;es</a>
+									<ul class="dropdown-menu">
+										<li wicket:id="IncluirTipoInstituicao">
+											<a href="IncluirTipoInstituicao">Incluir Tipo de Institui&ccedil;&atilde;o</a>
+										</li>
+										<li wicket:id="ListaTipoInstituicao">
+											<a	href="ListaTipoInstituicao">Pesquisar Tipo de Institui&ccedil;&atilde;o</a>
+										</li>
+									</ul>
+								</li>
+								<li class="dropdown-submenu"><a href="#">Usu&aacute;rios</a>
+									<ul class="dropdown-menu">
+										<li wicket:id="IncluirUsuario">
+											<a href="IncluirUsuario">Incluir Usu&aacute;rio</a>
+										</li>
+										<li wicket:id="ListaUsuario">
+											<a href="ListaUsuario">Pesquisar Usu&aacute;rio</a>
+										</li>
+									</ul>
+								</li>
+								
+							</ul>
+						</li>
 					<li>
-					<a href="#" style="text-align: center;"><span class="fa fa-gear" style="font-size: 50px;"></span> <br> Administração <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                        	<li>
-                        		<a href="#">Instituições<span class="fa arrow"></span></a> 
-                        		<ul class="nav nav-third-level">
-									<li wicket:id="IncluirInstituicao">
-		                        		<a href="IncluirInstituicao">Incluir Institui&ccedil;&atilde;o</a>
-		                        	</li>
-									<li wicket:id="ListaInstituicao">
-		                        		<a href="ListaInstituicao">Pesquisar Institui&ccedil;&atilde;o</a>
-		                        	</li>
-								</ul>
-                        	</li>
-                        	<li >
-                        		<a href="#">Munic&iacute;pios<span class="fa arrow"></span></a>
-                        		<ul class="nav nav-third-level">
-                        			<li wicket:id="IncluirMunicipio">
-		                        		<a href="IncluirMunicipio">Incluir Munic&iacute;pio</a>
-		                        	</li>
-									<li wicket:id="ListaMunicipio">
-		                        		<a href="ListaMunicipio">Pesquisar Munic&iacute;pio</a>
-		                        	</li>
-		                        </ul>
-                        	</li>
-                        	<li >
-                        		<a href="#">Usuários<span class="fa arrow"></span></a>
-								<ul class="nav nav-third-level">
-									<li wicket:id="IncluirUsuario">
-		                        		<a href="IncluirUsuario">Incluir Usu&aacute;rio</a>
-		                        	</li>
-									<li wicket:id="ListaUsuario">
-		                        		<a href="ListaUsuario">Pesquisar Usu&aacute;rio</a>
-		                        	</li>
-								</ul>
-                        	</li>
-                        	<li >
-                        		<a href="#">Tipo de Instituições<span class="fa arrow"></span></a>
-                        		<ul class="nav nav-third-level">
-									<li wicket:id="IncluirTipoInstituicao">
-		                        		<a href="IncluirTipoInstituicao">Incluir Tipo Institui&ccedil;&atilde;o</a>
-		                        	</li>
-									<li wicket:id="ListaTipoInstituicao">
-		                        		<a href="ListaTipoInstituicao">Pesquisar Tipo Institui&ccedil;&atilde;o</a>
-		                        	</li>
-								</ul>
-                        	</li>
-                        	<li >
-                        		<a href="#">Cart&oacute;rio<span class="fa arrow"></span></a>
-                        		<ul class="nav nav-third-level">
-									<li wicket:id="IncluirCartorio">
-		                        		<a href="IncluirCartorio">Incluir Cart&oacute;rio</a>
-		                        	</li>
-									<li wicket:id="ListaCartorio">
-		                        		<a href="ListaCartorio">Pesquisar Cart&oacute;rio</a>
-		                        	</li>
-								</ul>
-                        	</li>
-                        	<li >
-                        		<a href="pesquisarOrcamento">Slips</a>
-                        	</li>
-                        </ul>
+						<a href="#" style="text-align: center;">
+						 	<span class="fa fa-comments-o" style="font-size: 50px;"></span> 
+						 	<br>Informa&ccedil;&otilde;es
+						</a>
 					</li>
 				</ul>
 			</div>
-			<br style="clear: both;"/>
+			</div>
+			<br style="clear: both;" />
 		</div>
 	</wicket:panel>
 </body>

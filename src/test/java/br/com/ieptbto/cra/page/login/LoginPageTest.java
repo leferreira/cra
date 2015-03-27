@@ -46,7 +46,6 @@ public class LoginPageTest extends BaseTest {
 
 	@Test
 	public void testLoginUserFailInvalideUser() {
-
 		form.setValue("login", "1" + usuario.getLogin());
 		form.setValue("senha", usuario.getSenha());
 		form.submit();

@@ -24,7 +24,7 @@ import br.com.ieptbto.cra.security.UserSession;
 
 /**
  * 
- * @author Lefer
+ * @author Lefer 
  *
  */
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
