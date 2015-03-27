@@ -164,17 +164,12 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 
-	@SuppressWarnings("unchecked")
 	public Instituicao getInstituicao(Integer codigoMunicipio) {
-		Municipio municipio = municipioDAO.buscaMunicipioPorCodigoIBGE(codigoMunicipio);
 		Criteria criteria = getCriteria(Instituicao.class);
-		criteria.createAlias("municipios", "municipio");
+		criteria.createAlias("municipio", "municipio");
 
-		criteria.add(Restrictions.disjunction().add(Restrictions.eq("municipio.id", municipio.getId())));
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		criteria.add(Restrictions.eq("municipio.codigoIBGE", codigoMunicipio));
 
-		List<Instituicao> result = (List<Instituicao>) criteria.list();
-
-		return result.get(1);
+		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 }

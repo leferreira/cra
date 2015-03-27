@@ -146,7 +146,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	}
 
 	@OneToOne
-	@Column(name = "MUNICIPIO_ID")
+	@JoinColumn(name = "MUNICIPIO_ID")
 	public Municipio getMunicipio() {
 		return municipio;
 	}
