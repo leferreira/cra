@@ -26,7 +26,6 @@ import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.hibernate.audit.CraCustomRevisionEntity;
 
 /**
  * 
@@ -62,7 +61,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Rodape.class);
 		classesHibernate.add(Remessa.class);
 		classesHibernate.add(StatusArquivo.class);
-		classesHibernate.add(CraCustomRevisionEntity.class);
+		// classesHibernate.add(CraCustomRevisionEntity.class);
 	}
 
 	/**

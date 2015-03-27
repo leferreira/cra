@@ -68,7 +68,7 @@ public class CabecalhoVO extends AbstractArquivoVO {
 
 	@XmlAttribute(name = "t15")
 	@IAtributoArquivo(ordem = 15, posicao = 93, tamanho = 7, descricao = "Preencher com dois dígitos para o Código da Unidade da Federação e 5 para Código do Município.", obrigatoriedade = true)
-	private String codigoMunicipioPraçaPagamento;
+	private String codigoMunicipio;
 
 	@XmlAttribute(name = "t16")
 	@IAtributoArquivo(ordem = 16, posicao = 100, tamanho = 497, descricao = "Ajustar o tamanho do registro do header com o tamanho do registro de transação. Preencher com brancos.", obrigatoriedade = true)
@@ -130,8 +130,8 @@ public class CabecalhoVO extends AbstractArquivoVO {
 		return versaoLayout;
 	}
 
-	public String getCodigoMunicipioPraçaPagamento() {
-		return codigoMunicipioPraçaPagamento;
+	public String getCodigoMunicipio() {
+		return codigoMunicipio;
 	}
 
 	public String getComplementoRegistro() {
@@ -194,8 +194,8 @@ public class CabecalhoVO extends AbstractArquivoVO {
 		this.versaoLayout = versaoLayout;
 	}
 
-	public void setCodigoMunicipioPraçaPagamento(String codigoMunicipioPraçaPagamento) {
-		this.codigoMunicipioPraçaPagamento = codigoMunicipioPraçaPagamento;
+	public void setCodigoMunicipio(String codigoMunicipio) {
+		this.codigoMunicipio = codigoMunicipio;
 	}
 
 	public void setComplementoRegistro(String complementoRegistro) {

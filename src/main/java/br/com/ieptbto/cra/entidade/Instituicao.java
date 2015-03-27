@@ -10,10 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -46,7 +45,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	private TipoInstituicao tipoInstituicao;
 	private List<Arquivo> arquivoEnviados;
 	private List<Usuario> listaUsuarios;
-	private List<Municipio> municipios;
+	private Municipio municipio;
 
 	@Id
 	@Column(name = "ID_INSTITUICAO", columnDefinition = "serial")
@@ -130,15 +129,6 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return numeroContaCorrente;
 	}
 
-	/**
-	 * Instituições do tipo cartório estão em uma comarca
-	 * */
-	@ManyToMany
-	@JoinTable(name = "TB_INSTITUICAO_MUNICIPIO", joinColumns = @JoinColumn(name = "instituicao_id"), inverseJoinColumns = @JoinColumn(name = "municipio_id"))
-	public List<Municipio> getMunicipios() {
-		return municipios;
-	}
-
 	@OneToMany(mappedBy = "instituicaoEnvio", fetch = FetchType.LAZY)
 	public List<Arquivo> getArquivoEnviados() {
 		return arquivoEnviados;
@@ -155,8 +145,18 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return listaUsuarios;
 	}
 
+	@OneToOne
+	@Column(name = "MUNICIPIO_ID")
+	public Municipio getMunicipio() {
+		return municipio;
+	}
+
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public void setMunicipio(Municipio municipio) {
+		this.municipio = municipio;
 	}
 
 	public void setNomeFantasia(String nomeFantasia) {
@@ -229,10 +229,6 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 
 	public void setListaUsuarios(List<Usuario> listaUsuarios) {
 		this.listaUsuarios = listaUsuarios;
-	}
-
-	public void setMunicipios(List<Municipio> municipios) {
-		this.municipios = municipios;
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class AbstractBaseDAO {
 	}
 
 	protected Session getSession() {
-		return sessionFactory.openSession();
+		return sessionFactory.getCurrentSession();
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)

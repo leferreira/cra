@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -69,15 +68,13 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 	}
 
 	public void inserirInstituicaoInicial(Municipio municipio) {
-		List<Municipio> municipios = new ArrayList<Municipio>();
-		municipios.add(municipio);
 		Transaction transaction = getBeginTransation();
 		try {
 			Instituicao instituicao = new Instituicao();
 			instituicao.setNomeFantasia("CRA");
 			instituicao.setSituacao(true);
 			instituicao.setCnpj("123");
-			instituicao.setMunicipios(municipios);
+			instituicao.setMunicipio(municipio);
 			instituicao.setRazaoSocial("CRA");
 			instituicao.setTipoInstituicao(tipoInstituicaoDAO.buscarTipoInstituicao("CRA"));
 			save(instituicao);
@@ -167,12 +164,17 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 
+	@SuppressWarnings("unchecked")
 	public Instituicao getInstituicao(Integer codigoMunicipio) {
 		Municipio municipio = municipioDAO.buscaMunicipioPorCodigoIBGE(codigoMunicipio);
 		Criteria criteria = getCriteria(Instituicao.class);
-		criteria.createAlias("municipios", "muicipio");
-		criteria.add(Restrictions.eq("municipio.municipio", municipio));
+		criteria.createAlias("municipios", "municipio");
 
-		return Instituicao.class.cast(criteria.uniqueResult());
+		criteria.add(Restrictions.disjunction().add(Restrictions.eq("municipio.id", municipio.getId())));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+		List<Instituicao> result = (List<Instituicao>) criteria.list();
+
+		return result.get(1);
 	}
 }

@@ -60,7 +60,7 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 			protected void populateItem(ListItem<Instituicao> item) {
 				Instituicao instituicaoLista = item.getModelObject();
 				item.add(new Label("nomeFantasia", instituicaoLista.getNomeFantasia()));
-				item.add(new Label("municipioCartorio", instituicaoLista.getMunicipios().get(1).getNomeMunicipio()));
+				item.add(new Label("municipioCartorio", instituicaoLista.getMunicipio().getNomeMunicipio()));
 				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
 				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new Label("contato", instituicaoLista.getContato()));

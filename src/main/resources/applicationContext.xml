@@ -79,6 +79,10 @@
 			or method that has an @Transactional annotation on it  -->
 	<tx:annotation-driven />
 	
+<!-- 	<bean id="Envers" class="org.hibernate.envers.event.BaseEnversEventListener"> -->
+<!-- 		<property name="sessionFactory" ref="sessionFactory" /> -->
+<!-- 	</bean> -->
+	
 	<bean id="userDao" class="br.com.ieptbto.cra.dao.AbstractBaseDAO" scope="singleton">
 		<property name="sessionFactory" ref="sessionFactory" /></bean>
 	
