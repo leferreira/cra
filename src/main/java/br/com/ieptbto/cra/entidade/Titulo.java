@@ -1,14 +1,20 @@
 package br.com.ieptbto.cra.entidade;
 
+import java.beans.Transient;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.envers.Audited;
 
@@ -21,7 +27,7 @@ import br.com.ieptbto.cra.enumeration.TipoRegistro;
  */
 @Entity
 @Audited
-@Table(name = "TB_TITULO")
+@Table(name = "TB_TITULO", uniqueConstraints = { @UniqueConstraint(columnNames = { "CODIGO_PORTADOR", "NOSSO_NUMERO", "NUMERO_TITULO" }) })
 @org.hibernate.annotations.Table(appliesTo = "TB_TITULO")
 public class Titulo extends AbstractEntidade<Titulo> {
 
@@ -44,8 +50,8 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	private String nossoNumero;
 	private String especieTitulo;
 	private String numeroTitulo;
-	private Integer dataEmissaoTitulo; // As datas são passada assim: DDMMAAAA
-	private Integer dataVencimentoTitulo;
+	private Date dataEmissaoTitulo; // As datas são passada assim: DDMMAAAA
+	private Date dataVencimentoTitulo;
 	private String tipoMoeda;
 	private BigDecimal valorTitulo;
 	private BigDecimal saldoTitulo;
@@ -64,10 +70,10 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	private Integer codigoCartorio;
 	private String numeroProtocoloCartorio;
 	private String tipoOcorrencia;
-	private Integer dataProtocolo;
+	private Date dataProtocolo;
 	private BigDecimal valorCustaCartorio;
 	private String declaracaoPortador;
-	private Integer dataOcorrencia;
+	private Date dataOcorrencia;
 	private String codigoIrregularidade;
 	private String bairroDevedor;
 	private BigDecimal valorCustasCartorioDistribuidor;
@@ -84,12 +90,6 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	private String complementoRegistro;
 	private String numeroSequencialArquivo;
 
-	@Override
-	public int compareTo(Titulo entidade) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	@Id
 	@Column(name = "ID_TITULO", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -98,16 +98,17 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	}
 
 	@OneToOne
+	@JoinColumn(name = "REMESSA_ID")
 	public Remessa getRemessa() {
 		return remessa;
 	}
 
-	@Column(name = "IDENTIFICACAO_REGISTRO")
+	@Column(name = "IDENTIFICACAO_REGISTRO_ID")
 	public TipoRegistro getIdentificacaoRegistro() {
 		return identificacaoRegistro;
 	}
 
-	@Column(name = "CODIGO_PORTADOR")
+	@Column(name = "CODIGO_PORTADOR", length = 3, unique = true, nullable = false)
 	public String getCodigoPortador() {
 		return codigoPortador;
 	}
@@ -147,174 +148,221 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return cidadeSacadorVendedor;
 	}
 
+	@Column(name = "UF_SACADOR_VENDEDOR")
 	public String getUfSacadorVendedor() {
 		return ufSacadorVendedor;
 	}
 
+	@Column(name = "NOSSO_NUMERO", unique = true, nullable = false)
 	public String getNossoNumero() {
 		return nossoNumero;
 	}
 
+	@Column(name = "ESPECIE_TITULO", length = 3)
 	public String getEspecieTitulo() {
 		return especieTitulo;
 	}
 
+	@Column(name = "NUMERO_TITULO", unique = true, nullable = false)
 	public String getNumeroTitulo() {
 		return numeroTitulo;
 	}
 
-	public Integer getDataEmissaoTitulo() {
+	@Column(name = "DATA_EMISSAO", columnDefinition = "timestamp without time zone NOT NULL")
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getDataEmissaoTitulo() {
 		return dataEmissaoTitulo;
 	}
 
-	public Integer getDataVencimentoTitulo() {
+	@Column(name = "DATA_VENCIMENTO", columnDefinition = "timestamp without time zone NOT NULL")
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getDataVencimentoTitulo() {
 		return dataVencimentoTitulo;
 	}
 
+	@Column(name = "TIPO_MOEDA")
 	public String getTipoMoeda() {
 		return tipoMoeda;
 	}
 
+	@Column(name = "VALOR_TITULO")
 	public BigDecimal getValorTitulo() {
 		return valorTitulo;
 	}
 
+	@Column(name = "VALOR_SALDO_TITULO")
 	public BigDecimal getSaldoTitulo() {
 		return saldoTitulo;
 	}
 
+	@Column(name = "PRACA_PROTESTO")
 	public String getPracaProtesto() {
 		return pracaProtesto;
 	}
 
+	@Column(name = "TIPO_ENDOSO")
 	public String getTipoEndoso() {
 		return tipoEndoso;
 	}
 
+	@Column(name = "INFORMACAO_SOBRE_ACEITE")
 	public String getInformacaoSobreAceite() {
 		return informacaoSobreAceite;
 	}
 
+	@Column(name = "NUMERO_CONTROLE_DEVEDOR")
 	public Integer getNumeroControleDevedor() {
 		return numeroControleDevedor;
 	}
 
+	@Column(name = "NOME_DEVEDOR")
 	public String getNomeDevedor() {
 		return nomeDevedor;
 	}
 
+	@Column(name = "TIPO_IDENTIFICACAO_DEVEDOR")
 	public String getTipoIdentificacaoDevedor() {
 		return tipoIdentificacaoDevedor;
 	}
 
+	@Column(name = "NUMERO_IDENTIFICACAO_DEVEDOR")
 	public String getNumeroIdentificacaoDevedor() {
 		return numeroIdentificacaoDevedor;
 	}
 
+	@Column(name = "DOCUMENTO_DEVEDOR")
 	public String getDocumentoDevedor() {
 		return documentoDevedor;
 	}
 
+	@Column(name = "ENDERECO_DEVEDOR")
 	public String getEnderecoDevedor() {
 		return enderecoDevedor;
 	}
 
+	@Column(name = "CEP_DEVEDOR")
 	public String getCepDevedor() {
 		return cepDevedor;
 	}
 
+	@Column(name = "CIDADE_DEVEDOR")
 	public String getCidadeDevedor() {
 		return cidadeDevedor;
 	}
 
+	@Column(name = "UF_DEVEDOR")
 	public String getUfDevedor() {
 		return ufDevedor;
 	}
 
+	@Column(name = "CODIGO_CARTORIO")
 	public Integer getCodigoCartorio() {
 		return codigoCartorio;
 	}
 
+	@Column(name = "NUMERO_PROTOCOLO_CARTORIO")
 	public String getNumeroProtocoloCartorio() {
 		return numeroProtocoloCartorio;
 	}
 
+	@Column(name = "TIPO_OCORRENCIA")
 	public String getTipoOcorrencia() {
 		return tipoOcorrencia;
 	}
 
-	public Integer getDataProtocolo() {
+	@Column(name = "DATA_PROTOCOLO", columnDefinition = "timestamp without time zone NOT NULL")
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getDataProtocolo() {
 		return dataProtocolo;
 	}
 
+	@Column(name = "VALOR_CUSTA_CARTORIO")
 	public BigDecimal getValorCustaCartorio() {
 		return valorCustaCartorio;
 	}
 
+	@Column(name = "DECLARACAO_PORTADOR")
 	public String getDeclaracaoPortador() {
 		return declaracaoPortador;
 	}
 
-	public Integer getDataOcorrencia() {
+	@Column(name = "DATA_OCORRENCIA", columnDefinition = "timestamp without time zone NOT NULL")
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getDataOcorrencia() {
 		return dataOcorrencia;
 	}
 
+	@Column(name = "CODIGO_IRREGULARIDADE")
 	public String getCodigoIrregularidade() {
 		return codigoIrregularidade;
 	}
 
+	@Column(name = "BAIRRO_DEVEDOR")
 	public String getBairroDevedor() {
 		return bairroDevedor;
 	}
 
+	@Column(name = "VALOR_CUSTA_CARTORIO_DISTRIBUIDOR")
 	public BigDecimal getValorCustasCartorioDistribuidor() {
 		return valorCustasCartorioDistribuidor;
 	}
 
+	@Column(name = "REGISTRO_DISTRIBUICAO")
 	public Integer getRegistroDistribuicao() {
 		return registroDistribuicao;
 	}
 
+	@Column(name = "VALOR_GRAVACAO_ELETRONICA")
 	public BigDecimal getValorGravacaoEletronica() {
 		return valorGravacaoEletronica;
 	}
 
+	@Column(name = "NUMERO_OPERACAO_BANCO")
 	public Integer getNumeroOperacaoBanco() {
 		return numeroOperacaoBanco;
 	}
 
+	@Column(name = "NUMERO_CONTRATO_BANCO")
 	public Integer getNumeroContratoBanco() {
 		return numeroContratoBanco;
 	}
 
+	@Column(name = "NUMERO_PARCELA_CONTRATO")
 	public Integer getNumeroParcelaContrato() {
 		return numeroParcelaContrato;
 	}
 
+	@Column(name = "TIPO_LETRA_CAMBIO")
 	public String getTipoLetraCambio() {
 		return tipoLetraCambio;
 	}
 
+	@Column(name = "COMPLEMENTO_CODIGO_IRREGULARIDADE")
 	public String getComplementoCodigoIrregularidade() {
 		return complementoCodigoIrregularidade;
 	}
 
+	@Column(name = "PROTESTO_MOTIVO_FALENCIA")
 	public String getProtestoMotivoFalencia() {
 		return protestoMotivoFalencia;
 	}
 
+	@Column(name = "INSTRUMENTO_PROTESTO")
 	public String getInstrumentoProtesto() {
 		return instrumentoProtesto;
 	}
 
+	@Column(name = "VALOR_DEMAIS_DESPESAS")
 	public BigDecimal getValorDemaisDespesas() {
 		return valorDemaisDespesas;
 	}
 
+	@Column(name = "COMPLEMENTO_REGISTRO")
 	public String getComplementoRegistro() {
 		return complementoRegistro;
 	}
 
+	@Column(name = "NUMERO_SEQUENCIAL_ARQUIVO")
 	public String getNumeroSequencialArquivo() {
 		return numeroSequencialArquivo;
 	}
@@ -379,11 +427,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.numeroTitulo = numeroTitulo;
 	}
 
-	public void setDataEmissaoTitulo(Integer dataEmissaoTitulo) {
+	public void setDataEmissaoTitulo(Date dataEmissaoTitulo) {
 		this.dataEmissaoTitulo = dataEmissaoTitulo;
 	}
 
-	public void setDataVencimentoTitulo(Integer dataVencimentoTitulo) {
+	public void setDataVencimentoTitulo(Date dataVencimentoTitulo) {
 		this.dataVencimentoTitulo = dataVencimentoTitulo;
 	}
 
@@ -459,7 +507,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.tipoOcorrencia = tipoOcorrencia;
 	}
 
-	public void setDataProtocolo(Integer dataProtocolo) {
+	public void setDataProtocolo(Date dataProtocolo) {
 		this.dataProtocolo = dataProtocolo;
 	}
 
@@ -471,7 +519,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.declaracaoPortador = declaracaoPortador;
 	}
 
-	public void setDataOcorrencia(Integer dataOcorrencia) {
+	public void setDataOcorrencia(Date dataOcorrencia) {
 		this.dataOcorrencia = dataOcorrencia;
 	}
 
@@ -533,6 +581,17 @@ public class Titulo extends AbstractEntidade<Titulo> {
 
 	public void setNumeroSequencialArquivo(String numeroSequencialArquivo) {
 		this.numeroSequencialArquivo = numeroSequencialArquivo;
+	}
+
+	@Transient
+	public String chaveTitulo() {
+		return this.codigoPortador + this.nossoNumero + this.numeroTitulo;
+	}
+
+	@Override
+	public int compareTo(Titulo entidade) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

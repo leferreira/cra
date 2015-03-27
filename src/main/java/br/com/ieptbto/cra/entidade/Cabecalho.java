@@ -1,5 +1,7 @@
 package br.com.ieptbto.cra.entidade;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
 
@@ -31,7 +35,7 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 	private TipoRegistro identificacaoRegistro;
 	private String numeroCodigoPortador;
 	private String nomePortador;
-	private Integer dataMovimento;
+	private Date dataMovimento;
 	private String identificacaoTransacaoRemetente;
 	private String identificacaoTransacaoDestinatario;
 	private String identificacaoTransacaoTipo;
@@ -54,23 +58,17 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 		return id;
 	}
 
-	@Override
-	public int compareTo(Cabecalho entidade) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	@OneToOne(mappedBy = "cabecalho")
 	public Remessa getRemessa() {
 		return remessa;
 	}
 
-	@Column(name = "IDENTIFICACAO_REGISTRO")
+	@Column(name = "TIPO_REGISTRO_ID")
 	public TipoRegistro getIdentificacaoRegistro() {
 		return identificacaoRegistro;
 	}
 
-	@Column(name = "NUMERO_CODIGO_PORTADOR")
+	@Column(name = "NUMERO_CODIGO_PORTADOR", length = 3)
 	public String getNumeroCodigoPortador() {
 		return numeroCodigoPortador;
 	}
@@ -80,22 +78,23 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 		return nomePortador;
 	}
 
-	@Column(name = "DATA_MOVIMENTO")
-	public Integer getDataMovimento() {
+	@Column(name = "DATA_MOVIMENTO", columnDefinition = "timestamp without time zone NOT NULL")
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getDataMovimento() {
 		return dataMovimento;
 	}
 
-	@Column(name = "IDENTIFICAO_TRANSACAO_REMENTE")
+	@Column(name = "IDENTIFICAO_TRANSACAO_REMENTE", length = 3)
 	public String getIdentificacaoTransacaoRemetente() {
 		return identificacaoTransacaoRemetente;
 	}
 
-	@Column(name = "IDENTIFICAO_TRANSACAO_DESTINATARIO")
+	@Column(name = "IDENTIFICAO_TRANSACAO_DESTINATARIO", length = 3)
 	public String getIdentificacaoTransacaoDestinatario() {
 		return identificacaoTransacaoDestinatario;
 	}
 
-	@Column(name = "IDENTIFICAO_TRANSACAO_TIPO")
+	@Column(name = "IDENTIFICAO_TRANSACAO_TIPO", length = 3)
 	public String getIdentificacaoTransacaoTipo() {
 		return identificacaoTransacaoTipo;
 	}
@@ -130,7 +129,7 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 		return agenciaCentralizadora;
 	}
 
-	@Column(name = "VERSAO_LAYOUT")
+	@Column(name = "VERSAO_LAYOUT", length = 3)
 	public String getVersaoLayout() {
 		return versaoLayout;
 	}
@@ -170,7 +169,7 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 		this.nomePortador = nomePortador;
 	}
 
-	public void setDataMovimento(Integer dataMovimento) {
+	public void setDataMovimento(Date dataMovimento) {
 		this.dataMovimento = dataMovimento;
 	}
 
@@ -224,5 +223,11 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 
 	public void setNumeroSequencialRegistroArquivo(String numeroSequencialRegistroArquivo) {
 		this.numeroSequencialRegistroArquivo = numeroSequencialRegistroArquivo;
+	}
+
+	@Override
+	public int compareTo(Cabecalho entidade) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
