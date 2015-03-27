@@ -40,7 +40,7 @@ public class MunicipioInputPanel extends Panel {
 	}
 	
 	private TextField<String> campoIBGE() {
-		TextField<String> textField = new TextField<String>("codIBGE");
+		TextField<String> textField = new TextField<String>("codigoIBGE");
 		textField.setLabel(new Model<String>("Código do IBGE"));
 		textField.setRequired(true);
 		textField.setOutputMarkupId(true);

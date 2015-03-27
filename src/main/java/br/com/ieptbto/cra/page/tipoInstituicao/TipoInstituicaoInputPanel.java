@@ -14,16 +14,18 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
-import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.PermissaoEnvioMediator;
 import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 
-@SuppressWarnings({ "serial" })
 public class TipoInstituicaoInputPanel extends Panel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@SpringBean
 	TipoInstituicaoMediator tipoInstituicaoMediator;
 	@SpringBean
@@ -31,22 +33,19 @@ public class TipoInstituicaoInputPanel extends Panel {
 	@SpringBean
 	PermissaoEnvioMediator permissaoEnvioMediator;
 
-	TipoInstituicao tipoInstituicao = new TipoInstituicao();
-	TipoArquivo tipoArquivo = new TipoArquivo();
-	PermissaoEnvio permitidos = new PermissaoEnvio();
+	private TipoInstituicao tipoInstituicao = new TipoInstituicao();
+	private PermissaoEnvio permitidos = new PermissaoEnvio();
 	TipoArquivoEnum arquivoEnum;
 
 	private Component button;
 	private List<PermissaoEnvio> listaPermissao = new ArrayList<PermissaoEnvio>();
 	private List<TipoArquivoEnum> enumLista = new ArrayList<TipoArquivoEnum>();
-	private TextField<String> textField;
-	private CheckBoxMultipleChoice<String> checkBox;
-	private List<String> choices = new ArrayList<String>();;
+	private TextField<String> nomeTipo;
+	private CheckBoxMultipleChoice<String> tipoPermitidos;
+	private List<String> choices = new ArrayList<String>();
 
-	public TipoInstituicaoInputPanel(String id, IModel<TipoInstituicao> model,
-			TipoInstituicao tipoInstituicao) {
+	public TipoInstituicaoInputPanel(String id, IModel<TipoInstituicao> model,TipoInstituicao tipoInstituicao) {
 		super(id, model);
-		this.tipoInstituicao = tipoInstituicao;
 		adicionarCampos();
 	}
 
@@ -57,92 +56,73 @@ public class TipoInstituicaoInputPanel extends Panel {
 
 	public void adicionarCampos() {
 		add(campoTipoInstituicao());
-		add(comboCidades());
+		add(comboTipoArquivos());
 		add(botaoSalvar());
 	}
 
 	private TextField<String> campoTipoInstituicao() {
-		textField = new TextField<String>("tipoInstituicao");
-		textField.setLabel(new Model<String>("Tipo Instituição"));
-		textField.setRequired(true);
-		textField.setOutputMarkupId(true);
-		return textField;
+		nomeTipo = new TextField<String>("tipoInstituicao");
+		nomeTipo.setLabel(new Model<String>("Tipo Instituição"));
+		nomeTipo.setRequired(true);
+		nomeTipo.setOutputMarkupId(true);
+		return nomeTipo;
 	}
 
-	public Component comboCidades() {
+	public Component comboTipoArquivos() {
 		enumLista = Arrays.asList(TipoArquivoEnum.values());
 		for (TipoArquivoEnum tipo : enumLista) {
 			choices.add(tipo.label);
 		}
-		return checkBox = new CheckBoxMultipleChoice<String>(
-				"arquivosEnvioPermitido", choices);
+		return tipoPermitidos = new CheckBoxMultipleChoice<String>("arquivosEnvioPermitido", choices);
 	}
 
 	private Component botaoSalvar() {
 		button = new Button("botaoSalvar") {
+			/** */
+			private static final long serialVersionUID = 1L;
+
 			@SuppressWarnings("unchecked")
 			public void onSubmit() {
-
-				String nomeTipo = (String) textField.getDefaultModelObject();
-				List<String> selects = (List<String>) checkBox
-						.getDefaultModelObject();
-				tipoInstituicao.setTipoInstituicao(nomeTipo);
-
+				
+				String tipo = (String)nomeTipo.getDefaultModelObject();
+				tipoInstituicao.setTipoInstituicao(tipo);
+				List<String> selects = (List<String>) tipoPermitidos.getDefaultModelObject();
 				if (tipoInstituicao.getId() != 0) {
-					TipoInstituicao tipoSalvo = tipoInstituicaoMediator
-							.alterar(tipoInstituicao);
+					TipoInstituicao tipoSalvo = tipoInstituicaoMediator.alterar(tipoInstituicao);
 					permitidos.setTipoInstituicao(tipoInstituicao);
-					listaPermissao = permissaoEnvioMediator
-							.permissoesPorTipoInstituicao(tipoSalvo);
-
+					listaPermissao = permissaoEnvioMediator.permissoesPorTipoInstituicao(tipoSalvo);
 					for (String s : selects) {
-						s = s.replace(" ", "_");
 						arquivoEnum = TipoArquivoEnum.valueOf(s);
-
 						if (!listaPermissao.isEmpty()) {
 							for (PermissaoEnvio p : listaPermissao) {
-								if (TipoArquivoEnum.valueOf(s) != null) {
-									if (p.getTipoArquivo().getTipoArquivo().equals(arquivoEnum)) {
-										tipoArquivo = tipoArquivoMediator.buscarTipoPorNome(arquivoEnum);
-										permitidos.setTipoArquivo(tipoArquivo);
-										permissaoEnvioMediator.alterar(permitidos);
-									}
+								if (p.getTipoArquivo().getTipoArquivo().equals(arquivoEnum)) {
+									permitidos.setTipoArquivo(tipoArquivoMediator.buscarTipoPorNome(arquivoEnum));
+									permissaoEnvioMediator.alterar(permitidos);
 								}
 							}
 						} else {
-							tipoArquivo = tipoArquivoMediator.buscarTipoPorNome(arquivoEnum);
-							permitidos.setTipoArquivo(tipoArquivo);
+							permitidos.setTipoArquivo(tipoArquivoMediator.buscarTipoPorNome(arquivoEnum));
 							permissaoEnvioMediator.salvar(permitidos);
 						}
-					}
-					if (tipoSalvo != null) {
-						info("Tipo instituição alterado com sucesso.");
-					} else {
-						error("Tipo instituição não alterado");
+						if (tipoSalvo != null)
+							info("Tipo instituição alterado com sucesso.");
+						else
+							error("Tipo instituição não alterado");
 					}
 				} else {
-
-					TipoInstituicao tipoSalvo = tipoInstituicaoMediator
-							.salvar(tipoInstituicao);
+					TipoInstituicao tipoSalvo = tipoInstituicaoMediator.salvar(tipoInstituicao);
 					for (String s : selects) {
-						s = s.replace(" ", "_");
-
 						if (TipoArquivoEnum.valueOf(s) != null) {
-							arquivoEnum = TipoArquivoEnum.valueOf(s);
-							tipoArquivo = tipoArquivoMediator
-									.buscarTipoPorNome(arquivoEnum);
 							permitidos.setTipoInstituicao(tipoInstituicao);
-							permitidos.setTipoArquivo(tipoArquivo);
+							permitidos.setTipoArquivo(tipoArquivoMediator.buscarTipoPorNome(TipoArquivoEnum.valueOf(s)));
 							permissaoEnvioMediator.salvar(permitidos);
 						}
 					}
-					if (tipoSalvo != null) {
+					if (tipoSalvo != null)
 						info("Tipo instituição criado com sucesso");
-					} else {
+					else
 						error("Tipo instituição não criado");
-					}
 				}
-
 			}
 		};
 		return button;

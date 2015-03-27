@@ -1,13 +1,28 @@
-#page-wrapper{
-	background-color: #3d8cbe;
-	  margin: 0 0 0 220px;
+#page-wrapper {
+	margin: 0 0 0 16%;
 }
-body{
-	background-color: #f8f8f8;
+
+body {
+	background-color: #337ab7;
 }
-.sidebar{
+
+.sidebar {
 	width: 16%;
+	background-color: transparent !important;
 }
-.dropdown-submenu>.dropdown-menu{
+
+.dropdown-submenu>.dropdown-menu {
 	border-radius: 0 0px 0px 0px;
+}
+
+.glyphicon {
+	color: #f8f8f8;
+}
+.glyphicon-folder-open{
+	color: black !important;
+}
+
+.link-icones {
+	text-align: center;
+	color: #f8f8f8;
 }

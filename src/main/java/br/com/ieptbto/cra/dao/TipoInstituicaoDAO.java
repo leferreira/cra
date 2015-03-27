@@ -23,6 +23,7 @@ public class TipoInstituicaoDAO extends AbstractBaseDAO {
 		Transaction transaction = getBeginTransation();
 		try {
 			novo = save(tipoInstituicao);	
+			transaction.commit();
 		} catch (Exception ex) {
 			transaction.rollback();
 		}

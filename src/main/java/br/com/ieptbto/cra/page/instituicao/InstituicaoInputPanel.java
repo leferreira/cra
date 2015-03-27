@@ -79,7 +79,7 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	private TextField<String> campoCodigoCompensacao() {
-		TextField<String> textField = new TextField<String>("codCompensacao");
+		TextField<String> textField = new TextField<String>("codigoCompensacao");
 		textField.setLabel(new Model<String>("Código Compensação"));
 		textField.setOutputMarkupId(true);
 		return textField;
@@ -127,7 +127,7 @@ public class InstituicaoInputPanel extends Panel {
 				.asList(new String[] { "Ativo", "Não Ativo" });
 		return new RadioChoice<String>("status", status);
 	}
-	
+
 	private Component comboTipoInstituicao() {
 		IChoiceRenderer<TipoInstituicao> renderer = new ChoiceRenderer<TipoInstituicao>(
 				"tipoInstituicao");

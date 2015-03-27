@@ -46,7 +46,8 @@ public class UsuarioDAO extends AbstractBaseDAO {
 			usuario.setSenha(Usuario.cryptPass("teste1234"));
 			usuario.setContato("99999999");
 			usuario.setStatus(true);
-			usuario.setGrupoUsuario(grupoUsuarioDAO.buscarGrupoInicial("Super Administrador"));
+			usuario.setGrupoUsuario(grupoUsuarioDAO
+					.buscarGrupoInicial("Super Administrador"));
 			usuario.setInstituicao(instituicaoDAO.buscarInstituicao("CRA"));
 			save(usuario);
 			transaction.commit();
@@ -63,6 +64,7 @@ public class UsuarioDAO extends AbstractBaseDAO {
 		try {
 			usuario.setSenha(Usuario.cryptPass(usuario.getSenha()));
 			novoUsuario = save(usuario);
+			transaction.commit();
 		} catch (Exception ex) {
 			transaction.rollback();
 		}
@@ -77,7 +79,6 @@ public class UsuarioDAO extends AbstractBaseDAO {
 			usuario.setSenha(Usuario.cryptPass(usuario.getSenha()));
 			session.update(usuario);
 			transaction.commit();
-
 		} catch (Exception ex) {
 			transaction.rollback();
 			System.out.println(ex.getMessage());

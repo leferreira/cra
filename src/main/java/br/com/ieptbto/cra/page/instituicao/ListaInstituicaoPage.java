@@ -27,12 +27,12 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
-	
+
 	private final Instituicao instituicao;
 	private WebMarkupContainer divListRetorno;
 	private WebMarkupContainer divListaInstituicao;
 	private WebMarkupContainer dataTableInstituicao;
-	
+
 	public ListaInstituicaoPage() {
 		super();
 		instituicao = new Instituicao();
@@ -43,7 +43,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 		divListRetorno = carregarDataTableInstiuicao();
 		add(divListRetorno);
 	}
-	
+
 	private WebMarkupContainer carregarDataTableInstiuicao() {
 		divListaInstituicao = new WebMarkupContainer("divListView");
 		dataTableInstituicao = new WebMarkupContainer("dataTableInstituicao");
@@ -54,7 +54,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 		divListaInstituicao.add(dataTableInstituicao);
 		return divListaInstituicao;
 	}
-	
+
 	private PageableListView<Instituicao> getListViewInstituicao() {
 		return new PageableListView<Instituicao>("listViewInstituicao",
 				listarInstituicoes(), 10) {
@@ -67,6 +67,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 						.getTipoInstituicao().getTipoInstituicao()));
 				item.add(new Label("responsavel", instituicaoLista
 						.getResponsavel()));
+				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new Label("contato", instituicaoLista.getContato()));
 				if (instituicaoLista.isSituacao()) {
 					item.add(new Label("situacao", "Sim"));
@@ -98,17 +99,18 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 			}
 		};
 	}
-	
+
 	public IModel<List<Instituicao>> listarInstituicoes() {
 		return new LoadableDetachableModel<List<Instituicao>>() {
 			@Override
 			protected List<Instituicao> load() {
-				List<Instituicao> list = instituicaoMediator.listarTodasInstituicoes();
+				List<Instituicao> list = instituicaoMediator
+						.listarTodasInstituicoes();
 				return list;
 			}
 		};
 	}
-	
+
 	@Override
 	protected IModel<Instituicao> getModel() {
 		return new CompoundPropertyModel<Instituicao>(instituicao);
