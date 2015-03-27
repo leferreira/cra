@@ -22,6 +22,7 @@ public class MunicipioDAO extends AbstractBaseDAO {
 		Transaction transaction = getBeginTransation();
 		try {
 			novoMunicipio = save(municipio);
+			transaction.commit();
 		} catch (Exception ex) {
 			transaction.rollback();
 		}

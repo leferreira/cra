@@ -28,6 +28,7 @@ public class TipoArquivoDAO extends AbstractBaseDAO {
 		Transaction transaction = getBeginTransation();
 		try {
 			novo = save(tipoArquivo);
+			transaction.commit();
 		} catch (Exception ex) {
 			transaction.rollback();
 		}

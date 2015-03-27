@@ -78,6 +78,7 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 			instituicao.setRazaoSocial("CRA");
 			instituicao.setTipoInstituicao(tipoInstituicaoDAO.buscarTipoInstituicao("CRA"));
 			save(instituicao);
+
 			transaction.commit();
 		} catch (Exception ex) {
 			transaction.rollback();

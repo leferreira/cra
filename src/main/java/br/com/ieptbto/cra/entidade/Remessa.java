@@ -35,7 +35,6 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	private int id;
 	private Arquivo arquivo;
 	private Date dataRecebimento;
-	private Usuario usuarioRecebe;
 	private Instituicao instituicaoDestino;
 	private List<Titulo> titulos;
 	private Cabecalho cabecalho;
@@ -58,12 +57,6 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getDataRecebimento() {
 		return dataRecebimento;
-	}
-
-	@OneToOne
-	@JoinColumn(name = "USUARIO_ID")
-	public Usuario getUsuarioRecebe() {
-		return usuarioRecebe;
 	}
 
 	@ManyToOne
@@ -103,10 +96,6 @@ public class Remessa extends AbstractEntidade<Remessa> {
 
 	public void setDataRecebimento(Date dataRecebimento) {
 		this.dataRecebimento = dataRecebimento;
-	}
-
-	public void setUsuarioRecebe(Usuario usuarioRecebe) {
-		this.usuarioRecebe = usuarioRecebe;
 	}
 
 	public void setInstituicaoDestino(Instituicao instituicaoDestino) {
