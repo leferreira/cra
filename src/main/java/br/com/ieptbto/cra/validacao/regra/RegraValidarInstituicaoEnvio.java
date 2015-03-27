@@ -11,7 +11,7 @@ public class RegraValidarInstituicaoEnvio extends RegrasDeEntrada {
 	@Override
 	protected void validar(File arquivo, Usuario usuario) {
 		this.arquivo = arquivo;
-		this.arquivo = arquivo;
+		this.usuario = usuario;
 
 		executar();
 
@@ -31,11 +31,11 @@ public class RegraValidarInstituicaoEnvio extends RegrasDeEntrada {
 		try {
 			if (!usuario.getInstituicao().isSituacao()) {
 				logger.error(ErroValidacao.INSTITUICAO_BLOQUEADA.getMensagemErro());
-				new InfraException(ErroValidacao.INSTITUICAO_BLOQUEADA.getMensagemErro());
+				throw new InfraException(ErroValidacao.INSTITUICAO_BLOQUEADA.getMensagemErro());
 			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
-			new InfraException(ErroValidacao.INSTITUICAO_BLOQUEADA.getMensagemErro(), ex.getCause());
+			throw new InfraException(ErroValidacao.INSTITUICAO_BLOQUEADA.getMensagemErro(), ex.getCause());
 		}
 	}
 

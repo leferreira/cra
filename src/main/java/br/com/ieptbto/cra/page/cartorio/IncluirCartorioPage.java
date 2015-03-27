@@ -10,30 +10,29 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 @SuppressWarnings("serial")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN,
-		CraRoles.SUPER, })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
 public class IncluirCartorioPage extends BasePage<Instituicao> {
 
 	private Instituicao cartorio;
 	private CartorioForm form;
-	
+
 	public IncluirCartorioPage() {
 		cartorio = new Instituicao();
 		setForm();
 	}
-	
+
 	public IncluirCartorioPage(Instituicao cartorio) {
 		this.cartorio = cartorio;
 		setForm();
 	}
-	
-	public void setForm(){
+
+	public void setForm() {
 		form = new CartorioForm("form", getModel());
-		form.add(new CartorioInputPanel("cartorioInputPanel", getModel(), cartorio));
-		//form.add(new Button("botaoSalvar"));
+		form.add(new CartorioInputPanel("cartorioInputPanel", getModel()));
+		// form.add(new Button("botaoSalvar"));
 		add(form);
 	}
-	
+
 	@Override
 	protected IModel<Instituicao> getModel() {
 		return new CompoundPropertyModel<Instituicao>(cartorio);

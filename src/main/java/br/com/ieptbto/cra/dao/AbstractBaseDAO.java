@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.dao;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -20,6 +21,9 @@ import br.com.ieptbto.cra.entidade.AbstractEntidade;
  */
 @SuppressWarnings({ "unchecked" })
 public class AbstractBaseDAO {
+
+	protected static final Logger logger = Logger.getLogger(AbstractBaseDAO.class);
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -73,7 +77,6 @@ public class AbstractBaseDAO {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public <T extends AbstractEntidade<T>> T save(T obj) {
 		T t = (T) getSession().get(obj.getClass(), getSession().save(obj));
-		flush();
 		return t;
 	}
 

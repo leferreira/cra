@@ -12,7 +12,7 @@ import br.com.ieptbto.cra.annotations.IAtributoArquivo;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class TituloVO extends AbstractArquivo {
+public class TituloVO extends AbstractArquivoVO {
 
 	@XmlAttribute(name = "t01")
 	@IAtributoArquivo(ordem = 1, posicao = 1, tamanho = 1, descricao = "Identificar o Registro Transação no arquivo. Constante 1", obrigatoriedade = true, validacao = "1", tipo = Integer.class)

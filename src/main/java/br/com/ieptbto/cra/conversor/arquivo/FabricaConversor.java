@@ -8,7 +8,8 @@ import java.util.Map;
 
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.entidade.vo.AbstractArquivo;
+import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
+import br.com.ieptbto.cra.enumeration.CraEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 
 /**
@@ -28,6 +29,7 @@ public class FabricaConversor {
 		map.put(LocalDate.class, DateConversor.class);
 		map.put(List.class, ListConversor.class);
 		map.put(BigDecimal.class, BigDecimalConversor.class);
+		map.put(Enum.class, EnumConversor.class);
 		CONVERSORES = Collections.unmodifiableMap(map);
 	}
 
@@ -39,7 +41,7 @@ public class FabricaConversor {
 	 */
 	public static AbstractConversor<?> getConversor(Class<?> propertyType) {
 		Class<? extends AbstractConversor<?>> conversorClass = CONVERSORES.get(propertyType);
-		if (Enum.class.isAssignableFrom(propertyType)) {
+		if (CraEnum.class.isAssignableFrom(propertyType)) {
 			return new EnumConversor();
 		}
 		try {
@@ -59,7 +61,7 @@ public class FabricaConversor {
 	 * 
 	 * @return
 	 */
-	public static AbstractConversor<?> getConversor(CampoArquivo campoArquivo, AbstractArquivo arquivo) {
+	public static AbstractConversor<?> getConversor(CampoArquivo campoArquivo, AbstractArquivoVO arquivo) {
 
 		Class<?> propertyType = campoArquivo.getType();
 		return getConversor(campoArquivo, arquivo, propertyType);
@@ -73,7 +75,7 @@ public class FabricaConversor {
 	 * @param propertyType
 	 * @return
 	 */
-	public static AbstractConversor<?> getConversor(CampoArquivo campoArquivo, AbstractArquivo arquivo, Class<?> propertyType) {
+	public static AbstractConversor<?> getConversor(CampoArquivo campoArquivo, AbstractArquivoVO arquivo, Class<?> propertyType) {
 		AbstractConversor<?> conversor = FabricaConversor.getConversor(propertyType);
 		conversor.setCampoArquivo(campoArquivo);
 		conversor.setArquivo(arquivo);
@@ -90,6 +92,6 @@ public class FabricaConversor {
 	 */
 	public static Object getValorConvertido(Class<?> propertyType, String valor) {
 		AbstractConversor<?> conversor = getConversor(propertyType);
-		return conversor.getValorConvertido(valor);
+		return conversor.getValorConvertido(valor, propertyType);
 	}
 }

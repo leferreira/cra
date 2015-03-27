@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.entidade;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,25 +30,23 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 	private String nomeFantasia;
 	private String razaoSocial;
 	private String cnpj;
-	private String codCompensacao;
+	private String codigoCompensacao;
 	private String email;
 	private String contato;
-	private Double valorConfirmacao;
+	private BigDecimal valorConfirmacao;
 	private String endereco;
 	private String responsavel;
 	private String agenciaCentralizadora;
 	private String favorecido;
 	private String bancoContaCorrente;
 	private String agenciaContaCorrente;
-	private String numContaCorrente;
-	private String municipioCartorio;
+	private String numeroContaCorrente;
 	private boolean situacao;
 
 	private TipoInstituicao tipoInstituicao;
-	private Municipio comarcaCartorio;
-	private List<Arquivo> arquivosEnviados;
+	private List<Arquivo> arquivoEnviados;
 	private List<Usuario> listaUsuarios;
-	private List<InstituicaoMunicipio> instituicaoMunicipio;
+	private List<Municipio> municipios;
 
 	@Id
 	@Column(name = "ID_INSTITUICAO", columnDefinition = "serial")
@@ -64,14 +65,14 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return cnpj;
 	}
 
-	@Column(name = "RAZAO_SOCIAL", length = 50)
+	@Column(name = "RAZAO_SOCIAL", length = 50, nullable = false, unique = true)
 	public String getRazaoSocial() {
 		return razaoSocial;
 	}
 
 	@Column(name = "CODIGO_COMPENSACAO", length = 3)
-	public String getCodCompensacao() {
-		return codCompensacao;
+	public String getCodigoCompensacao() {
+		return codigoCompensacao;
 	}
 
 	@Column(name = "EMAIL", length = 50)
@@ -79,13 +80,13 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return email;
 	}
 
-	@Column(name = "CONTATO", length = 20)
+	@Column(name = "CONTATO", length = 40)
 	public String getContato() {
 		return contato;
 	}
 
 	@Column(name = "VALOR_CONFIRMACAO", precision = 2)
-	public Double getValorConfirmacao() {
+	public BigDecimal getValorConfirmacao() {
 		return valorConfirmacao;
 	}
 
@@ -124,32 +125,23 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return agenciaContaCorrente;
 	}
 
-	@Column(name = "NUM_CONTA_CORRENTE")
-	public String getNumContaCorrente() {
-		return numContaCorrente;
-	}
-
-	@Transient
-	public Municipio getComarcaCartorio() {
-		return comarcaCartorio;
+	@Column(name = "NUMERO_CONTA_CORRENTE")
+	public String getNumeroContaCorrente() {
+		return numeroContaCorrente;
 	}
 
 	/**
 	 * Instituições do tipo cartório estão em uma comarca
 	 * */
-	@Column(name = "MUNICIPIO_CARTORIO", nullable = true, length = 40, unique = true)
-	public String getMunicipioCartorio() {
-		return municipioCartorio;
+	@ManyToMany
+	@JoinTable(name = "TB_INSTITUICAO_MUNICIPIO", joinColumns = @JoinColumn(name = "instituicao_id"), inverseJoinColumns = @JoinColumn(name = "municipio_id"))
+	public List<Municipio> getMunicipios() {
+		return municipios;
 	}
 
 	@OneToMany(mappedBy = "instituicaoEnvio", fetch = FetchType.LAZY)
-	public List<Arquivo> getArquivosEnviados() {
-		return arquivosEnviados;
-	}
-
-	@OneToMany(mappedBy = "instituicao", fetch = FetchType.LAZY)
-	public List<InstituicaoMunicipio> getInstituicaoMunicipio() {
-		return instituicaoMunicipio;
+	public List<Arquivo> getArquivoEnviados() {
+		return arquivoEnviados;
 	}
 
 	@ManyToOne
@@ -171,29 +163,16 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		this.nomeFantasia = nomeFantasia;
 	}
 
-	public void setCnpj(String cnpj) {
-		this.cnpj = cnpj;
-	}
-
-	public void setListaUsuarios(List<Usuario> listaUsuarios) {
-		this.listaUsuarios = listaUsuarios;
-	}
-
-	@Override
-	public int compareTo(Instituicao entidade) {
-		return 0;
-	}
-
-	public void setTipoInstituicao(TipoInstituicao tipoInstituicao) {
-		this.tipoInstituicao = tipoInstituicao;
-	}
-
 	public void setRazaoSocial(String razaoSocial) {
 		this.razaoSocial = razaoSocial;
 	}
 
-	public void setCodCompensacao(String codCompensacao) {
-		this.codCompensacao = codCompensacao;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+	public void setCodigoCompensacao(String codigoCompensacao) {
+		this.codigoCompensacao = codigoCompensacao;
 	}
 
 	public void setEmail(String email) {
@@ -204,7 +183,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		this.contato = contato;
 	}
 
-	public void setValorConfirmacao(Double valorConfirmacao) {
+	public void setValorConfirmacao(BigDecimal valorConfirmacao) {
 		this.valorConfirmacao = valorConfirmacao;
 	}
 
@@ -220,12 +199,45 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		this.agenciaCentralizadora = agenciaCentralizadora;
 	}
 
+	public void setFavorecido(String favorecido) {
+		this.favorecido = favorecido;
+	}
+
+	public void setBancoContaCorrente(String bancoContaCorrente) {
+		this.bancoContaCorrente = bancoContaCorrente;
+	}
+
+	public void setAgenciaContaCorrente(String agenciaContaCorrente) {
+		this.agenciaContaCorrente = agenciaContaCorrente;
+	}
+
+	public void setNumeroContaCorrente(String numeroContaCorrente) {
+		this.numeroContaCorrente = numeroContaCorrente;
+	}
+
 	public void setSituacao(boolean situacao) {
 		this.situacao = situacao;
 	}
 
-	public void setComarcaCartorio(Municipio municipio) {
-		this.comarcaCartorio = municipio;
+	public void setTipoInstituicao(TipoInstituicao tipoInstituicao) {
+		this.tipoInstituicao = tipoInstituicao;
+	}
+
+	public void setArquivoEnviados(List<Arquivo> arquivoEnviados) {
+		this.arquivoEnviados = arquivoEnviados;
+	}
+
+	public void setListaUsuarios(List<Usuario> listaUsuarios) {
+		this.listaUsuarios = listaUsuarios;
+	}
+
+	public void setMunicipios(List<Municipio> municipios) {
+		this.municipios = municipios;
+	}
+
+	@Override
+	public int compareTo(Instituicao entidade) {
+		return 0;
 	}
 
 	@Transient
@@ -243,34 +255,5 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		} else {
 			setSituacao(false);
 		}
-	}
-
-	public void setFavorecido(String favorecido) {
-		this.favorecido = favorecido;
-	}
-
-	public void setBancoContaCorrente(String bancoContaCorrente) {
-		this.bancoContaCorrente = bancoContaCorrente;
-	}
-
-	public void setAgenciaContaCorrente(String agenciaContaCorrente) {
-		this.agenciaContaCorrente = agenciaContaCorrente;
-	}
-
-	public void setNumContaCorrente(String numContaCorrente) {
-		this.numContaCorrente = numContaCorrente;
-	}
-
-	public void setInstituicaoMunicipio(
-			List<InstituicaoMunicipio> instituicaoMunicipio) {
-		this.instituicaoMunicipio = instituicaoMunicipio;
-	}
-
-	public void setMunicipioCartorio(String municipioCartorio) {
-		this.municipioCartorio = municipioCartorio;
-	}
-
-	public void setArquivosEnviados(List<Arquivo> arquivosEnviados) {
-		this.arquivosEnviados = arquivosEnviados;
 	}
 }

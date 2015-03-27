@@ -28,12 +28,12 @@ public class MunicipioMediator {
 
 	/**
 	 * Verificar se o município já está cadastrado
+	 * 
 	 * @param Municipio
 	 * @return
 	 * */
 	public boolean isMunicipioNaoExiste(Municipio municipio) {
-		Municipio municipioNovo = municipioDao.buscarMunicipioPorNome(municipio
-				.getNomeMunicipio());
+		Municipio municipioNovo = municipioDao.buscarMunicipioPorNome(municipio.getNomeMunicipio());
 		if (municipioNovo == null) {
 			return true;
 		}
@@ -42,12 +42,12 @@ public class MunicipioMediator {
 
 	/**
 	 * Verificar se o município tem um cartorio cadastrado
+	 * 
 	 * @param Municipio
 	 * @return
 	 * */
 	public boolean isMunicipioTemCartorio(Municipio municipio) {
-		Instituicao cartorio = instituicaoDao.buscarCartorioPorMunicipio(municipio
-				.getNomeMunicipio());
+		Instituicao cartorio = instituicaoDao.buscarCartorioPorMunicipio(municipio.getNomeMunicipio());
 		if (cartorio != null) {
 			return true;
 		}
@@ -74,5 +74,14 @@ public class MunicipioMediator {
 	 * */
 	public List<Municipio> listarTodos() {
 		return municipioDao.listarTodos();
+	}
+
+	public Municipio salvar(Municipio municipio) {
+		return municipioDao.salvar(municipio);
+
+	}
+
+	public Municipio buscaMunicipioPorCodigoIBGE(Integer codigoMunicipio) {
+		return municipioDao.buscaMunicipioPorCodigoIBGE(codigoMunicipio);
 	}
 }

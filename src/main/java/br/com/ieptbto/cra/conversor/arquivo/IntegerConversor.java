@@ -36,4 +36,9 @@ public class IntegerConversor extends AbstractConversor<Integer> {
 		return StringUtils.repeat("0", tamanho);
 	}
 
+	@Override
+	public Integer getValorConvertido(String valor, Class<?> propertyType) throws ConvertException {
+		return getValorConvertido(valor);
+	}
+
 }

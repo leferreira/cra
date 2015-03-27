@@ -1,13 +1,16 @@
 package br.com.ieptbto.cra.mediator;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ieptbto.cra.dao.ArquivoDAO;
 import br.com.ieptbto.cra.dao.TipoArquivoDAO;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.processador.ProcessadorArquivo;
@@ -23,12 +26,21 @@ public class ArquivoMediator {
 	@Autowired
 	private TipoArquivoDAO tipoArquivoDAO;
 	@Autowired
-	private TipoArquivoDAO arquivoDAO;
+	private ArquivoDAO arquivoDAO;
 
 	public void salvar(Arquivo arquivo, FileUpload uploadedFile) {
-		processarArquivo(arquivo, uploadedFile);
 		arquivo.setTipoArquivo(getTipoArquivo(arquivo));
+		arquivo.setStatusArquivo(setStatusArquivo());
+		processarArquivo(arquivo, uploadedFile);
+		arquivoDAO.salvar(arquivo);
 
+	}
+
+	private StatusArquivo setStatusArquivo() {
+		StatusArquivo status = new StatusArquivo();
+		status.setData(new Date());
+		status.setStatus("Enviado");
+		return status;
 	}
 
 	private TipoArquivo getTipoArquivo(Arquivo arquivo) {
@@ -36,10 +48,10 @@ public class ArquivoMediator {
 	}
 
 	private void processarArquivo(Arquivo arquivo, FileUpload uploadedFile) throws InfraException {
-		new ProcessadorArquivo().processarArquivo(uploadedFile, arquivo.getUsuarioEnvio());
+		new ProcessadorArquivo().processarArquivo(uploadedFile, arquivo);
 	}
 
-	public List<Arquivo> buscarArquivos(){
-		return arquivoDAO.buscarArquivos();
+	public List<Arquivo> buscarArquivos() {
+		return arquivoDAO.buscarTodosArquivos();
 	}
 }

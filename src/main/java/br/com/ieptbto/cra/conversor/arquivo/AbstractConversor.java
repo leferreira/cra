@@ -1,7 +1,7 @@
 package br.com.ieptbto.cra.conversor.arquivo;
 
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
-import br.com.ieptbto.cra.entidade.vo.AbstractArquivo;
+import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 import br.com.ieptbto.cra.exception.ConvertException;
 
 /**
@@ -16,7 +16,7 @@ public abstract class AbstractConversor<T> {
 	/**
 	 * Instância do arquivo que será trabalhada.
 	 */
-	private AbstractArquivo arquivo;
+	private AbstractArquivoVO arquivo;
 
 	private CampoArquivo campoArquivo;
 
@@ -29,6 +29,16 @@ public abstract class AbstractConversor<T> {
 	 * @throws ConvertException
 	 */
 	public abstract T getValorConvertido(String valor) throws ConvertException;
+
+	/**
+	 * Realiza a conversão do valor para a propriedade.
+	 * 
+	 * @param valor
+	 * 
+	 * @return
+	 * @throws ConvertException
+	 */
+	public abstract T getValorConvertido(String valor, Class<?> propertyType) throws ConvertException;
 
 	/**
 	 * Converte o objeto para {@link String}.
@@ -45,7 +55,7 @@ public abstract class AbstractConversor<T> {
 	 *            valor atribuído a arquivo
 	 */
 
-	public void setArquivo(AbstractArquivo arquivo) {
+	public void setArquivo(AbstractArquivoVO arquivo) {
 		this.arquivo = arquivo;
 	}
 
@@ -54,7 +64,7 @@ public abstract class AbstractConversor<T> {
 	 * 
 	 * @return arquivo
 	 */
-	protected AbstractArquivo getArquivo() {
+	protected AbstractArquivoVO getArquivo() {
 		return arquivo;
 	}
 

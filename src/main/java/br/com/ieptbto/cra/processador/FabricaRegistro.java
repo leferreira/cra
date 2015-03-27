@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import br.com.ieptbto.cra.entidade.vo.AbstractArquivo;
+import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.CabecalhoVO;
 import br.com.ieptbto.cra.entidade.vo.RodapeVO;
 import br.com.ieptbto.cra.entidade.vo.TituloVO;
@@ -23,9 +23,9 @@ import br.com.ieptbto.cra.util.CraConstructorUtils;
 public class FabricaRegistro extends Processador {
 	/** Tamanho padrao de uma linha de registro */
 
-	private static final Map<String, Class<? extends AbstractArquivo>> TIPOS_ARQUIVOS;
+	private static final Map<String, Class<? extends AbstractArquivoVO>> TIPOS_ARQUIVOS;
 	static {
-		HashMap<String, Class<? extends AbstractArquivo>> map = new HashMap<String, Class<? extends AbstractArquivo>>();
+		HashMap<String, Class<? extends AbstractArquivoVO>> map = new HashMap<String, Class<? extends AbstractArquivoVO>>();
 		map.put(TipoRegistro.TITULO.getConstante(), TituloVO.class);
 		map.put(TipoRegistro.CABECALHO.getConstante(), CabecalhoVO.class);
 		map.put(TipoRegistro.RODAPE.getConstante(), RodapeVO.class);
@@ -55,8 +55,8 @@ public class FabricaRegistro extends Processador {
 	 * 
 	 * @return
 	 */
-	public AbstractArquivo criarRegistro() {
-		Class<? extends AbstractArquivo> type = TIPOS_ARQUIVOS.get(tipoReg);
+	public AbstractArquivoVO criarRegistro() {
+		Class<? extends AbstractArquivoVO> type = TIPOS_ARQUIVOS.get(tipoReg);
 		if (type == null) {
 			throw new InfraException("Tipo de registro desconhecido ");
 		}
@@ -70,7 +70,7 @@ public class FabricaRegistro extends Processador {
 	 * @param type
 	 * @return
 	 */
-	private <T extends AbstractArquivo> T criarRegistro(Class<T> type) {
+	private <T extends AbstractArquivoVO> T criarRegistro(Class<T> type) {
 		T novoRegistro = novoRegistro(type);
 		new GerenciadorArquivo(linha, novoRegistro);
 		return novoRegistro;

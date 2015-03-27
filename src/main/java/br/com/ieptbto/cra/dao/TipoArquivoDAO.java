@@ -19,7 +19,7 @@ import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
  * @author Lefer
  *
  */
-@Repository 
+@Repository
 public class TipoArquivoDAO extends AbstractBaseDAO {
 
 	@Transactional(readOnly = true)
@@ -50,13 +50,6 @@ public class TipoArquivoDAO extends AbstractBaseDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Arquivo> buscarArquivos(){
-		Criteria criteria = getCriteria(Arquivo.class);
-		criteria.addOrder(Order.asc("id"));
-		return criteria.list();
-	}
-	
-	@SuppressWarnings("unchecked")
 	public List<TipoArquivo> buscarTiposArquivo() {
 		Criteria criteria = getCriteria(TipoArquivo.class);
 		criteria.addOrder(Order.asc("id"));
@@ -72,9 +65,15 @@ public class TipoArquivoDAO extends AbstractBaseDAO {
 
 	public TipoArquivo buscarTipoArquivo(Arquivo arquivo) {
 		Criteria criteria = getCriteria(TipoArquivo.class);
-		criteria.add(Restrictions.eq("constante", arquivo.getNomeArquivo()
-				.substring(0, 1).toUpperCase()));
+		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(arquivo.getNomeArquivo().substring(0, 1).toUpperCase());
+		criteria.add(Restrictions.eq("tipoArquivo", tipoArquivo));
 		return TipoArquivo.class.cast(criteria.uniqueResult());
 	}
 
+	public void inserirTipoArquivo(String tipo) {
+		TipoArquivo tipoArquivo = new TipoArquivo();
+		tipoArquivo.setTipoArquivo(TipoArquivoEnum.getTipoArquivoEnum(tipo));
+
+		salvar(tipoArquivo);
+	}
 }

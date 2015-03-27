@@ -5,6 +5,7 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
 import br.com.ieptbto.cra.conversor.enumeration.ErroConversao;
+import br.com.ieptbto.cra.enumeration.CraEnum;
 import br.com.ieptbto.cra.exception.ConvertException;
 
 /**
@@ -12,8 +13,7 @@ import br.com.ieptbto.cra.exception.ConvertException;
  * @author Lefer
  *
  */
-@SuppressWarnings("rawtypes")
-public class EnumConversor extends AbstractConversor<Enum> {
+public class EnumConversor extends AbstractConversor<CraEnum> {
 
 	private static final String VAZIO = " ";
 
@@ -21,17 +21,28 @@ public class EnumConversor extends AbstractConversor<Enum> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Enum getValorConvertido(String valor) {
-		try {
-			BeanWrapper propertyAccess = PropertyAccessorFactory.forBeanPropertyAccess(getArquivo());
+	public CraEnum getValorConvertido(String valor) {
+		BeanWrapper propertyAccess = PropertyAccessorFactory.forBeanPropertyAccess(getArquivo());
+		Class<?> propertyType = propertyAccess.getPropertyType(getFieldName());
 
-			Class<?> propertyType = propertyAccess.getPropertyType(getFieldName());
-			Integer integerValue = Integer.valueOf(valor);
-			if (Enum.class.isAssignableFrom(propertyType)) {
+		return getValorConvertido(valor, propertyType);
+
+	}
+
+	/**
+	 * 
+	 * @param valor
+	 * @param propertyType
+	 * @return
+	 */
+	@Override
+	public CraEnum getValorConvertido(String valor, Class<?> propertyType) {
+		try {
+			if (CraEnum.class.isAssignableFrom(propertyType)) {
 				Object[] enumConstants = propertyType.getEnumConstants();
 				for (Object object : enumConstants) {
-					Enum enumObject = (Enum) object;
-					if (enumObject.name().equals(integerValue)) {
+					CraEnum enumObject = (CraEnum) object;
+					if (enumObject.getConstante().equals(valor)) {
 						return enumObject;
 					}
 				}
@@ -47,13 +58,12 @@ public class EnumConversor extends AbstractConversor<Enum> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getValorConvertidoParaString(Enum objeto) {
+	public String getValorConvertidoParaString(CraEnum objeto) {
 		int tamanho = getAnotacaoAtributo().tamanho();
 		if (objeto != null) {
-			String codigo = objeto.name();
+			String codigo = objeto.getLabel();
 			return StringUtils.leftPad(codigo, tamanho, VAZIO);
 		}
 		return StringUtils.repeat(VAZIO, tamanho);
 	}
-
 }

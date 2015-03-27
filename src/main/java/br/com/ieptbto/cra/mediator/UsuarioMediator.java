@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.dao.GrupoUsuarioDAO;
 import br.com.ieptbto.cra.dao.InstituicaoDAO;
+import br.com.ieptbto.cra.dao.TipoArquivoDAO;
 import br.com.ieptbto.cra.dao.TipoInstituicaoDAO;
 import br.com.ieptbto.cra.dao.UsuarioDAO;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -29,6 +31,10 @@ public class UsuarioMediator {
 	TipoInstituicaoDAO tipoInstituicaoDao;
 	@Autowired
 	GrupoUsuarioDAO grupoUsuarioDao;
+	@Autowired
+	TipoArquivoDAO tipoArquivoDao;
+	@Autowired
+	MunicipioMediator municipioMediator;
 
 	public Usuario autenticar(String login, String senha) {
 		Usuario usuario = usuarioDao.buscarUsuarioPorLogin(login);
@@ -102,10 +108,22 @@ public class UsuarioMediator {
 		tipoInstituicaoDao.inserirTipoInstituicaoInicial("Cartório");
 		tipoInstituicaoDao.inserirTipoInstituicaoInicial("Instituições Financeiras");
 
+		tipoArquivoDao.inserirTipoArquivo("B");
+		tipoArquivoDao.inserirTipoArquivo("C");
+		tipoArquivoDao.inserirTipoArquivo("R");
+
+		Municipio municipio = new Municipio();
+		municipio.setCodigoIBGE(1721000);
+		municipio.setNomeMunicipio("Palmas");
+		municipio.setSituacao(true);
+		municipio.setUf("TO");
+
+		municipio = municipioMediator.salvar(municipio);
+
 		/*
 		 * Inserindo a instituição CRA
 		 */
-		instituicaoDao.inserirInstituicaoInicial();
+		instituicaoDao.inserirInstituicaoInicial(municipio);
 
 		/*
 		 * Inserindo os Grupos dos Usuário e as Permissões

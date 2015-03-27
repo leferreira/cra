@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.entidade;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -94,6 +95,8 @@ public class Arquivo extends AbstractEntidade<Arquivo> {
 		return usuarioEnvio;
 	}
 
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "STATUS_ARQUIVO_ID", nullable = false)
 	public StatusArquivo getStatusArquivo() {
 		return statusArquivo;
 	}

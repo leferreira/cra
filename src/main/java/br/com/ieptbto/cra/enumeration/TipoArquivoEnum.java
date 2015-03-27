@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import br.com.ieptbto.cra.exception.InfraException;
 
 @Entity
-public enum TipoArquivoEnum {
+public enum TipoArquivoEnum implements CraEnum {
 
 	REMESSA("B", "Remessa"), //
 	CONFIRMACAO("C", "Confirmação"), //
@@ -22,10 +22,6 @@ public enum TipoArquivoEnum {
 		this.label = label;
 	}
 
-	public String getConstante() {
-		return constante;
-	}
-
 	/**
 	 * retorna o tipo de arquivo dependendo do tipo informado
 	 * 
@@ -40,6 +36,16 @@ public enum TipoArquivoEnum {
 			}
 		}
 		throw new InfraException("Tipo de Arquivo não encontrado: " + valor);
+	}
+
+	@Override
+	public String getConstante() {
+		return constante;
+	}
+
+	@Override
+	public String getLabel() {
+		return this.label;
 	}
 
 }

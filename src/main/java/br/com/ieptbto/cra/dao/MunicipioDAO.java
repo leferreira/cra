@@ -14,10 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.ieptbto.cra.entidade.Municipio;
 
 @Repository
-public class MunicipioDAO extends AbstractBaseDAO{
+public class MunicipioDAO extends AbstractBaseDAO {
 
-	
-	@Transactional(readOnly = true)
+	// @Transactional(readOnly = true)
 	public Municipio salvar(Municipio municipio) {
 		Municipio novoMunicipio = new Municipio();
 		Transaction transaction = getBeginTransation();
@@ -43,18 +42,24 @@ public class MunicipioDAO extends AbstractBaseDAO{
 		}
 		return municipio;
 	}
-	
+
 	public Municipio buscarMunicipioPorNome(String nomeMunicipio) {
 		Criteria criteria = getCriteria(Municipio.class);
 		criteria.add(Restrictions.like("nomeMunicipio", nomeMunicipio, MatchMode.EXACT));
 
 		return Municipio.class.cast(criteria.uniqueResult());
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<Municipio> listarTodos(){
+	public List<Municipio> listarTodos() {
 		Criteria criteria = getCriteria(Municipio.class);
 		criteria.addOrder(Order.asc("nomeMunicipio"));
 		return criteria.list();
+	}
+
+	public Municipio buscaMunicipioPorCodigoIBGE(Integer codigoMunicipio) {
+		Criteria criteria = getCriteria(Municipio.class);
+		criteria.add(Restrictions.eq("codigoIBGE", codigoMunicipio));
+		return Municipio.class.cast(criteria.uniqueResult());
 	}
 }

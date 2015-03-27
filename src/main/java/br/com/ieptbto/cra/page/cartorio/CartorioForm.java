@@ -5,10 +5,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.InstituicaoMunicipioMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
@@ -22,8 +20,6 @@ public class CartorioForm extends BaseForm<Instituicao> {
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
-	@SpringBean
-	InstituicaoMunicipioMediator imMediator;
 
 	public CartorioForm(String id, IModel<Instituicao> model) {
 		super(id, model);
@@ -39,13 +35,10 @@ public class CartorioForm extends BaseForm<Instituicao> {
 		Instituicao instituicao = getModelObject();
 		TipoInstituicao tipo = tipoMediator.buscarTipoInstituicao("Cartório");
 		instituicao.setTipoInstituicao(tipo);
-		Municipio m = instituicao.getComarcaCartorio();
-		if (!municipioMediator.isMunicipioTemCartorio(m)) {
-			instituicao.setMunicipioCartorio(m.getNomeMunicipio());
 
+		if (!municipioMediator.isMunicipioTemCartorio(instituicao.getMunicipios().get(1))) {
 			if (getModelObject().getId() != 0) {
-				Instituicao instituicaoSalvo = instituicaoMediator
-						.alterar(instituicao);
+				Instituicao instituicaoSalvo = instituicaoMediator.alterar(instituicao);
 				if (instituicaoSalvo != null) {
 					info("Cartório alterado com sucesso!");
 				} else {
@@ -56,8 +49,7 @@ public class CartorioForm extends BaseForm<Instituicao> {
 					if (!instituicao.isSituacao()) {
 						instituicao.setSituacao(true);
 					}
-					Instituicao instituicaoSalvo = instituicaoMediator
-							.salvar(instituicao);
+					Instituicao instituicaoSalvo = instituicaoMediator.salvar(instituicao);
 					if (instituicaoSalvo != null) {
 						info("Cartório cadastrado com sucesso!");
 					} else {
@@ -67,7 +59,7 @@ public class CartorioForm extends BaseForm<Instituicao> {
 					error("Cartório não criado, pois já existe!");
 				}
 			}
-		}else{
+		} else {
 			error("Já existe um cartório cadastrado nesta cidade!");
 		}
 	}

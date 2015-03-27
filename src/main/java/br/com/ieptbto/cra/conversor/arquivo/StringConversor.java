@@ -2,6 +2,8 @@ package br.com.ieptbto.cra.conversor.arquivo;
 
 import org.apache.commons.lang.StringUtils;
 
+import br.com.ieptbto.cra.exception.ConvertException;
+
 /**
  * 
  * @author Lefer
@@ -27,6 +29,11 @@ public class StringConversor extends AbstractConversor<String> {
 			return StringUtils.rightPad(objeto, tamanho, ' ');
 		}
 		return StringUtils.repeat(" ", tamanho);
+	}
+
+	@Override
+	public String getValorConvertido(String valor, Class<?> propertyType) throws ConvertException {
+		return getValorConvertido(valor);
 	}
 
 }

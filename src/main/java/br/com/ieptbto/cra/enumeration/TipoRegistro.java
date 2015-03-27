@@ -2,9 +2,9 @@ package br.com.ieptbto.cra.enumeration;
 
 import br.com.ieptbto.cra.exception.InfraException;
 
-public enum TipoRegistro {
+public enum TipoRegistro implements CraEnum {
 
-	TITULO("1", "Tírulo"), CABECALHO("0", "Cabeçalho"), RODAPE("9", "Rodapé");
+	TITULO("1", "Título"), CABECALHO("0", "Cabeçalho"), RODAPE("9", "Rodapé");
 
 	private String constante;
 	private String label;
@@ -14,6 +14,7 @@ public enum TipoRegistro {
 		this.label = label;
 	}
 
+	@Override
 	public String getConstante() {
 		return constante;
 	}
@@ -37,4 +38,5 @@ public enum TipoRegistro {
 		}
 		throw new InfraException("Tipo de Registro desconhecido : " + valor);
 	}
+
 }

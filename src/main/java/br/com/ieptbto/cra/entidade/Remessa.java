@@ -27,7 +27,7 @@ import org.hibernate.envers.Audited;
 @Audited
 @Table(name = "TB_REMESSA")
 @org.hibernate.annotations.Table(appliesTo = "TB_REMESSA")
-public class Remessa extends AbstractEntidade<Remessa>{
+public class Remessa extends AbstractEntidade<Remessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -53,15 +53,15 @@ public class Remessa extends AbstractEntidade<Remessa>{
 	public Arquivo getArquivo() {
 		return arquivo;
 	}
-	
-	@Column(name = "DATA_ENVIO", columnDefinition = "timestamp without time zone NOT NULL")
+
+	@Column(name = "DATA_RECEBIMENTO", columnDefinition = "timestamp without time zone")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getDataRecebimento() {
 		return dataRecebimento;
 	}
 
 	@OneToOne
-	@JoinColumn(name="USUARIO_ID")
+	@JoinColumn(name = "USUARIO_ID")
 	public Usuario getUsuarioRecebe() {
 		return usuarioRecebe;
 	}
@@ -73,18 +73,18 @@ public class Remessa extends AbstractEntidade<Remessa>{
 	}
 
 	@OneToOne
-	@JoinColumn(name="CABECALHO_ID")
+	@JoinColumn(name = "CABECALHO_ID")
 	public Cabecalho getCabecalho() {
 		return cabecalho;
 	}
-	
+
 	@OneToMany(mappedBy = "remessa", fetch = FetchType.LAZY)
 	public List<Titulo> getTitulos() {
 		return titulos;
 	}
 
 	@OneToOne
-	@JoinColumn(name="RODAPE_ID")
+	@JoinColumn(name = "RODAPE_ID")
 	public Rodape getRodape() {
 		return rodape;
 	}
@@ -92,7 +92,7 @@ public class Remessa extends AbstractEntidade<Remessa>{
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public void setArquivo(Arquivo arquivo) {
 		this.arquivo = arquivo;
 	}
@@ -112,13 +112,12 @@ public class Remessa extends AbstractEntidade<Remessa>{
 	public void setInstituicaoDestino(Instituicao instituicaoDestino) {
 		this.instituicaoDestino = instituicaoDestino;
 	}
-	
+
 	@Override
 	public int compareTo(Remessa entidade) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 
 	public void setCabecalho(Cabecalho cabecalho) {
 		this.cabecalho = cabecalho;

@@ -45,4 +45,9 @@ public class BigDecimalConversor extends AbstractConversor<BigDecimal> {
 		return StringUtils.repeat(VALOR_ZERO, tamanho);
 	}
 
+	@Override
+	public BigDecimal getValorConvertido(String valor, Class<?> propertyType) throws ConvertException {
+		return getValorConvertido(valor);
+	}
+
 }

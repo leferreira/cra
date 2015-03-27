@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.ClassUtils;
 
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
-import br.com.ieptbto.cra.entidade.vo.AbstractArquivo;
+import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 
 /**
  * 
@@ -21,22 +21,22 @@ public class AtributoArquivoUtil {
 	 * @param registro
 	 * @return os campos anotados do registro.
 	 */
-	public static List<CampoArquivo> getAnnotatedFields(AbstractArquivo registro) {
-		Class<? extends AbstractArquivo> thisClass = registro.getClass();
+	public static List<CampoArquivo> getAnnotatedFields(AbstractArquivoVO registro) {
+		Class<? extends AbstractArquivoVO> thisClass = registro.getClass();
 		@SuppressWarnings("unchecked")
-		List<Class<? extends AbstractArquivo>> allSuperclasses = ClassUtils.getAllSuperclasses(thisClass);
+		List<Class<? extends AbstractArquivoVO>> allSuperclasses = ClassUtils.getAllSuperclasses(thisClass);
 		allSuperclasses.remove(Object.class);
 		allSuperclasses.add(thisClass);
 
 		List<CampoArquivo> camposAnotados = new ArrayList<CampoArquivo>();
-		for (Class<? extends AbstractArquivo> clazz : allSuperclasses) {
+		for (Class<? extends AbstractArquivoVO> clazz : allSuperclasses) {
 			camposAnotados.addAll(getAnnotatedFields(clazz));
 		}
 
 		return camposAnotados;
 	}
 
-	private static List<CampoArquivo> getAnnotatedFields(Class<? extends AbstractArquivo> class1) {
+	private static List<CampoArquivo> getAnnotatedFields(Class<? extends AbstractArquivoVO> class1) {
 		List<CampoArquivo> camposAnotados = new ArrayList<CampoArquivo>();
 		Field[] declaredFields = class1.getDeclaredFields();
 		for (Field field : declaredFields) {

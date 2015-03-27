@@ -10,7 +10,7 @@ import br.com.ieptbto.cra.entidade.TipoArquivo;
  * @author Lefer
  *
  */
-public abstract class AbstractArquivo {
+public abstract class AbstractArquivoVO {
 
 	@XmlAttribute(name = "t01")
 	@IAtributoArquivo(ordem = 1, posicao = 1, tamanho = 1, descricao = "Identificar o registro header no arquivo. Constante 0.", obrigatoriedade = true, validacao = "0", tipo = Integer.class)

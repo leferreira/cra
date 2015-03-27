@@ -59,7 +59,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				item.add(new Label("nomeMunicipio", municipioLista
 						.getNomeMunicipio()));
 				item.add(new Label("uf", municipioLista.getUf()));
-				item.add(new Label("codIBGE", municipioLista.getCodIBGE()));
+				item.add(new Label("codIBGE", municipioLista.getCodigoIBGE()));
 
 				item.add(detalharMunicipio(municipioLista));
 //				item.add(desativarMunicipio(municipioLista));

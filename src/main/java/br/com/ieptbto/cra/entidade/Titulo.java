@@ -50,8 +50,8 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	private BigDecimal valorTitulo;
 	private BigDecimal saldoTitulo;
 	private String pracaProtesto;
-	private char tipoEndoso;
-	private char informacaoSobreAceite;
+	private String tipoEndoso;
+	private String informacaoSobreAceite;
 	private Integer numeroControleDevedor;
 	private String nomeDevedor;
 	private String tipoIdentificacaoDevedor;
@@ -76,10 +76,10 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	private Integer numeroOperacaoBanco;
 	private Integer numeroContratoBanco;
 	private Integer numeroParcelaContrato;
-	private char tipoLetraCambio;
+	private String tipoLetraCambio;
 	private String complementoCodigoIrregularidade;
-	private char protestoMotivoFalencia;
-	private char instrumentoProtesto;
+	private String protestoMotivoFalencia;
+	private String instrumentoProtesto;
 	private BigDecimal valorDemaisDespesas;
 	private String complementoRegistro;
 	private String numeroSequencialArquivo;
@@ -111,7 +111,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	public String getCodigoPortador() {
 		return codigoPortador;
 	}
-	
+
 	@Column(name = "AGENCIA_CODIGO_CEDENTE")
 	public String getAgenciaCodigoCedente() {
 		return agenciaCodigoCedente;
@@ -141,7 +141,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	public String getCepSacadorVendedor() {
 		return cepSacadorVendedor;
 	}
-	
+
 	@Column(name = "CIDADE_CIDADE")
 	public String getCidadeSacadorVendedor() {
 		return cidadeSacadorVendedor;
@@ -187,11 +187,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return pracaProtesto;
 	}
 
-	public char getTipoEndoso() {
+	public String getTipoEndoso() {
 		return tipoEndoso;
 	}
 
-	public char getInformacaoSobreAceite() {
+	public String getInformacaoSobreAceite() {
 		return informacaoSobreAceite;
 	}
 
@@ -291,7 +291,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return numeroParcelaContrato;
 	}
 
-	public char getTipoLetraCambio() {
+	public String getTipoLetraCambio() {
 		return tipoLetraCambio;
 	}
 
@@ -299,11 +299,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return complementoCodigoIrregularidade;
 	}
 
-	public char getProtestoMotivoFalencia() {
+	public String getProtestoMotivoFalencia() {
 		return protestoMotivoFalencia;
 	}
 
-	public char getInstrumentoProtesto() {
+	public String getInstrumentoProtesto() {
 		return instrumentoProtesto;
 	}
 
@@ -403,11 +403,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.pracaProtesto = pracaProtesto;
 	}
 
-	public void setTipoEndoso(char tipoEndoso) {
+	public void setTipoEndoso(String tipoEndoso) {
 		this.tipoEndoso = tipoEndoso;
 	}
 
-	public void setInformacaoSobreAceite(char informacaoSobreAceite) {
+	public void setInformacaoSobreAceite(String informacaoSobreAceite) {
 		this.informacaoSobreAceite = informacaoSobreAceite;
 	}
 
@@ -483,8 +483,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.bairroDevedor = bairroDevedor;
 	}
 
-	public void setValorCustasCartorioDistribuidor(
-			BigDecimal valorCustasCartorioDistribuidor) {
+	public void setValorCustasCartorioDistribuidor(BigDecimal valorCustasCartorioDistribuidor) {
 		this.valorCustasCartorioDistribuidor = valorCustasCartorioDistribuidor;
 	}
 
@@ -508,20 +507,19 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.numeroParcelaContrato = numeroParcelaContrato;
 	}
 
-	public void setTipoLetraCambio(char tipoLetraCambio) {
+	public void setTipoLetraCambio(String tipoLetraCambio) {
 		this.tipoLetraCambio = tipoLetraCambio;
 	}
 
-	public void setComplementoCodigoIrregularidade(
-			String complementoCodigoIrregularidade) {
+	public void setComplementoCodigoIrregularidade(String complementoCodigoIrregularidade) {
 		this.complementoCodigoIrregularidade = complementoCodigoIrregularidade;
 	}
 
-	public void setProtestoMotivoFalencia(char protestoMotivoFalencia) {
+	public void setProtestoMotivoFalencia(String protestoMotivoFalencia) {
 		this.protestoMotivoFalencia = protestoMotivoFalencia;
 	}
 
-	public void setInstrumentoProtesto(char instrumentoProtesto) {
+	public void setInstrumentoProtesto(String instrumentoProtesto) {
 		this.instrumentoProtesto = instrumentoProtesto;
 	}
 

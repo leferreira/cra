@@ -12,7 +12,7 @@ import br.com.ieptbto.cra.annotations.IAtributoArquivo;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class RodapeVO extends AbstractArquivo {
+public class RodapeVO extends AbstractArquivoVO {
 
 	@XmlAttribute(name = "t01")
 	@IAtributoArquivo(ordem = 1, posicao = 1, tamanho = 1, descricao = "Identificar o registro trailler no arquivo. Constante 9.", obrigatoriedade = true, validacao = "9", tipo = Integer.class)

@@ -29,14 +29,12 @@ public class InstituicaoMediator {
 	 * @return
 	 */
 	public boolean isInstituicaoNaoExiste(Instituicao instituicao) {
-		Instituicao instituicaoNova = instituicaoDAO
-				.buscarInstituicao(instituicao.getNomeFantasia());
+		Instituicao instituicaoNova = instituicaoDAO.buscarInstituicao(instituicao.getNomeFantasia());
 		if (instituicaoNova == null) {
 			return true;
 		}
 		return false;
 	}
-	
 
 	/**
 	 * Busca uma instituicao cadastrada
@@ -82,5 +80,9 @@ public class InstituicaoMediator {
 	public List<Instituicao> listaDeCartorio() {
 		List<Instituicao> lista = instituicaoDAO.buscarListaCartorio();
 		return lista;
+	}
+
+	public Instituicao getInstituicao(Integer codigoMunicipio) {
+		return instituicaoDAO.getInstituicao(codigoMunicipio);
 	}
 }

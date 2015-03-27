@@ -7,7 +7,7 @@ import java.util.List;
  * @author Lefer
  *
  */
-public class ArquivoVO extends AbstractArquivo {
+public class ArquivoVO extends AbstractArquivoVO {
 
 	private List<CabecalhoVO> cabecalhos;
 	private List<TituloVO> titulos;

@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.page.cartorio;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -17,28 +16,22 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.InstituicaoMunicipio;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.InstituicaoMunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 @SuppressWarnings("serial")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN,
-		CraRoles.SUPER, })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
 public class ListaCartorioPage extends BasePage<Instituicao> {
 
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private InstituicaoMunicipioMediator imMediator;
-	
 	private final Instituicao cartorio;
 	private WebMarkupContainer divListRetorno;
 	private WebMarkupContainer divListaInstituicao;
 	private WebMarkupContainer dataTableInstituicao;
-	List<InstituicaoMunicipio> imLista = new ArrayList<InstituicaoMunicipio>();
-	
+
 	public ListaCartorioPage() {
 		super();
 		cartorio = new Instituicao();
@@ -49,7 +42,7 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 		divListRetorno = carregarDataTableInstiuicao();
 		add(divListRetorno);
 	}
-	
+
 	private WebMarkupContainer carregarDataTableInstiuicao() {
 		divListaInstituicao = new WebMarkupContainer("divListView");
 		dataTableInstituicao = new WebMarkupContainer("dataTableInstituicao");
@@ -60,20 +53,16 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 		divListaInstituicao.add(dataTableInstituicao);
 		return divListaInstituicao;
 	}
-	
+
 	private PageableListView<Instituicao> getListViewInstituicao() {
-		return new PageableListView<Instituicao>("listViewInstituicao",
-				listInstituicoes(), 10) {
+		return new PageableListView<Instituicao>("listViewInstituicao", listInstituicoes(), 10) {
 			@Override
 			protected void populateItem(ListItem<Instituicao> item) {
 				Instituicao instituicaoLista = item.getModelObject();
-				item.add(new Label("nomeFantasia", instituicaoLista
-						.getNomeFantasia()));
-				item.add(new Label("municipioCartorio", instituicaoLista.getMunicipioCartorio()  ));
-				item.add(new Label("responsavel", instituicaoLista
-						.getResponsavel()));
-				item.add(new Label("email", instituicaoLista
-						.getEmail()));
+				item.add(new Label("nomeFantasia", instituicaoLista.getNomeFantasia()));
+				item.add(new Label("municipioCartorio", instituicaoLista.getMunicipios().get(1).getNomeMunicipio()));
+				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
+				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new Label("contato", instituicaoLista.getContato()));
 				if (instituicaoLista.isSituacao()) {
 					item.add(new Label("situacao", "Sim"));
@@ -105,8 +94,8 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 			}
 		};
 	}
-	
-	public IModel<List<Instituicao>> listInstituicoes(){
+
+	public IModel<List<Instituicao>> listInstituicoes() {
 		return new LoadableDetachableModel<List<Instituicao>>() {
 			@Override
 			protected List<Instituicao> load() {
@@ -115,7 +104,7 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 			}
 		};
 	}
-	
+
 	@Override
 	protected IModel<Instituicao> getModel() {
 		return new CompoundPropertyModel<Instituicao>(cartorio);

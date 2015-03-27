@@ -12,8 +12,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.vo.AbstractArquivo;
-import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.Cabecalho;
+import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Rodape;
+import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.CabecalhoVO;
 import br.com.ieptbto.cra.entidade.vo.RodapeVO;
 import br.com.ieptbto.cra.entidade.vo.TituloVO;
@@ -30,67 +33,76 @@ import br.com.ieptbto.cra.processador.FabricaRegistro;
 public class FabricaDeArquivo {
 
 	private static final Logger logger = Logger.getLogger(FabricaDeArquivo.class);
-	private File arquivo;
+	private File arquivoFisico;
+	private Arquivo arquivo;
 
-	public FabricaDeArquivo(File arquivoFisico) {
-		setArquivo(arquivoFisico);
+	public FabricaDeArquivo(File arquivoFisico, Arquivo arquivo) {
+		this.arquivoFisico = arquivoFisico;
+		this.arquivo = arquivo;
 	}
 
 	public Arquivo converter() {
 		List<ArquivoException> erros = new ArrayList<ArquivoException>();
-		validarArquivo(getArquivo(), erros);
+		validarArquivo(getArquivoFisico(), erros);
 
-		return processarArquivo(getArquivo(), erros);
-	}
-
-	private Arquivo processarArquivo(File arquivoFisico, List<ArquivoException> erros) {
-		return processarArquivoFisico(arquivoFisico, erros);
+		return processarArquivoFisico(getArquivoFisico(), erros);
 	}
 
 	private Arquivo processarArquivoFisico(File arquivoFisico, List<ArquivoException> erros) {
 
 		try {
-			ArquivoVO arquivo = new ArquivoVO();
-			arquivo.setTitulos(new ArrayList<TituloVO>());
-			arquivo.setCabecalhos(new ArrayList<CabecalhoVO>());
-			arquivo.setRodapes(new ArrayList<RodapeVO>());
+			List<Remessa> remessas = new ArrayList<Remessa>();
+			getArquivo().setRemessas(remessas);
+			Remessa remessa = new Remessa();
+			remessa.setTitulos(new ArrayList<Titulo>());
+			remessa.setArquivo(getArquivo());
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(arquivoFisico)));
 			String linha = "";
-
 			while ((linha = reader.readLine()) != null) {
-				setRegistro(FabricaRegistro.getInstance(linha).criarRegistro(), arquivo);
+				setRegistro(linha, remessa);
+				if (remessa.getRodape() != null) {
+					remessas.add(remessa);
+					remessa = new Remessa();
+					remessa.setTitulos(new ArrayList<Titulo>());
+					remessa.setArquivo(getArquivo());
+				}
 			}
 			reader.close();
 
-			return parseArquivoVo(arquivo);
+			return getArquivo();
 
 		} catch (FileNotFoundException e) {
-			new InfraException("arquivo não encontrado");
+			new InfraException("arquivoFisico não encontrado");
 			logger.error(e.getMessage());
 		} catch (IOException e) {
-			new InfraException("arquivo não encontrado");
+			new InfraException("arquivoFisico não encontrado");
 			logger.error(e.getMessage());
 		}
 
 		return null;
 	}
 
-	private Arquivo parseArquivoVo(ArquivoVO arquivo2) {
-		Arquivo arquivo = new Arquivo();
-		return arquivo;
-	}
+	private void setRegistro(String linha, Remessa remessa) {
+		AbstractArquivoVO registro = FabricaRegistro.getInstance(linha).criarRegistro();
 
-	private void setRegistro(AbstractArquivo registro, ArquivoVO arquivo) {
-		if (TipoRegistro.TITULO.getConstante().equals(registro.getIdentificacaoRegistro())) {
-			TituloVO titulo = TituloVO.class.cast(registro);
-			arquivo.getTitulos().add(titulo);
-		} else if (TipoRegistro.CABECALHO.getConstante().equals(registro.getIdentificacaoRegistro())) {
-			CabecalhoVO cabecalho = CabecalhoVO.class.cast(registro);
-			arquivo.getCabecalhos().add(cabecalho);
+		if (TipoRegistro.CABECALHO.getConstante().equals(registro.getIdentificacaoRegistro())) {
+			CabecalhoVO cabecalhoVO = CabecalhoVO.class.cast(registro);
+			Cabecalho cabecalho = new CabecalhoConversor().converter(Cabecalho.class, cabecalhoVO);
+			remessa.setCabecalho(cabecalho);
+			cabecalho.setRemessa(remessa);
+		} else if (TipoRegistro.TITULO.getConstante().equals(registro.getIdentificacaoRegistro())) {
+			TituloVO tituloVO = TituloVO.class.cast(registro);
+			Titulo titulo = new TituloConversor().converter(Titulo.class, tituloVO);
+			titulo.setRemessa(remessa);
+			remessa.getTitulos().add(titulo);
 		} else if (TipoRegistro.RODAPE.getConstante().equals(registro.getIdentificacaoRegistro())) {
-			RodapeVO rodape = RodapeVO.class.cast(registro);
-			arquivo.getRodapes().add(rodape);
+			RodapeVO rodapeVO = RodapeVO.class.cast(registro);
+			Rodape rodape = new RodapeConversor().converter(Rodape.class, rodapeVO);
+			remessa.setRodape(rodape);
+			rodape.setRemessa(remessa);
+		} else {
+			throw new InfraException("O Tipo do registro não foi encontrado: [" + registro.getIdentificacaoRegistro() + " ]");
 		}
 
 	}
@@ -100,11 +112,19 @@ public class FabricaDeArquivo {
 
 	}
 
-	public File getArquivo() {
+	public File getArquivoFisico() {
+		return arquivoFisico;
+	}
+
+	public void setArquivoFisico(File arquivo) {
+		this.arquivoFisico = arquivo;
+	}
+
+	public Arquivo getArquivo() {
 		return arquivo;
 	}
 
-	public void setArquivo(File arquivo) {
+	public void setArquivo(Arquivo arquivo) {
 		this.arquivo = arquivo;
 	}
 

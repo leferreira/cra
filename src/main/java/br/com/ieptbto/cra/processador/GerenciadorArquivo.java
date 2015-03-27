@@ -9,7 +9,7 @@ import org.springframework.beans.PropertyAccessorFactory;
 
 import br.com.ieptbto.cra.conversor.arquivo.AbstractConversor;
 import br.com.ieptbto.cra.conversor.arquivo.CampoArquivo;
-import br.com.ieptbto.cra.entidade.vo.AbstractArquivo;
+import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 
 public class GerenciadorArquivo extends AbstractGerenciadorArquivoLinha {
 
@@ -21,7 +21,7 @@ public class GerenciadorArquivo extends AbstractGerenciadorArquivoLinha {
 	 * @param linha
 	 * @param registro
 	 */
-	public GerenciadorArquivo(String linha, AbstractArquivo arquivo) {
+	public GerenciadorArquivo(String linha, AbstractArquivoVO arquivo) {
 		this.arquivo = arquivo;
 		this.propertyAccess = PropertyAccessorFactory.forBeanPropertyAccess(arquivo);
 

@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import br.com.ieptbto.cra.exception.ConvertException;
+
 /**
  * 
  * @author Lefer
@@ -60,6 +62,11 @@ public class ListConversor extends AbstractConversor<List<?>> {
 			return valores.concat(StringUtils.repeat(VAZIO, tamanho * (quantidadeItens - objeto.size())));
 		}
 		return StringUtils.repeat(VAZIO, tamanho * quantidadeItens);
+	}
+
+	@Override
+	public List<?> getValorConvertido(String valor, Class<?> propertyType) throws ConvertException {
+		return getValorConvertido(valor);
 	}
 
 }

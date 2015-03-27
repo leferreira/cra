@@ -2,11 +2,14 @@ package br.com.ieptbto.cra.processador;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 
 import br.com.ieptbto.cra.conversor.arquivo.FabricaDeArquivo;
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
@@ -25,10 +28,12 @@ public class ProcessadorArquivo extends Processador {
 	private File arquivoFisico;
 	private String pathInstituicao;
 	private String pathUsuario;
+	private Arquivo arquivo;
 
-	public void processarArquivo(FileUpload uploadedFile, Usuario usuario) {
+	public void processarArquivo(FileUpload uploadedFile, Arquivo arquivo) {
 		this.file = uploadedFile;
-		this.usuario = usuario;
+		this.usuario = arquivo.getUsuarioEnvio();
+		this.arquivo = arquivo;
 
 		logger.info("Início do processamento do arquivoFisico " + getFile().getClientFileName() + " do usuário " + getUsuario().getLogin());
 		if (getFile() != null) {
@@ -45,8 +50,7 @@ public class ProcessadorArquivo extends Processador {
 	}
 
 	private void converterArquivo() {
-		new FabricaDeArquivo(getArquivoFisico()).converter();
-
+		new FabricaDeArquivo(getArquivoFisico(), getArquivo()).converter();
 	}
 
 	private void validarArquivo() {
@@ -113,5 +117,19 @@ public class ProcessadorArquivo extends Processador {
 
 	public void setArquivoFisico(File arquivo) {
 		this.arquivoFisico = arquivo;
+	}
+
+	public Arquivo getArquivo() {
+		if (this.arquivo == null) {
+			arquivo = new Arquivo();
+		}
+		if (arquivo.getRemessas() == null) {
+			arquivo.setRemessas(new ArrayList<Remessa>());
+		}
+		return arquivo;
+	}
+
+	public void setArquivo(Arquivo arquivo) {
+		this.arquivo = arquivo;
 	}
 }

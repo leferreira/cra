@@ -54,7 +54,7 @@ public class Rodape extends AbstractEntidade<Rodape> {
 		return id;
 	}
 
-	@OneToOne(mappedBy="rodape")
+	@OneToOne(mappedBy = "rodape")
 	public Remessa getRemessa() {
 		return remessa;
 	}
@@ -64,37 +64,37 @@ public class Rodape extends AbstractEntidade<Rodape> {
 		return identificacaoRegistro;
 	}
 
-	@Column(name = "CODIGO_PORTADOR", columnDefinition = "serial")
+	@Column(name = "CODIGO_PORTADOR")
 	public String getNumeroCodigoPortador() {
 		return numeroCodigoPortador;
 	}
 
-	@Column(name = "NOME_PORTADOR", columnDefinition = "serial")
+	@Column(name = "NOME_PORTADOR")
 	public String getNomePortador() {
 		return nomePortador;
 	}
 
-	@Column(name = "DATA_MOVIMENTO", columnDefinition = "serial")
+	@Column(name = "DATA_MOVIMENTO")
 	public String getDataMovimento() {
 		return dataMovimento;
 	}
 
-	@Column(name = "QTD_REMESSA", columnDefinition = "serial")
+	@Column(name = "QTD_REMESSA")
 	public BigDecimal getSomatorioQtdRemessa() {
 		return somatorioQtdRemessa;
 	}
 
-	@Column(name = "SOMATORIO_VLR_REMESSA", columnDefinition = "serial")
+	@Column(name = "SOMATORIO_VLR_REMESSA")
 	public BigDecimal getSomatorioValorRemessa() {
 		return somatorioValorRemessa;
 	}
 
-	@Column(name = "COMPLEMENTO_REGISTRO", columnDefinition = "serial")
+	@Column(name = "COMPLEMENTO_REGISTRO")
 	public String getComplementoRegistro() {
 		return complementoRegistro;
 	}
 
-	@Column(name = "NUMERO_SEQUENCIAL", columnDefinition = "serial")
+	@Column(name = "NUMERO_SEQUENCIAL")
 	public String getNumeroSequencialRegistroArquivo() {
 		return numeroSequencialRegistroArquivo;
 	}
@@ -135,8 +135,7 @@ public class Rodape extends AbstractEntidade<Rodape> {
 		this.complementoRegistro = complementoRegistro;
 	}
 
-	public void setNumeroSequencialRegistroArquivo(
-			String numeroSequencialRegistroArquivo) {
+	public void setNumeroSequencialRegistroArquivo(String numeroSequencialRegistroArquivo) {
 		this.numeroSequencialRegistroArquivo = numeroSequencialRegistroArquivo;
 	}
 }

@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -12,12 +13,19 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Municipio;
 
+/**
+ * @author Thasso Araújo
+ *
+ */
 @Repository
 public class InstituicaoDAO extends AbstractBaseDAO {
 
 	@Autowired
 	TipoInstituicaoDAO tipoInstituicaoDAO;
+	@Autowired
+	MunicipioDAO municipioDAO;
 
 	@Transactional(readOnly = true)
 	public Instituicao salvar(Instituicao instituicao) {
@@ -60,15 +68,18 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		}
 	}
 
-	public void inserirInstituicaoInicial() {
+	public void inserirInstituicaoInicial(Municipio municipio) {
+		List<Municipio> municipios = new ArrayList<Municipio>();
+		municipios.add(municipio);
 		Transaction transaction = getBeginTransation();
 		try {
 			Instituicao instituicao = new Instituicao();
 			instituicao.setNomeFantasia("CRA");
 			instituicao.setSituacao(true);
 			instituicao.setCnpj("123");
-			instituicao.setTipoInstituicao(tipoInstituicaoDAO
-					.buscarTipoInstituicao("CRA"));
+			instituicao.setMunicipios(municipios);
+			instituicao.setRazaoSocial("CRA");
+			instituicao.setTipoInstituicao(tipoInstituicaoDAO.buscarTipoInstituicao("CRA"));
 			save(instituicao);
 			transaction.commit();
 		} catch (Exception ex) {
@@ -78,19 +89,31 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 
 	}
 
+	/**
+	 * Busca uma instituicao ou cartório
+	 * 
+	 * @return Instituicao
+	 * */
 	public Instituicao buscarInstituicao(Instituicao instituicao) {
+		return buscarInstituicao(instituicao.getNomeFantasia());
+	}
+
+	/**
+	 * Busca uma instituicao ou cartório
+	 * 
+	 * @return Instituicao
+	 * */
+	public Instituicao buscarInstituicao(String nome) {
 		Criteria criteria = getCriteria(Instituicao.class);
-		criteria.add(Restrictions.eq("nomeFantasia",
-				instituicao.getNomeFantasia()));
+		criteria.add(Restrictions.eq("nomeFantasia", nome));
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 
-	public Instituicao buscarInstituicao(String nomeFantasia) {
-		Criteria criteria = getCriteria(Instituicao.class);
-		criteria.add(Restrictions.eq("nomeFantasia", nomeFantasia));
-		return Instituicao.class.cast(criteria.uniqueResult());
-	}
-
+	/**
+	 * Buscar todos as instituicões, ativas ou não, menos cartórios
+	 * 
+	 * @return List<Instituicao>
+	 * */
 	@SuppressWarnings("unchecked")
 	public List<Instituicao> buscarListaInstituicao() {
 		Criteria criteria = getCriteria(Instituicao.class);
@@ -99,6 +122,11 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
+	/**
+	 * Buscar todos as instituições ativas, menos cartórios
+	 * 
+	 * @return List<Instituicao>
+	 * */
 	@SuppressWarnings("unchecked")
 	public List<Instituicao> buscarListaInstituicaoAtivas() {
 		Criteria criteria = getCriteria(Instituicao.class);
@@ -108,6 +136,23 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
+	/**
+	 * Buscar todas as instituicões e cartórios cadastrados
+	 * 
+	 * @return List<Instituicao>
+	 * */
+	@SuppressWarnings("unchecked")
+	public List<Instituicao> buscarCartoriosInstituicoes() {
+		Criteria criteria = getCriteria(Instituicao.class);
+		criteria.addOrder(Order.asc("nomeFantasia"));
+		return criteria.list();
+	}
+
+	/**
+	 * Buscar todos os cartórios, ativos ou não e menos as instituicões
+	 * 
+	 * @return List<Instituicao>
+	 * */
 	@SuppressWarnings("unchecked")
 	public List<Instituicao> buscarListaCartorio() {
 		Criteria criteria = getCriteria(Instituicao.class);
@@ -119,6 +164,15 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 	public Instituicao buscarInstituicaoInicial(String nomeFantasia) {
 		Criteria criteria = getCriteria(Instituicao.class);
 		criteria.add(Restrictions.eq("nomeFantasia", nomeFantasia));
+		return Instituicao.class.cast(criteria.uniqueResult());
+	}
+
+	public Instituicao getInstituicao(Integer codigoMunicipio) {
+		Municipio municipio = municipioDAO.buscaMunicipioPorCodigoIBGE(codigoMunicipio);
+		Criteria criteria = getCriteria(Instituicao.class);
+		criteria.createAlias("municipios", "muicipio");
+		criteria.add(Restrictions.eq("municipio.municipio", municipio));
+
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 }

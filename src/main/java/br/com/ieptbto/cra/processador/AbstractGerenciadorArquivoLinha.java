@@ -6,7 +6,7 @@ import br.com.ieptbto.cra.conversor.arquivo.AbstractConversor;
 import br.com.ieptbto.cra.conversor.arquivo.AtributoArquivoUtil;
 import br.com.ieptbto.cra.conversor.arquivo.CampoArquivo;
 import br.com.ieptbto.cra.conversor.arquivo.FabricaConversor;
-import br.com.ieptbto.cra.entidade.vo.AbstractArquivo;
+import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 
 /**
  * 
@@ -15,7 +15,7 @@ import br.com.ieptbto.cra.entidade.vo.AbstractArquivo;
  */
 public abstract class AbstractGerenciadorArquivoLinha {
 
-	protected AbstractArquivo arquivo;
+	protected AbstractArquivoVO arquivo;
 
 	/**
 	 * @return os campos anotados do registro.

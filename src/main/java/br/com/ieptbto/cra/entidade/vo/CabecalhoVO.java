@@ -12,7 +12,7 @@ import br.com.ieptbto.cra.annotations.IAtributoArquivo;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class CabecalhoVO extends AbstractArquivo {
+public class CabecalhoVO extends AbstractArquivoVO {
 
 	@XmlAttribute(name = "t02")
 	@IAtributoArquivo(ordem = 2, posicao = 2, tamanho = 3, descricao = "Identificar o código do banco/portador. Preencher com o código compensação do Banco ou número de identificação do portador.", obrigatoriedade = true)
