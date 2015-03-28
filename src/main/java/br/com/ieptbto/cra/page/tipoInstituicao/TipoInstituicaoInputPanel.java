@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
@@ -14,35 +15,29 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
+import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.PermissaoEnvioMediator;
 import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 
+@SuppressWarnings("serial")
 public class TipoInstituicaoInputPanel extends Panel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(TipoInstituicaoInputPanel.class);
 	@SpringBean
-	TipoInstituicaoMediator tipoInstituicaoMediator;
+	private TipoInstituicaoMediator tipoInstituicaoMediator;
 	@SpringBean
-	TipoArquivoMediator tipoArquivoMediator;
+	private TipoArquivoMediator tipoArquivoMediator;
 	@SpringBean
-	PermissaoEnvioMediator permissaoEnvioMediator;
+	private PermissaoEnvioMediator permissaoEnvioMediator;
 
-	private TipoInstituicao tipoInstituicao = new TipoInstituicao();
-	private PermissaoEnvio permitidos = new PermissaoEnvio();
-	TipoArquivoEnum arquivoEnum;
-
+	private List<TipoArquivo> listaTiposArquivos = new ArrayList<TipoArquivo>();
 	private Component button;
-	private List<PermissaoEnvio> listaPermissao = new ArrayList<PermissaoEnvio>();
-	private List<TipoArquivoEnum> enumLista = new ArrayList<TipoArquivoEnum>();
 	private TextField<String> nomeTipo;
 	private CheckBoxMultipleChoice<String> tipoPermitidos;
-	private List<String> choices = new ArrayList<String>();
 
 	public TipoInstituicaoInputPanel(String id, IModel<TipoInstituicao> model,TipoInstituicao tipoInstituicao) {
 		super(id, model);
@@ -60,6 +55,76 @@ public class TipoInstituicaoInputPanel extends Panel {
 		add(botaoSalvar());
 	}
 
+	private Component botaoSalvar() {
+		button = new Button("botaoSalvar") {
+			/** */
+			private static final long serialVersionUID = 1L;
+
+			@SuppressWarnings("unchecked")
+			public void onSubmit() {
+				TipoInstituicao tipoInstituicao = new TipoInstituicao();
+				String tipo = (String)nomeTipo.getDefaultModelObject();
+				tipoInstituicao.setTipoInstituicao(tipo);
+				List<String> tiposArquivos = (List<String>) tipoPermitidos.getDefaultModelObject();
+				
+				//[B, CP, DP]
+				try {
+					if (tipoInstituicao.getId() != 0) {
+						TipoInstituicao tipoSalvo = tipoInstituicaoMediator.alterar(tipoInstituicao);
+						listaTiposArquivos = buscarListaTipoArquivos(tiposArquivos);
+						setPermissoes(tipoSalvo,listaTiposArquivos);
+						info("Os dados foram alterado com sucesso!");
+					} else {
+						TipoInstituicao tipoSalvo = tipoInstituicaoMediator.salvar(tipoInstituicao);
+						listaTiposArquivos = buscarListaTipoArquivos(tiposArquivos);
+						setPermissoes(tipoSalvo,listaTiposArquivos);
+						info("Os dados foram salvos com sucesso!");
+					}
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					error(ex.getMessage());
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					error("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
+				}
+			}
+		};
+		return button;
+
+	}
+	
+	/***
+	 * Método que transforma o array de strings em TipoArquivo 
+	 * */
+	private List<TipoArquivo> buscarListaTipoArquivos(List<String> tiposArquivo){
+		TipoArquivo tipoArquivo = new TipoArquivo();
+		for (String label: tiposArquivo){
+			tipoArquivo= tipoArquivoMediator.buscarTipoPorNome(TipoArquivoEnum.getTipoArquivoEnum(label));
+			listaTiposArquivos.add(tipoArquivo);
+		}
+		return listaTiposArquivos;
+	}
+	
+	/**
+	 * Método que seta a permissão para o tipo instituicao
+	 * */
+	private void setPermissoes(TipoInstituicao tipo, List<TipoArquivo> listaTipo){
+		PermissaoEnvio permitidos = new PermissaoEnvio();
+		try {
+			for (TipoArquivo tipoArquivo: listaTipo){
+				permitidos.setTipoArquivo(tipoArquivo);
+				permitidos.setTipoInstituicao(tipo);
+				permissaoEnvioMediator.alterar(permitidos);
+			}
+		} catch (InfraException ex) {
+			logger.error(ex.getMessage());
+			error(ex.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			error("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
+		}
+	}
+	
 	private TextField<String> campoTipoInstituicao() {
 		nomeTipo = new TextField<String>("tipoInstituicao");
 		nomeTipo.setLabel(new Model<String>("Tipo Instituição"));
@@ -69,63 +134,11 @@ public class TipoInstituicaoInputPanel extends Panel {
 	}
 
 	public Component comboTipoArquivos() {
-		enumLista = Arrays.asList(TipoArquivoEnum.values());
+		List<String> choices = new ArrayList<String>();
+		List<TipoArquivoEnum> enumLista = Arrays.asList(TipoArquivoEnum.values());
 		for (TipoArquivoEnum tipo : enumLista) {
-			choices.add(tipo.label);
+			choices.add(tipo.constante);
 		}
 		return tipoPermitidos = new CheckBoxMultipleChoice<String>("arquivosEnvioPermitido", choices);
-	}
-
-	private Component botaoSalvar() {
-		button = new Button("botaoSalvar") {
-			/** */
-			private static final long serialVersionUID = 1L;
-
-			@SuppressWarnings("unchecked")
-			public void onSubmit() {
-				
-				String tipo = (String)nomeTipo.getDefaultModelObject();
-				tipoInstituicao.setTipoInstituicao(tipo);
-				List<String> selects = (List<String>) tipoPermitidos.getDefaultModelObject();
-				if (tipoInstituicao.getId() != 0) {
-					TipoInstituicao tipoSalvo = tipoInstituicaoMediator.alterar(tipoInstituicao);
-					permitidos.setTipoInstituicao(tipoInstituicao);
-					listaPermissao = permissaoEnvioMediator.permissoesPorTipoInstituicao(tipoSalvo);
-					for (String s : selects) {
-						arquivoEnum = TipoArquivoEnum.valueOf(s);
-						if (!listaPermissao.isEmpty()) {
-							for (PermissaoEnvio p : listaPermissao) {
-								if (p.getTipoArquivo().getTipoArquivo().equals(arquivoEnum)) {
-									permitidos.setTipoArquivo(tipoArquivoMediator.buscarTipoPorNome(arquivoEnum));
-									permissaoEnvioMediator.alterar(permitidos);
-								}
-							}
-						} else {
-							permitidos.setTipoArquivo(tipoArquivoMediator.buscarTipoPorNome(arquivoEnum));
-							permissaoEnvioMediator.salvar(permitidos);
-						}
-						if (tipoSalvo != null)
-							info("Tipo instituição alterado com sucesso.");
-						else
-							error("Tipo instituição não alterado");
-					}
-				} else {
-					TipoInstituicao tipoSalvo = tipoInstituicaoMediator.salvar(tipoInstituicao);
-					for (String s : selects) {
-						if (TipoArquivoEnum.valueOf(s) != null) {
-							permitidos.setTipoInstituicao(tipoInstituicao);
-							permitidos.setTipoArquivo(tipoArquivoMediator.buscarTipoPorNome(TipoArquivoEnum.valueOf(s)));
-							permissaoEnvioMediator.salvar(permitidos);
-						}
-					}
-					if (tipoSalvo != null)
-						info("Tipo instituição criado com sucesso");
-					else
-						error("Tipo instituição não criado");
-				}
-			}
-		};
-		return button;
-
 	}
 }

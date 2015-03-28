@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
+import br.com.ieptbto.cra.exception.InfraException;
 
 @Repository
 public class PermissaoEnvioDAO extends AbstractBaseDAO{
@@ -18,11 +19,17 @@ public class PermissaoEnvioDAO extends AbstractBaseDAO{
 	@Transactional(readOnly = true)
 	public PermissaoEnvio salvar(PermissaoEnvio permissao ) {
 		PermissaoEnvio novasPermissao = new PermissaoEnvio();
-		Transaction transaction = getBeginTransation();
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			novasPermissao = save(permissao);
+			transaction.commit();
+			logger.info("As permissões para o tipo " + permissao.getTipoInstituicao().getTipoInstituicao() + " foram salvas no banco!");
 		} catch (Exception ex) {
 			transaction.rollback();
+			logger.error(ex.getMessage(), ex);
+			throw new InfraException("Não foi possível atribuir as permissões ao tipo " 
+					+ permissao.getTipoInstituicao().getTipoInstituicao() + ", informe a CRA!");
 		}
 		return novasPermissao;
 	}
@@ -35,9 +42,12 @@ public class PermissaoEnvioDAO extends AbstractBaseDAO{
 			session.update(permissao);
 			transaction.commit();
 
+			logger.info("As permissões para o tipo " + permissao.getTipoInstituicao().getTipoInstituicao() + " foram alteradas no banco!");
 		} catch (Exception ex) {
 			transaction.rollback();
-			System.out.println(ex.getMessage());
+			logger.error(ex.getMessage(), ex);
+			throw new InfraException("Não foi possível alterar as permissões ao tipo." 
+					+ permissao.getTipoInstituicao().getTipoInstituicao() + ", informe a CRA!");
 		}
 		return permissao;
 	}
@@ -48,7 +58,6 @@ public class PermissaoEnvioDAO extends AbstractBaseDAO{
 		criteria.add(Restrictions.eq("tipoInstituicao", tipo));
 
 		List<PermissaoEnvio> listaTipo = criteria.list();
-		flush();
 		return listaTipo;
 	}
 }

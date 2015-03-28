@@ -7,8 +7,7 @@
 		style="float: left; width: 45%; margin-right: 15px;">
 		<div class="form-group">
 			<label for="instituicao">Nome do Cartório:&nbsp;<small>(NomeFantasia)</small></label>
-			<input id="nomeFantasia"
-				onkeyup="this.value = this.value.toUpperCase()" name="nomeFantasia"
+			<input id="nomeFantasia" name="nomeFantasia"
 				type="text" wicket:id="nomeFantasia" placeholder="Nome Fantasia"
 				class="form-control" />
 		</div>
@@ -40,7 +39,7 @@
 		<div class="form-group">
 			<label for="municipio">Município:&nbsp;<small>(Comarca)</small></label>
 			<div class="controls">
-				<select id="municipio" wicket:id="comarcaCartorio"
+				<select id="municipio" wicket:id="municipio"
 					class="form-control">
 				</select>
 			</div>
@@ -86,7 +85,7 @@
 			</div>
 			<div class="form-group">
 				<label for="conta">Conta Corrente:</label> <input id="conta"
-					name="conta" type="text" wicket:id="numContaCorrente"
+					name="conta" type="text" wicket:id="numeroContaCorrente"
 					placeholder="Número da Conta" class="form-control" />
 			</div>
 			<br style="clear: both;" />

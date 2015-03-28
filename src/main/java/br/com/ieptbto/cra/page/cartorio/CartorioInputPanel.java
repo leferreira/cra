@@ -121,7 +121,7 @@ public class CartorioInputPanel extends Panel {
 	}
 
 	private TextField<String> campoContaCorrente() {
-		TextField<String> text = new TextField<String>("numContaCorrente");
+		TextField<String> text = new TextField<String>("numeroContaCorrente");
 		text.setLabel(new Model<String>("Conta Corrente"));
 		return text;
 	}

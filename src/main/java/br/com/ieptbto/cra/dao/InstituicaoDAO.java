@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
+import br.com.ieptbto.cra.exception.InfraException;
 
 /**
  * @author Thasso Araújo
@@ -29,11 +30,17 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 	@Transactional(readOnly = true)
 	public Instituicao salvar(Instituicao instituicao) {
 		Instituicao nova = new Instituicao();
-		Transaction transaction = getBeginTransation();
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			nova = save(instituicao);
+
+			transaction.commit();
+			logger.info(instituicao.getTipoInstituicao().getTipoInstituicao() + " foi salvo na base de dados. ");
 		} catch (Exception ex) {
 			transaction.rollback();
+			logger.error(ex.getMessage(), ex);
+			throw new InfraException("Não foi possível inserir esses dados na base.");
 		}
 		return nova;
 	}
@@ -44,18 +51,25 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.update(instituicao);
+			
 			transaction.commit();
-
+			logger.info(instituicao.getTipoInstituicao().getTipoInstituicao() + " foi alterado na base de dados. ");
 		} catch (Exception ex) {
 			transaction.rollback();
-			System.out.println(ex.getMessage());
+			logger.error(ex.getMessage(), ex);
+			throw new InfraException("Não foi possível alterar esses dados na base.");
 		}
 		return instituicao;
 	}
 
 	public Instituicao buscarCartorioPorMunicipio(String nomeMunicipio) {
 		Criteria criteria = getCriteria(Instituicao.class);
-		criteria.add(Restrictions.eq("municipioCartorio", nomeMunicipio));
+		criteria.createAlias("tipoInstituicao", "t");
+		criteria.createAlias("municipio", "m");
+		
+		criteria.add(Restrictions.and(
+				Restrictions.eq("t.tipoInstituicao", "Cartório"), 
+				Restrictions.eq("m.nomeMunicipio", nomeMunicipio)));
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 
@@ -84,7 +98,6 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 			transaction.rollback();
 			System.out.println(ex.getMessage());
 		}
-
 	}
 
 	/**
@@ -155,7 +168,8 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 	public List<Instituicao> buscarListaCartorio() {
 		Criteria criteria = getCriteria(Instituicao.class);
 		criteria.addOrder(Order.asc("id"));
-		criteria.add(Restrictions.eq("tipoInstituicao.id", 2));
+		criteria.createAlias("tipoInstituicao", "t");
+		criteria.add(Restrictions.eq("t.id", 2));
 		return criteria.list();
 	}
 

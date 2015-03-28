@@ -1,10 +1,12 @@
 package br.com.ieptbto.cra.page.instituicao;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
 
@@ -12,7 +14,8 @@ import br.com.ieptbto.cra.page.base.BaseForm;
 public class InstituicaoForm extends BaseForm<Instituicao> {
 
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
+	private static final Logger logger = Logger.getLogger(InstituicaoForm.class);
 
 	public InstituicaoForm(String id, IModel<Instituicao> model) {
 		super(id, model);
@@ -22,32 +25,32 @@ public class InstituicaoForm extends BaseForm<Instituicao> {
 		this(id, new CompoundPropertyModel<Instituicao>(colaboradorModel));
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void onSubmit() {
 		Instituicao instituicao = getModelObject();
-		if (getModelObject().getId() != 0) {
-			Instituicao instituicaoSalvo = instituicaoMediator
-					.alterar(instituicao);
-			if (instituicaoSalvo != null) {
-				info("Instituição alterada com sucesso!");
-			} else {
-				error("Instituição não alterada!");
-			}
-		} else {
-			if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
-				if(!instituicao.isSituacao()){
-					instituicao.setSituacao(true);
-				}
-				Instituicao instituicaoSalvo = instituicaoMediator
-						.salvar(instituicao);
-				if (instituicaoSalvo != null) {
-					info("Instituição criada com sucesso!");
+		
+		try {
+			if (getModelObject().getId() != 0) {
+				Instituicao instituicaoSalvo = instituicaoMediator.alterar(instituicao);
+				info("Dados alterados com sucesso!.");
+			}else{
+				if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
+					if(!instituicao.isSituacao()){
+						instituicao.setSituacao(true);
+					}
+					Instituicao instituicaoSalvo = instituicaoMediator.salvar(instituicao);
+					info("Dados salvos com sucesso!.");
 				} else {
-					error("Instituição não criada!");
+					error("Instituição não criada, pois já existe!");
 				}
-			} else {
-				error("Instituição não criada, pois já existe!");
-			}
+			}	
+		} catch (InfraException ex) {
+			logger.error(ex.getMessage());
+			error(ex.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			error("Não foi possível realizar esta operação! \n Entre em contato com a CRA!");
 		}
 	}
 }

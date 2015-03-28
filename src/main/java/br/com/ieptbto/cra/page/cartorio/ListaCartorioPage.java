@@ -26,8 +26,7 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	private final Instituicao cartorio;
+	private Instituicao cartorio;
 	private WebMarkupContainer divListRetorno;
 	private WebMarkupContainer divListaInstituicao;
 	private WebMarkupContainer dataTableInstituicao;
@@ -60,7 +59,7 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 			protected void populateItem(ListItem<Instituicao> item) {
 				Instituicao instituicaoLista = item.getModelObject();
 				item.add(new Label("nomeFantasia", instituicaoLista.getNomeFantasia()));
-				item.add(new Label("municipioCartorio", instituicaoLista.getMunicipio().getNomeMunicipio()));
+				item.add(new Label("municipio", instituicaoLista.getMunicipio().getNomeMunicipio()));
 				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
 				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new Label("contato", instituicaoLista.getContato()));

@@ -3,7 +3,8 @@
 }
 
 body {
-	background-color: #337ab7;
+	/*background-color: #337ab7;*/
+	background-color: #f8f8f8;
 }
 
 .sidebar {
@@ -15,14 +16,14 @@ body {
 	border-radius: 0 0px 0px 0px;
 }
 
-.glyphicon {
+/*.glyphicon {
 	color: #f8f8f8;
-}
+}*/
 .glyphicon-folder-open{
 	color: black !important;
 }
 
 .link-icones {
 	text-align: center;
-	color: #f8f8f8;
+	/*color: #f8f8f8;*/
 }

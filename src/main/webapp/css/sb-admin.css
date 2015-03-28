@@ -134,7 +134,8 @@ body {
 		position: absolute;
 		/*width: 250px;*/
 		width: 16%;
-		  margin-top: 40px;
+		/*  margin-top: 40px;*/
+		  margin-top: 3.5%;
 		  padding-top: 20PX;
 	}
 	.navbar-top-links .dropdown-messages, .navbar-top-links .dropdown-tasks,
