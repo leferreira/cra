@@ -11,6 +11,8 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"
 	media="screen" title="Stylesheet" />
 
+<link href="css/jquery-ui.css" rel="stylesheet">
+
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
 <link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
 <link href="css/plugins/timeline/timeline.css" rel="stylesheet">
@@ -28,6 +30,7 @@
 
 
 	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-ui.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 <!-- 	<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script> -->
 	<!-- DataTables JavaScript -->
@@ -63,6 +66,32 @@
 					    }
             }
         } );
+
+        jQuery(function($){
+            $.datepicker.regional['pt-BR'] = {
+                    closeText: 'Fechar',
+                    prevText: '&#x3c;Anterior',
+                    nextText: 'Pr&oacute;ximo&#x3e;',
+                    currentText: 'Hoje',
+                    monthNames: ['Janeiro','Fevereiro','Mar&ccedil;o','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+                    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+                    dayNames: ['Domingo','Segunda-feira','Ter&ccedil;a-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sabado'],
+                    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+                    dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+                    weekHeader: 'Sm',
+                    dateFormat: 'dd/mm/yy',
+                    firstDay: 0,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: ''};
+            $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+        });
+
+         $(function() {
+            $( "#date" ).datepicker();
+          });
+
+        
     } );
 	</script>
 </body>

@@ -94,4 +94,9 @@ public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 		return 0;
 	}
 
+	@Override
+	public String toString() {
+		return tipoArquivo.constante;
+	}
+
 }

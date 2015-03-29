@@ -32,9 +32,9 @@ public class CraMenu extends Panel {
 		String[] rolesPesquisar = { CraRoles.USER };
 
 		MenuItem menuLateral = menu.addItem("menuLateral", rolesPesquisar);
-		menuLateral.addItem("EnviarArquivo", rolesIncluir);
+		menuLateral.addItem("EnviarArquivo", rolesPesquisar);
 		menuLateral.addItem("AcompanharArquivos", rolesPesquisar);
-		menuLateral.addItem("IncluirUsuario", rolesPesquisar);
+		menuLateral.addItem("IncluirUsuario", rolesIncluir);
 		menuLateral.addItem("IncluirInstituicao", rolesIncluir);
 		menuLateral.addItem("ListaInstituicao", rolesIncluir);
 		menuLateral.addItem("IncluirMunicipio", rolesIncluir);
@@ -44,6 +44,7 @@ public class CraMenu extends Panel {
 		menuLateral.addItem("ListaTipoInstituicao", rolesIncluir);
 		menuLateral.addItem("IncluirCartorio", rolesIncluir);
 		menuLateral.addItem("ListaCartorio", rolesIncluir);
+		menuLateral.addItem("MonitorarTitulos", rolesPesquisar);
 		// menuLateral.addItem("IncluirCartorio", rolesIncluir);
 		// menuLateral.addItem("IncluirCartorio", rolesIncluir);
 		// menuLateral.addItem("IncluirCartorio", rolesIncluir);

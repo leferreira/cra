@@ -27,3 +27,24 @@ body {
 	text-align: center;
 	/*color: #f8f8f8;*/
 }
+.checkbox-inline br {
+	display: none !important; 
+}
+.checkbox-inline label {
+	margin-left: 30px !important; 
+}
+.checkbox-inline input{
+	margin-left: 10px !important;
+}
+.ajuste{
+	margin-left: 0px !important;
+}
+.inline br {
+	display: none !important; 
+}
+.inline label {
+	margin-left: 30px !important; 
+}
+.inline input{
+	margin-left: 10px !important;
+}

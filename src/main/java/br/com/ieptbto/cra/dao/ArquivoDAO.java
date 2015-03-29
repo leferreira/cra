@@ -6,12 +6,15 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 
@@ -64,5 +67,12 @@ public class ArquivoDAO extends AbstractBaseDAO {
 		}
 		return arquivoSalvo;
 
+	}
+	
+	public StatusArquivo buscarStatusArquivo(SituacaoArquivo situacao) {
+		Criteria criteria = getCriteria(StatusArquivo.class);
+		criteria.add(Restrictions.eq("situacaoArquivo", situacao));
+		criteria.addOrder(Order.asc("id"));
+		return StatusArquivo.class.cast(criteria.uniqueResult());
 	}
 }

@@ -111,6 +111,9 @@ public class UsuarioMediator {
 		tipoArquivoDao.inserirTipoArquivo("B");
 		tipoArquivoDao.inserirTipoArquivo("C");
 		tipoArquivoDao.inserirTipoArquivo("R");
+		tipoArquivoDao.inserirTipoArquivo("CP");
+		tipoArquivoDao.inserirTipoArquivo("DP");
+		tipoArquivoDao.inserirTipoArquivo("AC");
 
 		Municipio municipio = new Municipio();
 		municipio.setCodigoIBGE(1721000);

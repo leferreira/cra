@@ -28,6 +28,7 @@ public class StatusArquivo extends AbstractEntidade<StatusArquivo> {
 	private static final long serialVersionUID = 853651236L;
 
 	private int id;
+//	private SituacaoArquivo situacaoArquivo;
 	private Date data;
 	private String status;
 
@@ -39,6 +40,12 @@ public class StatusArquivo extends AbstractEntidade<StatusArquivo> {
 		return this.id;
 	}
 
+//	@Column(name = "SITUACAO_ARQUIVO")
+//	@Enumerated(EnumType.STRING)
+//	public SituacaoArquivo getSituacaoArquivo() {
+//		return situacaoArquivo;
+//	}
+	
 	@Column(name = "DATA", columnDefinition = "timestamp without time zone NOT NULL")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getData() {
@@ -62,10 +69,15 @@ public class StatusArquivo extends AbstractEntidade<StatusArquivo> {
 		this.status = status;
 	}
 
+//	public void setSituacaoArquivo(SituacaoArquivo situacaoArquivo) {
+//		this.situacaoArquivo = situacaoArquivo;
+//	}
+
 	@Override
 	public int compareTo(StatusArquivo entidade) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 
 }

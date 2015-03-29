@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
@@ -20,7 +21,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
@@ -30,6 +30,7 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -43,36 +44,26 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger
-			.getLogger(AcompanharArquivosPage.class);
+	private static final Logger logger = Logger.getLogger(AcompanharArquivosPage.class);
 
 	@SpringBean
 	private RemessaMediator remessasMediator;
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
+	@SpringBean
+	private TipoArquivoMediator tipoMediator;
+	
 
 	private Arquivo arquivo;
 	private Usuario user;
 	private Instituicao instituicao;
 	private Form<Arquivo> formFilters;
 
-	final CheckBox enviados = new CheckBox("enviados",
-			new PropertyModel<Boolean>(this, "enviados"));
-	final CheckBox recebidos = new CheckBox("recebidos",
-			new PropertyModel<Boolean>(this, "recebidos"));
-	final CheckBox aguardando = new CheckBox("aguardando",
-			new PropertyModel<Boolean>(this, "aguardando"));
-	final CheckBox b = new CheckBox("b", new PropertyModel<Boolean>(this, "b"));
-	final CheckBox c = new CheckBox("c", new PropertyModel<Boolean>(this, "c"));
-	final CheckBox r = new CheckBox("r", new PropertyModel<Boolean>(this, "r"));
-	final CheckBox cp = new CheckBox("cp", new PropertyModel<Boolean>(this,
-			"cp"));
-	final CheckBox dp = new CheckBox("dp", new PropertyModel<Boolean>(this,
-			"dp"));
-	final CheckBox ac = new CheckBox("ac", new PropertyModel<Boolean>(this,
-			"ac"));
-
-	private TextField<Date> dataEnvio = null;
+	private boolean signal = false;
+	private Date date;
+	private TextField<String> dataEnvio = null;
+	private ArrayList<String> tiposSelect = new ArrayList<String>();
+	private ArrayList<String> statusSelect = new ArrayList<String>();
 	private List<TipoArquivoEnum> enumLista = new ArrayList<TipoArquivoEnum>();
 
 	private WebMarkupContainer divTable;
@@ -90,10 +81,14 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 
 			@Override
 			protected void onSubmit() {
-
+				info("Tipos  : " + tiposSelect.toString());
+				info("Status  : " + statusSelect.toString());
+				date = (Date) dataEnvio.getDefaultModelObject();
+				info("Format : " + DataUtil.formatarData(date));
+				signal = true;
 			}
 		};
-
+		
 		adicionarFiltros(formFilters);
 		divTable = adicionarTableArquivos();
 		add(divTable);
@@ -106,21 +101,10 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 	 * */
 	private void adicionarFiltros(Form<Arquivo> form) {
 		form.add(campoDataEnvio());
-		form.add(enviados);
-		form.add(recebidos);
-		form.add(aguardando);
-		form.add(b);
-		form.add(c);
-		form.add(r);
-		form.add(cp);
-		form.add(dp);
-		form.add(ac);
+		form.add(comboTipoArquivos());
+		form.add(comboStatus());
 	}
 
-	public TextField<Date> campoDataEnvio() {
-		return dataEnvio = new TextField<Date>("dataEnvio", new Model<Date>(
-				null));
-	}
 
 	/***
 	 * Criando tabela de remessas de arquivos
@@ -144,17 +128,12 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				Remessa remessa = item.getModelObject();
-				item.add(new Label("tipoArquivo", remessa.getArquivo()
-						.getTipoArquivo().getTipoArquivo().constante));
-				item.add(new Label("nomeArquivo", remessa.getArquivo()
-						.getNomeArquivo()));
-				item.add(new Label("dataEnvio", DataUtil.formatarData(remessa
-						.getArquivo().getDataEnvio())));
-				item.add(new Label("instituicao", remessa.getArquivo()
-						.getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("destino", remessa.getInstituicaoDestino()
-						.getNomeFantasia()));
-
+				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
+				item.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
+				item.add(new Label("dataEnvio", DataUtil.formatarData(remessa.getArquivo().getDataEnvio())));
+				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
+				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
 				item.add(downloadArquivo(remessa.getArquivo()));
 			}
 
@@ -177,14 +156,35 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 		return new LoadableDetachableModel<List<Remessa>>() {
 			@Override
 			protected List<Remessa> load() {
-				return remessasMediator.buscarRemessa(instituicao);
+				String data = DataUtil.formatarData(date);
+				if (signal == false)
+					return remessasMediator.listarRemessa(instituicao);
+				else
+					return remessasMediator.buscarRemessasComFiltros(instituicao, tiposSelect, statusSelect, data);
 			}
 		};
+	}
+
+	public Component comboTipoArquivos() {
+		List<String> choices = new ArrayList<String>();
+		List<TipoArquivoEnum> enumLista = Arrays.asList(TipoArquivoEnum.values());
+		for (TipoArquivoEnum tipo : enumLista) {
+			choices.add(tipo.constante);
+		}
+		return new CheckBoxMultipleChoice<String>("tipoArquivos", new Model<ArrayList<String>>(tiposSelect),choices);
+	}
+	
+	public Component comboStatus() {
+		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] { "Aguardando", "Enviado", "Recebido" }));
+		return new CheckBoxMultipleChoice<String>("statusArquivos", new Model<ArrayList<String>>(statusSelect),choices);
+	}
+	
+	public TextField<String> campoDataEnvio() {
+		return dataEnvio = new TextField<String>("dataEnvio");
 	}
 
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(arquivo);
 	}
-
 }

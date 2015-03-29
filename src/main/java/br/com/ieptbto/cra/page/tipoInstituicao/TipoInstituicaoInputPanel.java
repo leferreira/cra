@@ -66,7 +66,6 @@ public class TipoInstituicaoInputPanel extends Panel {
 				String tipo = (String)nomeTipo.getDefaultModelObject();
 				tipoInstituicao.setTipoInstituicao(tipo);
 				List<String> tiposArquivos = (List<String>) tipoPermitidos.getDefaultModelObject();
-				
 				//[B, CP, DP]
 				try {
 					if (tipoInstituicao.getId() != 0) {
