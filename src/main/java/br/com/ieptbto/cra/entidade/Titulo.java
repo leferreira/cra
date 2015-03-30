@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.entidade;
 
 import java.beans.Transient;
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,11 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.envers.Audited;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.enumeration.TipoRegistro;
 
@@ -50,8 +48,8 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	private String nossoNumero;
 	private String especieTitulo;
 	private String numeroTitulo;
-	private Date dataEmissaoTitulo; // As datas são passada assim: DDMMAAAA
-	private Date dataVencimentoTitulo;
+	private LocalDate dataEmissaoTitulo; // As datas são passada assim: DDMMAAAA
+	private LocalDate dataVencimentoTitulo;
 	private String tipoMoeda;
 	private BigDecimal valorTitulo;
 	private BigDecimal saldoTitulo;
@@ -70,10 +68,10 @@ public class Titulo extends AbstractEntidade<Titulo> {
 	private Integer codigoCartorio;
 	private String numeroProtocoloCartorio;
 	private String tipoOcorrencia;
-	private Date dataProtocolo;
+	private LocalDate dataProtocolo;
 	private BigDecimal valorCustaCartorio;
 	private String declaracaoPortador;
-	private Date dataOcorrencia;
+	private LocalDate dataOcorrencia;
 	private String codigoIrregularidade;
 	private String bairroDevedor;
 	private BigDecimal valorCustasCartorioDistribuidor;
@@ -108,7 +106,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return identificacaoRegistro;
 	}
 
-	@Column(name = "CODIGO_PORTADOR", length = 3, unique = true, nullable = false)
+	@Column(name = "CODIGO_PORTADOR", length = 3, nullable = false)
 	public String getCodigoPortador() {
 		return codigoPortador;
 	}
@@ -153,7 +151,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return ufSacadorVendedor;
 	}
 
-	@Column(name = "NOSSO_NUMERO", unique = true, nullable = false)
+	@Column(name = "NOSSO_NUMERO", nullable = false)
 	public String getNossoNumero() {
 		return nossoNumero;
 	}
@@ -163,20 +161,18 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return especieTitulo;
 	}
 
-	@Column(name = "NUMERO_TITULO", unique = true, nullable = false)
+	@Column(name = "NUMERO_TITULO", nullable = false)
 	public String getNumeroTitulo() {
 		return numeroTitulo;
 	}
 
-	@Column(name = "DATA_EMISSAO", columnDefinition = "timestamp without time zone NOT NULL")
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getDataEmissaoTitulo() {
+	@Column(name = "DATA_EMISSAO", columnDefinition = "date NOT NULL")
+	public LocalDate getDataEmissaoTitulo() {
 		return dataEmissaoTitulo;
 	}
 
-	@Column(name = "DATA_VENCIMENTO", columnDefinition = "timestamp without time zone NOT NULL")
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getDataVencimentoTitulo() {
+	@Column(name = "DATA_VENCIMENTO", columnDefinition = "date NOT NULL")
+	public LocalDate getDataVencimentoTitulo() {
 		return dataVencimentoTitulo;
 	}
 
@@ -270,9 +266,8 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return tipoOcorrencia;
 	}
 
-	@Column(name = "DATA_PROTOCOLO", columnDefinition = "timestamp without time zone NOT NULL")
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getDataProtocolo() {
+	@Column(name = "DATA_PROTOCOLO", columnDefinition = "date NOT NULL")
+	public LocalDate getDataProtocolo() {
 		return dataProtocolo;
 	}
 
@@ -286,9 +281,8 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return declaracaoPortador;
 	}
 
-	@Column(name = "DATA_OCORRENCIA", columnDefinition = "timestamp without time zone NOT NULL")
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getDataOcorrencia() {
+	@Column(name = "DATA_OCORRENCIA", columnDefinition = "date NOT NULL")
+	public LocalDate getDataOcorrencia() {
 		return dataOcorrencia;
 	}
 
@@ -427,11 +421,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.numeroTitulo = numeroTitulo;
 	}
 
-	public void setDataEmissaoTitulo(Date dataEmissaoTitulo) {
+	public void setDataEmissaoTitulo(LocalDate dataEmissaoTitulo) {
 		this.dataEmissaoTitulo = dataEmissaoTitulo;
 	}
 
-	public void setDataVencimentoTitulo(Date dataVencimentoTitulo) {
+	public void setDataVencimentoTitulo(LocalDate dataVencimentoTitulo) {
 		this.dataVencimentoTitulo = dataVencimentoTitulo;
 	}
 
@@ -507,7 +501,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.tipoOcorrencia = tipoOcorrencia;
 	}
 
-	public void setDataProtocolo(Date dataProtocolo) {
+	public void setDataProtocolo(LocalDate dataProtocolo) {
 		this.dataProtocolo = dataProtocolo;
 	}
 
@@ -519,7 +513,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.declaracaoPortador = declaracaoPortador;
 	}
 
-	public void setDataOcorrencia(Date dataOcorrencia) {
+	public void setDataOcorrencia(LocalDate dataOcorrencia) {
 		this.dataOcorrencia = dataOcorrencia;
 	}
 

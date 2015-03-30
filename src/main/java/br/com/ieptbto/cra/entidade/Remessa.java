@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.entidade;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -14,10 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
+import org.joda.time.LocalDateTime;
 
 /**
  * @author Thasso Araújo
@@ -34,7 +32,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 
 	private int id;
 	private Arquivo arquivo;
-	private Date dataRecebimento;
+	private LocalDateTime dataRecebimento;
 	private Instituicao instituicaoDestino;
 	private List<Titulo> titulos;
 	private Cabecalho cabecalho;
@@ -54,8 +52,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	}
 
 	@Column(name = "DATA_RECEBIMENTO", columnDefinition = "timestamp without time zone")
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getDataRecebimento() {
+	public LocalDateTime getDataRecebimento() {
 		return dataRecebimento;
 	}
 
@@ -94,7 +91,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		this.titulos = titulos;
 	}
 
-	public void setDataRecebimento(Date dataRecebimento) {
+	public void setDataRecebimento(LocalDateTime dataRecebimento) {
 		this.dataRecebimento = dataRecebimento;
 	}
 

@@ -68,7 +68,7 @@ public class ArquivoDAO extends AbstractBaseDAO {
 		return arquivoSalvo;
 
 	}
-	
+
 	public StatusArquivo buscarStatusArquivo(SituacaoArquivo situacao) {
 		Criteria criteria = getCriteria(StatusArquivo.class);
 		criteria.add(Restrictions.eq("situacaoArquivo", situacao));

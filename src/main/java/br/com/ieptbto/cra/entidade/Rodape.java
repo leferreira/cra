@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
+import org.joda.time.LocalDateTime;
 
 import br.com.ieptbto.cra.enumeration.TipoRegistro;
 
@@ -35,7 +36,7 @@ public class Rodape extends AbstractEntidade<Rodape> {
 	private TipoRegistro identificacaoRegistro;
 	private String numeroCodigoPortador;
 	private String nomePortador;
-	private String dataMovimento;
+	private LocalDateTime dataMovimento;
 	private BigDecimal somatorioQtdRemessa;
 	private BigDecimal somatorioValorRemessa;
 	private String complementoRegistro;
@@ -74,8 +75,8 @@ public class Rodape extends AbstractEntidade<Rodape> {
 		return nomePortador;
 	}
 
-	@Column(name = "DATA_MOVIMENTO")
-	public String getDataMovimento() {
+	@Column(name = "DATA_MOVIMENTO", columnDefinition = "timestamp without time zone NOT NULL")
+	public LocalDateTime getDataMovimento() {
 		return dataMovimento;
 	}
 
@@ -119,7 +120,7 @@ public class Rodape extends AbstractEntidade<Rodape> {
 		this.nomePortador = nomePortador;
 	}
 
-	public void setDataMovimento(String dataMovimento) {
+	public void setDataMovimento(LocalDateTime dataMovimento) {
 		this.dataMovimento = dataMovimento;
 	}
 

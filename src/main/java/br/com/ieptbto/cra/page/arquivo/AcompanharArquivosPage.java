@@ -52,7 +52,6 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 	private ArquivoMediator arquivoMediator;
 	@SpringBean
 	private TipoArquivoMediator tipoMediator;
-	
 
 	private Arquivo arquivo;
 	private Usuario user;
@@ -88,7 +87,7 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 				signal = true;
 			}
 		};
-		
+
 		adicionarFiltros(formFilters);
 		divTable = adicionarTableArquivos();
 		add(divTable);
@@ -104,7 +103,6 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 		form.add(comboTipoArquivos());
 		form.add(comboStatus());
 	}
-
 
 	/***
 	 * Criando tabela de remessas de arquivos
@@ -123,14 +121,13 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 
 	@SuppressWarnings("serial")
 	private PageableListView<Remessa> getListaViewArquivos() {
-		return new PageableListView<Remessa>("listViewArquivos",
-				buscarListaRemessas(), 10) {
+		return new PageableListView<Remessa>("listViewArquivos", buscarListaRemessas(), 10) {
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				Remessa remessa = item.getModelObject();
 				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
 				item.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
-				item.add(new Label("dataEnvio", DataUtil.formatarData(remessa.getArquivo().getDataEnvio())));
+				item.add(new Label("dataEnvio", DataUtil.localDateTimeToString(remessa.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
 				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
@@ -171,14 +168,14 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 		for (TipoArquivoEnum tipo : enumLista) {
 			choices.add(tipo.constante);
 		}
-		return new CheckBoxMultipleChoice<String>("tipoArquivos", new Model<ArrayList<String>>(tiposSelect),choices);
+		return new CheckBoxMultipleChoice<String>("tipoArquivos", new Model<ArrayList<String>>(tiposSelect), choices);
 	}
-	
+
 	public Component comboStatus() {
 		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] { "Aguardando", "Enviado", "Recebido" }));
-		return new CheckBoxMultipleChoice<String>("statusArquivos", new Model<ArrayList<String>>(statusSelect),choices);
+		return new CheckBoxMultipleChoice<String>("statusArquivos", new Model<ArrayList<String>>(statusSelect), choices);
 	}
-	
+
 	public TextField<String> campoDataEnvio() {
 		return dataEnvio = new TextField<String>("dataEnvio");
 	}

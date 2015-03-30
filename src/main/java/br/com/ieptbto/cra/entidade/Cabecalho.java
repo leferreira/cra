@@ -1,7 +1,5 @@
 package br.com.ieptbto.cra.entidade;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,10 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
+import org.joda.time.LocalDateTime;
 
 import br.com.ieptbto.cra.enumeration.TipoRegistro;
 
@@ -35,7 +32,7 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 	private TipoRegistro identificacaoRegistro;
 	private String numeroCodigoPortador;
 	private String nomePortador;
-	private Date dataMovimento;
+	private LocalDateTime dataMovimento;
 	private String identificacaoTransacaoRemetente;
 	private String identificacaoTransacaoDestinatario;
 	private String identificacaoTransacaoTipo;
@@ -79,8 +76,7 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 	}
 
 	@Column(name = "DATA_MOVIMENTO", columnDefinition = "timestamp without time zone NOT NULL")
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getDataMovimento() {
+	public LocalDateTime getDataMovimento() {
 		return dataMovimento;
 	}
 
@@ -169,7 +165,7 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 		this.nomePortador = nomePortador;
 	}
 
-	public void setDataMovimento(Date dataMovimento) {
+	public void setDataMovimento(LocalDateTime dataMovimento) {
 		this.dataMovimento = dataMovimento;
 	}
 

@@ -1,7 +1,5 @@
 package br.com.ieptbto.cra.page.arquivo;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -14,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
+import org.joda.time.LocalDateTime;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -44,7 +43,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		arquivo = new Arquivo();
 		arquivo.setInstituicaoEnvio(getUser().getInstituicao());
 		arquivo.setUsuarioEnvio(getUser());
-		arquivo.setDataEnvio(new Date());
+		arquivo.setDataEnvio(new LocalDateTime());
 
 		form = new Form<Arquivo>("form", getModel()) {
 			/****/

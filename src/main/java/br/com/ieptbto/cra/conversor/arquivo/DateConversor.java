@@ -22,7 +22,7 @@ public class DateConversor extends AbstractConversor<LocalDate> {
 		String formato = getAnotacaoAtributo().formato();
 		try {
 			if (StringUtils.isBlank(formato)) {
-				return DataUtil.stringToLocalDate(DataUtil.PADRAO_FORMATACAO_DATA_YYYYMMDD, valor);
+				return DataUtil.stringToLocalDate(DataUtil.PADRAO_FORMATACAO_DATA_DDMMYYYY, valor);
 			}
 			return DataUtil.stringToLocalDate(formato, valor);
 		} catch (IllegalArgumentException e) {

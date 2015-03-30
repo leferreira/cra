@@ -36,10 +36,10 @@ public class DataUtil implements Serializable {
 	public static final String PADRAO_FORMATACAO_DATA = "dd/MM/yyyy";
 
 	/** Pattern padrao para formatacao de data. */
-	public static final String PADRAO_FORMATACAO_DATA_YYYYMMDD = "yyyyMMdd";
+	public static final String PADRAO_FORMATACAO_DATA_DDMMYYYY = "ddMMyyyy";
 
 	/** Formato padr�o para data */
-	public static final String FORMATO_DATA_PADRAO_REGISTRO = PADRAO_FORMATACAO_DATA_YYYYMMDD;
+	public static final String FORMATO_DATA_PADRAO_REGISTRO = PADRAO_FORMATACAO_DATA_DDMMYYYY;
 
 	/**
 	 * Cria um {@link LocalDate} a partir de uma {@link String} no formato
@@ -139,7 +139,7 @@ public class DataUtil implements Serializable {
 
 	/**
 	 * Cria um {@link String} a partir de uma {@link LocalDate} no formato
-	 * {@link #PADRAO_FORMATACAO_DATA_YYYYMMDD}.
+	 * {@link #PADRAO_FORMATACAO_DATA_DDMMYYYY}.
 	 * 
 	 * @param data
 	 *            data a ser transformada
@@ -147,7 +147,7 @@ public class DataUtil implements Serializable {
 	 */
 
 	public static String localDateToStringyyyyMMdd(LocalDate data) {
-		return data.toString(getDateTimeFormatter(PADRAO_FORMATACAO_DATA_YYYYMMDD));
+		return data.toString(getDateTimeFormatter(PADRAO_FORMATACAO_DATA_DDMMYYYY));
 	}
 
 	/**
