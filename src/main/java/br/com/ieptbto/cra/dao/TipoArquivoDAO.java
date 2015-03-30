@@ -8,7 +8,6 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
@@ -22,7 +21,6 @@ import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 @Repository
 public class TipoArquivoDAO extends AbstractBaseDAO {
 
-	@Transactional(readOnly = true)
 	public TipoArquivo salvar(TipoArquivo tipoArquivo) {
 		TipoArquivo novo = new TipoArquivo();
 		Transaction transaction = getBeginTransation();
@@ -35,7 +33,6 @@ public class TipoArquivoDAO extends AbstractBaseDAO {
 		return novo;
 	}
 
-	@Transactional(readOnly = true)
 	public TipoArquivo alterar(TipoArquivo tipoArquivo) {
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();

@@ -9,7 +9,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
@@ -27,11 +26,9 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 	@Autowired
 	MunicipioDAO municipioDAO;
 
-	@Transactional(readOnly = true)
 	public Instituicao salvar(Instituicao instituicao) {
 		Instituicao nova = new Instituicao();
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
+		Transaction transaction = getBeginTransation();
 		try {
 			nova = save(instituicao);
 
@@ -45,13 +42,12 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		return nova;
 	}
 
-	@Transactional(readOnly = true)
 	public Instituicao alterar(Instituicao instituicao) {
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.update(instituicao);
-			
+
 			transaction.commit();
 			logger.info(instituicao.getTipoInstituicao().getTipoInstituicao() + " foi alterado na base de dados. ");
 		} catch (Exception ex) {
@@ -66,10 +62,8 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		Criteria criteria = getCriteria(Instituicao.class);
 		criteria.createAlias("tipoInstituicao", "t");
 		criteria.createAlias("municipio", "m");
-		
-		criteria.add(Restrictions.and(
-				Restrictions.eq("t.tipoInstituicao", "Cartório"), 
-				Restrictions.eq("m.nomeMunicipio", nomeMunicipio)));
+
+		criteria.add(Restrictions.and(Restrictions.eq("t.tipoInstituicao", "Cartório"), Restrictions.eq("m.nomeMunicipio", nomeMunicipio)));
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 

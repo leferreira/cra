@@ -11,7 +11,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 
@@ -46,8 +45,7 @@ public class UsuarioDAO extends AbstractBaseDAO {
 			usuario.setSenha(Usuario.cryptPass("teste1234"));
 			usuario.setContato("99999999");
 			usuario.setStatus(true);
-			usuario.setGrupoUsuario(grupoUsuarioDAO
-					.buscarGrupoInicial("Super Administrador"));
+			usuario.setGrupoUsuario(grupoUsuarioDAO.buscarGrupoInicial("Super Administrador"));
 			usuario.setInstituicao(instituicaoDAO.buscarInstituicao("CRA"));
 			save(usuario);
 			transaction.commit();
@@ -57,7 +55,6 @@ public class UsuarioDAO extends AbstractBaseDAO {
 		}
 	}
 
-	@Transactional(readOnly = true)
 	public Usuario criarUsuario(Usuario usuario) {
 		Usuario novoUsuario = new Usuario();
 		Session session = getSession();
@@ -74,7 +71,6 @@ public class UsuarioDAO extends AbstractBaseDAO {
 		return novoUsuario;
 	}
 
-	@Transactional(readOnly = true)
 	public Usuario alterar(Usuario usuario) {
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();

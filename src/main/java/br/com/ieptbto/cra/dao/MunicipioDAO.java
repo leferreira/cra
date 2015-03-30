@@ -9,14 +9,12 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.Municipio;
 
 @Repository
 public class MunicipioDAO extends AbstractBaseDAO {
 
-	// @Transactional(readOnly = true)
 	public Municipio salvar(Municipio municipio) {
 		Municipio novoMunicipio = new Municipio();
 		Transaction transaction = getBeginTransation();
@@ -29,7 +27,6 @@ public class MunicipioDAO extends AbstractBaseDAO {
 		return novoMunicipio;
 	}
 
-	@Transactional(readOnly = true)
 	public Municipio alterar(Municipio municipio) {
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();

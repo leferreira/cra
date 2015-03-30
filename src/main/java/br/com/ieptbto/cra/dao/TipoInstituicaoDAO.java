@@ -10,19 +10,17 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 
 @Repository
 public class TipoInstituicaoDAO extends AbstractBaseDAO {
 
-	@Transactional(readOnly = true)
 	public TipoInstituicao salvar(TipoInstituicao tipoInstituicao) {
 		TipoInstituicao novo = new TipoInstituicao();
 		Transaction transaction = getBeginTransation();
 		try {
-			novo = save(tipoInstituicao);	
+			novo = save(tipoInstituicao);
 			transaction.commit();
 		} catch (Exception ex) {
 			transaction.rollback();
@@ -30,7 +28,6 @@ public class TipoInstituicaoDAO extends AbstractBaseDAO {
 		return novo;
 	}
 
-	@Transactional(readOnly = true)
 	public TipoInstituicao alterar(TipoInstituicao tipo) {
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
@@ -61,7 +58,7 @@ public class TipoInstituicaoDAO extends AbstractBaseDAO {
 	@SuppressWarnings("unchecked")
 	public List<TipoInstituicao> buscarListaTipoInstituicao() {
 		Criteria criteria = getCriteria(TipoInstituicao.class);
-		criteria.add(Restrictions.ne("tipoInstituicao","Cartório"));
+		criteria.add(Restrictions.ne("tipoInstituicao", "Cartório"));
 		criteria.addOrder(Order.asc("tipoInstituicao"));
 		return criteria.list();
 	}
@@ -72,12 +69,11 @@ public class TipoInstituicaoDAO extends AbstractBaseDAO {
 		criteria.addOrder(Order.asc("tipoInstituicao"));
 		return criteria.list();
 	}
-	
+
 	public TipoInstituicao buscarTipoInstituicao(String tipoInstituicao) {
 		Criteria criteria = getCriteria(TipoInstituicao.class);
 		if (StringUtils.isNotBlank(tipoInstituicao)) {
-			criteria.add(Restrictions.like("tipoInstituicao", tipoInstituicao,
-					MatchMode.ANYWHERE));
+			criteria.add(Restrictions.like("tipoInstituicao", tipoInstituicao, MatchMode.ANYWHERE));
 		}
 		criteria.addOrder(Order.asc("tipoInstituicao"));
 		return TipoInstituicao.class.cast(criteria.uniqueResult());
