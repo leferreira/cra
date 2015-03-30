@@ -166,12 +166,12 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return numeroTitulo;
 	}
 
-	@Column(name = "DATA_EMISSAO", columnDefinition = "date NOT NULL")
+	@Column(name = "DATA_EMISSAO")
 	public LocalDate getDataEmissaoTitulo() {
 		return dataEmissaoTitulo;
 	}
 
-	@Column(name = "DATA_VENCIMENTO", columnDefinition = "date NOT NULL")
+	@Column(name = "DATA_VENCIMENTO")
 	public LocalDate getDataVencimentoTitulo() {
 		return dataVencimentoTitulo;
 	}
@@ -266,7 +266,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return tipoOcorrencia;
 	}
 
-	@Column(name = "DATA_PROTOCOLO", columnDefinition = "date NOT NULL")
+	@Column(name = "DATA_PROTOCOLO")
 	public LocalDate getDataProtocolo() {
 		return dataProtocolo;
 	}
@@ -281,7 +281,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return declaracaoPortador;
 	}
 
-	@Column(name = "DATA_OCORRENCIA", columnDefinition = "date NOT NULL")
+	@Column(name = "DATA_OCORRENCIA")
 	public LocalDate getDataOcorrencia() {
 		return dataOcorrencia;
 	}

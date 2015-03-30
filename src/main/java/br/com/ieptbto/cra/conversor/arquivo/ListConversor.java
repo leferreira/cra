@@ -29,7 +29,7 @@ public class ListConversor extends AbstractConversor<List<?>> {
 		while (StringUtils.isNotBlank(StringUtils.substring(valor, posicaoInicial, posicaoFinal))) {
 			Class<?> listType = getAnotacaoAtributo().tipo();
 			Object valorConvertido = FabricaConversor.getValorConvertido(listType,
-			        StringUtils.substring(valor, posicaoInicial, posicaoFinal));
+			        StringUtils.substring(valor, posicaoInicial, posicaoFinal), null, null);
 			if (valorConvertido instanceof String) {
 				valorConvertido = StringUtils.trim((String) valorConvertido);
 			}

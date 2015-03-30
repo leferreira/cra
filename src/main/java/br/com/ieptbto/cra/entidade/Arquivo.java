@@ -64,7 +64,7 @@ public class Arquivo extends AbstractEntidade<Arquivo> {
 		return path;
 	}
 
-	@Column(name = "DATA_ENVIO", columnDefinition = "timestamp without time zone NOT NULL")
+	@Column(name = "DATA_ENVIO")
 	public LocalDateTime getDataEnvio() {
 		return dataEnvio;
 	}

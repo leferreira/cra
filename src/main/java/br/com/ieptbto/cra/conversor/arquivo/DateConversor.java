@@ -19,14 +19,13 @@ public class DateConversor extends AbstractConversor<LocalDate> {
 	 */
 	@Override
 	public LocalDate getValorConvertido(String valor) {
-		String formato = getAnotacaoAtributo().formato();
 		try {
-			if (StringUtils.isBlank(formato)) {
-				return DataUtil.stringToLocalDate(DataUtil.PADRAO_FORMATACAO_DATA_DDMMYYYY, valor);
-			}
-			return DataUtil.stringToLocalDate(formato, valor);
+			return DataUtil.stringToLocalDate(DataUtil.PADRAO_FORMATACAO_DATA_DDMMYYYY, valor);
 		} catch (IllegalArgumentException e) {
-			throw new ConvertException(ErroConversao.CONVERSAO_DATE, e, getFieldName());
+			if (getAnotacaoAtributo().obrigatoriedade()) {
+				throw new ConvertException(ErroConversao.CONVERSAO_DATE, e, getFieldName());
+			}
+			return null;
 		}
 	}
 

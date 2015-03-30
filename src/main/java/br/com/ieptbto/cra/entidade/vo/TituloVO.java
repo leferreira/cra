@@ -71,7 +71,7 @@ public class TituloVO extends AbstractArquivoVO {
 	private String dataEmissaoTitulo;
 
 	@XmlAttribute(name = "t15")
-	@IAtributoArquivo(ordem = 15, posicao = 236, tamanho = 8, descricao = "Identificar a data do vencimento do título, no formato DDMMAAA. Para vencimentos à vista preencher com 99999999.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 15, posicao = 236, tamanho = 8, descricao = "Identificar a data do vencimento do título, no formato DDMMAAA. Para vencimentos à vista preencher com 99999999.", obrigatoriedade = false)
 	private String dataVencimentoTitulo;
 
 	@XmlAttribute(name = "t16")
@@ -149,7 +149,7 @@ public class TituloVO extends AbstractArquivoVO {
 	private String tipoOcorrencia;
 
 	@XmlAttribute(name = "t34")
-	@IAtributoArquivo(ordem = 34, posicao = 459, tamanho = 8, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 34, posicao = 459, tamanho = 8, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = false)
 	private String dataProtocolo;
 
 	@XmlAttribute(name = "t35")
@@ -161,7 +161,7 @@ public class TituloVO extends AbstractArquivoVO {
 	private String declaracaoPortador;
 
 	@XmlAttribute(name = "t37")
-	@IAtributoArquivo(ordem = 37, posicao = 478, tamanho = 8, descricao = "", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 37, posicao = 478, tamanho = 8, descricao = "", obrigatoriedade = false)
 	private String dataOcorrencia;
 
 	@XmlAttribute(name = "t38")

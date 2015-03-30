@@ -58,14 +58,15 @@ public abstract class AbstractConversorArquivo<R extends AbstractArquivoVO, E ex
 			if (propertyAccessEntidadeVO.isReadableProperty(propertyName) && propertyAccessEntidade.isWritableProperty(propertyName)) {
 				String valor = String.class.cast(propertyAccessEntidadeVO.getPropertyValue(propertyName));
 				Class<?> propertyType = propertyAccessEntidade.getPropertyType(propertyName);
-				propertyAccessEntidade.setPropertyValue(propertyName, getValorTipado(valor, propertyType));
+				propertyAccessEntidade.setPropertyValue(propertyName,
+				        getValorTipado(valor, propertyType, entidadeVO, new CampoArquivo(propertyName, entidadeVO.getClass())));
 			}
 		}
 
 		return arquivo;
 	}
 
-	private Object getValorTipado(String valor, Class<?> propertyType) {
-		return FabricaConversor.getValorConvertido(propertyType, valor);
+	private Object getValorTipado(String valor, Class<?> propertyType, R entidadeVO, CampoArquivo campoArquivo) {
+		return FabricaConversor.getValorConvertido(propertyType, valor, entidadeVO, campoArquivo);
 	}
 }

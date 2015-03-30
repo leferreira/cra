@@ -16,14 +16,13 @@ public class DateTimeConversor extends AbstractConversor<LocalDateTime> {
 
 	@Override
 	public LocalDateTime getValorConvertido(String valor) throws ConvertException {
-		String formato = getAnotacaoAtributo().formato();
 		try {
-			if (StringUtils.isBlank(formato)) {
-				return DataUtil.stringToLocalDateTime(DataUtil.PADRAO_FORMATACAO_DATAHORASEG, valor);
-			}
-			return DataUtil.stringToLocalDateTime(formato, valor);
+			return DataUtil.stringToLocalDateTime(DataUtil.PADRAO_FORMATACAO_DATAHORASEG, valor);
 		} catch (IllegalArgumentException e) {
-			throw new ConvertException(ErroConversao.CONVERSAO_DATE, e, getFieldName());
+			if (getAnotacaoAtributo().obrigatoriedade()) {
+				throw new ConvertException(ErroConversao.CONVERSAO_DATE, e, getFieldName());
+			}
+			return null;
 		}
 	}
 

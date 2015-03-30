@@ -2,6 +2,8 @@ package br.com.ieptbto.cra.conversor.arquivo;
 
 import java.lang.reflect.Field;
 
+import org.apache.commons.lang.reflect.FieldUtils;
+
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
 
 /**
@@ -22,6 +24,10 @@ public class CampoArquivo {
 	public CampoArquivo(Field field) {
 		this.field = field;
 		this.anotacaoAtributo = field.getAnnotation(IAtributoArquivo.class);
+	}
+
+	public CampoArquivo(String field, Class<?> cls) {
+		this(FieldUtils.getField(cls, field, true));
 	}
 
 	/**

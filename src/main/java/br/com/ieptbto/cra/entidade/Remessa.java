@@ -51,7 +51,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return arquivo;
 	}
 
-	@Column(name = "DATA_RECEBIMENTO", columnDefinition = "timestamp without time zone")
+	@Column(name = "DATA_RECEBIMENTO")
 	public LocalDateTime getDataRecebimento() {
 		return dataRecebimento;
 	}

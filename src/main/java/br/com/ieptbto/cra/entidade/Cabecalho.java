@@ -9,7 +9,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
-import org.joda.time.LocalDateTime;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.enumeration.TipoRegistro;
 
@@ -32,7 +32,7 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 	private TipoRegistro identificacaoRegistro;
 	private String numeroCodigoPortador;
 	private String nomePortador;
-	private LocalDateTime dataMovimento;
+	private LocalDate dataMovimento;
 	private String identificacaoTransacaoRemetente;
 	private String identificacaoTransacaoDestinatario;
 	private String identificacaoTransacaoTipo;
@@ -75,8 +75,8 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 		return nomePortador;
 	}
 
-	@Column(name = "DATA_MOVIMENTO", columnDefinition = "timestamp without time zone NOT NULL")
-	public LocalDateTime getDataMovimento() {
+	@Column(name = "DATA_MOVIMENTO")
+	public LocalDate getDataMovimento() {
 		return dataMovimento;
 	}
 
@@ -165,7 +165,7 @@ public class Cabecalho extends AbstractEntidade<Cabecalho> {
 		this.nomePortador = nomePortador;
 	}
 
-	public void setDataMovimento(LocalDateTime dataMovimento) {
+	public void setDataMovimento(LocalDate dataMovimento) {
 		this.dataMovimento = dataMovimento;
 	}
 

@@ -23,7 +23,7 @@ public class CabecalhoVO extends AbstractArquivoVO {
 	private String nomePortador;
 
 	@XmlAttribute(name = "t04")
-	@IAtributoArquivo(ordem = 4, posicao = 45, tamanho = 8, descricao = "Identificar a data de envio da Remessa ao serviço de distribuição, no formato DDMMAAAA.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 4, posicao = 45, tamanho = 8, formato = "ddMMyyyy HH:mm:ss", descricao = "Identificar a data de envio da Remessa ao serviço de distribuição, no formato DDMMAAAA.", obrigatoriedade = true)
 	private String dataMovimento;
 
 	@XmlAttribute(name = "t05")

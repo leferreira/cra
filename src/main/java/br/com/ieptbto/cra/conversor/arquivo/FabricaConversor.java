@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 import br.com.ieptbto.cra.enumeration.CraEnum;
@@ -27,6 +28,7 @@ public class FabricaConversor {
 		map.put(Integer.class, IntegerConversor.class);
 		map.put(String.class, StringConversor.class);
 		map.put(LocalDate.class, DateConversor.class);
+		map.put(LocalDateTime.class, DateTimeConversor.class);
 		map.put(List.class, ListConversor.class);
 		map.put(BigDecimal.class, BigDecimalConversor.class);
 		map.put(Enum.class, EnumConversor.class);
@@ -90,8 +92,10 @@ public class FabricaConversor {
 	 * @param valor
 	 * @return
 	 */
-	public static Object getValorConvertido(Class<?> propertyType, String valor) {
+	public static Object getValorConvertido(Class<?> propertyType, String valor, AbstractArquivoVO entidade, CampoArquivo campoArquivo) {
 		AbstractConversor<?> conversor = getConversor(propertyType);
+		conversor.setArquivo(entidade);
+		conversor.setCampoArquivo(campoArquivo);
 		return conversor.getValorConvertido(valor, propertyType);
 	}
 }
