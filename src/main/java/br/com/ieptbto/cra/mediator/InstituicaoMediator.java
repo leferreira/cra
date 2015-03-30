@@ -58,13 +58,19 @@ public class InstituicaoMediator {
 
 	/**
 	 * Busca as Instituicões ativas
-	 * 
 	 */
 	public List<Instituicao> listaDeInstituicoesAtivas() {
 		List<Instituicao> lista = instituicaoDAO.buscarListaInstituicaoAtivas();
 		return lista;
 	}
 
+	/**
+	 * Buscar todos os cartórios e instituicao cadastrados
+	 */
+	public List<Instituicao> buscarCartoriosInstituicoes(){
+		return instituicaoDAO.buscarCartoriosInstituicoes();
+	}
+	
 	/**
 	 * Busca todas as Instituicões ativas ou não, menos cartórios.
 	 * 
