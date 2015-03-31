@@ -145,7 +145,7 @@ public class TituloVO extends AbstractArquivoVO {
 	private String numeroProtocoloCartorio;
 
 	@XmlAttribute(name = "t33")
-	@IAtributoArquivo(ordem = 33, posicao = 458, tamanho = 1, descricao = "Uso restrito do serviço de distribuição.Preencher com brancos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 33, posicao = 458, tamanho = 1, descricao = "Uso restrito do serviço de distribuição.Preencher com brancos.", obrigatoriedade = false)
 	private String tipoOcorrencia;
 
 	@XmlAttribute(name = "t34")
@@ -177,51 +177,51 @@ public class TituloVO extends AbstractArquivoVO {
 	private String valorCustasCartorioDistribuidor;
 
 	@XmlAttribute(name = "t41")
-	@IAtributoArquivo(ordem = 41, posicao = 518, tamanho = 6, descricao = "Uso restrito do 7º Ofício do Rio de Janeiro. Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 41, posicao = 518, tamanho = 6, descricao = "Uso restrito do 7º Ofício do Rio de Janeiro. Preencher com zeros.", obrigatoriedade = false, formato = "000000")
 	private String registroDistribuicao;
 
 	@XmlAttribute(name = "t42")
-	@IAtributoArquivo(ordem = 42, posicao = 524, tamanho = 10, descricao = "Uso restrito da Centralizadora de Rmessas de Arquivos (CRA). Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 42, posicao = 524, tamanho = 10, descricao = "Uso restrito da Centralizadora de Rmessas de Arquivos (CRA). Preencher com zeros.", obrigatoriedade = false, formato = "0000000000")
 	private String valorGravacaoEletronica;
 
 	@XmlAttribute(name = "t43")
-	@IAtributoArquivo(ordem = 43, posicao = 534, tamanho = 5, descricao = "Identificar o número da operação - exclusivo para protesto de letra de câmbio. Os bancos que não usarem devem preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 43, posicao = 534, tamanho = 5, descricao = "Identificar o número da operação - exclusivo para protesto de letra de câmbio. Os bancos que não usarem devem preencher com zeros.", obrigatoriedade = false)
 	private String numeroOperacaoBanco;
 
 	@XmlAttribute(name = "t44")
-	@IAtributoArquivo(ordem = 44, posicao = 539, tamanho = 15, descricao = "Identificar o número do contrato - exclusivo para protesto de letra de câmbio.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 44, posicao = 539, tamanho = 15, descricao = "Identificar o número do contrato - exclusivo para protesto de letra de câmbio.", obrigatoriedade = false)
 	private String numeroContratoBanco;
 
 	@XmlAttribute(name = "t45")
-	@IAtributoArquivo(ordem = 45, posicao = 554, tamanho = 3, descricao = "Identificar o número de parcelas do contrato - exclusivo para protesto de letra de câmbio.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 45, posicao = 554, tamanho = 3, descricao = "Identificar o número de parcelas do contrato - exclusivo para protesto de letra de câmbio.", obrigatoriedade = false)
 	private String numeroParcelaContrato;
 
 	@XmlAttribute(name = "t46")
-	@IAtributoArquivo(ordem = 46, posicao = 557, tamanho = 1, descricao = "Identificar o logotipo do banco na letra de câmbio, quando existir mais bancos no conglomerado.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 46, posicao = 557, tamanho = 1, descricao = "Identificar o logotipo do banco na letra de câmbio, quando existir mais bancos no conglomerado.", obrigatoriedade = false)
 	private String tipoLetraCambio;
 
 	@XmlAttribute(name = "t47")
-	@IAtributoArquivo(ordem = 47, posicao = 558, tamanho = 8, descricao = "Uso restrito do serviço de distribuição. Preencher com bancos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 47, posicao = 558, tamanho = 8, descricao = "Uso restrito do serviço de distribuição. Preencher com bancos.", obrigatoriedade = false)
 	private String complementoCodigoIrregularidade;
 
 	@XmlAttribute(name = "t48")
-	@IAtributoArquivo(ordem = 48, posicao = 566, tamanho = 1, descricao = "Informar ao cartório se o título será protestado para fins falimentares.Preencher com a letra 'F',caso contrario brancos. ", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 48, posicao = 566, tamanho = 1, descricao = "Informar ao cartório se o título será protestado para fins falimentares.Preencher com a letra 'F',caso contrario brancos. ", obrigatoriedade = false)
 	private String protestoMotivoFalencia;
 
 	@XmlAttribute(name = "t49")
-	@IAtributoArquivo(ordem = 49, posicao = 567, tamanho = 1, descricao = "Informar a letra 'I' para solicitação ao cartório a emissão da 2ª via do Instrumento de Protesto.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 49, posicao = 567, tamanho = 1, descricao = "Informar a letra 'I' para solicitação ao cartório a emissão da 2ª via do Instrumento de Protesto.", obrigatoriedade = false)
 	private String instrumentoProtesto;
 
 	@XmlAttribute(name = "t50")
-	@IAtributoArquivo(ordem = 50, posicao = 568, tamanho = 10, descricao = "Uso restrito dos cartórios. Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 50, posicao = 568, tamanho = 10, descricao = "Uso restrito dos cartórios. Preencher com zeros.", obrigatoriedade = false)
 	private String valorDemaisDespesas;
 
 	@XmlAttribute(name = "t51")
-	@IAtributoArquivo(ordem = 51, posicao = 578, tamanho = 19, descricao = "Espaço reservado para futuras implementações. Preencher com brancos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 51, posicao = 578, tamanho = 19, descricao = "Espaço reservado para futuras implementações. Preencher com brancos.", obrigatoriedade = false)
 	private String complementoRegistro;
 
 	@XmlAttribute(name = "t52")
-	@IAtributoArquivo(ordem = 52, posicao = 597, tamanho = 4, descricao = "Número sequêncial do registro do arquivo, independente da quantidade de praças dentro do arquivo.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 52, posicao = 597, tamanho = 4, descricao = "Número sequêncial do registro do arquivo, independente da quantidade de praças dentro do arquivo.", obrigatoriedade = false)
 	private String numeroSequencialArquivo;
 
 	public String getIdentificacaoRegistro() {

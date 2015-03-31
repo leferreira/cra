@@ -20,7 +20,11 @@ public class IntegerConversor extends AbstractConversor<Integer> {
 		try {
 			return Integer.valueOf(valor);
 		} catch (NumberFormatException e) {
-			throw new ConvertException(ErroConversao.CONVERSAO_INTEGER, e, getFieldName());
+			getArquivo();
+			if (getAnotacaoAtributo().obrigatoriedade()) {
+				throw new ConvertException(ErroConversao.CONVERSAO_INTEGER, e, getFieldName());
+			}
+			return null;
 		}
 	}
 
