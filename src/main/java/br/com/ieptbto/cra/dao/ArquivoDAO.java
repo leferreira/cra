@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -49,7 +50,8 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				remessa.setCabecalho(save(remessa.getCabecalho()));
 				remessa.setRodape(save(remessa.getRodape()));
 				remessa.setArquivo(arquivoSalvo);
-				remessa.setDataRecebimento(arquivoSalvo.getDataEnvio());
+				//remessa.setDataRecebimento(arquivoSalvo.getDataEnvio());
+				remessa.setDataRecebimento(new LocalDateTime());
 				remessa.setInstituicaoDestino(InstituicaoMediator.getInstituicao(remessa.getCabecalho().getCodigoMunicipio()));
 				save(remessa);
 				for (Titulo titulo : remessa.getTitulos()) {
@@ -63,6 +65,9 @@ public class ArquivoDAO extends AbstractBaseDAO {
 		} catch (Exception ex) {
 			transaction.rollback();
 			logger.error(ex.getMessage(), ex);
+//			if (ex.getMessage().contains("duplicar valor da chave viola a restrição de unicidade")) {
+//				throw new InfraException("O registro já está salvo na CRA.");
+//			}
 			throw new InfraException("Não foi possível inserir esse arquivo na base de dados.");
 		}
 		return arquivoSalvo;

@@ -8,9 +8,12 @@ import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import br.com.ieptbto.cra.app.CraApplication;
 import br.com.ieptbto.cra.dao.UsuarioDAO;
@@ -24,10 +27,12 @@ import br.com.ieptbto.cra.security.UserSession;
 
 /**
  * 
- * @author Lefer 
+ * @author Lefer
  *
  */
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
+@TransactionConfiguration(transactionManager = "txManager", defaultRollback = false)
 public class BaseTest extends AbstractJUnit4SpringContextTests {
 	public static final String USUARIO_TESTE = "teste";
 	public static final String SENHA_TESTE = "teste1234";

@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.processador;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -11,6 +12,7 @@ import br.com.ieptbto.cra.conversor.arquivo.FabricaDeArquivo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.exception.ArquivoException;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.validacao.FabricaValidacaoArquivo;
@@ -29,6 +31,7 @@ public class ProcessadorArquivo extends Processador {
 	private String pathInstituicao;
 	private String pathUsuario;
 	private Arquivo arquivo;
+	private List<ArquivoException> erros;
 
 	public void processarArquivo(FileUpload uploadedFile, Arquivo arquivo) {
 		this.file = uploadedFile;
@@ -50,7 +53,7 @@ public class ProcessadorArquivo extends Processador {
 	}
 
 	private void converterArquivo() {
-		new FabricaDeArquivo(getArquivoFisico(), getArquivo()).converter();
+		FabricaDeArquivo.processarArquivoFisico(getArquivoFisico(), getArquivo(), getErros());
 	}
 
 	private void validarArquivo() {
@@ -131,5 +134,13 @@ public class ProcessadorArquivo extends Processador {
 
 	public void setArquivo(Arquivo arquivo) {
 		this.arquivo = arquivo;
+	}
+
+	public List<ArquivoException> getErros() {
+		return erros;
+	}
+
+	public void setErros(List<ArquivoException> erros) {
+		this.erros = erros;
 	}
 }
