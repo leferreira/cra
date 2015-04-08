@@ -166,6 +166,20 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		criteria.add(Restrictions.eq("t.id", 2));
 		return criteria.list();
 	}
+	
+	/**
+	 * Buscar todos instituicões financieiras, ativos ou não 
+	 * 
+	 * @return List<Instituicao>
+	 * */
+	@SuppressWarnings("unchecked")
+	public List<Instituicao> getInstituicoesFinanceiras() {
+		Criteria criteria = getCriteria(Instituicao.class);
+		criteria.addOrder(Order.asc("nomeFantasia"));
+		criteria.createAlias("tipoInstituicao", "t");
+		criteria.add(Restrictions.eq("t.id", 3));
+		return criteria.list();
+	}
 
 	public Instituicao buscarInstituicaoInicial(String nomeFantasia) {
 		Criteria criteria = getCriteria(Instituicao.class);
@@ -178,6 +192,13 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		criteria.createAlias("municipio", "municipio");
 
 		criteria.add(Restrictions.eq("municipio.codigoIBGE", codigoMunicipio));
+
+		return Instituicao.class.cast(criteria.uniqueResult());
+	}
+	
+	public Instituicao getInstituicaoPorCodigo(String codigoCompensacao) {
+		Criteria criteria = getCriteria(Instituicao.class);
+		criteria.add(Restrictions.eq("codigoCompensacao", codigoCompensacao));
 
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}

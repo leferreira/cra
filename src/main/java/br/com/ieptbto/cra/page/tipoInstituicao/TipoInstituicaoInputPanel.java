@@ -14,27 +14,27 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.PermissaoEnvio;
-import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.PermissaoEnvioMediator;
-import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 
-@SuppressWarnings("serial")
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class TipoInstituicaoInputPanel extends Panel {
 
+	/***/
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(TipoInstituicaoInputPanel.class);
+	
 	@SpringBean
 	private TipoInstituicaoMediator tipoInstituicaoMediator;
 	@SpringBean
-	private TipoArquivoMediator tipoArquivoMediator;
-	@SpringBean
-	private PermissaoEnvioMediator permissaoEnvioMediator;
+	private PermissaoEnvioMediator permissaoMediator;
 
-	private List<TipoArquivo> listaTiposArquivos = new ArrayList<TipoArquivo>();
 	private Component button;
 	private TextField<String> nomeTipo;
 	private CheckBoxMultipleChoice<String> tipoPermitidos;
@@ -65,18 +65,16 @@ public class TipoInstituicaoInputPanel extends Panel {
 				TipoInstituicao tipoInstituicao = new TipoInstituicao();
 				String tipo = (String)nomeTipo.getDefaultModelObject();
 				tipoInstituicao.setTipoInstituicao(tipo);
-				List<String> tiposArquivos = (List<String>) tipoPermitidos.getDefaultModelObject();
-				//[B, CP, DP]
+				
+				List<String> tiposArquivos = (List<String>)tipoPermitidos.getDefaultModelObject();
 				try {
 					if (tipoInstituicao.getId() != 0) {
 						TipoInstituicao tipoSalvo = tipoInstituicaoMediator.alterar(tipoInstituicao);
-						listaTiposArquivos = buscarListaTipoArquivos(tiposArquivos);
-						setPermissoes(tipoSalvo,listaTiposArquivos);
-						info("Os dados foram alterado com sucesso!");
+						permissaoMediator.setPermissoes(tipoSalvo,tiposArquivos);
+						info("Os dados foram alterados com sucesso!");
 					} else {
 						TipoInstituicao tipoSalvo = tipoInstituicaoMediator.salvar(tipoInstituicao);
-						listaTiposArquivos = buscarListaTipoArquivos(tiposArquivos);
-						setPermissoes(tipoSalvo,listaTiposArquivos);
+						permissaoMediator.setPermissoes(tipoSalvo, tiposArquivos);
 						info("Os dados foram salvos com sucesso!");
 					}
 				} catch (InfraException ex) {
@@ -89,39 +87,6 @@ public class TipoInstituicaoInputPanel extends Panel {
 			}
 		};
 		return button;
-
-	}
-	
-	/***
-	 * Método que transforma o array de strings em TipoArquivo 
-	 * */
-	private List<TipoArquivo> buscarListaTipoArquivos(List<String> tiposArquivo){
-		TipoArquivo tipoArquivo = new TipoArquivo();
-		for (String label: tiposArquivo){
-			tipoArquivo= tipoArquivoMediator.buscarTipoPorNome(TipoArquivoEnum.getTipoArquivoEnum(label));
-			listaTiposArquivos.add(tipoArquivo);
-		}
-		return listaTiposArquivos;
-	}
-	
-	/**
-	 * Método que seta a permissão para o tipo instituicao
-	 * */
-	private void setPermissoes(TipoInstituicao tipo, List<TipoArquivo> listaTipo){
-		PermissaoEnvio permitidos = new PermissaoEnvio();
-		try {
-			for (TipoArquivo tipoArquivo: listaTipo){
-				permitidos.setTipoArquivo(tipoArquivo);
-				permitidos.setTipoInstituicao(tipo);
-				permissaoEnvioMediator.alterar(permitidos);
-			}
-		} catch (InfraException ex) {
-			logger.error(ex.getMessage());
-			error(ex.getMessage());
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			error("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
-		}
 	}
 	
 	private TextField<String> campoTipoInstituicao() {

@@ -12,7 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
-import org.joda.time.LocalDateTime;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -43,7 +43,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		arquivo = new Arquivo();
 		arquivo.setInstituicaoEnvio(getUser().getInstituicao());
 		arquivo.setUsuarioEnvio(getUser());
-		arquivo.setDataEnvio(new LocalDateTime());
+		arquivo.setDataEnvio(new LocalDate());
 
 		form = new Form<Arquivo>("form", getModel()) {
 			/****/

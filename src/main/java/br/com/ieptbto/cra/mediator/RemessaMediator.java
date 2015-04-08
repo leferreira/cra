@@ -4,16 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.dao.RemessaDAO;
 import br.com.ieptbto.cra.dao.TipoArquivoDAO;
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -21,6 +23,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("unused")
 @Service
 public class RemessaMediator {
 
@@ -37,58 +40,95 @@ public class RemessaMediator {
 		return remessaDao.listarRemessasPorInstituicao(instituicao);
 	}
 	
+	/***
+	 * 
+	 * */
 	public List<Remessa> buscarRemessasComFiltros(Instituicao instituicao,ArrayList<String> tipos,ArrayList<String> status,String date){
+			
+			try{ 
+				remessasFiltradas = new ArrayList<Remessa>();
+				remessas = listarRemessa(instituicao);
+				
+				for (Remessa remessa: remessas){
+					filtroTipoArquivo(tipos,remessa);
+					filtroStatusArquivo(status, remessa, instituicao);
+					if (!date.equals(""))
+						filtroData(date, remessa);
+				}
+			} catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
+				throw new InfraException("Não foi possível realizar a busca, contate a CRA.");
+			}
+		return remessasFiltradas;
+	}
+	
+	/***
+	 * 
+	 * */
+	public List<Remessa> buscarArquivos(Arquivo arquivo,Municipio municipio,Instituicao portador, LocalDate dataInicio,LocalDate dataFim,ArrayList<String> tipos,Usuario usuario){
 		
-		try {
+		try{ 
 			remessasFiltradas = new ArrayList<Remessa>();
-			remessas = listarRemessa(instituicao);
-			filtroTipoArquivo(tipos);
-			filtroStatusArquivo(status);
-			if (date != null || date!="")
-				filtroData(date);
+			remessas = remessaDao.remessasPorIntervaloDeDatas(arquivo, municipio, portador, dataInicio, dataFim, usuario);
+			
+			for (Remessa remessa: remessas)
+				filtroTipoArquivo(tipos,remessa);
+			
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
-			throw new InfraException("Não foi possível realizar a busca, contate a CRA.");
+			new InfraException("Não foi possível realizar a busca, contate a CRA.");
 		}
 		return remessasFiltradas;
 	}
 	
-	private void filtroTipoArquivo(ArrayList<String> tipos){
-		//[B,C,D]
+	private void filtroTipoArquivo(ArrayList<String> tipos,Remessa remessa){
 		TipoArquivo tipoArquivo = new TipoArquivo();
 		if (!tipos.isEmpty() || !tipos.equals(null)) {
 			for (String constante: tipos) {
-				tipoArquivo = tipoArquivoDao.buscarPorTipoArquivo(TipoArquivoEnum.getTipoArquivoEnum(constante));
-				for (Remessa r: remessas){
-					if (r.getArquivo().getTipoArquivo().equals(tipoArquivo)){
-						if(!remessasFiltradas.contains(r))
-						    remessasFiltradas.add(r);      
-					}
+				if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().getConstante().equals(constante)){
+					if(!remessasFiltradas.contains(remessa))
+					    remessasFiltradas.add(remessa);      
 				}
 			}
 		}
 	}
 	
-	private void filtroStatusArquivo(ArrayList<String> status){
+	private void filtroStatusArquivo(ArrayList<String> status, Remessa remessa, Instituicao instituicaoUsuario){
 		if (!status.isEmpty() || !status.equals(null)) {
 			for (String situacao: status) {
-				for (Remessa r: remessas){
-					if (r.getArquivo().getStatusArquivo().getStatus().equals(situacao)){
-						if(!remessasFiltradas.contains(r))
-						    remessasFiltradas.add(r);      
-					}
+				switch (situacao) {
+					case "Aguardando":
+						String statusRemessa = remessa.getArquivo().getStatusArquivo().getStatus();
+						if (situacao.equals(statusRemessa)){
+							if(!remessasFiltradas.contains(remessa))
+								remessasFiltradas.add(remessa);      
+						}
+						break;
+					case "Enviado":
+						String instituicaoEnvio = remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia();
+						if (instituicaoUsuario.getNomeFantasia().equals(instituicaoEnvio)){
+							if(!remessasFiltradas.contains(remessa))
+								remessasFiltradas.add(remessa);      
+						}
+						break;
+					case "Recebido":
+						String destino = remessa.getInstituicaoDestino().getNomeFantasia();
+						if (instituicaoUsuario.getNomeFantasia().equals(destino)){
+							if(!remessasFiltradas.contains(remessa))
+								remessasFiltradas.add(remessa);      
+						}
+						break;
 				}
+				
 			}
 		}
 	}
 	
-	private void filtroData(String date){
-		DateTime dt = DataUtil.stringToDateTime(date);
-		for (Remessa r: remessas){
-			if (!r.getArquivo().getDataEnvio().equals(dt)){
-				if(!remessasFiltradas.contains(r))
-				    remessasFiltradas.add(r);      
-			}
+	private void filtroData(String dataFiltro, Remessa remessa){
+		String dataEnvio = DataUtil.localDateToString(remessa.getArquivo().getDataEnvio());
+		if (dataEnvio.contains(dataFiltro)){
+			if(!remessasFiltradas.contains(remessa))
+			    remessasFiltradas.add(remessa);      
 		}
 	}
 }

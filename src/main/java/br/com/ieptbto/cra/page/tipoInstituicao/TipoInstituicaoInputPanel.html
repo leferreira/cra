@@ -1,31 +1,22 @@
 <head>
 <meta charset="UTF8">
 </head>
-<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR"
-	charset="UTF8">
-	<div class="panel-body-right"
-		style="float: left; width: 45%; margin-right: 15px;">
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+	<div class="col-lg-10 col-md-offset-1">
 		<div class="form-group">
-			<label for="tipoInstituicao">Tipo Intituicao:&nbsp;</label> <input
-				id="tipoInstituicao" name="tipoInstituicao" type="text"
-				wicket:id="tipoInstituicao" placeholder="Tipo Instituição"
+			<label for="tipoInstituicao">Tipo Intituicao:&nbsp;</label> 
+				<input id="tipoInstituicao" name="tipoInstituicao" type="text" wicket:id="tipoInstituicao" placeholder="Tipo Instituição"
 				class="form-control" />
 		</div>
 		<br style="clear: both;"/>
-		<label for="legenda">Legenda:&nbsp;</label><br>
-		<span><small>B - Remessa, C - Confirmação, R - Retorno, CP - Cancelamento, DP - Devolução, AC - Autorização de Cancelamento</small></span>
-	</div>
-	<div class="panel-body-left">
 		<div class="form-group">
-			<label for="tipoInstituicao">Arquivos Permitidos:&nbsp;</label>
-			<div class="checkbox" style="margin-left: 5%;">
-				<label wicket:id="arquivosEnvioPermitido"> <input
-					type="checkbox" value="">Checkbox 1
+			<label for="tipoInstituicao">Arquivos Permitidos:&nbsp;<small> (B- Remessa, C- Confirmação, R- Retorno, CP- Cancelamento, DP- Devolução, AC- Autorização de Cancelamento)</small></label>
+			<div class="checkbox">
+				<label class="inline" wicket:id="arquivosEnvioPermitido"> 
+					<input type="checkbox" value="">Checkbox 1
 				</label>
 			</div>
 		</div>
-	<button wicket:id="botaoSalvar" type="submit" class="btn btn-primary">Salvar</button>
+		<button wicket:id="botaoSalvar" type="submit" class="btn btn-primary">Salvar</button>
 	</div>
-	
-
 </wicket:panel>

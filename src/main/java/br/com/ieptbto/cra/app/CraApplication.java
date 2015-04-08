@@ -22,6 +22,7 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.arquivo.AcompanharArquivosPage;
+import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
@@ -130,6 +131,7 @@ public class CraApplication extends WebApplication implements
 		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
 		mountPage("ListaMunicipio", ListaMunicipioPage.class);
 		mountPage("EnviarArquivo", EnviarArquivoPage.class);
+		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 		mountPage("AcompanharArquivos", AcompanharArquivosPage.class);
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
 	}

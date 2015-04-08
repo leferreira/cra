@@ -1,96 +1,59 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
 
-/**
- * @author Thasso Araújo
- *
- */
-@AuthorizeInstantiation(value = "USER")
-public class AcompanharArquivosPage extends BasePage<Arquivo> {
+public class ListaArquivosPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(AcompanharArquivosPage.class);
-
+	
 	@SpringBean
-	private RemessaMediator remessasMediator;
-
-	private Arquivo arquivo;
-	private Form<Arquivo> formFilters;
-
-	private String novaData = "";
-	private TextField<LocalDate> dataEnvio;
-	private ArrayList<String> tiposSelect = new ArrayList<String>();
-	private ArrayList<String> statusSelect = new ArrayList<String>();
+	private RemessaMediator remessaMediator;
+	private final Arquivo arquivo;
+	private Municipio municipio;
+	private Instituicao portador;
+	private LocalDate dataInicio;
+	private LocalDate dataFim;
+	private ArrayList<String> tiposDeArquivos = new ArrayList<String>();
+	
 	private WebMarkupContainer divTable;
 	private WebMarkupContainer divArquivos;
 	private WebMarkupContainer tabelaArquivos;
+	
+	public ListaArquivosPage(Arquivo arquivo, Municipio municipio,Instituicao portador, LocalDate dataInicio, LocalDate dataFim, ArrayList<String> tiposArquivo) {
+		super();
+		this.arquivo = arquivo;
+		this.municipio = municipio;
+		this.portador = portador;
+		this.dataInicio = dataInicio;
+		this.dataFim = dataFim;
+		this.tiposDeArquivos = tiposArquivo;
 
-	public AcompanharArquivosPage() {
-		this.arquivo = new Arquivo();
-
-		formFilters = new Form<Arquivo>("form", getModel()) {
-			/****/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onSubmit() {
-				try { 
-
-					if (dataEnvio.getDefaultModelObject() != null)
-						novaData = dataEnvio.getDefaultModelObject().toString();
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
-				}
-			}
-		};
-
-		adicionarFiltros(formFilters);
 		divTable = adicionarTableArquivos();
 		add(divTable);
-		formFilters.add(new Button("botaoEnviar"));
-		add(formFilters);
 	}
-
-	/**
-	 * Adicionando os campos de filtros
-	 * */
-	private void adicionarFiltros(Form<Arquivo> form) {
-		form.add(campoDataEnvio());
-		form.add(comboTipoArquivos());
-		form.add(comboStatus());
-	}
-
+	
 	/***
 	 * Criando tabela de remessas de arquivos
 	 * */
@@ -105,11 +68,10 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 
 		return divArquivos;
 	}
-
+	
 	@SuppressWarnings("serial")
 	private PageableListView<Remessa> getListaViewArquivos() {
-		return new PageableListView<Remessa>("listViewArquivos",
-				buscarListaRemessas(), 10) {
+		return new PageableListView<Remessa>("listViewArquivos",buscarListaRemessas(), 10) {
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				Remessa remessa = item.getModelObject();
@@ -132,7 +94,7 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 			}
 		};
 	}
-
+	
 	/**
 	 * Método que recebe os parametros e buscará os arquivos
 	 * */
@@ -141,31 +103,14 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 		return new LoadableDetachableModel<List<Remessa>>() {
 			@Override
 			protected List<Remessa> load() {
-				return remessasMediator.buscarRemessasComFiltros(getUser().getInstituicao(), tiposSelect, statusSelect, novaData);
+				return remessaMediator.buscarArquivos(arquivo, municipio, portador, dataInicio, dataFim, tiposDeArquivos, getUser());
 			}
 		};
 	}
-
-	public Component comboTipoArquivos() {
-		List<String> choices = new ArrayList<String>();
-		List<TipoArquivoEnum> enumLista = Arrays.asList(TipoArquivoEnum.values());
-		for (TipoArquivoEnum tipo : enumLista) {
-			choices.add(tipo.constante);
-		}
-		return new CheckBoxMultipleChoice<String>("tipoArquivos",new Model<ArrayList<String>>(tiposSelect), choices);
-	}
-
-	public Component comboStatus() {
-		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] { "Aguardando", "Enviado","Recebido" }));
-		return new CheckBoxMultipleChoice<String>("statusArquivos",	new Model<ArrayList<String>>(statusSelect), choices);
-	}
 	
-	public TextField<LocalDate> campoDataEnvio() {
-		return dataEnvio = new TextField<LocalDate>("dataEnvio", new Model<LocalDate>());
-	}
-
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(arquivo);
 	}
+
 }

@@ -1,27 +1,26 @@
 <head>
 <meta charset="UTF8">
 </head>
-<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR"
-	charset="UTF8">
-	<div class="panel-body-right">
-		<!-- Text input Nome -->
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+	<div class="col-lg-10 col-md-offset-1">
 		<div class="form-group">
 			<label for="nome">Nome do Município:</label> <input id="nome" name="nome"
 				type="text"	wicket:id="nomeMunicipio" placeholder="Município" class="form-control" />
 		</div>
-		<div class="form-group">
-			<label for="codigo">Código do IBGE:</label> <input id="codIBGE"
-				name="codigo" type="text" wicket:id="codigoIBGE"
-				placeholder="Código do IBGE" class="form-control" />
+		<div class="panel-body-right">
+			<div class="form-group">
+				<label for="codigo">Código do IBGE:</label> <input id="codIBGE" maxlength="7"
+					name="codigo" type="text" wicket:id="codigoIBGE"
+					placeholder="Código do IBGE" class="form-control" />
+			</div>
 		</div>
-	</div>
-	<div class="panel-body-left">
-		<div class="form-group">
-			<label class="control-label" for="uf">UF:</label> <input
-				id="uf" name="uf" type="text" wicket:id="uf" onkeyup="this.value = this.value.toUpperCase()"
-				class="form-control" placeholder="Unidade Federal"/>
+		<div class="panel-body-left">
+			<div class="form-group">
+				<label class="control-label" for="uf">UF:</label> 
+					<input id="uf" name="uf" type="text" wicket:id="uf" onkeyup="this.value = this.value.toUpperCase()"
+					class="form-control" maxlength="2" placeholder="Unidade Federal"/>
+			</div>
 		</div>
-		<br style="clear: both;" />
-			<button style="margin-top: 30px;" wicket:id="botaoSalvar" type="submit" class="btn btn-primary">Salvar</button>
+		<button wicket:id="botaoSalvar" type="submit" class="btn btn-primary">Salvar</button>
 	</div>
 </wicket:panel>

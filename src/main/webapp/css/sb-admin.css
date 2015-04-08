@@ -68,8 +68,7 @@ body {
 @media ( min-width :768px) {
 	#page-wrapper {
 		position: inherit;
-		/*margin: 0 0 0 250px;*/
-		    margin: 0px 0 0 16%;
+		margin: 0 0 5% 16%;
 		padding: 0 30px;
 		min-height: auto;
 		border-left: 2px solid #e7e7e7;
@@ -459,18 +458,16 @@ button {
 .panel-body-right {
 	float: left;
 	width: 45%;
-	margin-right: 15px;
 }
 
 .panel-body-left {
-	margin-left: 3%;
 	float: left;
+	margin-left: 10%;
 	width: 45%;
-	margin-right: 15px;
 }
 
 .feedbackPanel {
-	margin-top: 40px;
+	/*margin-top: 40px;*/
 	margin-left: -40px;
 }
 

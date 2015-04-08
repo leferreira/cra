@@ -32,6 +32,7 @@ public class CraMenu extends Panel {
 		String[] rolesPesquisar = { CraRoles.USER };
 
 		MenuItem menuLateral = menu.addItem("menuLateral", rolesPesquisar);
+		menuLateral.addItem("BuscarArquivo", rolesPesquisar);
 		menuLateral.addItem("EnviarArquivo", rolesPesquisar);
 		menuLateral.addItem("AcompanharArquivos", rolesPesquisar);
 		menuLateral.addItem("IncluirUsuario", rolesIncluir);

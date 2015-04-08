@@ -42,9 +42,7 @@
 														<input name=tipoArquivo id="tipoArquivo" type="checkbox"/>1
 													</label> 
 												</div>
-											<br style="clear: both;" /> 
 											<input type="submit" value="Buscar" style="float: right;" wicket:id="botaoEnviar" class="btn btn-sm btn-primary"/>
-												
 										</div>
 									</div>
 								</div>
@@ -74,8 +72,14 @@
 										<td wicket:id="instituicao"></td>
 										<td wicket:id="destino"></td>
 										<td wicket:id="status"></td>
+										
 										<td style="text-align: center;">
-										<button type="button" class="btn btn-primary btn-sm" wicket:id="downloadArquivo" style="float: initial;"><i class="glyphicon glyphicon-arrow-down"></i>Baixar</button>
+											<a href="#">
+												<img border="0" class="download-ico" title="Download em TXT" src="img/txt.ico" wicket:id="downloadArquivo">
+											</a>
+											<a href="#">
+												<img border="0" style="margin-left: 2%;" class="download-ico" title="Download em XML" src="img/xml.ico">
+											</a>
 										</td>
 									</tr>
 								</tbody>

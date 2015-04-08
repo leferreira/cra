@@ -6,16 +6,20 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
 
 @SuppressWarnings("serial")
 public class InstituicaoForm extends BaseForm<Instituicao> {
 
+	private static final Logger logger = Logger.getLogger(InstituicaoForm.class);
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
-	private static final Logger logger = Logger.getLogger(InstituicaoForm.class);
+	@SpringBean
+	private MunicipioMediator municipioMediator;
 
 	public InstituicaoForm(String id, IModel<Instituicao> model) {
 		super(id, model);
@@ -36,9 +40,8 @@ public class InstituicaoForm extends BaseForm<Instituicao> {
 				info("Dados alterados com sucesso!.");
 			}else{
 				if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
-					if(!instituicao.isSituacao()){
-						instituicao.setSituacao(true);
-					}
+					Municipio municipio = municipioMediator.buscarMunicipio("Palmas");
+					instituicao.setMunicipio(municipio);
 					Instituicao instituicaoSalvo = instituicaoMediator.salvar(instituicao);
 					info("Dados salvos com sucesso!.");
 				} else {

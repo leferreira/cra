@@ -91,4 +91,18 @@ public class InstituicaoMediator {
 	public Instituicao getInstituicao(Integer codigoMunicipio) {
 		return instituicaoDAO.getInstituicao(codigoMunicipio);
 	}
+	
+	/**
+	 * Busca portador por Código do portador 
+	 */
+	public Instituicao getInstituicao(String codigoPortador) {
+		return instituicaoDAO.getInstituicaoPorCodigo(codigoPortador);
+	}
+	
+	/**
+	 * Busca portador por Código do portador 
+	 */
+	public List<Instituicao> getInstituicoesFinanceiras() {
+		return instituicaoDAO.getInstituicoesFinanceiras();
+	}
 }

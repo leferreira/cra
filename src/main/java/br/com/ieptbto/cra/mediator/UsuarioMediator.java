@@ -16,13 +16,12 @@ import br.com.ieptbto.cra.dao.UsuarioDAO;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 import br.com.ieptbto.cra.security.CraRoles;
 
 @Service
 public class UsuarioMediator {
 
-	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
+	private static final Logger logger = Logger.getLogger(UsuarioMediator.class);
 	@Autowired
 	UsuarioDAO usuarioDao;
 	@Autowired

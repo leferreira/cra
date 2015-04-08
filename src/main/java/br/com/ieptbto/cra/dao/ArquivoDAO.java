@@ -7,7 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.joda.time.LocalDateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -51,7 +51,7 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				remessa.setRodape(save(remessa.getRodape()));
 				remessa.setArquivo(arquivoSalvo);
 				//remessa.setDataRecebimento(arquivoSalvo.getDataEnvio());
-				remessa.setDataRecebimento(new LocalDateTime());
+				remessa.setDataRecebimento(new LocalDate());
 				remessa.setInstituicaoDestino(InstituicaoMediator.getInstituicao(remessa.getCabecalho().getCodigoMunicipio()));
 				save(remessa);
 				for (Titulo titulo : remessa.getTitulos()) {

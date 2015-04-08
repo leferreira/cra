@@ -1,0 +1,44 @@
+<head>
+<meta charset="UTF8">
+</head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
+	<div class="col-lg-10 col-md-offset-1">
+		<fieldset>
+			<legend>Dados da Busca</legend>
+			<div class="form-group">
+				<label for="nomeArquivo">Nome do Arquivo:</label> 
+				<input id="nomeArquivo" name="nomeArquivo" maxlength="13" type="text" wicket:id="nomeArquivo" placeholder="Nome" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="tipoArquivo">Tipo Do Arquivo:&nbsp;&nbsp;
+				<small>B - Remessa/ C - Confirmação/ R - Retorno/ CP - Cancelamento/ DP - Devolução/ AC - Autorização</small></label><br
+					style="clear: both;" />
+				<div class="checkbox">
+					<label class="inline" wicket:id="tipoArquivos" style="margin-left: -5px;"> 
+						<input type="checkbox" value="">
+					</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>Data Envio:&nbsp; <small>intervalo de entrada do arquivo na CRA*</small></label><br />
+				<span style="padding-top: 1%; float: left;">Entre &nbsp;</span><input  id="date" name="dataEnvioInicio" maxlength="10" type="text" style="width: 30%; float: left;" wicket:id="dataEnvioInicio" placeholder="__/__/____" class="form-control" />
+				<span style="padding-top: 1%; padding-left: 1%; float: left;">e &nbsp;</span><input  id="date1" name="dataEnvioFinal" maxlength="10" type="text" style="width: 30%; float: left;" wicket:id="dataEnvioFinal" placeholder="__/__/____" class="form-control" /> 
+			</div>
+			<hr>
+			<br />
+		 	<div class="form-group">
+				<label class="control-label" for="portador">Portador:</label>
+				<div class="controls">
+					<select wicket:id="instituicaoEnvio" id="portador" class="form-control"></select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="portador">Praça de Protesto:</label>
+				<div class="controls">
+					<select wicket:id="instituicaoEnvio.municipio" id="portador" class="form-control"></select>
+				</div>
+			</div>
+		</fieldset>
+		<button wicket:id="botaoBuscar" type="submit" style="float: right;"class="btn btn-primary">Buscar</button>
+	</div>
+</wicket:panel>

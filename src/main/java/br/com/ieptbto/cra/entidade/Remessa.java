@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
-import org.joda.time.LocalDateTime;
+import org.joda.time.LocalDate;
 
 /**
  * @author Thasso Araújo
@@ -32,7 +32,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 
 	private int id;
 	private Arquivo arquivo;
-	private LocalDateTime dataRecebimento;
+	private LocalDate dataRecebimento;
 	private Instituicao instituicaoDestino;
 	private List<Titulo> titulos;
 	private Cabecalho cabecalho;
@@ -52,7 +52,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	}
 
 	@Column(name = "DATA_RECEBIMENTO")
-	public LocalDateTime getDataRecebimento() {
+	public LocalDate getDataRecebimento() {
 		return dataRecebimento;
 	}
 
@@ -91,7 +91,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		this.titulos = titulos;
 	}
 
-	public void setDataRecebimento(LocalDateTime dataRecebimento) {
+	public void setDataRecebimento(LocalDate dataRecebimento) {
 		this.dataRecebimento = dataRecebimento;
 	}
 

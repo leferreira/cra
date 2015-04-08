@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
-import org.joda.time.LocalDateTime;
+import org.joda.time.LocalDate;
 
 /**
  * 
@@ -35,7 +35,7 @@ public class Arquivo extends AbstractEntidade<Arquivo> {
 	private String nomeArquivo;
 	private String comentario;
 	private String path;
-	private LocalDateTime dataEnvio;
+	private LocalDate dataEnvio;
 	private List<Remessa> remessas;
 	private Instituicao instituicaoEnvio;
 	private TipoArquivo tipoArquivo;
@@ -65,7 +65,7 @@ public class Arquivo extends AbstractEntidade<Arquivo> {
 	}
 
 	@Column(name = "DATA_ENVIO")
-	public LocalDateTime getDataEnvio() {
+	public LocalDate getDataEnvio() {
 		return dataEnvio;
 	}
 
@@ -114,7 +114,7 @@ public class Arquivo extends AbstractEntidade<Arquivo> {
 		this.path = path;
 	}
 
-	public void setDataEnvio(LocalDateTime dataEnvio) {
+	public void setDataEnvio(LocalDate dataEnvio) {
 		this.dataEnvio = dataEnvio;
 	}
 

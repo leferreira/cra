@@ -123,8 +123,7 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	private Component campoStatus() {
-		List<String> status = Arrays
-				.asList(new String[] { "Ativo", "Não Ativo" });
+		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
 		return new RadioChoice<String>("status", status);
 	}
 
