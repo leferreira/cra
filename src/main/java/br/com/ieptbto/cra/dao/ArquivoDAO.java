@@ -52,7 +52,7 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				remessa.setArquivo(arquivoSalvo);
 				//remessa.setDataRecebimento(arquivoSalvo.getDataEnvio());
 				remessa.setDataRecebimento(new LocalDate());
-				remessa.setInstituicaoDestino(InstituicaoMediator.getInstituicao(remessa.getCabecalho().getCodigoMunicipio()));
+				remessa.setInstituicaoDestino(InstituicaoMediator.getInstituicaoPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()));
 				save(remessa);
 				for (Titulo titulo : remessa.getTitulos()) {
 					titulo.setRemessa(remessa);

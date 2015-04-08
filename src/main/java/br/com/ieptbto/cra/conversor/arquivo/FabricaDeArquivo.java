@@ -24,7 +24,7 @@ public class FabricaDeArquivo {
 
 	private static final Logger logger = Logger.getLogger(FabricaDeArquivo.class);
 
-	public static Arquivo processarArquivoFisico(File arquivoFisico, Arquivo arquivo, List<ArquivoException> erros) {
+	public Arquivo processarArquivoFisico(File arquivoFisico, Arquivo arquivo, List<ArquivoException> erros) {
 
 		String linha = getLinhaArquivo(arquivoFisico);
 

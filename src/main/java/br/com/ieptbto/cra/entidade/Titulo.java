@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
 import org.hibernate.envers.Audited;
 import org.joda.time.LocalDate;
 
@@ -584,8 +585,12 @@ public class Titulo extends AbstractEntidade<Titulo> {
 
 	@Override
 	public int compareTo(Titulo entidade) {
-		// TODO Auto-generated method stub
-		return 0;
+		CompareToBuilder compareToBuilder = new CompareToBuilder();
+		compareToBuilder.append(this.getCodigoPortador(), entidade.getCodigoPortador());
+		compareToBuilder.append(this.getNossoNumero(), entidade.getNossoNumero());
+		compareToBuilder.append(this.getNumeroTitulo(), entidade.getNumeroTitulo());
+
+		return compareToBuilder.toComparison();
 	}
 
 }

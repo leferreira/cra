@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
 import org.hibernate.envers.Audited;
 import org.joda.time.LocalDate;
 
@@ -140,7 +141,9 @@ public class Arquivo extends AbstractEntidade<Arquivo> {
 
 	@Override
 	public int compareTo(Arquivo entidade) {
-		// TODO Auto-generated method stub
-		return 0;
+		CompareToBuilder compareToBuilder = new CompareToBuilder();
+		compareToBuilder.append(this.getId(), entidade.getId());
+		compareToBuilder.append(this.getNomeArquivo(), entidade.getNomeArquivo());
+		return compareToBuilder.toComparison();
 	}
 }

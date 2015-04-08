@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
 import org.hibernate.envers.Audited;
 import org.joda.time.LocalDate;
 
@@ -33,6 +34,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	private int id;
 	private Arquivo arquivo;
 	private LocalDate dataRecebimento;
+	private Instituicao instituicaoOrigem;
 	private Instituicao instituicaoDestino;
 	private List<Titulo> titulos;
 	private Cabecalho cabecalho;
@@ -79,6 +81,12 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return rodape;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "INSTITUICAO_ORIGEM_ID")
+	public Instituicao getInstituicaoOrigem() {
+		return instituicaoOrigem;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -99,10 +107,15 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		this.instituicaoDestino = instituicaoDestino;
 	}
 
+	public void setInstituicaoOrigem(Instituicao instituicaoOrigem) {
+		this.instituicaoOrigem = instituicaoOrigem;
+	}
+
 	@Override
 	public int compareTo(Remessa entidade) {
-		// TODO Auto-generated method stub
-		return 0;
+		CompareToBuilder compareToBuilder = new CompareToBuilder();
+		compareToBuilder.append(this.getId(), entidade.getId());
+		return compareToBuilder.toComparison();
 	}
 
 	public void setCabecalho(Cabecalho cabecalho) {

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.dao.InstituicaoDAO;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.exception.InfraException;
 
 @Service
 public class InstituicaoMediator {
@@ -67,10 +68,10 @@ public class InstituicaoMediator {
 	/**
 	 * Buscar todos os cartórios e instituicao cadastrados
 	 */
-	public List<Instituicao> buscarCartoriosInstituicoes(){
+	public List<Instituicao> buscarCartoriosInstituicoes() {
 		return instituicaoDAO.buscarCartoriosInstituicoes();
 	}
-	
+
 	/**
 	 * Busca todas as Instituicões ativas ou não, menos cartórios.
 	 * 
@@ -88,21 +89,26 @@ public class InstituicaoMediator {
 		return lista;
 	}
 
-	public Instituicao getInstituicao(Integer codigoMunicipio) {
+	public Instituicao getInstituicaoPorCodigoIBGE(Integer codigoMunicipio) {
 		return instituicaoDAO.getInstituicao(codigoMunicipio);
 	}
-	
+
 	/**
-	 * Busca portador por Código do portador 
+	 * Busca portador por Código do portador
 	 */
-	public Instituicao getInstituicao(String codigoPortador) {
+	public Instituicao getInstituicaoPorCodigoPortador(String codigoPortador) {
+		if (instituicaoDAO.getInstituicaoPorCodigo(codigoPortador) == null) {
+			throw new InfraException("Instituição não cadastrada com o código de compesação [" + codigoPortador + "]");
+		}
+
 		return instituicaoDAO.getInstituicaoPorCodigo(codigoPortador);
 	}
-	
+
 	/**
-	 * Busca portador por Código do portador 
+	 * Busca portador por Código do portador
 	 */
 	public List<Instituicao> getInstituicoesFinanceiras() {
 		return instituicaoDAO.getInstituicoesFinanceiras();
 	}
+
 }

@@ -166,9 +166,9 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		criteria.add(Restrictions.eq("t.id", 2));
 		return criteria.list();
 	}
-	
+
 	/**
-	 * Buscar todos instituicões financieiras, ativos ou não 
+	 * Buscar todos instituicões financieiras, ativos ou não
 	 * 
 	 * @return List<Instituicao>
 	 * */
@@ -195,7 +195,7 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
-	
+
 	public Instituicao getInstituicaoPorCodigo(String codigoCompensacao) {
 		Criteria criteria = getCriteria(Instituicao.class);
 		criteria.add(Restrictions.eq("codigoCompensacao", codigoCompensacao));

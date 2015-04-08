@@ -63,7 +63,7 @@ public class ListaTitulosPage extends BasePage<Titulo> {
 			@Override
 			protected void populateItem(ListItem<Titulo> item) {
 				Titulo tituloLista = item.getModelObject();
-				portador = instituicaoMediator.getInstituicao(tituloLista.getCodigoPortador());
+				portador = instituicaoMediator.getInstituicaoPorCodigoPortador(tituloLista.getCodigoPortador());
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
 				item.add(new Label("protocolo", tituloLista.getNumeroProtocoloCartorio()));

@@ -9,8 +9,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Cabecalho;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Rodape;
 import br.com.ieptbto.cra.entidade.Titulo;
@@ -18,9 +21,11 @@ import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.CabecalhoVO;
 import br.com.ieptbto.cra.entidade.vo.RodapeVO;
 import br.com.ieptbto.cra.entidade.vo.TituloVO;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoRegistro;
 import br.com.ieptbto.cra.exception.ArquivoException;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.processador.FabricaRegistro;
 
 /**
@@ -29,6 +34,9 @@ import br.com.ieptbto.cra.processador.FabricaRegistro;
  *
  */
 public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
+
+	@SpringBean(required = true)
+	InstituicaoMediator instituicaoMediator;
 
 	public FabricaDeArquivoTXT(File arquivoFisico, Arquivo arquivo, List<ArquivoException> erros) {
 		this.arquivoFisico = arquivoFisico;
@@ -78,6 +86,8 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 			Cabecalho cabecalho = new CabecalhoConversor().converter(Cabecalho.class, cabecalhoVO);
 			remessa.setCabecalho(cabecalho);
 			cabecalho.setRemessa(remessa);
+			remessa.setInstituicaoDestino(getInstituicaoDeDestino(cabecalho));
+			remessa.setInstituicaoOrigem(getArquivo().getInstituicaoEnvio());
 		} else if (TipoRegistro.TITULO.getConstante().equals(registro.getIdentificacaoRegistro())) {
 			TituloVO tituloVO = TituloVO.class.cast(registro);
 			Titulo titulo = new TituloConversor().converter(Titulo.class, tituloVO);
@@ -92,6 +102,15 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 			throw new InfraException("O Tipo do registro não foi encontrado: [" + registro.getIdentificacaoRegistro() + " ]");
 		}
 
+	}
+
+	private Instituicao getInstituicaoDeDestino(Cabecalho cabecalho) {
+		if (TipoArquivoEnum.CONFIRMACAO.equals(TipoArquivoEnum.getTipoArquivoEnum(getArquivo().getNomeArquivo()))
+		        || TipoArquivoEnum.RETORNO.equals(TipoArquivoEnum.getTipoArquivoEnum(getArquivo().getNomeArquivo()))) {
+			return instituicaoMediator.getInstituicaoPorCodigoPortador(cabecalho.getNumeroCodigoPortador());
+		} else {
+			return instituicaoMediator.getInstituicaoPorCodigoIBGE(cabecalho.getCodigoMunicipio());
+		}
 	}
 
 	@Override

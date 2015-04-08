@@ -45,7 +45,7 @@ public class TipoArquivo extends AbstractEntidade<TipoArquivo> {
 		return id;
 	}
 
-	@Column(name = "TIPO_ARQUIVO")
+	@Column(name = "TIPO_ARQUIVO", unique = true)
 	@Enumerated(EnumType.STRING)
 	public TipoArquivoEnum getTipoArquivo() {
 		return tipoArquivo;

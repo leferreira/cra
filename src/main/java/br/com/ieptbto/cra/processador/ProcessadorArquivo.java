@@ -53,7 +53,7 @@ public class ProcessadorArquivo extends Processador {
 	}
 
 	private void converterArquivo() {
-		FabricaDeArquivo.processarArquivoFisico(getArquivoFisico(), getArquivo(), getErros());
+		new FabricaDeArquivo().processarArquivoFisico(getArquivoFisico(), getArquivo(), getErros());
 	}
 
 	private void validarArquivo() {
