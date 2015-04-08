@@ -9,7 +9,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Cabecalho;
@@ -33,15 +34,17 @@ import br.com.ieptbto.cra.processador.FabricaRegistro;
  * @author Lefer
  *
  */
+@Service
 public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 
-	@SpringBean(required = true)
+	@Autowired
 	InstituicaoMediator instituicaoMediator;
 
-	public FabricaDeArquivoTXT(File arquivoFisico, Arquivo arquivo, List<ArquivoException> erros) {
+	public FabricaDeArquivoTXT fabrica(File arquivoFisico, Arquivo arquivo, List<ArquivoException> erros) {
 		this.arquivoFisico = arquivoFisico;
 		this.arquivo = arquivo;
 		this.erros = erros;
+		return this;
 	}
 
 	public Arquivo converter() {
@@ -118,5 +121,4 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 		// TODO Auto-generated method stub
 
 	}
-
 }

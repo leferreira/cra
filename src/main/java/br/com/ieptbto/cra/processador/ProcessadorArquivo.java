@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.conversor.arquivo.FabricaDeArquivo;
 import br.com.ieptbto.cra.entidade.Arquivo;
@@ -22,9 +24,14 @@ import br.com.ieptbto.cra.validacao.FabricaValidacaoArquivo;
  * @author Lefer
  *
  */
+@Service
 public class ProcessadorArquivo extends Processador {
 
 	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
+
+	@Autowired
+	private FabricaDeArquivo fabricaDeArquivo;
+
 	private FileUpload file;
 	private Usuario usuario;
 	private File arquivoFisico;
@@ -53,7 +60,7 @@ public class ProcessadorArquivo extends Processador {
 	}
 
 	private void converterArquivo() {
-		new FabricaDeArquivo().processarArquivoFisico(getArquivoFisico(), getArquivo(), getErros());
+		fabricaDeArquivo.processarArquivoFisico(getArquivoFisico(), getArquivo(), getErros());
 	}
 
 	private void validarArquivo() {

@@ -28,6 +28,9 @@ public class ArquivoMediator {
 	@Autowired
 	private ArquivoDAO arquivoDAO;
 
+	@Autowired
+	private ProcessadorArquivo processadorArquivo;
+
 	public void salvar(Arquivo arquivo, FileUpload uploadedFile) {
 		arquivo.setTipoArquivo(getTipoArquivo(arquivo));
 		arquivo.setStatusArquivo(setStatusArquivo());
@@ -48,7 +51,7 @@ public class ArquivoMediator {
 	}
 
 	private void processarArquivo(Arquivo arquivo, FileUpload uploadedFile) throws InfraException {
-		new ProcessadorArquivo().processarArquivo(uploadedFile, arquivo);
+		processadorArquivo.processarArquivo(uploadedFile, arquivo);
 	}
 
 	public List<Arquivo> buscarArquivos() {

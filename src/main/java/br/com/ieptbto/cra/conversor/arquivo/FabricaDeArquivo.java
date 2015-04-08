@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.enumeration.LayoutArquivo;
@@ -20,16 +22,19 @@ import br.com.ieptbto.cra.exception.InfraException;
  * @author Lefer
  *
  */
+@Service
 public class FabricaDeArquivo {
 
 	private static final Logger logger = Logger.getLogger(FabricaDeArquivo.class);
+	@Autowired
+	private FabricaDeArquivoTXT fabricaDeArquivoTXT;
 
 	public Arquivo processarArquivoFisico(File arquivoFisico, Arquivo arquivo, List<ArquivoException> erros) {
 
 		String linha = getLinhaArquivo(arquivoFisico);
 
 		if (LayoutArquivo.TXT.equals(LayoutArquivo.get(linha))) {
-			return new FabricaDeArquivoTXT(arquivoFisico, arquivo, erros).converter();
+			return fabricaDeArquivoTXT.fabrica(arquivoFisico, arquivo, erros).converter();
 		} else if (LayoutArquivo.XML.equals(LayoutArquivo.get(linha))) {
 			return new FabricaDeArquivoXML(arquivoFisico, arquivo, erros).converter();
 		} else {

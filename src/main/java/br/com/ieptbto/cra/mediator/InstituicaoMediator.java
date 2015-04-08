@@ -90,18 +90,24 @@ public class InstituicaoMediator {
 	}
 
 	public Instituicao getInstituicaoPorCodigoIBGE(Integer codigoMunicipio) {
-		return instituicaoDAO.getInstituicao(codigoMunicipio);
+		Instituicao instituicao = instituicaoDAO.getInstituicao(codigoMunicipio);
+		if (instituicao == null) {
+			throw new InfraException("Instituição não cadastrada com o código IBGE [" + codigoMunicipio + "]");
+		}
+
+		return instituicao;
 	}
 
 	/**
 	 * Busca portador por Código do portador
 	 */
 	public Instituicao getInstituicaoPorCodigoPortador(String codigoPortador) {
-		if (instituicaoDAO.getInstituicaoPorCodigo(codigoPortador) == null) {
+		Instituicao instituicao = instituicaoDAO.getInstituicaoPorCodigo(codigoPortador);
+		if (instituicao == null) {
 			throw new InfraException("Instituição não cadastrada com o código de compesação [" + codigoPortador + "]");
 		}
 
-		return instituicaoDAO.getInstituicaoPorCodigo(codigoPortador);
+		return instituicao;
 	}
 
 	/**
