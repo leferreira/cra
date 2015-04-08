@@ -14,12 +14,17 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 public class DateConversor extends AbstractConversor<LocalDate> {
 
+	private static final String ZEROS = "00000000";
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public LocalDate getValorConvertido(String valor) {
 		try {
+			if (StringUtils.isBlank(valor) || valor.equals(ZEROS)) {
+				return null;
+			}
 			return DataUtil.stringToLocalDate(DataUtil.PADRAO_FORMATACAO_DATA_DDMMYYYY, valor);
 		} catch (IllegalArgumentException e) {
 			if (getAnotacaoAtributo().obrigatoriedade()) {

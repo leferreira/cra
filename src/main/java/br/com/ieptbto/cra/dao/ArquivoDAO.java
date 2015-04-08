@@ -50,7 +50,6 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				remessa.setCabecalho(save(remessa.getCabecalho()));
 				remessa.setRodape(save(remessa.getRodape()));
 				remessa.setArquivo(arquivoSalvo);
-				// remessa.setDataRecebimento(arquivoSalvo.getDataEnvio());
 				remessa.setDataRecebimento(new LocalDate());
 				save(remessa);
 				for (Titulo titulo : remessa.getTitulos()) {

@@ -63,7 +63,7 @@ public class TipoArquivoDAO extends AbstractBaseDAO {
 
 	public TipoArquivo buscarTipoArquivo(Arquivo arquivo) {
 		Criteria criteria = getCriteria(TipoArquivo.class);
-		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(arquivo.getNomeArquivo().substring(0, 1).toUpperCase());
+		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(arquivo.getNomeArquivo().toUpperCase());
 		criteria.add(Restrictions.eq("tipoArquivo", tipoArquivo));
 		return TipoArquivo.class.cast(criteria.uniqueResult());
 	}
