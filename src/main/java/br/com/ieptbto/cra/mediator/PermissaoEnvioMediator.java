@@ -23,10 +23,12 @@ import br.com.ieptbto.cra.exception.InfraException;
 public class PermissaoEnvioMediator {
 
 	private static final Logger logger = Logger.getLogger(PermissaoEnvioMediator.class);
+	
 	@Autowired
-	private PermissaoEnvioDAO permissaoDAO;
+	PermissaoEnvioDAO permissaoDAO;
 	@Autowired
-	private TipoArquivoDAO tipoArquivoDAO;
+	TipoArquivoDAO tipoArquivoDAO;
+	
 	private PermissaoEnvio permitido = new PermissaoEnvio();
 	
 	
@@ -70,7 +72,7 @@ public class PermissaoEnvioMediator {
 			new InfraException(ex.getMessage());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			new InfraException("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
+			throw new InfraException("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
 		}
 	}
 	

@@ -16,6 +16,7 @@ import java.util.List;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Cabecalho;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
+import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
@@ -61,6 +62,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Rodape.class);
 		classesHibernate.add(Remessa.class);
 		classesHibernate.add(StatusArquivo.class);
+		classesHibernate.add(Historico.class);
 		// classesHibernate.add(CraCustomRevisionEntity.class);
 	}
 

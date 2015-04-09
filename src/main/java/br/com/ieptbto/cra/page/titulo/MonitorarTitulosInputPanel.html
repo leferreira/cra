@@ -27,14 +27,6 @@
 						<label for=dataOcorrencia>Data da Ocorrência:</label> 
 						<input id="date1" name="dataOcorrencia" type="text" wicket:id="dataOcorrencia" placeholder="__/__/____" class="form-control" />
 					</div>
-					<div class="form-group">
-						<label for="saldoTitulo">Saldo do Título:</label> 
-						<input id="saldoTitulo" name="saldoTitulo" type="text" wicket:id="saldoTitulo" placeholder="Saldo do Título" class="form-control" />
-					</div>
-					<div class="form-group">
-						<label for="valorTitulo">Valor do Título:</label> 
-						<input id="valorTitulo" name="valorTitulo" type="text" wicket:id="valorTitulo" placeholder="Valor do Título" class="form-control" />
-					</div>
 		  		</div>
 			</fieldset>
 		</div>
@@ -56,8 +48,10 @@
 				<legend><small>Dados do Portador</small></legend>
 		  		<div class="panel-body">
 					<div class="form-group">
-						<label for="codigoPortador">Código do Portador:</label> 
-						<input id="codigoPortador" name="codigoPortador" type="text" wicket:id="codigoPortador" placeholder="Código do Portador" class="form-control" />
+						<label class="control-label" for="portador">Portador:</label>
+						<div class="controls">
+							<select wicket:id="remessa.instituicaoOrigem" id="portador" class="form-control"></select>
+						</div>
 					</div>
 		  		</div>
 			</fieldset>

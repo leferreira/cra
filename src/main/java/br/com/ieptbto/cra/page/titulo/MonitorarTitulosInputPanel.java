@@ -1,18 +1,22 @@
 package br.com.ieptbto.cra.page.titulo;
 
-import java.math.BigDecimal;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -25,9 +29,13 @@ public class MonitorarTitulosInputPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(MonitorarTitulosInputPanel.class);
 	
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
+	
 	private Titulo titulo;
 	private TextField<LocalDate> dataEmissao;
 	private TextField<LocalDate> dataOcorrencia;
+	private DropDownChoice<Instituicao> comboPortador;
 	private IModel<Titulo> model;
 	
 	public MonitorarTitulosInputPanel(String id, IModel<Titulo> model) {
@@ -41,17 +49,24 @@ public class MonitorarTitulosInputPanel extends Panel {
 		add(numeroTitulo());
 		add(dataEmissaoTitulo());
 		add(dataOcorrencia());
-		add(valorTitulo()); 
-		add(saldoTitulo()); 
+//		add(valorTitulo()); 
+//		add(saldoTitulo()); 
 		add(numeroProtocoloCartorio());
-		add(codigoPortador()); 
+//		add(codigoPortador()); 
+		add(comboPortador());
 		add(nomeDevedor());
 		add(documentoDevedor()); 
 		add(botaoEnviar());
 	}
 	
-	public TextField<String> codigoPortador() {
-		return new TextField<String>("codigoPortador");
+//	public TextField<String> codigoPortador() {
+//		return new TextField<String>("codigoPortador");
+//	}
+	
+	private Component comboPortador() {
+		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
+		this.comboPortador = new DropDownChoice<Instituicao>("remessa.instituicaoOrigem",instituicaoMediator.getInstituicoesFinanceiras(), renderer);
+		return comboPortador;
 	}
 	
 	public TextField<String> nossoNumero() {
@@ -70,13 +85,13 @@ public class MonitorarTitulosInputPanel extends Panel {
 		return dataOcorrencia = new TextField<LocalDate>("dataOcorrencia", new Model<LocalDate>());
 	}
 	
-	public TextField<BigDecimal> valorTitulo() {
-		return new TextField<BigDecimal>("valorTitulo");
-	}
-	
-	public TextField<BigDecimal> saldoTitulo() {
-		return new TextField<BigDecimal>("saldoTitulo");
-	}
+//	public TextField<BigDecimal> valorTitulo() {
+//		return new TextField<BigDecimal>("valorTitulo");
+//	}
+//	
+//	public TextField<BigDecimal> saldoTitulo() {
+//		return new TextField<BigDecimal>("saldoTitulo");
+//	}
 	
 	public TextField<String> nomeDevedor() {
 		return new TextField<String>("nomeDevedor");
@@ -102,6 +117,8 @@ public class MonitorarTitulosInputPanel extends Panel {
 						titulo.setDataOcorrencia(DataUtil.stringToLocalDate(dataOcorrencia.getDefaultModelObject().toString()));
 					if (dataEmissao.getDefaultModelObject() != null)
 						titulo.setDataEmissaoTitulo(DataUtil.stringToLocalDate(dataEmissao.getDefaultModelObject().toString()));
+					if (comboPortador.getDefaultModelObject() != null)
+						titulo.setCodigoPortador(titulo.getRemessa().getInstituicaoOrigem().getCodigoCompensacao());
 					
 					setResponsePage(new ListaTitulosPage(titulo));
 				} catch (InfraException ex) {

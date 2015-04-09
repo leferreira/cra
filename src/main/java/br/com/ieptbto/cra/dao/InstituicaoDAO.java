@@ -190,9 +190,9 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 	public Instituicao getInstituicao(Integer codigoMunicipio) {
 		Criteria criteria = getCriteria(Instituicao.class);
 		criteria.createAlias("municipio", "municipio");
-
+		criteria.createAlias("tipoInstituicao", "tipoInstituicao");
 		criteria.add(Restrictions.eq("municipio.codigoIBGE", codigoMunicipio));
-
+		criteria.add(Restrictions.eq("tipoInstituicao.id", 2));
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 

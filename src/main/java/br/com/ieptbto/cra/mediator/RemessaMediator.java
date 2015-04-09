@@ -27,7 +27,7 @@ import br.com.ieptbto.cra.util.DataUtil;
 @Service
 public class RemessaMediator {
 
-	protected static final Logger logger = Logger.getLogger(RemessaMediator.class);
+protected static final Logger logger = Logger.getLogger(RemessaMediator.class);
 	
 	@Autowired
 	private RemessaDAO remessaDao;
