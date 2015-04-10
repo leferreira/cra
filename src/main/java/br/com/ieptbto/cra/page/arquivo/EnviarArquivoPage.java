@@ -55,7 +55,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
 
 				try {
-					arquivoMediator.salvar(arquivo, uploadedFile);
+					arquivoMediator.salvar(arquivo, uploadedFile, getUser());
 					info("Arquivo enviado com sucesso.");
 
 				} catch (InfraException ex) {

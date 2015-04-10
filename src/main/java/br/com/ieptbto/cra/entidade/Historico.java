@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import org.hibernate.envers.Audited;
 import org.joda.time.LocalDateTime;
 
+import br.com.ieptbto.cra.util.DataUtil;
+
 /**
  * @author Thasso Araújo
  *
@@ -21,6 +23,13 @@ import org.joda.time.LocalDateTime;
 @Table(name = "TB_HISTORICO")
 @org.hibernate.annotations.Table(appliesTo = "TB_HISTORICO")
 public class Historico extends AbstractEntidade<Historico> {
+
+	@Override
+	public String toString() {
+		return "Arquivo " + remessa.getArquivo().getNomeArquivo() + 
+				" importado em " + DataUtil.localDateTimeToString(dataOcorrencia) + 
+				" por " + usuarioAcao.getNome() + ".<br/>\n";
+	}
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -50,19 +59,22 @@ public class Historico extends AbstractEntidade<Historico> {
 		return remessa;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "USUARIO_ID")
+	public Usuario getUsuarioAcao() {
+		return usuarioAcao;
+	}
+
 	@Column(name = "DATA_OCORRENCIA")
 	public LocalDateTime getDataOcorrencia() {
 		return dataOcorrencia;
 	}
 
+
 	public void setId(int id) {
 		this.id = id;
 	}
 
-
-	public Usuario getUsuarioAcao() {
-		return usuarioAcao;
-	}
 
 	public void setTitulo(Titulo titulo) {
 		this.titulo = titulo;
@@ -79,7 +91,7 @@ public class Historico extends AbstractEntidade<Historico> {
 	public void setUsuarioAcao(Usuario usuarioAcao) {
 		this.usuarioAcao = usuarioAcao;
 	}
-	
+
 	@Override
 	public int compareTo(Historico entidade) {
 		// TODO Auto-generated method stub

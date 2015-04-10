@@ -39,12 +39,19 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	private List<Titulo> titulos;
 	private Cabecalho cabecalho;
 	private Rodape rodape;
+	private List<Historico> historicos;
+
 
 	@Id
 	@Column(name = "ID_REMESSA", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int getId() {
 		return id;
+	}
+
+	@OneToMany(mappedBy="remessa")
+	public List<Historico> getHistoricos() {
+		return historicos;
 	}
 
 	@ManyToOne
@@ -95,6 +102,10 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		this.arquivo = arquivo;
 	}
 
+	public void setHistoricos(List<Historico> historicos) {
+		this.historicos = historicos;
+	}
+	
 	public void setTitulos(List<Titulo> titulos) {
 		this.titulos = titulos;
 	}

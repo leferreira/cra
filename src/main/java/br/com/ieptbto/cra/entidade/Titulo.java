@@ -1,7 +1,7 @@
 package br.com.ieptbto.cra.entidade;
 
-import java.beans.Transient;
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
@@ -35,6 +37,7 @@ public class Titulo extends AbstractEntidade<Titulo> {
 
 	private int id;
 	private Remessa remessa;
+	private List<Historico> historicos;
 
 	private TipoRegistro identificacaoRegistro;
 	private String codigoPortador;
@@ -102,6 +105,11 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		return remessa;
 	}
 
+	@OneToMany(mappedBy="titulo")
+	public List<Historico> getHistoricos() {
+		return historicos;
+	}
+	
 	@Column(name = "IDENTIFICACAO_REGISTRO_ID")
 	public TipoRegistro getIdentificacaoRegistro() {
 		return identificacaoRegistro;
@@ -370,6 +378,10 @@ public class Titulo extends AbstractEntidade<Titulo> {
 		this.remessa = remessa;
 	}
 
+	public void setHistoricos(List<Historico> historicos) {
+		this.historicos = historicos;
+	}
+	
 	public void setIdentificacaoRegistro(TipoRegistro identificacaoRegistro) {
 		this.identificacaoRegistro = identificacaoRegistro;
 	}

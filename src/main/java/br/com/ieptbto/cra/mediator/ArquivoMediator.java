@@ -12,6 +12,7 @@ import br.com.ieptbto.cra.dao.TipoArquivoDAO;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 
@@ -31,11 +32,11 @@ public class ArquivoMediator {
 	@Autowired
 	private ProcessadorArquivo processadorArquivo;
 
-	public void salvar(Arquivo arquivo, FileUpload uploadedFile) {
+	public void salvar(Arquivo arquivo, FileUpload uploadedFile, Usuario usuario) {
 		arquivo.setTipoArquivo(getTipoArquivo(arquivo));
 		arquivo.setStatusArquivo(setStatusArquivo());
 		processarArquivo(arquivo, uploadedFile);
-		arquivoDAO.salvar(arquivo);
+		arquivoDAO.salvar(arquivo, usuario);
 
 	}
 

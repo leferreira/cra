@@ -1,5 +1,7 @@
 package br.com.ieptbto.cra.entidade;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -36,6 +39,7 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, 
 	private boolean status;
 	private GrupoUsuario grupoUsuario;
 	private Instituicao instituicao;
+	private List<Historico> historicos;
 
 	@Override
 	@Id
@@ -87,6 +91,15 @@ public class Usuario extends AbstractEntidade<Usuario> implements IClusterable, 
 		return status;
 	}
 
+	@OneToMany(mappedBy="usuarioAcao")
+	public List<Historico> getHistoricos() {
+		return historicos;
+	}
+
+	public void setHistoricos(List<Historico> historicos) {
+		this.historicos = historicos;
+	}
+	
 	public void setEmail(String email) {
 		this.email = email;
 	}

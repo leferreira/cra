@@ -8,6 +8,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.Usuario;
@@ -48,5 +49,9 @@ public class TituloDAO extends AbstractBaseDAO  {
 		
 		criteria.addOrder(Order.asc("nomeDevedor"));
 		return criteria.list();
+	}
+	
+	public List<Historico> getHistoricoTitulo(Titulo titulo){
+		return null;
 	}
 }

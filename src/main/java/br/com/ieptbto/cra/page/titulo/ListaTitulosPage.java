@@ -2,8 +2,10 @@ package br.com.ieptbto.cra.page.titulo;
 
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -71,18 +73,22 @@ public class ListaTitulosPage extends BasePage<Titulo> {
 				item.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
 //				item.add(new Label("situacao", ));
-//				item.add(informacoesTitulo(tituloLista));
+				item.add(historicoTitulo(tituloLista));
 			}
 
-//			private Component detalharUsuario(final Usuario u) {
-//				return new Link<Usuario>("detalharUsuario") {
-//
-//					@Override
-//					public void onClick() {
-//						setResponsePage(new IncluirUsuarioPage(u));
-//					}
-//				};
-//			}
+			private Component historicoTitulo(final Titulo t) {
+				return new Link<Titulo>("historicoTitulo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						setResponsePage(new HistoricoPage(t));
+					}
+					
+				};
+			}
 
 		};
 	}
@@ -99,6 +105,7 @@ public class ListaTitulosPage extends BasePage<Titulo> {
 		};
 	}
 
+    
 	@Override
 	protected IModel<Titulo> getModel() {
 		return new CompoundPropertyModel<Titulo>(titulo);

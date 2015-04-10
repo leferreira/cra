@@ -67,7 +67,6 @@ public class ProcessadorArquivo extends Processador {
 		logger.info("Iniciar validação do arquivoFisico " + getFile().getClientFileName() + " enviado pelo usuário "
 		        + getUsuario().getLogin());
 		new FabricaValidacaoArquivo(getArquivoFisico(), getUsuario()).validar();
-
 	}
 
 	private void copiarArquivoParaDiretorioDoUsuario() {
