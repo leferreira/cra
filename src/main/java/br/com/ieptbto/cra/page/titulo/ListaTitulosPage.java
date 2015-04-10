@@ -14,12 +14,12 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 
-public class ListaTitulosPage extends BasePage<Titulo> {
+public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -28,14 +28,14 @@ public class ListaTitulosPage extends BasePage<Titulo> {
 	private TituloMediator tituloMediator;
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
-	private final Titulo titulo;
+	private final TituloRemessa titulo;
 	private Instituicao portador;
 	
 	private WebMarkupContainer divListRetorno;
 	private WebMarkupContainer divListaTitulo;
 	private WebMarkupContainer dataTableTitulo;
 	
-	public ListaTitulosPage(Titulo titulo) {
+	public ListaTitulosPage(TituloRemessa titulo) {
 		super();
 		this.titulo=titulo;
 		adicionarCampos();
@@ -49,7 +49,7 @@ public class ListaTitulosPage extends BasePage<Titulo> {
 	private WebMarkupContainer carregarDataTableTitulo() {
 		divListaTitulo = new WebMarkupContainer("divListView");
 		dataTableTitulo = new WebMarkupContainer("dataTableTitulo");
-		PageableListView<Titulo> listView = getListViewTitulos();
+		PageableListView<TituloRemessa> listView = getListViewTitulos();
 		dataTableTitulo.setOutputMarkupId(true);
 		dataTableTitulo.add(listView);
 
@@ -57,14 +57,14 @@ public class ListaTitulosPage extends BasePage<Titulo> {
 		return divListaTitulo;
 	}
 
-	private PageableListView<Titulo> getListViewTitulos() {
-		return new PageableListView<Titulo>("listViewTitulo",buscarTitulos(), 10) {
+	private PageableListView<TituloRemessa> getListViewTitulos() {
+		return new PageableListView<TituloRemessa>("listViewTitulo",buscarTitulos(), 10) {
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<Titulo> item) {
-				Titulo tituloLista = item.getModelObject();
+			protected void populateItem(ListItem<TituloRemessa> item) {
+				TituloRemessa tituloLista = item.getModelObject();
 				portador = instituicaoMediator.getInstituicaoPorCodigoPortador(tituloLista.getCodigoPortador());
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
@@ -76,8 +76,8 @@ public class ListaTitulosPage extends BasePage<Titulo> {
 				item.add(historicoTitulo(tituloLista));
 			}
 
-			private Component historicoTitulo(final Titulo t) {
-				return new Link<Titulo>("historicoTitulo") {
+			private Component historicoTitulo(final TituloRemessa t) {
+				return new Link<TituloRemessa>("historicoTitulo") {
 
 					/***/
 					private static final long serialVersionUID = 1L;
@@ -93,13 +93,13 @@ public class ListaTitulosPage extends BasePage<Titulo> {
 		};
 	}
 	
-	public IModel<List<Titulo>> buscarTitulos() {
-		return new LoadableDetachableModel<List<Titulo>>() {
+	public IModel<List<TituloRemessa>> buscarTitulos() {
+		return new LoadableDetachableModel<List<TituloRemessa>>() {
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected List<Titulo> load() {
+			protected List<TituloRemessa> load() {
 				return tituloMediator.buscarListaTitulos(titulo, getUser());
 			}
 		};
@@ -107,8 +107,8 @@ public class ListaTitulosPage extends BasePage<Titulo> {
 
     
 	@Override
-	protected IModel<Titulo> getModel() {
-		return new CompoundPropertyModel<Titulo>(titulo);
+	protected IModel<TituloRemessa> getModel() {
+		return new CompoundPropertyModel<TituloRemessa>(titulo);
 	}
 
 }

@@ -3,23 +3,23 @@ package br.com.ieptbto.cra.page.titulo;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
-import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.page.base.BasePage;
 
-public class HistoricoPage extends BasePage<Titulo> {
+public class HistoricoPage extends BasePage<TituloRemessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private Titulo titulo;
+	private TituloRemessa titulo;
 
-	public HistoricoPage(Titulo titulo){
+	public HistoricoPage(TituloRemessa titulo){
 		this.titulo=titulo;
 		add(new HistoricoPanel("tituloHistorio", getModel(), titulo));
 	}
 	
 	@Override
-	protected IModel<Titulo> getModel() {
-		return new CompoundPropertyModel<Titulo>(titulo);
+	protected IModel<TituloRemessa> getModel() {
+		return new CompoundPropertyModel<TituloRemessa>(titulo);
 	}
 
 }

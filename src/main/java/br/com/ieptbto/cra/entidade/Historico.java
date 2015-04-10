@@ -35,7 +35,7 @@ public class Historico extends AbstractEntidade<Historico> {
 	private static final long serialVersionUID = 1L;
 
 	private int id;
-	private Titulo titulo;
+	private TituloRemessa titulo;
 	private Remessa remessa;
 	private LocalDateTime dataOcorrencia;
 	private Usuario usuarioAcao;
@@ -49,7 +49,7 @@ public class Historico extends AbstractEntidade<Historico> {
 
 	@ManyToOne
 	@JoinColumn(name = "TITULO_ID")
-	public Titulo getTitulo() {
+	public TituloRemessa getTitulo() {
 		return titulo;
 	}
 
@@ -76,7 +76,7 @@ public class Historico extends AbstractEntidade<Historico> {
 	}
 
 
-	public void setTitulo(Titulo titulo) {
+	public void setTitulo(TituloRemessa titulo) {
 		this.titulo = titulo;
 	}
 

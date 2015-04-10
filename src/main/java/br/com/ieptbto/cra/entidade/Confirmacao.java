@@ -1,21 +1,43 @@
 package br.com.ieptbto.cra.entidade;
 
 import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.envers.Audited;
 
 /**
  * 
  * @author Lefer
  *
- * @param <T>
  */
 @SuppressWarnings("serial")
-@MappedSuperclass
-public class Cabecalho<T> extends AbstractEntidade<T> {
+@Entity
+@Audited
+@Table(name = "TB_CONFIRMACAO")
+@org.hibernate.annotations.Table(appliesTo = "TB_CONFIRMACAO")
+public class Confirmacao extends Titulo<Confirmacao> {
 
+	private int id;
+	private Remessa remessa;
 	private String identificacaoTransacaoRemetente;
 	private String identificacaoTransacaoDestinatario;
 	private String identificacaoTransacaoTipo;
+	private TituloRemessa titulo;
+
+	@Id
+	@Column(name = "ID_CONFIRMACAO", columnDefinition = "serial")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Override
+	public int getId() {
+		return id;
+	}
 
 	@Column(name = "IDENTIFICAO_TRANSACAO_REMENTE", length = 3)
 	public String getIdentificacaoTransacaoRemetente() {
@@ -32,6 +54,30 @@ public class Cabecalho<T> extends AbstractEntidade<T> {
 		return identificacaoTransacaoTipo;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "REMESSA_ID")
+	public Remessa getRemessa() {
+		return remessa;
+	}
+
+	@OneToOne
+	@JoinColumn(name = "TITULO_ID")
+	public TituloRemessa getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(TituloRemessa titulo) {
+		this.titulo = titulo;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setRemessa(Remessa remessa) {
+		this.remessa = remessa;
+	}
+
 	public void setIdentificacaoTransacaoDestinatario(String identificacaoTransacaoDestinatario) {
 		this.identificacaoTransacaoDestinatario = identificacaoTransacaoDestinatario;
 	}
@@ -45,13 +91,7 @@ public class Cabecalho<T> extends AbstractEntidade<T> {
 	}
 
 	@Override
-	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int compareTo(T entidade) {
+	public int compareTo(Confirmacao entidade) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -14,7 +14,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -32,13 +32,13 @@ public class MonitorarTitulosInputPanel extends Panel {
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
 	
-	private Titulo titulo;
+	private TituloRemessa titulo;
 	private TextField<LocalDate> dataEmissao;
 	private TextField<LocalDate> dataOcorrencia;
 	private DropDownChoice<Instituicao> comboPortador;
-	private IModel<Titulo> model;
+	private IModel<TituloRemessa> model;
 	
-	public MonitorarTitulosInputPanel(String id, IModel<Titulo> model) {
+	public MonitorarTitulosInputPanel(String id, IModel<TituloRemessa> model) {
 		super(id, model);
 		this.model = model;
 		adicionarCampos();

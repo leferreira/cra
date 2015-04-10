@@ -14,18 +14,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Cabecalho;
+import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
+import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.Rodape;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
-import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 
 /**
@@ -57,8 +59,10 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(TipoArquivo.class);
 		classesHibernate.add(PermissaoEnvio.class);
 		classesHibernate.add(Arquivo.class);
-		classesHibernate.add(Titulo.class);
-		classesHibernate.add(Cabecalho.class);
+		classesHibernate.add(TituloRemessa.class);
+		classesHibernate.add(Confirmacao.class);
+		classesHibernate.add(Retorno.class);
+		classesHibernate.add(CabecalhoRemessa.class);
 		classesHibernate.add(Rodape.class);
 		classesHibernate.add(Remessa.class);
 		classesHibernate.add(StatusArquivo.class);

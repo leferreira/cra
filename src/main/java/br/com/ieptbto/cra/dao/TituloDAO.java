@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 
 /**
@@ -23,10 +23,10 @@ public class TituloDAO extends AbstractBaseDAO  {
 	private Instituicao instituicaoUsuario;
 	
 	@SuppressWarnings("unchecked")
-	public List<Titulo> buscarListaTitulos(Titulo titulo, Usuario user){
+	public List<TituloRemessa> buscarListaTitulos(TituloRemessa titulo, Usuario user){
 		this.instituicaoUsuario = user.getInstituicao();
 		
-		Criteria criteria = getCriteria(Titulo.class);
+		Criteria criteria = getCriteria(TituloRemessa.class);
 		criteria.createAlias("remessa", "remessa");
 		criteria.createAlias("remessa.arquivo", "arquivo");
 		if (!instituicaoUsuario.getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
@@ -49,7 +49,7 @@ public class TituloDAO extends AbstractBaseDAO  {
 		return criteria.list();
 	}
 	
-	public List<Historico> getHistoricoTitulo(Titulo titulo){
+	public List<Historico> getHistoricoTitulo(TituloRemessa titulo){
 		return null;
 	}
 }

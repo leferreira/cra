@@ -16,7 +16,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
-import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -56,7 +56,7 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				remessa.setArquivo(arquivoSalvo);
 				remessa.setDataRecebimento(new LocalDate());
 				save(remessa);
-				for (Titulo titulo : remessa.getTitulos()) {
+				for (TituloRemessa titulo : remessa.getTitulos()) {
 					titulo.setRemessa(remessa);
 					save(titulo);
 					historico.setDataOcorrencia(new LocalDateTime());

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Cabecalho;
+import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.CabecalhoVO;
@@ -23,12 +23,12 @@ public class ArquivoConversor {
 		Remessa remessa = new Remessa();
 
 		for (CabecalhoVO cabecalhoVO : arquivoVO.getCabecalhos()) {
-			Cabecalho cabecalho = new CabecalhoConversor().converter(Cabecalho.class, cabecalhoVO);
+			CabecalhoRemessa cabecalho = new CabecalhoConversor().converter(CabecalhoRemessa.class, cabecalhoVO);
 			cabecalho.setRemessa(remessa);
 			remessa.setCabecalho(cabecalho);
 		}
 		// for (TituloVO tituloVO : arquivoVO.getTitulos()) {
-		// Titulo titulo = new TituloConversor().converter(Titulo.class,
+		// TituloRemessa titulo = new TituloConversor().converter(TituloRemessa.class,
 		// tituloVO);
 		// titulo.setArquivo(arquivo);
 		// arquivo.getTitulos().add(titulo);

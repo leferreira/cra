@@ -36,8 +36,8 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	private LocalDate dataRecebimento;
 	private Instituicao instituicaoOrigem;
 	private Instituicao instituicaoDestino;
-	private List<Titulo> titulos;
-	private Cabecalho cabecalho;
+	private List<TituloRemessa> titulos;
+	private CabecalhoRemessa cabecalho;
 	private Rodape rodape;
 	private List<Historico> historicos;
 
@@ -73,12 +73,12 @@ public class Remessa extends AbstractEntidade<Remessa> {
 
 	@OneToOne
 	@JoinColumn(name = "CABECALHO_ID")
-	public Cabecalho getCabecalho() {
+	public CabecalhoRemessa getCabecalho() {
 		return cabecalho;
 	}
 
 	@OneToMany(mappedBy = "remessa", fetch = FetchType.LAZY)
-	public List<Titulo> getTitulos() {
+	public List<TituloRemessa> getTitulos() {
 		return titulos;
 	}
 
@@ -106,7 +106,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		this.historicos = historicos;
 	}
 	
-	public void setTitulos(List<Titulo> titulos) {
+	public void setTitulos(List<TituloRemessa> titulos) {
 		this.titulos = titulos;
 	}
 
@@ -129,7 +129,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return compareToBuilder.toComparison();
 	}
 
-	public void setCabecalho(Cabecalho cabecalho) {
+	public void setCabecalho(CabecalhoRemessa cabecalho) {
 		this.cabecalho = cabecalho;
 	}
 

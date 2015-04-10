@@ -5,7 +5,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 
 
@@ -17,7 +17,7 @@ public class HistoricoPanel extends Panel {
 	TituloMediator tituloMediator;
 //	private List<Historico> historico;
 
-	public HistoricoPanel(String id, IModel<Titulo> model, Titulo titulo){
+	public HistoricoPanel(String id, IModel<TituloRemessa> model, TituloRemessa titulo){
         super(id, model);
 //        this.historico = tituloMediator.getHistoricoTitulo(titulo);
 //        add(historico());

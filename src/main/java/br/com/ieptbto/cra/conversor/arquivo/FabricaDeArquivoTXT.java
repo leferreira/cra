@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Cabecalho;
+import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Rodape;
-import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.CabecalhoVO;
 import br.com.ieptbto.cra.entidade.vo.RodapeVO;
@@ -52,7 +52,7 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 			List<Remessa> remessas = new ArrayList<Remessa>();
 			getArquivo().setRemessas(remessas);
 			Remessa remessa = new Remessa();
-			remessa.setTitulos(new ArrayList<Titulo>());
+			remessa.setTitulos(new ArrayList<TituloRemessa>());
 			remessa.setArquivo(getArquivo());
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(getArquivoFisico())));
@@ -62,7 +62,7 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 				if (remessa.getRodape() != null) {
 					remessas.add(remessa);
 					remessa = new Remessa();
-					remessa.setTitulos(new ArrayList<Titulo>());
+					remessa.setTitulos(new ArrayList<TituloRemessa>());
 					remessa.setArquivo(getArquivo());
 				}
 			}
@@ -86,14 +86,14 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 
 		if (TipoRegistro.CABECALHO.getConstante().equals(registro.getIdentificacaoRegistro())) {
 			CabecalhoVO cabecalhoVO = CabecalhoVO.class.cast(registro);
-			Cabecalho cabecalho = new CabecalhoConversor().converter(Cabecalho.class, cabecalhoVO);
+			CabecalhoRemessa cabecalho = new CabecalhoConversor().converter(CabecalhoRemessa.class, cabecalhoVO);
 			remessa.setCabecalho(cabecalho);
 			cabecalho.setRemessa(remessa);
 			remessa.setInstituicaoDestino(getInstituicaoDeDestino(cabecalho));
 			remessa.setInstituicaoOrigem(getArquivo().getInstituicaoEnvio());
 		} else if (TipoRegistro.TITULO.getConstante().equals(registro.getIdentificacaoRegistro())) {
 			TituloVO tituloVO = TituloVO.class.cast(registro);
-			Titulo titulo = new TituloConversor().converter(Titulo.class, tituloVO);
+			TituloRemessa titulo = new TituloConversor().converter(TituloRemessa.class, tituloVO);
 			titulo.setRemessa(remessa);
 			remessa.getTitulos().add(titulo);
 		} else if (TipoRegistro.RODAPE.getConstante().equals(registro.getIdentificacaoRegistro())) {
@@ -107,7 +107,7 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 
 	}
 
-	private Instituicao getInstituicaoDeDestino(Cabecalho cabecalho) {
+	private Instituicao getInstituicaoDeDestino(CabecalhoRemessa cabecalho) {
 		if (TipoArquivoEnum.CONFIRMACAO.equals(TipoArquivoEnum.getTipoArquivoEnum(getArquivo().getNomeArquivo()))
 		        || TipoArquivoEnum.RETORNO.equals(TipoArquivoEnum.getTipoArquivoEnum(getArquivo().getNomeArquivo()))) {
 			return instituicaoMediator.getInstituicaoPorCodigoPortador(cabecalho.getNumeroCodigoPortador());
