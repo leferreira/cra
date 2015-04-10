@@ -36,7 +36,7 @@ public class PermissaoEnvioDAO extends AbstractBaseDAO {
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			session.update(permissao);
+			update(permissao);
 			transaction.commit();
 
 			logger.info("As permissões para o tipo " + permissao.getTipoInstituicao().getTipoInstituicao() + " foram alteradas no banco!");

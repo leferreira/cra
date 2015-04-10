@@ -3,7 +3,6 @@ package br.com.ieptbto.cra.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -28,10 +27,9 @@ public class MunicipioDAO extends AbstractBaseDAO {
 	}
 
 	public Municipio alterar(Municipio municipio) {
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
+		Transaction transaction = getBeginTransation();
 		try {
-			session.update(municipio);
+			update(municipio);
 			transaction.commit();
 
 		} catch (Exception ex) {

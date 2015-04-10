@@ -3,7 +3,6 @@ package br.com.ieptbto.cra.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -43,10 +42,9 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 	}
 
 	public Instituicao alterar(Instituicao instituicao) {
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
+		Transaction transaction = getBeginTransation();
 		try {
-			session.update(instituicao);
+			update(instituicao);
 
 			transaction.commit();
 			logger.info(instituicao.getTipoInstituicao().getTipoInstituicao() + " foi alterado na base de dados. ");

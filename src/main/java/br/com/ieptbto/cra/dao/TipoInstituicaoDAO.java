@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -29,10 +28,9 @@ public class TipoInstituicaoDAO extends AbstractBaseDAO {
 	}
 
 	public TipoInstituicao alterar(TipoInstituicao tipo) {
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
+		Transaction transaction = getBeginTransation();
 		try {
-			session.update(tipo);
+			update(tipo);
 			transaction.commit();
 
 		} catch (Exception ex) {

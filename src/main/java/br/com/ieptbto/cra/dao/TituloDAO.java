@@ -40,10 +40,8 @@ public class TituloDAO extends AbstractBaseDAO  {
 				.add(Restrictions.ilike("numeroTitulo", titulo.getNumeroTitulo(), MatchMode.ANYWHERE))
 				.add(Restrictions.ilike("nomeDevedor", titulo.getNomeDevedor(), MatchMode.ANYWHERE))
 				.add(Restrictions.ilike("documentoDevedor", titulo.getDocumentoDevedor(), MatchMode.ANYWHERE))
-				.add(Restrictions.eq("saldoTitulo", titulo.getSaldoTitulo())) // Não funciona 
-				.add(Restrictions.eq("valorTitulo", titulo.getValorTitulo())) // Não funciona 
-				.add(Restrictions.eq("dataEmissaoTitulo", titulo.getDataEmissaoTitulo())) // Não funciona 
-				.add(Restrictions.eq("dataOcorrencia", titulo.getDataOcorrencia())) // Não funciona 
+				.add(Restrictions.eq("dataEmissaoTitulo", titulo.getDataEmissaoTitulo())) 
+				.add(Restrictions.eq("dataOcorrencia", titulo.getDataOcorrencia())) 
 				.add(Restrictions.ilike("nossoNumero", titulo.getNossoNumero(), MatchMode.ANYWHERE)));
 		
 		

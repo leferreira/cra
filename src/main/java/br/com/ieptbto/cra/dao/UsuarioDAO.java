@@ -57,7 +57,6 @@ public class UsuarioDAO extends AbstractBaseDAO {
 
 	public Usuario criarUsuario(Usuario usuario) {
 		Usuario novoUsuario = new Usuario();
-		Session session = getSession();
 		Transaction transaction = getBeginTransation();
 		try {
 			usuario.setSenha(Usuario.cryptPass(usuario.getSenha()));
@@ -65,8 +64,6 @@ public class UsuarioDAO extends AbstractBaseDAO {
 			transaction.commit();
 		} catch (Exception ex) {
 			transaction.rollback();
-		} finally {
-			session.close();
 		}
 		return novoUsuario;
 	}

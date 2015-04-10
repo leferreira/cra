@@ -3,7 +3,6 @@ package br.com.ieptbto.cra.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -34,10 +33,9 @@ public class TipoArquivoDAO extends AbstractBaseDAO {
 	}
 
 	public TipoArquivo alterar(TipoArquivo tipoArquivo) {
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
+		Transaction transaction = getBeginTransation();
 		try {
-			session.update(tipoArquivo);
+			update(tipoArquivo);
 			transaction.commit();
 
 		} catch (Exception ex) {
