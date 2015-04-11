@@ -81,21 +81,21 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	}
 
 	@OneToOne
-	@JoinColumn(name = "ID_CONFIRMACAO", nullable = false)
+	@JoinColumn(name = "CONFIRMACAO_ID", columnDefinition = "integer NULL")
 	public Confirmacao getConfirmacao() {
 		return confirmacao;
+	}
+
+	@OneToOne
+	@JoinColumn(name = "RETORNO_ID", columnDefinition = "integer NULL")
+	public Retorno getRetorno() {
+		return retorno;
 	}
 
 	@OneToOne
 	@JoinColumn(name = "REMESSA_ID")
 	public Remessa getRemessa() {
 		return remessa;
-	}
-
-	@OneToOne
-	@JoinColumn(name = "RETORNO_ID", nullable = false)
-	public Retorno getRetorno() {
-		return retorno;
 	}
 
 	@OneToMany(mappedBy = "titulo")
