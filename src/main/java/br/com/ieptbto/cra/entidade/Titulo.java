@@ -3,6 +3,8 @@ package br.com.ieptbto.cra.entidade;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 import org.joda.time.LocalDate;
@@ -16,7 +18,7 @@ import br.com.ieptbto.cra.enumeration.TipoRegistro;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public class Titulo<T> extends AbstractEntidade<T> {
+public abstract class Titulo<T> extends AbstractEntidade<T> {
 
 	private TipoRegistro identificacaoRegistro;
 	private String codigoPortador;
@@ -39,6 +41,16 @@ public class Titulo<T> extends AbstractEntidade<T> {
 	private String complementoCodigoIrregularidade;
 	private BigDecimal valorDemaisDespesas;
 	private String numeroSequencialArquivo;
+	private Remessa remessa;
+
+	@Override
+	public abstract int getId();
+
+	@ManyToOne
+	@JoinColumn(name = "REMESSA_ID")
+	public Remessa getRemessa() {
+		return remessa;
+	}
 
 	@Column(name = "IDENTIFICACAO_REGISTRO_ID")
 	public TipoRegistro getIdentificacaoRegistro() {
@@ -140,6 +152,10 @@ public class Titulo<T> extends AbstractEntidade<T> {
 		return numeroSequencialArquivo;
 	}
 
+	public void setRemessa(Remessa remessa) {
+		this.remessa = remessa;
+	}
+
 	public void setValorDemaisDespesas(BigDecimal valorDemaisDespesas) {
 		this.valorDemaisDespesas = valorDemaisDespesas;
 	}
@@ -222,12 +238,7 @@ public class Titulo<T> extends AbstractEntidade<T> {
 
 	@Override
 	public int compareTo(T entidade) {
-		// TODO Auto-generated method stub
 		return 0;
-	}
+	};
 
-	@Override
-	public int getId() {
-		return 0;
-	}
 }

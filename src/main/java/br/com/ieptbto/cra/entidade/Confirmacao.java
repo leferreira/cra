@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
@@ -24,19 +23,19 @@ import org.hibernate.envers.Audited;
 @org.hibernate.annotations.Table(appliesTo = "TB_CONFIRMACAO")
 public class Confirmacao extends Titulo<Confirmacao> {
 
-	private int id;
-	private Remessa remessa;
 	private String identificacaoTransacaoRemetente;
 	private String identificacaoTransacaoDestinatario;
 	private String identificacaoTransacaoTipo;
-	private TituloRemessa titulo;
+	private int id;
+
+	private TituloRemessa tituloRemessa;
 
 	@Id
 	@Column(name = "ID_CONFIRMACAO", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Override
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 	@Column(name = "IDENTIFICAO_TRANSACAO_REMENTE", length = 3)
@@ -55,27 +54,17 @@ public class Confirmacao extends Titulo<Confirmacao> {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "REMESSA_ID")
-	public Remessa getRemessa() {
-		return remessa;
-	}
-
-	@OneToOne
 	@JoinColumn(name = "TITULO_ID")
 	public TituloRemessa getTitulo() {
-		return titulo;
+		return tituloRemessa;
 	}
 
 	public void setTitulo(TituloRemessa titulo) {
-		this.titulo = titulo;
+		this.tituloRemessa = titulo;
 	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public void setRemessa(Remessa remessa) {
-		this.remessa = remessa;
 	}
 
 	public void setIdentificacaoTransacaoDestinatario(String identificacaoTransacaoDestinatario) {

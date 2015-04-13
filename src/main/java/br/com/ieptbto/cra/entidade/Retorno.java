@@ -23,22 +23,16 @@ import org.hibernate.envers.Audited;
 @org.hibernate.annotations.Table(appliesTo = "TB_RETORNO")
 public class Retorno extends Titulo<Retorno> {
 
-	private int id;
-	private Remessa remessa;
 	private CabecalhoRemessa cabecalho;
+	private int id;
+	private TituloRemessa titulo;
 
 	@Id
-	@Column(name = "ID_CONFIRMACAO", columnDefinition = "serial")
+	@Column(name = "ID_RETORNO", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Override
 	public int getId() {
-		return id;
-	}
-
-	@ManyToOne
-	@JoinColumn(name = "REMESSA_ID")
-	public Remessa getRemessa() {
-		return remessa;
+		return this.id;
 	}
 
 	@ManyToOne
@@ -47,16 +41,28 @@ public class Retorno extends Titulo<Retorno> {
 		return cabecalho;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "TITULO_ID")
+	public TituloRemessa getTitulo() {
+		return titulo;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
 
-	public void setRemessa(Remessa remessa) {
-		this.remessa = remessa;
-	}
-
 	public void setCabecalho(CabecalhoRemessa cabecalho) {
 		this.cabecalho = cabecalho;
+	}
+
+	public void setTitulo(TituloRemessa titulo) {
+		this.titulo = titulo;
+	}
+
+	@Override
+	public int compareTo(Retorno entidade) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

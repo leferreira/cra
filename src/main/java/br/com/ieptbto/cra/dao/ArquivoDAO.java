@@ -16,6 +16,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
+import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
@@ -27,13 +28,13 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
  * @author Lefer
  *
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Repository
 public class ArquivoDAO extends AbstractBaseDAO {
 
 	@Autowired
 	InstituicaoMediator InstituicaoMediator;
 
-	@SuppressWarnings("unchecked")
 	public List<Arquivo> buscarTodosArquivos() {
 		Criteria criteria = getCriteria(Arquivo.class);
 		criteria.addOrder(Order.asc("id"));
@@ -56,7 +57,8 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				remessa.setArquivo(arquivoSalvo);
 				remessa.setDataRecebimento(new LocalDate());
 				save(remessa);
-				for (TituloRemessa titulo : remessa.getTitulos()) {
+				for (Titulo tituloA : remessa.getTitulos()) {
+					TituloRemessa titulo = TituloRemessa.class.cast(tituloA);
 					titulo.setRemessa(remessa);
 					save(titulo);
 					historico.setDataOcorrencia(new LocalDateTime());

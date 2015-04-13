@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.entidade;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 /**
  * 
@@ -11,7 +12,7 @@ import javax.persistence.MappedSuperclass;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public class Cabecalho<T> extends AbstractEntidade<T> {
+public abstract class Cabecalho<T> extends AbstractEntidade<T> {
 
 	private String identificacaoTransacaoRemetente;
 	private String identificacaoTransacaoDestinatario;
@@ -45,15 +46,10 @@ public class Cabecalho<T> extends AbstractEntidade<T> {
 	}
 
 	@Override
-	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	@Transient
+	public abstract int getId();
 
 	@Override
-	public int compareTo(T entidade) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public abstract int compareTo(T entidade);
 
 }

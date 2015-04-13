@@ -20,6 +20,7 @@ import br.com.ieptbto.cra.exception.InfraException;
 @Repository
 public class InstituicaoDAO extends AbstractBaseDAO {
 
+	private static final int CARTORIO = 2;
 	@Autowired
 	TipoInstituicaoDAO tipoInstituicaoDAO;
 	@Autowired
@@ -190,7 +191,7 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		criteria.createAlias("municipio", "municipio");
 		criteria.createAlias("tipoInstituicao", "tipoInstituicao");
 		criteria.add(Restrictions.eq("municipio.codigoIBGE", codigoMunicipio));
-		criteria.add(Restrictions.eq("tipoInstituicao.id", 2));
+		criteria.add(Restrictions.eq("tipoInstituicao.id", CARTORIO));
 		return Instituicao.class.cast(criteria.uniqueResult());
 	}
 

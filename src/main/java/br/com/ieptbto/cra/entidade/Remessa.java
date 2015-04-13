@@ -22,6 +22,7 @@ import org.joda.time.LocalDate;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("rawtypes")
 @Entity
 @Audited
 @Table(name = "TB_REMESSA")
@@ -36,11 +37,10 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	private LocalDate dataRecebimento;
 	private Instituicao instituicaoOrigem;
 	private Instituicao instituicaoDestino;
-	private List<TituloRemessa> titulos;
 	private CabecalhoRemessa cabecalho;
 	private Rodape rodape;
 	private List<Historico> historicos;
-
+	private List<Titulo> titulos;
 
 	@Id
 	@Column(name = "ID_REMESSA", columnDefinition = "serial")
@@ -49,7 +49,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return id;
 	}
 
-	@OneToMany(mappedBy="remessa")
+	@OneToMany(mappedBy = "remessa", fetch = FetchType.LAZY)
 	public List<Historico> getHistoricos() {
 		return historicos;
 	}
@@ -77,8 +77,8 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return cabecalho;
 	}
 
-	@OneToMany(mappedBy = "remessa", fetch = FetchType.LAZY)
-	public List<TituloRemessa> getTitulos() {
+	@javax.persistence.Transient
+	public List<Titulo> getTitulos() {
 		return titulos;
 	}
 
@@ -105,8 +105,8 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	public void setHistoricos(List<Historico> historicos) {
 		this.historicos = historicos;
 	}
-	
-	public void setTitulos(List<TituloRemessa> titulos) {
+
+	public void setTitulos(List<Titulo> titulos) {
 		this.titulos = titulos;
 	}
 

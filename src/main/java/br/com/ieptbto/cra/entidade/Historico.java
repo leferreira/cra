@@ -24,13 +24,6 @@ import br.com.ieptbto.cra.util.DataUtil;
 @org.hibernate.annotations.Table(appliesTo = "TB_HISTORICO")
 public class Historico extends AbstractEntidade<Historico> {
 
-	@Override
-	public String toString() {
-		return "Arquivo " + remessa.getArquivo().getNomeArquivo() + 
-				" importado em " + DataUtil.localDateTimeToString(dataOcorrencia) + 
-				" por " + usuarioAcao.getNome() + ".<br/>\n";
-	}
-
 	/***/
 	private static final long serialVersionUID = 1L;
 
@@ -70,11 +63,9 @@ public class Historico extends AbstractEntidade<Historico> {
 		return dataOcorrencia;
 	}
 
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
 
 	public void setTitulo(TituloRemessa titulo) {
 		this.titulo = titulo;
@@ -90,6 +81,12 @@ public class Historico extends AbstractEntidade<Historico> {
 
 	public void setUsuarioAcao(Usuario usuarioAcao) {
 		this.usuarioAcao = usuarioAcao;
+	}
+
+	@Override
+	public String toString() {
+		return "Arquivo " + remessa.getArquivo().getNomeArquivo() + " importado em " + DataUtil.localDateTimeToString(dataOcorrencia)
+		        + " por " + usuarioAcao.getNome() + ".<br/>\n";
 	}
 
 	@Override

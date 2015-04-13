@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -34,7 +33,6 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	private static final long serialVersionUID = 1L;
 
 	private int id;
-	private Remessa remessa;
 	private List<Historico> historicos;
 	private Confirmacao confirmacao;
 	private Retorno retorno;
@@ -77,25 +75,17 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Override
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
-	@OneToOne
-	@JoinColumn(name = "CONFIRMACAO_ID", columnDefinition = "integer NULL")
+	@OneToOne(optional = true, mappedBy = "titulo")
 	public Confirmacao getConfirmacao() {
 		return confirmacao;
 	}
 
-	@OneToOne
-	@JoinColumn(name = "RETORNO_ID", columnDefinition = "integer NULL")
+	@OneToOne(optional = true, mappedBy = "titulo")
 	public Retorno getRetorno() {
 		return retorno;
-	}
-
-	@OneToOne
-	@JoinColumn(name = "REMESSA_ID")
-	public Remessa getRemessa() {
-		return remessa;
 	}
 
 	@OneToMany(mappedBy = "titulo")
@@ -269,10 +259,6 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 
 	public void setConfirmacao(Confirmacao confirmacao) {
 		this.confirmacao = confirmacao;
-	}
-
-	public void setRemessa(Remessa remessa) {
-		this.remessa = remessa;
 	}
 
 	public void setHistoricos(List<Historico> historicos) {
