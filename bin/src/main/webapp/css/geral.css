@@ -1,0 +1,71 @@
+body {
+	/*background-color: #337ab7;*/
+	background-color: #f8f8f8;
+}
+.panel-historico{
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+}
+.panel-label{
+  float: left;
+  width: 30%;
+  text-align: right;
+}
+.panel-input{
+  width: 69%;
+  float: left;
+  margin-left: 1%;
+}
+.input-historico{
+	width: 100%;
+}
+.sidebar {
+	width: 16%;
+	background-color: transparent !important;
+}
+
+.dropdown-submenu>.dropdown-menu {
+	border-radius: 0 0px 0px 0px;
+}
+
+/*.glyphicon {
+	color: #f8f8f8;
+}*/
+.glyphicon-folder-open{
+	color: black !important;
+}
+
+.link-icones {
+	text-align: center;
+	/*color: #f8f8f8;*/
+}
+.checkbox-inline br {
+	display: none !important; 
+}
+.checkbox-inline label {
+	margin-left: 30px !important; 
+}
+.checkbox-inline input{
+	margin-left: 10px !important;
+}
+.ajuste{
+	margin-left: 0px !important;
+}
+.inline br {
+	display: none !important; 
+}
+.inline label {
+	margin-left: 30px !important; 
+}
+.inline input{
+	margin-left: 10px !important;
+}
+th{
+	text-align: center;
+}
+.download-ico{
+	width: 35%;
+}

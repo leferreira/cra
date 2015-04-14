@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8"></meta>
+</head>
+<body>
+	<wicket:extend>
+		<br />
+		<h4 style="float: left;">Detalhes do Cadastro</h4>
+		<br />
+		<br />
+		<form wicket:id="form">
+			<input id="singlebutton" name="voltarListaUsuario"
+				wicket:id="botaoVoltarListaUsuario" type="submit"
+				class="btn btn-primary" value="Lista de Usuários" style="float: left;" /> <input id="singlebutton"
+				name="novoUsuario" wicket:id="botaoNovoUsuario" type="submit"
+				class="btn btn-primary" value="Adicionar Novo" style="float: right;" /> <br
+				style="clear: both;" /> &nbsp;
+			<div class="well" style="margin-top: 2%;">
+				<div wicket:id="usuarioLabelPanel" id="usuarioLabelPanel"
+					style="margin: auto; text-align: -webkit-left;"></div>
+				<wicket:child>
+				</wicket:child>
+			</div>
+		</form>
+
+	</wicket:extend>
+</body>
+</html>

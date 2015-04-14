@@ -46,9 +46,7 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	private String cepSacadorVendedor;
 	private String cidadeSacadorVendedor;
 	private String ufSacadorVendedor;
-	private String nossoNumero;
 	private String especieTitulo;
-	private String numeroTitulo;
 	private LocalDate dataEmissaoTitulo; // As datas são passada assim: DDMMAAAA
 	private LocalDate dataVencimentoTitulo;
 	private String tipoMoeda;
@@ -90,7 +88,7 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 		return retorno;
 	}
 
-	@OneToMany(mappedBy = "titulo", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "titulo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	public List<Historico> getHistoricos() {
 		return historicos;
 	}
@@ -130,19 +128,9 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 		return ufSacadorVendedor;
 	}
 
-	@Column(name = "NOSSO_NUMERO", nullable = false)
-	public String getNossoNumero() {
-		return nossoNumero;
-	}
-
 	@Column(name = "ESPECIE_TITULO", length = 3)
 	public String getEspecieTitulo() {
 		return especieTitulo;
-	}
-
-	@Column(name = "NUMERO_TITULO", nullable = false)
-	public String getNumeroTitulo() {
-		return numeroTitulo;
 	}
 
 	@Column(name = "DATA_EMISSAO")
@@ -299,16 +287,8 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 		this.ufSacadorVendedor = ufSacadorVendedor;
 	}
 
-	public void setNossoNumero(String nossoNumero) {
-		this.nossoNumero = nossoNumero;
-	}
-
 	public void setEspecieTitulo(String especieTitulo) {
 		this.especieTitulo = especieTitulo;
-	}
-
-	public void setNumeroTitulo(String numeroTitulo) {
-		this.numeroTitulo = numeroTitulo;
 	}
 
 	public void setDataEmissaoTitulo(LocalDate dataEmissaoTitulo) {
@@ -400,7 +380,7 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	}
 
 	@Transient
-	public String chaveTitulo() {
+	public String getChaveTitulo() {
 		return this.getCodigoPortador() + getNossoNumero() + getNumeroTitulo();
 	}
 

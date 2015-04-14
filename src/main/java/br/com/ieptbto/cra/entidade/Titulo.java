@@ -22,6 +22,8 @@ public abstract class Titulo<T> extends AbstractEntidade<T> {
 
 	private TipoRegistro identificacaoRegistro;
 	private String codigoPortador;
+	private String numeroTitulo;
+	private String nossoNumero;
 	private String agenciaCodigoCedente;
 	private BigDecimal saldoTitulo;
 
@@ -60,6 +62,16 @@ public abstract class Titulo<T> extends AbstractEntidade<T> {
 	@Column(name = "CODIGO_PORTADOR", length = 3, nullable = false)
 	public String getCodigoPortador() {
 		return codigoPortador;
+	}
+
+	@Column(name = "NOSSO_NUMERO", nullable = false)
+	public String getNossoNumero() {
+		return nossoNumero;
+	}
+
+	@Column(name = "NUMERO_TITULO", nullable = false)
+	public String getNumeroTitulo() {
+		return numeroTitulo;
 	}
 
 	@Column(name = "AGENCIA_CODIGO_CEDENTE")
@@ -154,6 +166,14 @@ public abstract class Titulo<T> extends AbstractEntidade<T> {
 
 	public void setRemessa(Remessa remessa) {
 		this.remessa = remessa;
+	}
+
+	public void setNossoNumero(String nossoNumero) {
+		this.nossoNumero = nossoNumero;
+	}
+
+	public void setNumeroTitulo(String numeroTitulo) {
+		this.numeroTitulo = numeroTitulo;
 	}
 
 	public void setValorDemaisDespesas(BigDecimal valorDemaisDespesas) {
