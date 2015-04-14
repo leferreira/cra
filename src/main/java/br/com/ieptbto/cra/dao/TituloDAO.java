@@ -10,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.postgresql.util.PSQLException;
 import org.springframework.stereotype.Repository;
 
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Instituicao;
@@ -29,6 +30,14 @@ public class TituloDAO extends AbstractBaseDAO {
 
 	private Instituicao instituicaoUsuario;
 
+	public List<TituloRemessa> buscarTitulosPorArquivo(Arquivo arquivo){
+		Criteria criteria = getCriteria(TituloRemessa.class);
+		criteria.createAlias("remessa", "remessa");
+		criteria.createAlias("remessa.arquivo", "arquivo");
+		criteria.add(Restrictions.eq("arquivo.nomeArquivo", arquivo.getNomeArquivo()));
+		return criteria.list();
+	}
+	
 	public List<TituloRemessa> buscarListaTitulos(TituloRemessa titulo, Usuario user) {
 		this.instituicaoUsuario = user.getInstituicao();
 

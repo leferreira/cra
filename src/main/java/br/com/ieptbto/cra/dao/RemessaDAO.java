@@ -59,7 +59,7 @@ public class RemessaDAO extends AbstractBaseDAO {
 			criteria.add(Restrictions.ilike("instituicaoDestino.nomeFantasia", arquivo.getInstituicaoEnvio().getNomeFantasia(), MatchMode.ANYWHERE));
 		}
 		
-		criteria.add(Restrictions.disjunction().add(Restrictions.between("a.dataEnvio", dataInicio, dataFim)));
+		criteria.add(Restrictions.between("a.dataEnvio", dataInicio, dataFim));
 		
 		criteria.addOrder(Order.desc("a.dataEnvio"));
 		return criteria.list();

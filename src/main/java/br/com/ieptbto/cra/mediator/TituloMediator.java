@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.dao.TituloDAO;
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
@@ -22,6 +23,10 @@ public class TituloMediator {
 	
 	public List<TituloRemessa> buscarListaTitulos(TituloRemessa titulo, Usuario user){
 		return tituloDAO.buscarListaTitulos(titulo, user);
+	}
+	
+	public List<TituloRemessa> buscarTitulosPorArquivo(Arquivo arquivo){
+		return tituloDAO.buscarTitulosPorArquivo(arquivo);
 	}
 	
 	public List<Historico> getHistoricoTitulo(TituloRemessa titulo){

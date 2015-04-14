@@ -86,7 +86,7 @@ public class Historico extends AbstractEntidade<Historico> {
 	@Override
 	public String toString() {
 		return "Arquivo " + remessa.getArquivo().getNomeArquivo() + " importado em " + DataUtil.localDateToString(dataOcorrencia.toLocalDate()) 
-				+ " às " +   dataOcorrencia.toLocalTime().toString() + " por " + usuarioAcao.getNome() + ".";
+				+ " às " +   dataOcorrencia.toDateTime().toString()  + " por " + usuarioAcao.getNome() + ".";
 	}
 
 	@Override

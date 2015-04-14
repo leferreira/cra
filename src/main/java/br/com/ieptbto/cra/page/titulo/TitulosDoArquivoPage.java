@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.page.titulo;
 
 import java.util.List;
 
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -13,47 +12,48 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 
-/**
- * @author Thasso Araújo
- *
- */
-@AuthorizeInstantiation(value = "USER")
-public class ListaTitulosPage extends BasePage<TituloRemessa> {
+public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 	
 	@SpringBean
-	private TituloMediator tituloMediator;
+	TituloMediator tituloMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
-	private final TituloRemessa titulo;
+	InstituicaoMediator instituicaoMediator;
+
+	private Arquivo arquivo;
 	private Instituicao portador;
 	
 	private WebMarkupContainer divListRetorno;
 	private WebMarkupContainer divListaTitulo;
 	private WebMarkupContainer dataTableTitulo;
 	
-	public ListaTitulosPage(TituloRemessa titulo) {
-		super();
-		this.titulo=titulo;
+	public TitulosDoArquivoPage(Arquivo arquivo) {
+		this.arquivo = arquivo;
 		adicionarCampos();
 	}
-	
+
 	public void adicionarCampos() {
 		divListRetorno = carregarDataTableTitulo();
 		add(divListRetorno);
+//		add(nomeArquivo());
+//		add(portador());
+//		add(dataEnvio());
+//		add(usuarioEnvio());
+//		add(qtdTitulos());
 	}
 
 	private WebMarkupContainer carregarDataTableTitulo() {
-		divListaTitulo = new WebMarkupContainer("divListView");
-		dataTableTitulo = new WebMarkupContainer("dataTableTitulo");
+		divListaTitulo = new WebMarkupContainer("divListViewArquivo");
+		dataTableTitulo = new WebMarkupContainer("dataTableTituloArquivo");
 		PageableListView<TituloRemessa> listView = getListViewTitulos();
 		dataTableTitulo.setOutputMarkupId(true);
 		dataTableTitulo.add(listView);
@@ -63,7 +63,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 	}
 
 	private PageableListView<TituloRemessa> getListViewTitulos() {
-		return new PageableListView<TituloRemessa>("listViewTitulo",buscarTitulos(), 10) {
+		return new PageableListView<TituloRemessa>("listViewTituloArquivo",buscarTitulos(), 10) {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -99,15 +99,13 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 			@Override
 			protected List<TituloRemessa> load() {
-				return tituloMediator.buscarListaTitulos(titulo, getUser());
+				return tituloMediator.buscarTitulosPorArquivo(arquivo);
 			}
 		};
 	}
-
-    
+	
 	@Override
-	protected IModel<TituloRemessa> getModel() {
-		return new CompoundPropertyModel<TituloRemessa>(titulo);
+	protected IModel<Arquivo> getModel() {
+		return new CompoundPropertyModel<Arquivo>(arquivo);
 	}
-
 }

@@ -9,6 +9,9 @@ body {
   background-color: #f8f8f8;
   border-radius: 5px;
 }
+.link{
+	color: #337ab7 !important;
+}
 .panel-label{
   float: left;
   width: 30%;
@@ -21,6 +24,9 @@ body {
 }
 .input-historico{
 	width: 100%;
+}
+.destaque{
+	color: red; font-weight: bold;
 }
 .sidebar {
 	width: 16%;

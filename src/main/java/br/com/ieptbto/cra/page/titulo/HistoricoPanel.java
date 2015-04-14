@@ -2,26 +2,40 @@ package br.com.ieptbto.cra.page.titulo;
 
 import java.util.List;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Historico;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.util.DataUtil;
 
+
+/**
+ * @author Thasso Araújo
+ *
+ */
+@AuthorizeInstantiation(value = "USER")
 public class HistoricoPanel extends Panel {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 	@SpringBean
 	private TituloMediator tituloMediator;
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
 	private TituloRemessa titulo;
 	
 	private WebMarkupContainer divListRetorno;
@@ -52,10 +66,23 @@ public class HistoricoPanel extends Panel {
 			/***/
 			private static final long serialVersionUID = 1L;
 
+			@SuppressWarnings("rawtypes")
 			@Override
 			protected void populateItem(ListItem<Historico> item) {
-				Historico historico = item.getModelObject();
-				item.add(new Label("historico", historico.toString()));
+				final Historico historico = item.getModelObject();
+				
+				Link linkArquivo = new Link("linkArquivo") {
+		            /***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+		            	setResponsePage(new TitulosDoArquivoPage(historico.getRemessa().getArquivo()));
+		            }
+		        };
+		        linkArquivo.add(new Label("nomeArquivo", historico.getRemessa().getArquivo().getNomeArquivo()));
+		        item.add(linkArquivo);
+				item.add(new Label("dataOcorrencia", DataUtil.localDateTimeToString(historico.getDataOcorrencia())));
+				item.add(new Label("usuarioAcao", historico.getUsuarioAcao().getNome()));
 			}
 		};
 	}
@@ -83,9 +110,9 @@ public class HistoricoPanel extends Panel {
 		return new TextField<String>("codigoCartorio");
 	}
 
-	// public Component cartorio(){
-	// return new Label("");
-	// }
+	public TextField<String> cartorio(){
+		return new TextField<String>("remessa.instituicaoDestino.nomeFantasia");
+	}
 
 	public TextField<String> pracaProtesto() {
 		return new TextField<String>("pracaProtesto");
@@ -99,6 +126,10 @@ public class HistoricoPanel extends Panel {
 	// return new Label("");
 	// }
 
+	public TextField<String> dataRemessa(){
+		return new TextField<String>("remessa.arquivo.dataEnvio", new Model<String>(DataUtil.localDateToString(titulo.getRemessa().getArquivo().getDataEnvio())));
+	}
+	
 	public TextField<String> nomeSacadorVendedor() {
 		return new TextField<String>("nomeSacadorVendedor");
 	}
@@ -151,9 +182,10 @@ public class HistoricoPanel extends Panel {
 		return new TextField<String>("numeroTitulo");
 	}
 
-	// public Component portador(){
-	// return new Label("");
-	// }
+	public TextField<String> portador(){
+		Instituicao portador = instituicaoMediator.getInstituicaoPorCodigoPortador(titulo.getCodigoPortador());
+		return new TextField<String>("remessa.arquivo.instituicaoEnvio.nomeFantasia", new Model<String>(portador.getNomeFantasia()));
+	}
 
 	// public Component agencia(){
 	// return new Label("");
@@ -168,11 +200,11 @@ public class HistoricoPanel extends Panel {
 	}
 
 	public TextField<String> dataEmissaoTitulo() {
-		return new TextField<String>("dataEmissaoTitulo");
+		return new TextField<String>("dataEmissaoTitulo", new Model<String>(DataUtil.localDateToString(titulo.getDataEmissaoTitulo())));
 	}
 
 	public TextField<String> dataVencimentoTitulo() {
-		return new TextField<String>("dataVencimentoTitulo");
+		return new TextField<String>("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(titulo.getDataVencimentoTitulo())));
 	}
 
 	public TextField<String> valorTitulo() {
@@ -225,8 +257,9 @@ public class HistoricoPanel extends Panel {
 		add(cidadeDevedor());
 		add(enderecoDevedor());
 		add(numeroTitulo());
-		// add(dataRemessa());
-		// add(portador());
+		add(dataRemessa());
+		add(portador());
+		add(cartorio());
 		// add(agencia());
 		add(nossoNumero());
 		add(especieTitulo());
