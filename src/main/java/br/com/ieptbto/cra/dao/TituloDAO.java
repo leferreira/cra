@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.postgresql.util.PSQLException;
 import org.springframework.stereotype.Repository;
 
 import br.com.ieptbto.cra.entidade.Confirmacao;
@@ -75,17 +76,35 @@ public class TituloDAO extends AbstractBaseDAO {
 		return null;
 	}
 
-	private TituloRemessa salvarTituloRetorno(Retorno tituloConfirmacao, Transaction transaction) {
-		// TODO Auto-generated method stub
-		return null;
+	private TituloRemessa salvarTituloRetorno(Retorno tituloRetorno, Transaction transaction) {
+		Criteria criteria = getCriteria(TituloRemessa.class);
+		criteria.add(Restrictions.eq("codigoPortador", tituloRetorno.getCodigoPortador()));
+		criteria.add(Restrictions.eq("nossoNumero", tituloRetorno.getNossoNumero()));
+		criteria.add(Restrictions.eq("numeroTitulo", tituloRetorno.getNumeroTitulo()));
+
+		TituloRemessa titulo = TituloRemessa.class.cast(criteria.uniqueResult());
+
+		if (titulo == null) {
+			throw new InfraException("Não existe um título para esse retorno");
+		}
+		try {
+			tituloRetorno.setTitulo(titulo);
+			titulo.setRetorno(save(tituloRetorno));
+			save(titulo);
+			logger.info("Retorno salvo com sucesso");
+
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex.getCause());
+			throw new InfraException("Não existe um título para esse retorno");
+		}
+		return titulo;
 	}
 
 	private TituloRemessa salvarTituloConfirmacao(Confirmacao tituloConfirmacao, Transaction transaction) {
 		Criteria criteria = getCriteria(TituloRemessa.class);
-
-		criteria.add(Restrictions.ge("codigoPortador", tituloConfirmacao.getCodigoPortador()));
-		criteria.add(Restrictions.ge("nossoNumero", tituloConfirmacao.getNossoNumero()));
-		criteria.add(Restrictions.ge("numeroTitulo", tituloConfirmacao.getNumeroTitulo()));
+		criteria.add(Restrictions.eq("codigoPortador", tituloConfirmacao.getCodigoPortador()));
+		criteria.add(Restrictions.eq("nossoNumero", tituloConfirmacao.getNossoNumero()));
+		criteria.add(Restrictions.eq("numeroTitulo", tituloConfirmacao.getNumeroTitulo()));
 
 		TituloRemessa titulo = TituloRemessa.class.cast(criteria.uniqueResult());
 
@@ -109,9 +128,15 @@ public class TituloDAO extends AbstractBaseDAO {
 		try {
 			return save(tituloRemessa);
 		} catch (Exception ex) {
-			transaction.rollback();
-			logger.error(ex.getMessage(), ex.getCause());
-			throw new InfraException("O Título número: " + tituloRemessa.getNumeroTitulo() + " não pode ser inserido.");
+			if (PSQLException.class.isInstance(ex)) {
+				logger.error(ex.getMessage(), ex.getCause());
+				new InfraException("O Título número: " + tituloRemessa.getNumeroTitulo() + " já existe já foi inserido.");
+				return null;
+			} else {
+				transaction.rollback();
+				logger.error(ex.getMessage(), ex.getCause());
+				throw new InfraException("O Título número: " + tituloRemessa.getNumeroTitulo() + " não pode ser inserido.");
+			}
 		}
 	}
 }
