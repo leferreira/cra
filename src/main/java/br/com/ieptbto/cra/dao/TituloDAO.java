@@ -49,7 +49,12 @@ public class TituloDAO extends AbstractBaseDAO  {
 		return criteria.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Historico> getHistoricoTitulo(TituloRemessa titulo){
-		return null;
+		Criteria criteria = getCriteria(Historico.class);
+		criteria.createAlias("titulo", "t");
+		criteria.add(Restrictions.eq("t.id", titulo.getId()));
+		criteria.addOrder(Order.asc("id"));
+		return criteria.list();
 	}
 }

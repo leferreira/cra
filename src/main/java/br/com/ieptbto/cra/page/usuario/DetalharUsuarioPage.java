@@ -24,6 +24,7 @@ public class DetalharUsuarioPage extends BasePage<Usuario> {
 		super();
 		this.usuario = u;
 		carregarComponentes();
+		info("Os dados foram salvos com sucesso!");
 	}
 	
 	public void carregarComponentes(){

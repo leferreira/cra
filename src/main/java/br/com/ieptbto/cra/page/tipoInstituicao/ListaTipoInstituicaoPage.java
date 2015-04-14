@@ -17,7 +17,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
-import br.com.ieptbto.cra.mediator.PermissaoEnvioMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -28,8 +27,6 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
 	@SpringBean
 	TipoInstituicaoMediator tipoInstituicaoMediator;
-	@SpringBean
-	PermissaoEnvioMediator permissaoMediator;
 
 	private final TipoInstituicao tipoInstituicao;
 	private WebMarkupContainer divListRetorno;
@@ -66,7 +63,7 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 			protected void populateItem(ListItem<TipoInstituicao> item) {
 				TipoInstituicao tipoLista = item.getModelObject();
 				item.add(new Label("tipoInstituicao", tipoLista.getTipoInstituicao()));
-				permissoes = permissaoMediator.permissoesPorTipoInstituicao(tipoLista);
+				permissoes = tipoInstituicaoMediator.permissoesPorTipoInstituicao(tipoLista);
 				for (PermissaoEnvio p : permissoes) {
 					todasPermissoes += p.getTipoArquivo().getTipoArquivo().getConstante() + " ";
 				}

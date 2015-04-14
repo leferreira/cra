@@ -46,12 +46,12 @@ public class MunicipioMediator {
 	 * @param Municipio
 	 * @return
 	 * */
-	public boolean isMunicipioTemCartorio(Municipio municipio) {
+	public Instituicao isMunicipioTemCartorio(Municipio municipio) {
 		Instituicao cartorio = instituicaoDao.buscarCartorioPorMunicipio(municipio.getNomeMunicipio());
 		if (cartorio != null) {
-			return true;
+			return cartorio;
 		}
-		return false;
+		return null;
 	}
 
 	/**

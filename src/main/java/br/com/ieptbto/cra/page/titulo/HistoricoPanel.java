@@ -1,197 +1,244 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import java.util.List;
+
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.TituloMediator;
-
 
 public class HistoricoPanel extends Panel {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 	@SpringBean
-	TituloMediator tituloMediator;
-//	private List<Historico> historico;
+	private TituloMediator tituloMediator;
+	private TituloRemessa titulo;
+	
+	private WebMarkupContainer divListRetorno;
+	private WebMarkupContainer divListaHistorico;
+	private WebMarkupContainer dataTableHistorico;
 
-	public HistoricoPanel(String id, IModel<TituloRemessa> model, TituloRemessa titulo){
-        super(id, model);
-//        this.historico = tituloMediator.getHistoricoTitulo(titulo);
-//        add(historico());
-        add(numeroProtocoloCartorio());
-        add(dataProtocolo());
-        add(codigoCartorio());
-        add(pracaProtesto());
-        add(nomeSacadorVendedor());
-        add(documentoSacador());
-        add(ufSacadorVendedor());
-        add(cepSacadorVendedor());
-        add(cidadeSacadorVendedor());
-        add(enderecoSacadorVendedor());
-        add(nomeDevedor());
-        add(documentoDevedor());
-        add(ufDevedor());
-        add(cepDevedor());
-        add(cidadeDevedor());
-        add(enderecoDevedor());
-        add(numeroTitulo());
-//        add(dataRemessa());
-//        add(portador());
-//        add(agencia());
-        add(nossoNumero());
-        add(especieTitulo());
-        add(dataEmissaoTitulo());
-        add(dataVencimentoTitulo());
-        add(valorTitulo());
-        add(saldoTitulo());
-        add(valorCustaCartorio());
-        add(valorGravacaoEletronica());
-        add(valorCustasCartorioDistribuidor());
-        add(valorDemaisDespesas());
-        add(nomeCedenteFavorecido());
-        add(agenciaCodigoCedente());
+	public HistoricoPanel(String id, IModel<TituloRemessa> model,TituloRemessa titulo) {
+		super(id, model);
+		this.titulo = titulo;
+		adicionarComponentes();
+		divListRetorno = carregarHistorico();
+		add(divListRetorno);
 	}
 	
-//	public Component historico(){
-//		return new Label("historico");
-//	}
+	private WebMarkupContainer carregarHistorico() {
+		divListaHistorico = new WebMarkupContainer("divListView");
+		dataTableHistorico = new WebMarkupContainer("historicoTable");
+		PageableListView<Historico> listView = getListViewHistorico();
+		dataTableHistorico.setOutputMarkupId(true);
+		dataTableHistorico.add(listView);
+
+		divListaHistorico.add(dataTableHistorico);
+		return divListaHistorico;
+	}
+
+	private PageableListView<Historico> getListViewHistorico() {
+		return new PageableListView<Historico>("divListaHistorico", buscarHistorico(), 10) {
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<Historico> item) {
+				Historico historico = item.getModelObject();
+				item.add(new Label("historico", historico.toString()));
+			}
+		};
+	}
 	
-	public TextField<String> numeroProtocoloCartorio(){
+	public IModel<List<Historico>> buscarHistorico() {
+		return new LoadableDetachableModel<List<Historico>>() {
+			/***/
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected List<Historico> load() {
+				return tituloMediator.getHistoricoTitulo(titulo);
+			}
+		};
+	}
+	
+	public TextField<String> numeroProtocoloCartorio() {
 		return new TextField<String>("numeroProtocoloCartorio");
 	}
-	
-	public TextField<String> dataProtocolo(){
+
+	public TextField<String> dataProtocolo() {
 		return new TextField<String>("dataProtocolo");
 	}
-	
-	public TextField<String> codigoCartorio(){
+
+	public TextField<String> codigoCartorio() {
 		return new TextField<String>("codigoCartorio");
 	}
-	
-//	public Component cartorio(){
-//		return new Label("");
-//	}
-	
-	public TextField<String> pracaProtesto(){
+
+	// public Component cartorio(){
+	// return new Label("");
+	// }
+
+	public TextField<String> pracaProtesto() {
 		return new TextField<String>("pracaProtesto");
 	}
-	
-//	public Component status(){
-//		return new Label("");
-//	}
-	
-//	public Component dataStatus(){
-//		return new Label("");
-//	}
-	
-	public TextField<String> nomeSacadorVendedor(){
+
+	// public Component status(){
+	// return new Label("");
+	// }
+
+	// public Component dataStatus(){
+	// return new Label("");
+	// }
+
+	public TextField<String> nomeSacadorVendedor() {
 		return new TextField<String>("nomeSacadorVendedor");
 	}
-	
-	public TextField<String> documentoSacador(){
+
+	public TextField<String> documentoSacador() {
 		return new TextField<String>("documentoSacador");
 	}
-	
-	public TextField<String> ufSacadorVendedor(){
+
+	public TextField<String> ufSacadorVendedor() {
 		return new TextField<String>("ufSacadorVendedor");
 	}
-	
-	public TextField<String> cepSacadorVendedor(){
+
+	public TextField<String> cepSacadorVendedor() {
 		return new TextField<String>("cepSacadorVendedor");
 	}
-	
-	public TextField<String> cidadeSacadorVendedor(){
+
+	public TextField<String> cidadeSacadorVendedor() {
 		return new TextField<String>("cidadeSacadorVendedor");
 	}
-	
-	public TextField<String> enderecoSacadorVendedor(){
+
+	public TextField<String> enderecoSacadorVendedor() {
 		return new TextField<String>("enderecoSacadorVendedor");
 	}
-	
-	public TextField<String> nomeDevedor(){
+
+	public TextField<String> nomeDevedor() {
 		return new TextField<String>("nomeDevedor");
 	}
-	
-	public TextField<String> documentoDevedor(){
+
+	public TextField<String> documentoDevedor() {
 		return new TextField<String>("documentoDevedor");
 	}
-	
-	public TextField<String> ufDevedor(){
+
+	public TextField<String> ufDevedor() {
 		return new TextField<String>("ufDevedor");
 	}
-	
-	public TextField<String> cepDevedor(){
+
+	public TextField<String> cepDevedor() {
 		return new TextField<String>("cepDevedor");
 	}
-	
-	public TextField<String> cidadeDevedor(){
+
+	public TextField<String> cidadeDevedor() {
 		return new TextField<String>("cidadeDevedor");
 	}
-	
-	public TextField<String> enderecoDevedor(){
+
+	public TextField<String> enderecoDevedor() {
 		return new TextField<String>("enderecoDevedor");
 	}
-	
-	public TextField<String> numeroTitulo(){
+
+	public TextField<String> numeroTitulo() {
 		return new TextField<String>("numeroTitulo");
 	}
-	
-//	public Component portador(){
-//		return new Label("");
-//	}
-	
-//	public Component agencia(){
-//		return new Label("");
-//	}
-	
-	public TextField<String> nossoNumero(){
+
+	// public Component portador(){
+	// return new Label("");
+	// }
+
+	// public Component agencia(){
+	// return new Label("");
+	// }
+
+	public TextField<String> nossoNumero() {
 		return new TextField<String>("nossoNumero");
 	}
-	
-	public TextField<String> especieTitulo(){
+
+	public TextField<String> especieTitulo() {
 		return new TextField<String>("especieTitulo");
 	}
-	
-	public TextField<String> dataEmissaoTitulo(){
+
+	public TextField<String> dataEmissaoTitulo() {
 		return new TextField<String>("dataEmissaoTitulo");
 	}
-	
-	public TextField<String> dataVencimentoTitulo(){
+
+	public TextField<String> dataVencimentoTitulo() {
 		return new TextField<String>("dataVencimentoTitulo");
 	}
-	
-	public TextField<String> valorTitulo(){
+
+	public TextField<String> valorTitulo() {
 		return new TextField<String>("valorTitulo");
 	}
-	
-	public TextField<String> saldoTitulo(){
+
+	public TextField<String> saldoTitulo() {
 		return new TextField<String>("saldoTitulo");
 	}
-	
-	public TextField<String> valorCustaCartorio(){
+
+	public TextField<String> valorCustaCartorio() {
 		return new TextField<String>("valorCustaCartorio");
 	}
-	
-	public TextField<String> valorGravacaoEletronica(){
+
+	public TextField<String> valorGravacaoEletronica() {
 		return new TextField<String>("valorGravacaoEletronica");
 	}
-	
-	public TextField<String> valorCustasCartorioDistribuidor(){
+
+	public TextField<String> valorCustasCartorioDistribuidor() {
 		return new TextField<String>("valorCustasCartorioDistribuidor");
 	}
-	
-	public TextField<String> valorDemaisDespesas(){
+
+	public TextField<String> valorDemaisDespesas() {
 		return new TextField<String>("valorDemaisDespesas");
 	}
-	
-	public TextField<String> nomeCedenteFavorecido(){
+
+	public TextField<String> nomeCedenteFavorecido() {
 		return new TextField<String>("nomeCedenteFavorecido");
 	}
-	
-	public TextField<String> agenciaCodigoCedente(){
+
+	public TextField<String> agenciaCodigoCedente() {
 		return new TextField<String>("agenciaCodigoCedente");
+	}
+
+	public void adicionarComponentes() {
+		add(numeroProtocoloCartorio());
+		add(dataProtocolo());
+		add(codigoCartorio());
+		add(pracaProtesto());
+		add(nomeSacadorVendedor());
+		add(documentoSacador());
+		add(ufSacadorVendedor());
+		add(cepSacadorVendedor());
+		add(cidadeSacadorVendedor());
+		add(enderecoSacadorVendedor());
+		add(nomeDevedor());
+		add(documentoDevedor());
+		add(ufDevedor());
+		add(cepDevedor());
+		add(cidadeDevedor());
+		add(enderecoDevedor());
+		add(numeroTitulo());
+		// add(dataRemessa());
+		// add(portador());
+		// add(agencia());
+		add(nossoNumero());
+		add(especieTitulo());
+		add(dataEmissaoTitulo());
+		add(dataVencimentoTitulo());
+		add(valorTitulo());
+		add(saldoTitulo());
+		add(valorCustaCartorio());
+		add(valorGravacaoEletronica());
+		add(valorCustasCartorioDistribuidor());
+		add(valorDemaisDespesas());
+		add(nomeCedenteFavorecido());
+		add(agenciaCodigoCedente());
 	}
 }

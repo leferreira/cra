@@ -17,7 +17,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.PermissaoEnvioMediator;
+import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 
 /**
@@ -31,9 +31,10 @@ public class TipoInstituicaoInputPanel extends Panel {
 	private static final Logger logger = Logger.getLogger(TipoInstituicaoInputPanel.class);
 	
 	@SpringBean
-	private TipoInstituicaoMediator tipoInstituicaoMediator;
+	TipoInstituicaoMediator tipoInstituicaoMediator;
 	@SpringBean
-	private PermissaoEnvioMediator permissaoMediator;
+	TipoArquivoMediator tipoArquivoMediator;
+
 
 	private Component button;
 	private TextField<String> nomeTipo;
@@ -69,12 +70,10 @@ public class TipoInstituicaoInputPanel extends Panel {
 				List<String> tiposArquivos = (List<String>)tipoPermitidos.getDefaultModelObject();
 				try {
 					if (tipoInstituicao.getId() != 0) {
-						TipoInstituicao tipoSalvo = tipoInstituicaoMediator.alterar(tipoInstituicao);
-						permissaoMediator.setPermissoes(tipoSalvo,tiposArquivos);
+						tipoInstituicaoMediator.alterar(tipoInstituicao, tiposArquivos);
 						info("Os dados foram alterados com sucesso!");
 					} else {
-						TipoInstituicao tipoSalvo = tipoInstituicaoMediator.salvar(tipoInstituicao);
-						permissaoMediator.setPermissoes(tipoSalvo, tiposArquivos);
+						tipoInstituicaoMediator.salvar(tipoInstituicao, tiposArquivos);
 						info("Os dados foram salvos com sucesso!");
 					}
 				} catch (InfraException ex) {

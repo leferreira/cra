@@ -52,16 +52,11 @@ public class MonitorarTitulosInputPanel extends Panel {
 //		add(valorTitulo()); 
 //		add(saldoTitulo()); 
 		add(numeroProtocoloCartorio());
-//		add(codigoPortador()); 
 		add(comboPortador());
 		add(nomeDevedor());
 		add(documentoDevedor()); 
 		add(botaoEnviar());
 	}
-	
-//	public TextField<String> codigoPortador() {
-//		return new TextField<String>("codigoPortador");
-//	}
 	
 	private Component comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");

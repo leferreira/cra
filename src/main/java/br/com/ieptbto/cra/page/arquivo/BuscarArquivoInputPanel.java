@@ -119,7 +119,6 @@ public class BuscarArquivoInputPanel extends Panel  {
 			choices.add(tipo.constante);
 		}
 		CheckBoxMultipleChoice<String> tipos = new CheckBoxMultipleChoice<String>("tipoArquivos",new Model<ArrayList<String>>(tiposArquivo), choices);
-		tipos.setRequired(true);
 		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
 	}

@@ -25,7 +25,6 @@ public class UsuarioForm extends BaseForm<Usuario> {
 		this(id, new CompoundPropertyModel<Usuario>(colaboradorModel));
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public void onSubmit() {
 		
@@ -34,13 +33,13 @@ public class UsuarioForm extends BaseForm<Usuario> {
 			if(usuarioMediator.isSenhasIguais(usuario)){
 				if (getModelObject().getId() != 0) {
 					Usuario usuarioSalvo = usuarioMediator.alterar(usuario);
-					info("Dados alterados com sucesso!");
+					setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
 				} else {
 					if (usuarioMediator.isLoginNaoExiste(usuario)) {
 						if(!usuario.isStatus())
 							usuario.setStatus(true);
 						Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
-						info("Dados salvos com sucesso!.");
+						setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
 					} else 
 						error("Usuário não criado. O login já existe!");
 				}

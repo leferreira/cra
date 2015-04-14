@@ -32,7 +32,6 @@ public class CartorioForm extends BaseForm<Instituicao> {
 		this(id, new CompoundPropertyModel<Instituicao>(colaboradorModel));
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public void onSubmit() {
 
@@ -40,23 +39,26 @@ public class CartorioForm extends BaseForm<Instituicao> {
 		TipoInstituicao tipo = tipoMediator.buscarTipoInstituicao("Cartório");
 		instituicao.setTipoInstituicao(tipo);
 		try{
-			if (!municipioMediator.isMunicipioTemCartorio(instituicao.getMunicipio())) {
+			Instituicao cartorio = municipioMediator.isMunicipioTemCartorio(instituicao.getMunicipio());
+			if (cartorio != null){
+				if (cartorio.getNomeFantasia().equals(instituicao.getNomeFantasia())){
+					Instituicao instituicaoSalvo = instituicaoMediator.alterar(instituicao);
+					setResponsePage(new DetalharCartorioPage(instituicaoSalvo));
+				} else
+					throw new InfraException("Já existe um cartório cadastrado nesta cidade!");
+			} else {
 				if (getModelObject().getId() != 0) {
 					Instituicao instituicaoSalvo = instituicaoMediator.alterar(instituicao);
-					info("Dados alterados com sucesso!.");
+					setResponsePage(new DetalharCartorioPage(instituicaoSalvo));
 				} else {
 					if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
-						if (!instituicao.isSituacao())
-							instituicao.setSituacao(true);
 						Instituicao instituicaoSalvo = instituicaoMediator.salvar(instituicao);
-						info("Dados salvos com sucesso!.");
+						setResponsePage(new DetalharCartorioPage(instituicaoSalvo));
 					} else 
 						error("Cartório não criado, pois já existe!");
 				}
-			} else {
-				error("Já existe um cartório cadastrado nesta cidade!");
 			}
-						
+			
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage());
 			error(ex.getMessage());
