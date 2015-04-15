@@ -34,9 +34,13 @@ public class TituloDAO extends AbstractBaseDAO {
 		Criteria criteria = getCriteria(TituloRemessa.class);
 		criteria.createAlias("remessa", "remessa");
 		criteria.add(Restrictions.eq("remessa.arquivo", arquivo));
-		
-//		arquivo = (TituloRemessa) criteria.list();
-		
+		return criteria.list();
+	}
+	
+	public List<Confirmacao> buscarTitulosConfirmacao(Arquivo arquivo) {
+		Criteria criteria = getCriteria(Confirmacao.class);
+		criteria.createAlias("remessa", "remessa");
+		criteria.add(Restrictions.eq("remessa.arquivo", arquivo));
 		return criteria.list();
 	}
 	
@@ -150,5 +154,4 @@ public class TituloDAO extends AbstractBaseDAO {
 			}
 		}
 	}
-
 }

@@ -137,8 +137,8 @@ public class CraApplication extends WebApplication implements
 		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 		mountPage("AcompanharArquivos", AcompanharArquivosPage.class);
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
-		mountPage("ListaTitulosPage", ListaTitulosPage.class);
-		mountPage("HistoricoPage", HistoricoPage.class);
+		mountPage("ListaTitulos", ListaTitulosPage.class);
+		mountPage("Historico", HistoricoPage.class);
 		mountPage("TitulosDoArquivo", TitulosDoArquivoPage.class);
 	}
 

@@ -74,7 +74,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				portador = instituicaoMediator.getInstituicaoPorCodigoPortador(tituloLista.getCodigoPortador());
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
-				item.add(new Label("protocolo", tituloLista.getNumeroProtocoloCartorio()));
+				item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
 				item.add(new Label("portador", portador.getNomeFantasia()));
 				
 				Link linkHistorico = new Link("linkHistorico") {
@@ -88,6 +88,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
 		        item.add(linkHistorico);
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
+				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
 			}
 		};
 	}

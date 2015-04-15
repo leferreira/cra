@@ -393,5 +393,15 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 
 		return compareToBuilder.toComparison();
 	}
+	
+	@Transient
+	public String getSituacaoTitulo(){
+		if (this.confirmacao.equals(null)){
+			return "AGUARDANDO CONFIRMAÇÃO";
+		} else {
+			return "NOTIFICAÇÃO ABERTA";
+		} 
+		/// TRATAR ESTADOS DO TITULO
+	}
 
 }

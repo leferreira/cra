@@ -15,7 +15,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
@@ -32,17 +32,16 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 
-	private Arquivo arquivo;
-	private Instituicao portador;
+	private Remessa remessa;
 	private List<TituloRemessa> titulos;
 	
 	private WebMarkupContainer divListRetorno;
 	private WebMarkupContainer divListaArquivo;
 	private WebMarkupContainer dataTableTitulo;
 	
-	public TitulosDoArquivoPage(Arquivo arquivo) {
-		this.titulos = tituloMediator.buscarTitulosPorArquivo(arquivo);
-		this.arquivo = arquivo;
+	public TitulosDoArquivoPage(Remessa remessa) {
+		this.titulos = tituloMediator.buscarTitulosPorArquivo(remessa);
+		this.remessa = remessa;
 		divListRetorno = carregarDataTableTitulo();
 		add(divListRetorno);
 	}
@@ -71,11 +70,10 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
 				final TituloRemessa tituloLista = TituloRemessa.class.cast(item.getModelObject());
-				portador = instituicaoMediator.getInstituicaoPorCodigoPortador(tituloLista.getCodigoPortador());
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
-				item.add(new Label("protocolo", tituloLista.getNumeroProtocoloCartorio()));
-				item.add(new Label("portador", portador.getNomeFantasia()));
+				item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
+				item.add(new Label("portador", tituloLista.getRemessa().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				
 				Link linkHistorico = new Link("linkHistorico") {
 		            /***/
@@ -88,6 +86,7 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
 		        item.add(linkHistorico);
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
+				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
 			}
 		};
 	}
@@ -105,23 +104,23 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	}
 	
 	public TextField<String> nomeArquivo(){
-		return new TextField<String>("nomeArquivo", new Model<String>(arquivo.getNomeArquivo()));
+		return new TextField<String>("nomeArquivo", new Model<String>(remessa.getArquivo().getNomeArquivo()));
 	}
 	
 	public TextField<String> portador(){
-		return new TextField<String>("remessas.cabecalho.nomePortador");
+		return new TextField<String>("nomePortador", new Model<String>(remessa.getCabecalho().getNomePortador()));
 	}
 	
 	public TextField<String> dataEnvio(){
-		return new TextField<String>("dataEnvio", new Model<String>(DataUtil.localDateToString(arquivo.getDataEnvio())));
+		return new TextField<String>("dataEnvio", new Model<String>(DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
 	}
 	
 	public TextField<String> usuarioEnvio(){
-		return new TextField<String>("usuarioEnvio", new Model<String>(arquivo.getUsuarioEnvio().getNome()));
+		return new TextField<String>("usuarioEnvio", new Model<String>(remessa.getArquivo().getUsuarioEnvio().getNome()));
 	}
 	
 	public TextField<String> tipoArquivo(){
-		return new TextField<String>("tipo", new Model<String>(arquivo.getTipoArquivo().getTipoArquivo().getLabel()));
+		return new TextField<String>("tipo", new Model<String>(remessa.getArquivo().getTipoArquivo().getTipoArquivo().getLabel()));
 	}
 	
 	public List<TituloRemessa> getTitulos() {
@@ -134,6 +133,6 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	
 	@Override
 	protected IModel<Arquivo> getModel() {
-		return new CompoundPropertyModel<Arquivo>(arquivo);
+		return new CompoundPropertyModel<Arquivo>(remessa.getArquivo());
 	}
 }

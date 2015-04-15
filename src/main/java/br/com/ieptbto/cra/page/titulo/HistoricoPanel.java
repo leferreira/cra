@@ -75,7 +75,7 @@ public class HistoricoPanel extends Panel {
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
-		            	setResponsePage(new TitulosDoArquivoPage(historico.getRemessa().getArquivo()));  
+		            	setResponsePage(new TitulosDoArquivoPage(historico.getRemessa()));  
 		            }
 		        };
 		        linkArquivo.add(new Label("nomeArquivo", historico.getRemessa().getArquivo().getNomeArquivo()));
@@ -98,11 +98,11 @@ public class HistoricoPanel extends Panel {
 	}
 	
 	public TextField<String> numeroProtocoloCartorio() {
-		return new TextField<String>("numeroProtocoloCartorio");
+		return new TextField<String>("confirmacao.numeroProtocoloCartorio");
 	}
 
 	public TextField<String> dataProtocolo() {
-		return new TextField<String>("dataProtocolo");
+		return new TextField<String>("confirmacao.dataProtocolo", new Model<String>(DataUtil.localDateToString(titulo.getConfirmacao().getDataProtocolo())));
 	}
 
 	public TextField<String> codigoCartorio() {
@@ -117,13 +117,9 @@ public class HistoricoPanel extends Panel {
 		return new TextField<String>("pracaProtesto");
 	}
 
-	// public Component status(){
-	// return new Label("");
-	// }
-
-	// public Component dataStatus(){
-	// return new Label("");
-	// }
+	 public TextField<String> status(){
+		 return new TextField<String>("situacaoTitulo", new Model<String>(titulo.getSituacaoTitulo()));
+	 }
 
 	public TextField<String> dataRemessa(){
 		return new TextField<String>("remessa.arquivo.dataEnvio", new Model<String>(DataUtil.localDateToString(titulo.getRemessa().getArquivo().getDataEnvio())));
@@ -275,5 +271,6 @@ public class HistoricoPanel extends Panel {
 		add(valorDemaisDespesas());
 		add(nomeCedenteFavorecido());
 		add(agenciaCodigoCedente());
+		add(status());
 	}
 }
