@@ -15,11 +15,19 @@
 							<label for="nome">Nome do Arquivo:</label> 
 						</div>
 						<div class="panel-input">
+							<input class="input-historico destaque" wicket:id="nomeArquivo" type="text" disabled="disabled"/>
 						</div>
 						<div class="panel-label">
 							<label for="nome">Portador:</label> 
 						</div>
 						<div class="panel-input">
+							<input class="input-historico " wicket:id="remessas.cabecalho.nomePortador" type="text" disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Tipo de Arquivo:</label> 
+						</div>
+						<div class="panel-input">
+							<input class="input-historico " wicket:id="tipo" type="text" disabled="disabled"/>
 						</div>
 					</div>
 					<div class="panel-body-left">
@@ -27,16 +35,13 @@
 							<label for="nome">Data do Envio:</label> 
 						</div>
 						<div class="panel-input">
+							<input class="input-historico " wicket:id="dataEnvio" type="text" disabled="disabled"/>
 						</div>
 						<div class="panel-label">
 							<label for="nome">Enviado por:</label> 
 						</div>
 						<div class="panel-input">
-						</div>
-						<div class="panel-label">
-							<label for="nome">Qtd. Títulos:</label> 
-						</div>
-						<div class="panel-input">
+							<input class="input-historico " wicket:id="usuarioEnvio" type="text" disabled="disabled"/>
 						</div>
 					</div>
 				</fieldset>

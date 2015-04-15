@@ -16,7 +16,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Historico;
-import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
@@ -183,13 +182,12 @@ public class HistoricoPanel extends Panel {
 	}
 
 	public TextField<String> portador(){
-		Instituicao portador = instituicaoMediator.getInstituicaoPorCodigoPortador(titulo.getCodigoPortador());
-		return new TextField<String>("remessa.arquivo.instituicaoEnvio.nomeFantasia", new Model<String>(portador.getNomeFantasia()));
+		return new TextField<String>("remessa.arquivo.instituicaoEnvio.nomeFantasia", new Model<String>(titulo.getRemessa().getCabecalho().getNomePortador()));
 	}
 
-	// public Component agencia(){
-	// return new Label("");
-	// }
+	 public TextField<String> agencia(){
+	 return new TextField<String>("agencia", new Model<String>(titulo.getRemessa().getCabecalho().getAgenciaCentralizadora()));
+	 }
 
 	public TextField<String> nossoNumero() {
 		return new TextField<String>("nossoNumero");
@@ -260,7 +258,7 @@ public class HistoricoPanel extends Panel {
 		add(dataRemessa());
 		add(portador());
 		add(cartorio());
-		// add(agencia());
+		add(agencia());
 		add(nossoNumero());
 		add(especieTitulo());
 		add(dataEmissaoTitulo());

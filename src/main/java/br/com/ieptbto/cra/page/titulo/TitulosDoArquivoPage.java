@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
@@ -18,6 +20,7 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.util.DataUtil;
 
 public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 
@@ -33,33 +36,29 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	private Instituicao portador;
 	
 	private WebMarkupContainer divListRetorno;
-	private WebMarkupContainer divListaTitulo;
+	private WebMarkupContainer divListaArquivo;
 	private WebMarkupContainer dataTableTitulo;
 	
 	public TitulosDoArquivoPage(Arquivo arquivo) {
 		this.arquivo = arquivo;
-		adicionarCampos();
-	}
-
-	public void adicionarCampos() {
 		divListRetorno = carregarDataTableTitulo();
 		add(divListRetorno);
-//		add(nomeArquivo());
-//		add(portador());
-//		add(dataEnvio());
-//		add(usuarioEnvio());
-//		add(qtdTitulos());
 	}
 
 	private WebMarkupContainer carregarDataTableTitulo() {
-		divListaTitulo = new WebMarkupContainer("divListViewArquivo");
+		divListaArquivo = new WebMarkupContainer("divListViewArquivo");
 		dataTableTitulo = new WebMarkupContainer("dataTableTituloArquivo");
 		PageableListView<TituloRemessa> listView = getListViewTitulos();
 		dataTableTitulo.setOutputMarkupId(true);
 		dataTableTitulo.add(listView);
 
-		divListaTitulo.add(dataTableTitulo);
-		return divListaTitulo;
+		divListaArquivo.add(dataTableTitulo);
+		divListaArquivo.add(nomeArquivo());
+		divListaArquivo.add(portador());
+		divListaArquivo.add(dataEnvio());
+		divListaArquivo.add(tipoArquivo());
+		divListaArquivo.add(usuarioEnvio());
+		return divListaArquivo;
 	}
 
 	private PageableListView<TituloRemessa> getListViewTitulos() {
@@ -102,6 +101,26 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 				return tituloMediator.buscarTitulosPorArquivo(arquivo);
 			}
 		};
+	}
+	
+	public TextField<String> nomeArquivo(){
+		return new TextField<String>("nomeArquivo", new Model<String>(arquivo.getNomeArquivo()));
+	}
+	
+	public TextField<String> portador(){
+		return new TextField<String>("remessas.cabecalho.nomePortador");
+	}
+	
+	public TextField<String> dataEnvio(){
+		return new TextField<String>("dataEnvio", new Model<String>(DataUtil.localDateToString(arquivo.getDataEnvio())));
+	}
+	
+	public TextField<String> usuarioEnvio(){
+		return new TextField<String>("usuarioEnvio", new Model<String>(arquivo.getUsuarioEnvio().getNome()));
+	}
+	
+	public TextField<String> tipoArquivo(){
+		return new TextField<String>("tipo", new Model<String>(arquivo.getTipoArquivo().getTipoArquivo().getLabel()));
 	}
 	
 	@Override
