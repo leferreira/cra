@@ -21,7 +21,7 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
-
+@SuppressWarnings("rawtypes")
 public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 
 	/***/
@@ -34,12 +34,14 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 
 	private Arquivo arquivo;
 	private Instituicao portador;
+	private List<TituloRemessa> titulos;
 	
 	private WebMarkupContainer divListRetorno;
 	private WebMarkupContainer divListaArquivo;
 	private WebMarkupContainer dataTableTitulo;
 	
 	public TitulosDoArquivoPage(Arquivo arquivo) {
+		this.titulos = tituloMediator.buscarTitulosPorArquivo(arquivo);
 		this.arquivo = arquivo;
 		divListRetorno = carregarDataTableTitulo();
 		add(divListRetorno);
@@ -66,10 +68,9 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 			/***/
 			private static final long serialVersionUID = 1L;
 
-			@SuppressWarnings("rawtypes")
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
-				final TituloRemessa tituloLista = item.getModelObject();
+				final TituloRemessa tituloLista = TituloRemessa.class.cast(item.getModelObject());
 				portador = instituicaoMediator.getInstituicaoPorCodigoPortador(tituloLista.getCodigoPortador());
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
@@ -98,7 +99,7 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 
 			@Override
 			protected List<TituloRemessa> load() {
-				return tituloMediator.buscarTitulosPorArquivo(arquivo);
+				return getTitulos();
 			}
 		};
 	}
@@ -121,6 +122,14 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	
 	public TextField<String> tipoArquivo(){
 		return new TextField<String>("tipo", new Model<String>(arquivo.getTipoArquivo().getTipoArquivo().getLabel()));
+	}
+	
+	public List<TituloRemessa> getTitulos() {
+		return titulos;
+	}
+	
+	public void setTitulos( List<TituloRemessa> titulos) {
+		this.titulos = titulos;
 	}
 	
 	@Override

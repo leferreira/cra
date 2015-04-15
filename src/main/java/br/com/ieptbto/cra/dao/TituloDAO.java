@@ -33,8 +33,10 @@ public class TituloDAO extends AbstractBaseDAO {
 	public List<TituloRemessa> buscarTitulosPorArquivo(Arquivo arquivo){
 		Criteria criteria = getCriteria(TituloRemessa.class);
 		criteria.createAlias("remessa", "remessa");
-		criteria.createAlias("remessa.arquivo", "arquivo");
-		criteria.add(Restrictions.eq("arquivo.nomeArquivo", arquivo.getNomeArquivo()));
+		criteria.add(Restrictions.eq("remessa.arquivo", arquivo));
+		
+//		arquivo = (TituloRemessa) criteria.list();
+		
 		return criteria.list();
 	}
 	
@@ -148,4 +150,5 @@ public class TituloDAO extends AbstractBaseDAO {
 			}
 		}
 	}
+
 }

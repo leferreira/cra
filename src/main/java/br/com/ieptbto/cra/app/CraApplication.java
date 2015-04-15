@@ -140,7 +140,6 @@ public class CraApplication extends WebApplication implements
 		mountPage("ListaTitulosPage", ListaTitulosPage.class);
 		mountPage("HistoricoPage", HistoricoPage.class);
 		mountPage("TitulosDoArquivo", TitulosDoArquivoPage.class);
-		
 	}
 
 	/**

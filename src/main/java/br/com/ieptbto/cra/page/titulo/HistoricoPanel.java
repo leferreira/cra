@@ -75,7 +75,7 @@ public class HistoricoPanel extends Panel {
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
-		            	setResponsePage(new TitulosDoArquivoPage(historico.getRemessa().getArquivo()));
+		            	setResponsePage(new TitulosDoArquivoPage(historico.getRemessa().getArquivo()));  
 		            }
 		        };
 		        linkArquivo.add(new Label("nomeArquivo", historico.getRemessa().getArquivo().getNomeArquivo()));
@@ -235,6 +235,10 @@ public class HistoricoPanel extends Panel {
 
 	public TextField<String> agenciaCodigoCedente() {
 		return new TextField<String>("agenciaCodigoCedente");
+	}
+	
+	public TituloRemessa getTitulo() {
+		return titulo;
 	}
 
 	public void adicionarComponentes() {
