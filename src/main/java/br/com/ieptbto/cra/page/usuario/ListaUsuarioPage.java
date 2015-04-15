@@ -2,14 +2,12 @@ package br.com.ieptbto.cra.page.usuario;
 
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.PageableListView;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -30,40 +28,32 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 	private UsuarioMediator usuarioMediator;
 
 	private final Usuario usuario;
-	private WebMarkupContainer divListRetorno;
-	private WebMarkupContainer divListaUsuario;
-	private WebMarkupContainer dataTableUsuario;
 
 	public ListaUsuarioPage() {
 		super();
 		usuario = new Usuario();
-		adicionarCampos();
+		add(carregarListaUsuario());
 	}
 
-	public void adicionarCampos() {
-		divListRetorno = carregarDataTableUsuario();
-		add(divListRetorno);
-	}
-
-	private WebMarkupContainer carregarDataTableUsuario() {
-		divListaUsuario = new WebMarkupContainer("divListView");
-		dataTableUsuario = new WebMarkupContainer("dataTableUsuario");
-		PageableListView<Usuario> listView = getListViewUsuario();
-		dataTableUsuario.setOutputMarkupId(true);
-		dataTableUsuario.add(listView);
-
-		divListaUsuario.add(dataTableUsuario);
-		return divListaUsuario;
-	}
-
-	private PageableListView<Usuario> getListViewUsuario() {
-		return new PageableListView<Usuario>("listViewUsuario",
-				buscarUsuarios(), 10) {
+	@SuppressWarnings("rawtypes")
+	private ListView<Usuario> carregarListaUsuario(){
+		return new ListView<Usuario>("listViewUsuario", buscarUsuarios()) {
 			@Override
 			protected void populateItem(ListItem<Usuario> item) {
-				Usuario usuarioLista = item.getModelObject();
-				item.add(new Label("nomeUsuario", usuarioLista.getNome()));
-				item.add(new Label("loginUsuario", usuarioLista.getLogin()));
+				final Usuario usuarioLista = item.getModelObject();
+				
+				Link linkAlterar = new Link("linkAlterar") {
+		            /***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+						setResponsePage(new IncluirUsuarioPage(usuarioLista));
+		            }
+		        };
+		        linkAlterar.add(new Label("nomeUsuario", usuarioLista.getNome()));
+		        item.add(linkAlterar);
+		        
+		        item.add(new Label("loginUsuario", usuarioLista.getLogin()));
 				item.add(new Label("emailUsuario", usuarioLista.getEmail()));
 				item.add(new Label("contato", usuarioLista.getContato()));
 				item.add(new Label("instituicaoUsuario", usuarioLista
@@ -73,39 +63,8 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 				}else{
 					item.add(new Label("status","Não" ));
 				}
-
-				item.add(detalharUsuario(usuarioLista));
-				item.add(desativarUsuario(usuarioLista));
-			}
-
-			private Component detalharUsuario(final Usuario u) {
-				return new Link<Usuario>("detalharUsuario") {
-
-					@Override
-					public void onClick() {
-						setResponsePage(new IncluirUsuarioPage(u));
-					}
-				};
-			}
-
-			private Component desativarUsuario(final Usuario u) {
-				return new Link<Usuario>("excluirUsuario") {
-
-					@Override
-					public void onClick() {
-						Usuario corrente = getUser();
-						if (corrente.equals(u)) {
-							error("Não é possível desativar.O usuário está logado!");
-						}else{
-							u.setStatus(false);
-							usuarioMediator.alterar(u);
-							info("Usuario desativado!");
-						}
-					}
-				};
 			}
 		};
-
 	}
 
 	public IModel<List<Usuario>> buscarUsuarios() {

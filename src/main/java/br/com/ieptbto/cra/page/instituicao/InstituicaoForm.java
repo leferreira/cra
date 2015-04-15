@@ -37,13 +37,13 @@ public class InstituicaoForm extends BaseForm<Instituicao> {
 		try {
 			if (getModelObject().getId() != 0) {
 				Instituicao instituicaoSalvo = instituicaoMediator.alterar(instituicao);
-				info("Dados alterados com sucesso!.");
+				setResponsePage(new DetalharInstituicaoPage(instituicao));
 			}else{
 				if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
 					Municipio municipio = municipioMediator.buscarMunicipio("Palmas");
 					instituicao.setMunicipio(municipio);
 					Instituicao instituicaoSalvo = instituicaoMediator.salvar(instituicao);
-					info("Dados salvos com sucesso!.");
+					setResponsePage(new DetalharInstituicaoPage(instituicao));
 				} else {
 					error("Instituição não criada, pois já existe!");
 				}
@@ -53,7 +53,7 @@ public class InstituicaoForm extends BaseForm<Instituicao> {
 			error(ex.getMessage());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			error("Não foi possível realizar esta operação! \n Entre em contato com a CRA!");
+			error("Não foi possível realizar esta operação! Entre em contato com a CRA!");
 		}
 	}
 }

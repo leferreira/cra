@@ -31,7 +31,6 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		Transaction transaction = getBeginTransation();
 		try {
 			nova = save(instituicao);
-
 			transaction.commit();
 			logger.info(instituicao.getTipoInstituicao().getTipoInstituicao() + " foi salvo na base de dados. ");
 		} catch (Exception ex) {
@@ -43,10 +42,10 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 	}
 
 	public Instituicao alterar(Instituicao instituicao) {
+		Instituicao instituicaoSalva = new Instituicao();
 		Transaction transaction = getBeginTransation();
 		try {
-			update(instituicao);
-
+			instituicaoSalva = update(instituicao);
 			transaction.commit();
 			logger.info(instituicao.getTipoInstituicao().getTipoInstituicao() + " foi alterado na base de dados. ");
 		} catch (Exception ex) {
@@ -54,7 +53,7 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 			logger.error(ex.getMessage(), ex);
 			throw new InfraException("Não foi possível alterar esses dados na base.");
 		}
-		return instituicao;
+		return instituicaoSalva;
 	}
 
 	public Instituicao buscarCartorioPorMunicipio(String nomeMunicipio) {

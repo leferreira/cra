@@ -9,42 +9,37 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">Arquivos</div>
 				<div class="panel-body">
-					<div class="tabela">
-						<div wicket:id="divListView">
-							<table wicket:id="tabelaArquivos" id="table"
-								class="table table-striped table-bordered table-hover">
-								<thead>
-									<tr>
-										<th style="width: 60px;">Tipo</th>
-										<th>Nome Arquivo</th>
-										<th>Data Envio</th>
-										<th>Enviado por</th>
-										<th>Destino</th>
-										<th>Situação</th>
-										<th style="width: 60px;">Baixar</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr wicket:id="listViewArquivos">
-										<td wicket:id="tipoArquivo"></td>
-										<td wicket:id="nomeArquivo"></td>
-										<td wicket:id="dataEnvio"></td>
-										<td wicket:id="instituicao"></td>
-										<td wicket:id="destino"></td>
-										<td wicket:id="status"></td>
-										<td style="text-align: center;">
-											<a href="#">
-												<img border="0" class="download-ico" title="Download em TXT" src="img/txt.ico" wicket:id="downloadArquivo">
-											</a>
-											<a href="#">
-												<img border="0" style="margin-left: 3%;" class="download-ico" title="Download em XML" src="img/xml.ico">
-											</a>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
+					<table id="table" class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th style="width: 60px;">Tipo</th>
+								<th>Nome Arquivo</th>
+								<th>Data Envio</th>
+								<th>Enviado por</th>
+								<th>Destino</th>
+								<th>Situação</th>
+								<th style="width: 60px;">Baixar</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr wicket:id="dataTableRemessa">
+								<td wicket:id="tipoArquivo"></td>
+								<td wicket:id="nomeArquivo"></td>
+								<td wicket:id="dataEnvio"></td>
+								<td wicket:id="instituicao"></td>
+								<td wicket:id="destino"></td>
+								<td wicket:id="status"></td>
+								<td style="text-align: center;">
+									<a href="#">
+										<img border="0" class="download-ico" title="Download em TXT" src="img/txt.ico" wicket:id="downloadArquivo">
+									</a>
+									<a href="#">
+										<img border="0" style="margin-left: 3%;" class="download-ico" title="Download em XML" src="img/xml.ico">
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>

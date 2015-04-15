@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -69,11 +68,10 @@ public class UsuarioDAO extends AbstractBaseDAO {
 	}
 
 	public Usuario alterar(Usuario usuario) {
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
+		Transaction transaction = getBeginTransation();
 		try {
 			usuario.setSenha(Usuario.cryptPass(usuario.getSenha()));
-			session.update(usuario);
+			update(usuario);
 			transaction.commit();
 		} catch (Exception ex) {
 			transaction.rollback();

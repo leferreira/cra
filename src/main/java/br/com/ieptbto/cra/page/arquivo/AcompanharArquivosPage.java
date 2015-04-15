@@ -109,7 +109,7 @@ public class AcompanharArquivosPage extends BasePage<Arquivo> {
 	@SuppressWarnings("serial")
 	private PageableListView<Remessa> getListaViewArquivos() {
 		return new PageableListView<Remessa>("listViewArquivos",
-				buscarListaRemessas(), 10) {
+				buscarListaRemessas(), 50) {
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				Remessa remessa = item.getModelObject();

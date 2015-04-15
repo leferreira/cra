@@ -2,14 +2,12 @@ package br.com.ieptbto.cra.page.instituicao;
 
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.PageableListView;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -29,44 +27,33 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 	private InstituicaoMediator instituicaoMediator;
 
 	private final Instituicao instituicao;
-	private WebMarkupContainer divListRetorno;
-	private WebMarkupContainer divListaInstituicao;
-	private WebMarkupContainer dataTableInstituicao;
 
 	public ListaInstituicaoPage() {
 		super();
 		instituicao = new Instituicao();
-		adicionarCampos();
+		add(carregarListaInstituicao());
 	}
 
-	public void adicionarCampos() {
-		divListRetorno = carregarDataTableInstiuicao();
-		add(divListRetorno);
-	}
-
-	private WebMarkupContainer carregarDataTableInstiuicao() {
-		divListaInstituicao = new WebMarkupContainer("divListView");
-		dataTableInstituicao = new WebMarkupContainer("dataTableInstituicao");
-		PageableListView<Instituicao> listView = getListViewInstituicao();
-		dataTableInstituicao.setOutputMarkupId(true);
-		dataTableInstituicao.add(listView);
-
-		divListaInstituicao.add(dataTableInstituicao);
-		return divListaInstituicao;
-	}
-
-	private PageableListView<Instituicao> getListViewInstituicao() {
-		return new PageableListView<Instituicao>("listViewInstituicao",
-				listarInstituicoes(), 10) {
+	@SuppressWarnings("rawtypes")
+	private ListView<Instituicao> carregarListaInstituicao(){
+		return new ListView<Instituicao>("listViewInstituicao", listarInstituicoes()) {
 			@Override
 			protected void populateItem(ListItem<Instituicao> item) {
-				Instituicao instituicaoLista = item.getModelObject();
-				item.add(new Label("nomeFantasia", instituicaoLista
-						.getNomeFantasia()));
-				item.add(new Label("tipoInstituicao", instituicaoLista
-						.getTipoInstituicao().getTipoInstituicao()));
-				item.add(new Label("responsavel", instituicaoLista
-						.getResponsavel()));
+				final Instituicao instituicaoLista = item.getModelObject();
+				
+				Link linkAlterar = new Link("linkAlterar") {
+		            /***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+						setResponsePage(new IncluirInstituicaoPage(instituicaoLista));
+		            }
+		        };
+		        linkAlterar.add(new Label("nomeFantasia", instituicaoLista.getNomeFantasia()));
+		        item.add(linkAlterar);
+		        
+		        item.add(new Label("tipoInstituicao", instituicaoLista.getTipoInstituicao().getTipoInstituicao()));
+				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
 				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new Label("contato", instituicaoLista.getContato()));
 				if (instituicaoLista.isSituacao()) {
@@ -74,28 +61,6 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 				} else {
 					item.add(new Label("situacao", "Não"));
 				}
-
-				item.add(detalharInstituicao(instituicaoLista));
-				item.add(desativarInstituicao(instituicaoLista));
-			}
-
-			private Component detalharInstituicao(final Instituicao instituicao) {
-				return new Link<Instituicao>("detalharInstituicao") {
-					@Override
-					public void onClick() {
-						setResponsePage(new IncluirInstituicaoPage(instituicao));
-					}
-				};
-			}
-
-			private Component desativarInstituicao(final Instituicao instituicao) {
-				return new Link<Instituicao>("desativarInstituicao") {
-					@Override
-					public void onClick() {
-						instituicao.setSituacao(false);
-						instituicaoMediator.alterar(instituicao);
-					}
-				};
 			}
 		};
 	}

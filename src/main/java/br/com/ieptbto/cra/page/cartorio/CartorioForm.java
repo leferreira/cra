@@ -6,6 +6,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -32,6 +33,7 @@ public class CartorioForm extends BaseForm<Instituicao> {
 		this(id, new CompoundPropertyModel<Instituicao>(colaboradorModel));
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void onSubmit() {
 
@@ -40,24 +42,24 @@ public class CartorioForm extends BaseForm<Instituicao> {
 		instituicao.setTipoInstituicao(tipo);
 		try{
 			Instituicao cartorio = municipioMediator.isMunicipioTemCartorio(instituicao.getMunicipio());
-			if (cartorio != null){
-				if (cartorio.getNomeFantasia().equals(instituicao.getNomeFantasia())){
+			if (instituicao.getId() != 0) {
+				if (cartorio.getNomeFantasia().equals(instituicao.getNomeFantasia())) {
 					Instituicao instituicaoSalvo = instituicaoMediator.alterar(instituicao);
-					setResponsePage(new DetalharCartorioPage(instituicaoSalvo));
+					setResponsePage(new DetalharCartorioPage(instituicao));
 				} else
 					throw new InfraException("Já existe um cartório cadastrado nesta cidade!");
-			} else {
-				if (getModelObject().getId() != 0) {
-					Instituicao instituicaoSalvo = instituicaoMediator.alterar(instituicao);
-					setResponsePage(new DetalharCartorioPage(instituicaoSalvo));
-				} else {
-					if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
+			}else{
+				if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
+					Municipio municipio = municipioMediator.buscarMunicipio("Palmas");
+					instituicao.setMunicipio(municipio);
+					if (cartorio != null) {
 						Instituicao instituicaoSalvo = instituicaoMediator.salvar(instituicao);
-						setResponsePage(new DetalharCartorioPage(instituicaoSalvo));
-					} else 
-						error("Cartório não criado, pois já existe!");
-				}
-			}
+						setResponsePage(new DetalharCartorioPage(instituicao));
+					} else
+						throw new InfraException("Já existe um cartório cadastrado nesta cidade!");
+				} else 
+					error("Cartório não criado, pois já existe!");
+			}	
 			
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage());

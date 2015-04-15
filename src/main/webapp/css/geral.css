@@ -10,7 +10,8 @@ body {
   border-radius: 5px;
 }
 .link{
-	color: #337ab7 !important;
+  color: #337AB7 !important;
+  font-weight: bold;
 }
 .panel-label{
   float: left;

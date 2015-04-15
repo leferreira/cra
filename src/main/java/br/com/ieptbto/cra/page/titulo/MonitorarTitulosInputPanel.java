@@ -49,8 +49,6 @@ public class MonitorarTitulosInputPanel extends Panel {
 		add(numeroTitulo());
 		add(dataEmissaoTitulo());
 		add(dataOcorrencia());
-//		add(valorTitulo()); 
-//		add(saldoTitulo()); 
 		add(numeroProtocoloCartorio());
 		add(comboPortador());
 		add(nomeDevedor());
@@ -80,14 +78,6 @@ public class MonitorarTitulosInputPanel extends Panel {
 		return dataOcorrencia = new TextField<LocalDate>("dataOcorrencia", new Model<LocalDate>());
 	}
 	
-//	public TextField<BigDecimal> valorTitulo() {
-//		return new TextField<BigDecimal>("valorTitulo");
-//	}
-//	
-//	public TextField<BigDecimal> saldoTitulo() {
-//		return new TextField<BigDecimal>("saldoTitulo");
-//	}
-	
 	public TextField<String> nomeDevedor() {
 		return new TextField<String>("nomeDevedor");
 	}
@@ -115,6 +105,7 @@ public class MonitorarTitulosInputPanel extends Panel {
 					if (comboPortador.getDefaultModelObject() != null)
 						titulo.setCodigoPortador(titulo.getRemessa().getInstituicaoOrigem().getCodigoCompensacao());
 					
+					System.out.println(titulo.getDataEmissaoTitulo());
 					setResponsePage(new ListaTitulosPage(titulo));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());

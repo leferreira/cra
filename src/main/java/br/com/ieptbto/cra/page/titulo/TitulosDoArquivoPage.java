@@ -2,12 +2,11 @@ package br.com.ieptbto.cra.page.titulo;
 
 import java.util.List;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.PageableListView;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -35,35 +34,15 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	private Remessa remessa;
 	private List<TituloRemessa> titulos;
 	
-	private WebMarkupContainer divListRetorno;
-	private WebMarkupContainer divListaArquivo;
-	private WebMarkupContainer dataTableTitulo;
-	
 	public TitulosDoArquivoPage(Remessa remessa) {
 		this.titulos = tituloMediator.buscarTitulosPorArquivo(remessa);
 		this.remessa = remessa;
-		divListRetorno = carregarDataTableTitulo();
-		add(divListRetorno);
+		carregarInformacoes();
+		add(carregarListaTitulos());
 	}
 
-	private WebMarkupContainer carregarDataTableTitulo() {
-		divListaArquivo = new WebMarkupContainer("divListViewArquivo");
-		dataTableTitulo = new WebMarkupContainer("dataTableTituloArquivo");
-		PageableListView<TituloRemessa> listView = getListViewTitulos();
-		dataTableTitulo.setOutputMarkupId(true);
-		dataTableTitulo.add(listView);
-
-		divListaArquivo.add(dataTableTitulo);
-		divListaArquivo.add(nomeArquivo());
-		divListaArquivo.add(portador());
-		divListaArquivo.add(dataEnvio());
-		divListaArquivo.add(tipoArquivo());
-		divListaArquivo.add(usuarioEnvio());
-		return divListaArquivo;
-	}
-
-	private PageableListView<TituloRemessa> getListViewTitulos() {
-		return new PageableListView<TituloRemessa>("listViewTituloArquivo",buscarTitulos(), 10) {
+	private ListView<TituloRemessa> carregarListaTitulos() {
+		return new ListView<TituloRemessa>("listViewTituloArquivo",buscarTitulos()) {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -101,6 +80,14 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 				return getTitulos();
 			}
 		};
+	}
+	
+	private void carregarInformacoes(){
+		add(nomeArquivo());
+		add(portador());
+		add(dataEnvio());
+		add(usuarioEnvio());
+		add(tipoArquivo());
 	}
 	
 	public TextField<String> nomeArquivo(){

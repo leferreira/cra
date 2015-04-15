@@ -85,8 +85,7 @@ public class UsuarioInputPanel extends Panel {
 	}
 
 	private TextField<String> campoConfirmarSenha() {
-		PasswordTextField confirmarSenha = new PasswordTextField(
-				"confirmarSenha");
+		PasswordTextField confirmarSenha = new PasswordTextField("confirmarSenha");
 		confirmarSenha.setLabel(new Model<String>("Confirmar Senha"));
 		confirmarSenha.setOutputMarkupId(true);
 		confirmarSenha.setRequired(true);
@@ -107,28 +106,21 @@ public class UsuarioInputPanel extends Panel {
 	}
 
 	private Component campoStatus() {
-		List<String> status = Arrays
-				.asList(new String[] { "Ativo", "Não Ativo" });
+		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
 		return new RadioChoice<String>("situacao", status);
 	}
 
 	private Component comboInstituicao() {
-		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>(
-				"nomeFantasia");
-		comboInstituicao = new DropDownChoice<Instituicao>("instituicao",
-				instituicaoMediator.buscarCartoriosInstituicoes(), renderer);
+		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
+		comboInstituicao = new DropDownChoice<Instituicao>("instituicao",instituicaoMediator.buscarCartoriosInstituicoes(), renderer);
 		comboInstituicao.setLabel(new Model<String>("Instituição"));
-		comboInstituicao.setOutputMarkupId(true);
 		comboInstituicao.setRequired(true);
 		return comboInstituicao;
 	}
 
 	private Component comboGrupoDoUsuario() {
-		IChoiceRenderer<GrupoUsuario> renderer = new ChoiceRenderer<GrupoUsuario>(
-				"grupo");
-		comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario",
-				grupoUsuarioMediator.listaDeGrupos(), renderer);
-		comboGrupoUsuario.setOutputMarkupId(true);
+		IChoiceRenderer<GrupoUsuario> renderer = new ChoiceRenderer<GrupoUsuario>("grupo");
+		comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario",grupoUsuarioMediator.listaDeGrupos(), renderer);
 		comboGrupoUsuario.setLabel(new Model<String>("Grupo Usuário"));
 		comboGrupoUsuario.setRequired(true);
 		return comboGrupoUsuario;
