@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.titulo;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -102,7 +103,11 @@ public class HistoricoPanel extends Panel {
 	}
 
 	public TextField<String> dataProtocolo() {
-		return new TextField<String>("confirmacao.dataProtocolo", new Model<String>(DataUtil.localDateToString(titulo.getConfirmacao().getDataProtocolo())));
+		String dataProtocolo = StringUtils.EMPTY;
+		if (titulo.getConfirmacao() != null){
+			dataProtocolo = DataUtil.localDateToString(titulo.getConfirmacao().getDataProtocolo()); 
+		}
+		return new TextField<String>("confirmacao.dataProtocolo", new Model<String>(dataProtocolo));
 	}
 
 	public TextField<String> codigoCartorio() {

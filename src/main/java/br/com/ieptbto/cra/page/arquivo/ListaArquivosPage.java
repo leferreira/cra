@@ -19,6 +19,7 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 public class ListaArquivosPage extends BasePage<Arquivo> {
@@ -37,14 +38,28 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 		this.arquivo = arquivo;
 		this.remessas = remessaMediator.buscarArquivos(arquivo, municipio, portador, dataInicio, dataFim, tiposArquivo, getUser());
 
-		add(new ListView<Remessa>("dataTableRemessa", remessas) {
+		add(carregarListaArquivos());
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private ListView<Remessa> carregarListaArquivos(){
+		return new ListView<Remessa>("dataTableRemessa", remessas) {
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			protected void populateItem(ListItem<Remessa> item) {
-				Remessa remessa = item.getModelObject();
+				final Remessa remessa = item.getModelObject();
 				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
-				item.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
+				Link linkArquivo = new Link("linkArquivo") {
+		            /***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+		            	setResponsePage(new TitulosDoArquivoPage(remessa));  
+		            }
+		        };
+		        linkArquivo.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
+		        item.add(linkArquivo);
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
@@ -62,7 +77,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 					}
 				};
 			}
-		 });
+		};
 	}
 	
 	@Override

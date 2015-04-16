@@ -9,7 +9,6 @@ import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN,
@@ -58,7 +57,7 @@ public class DetalharInstituicaoPage extends BasePage<Instituicao> {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
-				setResponsePage(new ListaCartorioPage());
+				setResponsePage(new ListaInstituicaoPage());
 			}
 		};
 	}

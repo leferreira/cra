@@ -76,14 +76,16 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 		}
 	}
 
-	public void inserirInstituicaoInicial(Municipio municipio) {
+	public void inserirInstituicaoInicial() {
 		Transaction transaction = getBeginTransation();
 		try {
 			Instituicao instituicao = new Instituicao();
 			instituicao.setNomeFantasia("CRA");
 			instituicao.setSituacao(true);
 			instituicao.setCnpj("123");
-			instituicao.setMunicipio(municipio);
+			Municipio m = new Municipio();
+			m.setId(1);
+			instituicao.setMunicipio(municipioDAO.buscarPorPK(m));
 			instituicao.setRazaoSocial("CRA");
 			instituicao.setTipoInstituicao(tipoInstituicaoDAO.buscarTipoInstituicao("CRA"));
 			save(instituicao);

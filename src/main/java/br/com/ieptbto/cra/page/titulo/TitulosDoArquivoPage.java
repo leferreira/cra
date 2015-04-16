@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.titulo;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
@@ -48,10 +49,14 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
-				final TituloRemessa tituloLista = TituloRemessa.class.cast(item.getModelObject());
+				final TituloRemessa tituloLista = item.getModelObject();
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
-				item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
+				if (tituloLista.getConfirmacao() != null) {
+					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
+				} else { 
+					item.add(new Label("protocolo", StringUtils.EMPTY));
+				}
 				item.add(new Label("portador", tituloLista.getRemessa().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				
 				Link linkHistorico = new Link("linkHistorico") {

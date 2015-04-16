@@ -396,10 +396,10 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	
 	@Transient
 	public String getSituacaoTitulo(){
-		if (this.confirmacao.equals(null)){
-			return "AGUARDANDO CONFIRMAÇÃO";
+		if (this.confirmacao == null){
+			return "NÃO CONFIRMADO";
 		} else {
-			return "NOTIFICAÇÃO ABERTA";
+			return "ABERTO";
 		} 
 		/// TRATAR ESTADOS DO TITULO
 	}

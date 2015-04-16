@@ -20,12 +20,8 @@
 						<input id="numeroProtocoloCartorio" name="numeroProtocoloCartorio" type="text" wicket:id="numeroProtocoloCartorio" placeholder="Número de Protocolo" class="form-control" />
 					</div>
 					<div class="form-group">
-						<label for=dataEmissaoTitulo>Data de Entrada na CRA:</label> 
-						<input id="date" name="dataEmissaoTitulo" type="text" wicket:id="dataEmissaoTitulo" placeholder="__/__/____" class="form-control" />
-					</div>
-					<div class="form-group">
-						<label for=dataOcorrencia>Data da Ocorrência:</label> 
-						<input id="date1" name="dataOcorrencia" type="text" wicket:id="dataOcorrencia" placeholder="__/__/____" class="form-control" />
+						<label for=dataOcorrencia>Data de Entrada na CRA:</label> 
+						<input id="date" name="dataOcorrencia" type="text" wicket:id="dataOcorrencia" placeholder="__/__/____" class="form-control" />
 					</div>
 		  		</div>
 			</fieldset>
@@ -53,9 +49,9 @@
 							<select wicket:id="remessa.instituicaoOrigem" id="portador" class="form-control"></select>
 						</div>
 					</div>
+				<input type="submit" class="btn btn-primary" wicket:id="botaoBuscar" value="Buscar" style="float: right;"/>
 		  		</div>
 			</fieldset>
 		</div>
-		<input type="submit" class="btn btn-primary" wicket:id="botaoBuscar" value="Buscar" style="float: right;"/>
 	</div>
 </wicket:panel>

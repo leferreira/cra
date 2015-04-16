@@ -39,28 +39,24 @@ public class RemessaDAO extends AbstractBaseDAO {
 	public List<Remessa> remessasPorIntervaloDeDatas(Arquivo arquivo, Municipio pracaProtesto, Instituicao portador, LocalDate dataInicio,LocalDate dataFim, Usuario usuarioCorrente){
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "a");
-		criteria.createAlias("a.instituicaoEnvio", "instituicaoEnvio");
-		criteria.createAlias("instituicaoDestino", "instituicaoDestino");
-		criteria.createAlias("instituicaoDestino.municipio", "m");
+		
 		if (!usuarioCorrente.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
-			criteria.add(Restrictions.disjunction()
-					.add(Restrictions.eq("instituicaoDestino", usuarioCorrente.getInstituicao()))
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoDestino", usuarioCorrente.getInstituicao()))
 					.add(Restrictions.eq("a.instituicaoEnvio", usuarioCorrente.getInstituicao())));
 		}
 		
 		if (StringUtils.isNotBlank(arquivo.getNomeArquivo())) 
 			criteria.add(Restrictions.ilike("a.nomeArquivo", arquivo.getNomeArquivo(), MatchMode.ANYWHERE));
+
+		if (portador != null){
+			criteria.add(Restrictions.ilike("a.instituicaoEnvio.nomeFantasia", portador.getNomeFantasia(), MatchMode.ANYWHERE));
+			criteria.add(Restrictions.ilike("instituicaoDestino.nomeFantasia", portador.getNomeFantasia(), MatchMode.ANYWHERE));
+		}
 		
 		if (pracaProtesto != null)
 			criteria.add(Restrictions.ilike("m.nomeMunicipio", arquivo.getInstituicaoEnvio().getMunicipio().getNomeMunicipio(), MatchMode.ANYWHERE));
 		
-		if (portador != null){
-			criteria.add(Restrictions.ilike("instituicaoEnvio.nomeFantasia", arquivo.getInstituicaoEnvio().getNomeFantasia(), MatchMode.ANYWHERE));
-			criteria.add(Restrictions.ilike("instituicaoDestino.nomeFantasia", arquivo.getInstituicaoEnvio().getNomeFantasia(), MatchMode.ANYWHERE));
-		}
-		
 		criteria.add(Restrictions.between("a.dataEnvio", dataInicio, dataFim));
-		
 		criteria.addOrder(Order.desc("a.dataEnvio"));
 		return criteria.list();
 	}

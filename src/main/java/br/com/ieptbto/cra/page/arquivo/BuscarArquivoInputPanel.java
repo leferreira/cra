@@ -79,13 +79,13 @@ public class BuscarArquivoInputPanel extends Panel  {
 				arquivo = model.getObject();
 				
 				try {
-					
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
 							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
 							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
 							if (!dataInicio.isBefore(dataFim))
-								throw new InfraException("A data de início deve ser antes da data fim.");
+								if (!dataInicio.isEqual(dataFim))
+									throw new InfraException("A data de início deve ser antes da data fim.");
 						}else
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
@@ -126,7 +126,7 @@ public class BuscarArquivoInputPanel extends Panel  {
 	public TextField<LocalDate> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
 		dataEnvioInicio.setRequired(true);
-		dataEnvioInicio.setLabel(new Model<String>("Intervalo de datas"));
+		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 	

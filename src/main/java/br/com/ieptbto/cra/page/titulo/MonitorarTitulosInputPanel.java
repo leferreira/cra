@@ -33,8 +33,7 @@ public class MonitorarTitulosInputPanel extends Panel {
 	private InstituicaoMediator instituicaoMediator;
 	
 	private TituloRemessa titulo;
-	private TextField<LocalDate> dataEmissao;
-	private TextField<LocalDate> dataOcorrencia;
+	private TextField<LocalDate> dataEntradaCRA;
 	private DropDownChoice<Instituicao> comboPortador;
 	private IModel<TituloRemessa> model;
 	
@@ -47,8 +46,7 @@ public class MonitorarTitulosInputPanel extends Panel {
 	private void adicionarCampos(){
 		add(nossoNumero());
 		add(numeroTitulo());
-		add(dataEmissaoTitulo());
-		add(dataOcorrencia());
+		add(dataEntradaCRA());
 		add(numeroProtocoloCartorio());
 		add(comboPortador());
 		add(nomeDevedor());
@@ -70,12 +68,8 @@ public class MonitorarTitulosInputPanel extends Panel {
 		return new TextField<String>("numeroTitulo");
 	}
 	
-	public TextField<LocalDate> dataEmissaoTitulo() {
-		return dataEmissao = new TextField<LocalDate>("dataEmissaoTitulo", new Model<LocalDate>());
-	}
-	
-	public TextField<LocalDate> dataOcorrencia() {
-		return dataOcorrencia = new TextField<LocalDate>("dataOcorrencia", new Model<LocalDate>());
+	public TextField<LocalDate> dataEntradaCRA() {
+		return dataEntradaCRA = new TextField<LocalDate>("dataOcorrencia", new Model<LocalDate>());
 	}
 	
 	public TextField<String> nomeDevedor() {
@@ -98,14 +92,11 @@ public class MonitorarTitulosInputPanel extends Panel {
 				
 				titulo = model.getObject();
 				try {
-					if (dataOcorrencia.getDefaultModelObject() != null)
-						titulo.setDataOcorrencia(DataUtil.stringToLocalDate(dataOcorrencia.getDefaultModelObject().toString()));
-					if (dataEmissao.getDefaultModelObject() != null)
-						titulo.setDataEmissaoTitulo(DataUtil.stringToLocalDate(dataEmissao.getDefaultModelObject().toString()));
+					if (dataEntradaCRA.getDefaultModelObject() != null)
+						titulo.setDataOcorrencia(DataUtil.stringToLocalDate(dataEntradaCRA.getDefaultModelObject().toString()));
 					if (comboPortador.getDefaultModelObject() != null)
 						titulo.setCodigoPortador(titulo.getRemessa().getInstituicaoOrigem().getCodigoCompensacao());
 					
-					System.out.println(titulo.getDataEmissaoTitulo());
 					setResponsePage(new ListaTitulosPage(titulo));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());

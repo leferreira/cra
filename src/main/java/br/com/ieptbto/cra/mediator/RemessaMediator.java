@@ -70,10 +70,12 @@ protected static final Logger logger = Logger.getLogger(RemessaMediator.class);
 		try{ 
 			remessasFiltradas = new ArrayList<Remessa>();
 			remessas = remessaDao.remessasPorIntervaloDeDatas(arquivo, municipio, portador, dataInicio, dataFim, usuario);
-			
-			for (Remessa remessa: remessas)
-				filtroTipoArquivo(tipos,remessa);
-			
+			for (Remessa remessa: remessas){
+				if (!tipos.isEmpty()) 
+					filtroTipoArquivo(tipos,remessa);
+				else
+					return remessas;	
+			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			new InfraException("Não foi possível realizar a busca, contate a CRA.");
@@ -83,12 +85,11 @@ protected static final Logger logger = Logger.getLogger(RemessaMediator.class);
 	
 	private void filtroTipoArquivo(ArrayList<String> tipos,Remessa remessa){
 		TipoArquivo tipoArquivo = new TipoArquivo();
-		if (!tipos.isEmpty() || !tipos.equals(null)) {
-			for (String constante: tipos) {
-				if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().getConstante().equals(constante)){
-					if(!remessasFiltradas.contains(remessa))
-					    remessasFiltradas.add(remessa);      
-				}
+		
+		for (String constante: tipos) {
+			if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().getConstante().equals(constante)){
+				if(!remessasFiltradas.contains(remessa))
+				    remessasFiltradas.add(remessa);      
 			}
 		}
 	}

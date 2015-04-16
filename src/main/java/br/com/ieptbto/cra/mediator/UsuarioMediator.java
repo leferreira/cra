@@ -14,7 +14,6 @@ import br.com.ieptbto.cra.dao.TipoArquivoDAO;
 import br.com.ieptbto.cra.dao.TipoInstituicaoDAO;
 import br.com.ieptbto.cra.dao.UsuarioDAO;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
-import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -107,6 +106,9 @@ public class UsuarioMediator {
 		tipoInstituicaoDao.inserirTipoInstituicaoInicial("Cartório");
 		tipoInstituicaoDao.inserirTipoInstituicaoInicial("Instituições Financeiras");
 
+		/*
+		 * Inserindo os Tipos da Instituição
+		 */
 		tipoArquivoDao.inserirTipoArquivo("B");
 		tipoArquivoDao.inserirTipoArquivo("C");
 		tipoArquivoDao.inserirTipoArquivo("R");
@@ -114,37 +116,31 @@ public class UsuarioMediator {
 		tipoArquivoDao.inserirTipoArquivo("DP");
 		tipoArquivoDao.inserirTipoArquivo("AC");
 
-		Municipio municipio = new Municipio();
-		municipio.setCodigoIBGE(1721000);
-		municipio.setNomeMunicipio("Palmas");
-		municipio.setSituacao(true);
-		municipio.setUf("TO");
-
-		municipio = municipioMediator.salvar(municipio);
-
 		/*
 		 * Inserindo a instituição CRA
 		 */
-		instituicaoDao.inserirInstituicaoInicial(municipio);
+		instituicaoDao.inserirInstituicaoInicial();
 
 		/*
 		 * Inserindo os Grupos dos Usuário e as Permissões
 		 */
-		GrupoUsuario grupo = new GrupoUsuario();
-		grupo.setGrupo("Super Administrador");
+		GrupoUsuario grupo1 = new GrupoUsuario();
+		grupo1.setGrupo("Super Administrador");
 		String[] roles = { CraRoles.ADMIN, CraRoles.USER, CraRoles.SUPER };
-		grupo.setRoles(new Roles(roles));
-		grupoUsuarioDao.inserirGruposCargaInicial(grupo);
+		grupo1.setRoles(new Roles(roles));
+		grupoUsuarioDao.inserirGruposCargaInicial(grupo1);
 
-		grupo.setGrupo("Administrador");
+		GrupoUsuario grupo2 = new GrupoUsuario();
+		grupo2.setGrupo("Administrador");
 		String[] roles1 = { Roles.ADMIN, CraRoles.USER };
-		grupo.setRoles(new Roles(roles1));
-		grupoUsuarioDao.inserirGruposCargaInicial(grupo);
+		grupo2.setRoles(new Roles(roles1));
+		grupoUsuarioDao.inserirGruposCargaInicial(grupo2);
 
-		grupo.setGrupo("Usuário");
+		GrupoUsuario grupo3 = new GrupoUsuario();
+		grupo3.setGrupo("Usuário");
 		String[] roles2 = { CraRoles.USER };
-		grupo.setRoles(new Roles(roles2));
-		grupoUsuarioDao.inserirGruposCargaInicial(grupo);
+		grupo3.setRoles(new Roles(roles2));
+		grupoUsuarioDao.inserirGruposCargaInicial(grupo3);
 
 		/*
 		 * Inserindo o usuário de teste

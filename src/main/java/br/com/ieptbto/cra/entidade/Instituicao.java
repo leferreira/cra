@@ -55,7 +55,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return id;
 	}
 
-	@Column(name = "NOME_FANTASIA", nullable = false, unique = true, length = 50)
+	@Column(name = "NOME_FANTASIA", nullable = false, unique = true, length = 100)
 	public String getNomeFantasia() {
 		return nomeFantasia;
 	}
@@ -65,7 +65,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return cnpj;
 	}
 
-	@Column(name = "RAZAO_SOCIAL", length = 50, nullable = false, unique = true)
+	@Column(name = "RAZAO_SOCIAL", length = 100, nullable = false, unique = true)
 	public String getRazaoSocial() {
 		return razaoSocial;
 	}
@@ -95,7 +95,7 @@ public class Instituicao extends AbstractEntidade<Instituicao> {
 		return endereco;
 	}
 
-	@Column(name = "RESPOSAVEL", length = 20)
+	@Column(name = "RESPOSAVEL", length = 100)
 	public String getResponsavel() {
 		return responsavel;
 	}
