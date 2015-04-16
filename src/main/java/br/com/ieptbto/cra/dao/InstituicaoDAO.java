@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -42,10 +43,12 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 	}
 
 	public Instituicao alterar(Instituicao instituicao) {
-		Instituicao instituicaoSalva = new Instituicao();
-		Transaction transaction = getBeginTransation();
+		Session session = getSession();
+		session.clear();
+		session.flush();
+		Transaction transaction = session.beginTransaction();
 		try {
-			instituicaoSalva = update(instituicao);
+			update(instituicao);
 			transaction.commit();
 			logger.info(instituicao.getTipoInstituicao().getTipoInstituicao() + " foi alterado na base de dados. ");
 		} catch (Exception ex) {
@@ -53,7 +56,7 @@ public class InstituicaoDAO extends AbstractBaseDAO {
 			logger.error(ex.getMessage(), ex);
 			throw new InfraException("Não foi possível alterar esses dados na base.");
 		}
-		return instituicaoSalva;
+		return instituicao;
 	}
 
 	public Instituicao buscarCartorioPorMunicipio(String nomeMunicipio) {

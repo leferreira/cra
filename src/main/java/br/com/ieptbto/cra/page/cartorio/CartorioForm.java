@@ -6,7 +6,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -33,7 +32,6 @@ public class CartorioForm extends BaseForm<Instituicao> {
 		this(id, new CompoundPropertyModel<Instituicao>(colaboradorModel));
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public void onSubmit() {
 
@@ -43,17 +41,16 @@ public class CartorioForm extends BaseForm<Instituicao> {
 		try{
 			Instituicao cartorio = municipioMediator.isMunicipioTemCartorio(instituicao.getMunicipio());
 			if (instituicao.getId() != 0) {
-				if (cartorio.getNomeFantasia().equals(instituicao.getNomeFantasia())) {
-					Instituicao instituicaoSalvo = instituicaoMediator.alterar(instituicao);
+				if (cartorio.getId() == instituicao.getId()) {
+					System.out.println(cartorio.getId());
+					instituicaoMediator.alterar(instituicao);
 					setResponsePage(new DetalharCartorioPage(instituicao));
 				} else
 					throw new InfraException("Já existe um cartório cadastrado nesta cidade!");
 			}else{
 				if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
-					Municipio municipio = municipioMediator.buscarMunicipio("Palmas");
-					instituicao.setMunicipio(municipio);
-					if (cartorio != null) {
-						Instituicao instituicaoSalvo = instituicaoMediator.salvar(instituicao);
+					if (cartorio == null) {
+						instituicaoMediator.salvar(instituicao);
 						setResponsePage(new DetalharCartorioPage(instituicao));
 					} else
 						throw new InfraException("Já existe um cartório cadastrado nesta cidade!");

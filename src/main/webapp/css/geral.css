@@ -30,7 +30,7 @@ body {
 	color: red; font-weight: bold;
 }
 .sidebar {
-	width: 16%;
+	width: 15%;
 	background-color: transparent !important;
 }
 
@@ -74,5 +74,5 @@ th{
 	text-align: center;
 }
 .download-ico{
-	width: 35%;
+	width: 30%;
 }

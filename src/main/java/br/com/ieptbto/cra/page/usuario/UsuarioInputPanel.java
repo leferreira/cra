@@ -79,16 +79,12 @@ public class UsuarioInputPanel extends Panel {
 	private TextField<String> campoSenha() {
 		PasswordTextField senha = new PasswordTextField("senha");
 		senha.setLabel(new Model<String>("Senha"));
-		senha.setOutputMarkupId(true);
-		senha.setRequired(true);
 		return senha;
 	}
 
 	private TextField<String> campoConfirmarSenha() {
 		PasswordTextField confirmarSenha = new PasswordTextField("confirmarSenha");
 		confirmarSenha.setLabel(new Model<String>("Confirmar Senha"));
-		confirmarSenha.setOutputMarkupId(true);
-		confirmarSenha.setRequired(true);
 		return confirmarSenha;
 	}
 

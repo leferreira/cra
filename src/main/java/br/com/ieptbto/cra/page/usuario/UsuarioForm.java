@@ -29,8 +29,10 @@ public class UsuarioForm extends BaseForm<Usuario> {
 	public void onSubmit() {
 		
 		Usuario usuario = getModelObject();
-		try {	
-			if(usuarioMediator.isSenhasIguais(usuario)){
+		try {
+			if (usuario.getSenha() == null || usuario.getConfirmarSenha() == null){
+				error("A senha deve ser informada!");
+			} else if(usuarioMediator.isSenhasIguais(usuario)){
 				if (getModelObject().getId() != 0) {
 					Usuario usuarioSalvo = usuarioMediator.alterar(usuario);
 					setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
