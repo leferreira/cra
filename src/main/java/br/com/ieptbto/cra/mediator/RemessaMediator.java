@@ -69,7 +69,7 @@ protected static final Logger logger = Logger.getLogger(RemessaMediator.class);
 		
 		try{ 
 			remessasFiltradas = new ArrayList<Remessa>();
-			remessas = remessaDao.remessasPorIntervaloDeDatas(arquivo, municipio, portador, dataInicio, dataFim, usuario);
+			remessas = remessaDao.buscarRemessas(arquivo, municipio, portador, dataInicio, dataFim, usuario);
 			for (Remessa remessa: remessas){
 				if (!tipos.isEmpty()) 
 					filtroTipoArquivo(tipos,remessa);

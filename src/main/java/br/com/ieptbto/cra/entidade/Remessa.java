@@ -54,7 +54,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return historicos;
 	}
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ARQUIVO_ID")
 	public Arquivo getArquivo() {
 		return arquivo;
@@ -65,7 +65,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return dataRecebimento;
 	}
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "INSTITUICAO_DESTINO_ID")
 	public Instituicao getInstituicaoDestino() {
 		return instituicaoDestino;
@@ -88,7 +88,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return rodape;
 	}
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "INSTITUICAO_ORIGEM_ID")
 	public Instituicao getInstituicaoOrigem() {
 		return instituicaoOrigem;

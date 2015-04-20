@@ -36,26 +36,30 @@ public class RemessaDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 	
-	public List<Remessa> remessasPorIntervaloDeDatas(Arquivo arquivo, Municipio pracaProtesto, Instituicao portador, LocalDate dataInicio,LocalDate dataFim, Usuario usuarioCorrente){
+	/**
+	 * Buscar 
+	 * */
+	public List<Remessa> buscarRemessas(Arquivo arquivo, Municipio pracaProtesto, Instituicao portador, LocalDate dataInicio,LocalDate dataFim, Usuario usuarioCorrente){
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "a");
+		criteria.createAlias("instituicaoDestino", "d");
+		criteria.createAlias("instituicaoOrigem", "o");
 		
 		if (!usuarioCorrente.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
 			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoDestino", usuarioCorrente.getInstituicao()))
-					.add(Restrictions.eq("a.instituicaoEnvio", usuarioCorrente.getInstituicao())));
+					.add(Restrictions.eq("instituicaoOrigem", usuarioCorrente.getInstituicao())));
 		}
-		
-		if (StringUtils.isNotBlank(arquivo.getNomeArquivo())) 
+		if (StringUtils.isNotBlank(arquivo.getNomeArquivo())){ 
 			criteria.add(Restrictions.ilike("a.nomeArquivo", arquivo.getNomeArquivo(), MatchMode.ANYWHERE));
-
-		if (portador != null){
-			criteria.add(Restrictions.ilike("a.instituicaoEnvio.nomeFantasia", portador.getNomeFantasia(), MatchMode.ANYWHERE));
-			criteria.add(Restrictions.ilike("instituicaoDestino.nomeFantasia", portador.getNomeFantasia(), MatchMode.ANYWHERE));
 		}
-		
-		if (pracaProtesto != null)
-			criteria.add(Restrictions.ilike("m.nomeMunicipio", arquivo.getInstituicaoEnvio().getMunicipio().getNomeMunicipio(), MatchMode.ANYWHERE));
-		
+		if (portador != null){
+			criteria.add(Restrictions.disjunction()
+					.add(Restrictions.eq("instituicaoOrigem", portador)).add(Restrictions.eq("instituicaoDestino", portador)));
+		}
+		if (pracaProtesto != null){
+			criteria.add(Restrictions.disjunction()
+					.add(Restrictions.eq("d.municipio", pracaProtesto)).add(Restrictions.eq("o.municipio", pracaProtesto)));
+		}
 		criteria.add(Restrictions.between("a.dataEnvio", dataInicio, dataFim));
 		criteria.addOrder(Order.desc("a.dataEnvio"));
 		return criteria.list();

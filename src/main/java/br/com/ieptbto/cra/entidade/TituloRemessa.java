@@ -398,9 +398,11 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	public String getSituacaoTitulo(){
 		if (this.confirmacao == null){
 			return "NÃO CONFIRMADO";
+		} else if (this.retorno == null){
+			return "NOTIFICAÇÃO GERADA";
 		} else {
-			return "ABERTO";
-		} 
+			return this.retorno.getTipoOcorrencia();
+		}
 		/// TRATAR ESTADOS DO TITULO
 	}
 

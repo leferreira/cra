@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
@@ -41,7 +42,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 	public EnviarArquivoPage() {
 		arquivo = new Arquivo();
-		arquivo.setInstituicaoEnvio(getUser().getInstituicao());
+		arquivo.setInstituicaoEnvio(getUser().getInstituicao()); 
 		arquivo.setUsuarioEnvio(getUser());
 		arquivo.setDataEnvio(new LocalDate());
 
@@ -79,6 +80,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	private FileUploadField campoArquivo() {
 		fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
 		fileUploadField.setRequired(true);
+		fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
 		return fileUploadField;
 	}
 
