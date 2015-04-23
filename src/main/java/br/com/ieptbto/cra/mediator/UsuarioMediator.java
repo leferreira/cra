@@ -14,6 +14,7 @@ import br.com.ieptbto.cra.dao.TipoArquivoDAO;
 import br.com.ieptbto.cra.dao.TipoInstituicaoDAO;
 import br.com.ieptbto.cra.dao.UsuarioDAO;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -119,7 +120,12 @@ public class UsuarioMediator {
 		/*
 		 * Inserindo a instituição CRA
 		 */
-		instituicaoDao.inserirInstituicaoInicial();
+		Municipio m = new Municipio();
+		m.setNomeMunicipio("Palmas");
+		m.setUf("TO");
+		m.setCodigoIBGE(1721000);
+		m.setSituacao(true);
+		instituicaoDao.inserirInstituicaoInicial(m);
 
 		/*
 		 * Inserindo os Grupos dos Usuário e as Permissões

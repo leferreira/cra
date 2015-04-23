@@ -3,27 +3,31 @@ package br.com.ieptbto.cra.enumeration;
 import br.com.ieptbto.cra.exception.InfraException;
 
 
+/**
+ * @author Thasso Araújo
+ *
+ */
 public enum TipoOcorrencia implements CraEnum{
 	
-	PAGO("1", "Pago"), 
-	PROTESTADO("2", "Protestado"), 
-	RETIRADO("3", "Retirado"), 
-	SUSTADO("4", "Sustado"), 
-	DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS("5", "Devolvido por irregularidade.Sem custas"), 
-	DEVOLVIDO_POR_IRREGULARIDADE_COM_CUSTAS("6", "Devolvido por irregularidade.Com custas"),
-	LIQUIDACAO_EM_CONDICIONAL("7", "Liquidação em Condicional"), 
-	TITULO_ACEITO("8", "Título Aceito"), 
-	EDITAL_APENAS_BAHIA_E_RIO_DE_JANEIRO("9","Edital. Apenas para Bahia e Rio de Janeiro"),
-	PROTESTO_DO_BANCO_CANCELADO("A", "Protesto do banco cancelado"), 
-	PROTESTO_JA_EFETUADO("B", "Protesto já efetuado"), 
-	PROTESTO_POR_EDITAL("C", "Protesto por edital"), 
-	RETIRADO_POR_EDITAL("D", "Retirado por edital"),
-	PROTESTO_DE_TERCEIRO_CANCELADO("E", "Protesto de terceiro cancelado"), 
-	DESISTENCIA_DO_PROTESTO("F", "Desistência do Protesto"), 
-	SUSTADO_DEFINITIVO("G", "Sustado definitivo"), 
-	EMISSAO_2_VIA_PROTESTO("I", "Emissão da 2ª via"), 
-	CANCELAMENTO_EFETUADO_ANTERIORMENTE("J", "Cancelamento efetuado anteriormente"), 
-	CANCELAMENTO_NAO_EFETUADO("X", "Cancelamento não efetuado");
+	PAGO("1", "PAGO"), 
+	PROTESTADO("2", "PROTESTADO"), 
+	RETIRADO("3", "RETIRADO"), 
+	SUSTADO("4", "SUSTADO"), 
+	DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS("5", "DEVOLVIDO SEM CUSTAS"), 
+	DEVOLVIDO_POR_IRREGULARIDADE_COM_CUSTAS("6", "DEVOLVIDO COM CUSTAS"),
+	LIQUIDACAO_EM_CONDICIONAL("7", "LIQUIDAÇÃO EM CONDICIONAL"), 
+	TITULO_ACEITO("8", "TÍTULO ACEITO"), 
+	EDITAL_APENAS_BAHIA_E_RIO_DE_JANEIRO("9","EDITAL. APENAS PARA BAHIA E RIO DE JANEIRO"),
+	PROTESTO_DO_BANCO_CANCELADO("A", "PROTESTO DO BANCO CANCELADO"), 
+	PROTESTO_JA_EFETUADO("B", "PROTESTO EFETUADO"), 
+	PROTESTO_POR_EDITAL("C", "PROTESTO POR EDITAL"), 
+	RETIRADO_POR_EDITAL("D", "RETIRADO POR EDITAL"),
+	PROTESTO_DE_TERCEIRO_CANCELADO("E", "PROTESTO DE TERCEIRO CANCELADO"), 
+	DESISTENCIA_DO_PROTESTO("F", "DESISTÊNCIA DO PROTESTO"), 
+	SUSTADO_DEFINITIVO("G", "SUSTADO DEFINITIVO"), 
+	EMISSAO_2_VIA_PROTESTO("I", "EMISSÃO DA 2ª VIA"), 
+	CANCELAMENTO_EFETUADO_ANTERIORMENTE("J", "CANCELAMENTO EFETUADO ANTERIORMENTE"), 
+	CANCELAMENTO_NAO_EFETUADO("X", "CANCELAMENTO NÃO EFETUADO");
 
 	TipoOcorrencia(String constante, String label){
 		this.constante = constante;

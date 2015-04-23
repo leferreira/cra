@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.Usuario;
@@ -44,7 +45,6 @@ public class ArquivoDAO extends AbstractBaseDAO {
 
 	public Arquivo salvar(Arquivo arquivo, Usuario usuarioAcao) {
 		Arquivo arquivoSalvo = new Arquivo();
-		Historico historico = new Historico();
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 
@@ -60,6 +60,11 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				save(remessa);
 				for (Titulo titulo : remessa.getTitulos()) {
 					titulo.setRemessa(remessa);
+					if (Retorno.class.isInstance(titulo)) {
+						Retorno.class.cast(titulo).setCabecalho(remessa.getCabecalho());
+						
+					}
+					Historico historico = new Historico();
 					historico.setDataOcorrencia(new LocalDateTime());
 					historico.setRemessa(remessa);
 					historico.setTitulo(tituloDAO.salvar(titulo, transaction));

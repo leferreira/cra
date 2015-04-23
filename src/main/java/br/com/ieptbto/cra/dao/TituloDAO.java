@@ -54,14 +54,29 @@ public class TituloDAO extends AbstractBaseDAO {
 			criteria.add(Restrictions.disjunction().add(Restrictions.eq("remessa.instituicaoDestino", instituicaoUsuario))
 			        .add(Restrictions.eq("arquivo.instituicaoEnvio", instituicaoUsuario)));
 		}
-		criteria.add(Restrictions.disjunction().add(Restrictions.ilike("codigoPortador", titulo.getCodigoPortador(), MatchMode.ANYWHERE))
-		        .add(Restrictions.ilike("numeroProtocoloCartorio", titulo.getNumeroProtocoloCartorio(), MatchMode.ANYWHERE))
-		        .add(Restrictions.ilike("numeroTitulo", titulo.getNumeroTitulo(), MatchMode.ANYWHERE))
-		        .add(Restrictions.ilike("nomeDevedor", titulo.getNomeDevedor(), MatchMode.ANYWHERE))
-		        .add(Restrictions.ilike("documentoDevedor", titulo.getDocumentoDevedor(), MatchMode.ANYWHERE))
-		        .add(Restrictions.eq("dataEmissaoTitulo", titulo.getDataEmissaoTitulo()))
-		        .add(Restrictions.eq("dataOcorrencia", titulo.getDataOcorrencia()))
-		        .add(Restrictions.ilike("nossoNumero", titulo.getNossoNumero(), MatchMode.ANYWHERE)));
+		if (titulo.getCodigoPortador() != null)
+			criteria.add(Restrictions.ilike("codigoPortador", titulo.getCodigoPortador(), MatchMode.ANYWHERE));
+		
+		if (titulo.getNumeroProtocoloCartorio() != null)
+		    criteria.add(Restrictions.ilike("numeroProtocoloCartorio", titulo.getNumeroProtocoloCartorio(), MatchMode.ANYWHERE));
+		
+		if (titulo.getNumeroTitulo() != null)
+	        criteria.add(Restrictions.ilike("numeroTitulo", titulo.getNumeroTitulo(), MatchMode.ANYWHERE));
+		
+		if (titulo.getNomeDevedor() != null)
+		    criteria.add(Restrictions.ilike("nomeDevedor", titulo.getNomeDevedor(), MatchMode.ANYWHERE));
+		
+		if (titulo.getDocumentoDevedor() != null)
+		    criteria.add(Restrictions.ilike("documentoDevedor", titulo.getDocumentoDevedor(), MatchMode.ANYWHERE));
+		
+		if (titulo.getDataEmissaoTitulo() != null)
+		    criteria.add(Restrictions.eq("dataEmissaoTitulo", titulo.getDataEmissaoTitulo()));
+		
+		if (titulo.getDataOcorrencia() != null)
+		    criteria.add(Restrictions.eq("dataOcorrencia", titulo.getDataOcorrencia()));
+		
+		if (titulo.getNossoNumero() != null)
+		    criteria.add(Restrictions.ilike("nossoNumero", titulo.getNossoNumero(), MatchMode.ANYWHERE));
 
 		criteria.addOrder(Order.asc("nomeDevedor"));
 		return criteria.list();
@@ -70,7 +85,7 @@ public class TituloDAO extends AbstractBaseDAO {
 	public List<Historico> getHistoricoTitulo(TituloRemessa titulo) {
 		Criteria criteria = getCriteria(Historico.class);
 		criteria.createAlias("titulo", "t");
-		criteria.add(Restrictions.eq("t.id", titulo.getId()));
+		criteria.add(Restrictions.eq("t", titulo));
 		criteria.addOrder(Order.asc("id"));
 		return criteria.list();
 	}
@@ -95,7 +110,7 @@ public class TituloDAO extends AbstractBaseDAO {
 		Criteria criteria = getCriteria(TituloRemessa.class);
 		criteria.add(Restrictions.eq("codigoPortador", tituloRetorno.getCodigoPortador()));
 		criteria.add(Restrictions.eq("nossoNumero", tituloRetorno.getNossoNumero()));
-		criteria.add(Restrictions.eq("numeroTitulo", tituloRetorno.getNumeroTitulo()));
+//		criteria.add(Restrictions.eq("numeroTitulo", tituloRetorno.getNumeroTitulo()));
 
 		TituloRemessa titulo = TituloRemessa.class.cast(criteria.uniqueResult());
 
