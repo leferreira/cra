@@ -73,6 +73,9 @@ body {
 th{
 	text-align: center;
 }
+.table{
+	font-size: 12px !important;
+}
 .download-ico{
 	width: 30%;
 }

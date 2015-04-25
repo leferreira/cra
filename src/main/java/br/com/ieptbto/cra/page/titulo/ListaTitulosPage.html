@@ -8,28 +8,32 @@
 		<div class="panel panel-primary">
 			<div class="panel-heading">Títulos</div>
 			<div class="panel-body">
-				<table id="table" class="table table-striped table-bordered table-hover">
+				<table id="table" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 					<thead>
 						<tr>
-							<th>Nº Título</th>
-							<th>Nosso Número</th>
-							<th>Protocolo</th>
-							<th>Devedor</th>
-							<th>Portador</th>
+							<th>Título</th>
 							<th>Praça</th>
+							<th style="width: 60px;">Protocolo</th>
+							<th>Devedor</th>
+							<th>Valor</th>
+							<th>Remessa</th>
+							<th>Confir.</th>
+							<th>Retorno</th>
+							<th>Data Sit.</th>
 							<th>Situação</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr wicket:id="listViewTitulos">
 							<td wicket:id="numeroTitulo"></td>
-							<td wicket:id="nossoNumero"></td>
-							<td wicket:id="protocolo"></td>
-							<td>
-								<a href="#" wicket:id="linkHistorico"><span class="link" style="font-weight: bold;" wicket:id="nomeDevedor"></span></a>
-							</td>
-							<td wicket:id="portador"></td>
 							<td wicket:id="pracaProtesto"></td>
+							<td wicket:id="protocolo"></td>
+							<td><a href="#" wicket:id="linkHistorico"><span class="link" style="font-weight: bold;" wicket:id="nomeDevedor"></span></a></td>
+							<td wicket:id="valorTitulo"></td>
+							<td><a href="#" wicket:id="linkArquivo"><span class="link" style="font-weight: bold;" wicket:id="nomeRemessa"></span></a></td>
+							<td wicket:id="dataConfirmacao"></td>
+							<td wicket:id="retorno"></td>
+							<td wicket:id="dataSituacao"></td>
 							<td wicket:id="situacaoTitulo" class="destaque"></td>
 						</tr>
 					</tbody>

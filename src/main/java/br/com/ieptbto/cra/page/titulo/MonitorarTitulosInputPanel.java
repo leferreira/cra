@@ -30,7 +30,7 @@ public class MonitorarTitulosInputPanel extends Panel {
 	private static final Logger logger = Logger.getLogger(MonitorarTitulosInputPanel.class);
 	
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	
 	private TituloRemessa titulo;
 	private TextField<LocalDate> dataEntradaCRA;
@@ -40,6 +40,7 @@ public class MonitorarTitulosInputPanel extends Panel {
 	public MonitorarTitulosInputPanel(String id, IModel<TituloRemessa> model) {
 		super(id, model);
 		this.model = model;
+		this.titulo = new TituloRemessa();
 		adicionarCampos();
 	}
 	

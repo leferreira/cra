@@ -46,8 +46,8 @@ public class CraMenu extends Panel {
 		menuLateral.addItem("IncluirCartorio", rolesIncluir);
 		menuLateral.addItem("ListaCartorio", rolesIncluir);
 		menuLateral.addItem("MonitorarTitulos", rolesPesquisar);
-		// menuLateral.addItem("IncluirCartorio", rolesIncluir);
-		// menuLateral.addItem("IncluirCartorio", rolesIncluir);
+	    menuLateral.addItem("Batimento", rolesIncluir);
+	    menuLateral.addItem("HistoricoBatimento", rolesIncluir);
 		// menuLateral.addItem("IncluirCartorio", rolesIncluir);
 
 	}

@@ -1,23 +1,22 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 
 @AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
 public class MonitorarTitulosPage extends BasePage<TituloRemessa>{
 
 	/***/
 	private static final long serialVersionUID = 1L;
-
-	@SpringBean
-	private TituloMediator tituloMediator;
 	private TituloRemessa titulo;
 	private Form<TituloRemessa> form;
 

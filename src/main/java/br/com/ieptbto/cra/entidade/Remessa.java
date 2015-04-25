@@ -34,6 +34,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 
 	private int id;
 	private Arquivo arquivo;
+	private Batimento batimento;
 	private LocalDate dataRecebimento;
 	private Instituicao instituicaoOrigem;
 	private Instituicao instituicaoDestino;
@@ -49,12 +50,12 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return id;
 	}
 
-	@OneToMany(mappedBy = "remessa", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "remessa")
 	public List<Historico> getHistoricos() {
 		return historicos;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "ARQUIVO_ID")
 	public Arquivo getArquivo() {
 		return arquivo;
@@ -65,7 +66,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return dataRecebimento;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "INSTITUICAO_DESTINO_ID")
 	public Instituicao getInstituicaoDestino() {
 		return instituicaoDestino;
@@ -92,6 +93,15 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	@JoinColumn(name = "INSTITUICAO_ORIGEM_ID")
 	public Instituicao getInstituicaoOrigem() {
 		return instituicaoOrigem;
+	}
+	
+	@OneToOne(mappedBy="remessa")
+	public Batimento getBatimento() {
+		return batimento;
+	}
+
+	public void setBatimento(Batimento batimento) {
+		this.batimento = batimento;
 	}
 
 	public void setId(int id) {

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
@@ -20,6 +21,8 @@ import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
+import br.com.ieptbto.cra.enumeration.SituacaoBatimento;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 
@@ -58,11 +61,16 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				remessa.setArquivo(arquivoSalvo);
 				remessa.setDataRecebimento(new LocalDate());
 				save(remessa);
+				if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)){
+					Batimento batimento = new Batimento();
+					batimento.setRemessa(remessa);
+					batimento.setSituacaoBatimento(SituacaoBatimento.NAO_CONFIRMADO);
+					save(batimento);
+				}
 				for (Titulo titulo : remessa.getTitulos()) {
 					titulo.setRemessa(remessa);
 					if (Retorno.class.isInstance(titulo)) {
 						Retorno.class.cast(titulo).setCabecalho(remessa.getCabecalho());
-						
 					}
 					Historico historico = new Historico();
 					historico.setDataOcorrencia(new LocalDateTime());

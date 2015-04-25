@@ -32,7 +32,7 @@ public class RemessaDAO extends AbstractBaseDAO {
 					.add(Restrictions.eq("instituicaoDestino", instituicao))
 					.add(Restrictions.eq("a.instituicaoEnvio", instituicao)));
 		}
-		criteria.addOrder(Order.desc("a.dataEnvio"));
+		criteria.addOrder(Order.desc("dataRecebimento"));
 		return criteria.list();
 	}
 	

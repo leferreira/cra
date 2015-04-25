@@ -28,6 +28,7 @@ import br.com.ieptbto.cra.page.arquivo.ListaArquivosPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.batimento.BatimentoPage;
+import br.com.ieptbto.cra.page.batimento.ConfirmarBatimentoPage;
 import br.com.ieptbto.cra.page.cartorio.DetalharCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
@@ -149,9 +150,10 @@ public class CraApplication extends WebApplication implements
 		mountPage("AcompanharArquivos", AcompanharArquivosPage.class);
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
-		mountPage("Historico", HistoricoPage.class);
+		mountPage("HistoricoDoTitulo", HistoricoPage.class);
 		mountPage("TitulosDoArquivo", TitulosDoArquivoPage.class);
 		mountPage("Batimento", BatimentoPage.class);
+		mountPage("ConfirmarBatimento", ConfirmarBatimentoPage.class);
 	}
 
 	/**

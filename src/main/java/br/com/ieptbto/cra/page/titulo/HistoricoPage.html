@@ -4,13 +4,250 @@
 	<wicket:extend>
 		<div class="col-lg-12">
 			<div class="panel panel-primary">
-				<div class="panel-heading">InformaÃ§Ãµes do T&iacute;tulo</div>
+				<div class="panel-heading">Informações do T&iacute;tulo</div>
 				<div class="panel-body">
 					<br />
-					<div wicket:id="tituloHistorio" id="tituloHistorio"
-						style="margin: auto; text-align: left;"></div>
-					<wicket:child></wicket:child>
-					<br style="clear: both;" /> 
+				<div class="panel-body-right" style="text-align: left;">
+						<fieldset>
+						<legend>Dados do T&iacute;tulo</legend>
+						<div class="panel-label">
+							<label for="nome">Nº do T&iacute;tulo:</label> 
+						</div>
+						<div class="panel-input">
+							<input class="input-historico destaque" type="text" wicket:id="numeroTitulo"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Data Remessa:</label>
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="remessa.arquivo.dataEnvio" disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Portador:</label> 
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="remessa.arquivo.instituicaoEnvio.nomeFantasia" disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Agência:</label> 
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="agencia" disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Nosso Número:</label>
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="nossoNumero"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Espécie:</label>
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="especieTitulo"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Emissão:</label>
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="dataEmissaoTitulo"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Vencimento:</label>
+						</div>
+						<div class="panel-input">
+							<input class="input-historico destaque" type="text" wicket:id="dataVencimentoTitulo" disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Valor T&iacute;tulo:</label> 
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="valorTitulo"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Valor Saldo:</label>
+						</div>
+						<div class="panel-input">
+							<input class="input-historico destaque" type="text" wicket:id="saldoTitulo"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Valor Custas:</label> 
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="valorCustaCartorio"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Distr. Eletrônica:</label>
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="valorGravacaoEletronica"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Vlr. Contribuidor:</label> 
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="valorCustasCartorioDistribuidor"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Demais Despesas:</label> 
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="valorDemaisDespesas"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Cedente:</label> 
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="nomeCedenteFavorecido"  disabled="disabled"/>
+						</div>
+						<div class="panel-label">
+							<label for="nome">Agência Cedente:</label> 
+						</div>
+						<div class="panel-input">
+							<input class="input-historico" type="text" wicket:id="agenciaCodigoCedente"  disabled="disabled"/>
+						</div>
+						</fieldset>
+						<br/>
+						<fieldset>
+							<legend>Histórico do T&iacute;tulo</legend>
+							<table class="table table-striped table-bordered table-hover">
+								<tbody>
+									<tr wicket:id="divListaHistorico">
+										<td>
+											<img src="img/received.ico" style="width: 4%;"/>
+											<span>Arquivo </span>
+											<a wicket:id="linkArquivo" style="font-weight: bolder;"><span wicket:id="nomeArquivo"></span></a>
+											<span>importado em&nbsp;</span>
+											<span wicket:id="dataOcorrencia" style="font-weight: bolder;"></span>
+											<span>por</span>
+											<span wicket:id="usuarioAcao" style="font-weight: bolder;"></span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</fieldset>
+					</div> 
+					<div class="panel-body-left" style="text-align: left;">
+						<fieldset>
+							<legend>Dados do Protocolo</legend>
+							<div class="panel-label">
+								<label for="nome">Nº de Protocolo:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico destaque" type="text" wicket:id="confirmacao.numeroProtocoloCartorio" disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">Data do Protocolo:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="confirmacao.dataProtocolo"  disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">Cód. do Cartório:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="codigoCartorio"  disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">Cartório:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="remessa.instituicaoDestino.nomeFantasia" disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">Praça de Protesto:</label>
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="pracaProtesto"  disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">Status:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico destaque" type="text" wicket:id="situacaoTitulo" disabled="disabled"/>
+							</div>
+						</fieldset>
+						<br/>
+						<fieldset>
+							<legend>Dados do Devedor</legend>
+							<div class="panel-label">
+								<label for="nome">Devedor:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="nomeDevedor" disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">CNPJ/CPF:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico"  type="text" wicket:id="documentoDevedor"  disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">UF:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="ufDevedor"  disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">CEP:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="cepDevedor" disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">Cidade:</label>
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="cidadeDevedor"  disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">Endereço:</label>
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="enderecoDevedor" disabled="disabled"/>
+							</div>
+						</fieldset>
+						<br/>
+						<fieldset>
+							<legend>Dados do Sacador</legend>
+							<div class="panel-label">
+								<label for="nome">Sacador:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="nomeSacadorVendedor" disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">CNPJ/CPF:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="documentoSacador"  disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">UF:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="ufSacadorVendedor"  disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">CEP:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="cepSacadorVendedor" disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">Cidade:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="cidadeSacadorVendedor"  disabled="disabled"/>
+							</div>
+							<div class="panel-label">
+								<label for="nome">Endereço:</label> 
+							</div>
+							<div class="panel-input">
+								<input class="input-historico" type="text" wicket:id="enderecoSacadorVendedor" disabled="disabled"/>
+							</div>
+						</fieldset>
+					</div>
 				</div>
 			</div>
 		</div>

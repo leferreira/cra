@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -30,7 +31,7 @@ public class TituloDAO extends AbstractBaseDAO {
 
 	private Instituicao instituicaoUsuario;
 
-	public List<TituloRemessa> buscarTitulosPorArquivo(Arquivo arquivo){
+	public List<TituloRemessa> buscarTitulosRemessa(Arquivo arquivo){
 		Criteria criteria = getCriteria(TituloRemessa.class);
 		criteria.createAlias("remessa", "remessa");
 		criteria.add(Restrictions.eq("remessa.arquivo", arquivo));
@@ -39,6 +40,13 @@ public class TituloDAO extends AbstractBaseDAO {
 	
 	public List<Confirmacao> buscarTitulosConfirmacao(Arquivo arquivo) {
 		Criteria criteria = getCriteria(Confirmacao.class);
+		criteria.createAlias("remessa", "remessa");
+		criteria.add(Restrictions.eq("remessa.arquivo", arquivo));
+		return criteria.list();
+	}
+	
+	public List<Retorno> buscarTitulosRetorno(Arquivo arquivo) {
+		Criteria criteria = getCriteria(Retorno.class);
 		criteria.createAlias("remessa", "remessa");
 		criteria.add(Restrictions.eq("remessa.arquivo", arquivo));
 		return criteria.list();
@@ -82,11 +90,23 @@ public class TituloDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
-	public List<Historico> getHistoricoTitulo(TituloRemessa titulo) {
+	public TituloRemessa buscarTituloPorChave(TituloRemessa titulo) {
+		Criteria criteria = getCriteria(TituloRemessa.class);
+		criteria.add(Restrictions.eq("codigoPortador", titulo.getCodigoPortador()));
+		criteria.add(Restrictions.eq("nossoNumero", titulo.getNossoNumero()));
+		if (titulo.getNumeroTitulo() != null)
+			criteria.add(Restrictions.eq("numeroTitulo", titulo.getNumeroTitulo()));
+
+		return TituloRemessa.class.cast(criteria.uniqueResult());
+	}
+	
+	public List<Historico> buscarHistoricoDoTitulo(TituloRemessa titulo) {
 		Criteria criteria = getCriteria(Historico.class);
-		criteria.createAlias("titulo", "t");
-		criteria.add(Restrictions.eq("t", titulo));
-		criteria.addOrder(Order.asc("id"));
+		Hibernate.initialize(titulo);
+		criteria.createAlias("titulo", "titulo");
+		criteria.add(Restrictions.eq("titulo.codigoPortador", titulo.getCodigoPortador()));
+		criteria.add(Restrictions.eq("titulo.nossoNumero", titulo.getNossoNumero()));
+		
 		return criteria.list();
 	}
 

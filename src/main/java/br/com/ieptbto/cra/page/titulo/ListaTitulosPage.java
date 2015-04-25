@@ -3,6 +3,8 @@ package br.com.ieptbto.cra.page.titulo;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -13,36 +15,34 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("rawtypes")
 @AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
 public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 	
 	@SpringBean
-	private TituloMediator tituloMediator;
-	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
-	private final TituloRemessa titulo;
-	private Instituicao portador;
+	TituloMediator tituloMediator;
+	private TituloRemessa tituloBuscado;
 	
 	public ListaTitulosPage(TituloRemessa titulo) {
 		super();
-		this.titulo=titulo;
+		this.tituloBuscado=titulo;
 		add(carregarListaTitulos());
 	}
 
-	@SuppressWarnings("rawtypes")
 	private ListView<TituloRemessa> carregarListaTitulos() {
 		return new ListView<TituloRemessa>("listViewTitulos", buscarTitulos()) {
 			/***/
@@ -51,16 +51,28 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
 				final TituloRemessa tituloLista = item.getModelObject();
-				portador = instituicaoMediator.getInstituicaoPorCodigoPortador(tituloLista.getCodigoPortador());
+				
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
+				Link linkArquivo = new Link("linkArquivo") {
+		            /***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+		            	setResponsePage(new TitulosDoArquivoPage(tituloLista.getRemessa()));  
+		            }
+		        };
+		        linkArquivo.add(new Label("nomeRemessa", tituloLista.getRemessa().getArquivo().getNomeArquivo()));
+		        item.add(linkArquivo);
+		        
+				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
 				if (tituloLista.getConfirmacao() != null) {
+					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getDataRecebimento())));
 					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
 				} else { 
+					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 				}
-				item.add(new Label("portador", portador.getNomeFantasia()));
-				
+				item.add(new Label("valorTitulo", tituloLista.getValorTitulo().toString()));
 				Link linkHistorico = new Link("linkHistorico") {
 		            /***/
 					private static final long serialVersionUID = 1L;
@@ -71,7 +83,13 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		        };
 		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
 		        item.add(linkHistorico);
-				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
+		        if (tituloLista.getRetorno() != null){
+	        		item.add(new Label("retorno", tituloLista.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
+	        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getRetorno().getDataOcorrencia())));
+		        } else {
+		        	item.add(new Label("retorno", StringUtils.EMPTY));
+		        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getDataOcorrencia())));
+		        }
 				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
 			}
 		};
@@ -84,15 +102,14 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 			@Override
 			protected List<TituloRemessa> load() {
-				return tituloMediator.buscarListaTitulos(titulo, getUser());
+				return tituloMediator.buscarListaTitulos(tituloBuscado, getUser());
 			}
 		};
 	}
-
     
 	@Override
 	protected IModel<TituloRemessa> getModel() {
-		return new CompoundPropertyModel<TituloRemessa>(titulo);
+		return new CompoundPropertyModel<TituloRemessa>(tituloBuscado);
 	}
 
 }

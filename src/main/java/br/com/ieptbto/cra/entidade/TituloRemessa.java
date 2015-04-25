@@ -3,7 +3,6 @@ package br.com.ieptbto.cra.entidade;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,6 +18,8 @@ import javax.persistence.UniqueConstraint;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.hibernate.envers.Audited;
 import org.joda.time.LocalDate;
+
+import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 
 /**
  * 
@@ -83,12 +84,12 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 		return confirmacao;
 	}
 
-	@OneToOne(optional = true, mappedBy = "titulo")
+	@OneToOne(optional = true, mappedBy = "titulo", fetch=FetchType.LAZY)
 	public Retorno getRetorno() {
 		return retorno;
 	}
 
-	@OneToMany(mappedBy = "titulo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "titulo", fetch = FetchType.LAZY)
 	public List<Historico> getHistoricos() {
 		return historicos;
 	}
@@ -397,11 +398,11 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	@Transient
 	public String getSituacaoTitulo(){
 		if (this.confirmacao == null){
-			return "NÃO CONFIRMADO";
+			return "S/ CONFIRMAÇÃO";
 		} else if (this.retorno == null){
-			return "NOTIFICAÇÃO GERADA";
+			return "S/ RETORNO";
 		} else {
-			return this.retorno.getTipoOcorrencia();
+			return TipoOcorrencia.getTipoOcorrencia(this.retorno.getTipoOcorrencia()).getLabel();
 		}
 		/// TRATAR ESTADOS DO TITULO
 	}
