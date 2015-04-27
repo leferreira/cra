@@ -11,10 +11,10 @@
 					<div class="panel-heading">Batimento</div>
 					<div class="panel-body">
 						<br />
-						<table class="table table-striped table-bordered table-hover" style="font-size: 12px;">
-							<thead>
+						<div wicket:id="group">
+		                  <table class="table table-striped table-bordered table-hover">
+		                    <thead>
 								<tr>
-									<th width="10px;"></th>
 									<th>Arquivo</th>
 									<th>Data Envio</th>
 									<th>Cartório</th>
@@ -22,16 +22,21 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr wicket:id=listaRetornos>
-									<td style="float: right;"><input type="checkbox" wicket:id="retorno"></td>
-									<td><a wicket:id="linkArquivo"><span class="link" wicket:id="arquivo.nomeArquivo"></span></a></td>
+			                    <tr wicket:id="retornos">
+			                        <td>
+			                        	<input type="checkbox" wicket:id="checkbox"/>&nbsp;&nbsp;&nbsp;&nbsp;
+			                        	<a wicket:id="linkArquivo">
+			                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
+			                        	</a>
+			                        </td>
 									<td wicket:id="arquivo.dataEnvio"></td>
 									<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
 									<td wicket:id="valorPagos"></td>
-								</tr>
-							</tbody>
-						</table>
-						<input type="submit" class="btn btn-small" wicket:id="button" value="Enviar"/>
+			                    </tr>
+		                    </tbody>
+		                  </table>
+				        </div>
+						<input type="submit" class="btn btn-small" value="Enviar"/>
 					</div>
 					<div class="panel-footer"></div>
 				</div>
