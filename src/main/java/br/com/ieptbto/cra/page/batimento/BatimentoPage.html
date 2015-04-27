@@ -5,43 +5,43 @@
 </head>
 <body>
 	<wicket:extend>
-		<form wicket:id="form">
 			<div class="col-lg-12">
 				<div class="panel panel-primary">
 					<div class="panel-heading">Batimento</div>
 					<div class="panel-body">
-						<br />
-						<div wicket:id="group">
-		                  <table class="table table-striped table-bordered table-hover">
-		                    <thead>
-								<tr>
-									<th>Arquivo</th>
-									<th>Data Envio</th>
-									<th>Cartório</th>
-									<th>Valor Pagos</th>
-								</tr>
-							</thead>
-							<tbody>
-			                    <tr wicket:id="retornos">
-			                        <td>
-			                        	<input type="checkbox" wicket:id="checkbox"/>&nbsp;&nbsp;&nbsp;&nbsp;
-			                        	<a wicket:id="linkArquivo">
-			                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
-			                        	</a>
-			                        </td>
-									<td wicket:id="arquivo.dataEnvio"></td>
-									<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
-									<td wicket:id="valorPagos"></td>
-			                    </tr>
-		                    </tbody>
-		                  </table>
-				        </div>
+						<form wicket:id="form">
+						<input type="submit" wicket:id="confirmadosPage" value="Retornos Confirmados" class="btn btn-sm" style="float: left; margin-bottom: 5px;"/>
+							<div wicket:id="group">
+		                  		<table class="table table-striped table-bordered table-hover">
+				                    <thead>
+										<tr>
+											<th>Arquivo</th>
+											<th>Data Envio</th>
+											<th>Cartório</th>
+											<th>Valor Pagos</th>
+										</tr>
+									</thead>
+									<tbody>
+					                    <tr wicket:id="retornos">
+					                        <td>
+					                        	<input type="checkbox" wicket:id="checkbox"/>&nbsp;&nbsp;&nbsp;&nbsp;
+					                        	<a wicket:id="linkArquivo">
+					                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
+					                        	</a>
+					                        </td>
+											<td wicket:id="arquivo.dataEnvio"></td>
+											<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
+											<td wicket:id="valorPagos"></td>
+					                    </tr>
+				                    </tbody>
+				                </table>
+					        </div>
+						</form>
 						<input type="submit" class="btn btn-small" value="Enviar"/>
 					</div>
 					<div class="panel-footer"></div>
 				</div>
 			</div>
-		</form>
 	</wicket:extend>
 </body>
 </html>

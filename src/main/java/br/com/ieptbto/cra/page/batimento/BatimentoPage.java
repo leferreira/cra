@@ -8,6 +8,7 @@ import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.Form;
@@ -22,12 +23,12 @@ import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.BatimentoMediator;
-import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
+@SuppressWarnings("rawtypes")
 @AuthorizeInstantiation(value = { CraRoles.ADMIN, CraRoles.SUPER })
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
 public class BatimentoPage extends BasePage<Batimento> {
@@ -38,10 +39,9 @@ public class BatimentoPage extends BasePage<Batimento> {
 	
 	@SpringBean
 	private BatimentoMediator batimentoMediator;
-	@SpringBean
-	private TituloMediator tituloMediator;
 	private Batimento batimento;
 	private Form<Batimento> form;
+	private ListView<Remessa> remessas;
 	
 	public BatimentoPage() {
 		super();
@@ -58,7 +58,8 @@ public class BatimentoPage extends BasePage<Batimento> {
 						error("Ao menos um retorno deve ser selecionado!");
 					} else {
 						retornosParaConfirmar = (List<Remessa>) group.getModelObject();
-						setResponsePage(new ConfirmarBatimentoPage(retornosParaConfirmar));
+						batimentoMediator.confirmarBatimentos(retornosParaConfirmar);
+						setResponsePage(new ConfirmarBatimentoPage());
 					}
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -69,10 +70,25 @@ public class BatimentoPage extends BasePage<Batimento> {
 				}
             }
         };
+        form.add(new Button("confirmadosPage") {
+        	/***/
+        	private static final long serialVersionUID = 1L;
+        	
+        	@Override
+        	public void onSubmit() {
+        		setResponsePage(new ConfirmarBatimentoPage());
+        	}
+        }
+        		);
         add(form);
         form.add(group);
-        @SuppressWarnings("rawtypes")
-        ListView<Remessa> remessas = new ListView<Remessa>("retornos", batimentoMediator.buscarRetornosParaBatimento()){
+        add(carregarListaRetornos());
+        remessas.setReuseItems(true);
+        group.add(remessas);
+	}
+	
+	private ListView<Remessa> carregarListaRetornos(){
+		return remessas = new ListView<Remessa>("retornos", batimentoMediator.buscarRetornosParaBatimento()){
 			/***/
         	private static final long serialVersionUID = 1L;
 				@Override
@@ -95,8 +111,6 @@ public class BatimentoPage extends BasePage<Batimento> {
             }
 
         };
-        remessas.setReuseItems(true);
-        group.add(remessas);
 	}
 	
 	@Override

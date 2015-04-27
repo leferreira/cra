@@ -42,6 +42,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	private Rodape rodape;
 	private List<Historico> historicos;
 	private List<Titulo> titulos;
+	private Boolean situacaoBatimento;
 
 	@Id
 	@Column(name = "ID_REMESSA", columnDefinition = "serial")
@@ -95,9 +96,18 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return instituicaoOrigem;
 	}
 	
-	@OneToOne(mappedBy="remessa")
-	public Batimento getBatimento() {
+	@OneToOne(optional=true ,mappedBy="remessa", fetch=FetchType.LAZY)
+	public Batimento getBatimento(){
 		return batimento;
+	}
+
+	@Column(name="SITUACAO_BATIMENTO", nullable=true)
+	public Boolean getSituacaoBatimento() {
+		return situacaoBatimento;
+	}
+
+	public void setSituacaoBatimento(Boolean situacaoBatimento) {
+		this.situacaoBatimento = situacaoBatimento;
 	}
 
 	public void setBatimento(Batimento batimento) {

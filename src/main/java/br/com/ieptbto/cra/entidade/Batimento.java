@@ -46,7 +46,7 @@ public class Batimento extends AbstractEntidade<Batimento>{
 	}
 	
 	@OneToOne
-	@JoinColumn(name="REMESSA_ID")
+	@JoinColumn(name = "REMESSA_ID")
 	public Remessa getRemessa() {
 		return remessa;
 	}
@@ -87,6 +87,7 @@ public class Batimento extends AbstractEntidade<Batimento>{
 		CompareToBuilder compare = new CompareToBuilder();
 		compare.append(entidade.getId(), this.getId());
 		compare.append(entidade.getDataBatimento(), this.getDataBatimento());
+		compare.append(entidade.getRemessa(), this.getRemessa());
 		return compare.toComparison();
 	}
 

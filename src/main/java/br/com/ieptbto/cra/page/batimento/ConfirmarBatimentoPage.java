@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckGroup;
@@ -15,6 +16,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -23,6 +25,7 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
+@SuppressWarnings("rawtypes")
 public class ConfirmarBatimentoPage extends BasePage<Batimento> {
 
 	/***/
@@ -34,24 +37,24 @@ public class ConfirmarBatimentoPage extends BasePage<Batimento> {
 	private Batimento batimento;
 	private List<Remessa> retornosParaConfirmar;
 	private Form<Batimento> form;
+	private ListView<Remessa> remessas;
 
-	public ConfirmarBatimentoPage(List<Remessa> retornos){
+	public ConfirmarBatimentoPage(){
 		this.batimento = new Batimento();
-		this.retornosParaConfirmar = retornos;
+		this.retornosParaConfirmar = batimentoMediator.buscarBatimentosConfirmados();
 		final CheckGroup<Remessa> group = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
         form = new Form<Batimento>("form"){
             /***/
 			private static final long serialVersionUID = 1L;
 			@Override
             protected void onSubmit(){
-				List<Remessa> retornosParaConfirmar = new ArrayList<Remessa>();
-				
 				try{
 					if (group.getModelObject().isEmpty()){
 						error("Ao menos um retorno deve ser selecionado!");
 					} else {
 						retornosParaConfirmar = (List<Remessa>) group.getModelObject();
-						setResponsePage(new ConfirmarBatimentoPage(retornosParaConfirmar));
+						batimentoMediator.realizarBatimento(retornosParaConfirmar);
+						info("Batimento realizado com sucesso!");
 					}
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -64,8 +67,13 @@ public class ConfirmarBatimentoPage extends BasePage<Batimento> {
         };
         add(form);
         form.add(group);
-        @SuppressWarnings("rawtypes")
-        ListView<Remessa> remessas = new ListView<Remessa>("retornos", this.retornosParaConfirmar){
+        add(carregarListaRetornos());
+        remessas.setReuseItems(true);
+        group.add(remessas);
+	}
+	
+	private ListView<Remessa> carregarListaRetornos(){
+		return remessas = new ListView<Remessa>("retornos", this.retornosParaConfirmar){
 			/***/
         	private static final long serialVersionUID = 1L;
 				@Override
@@ -85,11 +93,22 @@ public class ConfirmarBatimentoPage extends BasePage<Batimento> {
 			        };
 			        linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
 			        item.add(linkArquivo);
+			        item.add(removerConfirmado(retorno));
             }
+				
+			private Component removerConfirmado(final Remessa retorno) {
+				return new Link<Arquivo>("removerConfirmado") {
+					/***/
+					private static final long serialVersionUID = 1L;
 
+					@Override
+					public void onClick() {
+						batimentoMediator.removerConfirmado(retorno);
+						setResponsePage(new ConfirmarBatimentoPage());
+					}
+				};
+			}
         };
-        remessas.setReuseItems(true);
-        group.add(remessas);
 	}
 	
 	@Override

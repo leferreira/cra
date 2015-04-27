@@ -83,11 +83,21 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		        };
 		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
 		        item.add(linkHistorico);
+		        Link linkRetorno = new Link("linkRetorno") {
+		        	/***/
+		        	private static final long serialVersionUID = 1L;
+		        	
+		        	public void onClick() {
+		        		setResponsePage(new TitulosDoArquivoPage(tituloLista.getRetorno().getRemessa()));  
+		        	}
+		        };
 		        if (tituloLista.getRetorno() != null){
-	        		item.add(new Label("retorno", tituloLista.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
+	        		linkRetorno.add(new Label("retorno", tituloLista.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
+	        		item.add(linkRetorno);
 	        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getRetorno().getDataOcorrencia())));
 		        } else {
-		        	item.add(new Label("retorno", StringUtils.EMPTY));
+		        	linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
+	        		item.add(linkRetorno);
 		        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getDataOcorrencia())));
 		        }
 				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));

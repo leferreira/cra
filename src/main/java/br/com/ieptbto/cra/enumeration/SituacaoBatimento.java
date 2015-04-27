@@ -2,8 +2,9 @@ package br.com.ieptbto.cra.enumeration;
 
 public enum SituacaoBatimento implements CraEnum {
 
-	NAO_CONFIRMADO("0","Não confirmado"),
-	RETORNO_GERADO("1","Retorno Gerado");
+	RECEBIDO("1","Recebido"),
+	CONFIRMADO("2","Confirmado"),
+	GERADO("3","Retorno Gerado");
 	
 	SituacaoBatimento(String constante, String label){
 		this.constante=constante;

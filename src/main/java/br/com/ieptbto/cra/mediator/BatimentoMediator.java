@@ -25,6 +25,10 @@ public class BatimentoMediator {
 		return batimentoDao.buscarRetornosParaBatimento();
 	}
 	
+	public List<Remessa> buscarBatimentosConfirmados(){
+		return batimentoDao.buscarBatimentosConfirmados();
+	}
+	
 	public BigDecimal buscarValorDeTitulosPagos(Remessa retorno){
 		if (!retorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)){
 			throw new InfraException("O arquivo não é um arquivo de RETORNO válido.");
@@ -33,6 +37,15 @@ public class BatimentoMediator {
 		}
 	}
 	
+	public void confirmarBatimentos(List<Remessa> retornos){
+		batimentoDao.confirmarBatimento(retornos);
+	}
+	
+	public void removerConfirmado(Remessa retorno){
+		batimentoDao.removerConfirmado(retorno);
+	}
+	
+	/*Método quando for gerar o arquivo de retorno*/
 	public void realizarBatimento(List<Remessa> retornos){
 		batimentoDao.realizarBatimento(retornos);
 	}
