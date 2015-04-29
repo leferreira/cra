@@ -49,21 +49,6 @@ public class BatimentoDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 	
-	public void removerConfirmado(Remessa retorno){
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
-
-		try {
-			retorno.setSituacaoBatimento(false);
-			update(retorno);
-			transaction.commit();
-		} catch (Exception ex) {
-			transaction.rollback();
-			logger.error(ex.getMessage(), ex);
-			throw new InfraException("Não foi possível confirmar estas remessas.");
-		}
-	}
-	
 	public BigDecimal buscarValorDeTitulosPagos(Remessa retorno){
 		Criteria criteria = getCriteria(Retorno.class);
 		criteria.add(Restrictions.eq("tipoOcorrencia", TipoOcorrencia.PAGO.getConstante()));
@@ -72,18 +57,15 @@ public class BatimentoDAO extends AbstractBaseDAO {
 		return BigDecimal.class.cast(criteria.uniqueResult());
 	}
 	
+
 	public void confirmarBatimento(List<Remessa> retornosConfirmados){
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 
 		try {
 			for (Remessa retorno : retornosConfirmados) {
-				Batimento batimento = new Batimento();
 				retorno.setSituacaoBatimento(true);
-				batimento.setRemessa(update(retorno));
-				batimento.setSituacaoBatimento(SituacaoBatimento.CONFIRMADO);
-				batimento.setDataBatimento(new LocalDateTime());
-				save(batimento);
+				update(retorno);
 			}
 			transaction.commit();
 			logger.info("A confirmação do batimento foi realizado com sucesso!");
@@ -94,6 +76,19 @@ public class BatimentoDAO extends AbstractBaseDAO {
 		}
 	}
 	
+	public void removerConfirmado(Remessa retorno){
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		
+		try {
+			retorno.setSituacaoBatimento(false);
+			update(retorno);
+			transaction.commit();
+		} catch (Exception ex) {
+			transaction.rollback();
+			logger.error(ex.getMessage(), ex);
+		}
+	}
 	/**
 	 * Método que irá chamar a Fábrica de Arquivo de Retorno
 	 * */
@@ -120,4 +115,5 @@ public class BatimentoDAO extends AbstractBaseDAO {
 			throw new InfraException("Não foi possível realizar esse batimento.");
 		}
 	}
+	
 }

@@ -37,7 +37,6 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 		super();
 		this.arquivo = arquivo;
 		this.remessas = remessaMediator.buscarArquivos(arquivo, municipio, portador, dataInicio, dataFim, tiposArquivo, getUser());
-
 		add(carregarListaArquivos());
 	}
 	
@@ -47,6 +46,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 			/***/
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
 				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
@@ -54,6 +54,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 		            /***/
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					public void onClick() {
 		            	setResponsePage(new TitulosDoArquivoPage(remessa));  
 		            }

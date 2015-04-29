@@ -89,6 +89,7 @@ public class MonitorarTitulosInputPanel extends Panel {
 		return new Button("botaoBuscar") {
 			/** */
 			private static final long serialVersionUID = 1L;
+			@Override
 			public void onSubmit() {
 				
 				titulo = model.getObject();

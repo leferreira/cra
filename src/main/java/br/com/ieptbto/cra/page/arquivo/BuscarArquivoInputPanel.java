@@ -43,17 +43,14 @@ public class BuscarArquivoInputPanel extends Panel  {
 	private MunicipioMediator municipioMediator;
 	private Arquivo arquivo;
 	private IModel<Arquivo> model;
-
-	private Municipio municipio = null;
-	private Instituicao portador =  null;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private ArrayList<String> tiposArquivo = new ArrayList<String>();
 	
-	private DropDownChoice<Municipio> comboMunicipio;
-	private TextField<LocalDate> dataEnvioInicio;
-	private TextField<LocalDate> dataEnvioFinal;
-	private DropDownChoice<Instituicao> comboPortador;
+	DropDownChoice<Municipio> comboMunicipio;
+	TextField<LocalDate> dataEnvioInicio;
+	TextField<LocalDate> dataEnvioFinal;
+	DropDownChoice<Instituicao> comboPortador;
 	
 	public BuscarArquivoInputPanel(String id, IModel<Arquivo> model) {
 		super(id, model);
@@ -75,7 +72,11 @@ public class BuscarArquivoInputPanel extends Panel  {
 		return new Button("botaoBuscar") {
 			/** */
 			private static final long serialVersionUID = 1L;
+			@Override
 			public void onSubmit() {
+				Municipio municipio = new Municipio();
+				Instituicao portador =  new Instituicao();
+
 				arquivo = model.getObject();
 				
 				try {
@@ -91,10 +92,10 @@ public class BuscarArquivoInputPanel extends Panel  {
 					} 
 					
 					if (comboMunicipio.getDefaultModelObject() != null)
-						municipio = (Municipio)comboMunicipio.getDefaultModelObject();
+						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
 					
-					if (comboPortador.getDefaultModelObject() != null)
-						portador = (Instituicao)comboPortador.getDefaultModelObject();
+					if (Instituicao.class.cast(comboPortador.getDefaultModelObject()).getNomeFantasia() != null)
+						portador = Instituicao.class.cast(comboPortador.getDefaultModelObject());
 					
 					setResponsePage(new ListaArquivosPage(arquivo, municipio, portador, dataInicio, dataFim, tiposArquivo));
 				} catch (InfraException ex) {

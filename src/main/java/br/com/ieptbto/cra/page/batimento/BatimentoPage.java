@@ -70,21 +70,12 @@ public class BatimentoPage extends BasePage<Batimento> {
 				}
             }
         };
-        form.add(new Button("confirmadosPage") {
-        	/***/
-        	private static final long serialVersionUID = 1L;
-        	
-        	@Override
-        	public void onSubmit() {
-        		setResponsePage(new ConfirmarBatimentoPage());
-        	}
-        }
-        		);
-        add(form);
+        form.add(new Button("confirmarBotao"));
         form.add(group);
         add(carregarListaRetornos());
         remessas.setReuseItems(true);
         group.add(remessas);
+        add(form);
 	}
 	
 	private ListView<Remessa> carregarListaRetornos(){
@@ -102,6 +93,7 @@ public class BatimentoPage extends BasePage<Batimento> {
 			            /***/
 						private static final long serialVersionUID = 1L;
 
+						@Override
 						public void onClick() {
 			            	setResponsePage(new TitulosDoArquivoPage(retorno));  
 			            }

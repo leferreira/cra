@@ -35,13 +35,12 @@ public class RemessaDAO extends AbstractBaseDAO {
 		criteria.addOrder(Order.desc("dataRecebimento"));
 		return criteria.list();
 	}
-	
-	/**
-	 * Buscar 
-	 * */
-	public List<Remessa> buscarRemessas(Arquivo arquivo, Municipio pracaProtesto, Instituicao portador, LocalDate dataInicio,LocalDate dataFim, Usuario usuarioCorrente){
+
+	public List<Remessa> buscarRemessas(Arquivo arquivo, Municipio pracaProtesto, Instituicao portador,
+			LocalDate dataInicio,LocalDate dataFim, Usuario usuarioCorrente,List<String> tipos){
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "a");
+		criteria.createAlias("a.tipoArquivo", "tipoArquivo");
 		criteria.createAlias("instituicaoDestino", "d");
 		criteria.createAlias("instituicaoOrigem", "o");
 		
@@ -52,14 +51,13 @@ public class RemessaDAO extends AbstractBaseDAO {
 		if (StringUtils.isNotBlank(arquivo.getNomeArquivo())){ 
 			criteria.add(Restrictions.ilike("a.nomeArquivo", arquivo.getNomeArquivo(), MatchMode.ANYWHERE));
 		}
-		if (portador != null){
-			criteria.add(Restrictions.disjunction()
-					.add(Restrictions.eq("instituicaoOrigem", portador)).add(Restrictions.eq("instituicaoDestino", portador)));
+		if (portador.getNomeFantasia() != null){
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", portador)).add(Restrictions.eq("instituicaoDestino", portador)));
 		}
 		if (pracaProtesto != null){
-			criteria.add(Restrictions.disjunction()
-					.add(Restrictions.eq("d.municipio", pracaProtesto)).add(Restrictions.eq("o.municipio", pracaProtesto)));
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("d.municipio", pracaProtesto)).add(Restrictions.eq("o.municipio", pracaProtesto)));
 		}
+		
 		criteria.add(Restrictions.between("a.dataEnvio", dataInicio, dataFim));
 		criteria.addOrder(Order.desc("a.dataEnvio"));
 		return criteria.list();

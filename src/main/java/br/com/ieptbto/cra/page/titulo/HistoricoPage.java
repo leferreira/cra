@@ -93,6 +93,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		            /***/
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					public void onClick() {
 		            	setResponsePage(new TitulosDoArquivoPage(historico.getRemessa()));  
 		            }
@@ -117,7 +118,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 	
 	public TextField<String> numeroProtocoloCartorio() {
-		return new TextField<String>("confirmacao.numeroProtocoloCartorio", new Model<String>(tituloRemessa.getNumeroProtocoloCartorio()));
+		return new TextField<String>("confirmacao.numeroProtocoloCartorio", new Model<String>(tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 	}
 
 	public TextField<String> dataProtocolo() {

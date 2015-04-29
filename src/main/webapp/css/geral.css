@@ -75,6 +75,7 @@ th{
 }
 .table{
 	font-size: 12px !important;
+	margin: 0px -10px 0px -10px !important;
 }
 .download-ico{
 	width: 30%;
