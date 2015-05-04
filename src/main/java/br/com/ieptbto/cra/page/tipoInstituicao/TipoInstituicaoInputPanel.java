@@ -50,7 +50,7 @@ public class TipoInstituicaoInputPanel extends Panel {
 		adicionarCampos();
 	}
 
-	public void adicionarCampos() {
+	private void adicionarCampos() {
 		add(campoTipoInstituicao());
 		add(comboTipoArquivos());
 		add(botaoSalvar());
@@ -96,7 +96,7 @@ public class TipoInstituicaoInputPanel extends Panel {
 		return nomeTipo;
 	}
 
-	public Component comboTipoArquivos() {
+	private Component comboTipoArquivos() {
 		List<String> choices = new ArrayList<String>();
 		List<TipoArquivoEnum> enumLista = Arrays.asList(TipoArquivoEnum.values());
 		for (TipoArquivoEnum tipo : enumLista) {
