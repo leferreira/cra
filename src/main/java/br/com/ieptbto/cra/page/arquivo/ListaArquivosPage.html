@@ -9,37 +9,40 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">Arquivos</div>
 				<div class="panel-body">
-					<table id="table" class="table table-striped table-bordered table-hover">
-						<thead>
-							<tr>
-								<th style="width: 60px;">Tipo</th>
-								<th>Nome Arquivo</th>
-								<th>Data Envio</th>
-								<th>Enviado por</th>
-								<th>Destino</th>
-								<th>Situação</th>
-								<th style="width: 60px;">Baixar</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr wicket:id="dataTableRemessa">
-								<td wicket:id="tipoArquivo"></td>
-								<td><a wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
-								<td wicket:id="dataEnvio"></td>
-								<td wicket:id="instituicao"></td>
-								<td wicket:id="destino"></td>
-								<td wicket:id="status"></td>
-								<td style="text-align: center;">
-									<a href="#">
-										<img border="0" class="download-ico" title="Download em TXT" src="img/txt1.ico" wicket:id="downloadArquivo">
-									</a>
-									<a href="#">
-										<img border="0" style="margin-left: 3%;" class="download-ico" title="Download em XML" src="img/xml.ico">
-									</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+					<fieldset>
+						<legend class="legend">Resultado da Busca por Arquivos<a href="BuscarArquivo" style="float: right; font-size: 16px;"><span class="fa fa-mail-reply"></span>Voltar à página de busca!</a>
+						</legend>
+						<table id="table" class="table table-striped table-bordered table-hover">
+							<thead>
+								<tr>
+									<th style="width: 60px;">Tipo</th>
+									<th style="width: 60px;">Baixar</th>
+									<th>Nome Arquivo</th>
+									<th>Data Envio</th>
+									<th>Enviado por</th>
+									<th>Destino</th>
+									<th>Situação</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr wicket:id="dataTableRemessa">
+									<td wicket:id="tipoArquivo"></td>
+									<td style="text-align: center;">
+										<a href="#" title="Download em TXT" wicket:id="downloadArquivo">TXT&nbsp;</a>
+										<a href="#" title="Download em XML" >XML</a>
+									</td>
+									<td><a wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
+									<td wicket:id="dataEnvio"></td>
+									<td wicket:id="instituicao"></td>
+									<td wicket:id="destino"></td>
+									<td wicket:id="status"></td>
+								</tr>
+							</tbody>
+						</table>
+					</fieldset>
+				</div>
+				<div class="panel-footer">
+					<p>Resultado da busca. Para mais informações dos arquivos clique no nome do arquivo!</p>
 				</div>
 			</div>
 		</div>

@@ -2,69 +2,82 @@
 <meta charset="UTF8">
 </head>
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">	
-	<div class="col-lg-10 col-md-offset-1">
-		<div class="panel-body-right">
-			<!-- Text input Nome -->
-			<div class="form-group">
-				<label for="nome">Nome:</label> 
-				<input id="nome" name="nome" type="text" wicket:id="nome" placeholder="Nome" class="form-control" autofocus="autofocus" />
-			</div>
-			<div class="form-group">
-				<label for="nome">Login:</label> <input id="loginUsuario"
-					name="loginUsuario" type="text" wicket:id="login"
-					placeholder="Login" class="form-control"/>
-			</div>
-		</div>
-		<div class="panel-body-left">
-			<div class="form-group">
-				<label class="control-label" for="senha">Senha:</label> <input
-					id="senha" name="senha" type="password" wicket:id="senha"
-					placeholder="Senha" class="form-control" />
-			</div>
-			<div class="form-group">
-				<label for="confirmarSenha">Confimar Senha:</label> <input
-					id="confirmarSenha" name="confirmarSenha" type="password" wicket:id="confirmarSenha"
-					placeholder="Repita a senha" class="form-control" />
-			</div>
-		</div>
-		<br style="clear: both;" />
-		<div class="panel-body-right">
-			<div class="form-group">
-				<label for="email">E-mail:</label> <input id="email" name="email"
-					type="text" placeholder="E-mail" wicket:id="email"
-					class="form-control" />
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="instituicao">Instituição:</label>
-				<div class="controls">
-					<select wicket:id="instituicao" id="razaoSocial"
-						class="form-control"></select>
+	<div class="panel panel-primary">
+		<div class="panel-heading">Cadastro de Usuários</div>
+		<div class="panel-body">
+			<fieldset>
+				<legend class="legend">Cadastro de Usuário<a href="UsuariosPage"	style="float: right; font-size: 16px;"><span class="fa fa-mail-reply"></span>Voltar a página anterior!</a>
+				</legend>
+				<div class="col-lg-10 col-md-offset-1" style="text-align: left;">
+					<div class="panel-body-right">
+						<!-- Text input Nome -->
+						<div class="form-group">
+							<label for="nome">Nome:</label> 
+							<input id="nome" name="nome" type="text" wicket:id="nome" placeholder="Nome" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label for="nome">Login:</label> <input id="loginUsuario"
+								name="loginUsuario" type="text" wicket:id="login"
+								placeholder="Login" class="form-control" />
+						</div>
+					</div>
+					<div class="panel-body-left">
+						<div class="form-group">
+							<label class="control-label" for="senha">Senha:</label> <input
+								id="senha" name="senha" type="password" wicket:id="senha"
+								placeholder="Senha" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label for="confirmarSenha">Confimar Senha:</label> <input
+								id="confirmarSenha" name="confirmarSenha" type="password" wicket:id="confirmarSenha"
+								placeholder="Repita a senha" class="form-control" />
+						</div>
+					</div>
+					<br style="clear: both;" />
+					<div class="panel-body-right">
+						<div class="form-group">
+							<label for="email">E-mail:</label> <input id="email" name="email"
+								type="text" placeholder="E-mail" wicket:id="email"
+								class="form-control" />
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="instituicao">Instituição:</label>
+							<div class="controls">
+								<select wicket:id="instituicao" id="razaoSocial"
+									class="form-control"></select>
+							</div>
+						</div>
+						<br style="clear: both;"/>
+						<div class="form-group">
+							<label class="control-label" for="situacao">Situação:</label><br
+								style="clear: both;" />
+							<div class="radio inline">
+								<span wicket:id="situacao"></span>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body-left">
+						<div class="form-group">
+							<label for="contato">Contato:</label> <input id="contato"
+								name="contato" type="text" placeholder="Contato" wicket:id="contato"
+								class="form-control" />
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="grupoUsuario">Grupo do Usuário:</label>
+							<div class="controls">
+								<select wicket:id="grupoUsuario" id="grupo" class="form-control"></select>
+							</div>
+						</div>
+						<br style="clear: both;"/>
+						<br style="clear: both;"/>
+						<button wicket:id="botaoSalvar" type="submit" class="btn btn-primary">Salvar</button>
+					</div>
 				</div>
-			</div>
-			<br style="clear: both;"/>
-			<div class="form-group">
-				<label class="control-label" for="situacao">Situação:</label><br
-					style="clear: both;" />
-				<div class="radio inline">
-					<span wicket:id="situacao"></span>
-				</div>
-			</div>
+			</fieldset>
 		</div>
-		<div class="panel-body-left">
-			<div class="form-group">
-				<label for="contato">Contato:</label> <input id="telefone"
-					name="contato" type="text" placeholder="Contato" wicket:id="contato"
-					class="form-control" />
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="grupoUsuario">Grupo do Usuário:</label>
-				<div class="controls">
-					<select wicket:id="grupoUsuario" id="grupo" class="form-control"></select>
-				</div>
-			</div>
-			<br style="clear: both;"/>
-			<br style="clear: both;"/>
-			<button wicket:id="botaoSalvar" type="submit" class="btn btn-primary">Salvar</button>
+		<div class="panel-footer">
+			<p>Formulário de cadastro de um usuário na CRA-TO. Os campos com
+				* são obrigatórios!</p>
 		</div>
 	</div>	
 </wicket:panel>

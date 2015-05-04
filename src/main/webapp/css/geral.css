@@ -75,8 +75,20 @@ th{
 }
 .table{
 	font-size: 12px !important;
-	margin: 0px -10px 0px -10px !important;
 }
 .download-ico{
 	width: 30%;
+}
+.page-title{
+	  position: absolute;
+  font-size: 16px;
+  
+}
+.legend{
+	text-align: left;
+  font-size: 16px;
+  font-style: italic;
+}
+#table_wrapper{
+  margin: 0 -5px;
 }

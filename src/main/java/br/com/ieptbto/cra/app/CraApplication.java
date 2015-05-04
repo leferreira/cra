@@ -21,7 +21,7 @@ import org.joda.time.DateTimeZone;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
-import br.com.ieptbto.cra.page.arquivo.AcompanharArquivosPage;
+import br.com.ieptbto.cra.page.arquivo.ArquivosEnviadosPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPage;
@@ -39,6 +39,7 @@ import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.municipio.DetalharMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.IncluirMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.ListaMunicipioPage;
+import br.com.ieptbto.cra.page.relatorio.RelatoriosDeTituloPage;
 import br.com.ieptbto.cra.page.tipoInstituicao.IncluirTipoInstituicaoPage;
 import br.com.ieptbto.cra.page.tipoInstituicao.ListaTipoInstituicaoPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
@@ -130,28 +131,43 @@ public class CraApplication extends WebApplication implements
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
+		
+		/** Arquivo */
+		mountPage("UsuariosPage", ListaUsuarioPage.class);
 		mountPage("IncluirUsuario", IncluirUsuarioPage.class);
-		mountPage("ListaUsuario", ListaUsuarioPage.class);
 		mountPage("DetalharUsuario", DetalharUsuarioPage.class );
+
+		mountPage("InstituicoesPage", ListaInstituicaoPage.class);
 		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
-		mountPage("ListaInstituicao", ListaInstituicaoPage.class);
 		mountPage("DetalharInstituicao", DetalharInstituicaoPage.class );
+		
+		mountPage("CartoriosPage", ListaCartorioPage.class);
 		mountPage("IncluirCartorio", IncluirCartorioPage.class);
-		mountPage("ListaCartorio", ListaCartorioPage.class);
 		mountPage("DetalharCartorio", DetalharCartorioPage.class );
+		
+		mountPage("TipoInstituicoesPage", ListaTipoInstituicaoPage.class);
 		mountPage("IncluirTipoInstituicao", IncluirTipoInstituicaoPage.class);
-		mountPage("ListaTipoInstituicao", ListaTipoInstituicaoPage.class);
+
+		mountPage("MunicipiosPage", ListaMunicipioPage.class);
 		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
-		mountPage("ListaMunicipio", ListaMunicipioPage.class);
 		mountPage("DetalharMunicipio", DetalharMunicipioPage.class );
+		
+		/** Arquivo */
 		mountPage("EnviarArquivo", EnviarArquivoPage.class);
 		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 		mountPage("ListaArquivo", ListaArquivosPage.class);
-		mountPage("AcompanharArquivos", AcompanharArquivosPage.class);
+		mountPage("ArquivosPage", ArquivosEnviadosPage.class);
+		mountPage("TitulosDoArquivo", TitulosDoArquivoPage.class);
+		
+		/** Titulos */
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
 		mountPage("HistoricoDoTitulo", HistoricoPage.class);
-		mountPage("TitulosDoArquivo", TitulosDoArquivoPage.class);
+
+		/** Relatorios */
+		mountPage("RelatorioTitulos", RelatoriosDeTituloPage.class);
+
+		/** Batimento */
 		mountPage("Batimento", BatimentoPage.class);
 		mountPage("ConfirmarBatimento", ConfirmarBatimentoPage.class);
 	}

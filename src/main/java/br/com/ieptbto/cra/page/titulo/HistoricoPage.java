@@ -31,7 +31,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 @SuppressWarnings("rawtypes")
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
 public class HistoricoPage extends BasePage<TituloRemessa> {
 
 	/***/
@@ -117,11 +117,15 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		};
 	}
 	
-	public TextField<String> numeroProtocoloCartorio() {
-		return new TextField<String>("confirmacao.numeroProtocoloCartorio", new Model<String>(tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+	private TextField<String> numeroProtocoloCartorio() {
+		if (tituloRemessa.getConfirmacao() != null){
+			return new TextField<String>("numeroProtocoloCartorio", new Model<String>(tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+		} else {
+			return new TextField<String>("numeroProtocoloCartorio", new Model<String>(StringUtils.EMPTY));
+		}
 	}
 
-	public TextField<String> dataProtocolo() {
+	private TextField<String> dataProtocolo() {
 		String dataProtocolo = StringUtils.EMPTY;
 		Hibernate.initialize(tituloRemessa.getConfirmacao());
 		if (tituloRemessa.getConfirmacao() != null){
@@ -130,101 +134,101 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		return new TextField<String>("confirmacao.dataProtocolo", new Model<String>(dataProtocolo));
 	}
 
-	public TextField<String> codigoCartorio() {
+	private TextField<String> codigoCartorio() {
 		return new TextField<String>("codigoCartorio", new Model<String>(tituloRemessa.getCodigoCartorio().toString()));
 	}
 
-	public TextField<String> cartorio(){
+	private TextField<String> cartorio(){
 //		Hibernate.initialize(tituloRemessa.getRemessa().getInstituicaoDestino());
 //		return new TextField<String>("remessa.instituicaoDestino.nomeFantasia", new Model<String>(tituloRemessa.getRemessa().getInstituicaoDestino().getNomeFantasia()));
 		return new TextField<String>("remessa.instituicaoDestino.nomeFantasia", new Model<String>(StringUtils.EMPTY));
 	}
 
-	public TextField<String> pracaProtesto() {
+	private TextField<String> pracaProtesto() {
 		return new TextField<String>("pracaProtesto", new Model<String>(tituloRemessa.getPracaProtesto()));
 	}
 
-	 public TextField<String> status(){
+	 private TextField<String> status(){
 		 return new TextField<String>("situacaoTitulo", new Model<String>(tituloRemessa.getSituacaoTitulo()));
 	 }
 
-	public TextField<String> dataRemessa(){
+	private TextField<String> dataRemessa(){
 		return new TextField<String>("remessa.arquivo.dataEnvio", new Model<String>(DataUtil.localDateToString(tituloRemessa.getRemessa().getArquivo().getDataEnvio())));
 	}
 	
-	public TextField<String> nomeSacadorVendedor() {
+	private TextField<String> nomeSacadorVendedor() {
 		return new TextField<String>("nomeSacadorVendedor", new Model<String>(tituloRemessa.getNomeSacadorVendedor()));
 	}
 
-	public TextField<String> documentoSacador() {
+	private TextField<String> documentoSacador() {
 		return new TextField<String>("documentoSacador", new Model<String>(tituloRemessa.getDocumentoSacador()));
 	}
 
-	public TextField<String> ufSacadorVendedor() {
+	private TextField<String> ufSacadorVendedor() {
 		return new TextField<String>("ufSacadorVendedor", new Model<String>(tituloRemessa.getUfSacadorVendedor()));
 	}
 
-	public TextField<String> cepSacadorVendedor() {
+	private TextField<String> cepSacadorVendedor() {
 		return new TextField<String>("cepSacadorVendedor", new Model<String>(tituloRemessa.getCepSacadorVendedor()));
 	}
 
-	public TextField<String> cidadeSacadorVendedor() {
+	private TextField<String> cidadeSacadorVendedor() {
 		return new TextField<String>("cidadeSacadorVendedor", new Model<String>(tituloRemessa.getCidadeSacadorVendedor()));
 	}
 
-	public TextField<String> enderecoSacadorVendedor() {
+	private TextField<String> enderecoSacadorVendedor() {
 		return new TextField<String>("enderecoSacadorVendedor", new Model<String>(tituloRemessa.getEnderecoSacadorVendedor()));
 	}
 
-	public TextField<String> nomeDevedor() {
+	private TextField<String> nomeDevedor() {
 		return new TextField<String>("nomeDevedor", new Model<String>(tituloRemessa.getNomeDevedor()));
 	}
 
-	public TextField<String> documentoDevedor() {
+	private TextField<String> documentoDevedor() {
 		return new TextField<String>("documentoDevedor", new Model<String>(tituloRemessa.getDocumentoDevedor()));
 	}
 
-	public TextField<String> ufDevedor() {
+	private TextField<String> ufDevedor() {
 		return new TextField<String>("ufDevedor", new Model<String>(tituloRemessa.getUfDevedor()));
 	}
 
-	public TextField<String> cepDevedor() {
+	private TextField<String> cepDevedor() {
 		return new TextField<String>("cepDevedor", new Model<String>(tituloRemessa.getCepDevedor()));
 	}
 
-	public TextField<String> cidadeDevedor() {
+	private TextField<String> cidadeDevedor() {
 		return new TextField<String>("cidadeDevedor", new Model<String>(tituloRemessa.getCidadeDevedor()));
 	}
 
-	public TextField<String> enderecoDevedor() {
+	private TextField<String> enderecoDevedor() {
 		return new TextField<String>("enderecoDevedor", new Model<String>(tituloRemessa.getEnderecoDevedor()));
 	}
 
-	public TextField<String> numeroTitulo() {
+	private TextField<String> numeroTitulo() {
 		return new TextField<String>("numeroTitulo", new Model<String>(tituloRemessa.getNumeroTitulo()));
 	}
 
-	public TextField<String> portador(){
+	private TextField<String> portador(){
 		return new TextField<String>("remessa.arquivo.instituicaoEnvio.nomeFantasia", new Model<String>(tituloRemessa.getRemessa().getCabecalho().getNomePortador()));
 	}
 
-	 public TextField<String> agencia(){
+	 private TextField<String> agencia(){
 		 return new TextField<String>("agencia", new Model<String>(tituloRemessa.getRemessa().getCabecalho().getAgenciaCentralizadora()));
 	 }
 
-	public TextField<String> nossoNumero() {
+	private TextField<String> nossoNumero() {
 		return new TextField<String>("nossoNumero", new Model<String>(tituloRemessa.getNossoNumero()));
 	}
 
-	public TextField<String> especieTitulo() {
+	private TextField<String> especieTitulo() {
 		return new TextField<String>("especieTitulo", new Model<String>(tituloRemessa.getEspecieTitulo()));
 	}
 
-	public TextField<String> dataEmissaoTitulo() {
+	private TextField<String> dataEmissaoTitulo() {
 		return new TextField<String>("dataEmissaoTitulo", new Model<String>(DataUtil.localDateToString(tituloRemessa.getDataEmissaoTitulo())));
 	}
 
-	public TextField<String> dataVencimentoTitulo() {
+	private TextField<String> dataVencimentoTitulo() {
 		return new TextField<String>("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(tituloRemessa.getDataVencimentoTitulo())));
 	}
 

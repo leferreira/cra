@@ -8,22 +8,29 @@
 		<div class="panel panel-primary">
 			<div class="panel-heading">Municípios</div>
 			<div class="panel-body">
-				<table id="table" class="table table-striped table-bordered table-hover">
-					<thead>
-						<tr>
-							<th>Nome Município</th>
-							<th>UF</th>
-							<th>Cód. IBGE</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr wicket:id="listViewMunicipio">
-							<td><a wicket:id="linkAlterar"><span class="link" wicket:id="nomeMunicipio"></span></a></td>
-							<td wicket:id="uf"></td>
-							<td wicket:id="codIBGE"></td>
-						</tr>
-					</tbody>
-				</table>
+				<fieldset>
+					<legend class="legend">Lista de Municípios<button style="float: right;" wicket:id="botaoNovo" class="btn btn-primary btn-sm"><span class="fa fa-plus"></span> Novo Município</button>
+					</legend>
+					<table id="table" class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>Nome Município</th>
+								<th>UF</th>
+								<th>Cód. IBGE</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr wicket:id="listViewMunicipio">
+								<td><a wicket:id="linkAlterar"><span class="link" wicket:id="nomeMunicipio"></span></a></td>
+								<td wicket:id="uf"></td>
+								<td wicket:id="codIBGE"></td>
+							</tr>
+						</tbody>
+					</table>
+				</fieldset>
+			</div>
+			<div class="panel-footer">
+					<p>Lista de municípios do Tocantins cadastrados na CRA-TO. Clique no nome para alterar as informações!</p>
 			</div>
 		</div>
 	</wicket:extend>

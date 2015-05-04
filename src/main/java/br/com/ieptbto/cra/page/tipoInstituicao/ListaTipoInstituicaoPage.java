@@ -30,9 +30,18 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
 	private final TipoInstituicao tipoInstituicao;
 
+	@SuppressWarnings("rawtypes")
 	public ListaTipoInstituicaoPage() {
 		super();
 		this.tipoInstituicao = new TipoInstituicao();
+		add(new Link("botaoNovo") {
+            /***/
+			private static final long serialVersionUID = 1L;
+
+			public void onClick() {
+				setResponsePage(new IncluirTipoInstituicaoPage());
+            }
+        });
 		add(carregarListaTipos());
 	}
 

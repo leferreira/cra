@@ -28,7 +28,7 @@ public class CartorioInputPanel extends Panel {
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
 	List<String> listaDeMunicipios;
 	static TextField<String> campoInstituicao;
 	private DropDownChoice<Municipio> combo;
@@ -44,7 +44,7 @@ public class CartorioInputPanel extends Panel {
 		adicionarCampos();
 	}
 
-	public void adicionarCampos() {
+	private void adicionarCampos() {
 		add(campoInstituicao());
 		add(campoRazaoSocial());
 		add(campoCnpj());

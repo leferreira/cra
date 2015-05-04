@@ -28,9 +28,18 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 
 	private final Instituicao instituicao;
 
+	@SuppressWarnings("rawtypes")
 	public ListaInstituicaoPage() {
 		super();
 		instituicao = new Instituicao();
+		add(new Link("botaoNovo") {
+            /***/
+			private static final long serialVersionUID = 1L;
+
+			public void onClick() {
+				setResponsePage(new IncluirInstituicaoPage());
+            }
+        });
 		add(carregarListaInstituicao());
 	}
 

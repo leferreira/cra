@@ -8,20 +8,27 @@
 		<div class="panel panel-primary">
 			<div class="panel-heading">Tipos de Instituições</div>
 			<div class="panel-body">
-				<table id="table" class="table table-striped table-bordered table-hover">
-					<thead>
-						<tr>
-							<th>Tipo Instituição</th>
-							<th>Arquivos de Envio</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr wicket:id="listViewTipos">
-							<td><a wicket:id="linkAlterar"><span wicket:id="tipoInstituicao"></span></a></td>
-							<td wicket:id="permissaoEnvio"></td>
-						</tr>
-					</tbody>
-				</table>
+				<fieldset>
+					<legend class="legend">Lista de Tipos de Instituições<button style="float: right;" wicket:id="botaoNovo" class="btn btn-primary btn-sm"><span class="fa fa-plus"></span> Novo Tipo Instituição</button>
+					</legend>
+					<table id="table" class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>Tipo Instituição</th>
+								<th>Arquivos de Envio</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr wicket:id="listViewTipos">
+								<td><a wicket:id="linkAlterar"><span wicket:id="tipoInstituicao"></span></a></td>
+								<td wicket:id="permissaoEnvio"></td>
+							</tr>
+						</tbody>
+					</table>
+				</fieldset>
+			</div>
+			<div class="panel-footer">
+				<p>Tipos de instiuições e os arquivos que são permitidos o envio na CRA-TO. Clique no nome para alterar as informações!</p>
 			</div>
 		</div>
 	</wicket:extend>

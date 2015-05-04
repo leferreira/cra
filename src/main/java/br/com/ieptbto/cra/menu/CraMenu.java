@@ -32,24 +32,28 @@ public class CraMenu extends Panel {
 		String[] rolesPesquisar = { CraRoles.USER };
 
 		MenuItem menuLateral = menu.addItem("menuLateral", rolesPesquisar);
+		/**Menus arquivos*/
 		menuLateral.addItem("BuscarArquivo", rolesPesquisar);
 		menuLateral.addItem("EnviarArquivo", rolesPesquisar);
-		menuLateral.addItem("AcompanharArquivos", rolesPesquisar);
-		menuLateral.addItem("IncluirUsuario", rolesIncluir);
-		menuLateral.addItem("IncluirInstituicao", rolesIncluir);
-		menuLateral.addItem("ListaInstituicao", rolesIncluir);
-		menuLateral.addItem("IncluirMunicipio", rolesIncluir);
-		menuLateral.addItem("ListaMunicipio", rolesIncluir);
-		menuLateral.addItem("ListaUsuario", rolesIncluir);
-		menuLateral.addItem("IncluirTipoInstituicao", rolesIncluir);
-		menuLateral.addItem("ListaTipoInstituicao", rolesIncluir);
-		menuLateral.addItem("IncluirCartorio", rolesIncluir);
-		menuLateral.addItem("ListaCartorio", rolesIncluir);
+		menuLateral.addItem("ArquivosPage", rolesPesquisar);
+		
+		/**Menus titulos*/
 		menuLateral.addItem("MonitorarTitulos", rolesPesquisar);
+
+		/**Menus Relatorios*/
+		menuLateral.addItem("RelatorioTitulos", rolesIncluir);
+
+		/**Menu batimento*/
 	    menuLateral.addItem("Batimento", rolesIncluir);
 	    menuLateral.addItem("ConfirmarBatimento",rolesIncluir);
-		// menuLateral.addItem("IncluirCartorio", rolesIncluir);
 
+	    /**Menus Relatorios*/
+	    menuLateral.addItem("CartoriosPage", rolesIncluir);
+	    menuLateral.addItem("InstituicoesPage", rolesIncluir);
+	    menuLateral.addItem("MunicipiosPage", rolesIncluir);
+	    menuLateral.addItem("TipoInstituicoesPage", rolesIncluir);
+	    menuLateral.addItem("UsuariosPage", rolesIncluir);
+	    
 	}
 
 	// private void adicionarMenuAgenda(Menu menu) {

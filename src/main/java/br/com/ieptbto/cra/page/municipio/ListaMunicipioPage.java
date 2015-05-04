@@ -23,9 +23,18 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 
 	private final Municipio municipio;
 
+	@SuppressWarnings("rawtypes")
 	public ListaMunicipioPage() {
 		super();
 		this.municipio = new Municipio();
+		add(new Link("botaoNovo") {
+            /***/
+			private static final long serialVersionUID = 1L;
+
+			public void onClick() {
+				setResponsePage(new IncluirMunicipioPage());
+            }
+        });
 		add(carregarListaMunicipio());
 	}
 

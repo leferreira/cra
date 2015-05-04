@@ -38,31 +38,25 @@ public class BuscarArquivoInputPanel extends Panel  {
 	private static final Logger logger = Logger.getLogger(BuscarArquivoInputPanel.class);
 	
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
+	
 	private Arquivo arquivo;
 	private IModel<Arquivo> model;
-	private LocalDate dataInicio;
-	private LocalDate dataFim;
 	private ArrayList<String> tiposArquivo = new ArrayList<String>();
-	
-	DropDownChoice<Municipio> comboMunicipio;
-	TextField<LocalDate> dataEnvioInicio;
-	TextField<LocalDate> dataEnvioFinal;
-	DropDownChoice<Instituicao> comboPortador;
+	private DropDownChoice<Municipio> comboMunicipio;
+	private TextField<LocalDate> dataEnvioInicio;
+	private TextField<LocalDate> dataEnvioFinal;
+	private DropDownChoice<Instituicao> comboPortador;
 	
 	public BuscarArquivoInputPanel(String id, IModel<Arquivo> model) {
 		super(id, model);
 		this.model = model;
-		adicionarCampos();
-	}
-
-	private void adicionarCampos(){
-		add(nomeArquivo());
 		add(comboTipoArquivos());
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
+		add(nomeArquivo());
 		add(comboPortador());
 		add(pracaProtesto());
 		add(botaoEnviar());
@@ -74,9 +68,10 @@ public class BuscarArquivoInputPanel extends Panel  {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
-				Municipio municipio = new Municipio();
-				Instituicao portador =  new Instituicao();
-
+				LocalDate dataInicio = null;
+				LocalDate dataFim = null;
+				Municipio municipio = null;
+				Instituicao portador =  null;
 				arquivo = model.getObject();
 				
 				try {
@@ -94,7 +89,7 @@ public class BuscarArquivoInputPanel extends Panel  {
 					if (comboMunicipio.getDefaultModelObject() != null)
 						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
 					
-					if (Instituicao.class.cast(comboPortador.getDefaultModelObject()).getNomeFantasia() != null)
+					if (comboPortador.getDefaultModelObject() != null)
 						portador = Instituicao.class.cast(comboPortador.getDefaultModelObject());
 					
 					setResponsePage(new ListaArquivosPage(arquivo, municipio, portador, dataInicio, dataFim, tiposArquivo));
@@ -109,11 +104,11 @@ public class BuscarArquivoInputPanel extends Panel  {
 		};
 	}
 	
-	public TextField<String> nomeArquivo() {
+	private TextField<String> nomeArquivo() {
 		return new TextField<String>("nomeArquivo");
 	}
 	
-	public Component comboTipoArquivos() {
+	private Component comboTipoArquivos() {
 		List<String> choices = new ArrayList<String>();
 		List<TipoArquivoEnum> enumLista = Arrays.asList(TipoArquivoEnum.values());
 		for (TipoArquivoEnum tipo : enumLista) {
@@ -124,26 +119,26 @@ public class BuscarArquivoInputPanel extends Panel  {
 		return tipos;
 	}
 	
-	public TextField<LocalDate> dataEnvioInicio() {
+	private TextField<LocalDate> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
 		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 	
-	public TextField<LocalDate> dataEnvioFinal() {
+	private TextField<LocalDate> dataEnvioFinal() {
 		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
 	}
 
 	private Component comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		this.comboPortador = new DropDownChoice<Instituicao>("instituicaoEnvio",instituicaoMediator.getInstituicoesFinanceiras(), renderer);
+		this.comboPortador = new DropDownChoice<Instituicao>("portador", new Model<Instituicao>(),instituicaoMediator.getInstituicoesFinanceiras(), renderer);
 		return comboPortador;
 	}
 	
 	private Component pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		this.comboMunicipio = new DropDownChoice<Municipio>("instituicaoEnvio.municipio", municipioMediator.listarTodos(), renderer);
+		this.comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.listarTodos(), renderer);
 		return comboMunicipio;
 	}
 }

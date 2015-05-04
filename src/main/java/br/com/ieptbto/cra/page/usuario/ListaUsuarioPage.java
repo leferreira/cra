@@ -29,9 +29,18 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 
 	private final Usuario usuario;
 
+	@SuppressWarnings("rawtypes")
 	public ListaUsuarioPage() {
 		super();
 		usuario = new Usuario();
+		add(new Link("botaoNovo") {
+            /***/
+			private static final long serialVersionUID = 1L;
+
+			public void onClick() {
+				setResponsePage(new IncluirUsuarioPage());
+            }
+        });
 		add(carregarListaUsuario());
 	}
 

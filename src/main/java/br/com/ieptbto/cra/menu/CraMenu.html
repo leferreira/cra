@@ -7,7 +7,6 @@
 			<div class="sidebar-nav navbar-collapse" wicket:id="menuLateral">
 				<div class="nav">
 				<ul class="nav" id="side-menu">
-				
 					<li class="dropdown-submenu">
 						<a href="#" class="link-icones">
 							<span class="glyphicon glyphicon-file" style="font-size: 35px;"></span>
@@ -15,10 +14,10 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="BuscarArquivo" wicket:id="BuscarArquivo">Buscar Arquivo</a></li>
-							<li><a href="#">Criar Arquivo</a></li>
 							<li><a href="EnviarArquivo" wicket:id="EnviarArquivo">Enviar Arquivo</a></li>
+							<li><a wicket:id="ArquivosPage" href="ArquivosPage">Enviados e Recebidos</a></li>
 							<li class="divider"></li>
-							<li><a wicket:id="AcompanharArquivos" href="AcompanharArquivos">Monitorar Arquivos</a></li>
+							<li><a href="#">Criar Remessa</a></li>
 						</ul>
 					</li>
 					
@@ -28,7 +27,7 @@
 							<br>T&iacute;tulos
 						</a>
 						<ul class="dropdown-menu">
-							<li><a wicket:id="MonitorarTitulos" href="MonitorarTitulos">Buscar T&iacute;tulo</a></li>
+							<li><a wicket:id="MonitorarTitulos" href="MonitorarTitulos">Buscar T&iacute;tulos</a></li>
 						</ul>
 					</li>
 
@@ -38,7 +37,7 @@
 							<br>Relat&oacute;rios
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Relat&oacute;rio</a></li>
+							<li><a href="RelatorioTitulos" wicket:id="RelatorioTitulos">Relat&oacute;rio de T&iacute;tulos</a></li>
 						</ul>
 					</li>
 					<li class="dropdown-submenu">
@@ -57,62 +56,19 @@
 							<li><a wicket:id="ConfirmarBatimento" href="ConfirmarBatimento">Gerar Retorno</a></li>
 						</ul>
 					</li>
-					<li class="dropdown-submenu"><a class="link-icones" tabindex="-1" href="#">
-						<span class="fa fa-gear" style="font-size: 35px;"></span>
-								<br>Administra&ccedil;&atilde;o</a>
-							<ul class="dropdown-menu">
-								<li class="dropdown-submenu"><a href="#">Cart&oacute;rio</a>
-									<ul class="dropdown-menu">
-										<li wicket:id="IncluirCartorio">
-											<a href="IncluirCartorio">Incluir Cart&oacute;rio</a>
-										</li>
-										<li wicket:id="ListaCartorio">
-											<a href="ListaCartorio">Pesquisar Cart&oacute;rio</a>
-										</li>
-									</ul>
-								</li>
-								<li class="dropdown-submenu"><a href="#">Institui&ccedil;&otilde;es</a>
-									<ul class="dropdown-menu">
-										<li wicket:id="IncluirInstituicao">
-				                        	<a href="IncluirInstituicao">Incluir Institui&ccedil;&atilde;o</a>
-				                        </li>
-				                    	<li wicket:id="ListaInstituicao">
-				                    		<a href="ListaInstituicao">Pesquisar Institui&ccedil;&atilde;o</a>
-										</li>
-									</ul>
-								</li>
-								<li class="dropdown-submenu"><a href="#">Munic&iacute;pios</a>
-									<ul class="dropdown-menu">
-										<li wicket:id="IncluirMunicipio">
-											<a href="IncluirMunicipio">Incluir Munic&iacute;pio</a>
-										</li>
-										<li wicket:id="ListaMunicipio">
-											<a href="ListaMunicipio">Pesquisar Munic&iacute;pio</a>
-										</li>
-									</ul>
-								</li>
-								<li class="dropdown-submenu"><a href="#">Tipo de Institui&ccedil;&otilde;es</a>
-									<ul class="dropdown-menu">
-										<li wicket:id="IncluirTipoInstituicao">
-											<a href="IncluirTipoInstituicao">Incluir Tipo de Institui&ccedil;&atilde;o</a>
-										</li>
-										<li wicket:id="ListaTipoInstituicao">
-											<a	href="ListaTipoInstituicao">Pesquisar Tipo de Institui&ccedil;&atilde;o</a>
-										</li>
-									</ul>
-								</li>
-								<li class="dropdown-submenu"><a href="#">Usu&aacute;rios</a>
-									<ul class="dropdown-menu">
-										<li wicket:id="IncluirUsuario">
-											<a href="IncluirUsuario">Incluir Usu&aacute;rio</a>
-										</li>
-										<li wicket:id="ListaUsuario">
-											<a href="ListaUsuario">Pesquisar Usu&aacute;rio</a>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</li>
+					<li class="dropdown-submenu">
+						<a href="#" class="link-icones">
+						 	<span class="fa fa-gear" style="font-size: 35px;"></span>
+								<br>Administra&ccedil;&atilde;o
+						</a>
+						<ul class="dropdown-menu">
+							<li><a wicket:id="CartoriosPage" href="CartoriosPage">Cart&oacute;rios</a></li>
+							<li><a href="InstituicoesPage" wicket:id="InstituicoesPage">Institui&ccedil;&otilde;es</a></li>
+							<li><a href="MunicipiosPage" wicket:id="MunicipiosPage">Munic&iacute;pios</a></li>
+							<li><a href="TipoInstituicoesPage" wicket:id="TipoInstituicoesPage">Tipo de Institui&ccedil;&otilde;es</a></li>
+							<li><a href="UsuariosPage" wicket:id="UsuariosPage">Usu&aacute;rios</a></li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 			</div>

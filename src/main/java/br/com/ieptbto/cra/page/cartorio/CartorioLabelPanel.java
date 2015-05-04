@@ -25,33 +25,38 @@ public class CartorioLabelPanel<Instituicao> extends Panel{
 		add(contato());
 		add(responsavel());
 		add(comarca());
+		add(endereco());
 	}
 
-	public Component nomeFantasia(){
+	private Component nomeFantasia(){
 		return new Label("nomeFantasia");
 	}
 	
-	public Component razaoSocial(){
+	private Component razaoSocial(){
 		return new Label("razaoSocial");
 	}
 	
-	public Component cnpj(){
+	private Component cnpj(){
 		return new Label("cnpj");
 	}
 	
-	public Component email(){
+	private Component email(){
 		return new Label("email");
 	}
 	
-	public Component contato(){
+	private Component contato(){
 		return new Label("contato");
 	}
 	
-	public Component responsavel(){
+	private Component responsavel(){
 		return new Label("responsavel");
 	}
 	
-	public Component comarca(){
+	private Component endereco(){
+		return new Label("endereco");
+	}
+	
+	private Component comarca(){
 		return new Label("municipio.nomeMunicipio");
 	}
 }

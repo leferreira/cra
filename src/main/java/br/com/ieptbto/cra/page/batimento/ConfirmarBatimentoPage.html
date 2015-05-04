@@ -10,37 +10,42 @@
 				<div class="panel panel-primary">
 					<div class="panel-heading">Gerar Retorno</div>
 					<div class="panel-body">
-						<br style="clear: both;"/>
-						<div wicket:id="group">
-		                  <table id="table" class="table table-striped table-bordered table-hover">
-		                    <thead>
-								<tr>
-									<th>Arquivo</th>
-									<th>Valor Pagos</th>
-									<th>Data Envio</th>
-									<th>Cartório</th>
-									<th width="width: 60px;"></th>
-								</tr>
-							</thead>
-							<tbody>
-			                    <tr wicket:id="retornos" style="text-align: center;">
-			                        <td>
-			                        	<input type="checkbox" wicket:id="checkbox"/>&nbsp;&nbsp;&nbsp;&nbsp;
-			                        	<a wicket:id="linkArquivo">
-			                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
-			                        	</a>
-			                        </td>
-									<td wicket:id="valorPagos" style="font-weight: bold;"></td>
-									<td wicket:id="arquivo.dataEnvio"></td>
-									<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
-									<td style="width: 60px;"><input type="button" value="Remover" wicket:id="removerConfirmado"/></td>
-			                    </tr>
-		                    </tbody>
-		                  </table>
-						<input type="submit" class="btn btn-small" value="Gerar Retorno"/>
-				        </div>
+						<fieldset>
+							<legend class="legend">Liberar Arquivos para Retorno
+							</legend>
+							<div wicket:id="group">
+			                  <table id="table" class="table table-striped table-bordered table-hover">
+			                    <thead>
+									<tr>
+										<th>Arquivo</th>
+										<th>Valor Pagos</th>
+										<th>Data Envio</th>
+										<th>Cartório</th>
+										<th width="width: 60px;"></th>
+									</tr>
+								</thead>
+								<tbody>
+				                    <tr wicket:id="retornos" style="text-align: center;">
+				                        <td>
+				                        	<input type="checkbox" wicket:id="checkbox"/>&nbsp;&nbsp;&nbsp;&nbsp;
+				                        	<a wicket:id="linkArquivo">
+				                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
+				                        	</a>
+				                        </td>
+										<td wicket:id="valorPagos" style="font-weight: bold;"></td>
+										<td wicket:id="arquivo.dataEnvio"></td>
+										<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
+										<td style="width: 60px;"><input type="button" value="Remover" wicket:id="removerConfirmado"/></td>
+				                    </tr>
+			                    </tbody>
+			                  </table>
+					        </div>
+					   </fieldset>
 					</div>
-					<div class="panel-footer"></div>
+					<div class="panel-footer">
+						<input type="submit" class="btn btn-primary" style="float: right;" value="Gerar Retorno"/>
+						<br style="clear: both;">
+					</div>
 				</div>
 			</div>
 		</form>
