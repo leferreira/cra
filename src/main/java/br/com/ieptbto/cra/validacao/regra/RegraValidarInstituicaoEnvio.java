@@ -1,17 +1,27 @@
 package br.com.ieptbto.cra.validacao.regra;
 
 import java.io.File;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.conversor.enumeration.ErroValidacao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 
+/**
+ * 
+ * @author Lefer
+ *
+ */
+@Service
 public class RegraValidarInstituicaoEnvio extends RegrasDeEntrada {
 
 	@Override
-	protected void validar(File arquivo, Usuario usuario) {
+	protected void validar(File arquivo, Usuario usuario, List<Exception> erros) {
 		this.arquivo = arquivo;
 		this.usuario = usuario;
+		setErros(erros);
 
 		executar();
 

@@ -42,7 +42,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 	public EnviarArquivoPage() {
 		arquivo = new Arquivo();
-		arquivo.setInstituicaoEnvio(getUser().getInstituicao()); 
+		arquivo.setInstituicaoEnvio(getUser().getInstituicao());
 		arquivo.setUsuarioEnvio(getUser());
 		arquivo.setDataEnvio(new LocalDate());
 
@@ -56,8 +56,15 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
 
 				try {
-					arquivoMediator.salvar(arquivo, uploadedFile, getUser());
-					info("Arquivo enviado com sucesso.");
+					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUser());
+
+					for (Exception exception : arquivoRetorno.getErros()) {
+						warn(exception.getMessage());
+					}
+
+					if (!arquivoRetorno.getArquivo().getRemessas().isEmpty()) {
+						info(arquivoRetorno.getArquivo().getRemessas().size() + " Remessa(s) salva com sucesso.");
+					}
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());

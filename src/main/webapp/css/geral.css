@@ -9,6 +9,17 @@ body {
   background-color: #f8f8f8;
   border-radius: 5px;
 }
+
+.feedbackPanelWARNING{
+	color: #8A6D3B;
+	background-color: #FCF8E3;
+	border-color: #FAEBCC;
+	padding: 15px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	list-style: none;
+}
+
 .link{
   color: #337AB7 !important;
   font-weight: bold;

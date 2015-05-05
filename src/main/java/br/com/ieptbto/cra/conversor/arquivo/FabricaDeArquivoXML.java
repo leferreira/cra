@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.List;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.exception.ArquivoException;
 
 /**
  * 
@@ -13,7 +12,7 @@ import br.com.ieptbto.cra.exception.ArquivoException;
  */
 public class FabricaDeArquivoXML extends AbstractFabricaDeArquivo {
 
-	public FabricaDeArquivoXML(File arquivoFisico, Arquivo arquivo, List<ArquivoException> erros) {
+	public FabricaDeArquivoXML(File arquivoFisico, Arquivo arquivo, List<Exception> erros) {
 		// TODO Auto-generated constructor stub
 	}
 

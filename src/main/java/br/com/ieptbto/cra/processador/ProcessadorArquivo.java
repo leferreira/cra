@@ -14,8 +14,8 @@ import br.com.ieptbto.cra.conversor.arquivo.FabricaDeArquivo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.exception.ArquivoException;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.exception.ValidacaoErroException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.validacao.FabricaValidacaoArquivo;
 
@@ -31,6 +31,8 @@ public class ProcessadorArquivo extends Processador {
 
 	@Autowired
 	private FabricaDeArquivo fabricaDeArquivo;
+	@Autowired
+	private FabricaValidacaoArquivo fabricaValidacaoArquivo;
 
 	private FileUpload file;
 	private Usuario usuario;
@@ -38,25 +40,46 @@ public class ProcessadorArquivo extends Processador {
 	private String pathInstituicao;
 	private String pathUsuario;
 	private Arquivo arquivo;
-	private List<ArquivoException> erros;
+	private List<Exception> erros;
+	private String pathInstituicaoTemp;
+	private String pathUsuarioTemp;
 
-	public void processarArquivo(FileUpload uploadedFile, Arquivo arquivo) {
+	public void processarArquivo(FileUpload uploadedFile, Arquivo arquivo, List<Exception> erros) {
 		this.file = uploadedFile;
 		this.usuario = arquivo.getUsuarioEnvio();
 		this.arquivo = arquivo;
+		this.erros = erros;
 
-		logger.info("Início do processamento do arquivoFisico " + getFile().getClientFileName() + " do usuário " + getUsuario().getLogin());
 		if (getFile() != null) {
 
+			logger.info("Início do processamento do arquivoFisico " + getFile().getClientFileName() + " do usuário "
+			        + getUsuario().getLogin());
 			verificaDiretorio();
-			copiarArquivoParaDiretorioDoUsuario();
+			copiarArquivoParaDiretorioDoUsuarioTemporario();
 			validarArquivo();
 			converterArquivo();
+			copiarArquivoEapagarTemporario();
+
+			logger.info("Fim do processamento do arquivoFisico " + getFile().getClientFileName() + " do usuário " + getUsuario().getLogin());
 
 		} else {
 			throw new InfraException("O arquivoFisico " + getFile().getClientFileName() + "enviado não pode ser processado.");
 		}
 
+	}
+
+	private void copiarArquivoEapagarTemporario() {
+		try {
+			if (getArquivoFisico().renameTo(new File(getPathUsuario() + ConfiguracaoBase.BARRA + getArquivo().getId()))) {
+				logger.info("Arquivo " + getArquivoFisico().getName() + " movido para pasta do usuário.");
+				return;
+			}
+			new InfraException("Não foi possível mover o arquivo temporário para o diretório do usuário.");
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex.getCause());
+			getErros().add(ex);
+			new InfraException("Não foi possível mover o arquivo temporário para o diretório do usuário.");
+		}
 	}
 
 	private void converterArquivo() {
@@ -66,28 +89,35 @@ public class ProcessadorArquivo extends Processador {
 	private void validarArquivo() {
 		logger.info("Iniciar validação do arquivoFisico " + getFile().getClientFileName() + " enviado pelo usuário "
 		        + getUsuario().getLogin());
-		new FabricaValidacaoArquivo(getArquivoFisico(), getUsuario()).validar();
+
+		fabricaValidacaoArquivo.validar(getArquivoFisico(), getUsuario(), getErros());
+
+		logger.info("Fim validação do arquivoFisico " + getFile().getClientFileName() + " enviado pelo usuário " + getUsuario().getLogin());
 	}
 
-	private void copiarArquivoParaDiretorioDoUsuario() {
-		setArquivoFisico(new File(pathUsuario + ConfiguracaoBase.BARRA + getFile().getClientFileName()));
+	private void copiarArquivoParaDiretorioDoUsuarioTemporario() {
+		setArquivoFisico(new File(getPathUsuarioTemp() + ConfiguracaoBase.BARRA + getFile().getClientFileName()));
 		try {
 			getArquivoFisico().createNewFile();
 			getFile().writeTo(getArquivoFisico());
 		} catch (IOException e) {
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(), e.getCause());
+			getErros().add(new ValidacaoErroException(e.getMessage(), e.getCause()));
 			throw new InfraException("Não foi possível criar arquivo Físico temporário para o arquivo " + getFile().getClientFileName());
 		}
 
 	}
 
 	private void verificaDiretorio() {
-		pathInstituicao = ConfiguracaoBase.DIRETORIO_BASE_INSTITUICAO + ConfiguracaoBase.BARRA + getUsuario().getInstituicao().getId();
+		pathInstituicao = ConfiguracaoBase.DIRETORIO_BASE_INSTITUICAO + getUsuario().getInstituicao().getId();
+		pathInstituicaoTemp = ConfiguracaoBase.DIRETORIO_BASE_INSTITUICAO_TEMP + getUsuario().getInstituicao().getId();
 		pathUsuario = pathInstituicao + ConfiguracaoBase.BARRA + usuario.getId();
+		pathUsuarioTemp = pathInstituicaoTemp + ConfiguracaoBase.BARRA + usuario.getId();
 		File diretorioTemp = new File(ConfiguracaoBase.DIRETORIO_TEMP_BASE);
 		File diretorioArquivo = new File(ConfiguracaoBase.DIRETORIO_BASE);
 		File diretorioInstituicao = new File(pathInstituicao);
 		File diretorioUsuario = new File(pathUsuario);
+		File diretorioUsuarioTemp = new File(pathUsuarioTemp);
 
 		if (!diretorioTemp.exists()) {
 			diretorioTemp.mkdirs();
@@ -100,6 +130,9 @@ public class ProcessadorArquivo extends Processador {
 		}
 		if (!diretorioUsuario.exists()) {
 			diretorioUsuario.mkdirs();
+		}
+		if (!diretorioUsuarioTemp.exists()) {
+			diretorioUsuarioTemp.mkdirs();
 		}
 
 	}
@@ -142,11 +175,28 @@ public class ProcessadorArquivo extends Processador {
 		this.arquivo = arquivo;
 	}
 
-	public List<ArquivoException> getErros() {
+	public List<Exception> getErros() {
 		return erros;
 	}
 
-	public void setErros(List<ArquivoException> erros) {
+	public void setErros(List<Exception> erros) {
 		this.erros = erros;
 	}
+
+	public String getPathInstituicaoTemp() {
+		return pathInstituicaoTemp;
+	}
+
+	public String getPathUsuarioTemp() {
+		return pathUsuarioTemp;
+	}
+
+	public String getPathInstituicao() {
+		return pathInstituicao;
+	}
+
+	public String getPathUsuario() {
+		return pathUsuario;
+	}
+
 }

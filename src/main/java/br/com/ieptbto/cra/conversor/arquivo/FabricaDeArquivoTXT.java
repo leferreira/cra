@@ -27,10 +27,11 @@ import br.com.ieptbto.cra.entidade.vo.RodapeVO;
 import br.com.ieptbto.cra.entidade.vo.TituloVO;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoRegistro;
-import br.com.ieptbto.cra.exception.ArquivoException;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.processador.FabricaRegistro;
+import br.com.ieptbto.cra.validacao.ValidarCabecalhoRemessa;
+import br.com.ieptbto.cra.validacao.regra.RegraValidaTipoArquivoTXT;
 
 /**
  * 
@@ -43,11 +44,16 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 
 	@Autowired
 	InstituicaoMediator instituicaoMediator;
+	@Autowired
+	ValidarCabecalhoRemessa validarCabecalhoRemessa;
+	List<Exception> errosCabecalho;
 
-	public FabricaDeArquivoTXT fabrica(File arquivoFisico, Arquivo arquivo, List<ArquivoException> erros) {
+	public FabricaDeArquivoTXT fabrica(File arquivoFisico, Arquivo arquivo, List<Exception> erros) {
 		this.arquivoFisico = arquivoFisico;
 		this.arquivo = arquivo;
 		this.erros = erros;
+		this.errosCabecalho = new ArrayList<Exception>();
+		validar();
 		return this;
 	}
 
@@ -75,9 +81,11 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 			return getArquivo();
 
 		} catch (FileNotFoundException e) {
+			getErros().add(e);
 			new InfraException("arquivoFisico não encontrado");
 			logger.error(e.getMessage());
 		} catch (IOException e) {
+			getErros().add(e);
 			new InfraException("arquivoFisico não encontrado");
 			logger.error(e.getMessage());
 		}
@@ -91,29 +99,44 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 		if (TipoRegistro.CABECALHO.getConstante().equals(registro.getIdentificacaoRegistro())) {
 			CabecalhoVO cabecalhoVO = CabecalhoVO.class.cast(registro);
 			CabecalhoRemessa cabecalho = new CabecalhoConversor().converter(CabecalhoRemessa.class, cabecalhoVO);
-			remessa.setCabecalho(cabecalho);
 			cabecalho.setRemessa(remessa);
-			remessa.setInstituicaoDestino(getInstituicaoDeDestino(cabecalho));
-			remessa.setInstituicaoOrigem(getArquivo().getInstituicaoEnvio());
+			validarCabecalhoRemessa.validar(cabecalho, errosCabecalho);
+
+			if (errosCabecalho.isEmpty()) {
+				remessa.setCabecalho(cabecalho);
+				remessa.setInstituicaoDestino(getInstituicaoDeDestino(cabecalho));
+				remessa.setInstituicaoOrigem(getArquivo().getInstituicaoEnvio());
+			} else {
+				getErros().addAll(errosCabecalho);
+			}
+
 		} else if (TipoRegistro.TITULO.getConstante().equals(registro.getIdentificacaoRegistro())) {
 			TituloVO tituloVO = TituloVO.class.cast(registro);
 			Titulo titulo;
-			if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
-				titulo = new ConfirmacaoConversor().converter(Confirmacao.class, tituloVO);
-			} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
-				titulo = new RetornoConversor().converter(Retorno.class, tituloVO);
-			} else {
-				titulo = new TituloConversor().converter(TituloRemessa.class, tituloVO);
+			if (errosCabecalho.isEmpty()) {
+				if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
+					titulo = new ConfirmacaoConversor().converter(Confirmacao.class, tituloVO);
+				} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+					titulo = new RetornoConversor().converter(Retorno.class, tituloVO);
+				} else {
+					titulo = new TituloConversor().converter(TituloRemessa.class, tituloVO);
+				}
+				titulo.setRemessa(remessa);
+				remessa.getTitulos().add(titulo);
 			}
-			titulo.setRemessa(remessa);
-			remessa.getTitulos().add(titulo);
 		} else if (TipoRegistro.RODAPE.getConstante().equals(registro.getIdentificacaoRegistro())) {
-			RodapeVO rodapeVO = RodapeVO.class.cast(registro);
-			Rodape rodape = new RodapeConversor().converter(Rodape.class, rodapeVO);
-			remessa.setRodape(rodape);
-			rodape.setRemessa(remessa);
+			if (errosCabecalho.isEmpty()) {
+				RodapeVO rodapeVO = RodapeVO.class.cast(registro);
+				Rodape rodape = new RodapeConversor().converter(Rodape.class, rodapeVO);
+				remessa.setRodape(rodape);
+				rodape.setRemessa(remessa);
+			} else {
+				errosCabecalho = new ArrayList<Exception>();
+			}
 		} else {
-			throw new InfraException("O Tipo do registro não foi encontrado: [" + registro.getIdentificacaoRegistro() + " ]");
+			getErros().add(new InfraException("O Tipo do registro não foi encontrado: [" + registro.getIdentificacaoRegistro() + " ]"));
+			new InfraException("O Tipo do registro não foi encontrado: [" + registro.getIdentificacaoRegistro() + " ]");
+			logger.error("O Tipo do registro não foi encontrado: [" + registro.getIdentificacaoRegistro() + " ]");
 		}
 
 	}
@@ -129,7 +152,7 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 
 	@Override
 	public void validar() {
-		// TODO Auto-generated method stub
+		new RegraValidaTipoArquivoTXT().validar(arquivoFisico, arquivo.getUsuarioEnvio(), erros);
 
 	}
 }

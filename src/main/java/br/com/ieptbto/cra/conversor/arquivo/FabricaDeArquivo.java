@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.enumeration.LayoutArquivo;
-import br.com.ieptbto.cra.exception.ArquivoException;
 import br.com.ieptbto.cra.exception.InfraException;
 
 /**
@@ -29,7 +28,7 @@ public class FabricaDeArquivo {
 	@Autowired
 	private FabricaDeArquivoTXT fabricaDeArquivoTXT;
 
-	public Arquivo processarArquivoFisico(File arquivoFisico, Arquivo arquivo, List<ArquivoException> erros) {
+	public Arquivo processarArquivoFisico(File arquivoFisico, Arquivo arquivo, List<Exception> erros) {
 
 		String linha = getLinhaArquivo(arquivoFisico);
 
@@ -40,7 +39,6 @@ public class FabricaDeArquivo {
 		} else {
 			throw new InfraException("Layout Do arquivo [" + arquivo.getNomeArquivo() + "] inválido");
 		}
-
 	}
 
 	private static String getLinhaArquivo(File arquivoFisico) {
@@ -51,14 +49,12 @@ public class FabricaDeArquivo {
 			reader.close();
 			return linha;
 		} catch (FileNotFoundException e) {
-			new InfraException("arquivoFisico não encontrado");
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(), e.getCause());
+			throw new InfraException("arquivoFisico não encontrado");
 		} catch (IOException e) {
-			new InfraException("arquivoFisico não encontrado");
-			logger.error(e.getMessage());
-		} finally {
+			logger.error(e.getMessage(), e.getCause());
+			throw new InfraException("arquivoFisico não encontrado");
 		}
-		return null;
 	}
 
 }

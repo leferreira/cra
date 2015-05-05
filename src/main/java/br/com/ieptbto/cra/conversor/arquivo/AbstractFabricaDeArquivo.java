@@ -1,12 +1,12 @@
 package br.com.ieptbto.cra.conversor.arquivo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.exception.ArquivoException;
 
 /**
  * 
@@ -17,7 +17,7 @@ public abstract class AbstractFabricaDeArquivo {
 	protected static final Logger logger = Logger.getLogger(AbstractFabricaDeArquivo.class);
 	protected File arquivoFisico;
 	protected Arquivo arquivo;
-	protected List<ArquivoException> erros;
+	protected List<Exception> erros;
 
 	public abstract Arquivo converter();
 
@@ -39,11 +39,14 @@ public abstract class AbstractFabricaDeArquivo {
 		this.arquivo = arquivo;
 	}
 
-	public List<ArquivoException> getErros() {
+	public List<Exception> getErros() {
+		if (erros == null) {
+			erros = new ArrayList<Exception>();
+		}
 		return erros;
 	}
 
-	public void setErros(List<ArquivoException> erros) {
+	public void setErros(List<Exception> erros) {
 		this.erros = erros;
 	}
 }

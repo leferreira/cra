@@ -117,4 +117,8 @@ public class InstituicaoMediator {
 		return instituicaoDAO.getInstituicoesFinanceiras();
 	}
 
+	public boolean isInstituicaoAtiva(Instituicao instituicao) {
+		return instituicaoDAO.isInstituicaoAtiva(instituicao);
+	}
+
 }

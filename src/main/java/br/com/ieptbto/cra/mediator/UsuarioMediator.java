@@ -158,4 +158,8 @@ public class UsuarioMediator {
 		return usuarioDao.listarTodosUsuarios();
 	}
 
+	public boolean isUsuatioAtivo(Usuario usuario) {
+		return usuario.isStatus();
+	}
+
 }

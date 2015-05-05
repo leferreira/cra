@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.mediator;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,16 +29,18 @@ public class ArquivoMediator {
 	private TipoArquivoDAO tipoArquivoDAO;
 	@Autowired
 	private ArquivoDAO arquivoDAO;
+	private List<Exception> erros;
+	private Arquivo arquivo;
 
 	@Autowired
 	private ProcessadorArquivo processadorArquivo;
 
-	public void salvar(Arquivo arquivo, FileUpload uploadedFile, Usuario usuario) {
+	public ArquivoMediator salvar(Arquivo arquivo, FileUpload uploadedFile, Usuario usuario) {
 		arquivo.setTipoArquivo(getTipoArquivo(arquivo));
 		arquivo.setStatusArquivo(setStatusArquivo());
 		processarArquivo(arquivo, uploadedFile);
-		arquivoDAO.salvar(arquivo, usuario);
-
+		setArquivo(arquivoDAO.salvar(arquivo, usuario));
+		return this;
 	}
 
 	private StatusArquivo setStatusArquivo() {
@@ -52,10 +55,29 @@ public class ArquivoMediator {
 	}
 
 	private void processarArquivo(Arquivo arquivo, FileUpload uploadedFile) throws InfraException {
-		processadorArquivo.processarArquivo(uploadedFile, arquivo);
+		processadorArquivo.processarArquivo(uploadedFile, arquivo, getErros());
 	}
 
 	public List<Arquivo> buscarArquivos() {
 		return arquivoDAO.buscarTodosArquivos();
+	}
+
+	public List<Exception> getErros() {
+		if (erros == null) {
+			erros = new ArrayList<Exception>();
+		}
+		return erros;
+	}
+
+	public void setErros(List<Exception> erros) {
+		this.erros = erros;
+	}
+
+	public void setArquivo(Arquivo arquivo) {
+		this.arquivo = arquivo;
+	}
+
+	public Arquivo getArquivo() {
+		return arquivo;
 	}
 }
