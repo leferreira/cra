@@ -7,24 +7,27 @@
 	<wicket:extend>
 		<div class="col-lg-12">
 			<div class="panel panel-primary">
-				<div class="panel-heading">Cadastro de Municípios</div>
-				<div class="panel-body">
+				<div class="panel-heading">Municípios</div>
 					<form wicket:id="form">
-						<div class="col-lg-10 col-md-offset-1">
-							<div wicket:id="municipioLabelPanel" id="municipioLabelPanel"></div>
-							<wicket:child>
-							</wicket:child>
-							<br style="clear: both;"/>
-							<input id="singlebutton" name="voltarLista" wicket:id="botaoVoltarLista" type="submit"
-								class="btn btn-sm btn-primary" value="Lista de Municipios" style="float: right;" />
-							<input id="singlebutton" name="novoUsuario" wicket:id="botaoNovo" type="submit"
-								class="btn btn-sm btn-primary" value="Adicionar Novo"  style="float: right; margin-right: 2%;" />
+						<div class="panel-body">
+							<fieldset>
+								<legend class="legend">Confirmação de Cadastro de Município
+									<span style="float: right;">
+										<a href="MunicipiosPage" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>Voltar para Lista!</a>
+										<button wicket:id="botaoNovo" class="btn btn-primary btn-sm"><span class="fa fa-plus"></span> Novo Município</button>&nbsp;&nbsp;
+									</span>
+								</legend>
+							<div class="col-lg-10 col-md-offset-1">
+								<div wicket:id="municipioLabelPanel" id="municipioLabelPanel"></div>
+								<wicket:child>
+								</wicket:child>
+							</div>
+							</fieldset>
 						</div> 
 					</form>
+					<div class="panel-footer"></div>
 				</div>
-				<div class="panel-footer"></div>
 			</div>
-		</div>
 	</wicket:extend>
 </body>
 </html>

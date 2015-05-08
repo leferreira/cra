@@ -29,14 +29,9 @@ public class DetalharUsuarioPage extends BasePage<Usuario> {
 	
 	public void carregarComponentes(){
 		form = new Form<Usuario>("form");
-		adicionarPainelUsuario();
-		adicionarBotoes();
-		add(form);
-	}
-	
-	private void adicionarBotoes() {
+		form.add(new UsuarioLabelPanel<Usuario>("usuarioLabelPanel", getModel(), usuario));
 		form.add(obterBotaoNovoUsuario());
-		form.add(obterBotaoVoltar());
+		add(form);
 	}
 	
 	private Button obterBotaoNovoUsuario() {
@@ -46,19 +41,6 @@ public class DetalharUsuarioPage extends BasePage<Usuario> {
 				setResponsePage(new IncluirUsuarioPage());
 			}
 		};
-	}
-	
-	private Button obterBotaoVoltar() {
-		return new Button("botaoVoltarListaUsuario") {
-			@Override
-			public void onSubmit() {
-				setResponsePage(new ListaUsuarioPage());
-			}
-		};
-	}
-
-	public void adicionarPainelUsuario(){
-		form.add(new UsuarioLabelPanel<Usuario>("usuarioLabelPanel", getModel(), usuario));
 	}
 	
 	@Override

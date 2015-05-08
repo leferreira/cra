@@ -1,44 +1,47 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
-import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 
-public class RelatorioPage extends BasePage<Arquivo>{
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
+public class RelatorioPage extends BasePage<Remessa>{
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private Arquivo arquivo;
-	private Form<Arquivo> form;
+	private Remessa remessa;
+	private Form<Remessa> form;
 	private Instituicao instituicao;
 	
 	public RelatorioPage() {
-		this.arquivo  = new Arquivo();
+		this.remessa  = new Remessa();
 		this.instituicao = getUser().getInstituicao();
 		
-		form = new Form<Arquivo>("form", getModel());
+		form = new Form<Remessa>("form", getModel());
 		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA")){
 			form.add(new RelatorioCraPanel("relatorioPanel", getModel(), getInstituicao()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("Cartório")){
 			form.add(new RelatorioCartorioPanel("relatorioPanel", getModel(), getInstituicao()));
 		} else {
-			form.add(new RelatorioBancoPanel("relatorioPanel", getModel(), getInstituicao()));
+			form.add(new RelatorioBancoPanel("relatorioPanel", getModel(),getInstituicao()));
 		}
 		add(form);
 	}
 
 	
-	public Arquivo getArquivo() {
-		return arquivo;
+	public Remessa getRemessa() {
+		return remessa;
 	}
 
-
-	public void setArquivo(Arquivo arquivo) {
-		this.arquivo = arquivo;
+	public void setRemessa(Remessa remessa) {
+		this.remessa = remessa;
 	}
 
 
@@ -53,7 +56,7 @@ public class RelatorioPage extends BasePage<Arquivo>{
 
 
 	@Override
-	protected IModel<Arquivo> getModel() {
-		return new CompoundPropertyModel<Arquivo>(arquivo);
+	protected IModel<Remessa> getModel() {
+		return new CompoundPropertyModel<Remessa>(remessa);
 	}
 }

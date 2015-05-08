@@ -2,6 +2,8 @@ package br.com.ieptbto.cra.page.municipio;
 
 import java.util.List;
 
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -14,8 +16,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 
 @SuppressWarnings("serial")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ListaMunicipioPage extends BasePage<Municipio> {
 
 	@SpringBean

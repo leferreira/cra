@@ -27,38 +27,20 @@ public class DetalharMunicipioPage extends BasePage<Municipio> {
 		info("Os dados foram salvos com sucesso!");
 	}
 	
-	public void carregarComponentes(){
+	private void carregarComponentes(){
 		form = new Form<Municipio>("form");
-		adicionarPainel();
-		adicionarBotoes();
+		form.add(new MunicipioLabelPanel("municipioLabelPanel", getModel(), municipio));
+		form.add(obterBotaoNovo());
 		add(form);
 	}
 	
-	private void adicionarBotoes() {
-		form.add(obterBotaoNovoUsuario());
-		form.add(obterBotaoVoltar());
-	}
-	
-	private Button obterBotaoNovoUsuario() {
+	private Button obterBotaoNovo() {
 		return new Button("botaoNovo") {
 			@Override
 			public void onSubmit() {
 				setResponsePage(new IncluirMunicipioPage());
 			}
 		};
-	}
-	
-	private Button obterBotaoVoltar() {
-		return new Button("botaoVoltarLista") {
-			@Override
-			public void onSubmit() {
-				setResponsePage(new ListaMunicipioPage());
-			}
-		};
-	}
-
-	public void adicionarPainel(){
-		form.add(new MunicipioLabelPanel("municipioLabelPanel", getModel(), municipio));
 	}
 	
 	@Override

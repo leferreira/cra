@@ -36,7 +36,7 @@ public class ArquivosCartorioPanel extends Panel {
 	RemessaMediator remessasMediator;
 
 	private Instituicao instituicao;
-	private LocalDate dataBusca;
+	private LocalDate dataBusca = new LocalDate();
 	private TextField<String> dataEnvio;
 	private ArrayList<String> tiposSelect = new ArrayList<String>();
 	private ArrayList<String> statusSelect = new ArrayList<String>();

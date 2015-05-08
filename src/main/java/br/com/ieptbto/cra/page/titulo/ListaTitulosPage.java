@@ -27,7 +27,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 @SuppressWarnings("rawtypes")
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
 public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 	/***/

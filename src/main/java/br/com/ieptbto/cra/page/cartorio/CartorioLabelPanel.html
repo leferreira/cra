@@ -3,24 +3,57 @@
 </head>
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR">
 	<fieldset style="text-align: left;">
-		<legend>Dados do Cartório</legend>
-		<div class="panel-label">
-			<label for="nomeFantasia">Nome Fantasia:</label>
-			<label for="razaoSocial">Razão Social:</label> 
-			<label for="cnpj">CNPJ:</label>
-			<label for="email">Email:</label> 
-			<label for="comarca">Comarca:</label> 
-			<label for="responsavel">Contato:</label>
-			<label for="responsavel">Responsável:</label>
-			<label for="endereco">Endereço:</label>
+		<div class="panel-body-right">
+			<div class="form-group">
+				<label style="width: 30%; text-align: right;" for="nomeFantasia">
+					Nome Fantasia:
+				</label> 
+				<span style="width: 70%;" wicket:id="nomeFantasia"></span>
+			</div>
+			<div class="form-group">
+				<label style="width: 30%; text-align: right;" for="razaoSocial">
+					Razão Social:
+				</label> 
+				<span style="width: 70%;" wicket:id="razaoSocial"></span>
+			</div>
+			<div class="form-group">
+				<label style="width: 30%; text-align: right;" for="CNPJ">
+					CNPJ:
+				</label> 
+				<span style="width: 70%;" wicket:id="cnpj"></span>
+			</div>
+			<div class="form-group">
+				<label style="width: 30%; text-align: right;" for="email">
+					Email:
+				</label> 
+				<span style="width: 70%;" wicket:id="email"></span>
+			</div>
 		</div>
-			<span wicket:id="nomeFantasia"></span>
-			<span wicket:id="razaoSocial"></span>
-			<span wicket:id="cnpj"></span>
-			<span wicket:id="email"></span>
-			<span wicket:id="municipio.nomeMunicipio"></span>
-			<span wicket:id="contato"></span>
-			<span wicket:id="responsavel"></span>
-			<span wicket:id="endereco"></span>
+		<div class="panel-body-left">
+			<div class="form-group">
+				<label style="width: 30%; text-align: right;" for="comarca">
+					Comarca:
+				</label> 
+				<span style="width: 70%;" wicket:id="municipio.nomeMunicipio"></span>
+			</div>
+			<div class="form-group">
+				<label style="width: 30%; text-align: right;" for="contato">
+					Contato:
+				</label> 
+				<span style="width: 70%;" wicket:id="contato"></span>
+			</div>
+			<div class="form-group">
+				<label style="width: 30%; text-align: right;" for="responsavel">
+					Responsável:
+				</label> 
+				<span style="width: 70%;" wicket:id="responsavel"></span>
+			</div>
+			<div class="form-group">
+				<label style="width: 30%; text-align: right;" for="endereco">
+					Endereço:
+				</label> 
+				<span style="width: 70%;" wicket:id="endereco"></span>
+			</div>
+		</div>
 	</fieldset>
 </wicket:panel>

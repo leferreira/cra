@@ -1,18 +1,23 @@
 package br.com.ieptbto.cra.page.arquivo;
 
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 
 /**
  * @author Thasso Araújo
  *
  */
 @AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class BuscarArquivoPage extends BasePage<Arquivo> {
 
 	/***/
@@ -20,17 +25,36 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 
 	private Arquivo arquivo;
 	private Form<Arquivo> form;
+	private Instituicao instituicao;
 
 	public BuscarArquivoPage() {
 		this.arquivo = new Arquivo();
+		this.instituicao = getUser().getInstituicao();
 		
-		form = new Form<Arquivo>("form", getModel());		
-		form.add(new BuscarArquivoInputPanel("buscarArquivoInputPanel", getModel()));
+		form = new Form<Arquivo>("form", getModel());
+		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA")){
+			form.add(new BuscarArquivoCraPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
+		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("Cartório")){
+			form.add(new BuscarArquivoCartorioPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
+		} else {
+			form.add(new BuscarArquivoBancoPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
+		}
 		add(form);
 	}
 
+	
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(arquivo);
+	}
+
+
+	public Instituicao getInstituicao() {
+		return instituicao;
+	}
+
+
+	public void setInstituicao(Instituicao instituicao) {
+		this.instituicao = instituicao;
 	}
 }

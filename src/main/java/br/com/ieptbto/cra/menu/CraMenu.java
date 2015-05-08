@@ -41,7 +41,8 @@ public class CraMenu extends Panel {
 		menuLateral.addItem("MonitorarTitulos", rolesPesquisar);
 
 		/**Menus Relatorios*/
-		menuLateral.addItem("RelatorioTitulos", rolesIncluir);
+		menuLateral.addItem("RelatorioSintetico", rolesIncluir);
+		menuLateral.addItem("RelatorioAnalitico", rolesIncluir);
 
 		/**Menu batimento*/
 	    menuLateral.addItem("Batimento", rolesIncluir);
@@ -53,7 +54,6 @@ public class CraMenu extends Panel {
 	    menuLateral.addItem("MunicipiosPage", rolesIncluir);
 	    menuLateral.addItem("TipoInstituicoesPage", rolesIncluir);
 	    menuLateral.addItem("UsuariosPage", rolesIncluir);
-	    
 	}
 
 	// private void adicionarMenuAgenda(Menu menu) {

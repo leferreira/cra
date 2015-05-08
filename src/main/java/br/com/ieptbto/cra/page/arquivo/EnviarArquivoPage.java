@@ -3,6 +3,8 @@ package br.com.ieptbto.cra.page.arquivo;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -20,6 +22,7 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.processador.ProcessadorArquivo;
+import br.com.ieptbto.cra.security.CraRoles;
 
 /**
  * 
@@ -27,6 +30,7 @@ import br.com.ieptbto.cra.processador.ProcessadorArquivo;
  *
  */
 @AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 	/****/

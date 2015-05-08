@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckGroup;
@@ -23,9 +25,11 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
+import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
 @SuppressWarnings("rawtypes")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ConfirmarBatimentoPage extends BasePage<Batimento> {
 
 	/***/

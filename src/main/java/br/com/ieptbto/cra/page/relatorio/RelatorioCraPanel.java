@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.page.relatorio;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -18,34 +19,39 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
-import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.mediator.RelatorioMediator;
 
 
+/**
+ * @author Thasso Araújo
+ *
+ */
+@SuppressWarnings("unused")
 public class RelatorioCraPanel extends Panel{
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	private MunicipioMediator municipioMediator;
-	@SuppressWarnings("unused")
-	private Instituicao instituicao;
+	private static final Logger logger = Logger.getLogger(RelatorioCraPanel.class);
 	
-	TextField<LocalDate> dataInicio;
-	TextField<LocalDate> dataFim;
-	Municipio municipio;
-	Instituicao comboPortador;
-	String tipoArquivo;
-	String nivelDetalhamento;
+	@SpringBean
+	InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	MunicipioMediator municipioMediator;
+	@SpringBean
+	RelatorioMediator relatorioMediator;
+	
+	private Instituicao instituicao;
+	private TextField<LocalDate> fieldDataInicio;
+	private TextField<LocalDate> fieldDataFim;
+	private Municipio municipio;
+	private Instituicao portador;
+	private String tipoArquivo;
 	
 	public RelatorioCraPanel(String id, IModel<?> model, Instituicao instituicao) {
 		super(id, model);
 		this.instituicao = instituicao;
-		add(nivelDetalhamento());
 		add(comboTipoArquivos());
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
@@ -56,28 +62,34 @@ public class RelatorioCraPanel extends Panel{
 				private static final long serialVersionUID = 1L;
 				@Override
 				public void onSubmit() {
-					LocalDate inicio = new LocalDate();
-					LocalDate fim = new LocalDate();
-					if (dataInicio.getDefaultModelObject() != null){
-						if (dataFim.getDefaultModelObject() != null){
-							inicio = DataUtil.stringToLocalDate(dataInicio.getDefaultModelObject().toString());
-							fim = DataUtil.stringToLocalDate(dataFim.getDefaultModelObject().toString());
-							if (!inicio.isBefore(fim))
-								if (!inicio.isEqual(fim))
-									throw new InfraException("A data de início deve ser antes da data fim.");
-						}else
-							throw new InfraException("As duas datas devem ser preenchidas.");
-					} 
-					
-					info(DataUtil.localDateToString(inicio));
-					info(DataUtil.localDateToString(fim));
+//					LocalDate dataInicio = new LocalDate();
+//					LocalDate dataFim = new LocalDate();
+//					if (fieldDataInicio.getDefaultModelObject() != null){
+//						if (fieldDataFim.getDefaultModelObject() != null){
+//							dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
+//							dataFim = DataUtil.stringToLocalDate(fieldDataFim.getDefaultModelObject().toString());
+//							if (!dataInicio.isBefore(dataFim))
+//								if (!dataInicio.isEqual(dataFim))
+//									throw new InfraException("A data de início deve ser antes da data fim.");
+//						}else
+//							throw new InfraException("As duas datas devem ser preenchidas.");
+//					} 
+//					
+//					try {
+//						if (municipio.equals(null) && portador.equals(null))
+//							relatorioMediator.novoRelatorioSintetico(getInstituicao(), getTipoArquivo(), dataInicio, dataFim);
+////						else 
+////							relatorioMediator.novoRelatorioCra(getInstituicao(), getTipoArquivo(), portador , municipio, dataInicio, dataFim );
+//					
+//					}catch (JRException e) {
+//						logger.error(e.getMessage(), e);
+//						error("Não foi possível gerar o relatório. \n Entre em contato com a CRA!");
+//					} catch (Exception e) {
+//						logger.error(e.getMessage(), e);
+//						error("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
+//					}
 				}
 		});
-	}
-	
-	private Component nivelDetalhamento() {
-		List<String> status = Arrays.asList(new String[] { "Analítico", "Sintético" });
-		return new RadioChoice<String>("nivelDetalhamento", new Model<String>(nivelDetalhamento), status).setRequired(true);
 	}
 	
 	private Component comboTipoArquivos() {
@@ -86,14 +98,14 @@ public class RelatorioCraPanel extends Panel{
 	}
 	
 	private TextField<LocalDate> dataEnvioInicio() {
-		dataInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
-		dataInicio.setLabel(new Model<String>("intervalo da data do envio"));
-		dataInicio.setRequired(true);
-		return dataInicio;
+		fieldDataInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
+		fieldDataInicio.setLabel(new Model<String>("intervalo da data do envio"));
+		fieldDataInicio.setRequired(true);
+		return fieldDataInicio;
 	}
 	
 	private TextField<LocalDate> dataEnvioFinal() {
-		return dataFim = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
+		return fieldDataFim = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
 	}
 	
 	private Component comboPortador() {
@@ -105,4 +117,14 @@ public class RelatorioCraPanel extends Panel{
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
 		return new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.listarTodos(), renderer);
 	}
+
+	private Instituicao getInstituicao() {
+		return instituicao;
+	}
+
+	private String getTipoArquivo() {
+		return tipoArquivo;
+	}
+	
+	
 }

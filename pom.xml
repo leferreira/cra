@@ -189,7 +189,13 @@
 			<scope>provided</scope>
 		</dependency>
 		
-
+		<!-- Jasper Reports -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>5.0.1</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

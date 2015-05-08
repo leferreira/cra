@@ -10,7 +10,7 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 @SuppressWarnings("serial")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class IncluirCartorioPage extends BasePage<Instituicao> {
 
 	private Instituicao cartorio;

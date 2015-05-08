@@ -1,12 +1,6 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
 		<div class="col-lg-10 col-md-offset-1" style="text-align: left;">
 			<div class="form-group">
-				<label class="control-label" for="situacao">N&iacute;vel de Detalhamento:<small>(Anal&iacute;tico - Detalhado ou Sint&eacute;tico - Simples)</small></label>
-				<div class="radio inline">
-					<span wicket:id="nivelDetalhamento"></span>
-				</div>
-			</div>
-			<div class="form-group">
 				<label class="control-label" for="tipoArquivo">Tipo Do Arquivo:&nbsp;&nbsp;
 				<small>B - Remessa/ C - Confirma&ccedil;&atilde;o/ R - Retorno</small></label>
 					<div class="radio inline">
@@ -26,6 +20,6 @@
 					<select wicket:id="municipio" id="municipio" class="form-control"></select>
 				</div>
 			</div>
-			<button class="btn btn-primary" wicket:id="botaoGerar">Gerar</button>
+			<button class="btn btn-info" wicket:id="botaoGerar" onclick="target='_blank';return true;">Gerar Relatorio</button>
 		</div>
 </wicket:panel>

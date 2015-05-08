@@ -19,7 +19,11 @@ import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
+/**
+ * @author Thasso Araújo
+ *
+ */
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
 	/***/

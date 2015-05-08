@@ -30,13 +30,8 @@ public class DetalharInstituicaoPage extends BasePage<Instituicao> {
 	public void carregarComponentes(){
 		form = new Form<Instituicao>("form");
 		form.add(new InstituicaoLabelPanel<Instituicao>("instituicaoLabelPanel", getModel(), instituicao));
-		adicionarBotoes();
-		add(form);
-	}
-	
-	private void adicionarBotoes() {
 		form.add(obterBotaoNovo());
-		form.add(obterBotaoLista());
+		add(form);
 	}
 	
 	private Button obterBotaoNovo() {
@@ -50,18 +45,6 @@ public class DetalharInstituicaoPage extends BasePage<Instituicao> {
 			}
 		};
 	}
-	
-	private Button obterBotaoLista() {
-		return new Button("botaoLista") {
-			/***/
-			private static final long serialVersionUID = 1L;
-			@Override
-			public void onSubmit() {
-				setResponsePage(new ListaInstituicaoPage());
-			}
-		};
-	}
-
 	
 	@Override
 	protected IModel<Instituicao> getModel() {

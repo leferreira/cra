@@ -18,10 +18,13 @@ import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-@SuppressWarnings("serial")
 
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN,
-		CraRoles.SUPER, })
+/**
+ * @author Thasso Araújo
+ *
+ */
+@SuppressWarnings("serial")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ListaUsuarioPage extends BasePage<Usuario> {
 
 	@SpringBean

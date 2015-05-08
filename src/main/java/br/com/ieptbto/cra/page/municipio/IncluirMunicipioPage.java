@@ -9,8 +9,11 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN,
-		CraRoles.SUPER, })
+/**
+ * @author Thasso Araújo
+ *
+ */
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class IncluirMunicipioPage extends BasePage<Municipio>{
 
 	private static final long serialVersionUID = 1L;
