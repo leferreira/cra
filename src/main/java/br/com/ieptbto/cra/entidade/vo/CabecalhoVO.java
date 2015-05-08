@@ -3,16 +3,23 @@ package br.com.ieptbto.cra.entidade.vo;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
+import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 
 /**
  * 
  * @author Lefer
  *
  */
+@XmlRootElement(name = "hdb")
 @XmlAccessorType(XmlAccessType.NONE)
 public class CabecalhoVO extends AbstractArquivoVO {
+
+	@XmlAttribute(name = "t01")
+	@IAtributoArquivo(ordem = 1, posicao = 1, tamanho = 1, descricao = "Identificar o registro header no arquivo. Constante 0.", obrigatoriedade = true, validacao = "0", tipo = Integer.class)
+	private String identificacaoRegistro;
 
 	@XmlAttribute(name = "t02")
 	@IAtributoArquivo(ordem = 2, posicao = 2, tamanho = 3, descricao = "Identificar o código do banco/portador. Preencher com o código compensação do Banco ou número de identificação do portador.", obrigatoriedade = true)
@@ -142,6 +149,14 @@ public class CabecalhoVO extends AbstractArquivoVO {
 		return numeroSequencialRegistroArquivo;
 	}
 
+	public String getIdentificacaoRegistro() {
+		return identificacaoRegistro;
+	}
+
+	public void setIdentificacaoRegistro(String identificacaoRegistro) {
+		this.identificacaoRegistro = identificacaoRegistro;
+	}
+
 	public void setNumeroCodigoPortador(String numeroCodigoPortador) {
 		this.numeroCodigoPortador = numeroCodigoPortador;
 	}
@@ -204,6 +219,11 @@ public class CabecalhoVO extends AbstractArquivoVO {
 
 	public void setNumeroSequencialRegistroArquivo(String numeroSequencialRegistroArquivo) {
 		this.numeroSequencialRegistroArquivo = numeroSequencialRegistroArquivo;
+	}
+
+	public void parseCabecalho(CabecalhoRemessa cabecalho) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

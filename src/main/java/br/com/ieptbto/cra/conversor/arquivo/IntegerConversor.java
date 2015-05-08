@@ -45,4 +45,8 @@ public class IntegerConversor extends AbstractConversor<Integer> {
 		return getValorConvertido(valor);
 	}
 
+	public String getValorConvertidoString(Object objeto) {
+		return getValorConvertidoParaString(Integer.class.cast(objeto));
+	}
+
 }

@@ -15,7 +15,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<source.version>1.7</source.version>
-		
+
 		<wicket.version>6.18.0</wicket.version>
 		<spring.version>4.1.4.RELEASE</spring.version>
 		<slf4j-log4j12.version>1.7.10</slf4j-log4j12.version>
@@ -30,7 +30,7 @@
 		<commons-collections.version>3.2.1</commons-collections.version>
 		<postgresql.version>9.1-901.jdbc4</postgresql.version>
 		<joda-time.version>2.2</joda-time.version>
-		
+
 		<!-- allowed values: R7, 1.0, 1.5, 2.0 or none -->
 		<wtp.version>none</wtp.version>
 	</properties>
@@ -80,22 +80,22 @@
 			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Utilizado no contexto de tests -->
-		<dependency> 
-			<groupId>javax.servlet</groupId> 
-			<artifactId>servlet-api</artifactId> 
-			<version>2.5</version> 
-			<scope>test</scope> 
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>test</scope>
 		</dependency>
-		
+
 
 
 		<!-- slf4j-log4j -->
@@ -142,7 +142,7 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate-core.version}</version>
 		</dependency>
-		
+
 		<!-- Hibernate Audit -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -156,19 +156,39 @@
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>c3p0</groupId>
 			<artifactId>c3p0</artifactId>
 			<version>${c3p0.version}</version>
 		</dependency>
-		
+
 		<!-- Joda Time -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>${joda-time.version}</version>
 		</dependency>
+
+
+		<!-- Teste WebService -->
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.enunciate</groupId>
+			<artifactId>enunciate-spring-app-rt</artifactId>
+			<version>1.18</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		
 
 	</dependencies>
 
@@ -232,7 +252,22 @@
 					<wtpversion>${wtp.version}</wtpversion>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.enunciate</groupId>
+				<artifactId>maven-enunciate-spring-plugin</artifactId>
+				<version>1.18</version>
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<goals> -->
+<!-- 							<goal>assemble</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+			</plugin>
+			
 		</plugins>
+		
 	</build>
 
 </project>

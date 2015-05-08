@@ -49,6 +49,14 @@ public abstract class AbstractConversor<T> {
 	public abstract String getValorConvertidoParaString(T objeto);
 
 	/**
+	 * Converte o objeto para {@link String}.
+	 * 
+	 * @param objeto
+	 * @return
+	 */
+	public abstract String getValorConvertidoString(Object objeto);
+
+	/**
 	 * Método responsável por definir o campo arquivo.
 	 * 
 	 * @param arquivo

@@ -61,8 +61,7 @@ import br.com.ieptbto.cra.webpage.AbstractWebPage;
  * @author Lefer
  *
  */
-public class CraApplication extends WebApplication implements
-		ISecureApplication, IWebApplication {
+public class CraApplication extends WebApplication implements ISecureApplication, IWebApplication {
 
 	public CraApplication() {
 	}
@@ -95,13 +94,11 @@ public class CraApplication extends WebApplication implements
 	}
 
 	protected void initSpring() {
-		getComponentInstantiationListeners().add(
-				new SpringComponentInjector(this));
+		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 	}
 
 	private void initConfig() {
-		getRequestCycleSettings().setRenderStrategy(
-				RenderStrategy.ONE_PASS_RENDER);
+		getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
@@ -113,8 +110,7 @@ public class CraApplication extends WebApplication implements
 		getApplicationSettings().setAccessDeniedPage(NotFoundPage.class);
 
 		// customized auth strategy
-		getSecuritySettings().setAuthorizationStrategy(
-				new UserRoleAuthorizationStrategy(new UserRolesAuthorizer()));
+		getSecuritySettings().setAuthorizationStrategy(new UserRoleAuthorizationStrategy(new UserRolesAuthorizer()));
 
 		// make markup friendly as in deployment-mode
 		getMarkupSettings().setStripWicketTags(true);
@@ -131,34 +127,34 @@ public class CraApplication extends WebApplication implements
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
-		
+
 		/** Arquivo */
 		mountPage("UsuariosPage", ListaUsuarioPage.class);
 		mountPage("IncluirUsuario", IncluirUsuarioPage.class);
-		mountPage("DetalharUsuario", DetalharUsuarioPage.class );
+		mountPage("DetalharUsuario", DetalharUsuarioPage.class);
 
 		mountPage("InstituicoesPage", ListaInstituicaoPage.class);
 		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
-		mountPage("DetalharInstituicao", DetalharInstituicaoPage.class );
-		
+		mountPage("DetalharInstituicao", DetalharInstituicaoPage.class);
+
 		mountPage("CartoriosPage", ListaCartorioPage.class);
 		mountPage("IncluirCartorio", IncluirCartorioPage.class);
-		mountPage("DetalharCartorio", DetalharCartorioPage.class );
-		
+		mountPage("DetalharCartorio", DetalharCartorioPage.class);
+
 		mountPage("TipoInstituicoesPage", ListaTipoInstituicaoPage.class);
 		mountPage("IncluirTipoInstituicao", IncluirTipoInstituicaoPage.class);
 
 		mountPage("MunicipiosPage", ListaMunicipioPage.class);
 		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
-		mountPage("DetalharMunicipio", DetalharMunicipioPage.class );
-		
+		mountPage("DetalharMunicipio", DetalharMunicipioPage.class);
+
 		/** Arquivo */
 		mountPage("EnviarArquivo", EnviarArquivoPage.class);
 		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 		mountPage("ListaArquivo", ListaArquivosPage.class);
 		mountPage("ArquivosPage", ArquivosEnviadosPage.class);
 		mountPage("TitulosDoArquivo", TitulosDoArquivoPage.class);
-		
+
 		/** Titulos */
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
@@ -185,8 +181,7 @@ public class CraApplication extends WebApplication implements
 	}
 
 	@Override
-	public Component createMenuSistema(AbstractWebPage<?> page,
-			String containerId) {
+	public Component createMenuSistema(AbstractWebPage<?> page, String containerId) {
 		return new CraMenu("menu");
 	}
 

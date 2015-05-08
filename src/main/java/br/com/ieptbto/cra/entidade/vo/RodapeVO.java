@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
+import br.com.ieptbto.cra.entidade.Rodape;
 
 /**
  * 
@@ -108,5 +109,10 @@ public class RodapeVO extends AbstractArquivoVO {
 
 	public void setNumeroSequencialRegistroArquivo(String numeroSequencialRegistroArquivo) {
 		this.numeroSequencialRegistroArquivo = numeroSequencialRegistroArquivo;
+	}
+
+	public void parseRodape(Rodape rodape) {
+		// TODO Auto-generated method stub
+
 	}
 }

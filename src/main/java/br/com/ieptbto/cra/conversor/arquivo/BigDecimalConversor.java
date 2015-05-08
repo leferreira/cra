@@ -50,4 +50,8 @@ public class BigDecimalConversor extends AbstractConversor<BigDecimal> {
 		return getValorConvertido(valor);
 	}
 
+	public String getValorConvertidoString(Object objeto) {
+		return getValorConvertidoParaString(BigDecimal.class.cast(objeto));
+	}
+
 }

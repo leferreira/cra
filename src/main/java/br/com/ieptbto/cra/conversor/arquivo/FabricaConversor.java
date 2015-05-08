@@ -85,6 +85,11 @@ public class FabricaConversor {
 		return conversor;
 	}
 
+	public static String getValorConvertidoParaString(Class<?> propertyType, Object valor) {
+		AbstractConversor<?> conversor = FabricaConversor.getConversor(propertyType);
+		return conversor.getValorConvertidoString(valor);
+	}
+
 	/**
 	 * Retorna o valor convertido utilizando o conversor apropriado.
 	 * 

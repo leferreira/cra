@@ -1,10 +1,17 @@
 package br.com.ieptbto.cra.entidade.vo;
 
+import java.beans.PropertyDescriptor;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
+
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
+import br.com.ieptbto.cra.conversor.arquivo.FabricaConversor;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 
 /**
  * 
@@ -638,6 +645,27 @@ public class TituloVO extends AbstractArquivoVO {
 
 	public void setNumeroSequencialArquivo(String numeroSequencialArquivo) {
 		this.numeroSequencialArquivo = numeroSequencialArquivo;
+	}
+
+	public static TituloVO parseTitulo(TituloRemessa titulo) {
+		TituloVO tituloVO = new TituloVO();
+		BeanWrapper propertyAccessCCR = PropertyAccessorFactory.forBeanPropertyAccess(titulo);
+		BeanWrapper propertyAccessTituloVO = PropertyAccessorFactory.forBeanPropertyAccess(tituloVO);
+		PropertyDescriptor[] propertyDescriptors = propertyAccessTituloVO.getPropertyDescriptors();
+		for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+			String propertyName = propertyDescriptor.getName();
+			if (propertyAccessCCR.isReadableProperty(propertyName) && propertyAccessTituloVO.isWritableProperty(propertyName)) {
+				String valor = getValorString(propertyAccessCCR.getPropertyValue(propertyName));
+				propertyAccessTituloVO.setPropertyValue(propertyName, valor);
+			}
+
+		}
+
+		return tituloVO;
+	}
+
+	private static String getValorString(Object propertyValue) {
+		return FabricaConversor.getValorConvertidoParaString(propertyValue.getClass(), propertyValue);
 	}
 
 }

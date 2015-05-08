@@ -49,4 +49,8 @@ public class DateConversor extends AbstractConversor<LocalDate> {
 		return getValorConvertido(valor);
 	}
 
+	public String getValorConvertidoString(Object objeto) {
+		return getValorConvertidoParaString(LocalDate.class.cast(objeto));
+	}
+
 }

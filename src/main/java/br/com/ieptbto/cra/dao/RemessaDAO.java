@@ -30,60 +30,62 @@ public class RemessaDAO extends AbstractBaseDAO {
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "a");
 		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
-			criteria.add(Restrictions.disjunction()
-					.add(Restrictions.eq("instituicaoDestino", instituicao))
-					.add(Restrictions.eq("a.instituicaoEnvio", instituicao)));
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoDestino", instituicao))
+			        .add(Restrictions.eq("a.instituicaoEnvio", instituicao)));
 		}
 		criteria.addOrder(Order.desc("dataRecebimento"));
 		return criteria.list();
 	}
 
-	public List<Remessa> buscarRemessas(Arquivo arquivo, Municipio pracaProtesto, Instituicao portador,
-			LocalDate dataInicio,LocalDate dataFim, Usuario usuarioCorrente,List<String> tipos){
+	public List<Remessa> buscarRemessas(Arquivo arquivo, Municipio pracaProtesto, Instituicao portador, LocalDate dataInicio,
+	        LocalDate dataFim, Usuario usuarioCorrente, List<String> tipos) {
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "a");
 		criteria.createAlias("a.tipoArquivo", "tipoArquivo");
 		criteria.createAlias("instituicaoDestino", "d");
 		criteria.createAlias("instituicaoOrigem", "o");
-		
+
 		if (!usuarioCorrente.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
 			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoDestino", usuarioCorrente.getInstituicao()))
-					.add(Restrictions.eq("instituicaoOrigem", usuarioCorrente.getInstituicao())));
+			        .add(Restrictions.eq("instituicaoOrigem", usuarioCorrente.getInstituicao())));
 		}
-		if (StringUtils.isNotBlank(arquivo.getNomeArquivo())){ 
+		if (StringUtils.isNotBlank(arquivo.getNomeArquivo())) {
 			criteria.add(Restrictions.ilike("a.nomeArquivo", arquivo.getNomeArquivo(), MatchMode.ANYWHERE));
 		}
-		if (portador != null){
-			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", portador)).add(Restrictions.eq("instituicaoDestino", portador)));
+		if (portador != null) {
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", portador))
+			        .add(Restrictions.eq("instituicaoDestino", portador)));
 		}
-		if (pracaProtesto != null){
-			criteria.add(Restrictions.disjunction().add(Restrictions.eq("d.municipio", pracaProtesto)).add(Restrictions.eq("o.municipio", pracaProtesto)));
+		if (pracaProtesto != null) {
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("d.municipio", pracaProtesto))
+			        .add(Restrictions.eq("o.municipio", pracaProtesto)));
 		}
-		
+
 		criteria.add(Restrictions.between("a.dataEnvio", dataInicio, dataFim));
 		criteria.addOrder(Order.desc("a.dataEnvio"));
 		return criteria.list();
 	}
-	
-	public List<Remessa> buscarArquivos(Instituicao instituicao, ArrayList<String> tipos, ArrayList<String> situacoes,LocalDate data){
+
+	public List<Remessa> buscarArquivos(Instituicao instituicao, ArrayList<String> tipos, ArrayList<String> situacoes, LocalDate data) {
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "a");
 		criteria.createAlias("a.tipoArquivo", "tipoArquivo");
 		criteria.createAlias("instituicaoDestino", "d");
 		criteria.createAlias("instituicaoOrigem", "o");
-		
+
 		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
-			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", instituicao)).add(Restrictions.eq("instituicaoDestino", instituicao)));
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", instituicao))
+			        .add(Restrictions.eq("instituicaoDestino", instituicao)));
 		}
-		
-		if (!tipos.isEmpty()){
+
+		if (!tipos.isEmpty()) {
 			for (String tipoConstante : tipos) {
 				TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(tipoConstante);
 				criteria.add(Restrictions.disjunction().add(Restrictions.eq("tipoArquivo.tipoArquivo", tipoArquivo)));
 			}
 		}
 
-		if (!situacoes.isEmpty()){
+		if (!situacoes.isEmpty()) {
 			for (String status : situacoes) {
 				if (status.equals("Enviados"))
 					criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", instituicao)));
@@ -94,5 +96,14 @@ public class RemessaDAO extends AbstractBaseDAO {
 		criteria.add(Restrictions.eq("a.dataEnvio", data));
 		criteria.addOrder(Order.desc("a.dataEnvio"));
 		return criteria.list();
+	}
+
+	public Remessa buscarArquivosPorNome(String nome) {
+		Criteria criteria = getCriteria(Remessa.class);
+		criteria.createAlias("arquivo", "arquivo");
+		criteria.add(Restrictions.eq("arquivo.nomeArquivo", nome));
+		criteria.setMaxResults(1);
+
+		return Remessa.class.cast(criteria.uniqueResult());
 	}
 }

@@ -69,4 +69,8 @@ public class ListConversor extends AbstractConversor<List<?>> {
 		return getValorConvertido(valor);
 	}
 
+	public String getValorConvertidoString(Object objeto) {
+		return getValorConvertidoParaString(List.class.cast(objeto));
+	}
+
 }

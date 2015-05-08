@@ -26,14 +26,14 @@ public abstract class AbstractConversorArquivo<R extends AbstractArquivoVO, E ex
 	 * @return
 	 */
 	protected final R converter(E entidade, Class<R> arquivoVO) {
-		BeanWrapper propertyAccessCCR = PropertyAccessorFactory.forBeanPropertyAccess(entidade);
+		BeanWrapper propertyAccessCRA = PropertyAccessorFactory.forBeanPropertyAccess(entidade);
 		R arquivo = CraConstructorUtils.newInstance(arquivoVO);
 		BeanWrapper propertyAccessArquivo = PropertyAccessorFactory.forBeanPropertyAccess(arquivo);
 		PropertyDescriptor[] propertyDescriptors = propertyAccessArquivo.getPropertyDescriptors();
 		for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
 			String propertyName = propertyDescriptor.getName();
-			if (propertyAccessCCR.isReadableProperty(propertyName) && propertyAccessArquivo.isWritableProperty(propertyName)) {
-				Object valor = propertyAccessCCR.getPropertyValue(propertyName);
+			if (propertyAccessCRA.isReadableProperty(propertyName) && propertyAccessArquivo.isWritableProperty(propertyName)) {
+				Object valor = propertyAccessCRA.getPropertyValue(propertyName);
 				propertyAccessArquivo.setPropertyValue(propertyName, valor);
 			}
 

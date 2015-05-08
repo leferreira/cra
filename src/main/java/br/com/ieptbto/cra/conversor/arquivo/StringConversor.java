@@ -36,4 +36,8 @@ public class StringConversor extends AbstractConversor<String> {
 		return getValorConvertido(valor);
 	}
 
+	public String getValorConvertidoString(Object objeto) {
+		return getValorConvertidoParaString(String.class.cast(objeto));
+	}
+
 }

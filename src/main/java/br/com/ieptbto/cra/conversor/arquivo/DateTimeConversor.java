@@ -39,4 +39,8 @@ public class DateTimeConversor extends AbstractConversor<LocalDateTime> {
 		return StringUtils.repeat(" ", getAnotacaoAtributo().tamanho());
 	}
 
+	public String getValorConvertidoString(Object objeto) {
+		return getValorConvertidoParaString(LocalDateTime.class.cast(objeto));
+	}
+
 }

@@ -66,4 +66,8 @@ public class EnumConversor extends AbstractConversor<CraEnum> {
 		}
 		return StringUtils.repeat(VAZIO, tamanho);
 	}
+
+	public String getValorConvertidoString(Object objeto) {
+		return getValorConvertidoParaString(CraEnum.class.cast(objeto));
+	}
 }
