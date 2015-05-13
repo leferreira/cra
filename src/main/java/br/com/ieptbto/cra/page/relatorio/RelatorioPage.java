@@ -1,5 +1,7 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import java.io.Serializable;
+
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.markup.html.form.Form;
@@ -12,7 +14,7 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
-public class RelatorioPage extends BasePage<Remessa>{
+public class RelatorioPage extends BasePage<Remessa> implements Serializable{
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -26,11 +28,11 @@ public class RelatorioPage extends BasePage<Remessa>{
 		
 		form = new Form<Remessa>("form", getModel());
 		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA")){
-			form.add(new RelatorioCraPanel("relatorioPanel", getModel(), getInstituicao()));
+			form.add(new RelatorioCraPanel("relatorioPanel", getModel()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("Cartório")){
 			form.add(new RelatorioCartorioPanel("relatorioPanel", getModel(), getInstituicao()));
 		} else {
-			form.add(new RelatorioBancoPanel("relatorioPanel", getModel(),getInstituicao()));
+			form.add(new RelatorioBancoPanel("relatorioPanel", getModel(), getInstituicao()));
 		}
 		add(form);
 	}

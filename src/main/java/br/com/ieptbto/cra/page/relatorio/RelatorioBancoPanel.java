@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
@@ -23,6 +24,7 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
+import br.com.ieptbto.cra.relatorio.RelatorioUtils;
 
 /**
  * @author Thasso Araújo
@@ -43,6 +45,7 @@ public class RelatorioBancoPanel extends Panel{
 	@SpringBean
 	RelatorioMediator relatorioMediator;
 	
+	private WebResponse response;
 	private Instituicao instituicao;
 	private TextField<LocalDate> fieldDataInicio;
 	private TextField<LocalDate> fieldDataFim;
@@ -51,6 +54,7 @@ public class RelatorioBancoPanel extends Panel{
 	
 	public RelatorioBancoPanel(String id, IModel<?> model, Instituicao instituicao) {
 		super(id, model);
+		this.response = (WebResponse) getResponse();
 		this.instituicao = instituicao;
 		add(comboTipoArquivos());
 		add(dataEnvioInicio());
@@ -78,11 +82,11 @@ public class RelatorioBancoPanel extends Panel{
 //					try {
 //						if (fieldMunicipio.getDefaultModelObject() != null) {
 //							Municipio municipio = Municipio.class.cast(fieldMunicipio.getDefaultModelObject());
-//							relatorioMediator.novoRelatorioAnaliticoBanco(getInstituicao(), getTipoArquivo(), dataInicio, dataFim , municipio);
+////							relatorioMediator.novoRelatorioAnaliticoBanco(getInstituicao(), getTipoArquivo(), dataInicio, dataFim , municipio);
 //						} else {
-//							relatorioMediator.novoRelatorioSintetico(getInstituicao(), getTipoArquivo(), dataInicio, dataFim);
+//							JasperPrint jasperPrint = relatorioMediator.novoRelatorioSintetico(getInstituicao(), getTipoArquivo(), dataInicio, dataFim);
+//							getRalatorioUtils().gerarRelatorio(response, jasperPrint);
 //						}
-//						
 //					}catch (JRException e) {
 //						logger.error(e.getMessage(), e);
 //						error("Não foi possível gerar o relatório. \n Entre em contato com a CRA!");
@@ -90,6 +94,7 @@ public class RelatorioBancoPanel extends Panel{
 //						logger.error(e.getMessage(), e);
 //						error("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
 //					}
+//					setResponsePage(new RelatorioPage());
 				}
 		});
 	}
@@ -122,4 +127,7 @@ public class RelatorioBancoPanel extends Panel{
 		return instituicao;
 	}
 	
+	private RelatorioUtils getRalatorioUtils(){
+		return new RelatorioUtils();
+	}
 }

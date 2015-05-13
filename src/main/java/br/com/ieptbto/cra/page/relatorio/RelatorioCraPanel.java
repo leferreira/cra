@@ -14,6 +14,8 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
@@ -22,6 +24,7 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
+import br.com.ieptbto.cra.relatorio.RelatorioUtils;
 
 
 /**
@@ -34,6 +37,7 @@ public class RelatorioCraPanel extends Panel{
 	/***/
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(RelatorioCraPanel.class);
+	private static final List<String> TIPO_ARQUIVOS = Arrays.asList(new String[] { "B", "C", "R" });
 	
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
@@ -42,16 +46,16 @@ public class RelatorioCraPanel extends Panel{
 	@SpringBean
 	RelatorioMediator relatorioMediator;
 	
-	private Instituicao instituicao;
 	private TextField<LocalDate> fieldDataInicio;
 	private TextField<LocalDate> fieldDataFim;
-	private Municipio municipio;
-	private Instituicao portador;
+	private DropDownChoice<Instituicao> fieldPortador;
+	private DropDownChoice<Municipio> fieldMunicipio;
 	private String tipoArquivo;
+	private WebResponse webResponse;
 	
-	public RelatorioCraPanel(String id, IModel<?> model, Instituicao instituicao) {
+	public RelatorioCraPanel(String id, IModel<?> model) {
 		super(id, model);
-		this.instituicao = instituicao;
+		this.webResponse = (WebResponse)getResponse();    
 		add(comboTipoArquivos());
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
@@ -64,6 +68,9 @@ public class RelatorioCraPanel extends Panel{
 				public void onSubmit() {
 //					LocalDate dataInicio = new LocalDate();
 //					LocalDate dataFim = new LocalDate();
+//					Municipio pracaProtesto = new Municipio();
+//					Instituicao bancoPortador = new Instituicao();
+//					
 //					if (fieldDataInicio.getDefaultModelObject() != null){
 //						if (fieldDataFim.getDefaultModelObject() != null){
 //							dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
@@ -74,13 +81,23 @@ public class RelatorioCraPanel extends Panel{
 //						}else
 //							throw new InfraException("As duas datas devem ser preenchidas.");
 //					} 
+//					if (fieldPortador.getModelObject() != null)
+//						bancoPortador = fieldPortador.getModelObject();
+//					if (fieldMunicipio.getModelObject() != null)
+//						pracaProtesto = (Municipio)fieldMunicipio.getDefaultModelObject();
 //					
 //					try {
-//						if (municipio.equals(null) && portador.equals(null))
-//							relatorioMediator.novoRelatorioSintetico(getInstituicao(), getTipoArquivo(), dataInicio, dataFim);
-////						else 
-////							relatorioMediator.novoRelatorioCra(getInstituicao(), getTipoArquivo(), portador , municipio, dataInicio, dataFim );
-//					
+//						if (bancoPortador != null && pracaProtesto == null) { 
+//							JasperPrint jasperPrint = relatorioMediator.novoRelatorioSintetico(bancoPortador, getTipoArquivo(), dataInicio, dataFim);
+//							getRelatorioUtils().gerarRelatorio(webResponse, jasperPrint);
+//
+//						} else if (bancoPortador == null && pracaProtesto != null){ 
+//							JasperPrint jasperPrint = relatorioMediator.novoRelatorioSinteticoPorMunicipio(pracaProtesto , getTipoArquivo(),dataInicio, dataFim );
+//							getRelatorioUtils().gerarRelatorio(webResponse, jasperPrint);
+//
+//						} else 
+//							error("Deve ser selecionado o portador ou o município!");
+//						
 //					}catch (JRException e) {
 //						logger.error(e.getMessage(), e);
 //						error("Não foi possível gerar o relatório. \n Entre em contato com a CRA!");
@@ -93,13 +110,12 @@ public class RelatorioCraPanel extends Panel{
 	}
 	
 	private Component comboTipoArquivos() {
-		List<String> status = Arrays.asList(new String[] { "B", "C", "R" });
-		return new RadioChoice<String>("tipoArquivo", new Model<String>(tipoArquivo), status).setRequired(true);
+		return new RadioChoice<String>("tipoArquivo", new PropertyModel<String>(this, "tipoArquivo"), TIPO_ARQUIVOS).setRequired(true);
 	}
 	
 	private TextField<LocalDate> dataEnvioInicio() {
 		fieldDataInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
-		fieldDataInicio.setLabel(new Model<String>("intervalo da data do envio"));
+		fieldDataInicio.setLabel(new Model<String>("intervalo da data do relatório"));
 		fieldDataInicio.setRequired(true);
 		return fieldDataInicio;
 	}
@@ -108,23 +124,23 @@ public class RelatorioCraPanel extends Panel{
 		return fieldDataFim = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
 	}
 	
-	private Component comboPortador() {
+	private DropDownChoice<Instituicao> comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		return new DropDownChoice<Instituicao>("portador", new Model<Instituicao>(),instituicaoMediator.getInstituicoesFinanceiras(), renderer);
+		return fieldPortador = new DropDownChoice<Instituicao>("portador", new Model<Instituicao>(),instituicaoMediator.getInstituicoesFinanceiras(), renderer);
 	}
 	
-	private Component pracaProtesto() {
+	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		return new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.listarTodos(), renderer);
-	}
-
-	private Instituicao getInstituicao() {
-		return instituicao;
+		this.fieldMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.listarTodos(), renderer);
+		return fieldMunicipio;
 	}
 
 	private String getTipoArquivo() {
 		return tipoArquivo;
 	}
 	
+	private RelatorioUtils getRelatorioUtils(){
+		return new RelatorioUtils();
+	}
 	
 }

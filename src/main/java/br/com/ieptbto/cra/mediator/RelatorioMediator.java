@@ -1,14 +1,18 @@
 package br.com.ieptbto.cra.mediator;
 
-import net.sf.jasperreports.engine.JRException;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+
+import org.hibernate.HibernateException;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.dao.ArquivoDAO;
-import br.com.ieptbto.cra.dao.RemessaDAO;
-import br.com.ieptbto.cra.dao.TipoArquivoDAO;
 import br.com.ieptbto.cra.dao.TituloDAO;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
@@ -16,93 +20,129 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.relatorio.RelatorioUtils;
+import br.com.ieptbto.cra.relatorio.SinteticoJRDataSource;
 
+
+/**
+ * @author Thasso Araújo
+ *
+ */
+@SuppressWarnings("unused")
 @Service
 public class RelatorioMediator {
 
 	@Autowired
-	ArquivoDAO arquivoDao;
+	ArquivoDAO arquivoDao = new ArquivoDAO();
 	@Autowired
-	RemessaDAO remessaDao;
-	@Autowired
-	TipoArquivoDAO tipoArquivoDao;
-	@Autowired
-	TituloDAO tituloDao;
-
+	TituloDAO tituloDao = new TituloDAO();
+ 
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private Instituicao instituicao;
 	private Municipio pracaProtesto;
 	private Instituicao bancoPortador;
-
-	public byte[] novoRelatorioDeArquivoDetalhado(Instituicao instituicao, Arquivo arquivo) {
-		this.instituicao = instituicao;
-		return chamarRelatorioArquivoDetalhado(arquivo);
-	}
-
+	
+//	public byte[] novoRelatorioDeArquivoDetalhado(Instituicao instituicao,Arquivo arquivo){
+//		this.instituicao=instituicao;
+//		return chamarRelatorioArquivoDetalhado(arquivo);
+//	}
+	
 	/**
 	 * Método que recebe os parâmetros do relatório sintético para BANCOS.
 	 * 
-	 * @param
-	 * @return
-	 * 
+	 * 	@param 
+	 * @return 
+	 * @throws IOException 
+	 * 	
 	 * */
-	public byte[] novoRelatorioSintetico(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim)
-	        throws JRException {
+	public JasperPrint novoRelatorioSintetico(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim) throws JRException, HibernateException, SQLException, IOException {
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.instituicao = instituicao;
 		return chamarRelatorioSinteticoPorTipoArquivo(tipoArquivo);
-	}
-
-	/**
-	 * Método que recebe os parâmetros do relatório analítico pra BANCOS.
-	 * 
-	 * @param
-	 * 
-	 * */
-	public byte[] novoRelatorioAnaliticoBanco(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim,
-	        Municipio municipio) {
-		this.dataInicio = dataInicio;
-		this.dataFim = dataFim;
-		this.instituicao = instituicao;
-		return chamarRelatorioAnaliticoPorTipoArquivoBanco(tipoArquivo);
-	}
+	}	
 
 	/**
 	 * Método que recebe os parâmetros do relatório analítico para Cartórios.
 	 * 
-	 * @param
-	 * 
+	 * @param 
+	 * @return 
+	 * 	
 	 * */
-	public byte[] novoRelatorioAnaliticoCartorio(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim,
-	        Instituicao portador) {
+	public JasperPrint novoRelatorioSinteticoPorMunicipio(Municipio municipio,	String tipoArquivo, LocalDate dataInicio, LocalDate dataFim)throws JRException, HibernateException, SQLException, IOException  {
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
-		this.instituicao = instituicao;
-		return chamarRelatorioAnaliticoPorTipoArquivoCartorio(tipoArquivo);
+		this.pracaProtesto = municipio;
+		return chamarRelatorioSinteticoPorTipoArquivoDeMunicipios(tipoArquivo);
 	}
+	
+	/**
+	 * Método que recebe os parâmetros do relatório analítico pra BANCOS.
+	 * 
+	 * @param 
+	 * 	
+	 * */
+//	public JasperPrint novoRelatorioAnaliticoBanco(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim, Municipio municipio) {
+//		this.dataInicio = dataInicio;
+//		this.dataFim = dataFim;
+//		this.instituicao = instituicao;
+//		return chamarRelatorioAnaliticoPorTipoArquivoBanco(tipoArquivo);
+//	}
 
-	private RelatorioUtils getRelatorioUtils() {
+	/**
+	 * Método que recebe os parâmetros do relatório analítico para Cartórios.
+	 * 
+	 * @param 
+	 * 	
+	 * */
+//	public JasperPrint novoRelatorioAnaliticoCartorio(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim, Instituicao portador) {
+//		this.dataInicio = dataInicio;
+//		this.dataFim = dataFim;
+//		this.instituicao = instituicao;
+//		return chamarRelatorioAnaliticoPorTipoArquivoCartorio(tipoArquivo);
+//	}
+	
+	private RelatorioUtils getRelatorioUtils(){
 		return new RelatorioUtils();
 	}
-
-	private byte[] chamarRelatorioSinteticoPorTipoArquivo(String stringTipo) throws JRException {
-
+	
+	private JasperPrint chamarRelatorioSinteticoPorTipoArquivo(String stringTipo) throws JRException, IOException{
+		
 		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(stringTipo);
 		if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
-			return getRelatorioUtils().relatorioSinteticoDeRemessa(instituicao, dataInicio, dataFim);
+			List<SinteticoJRDataSource> beans = tituloDao.relatorioDeRemessaSintetico(instituicao, dataInicio, dataFim);
+			return getRelatorioUtils().relatorioSinteticoDeRemessa(beans, instituicao, dataInicio, dataFim);
 		} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
-			return getRelatorioUtils().relatorioSinteticoDeConfirmacao(instituicao, dataInicio, dataFim);
+			List<SinteticoJRDataSource> beans = tituloDao.relatorioDeConfirmacaoSintetico(instituicao, dataInicio, dataFim);
+			return getRelatorioUtils().relatorioSinteticoDeConfirmacao(beans ,instituicao, dataInicio, dataFim);
 		} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
-			return getRelatorioUtils().relatorioSinteticoDeRetorno(instituicao, dataInicio, dataFim);
+			List<SinteticoJRDataSource> beans = tituloDao.relatorioDeRetornoSintetico(instituicao, dataInicio, dataFim); 
+			return getRelatorioUtils().relatorioSinteticoDeRetorno(beans, instituicao, dataInicio, dataFim);
 		} else {
 			throw new InfraException("Não foi possível gerar o relatório. Entre em contato com a CRA!");
 		}
 	}
+	
+	private JasperPrint chamarRelatorioSinteticoPorTipoArquivoDeMunicipios(String stringTipo) throws JRException, IOException{
+		
+		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(stringTipo);
+		if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
+			List<SinteticoJRDataSource> beans = tituloDao.relatorioDeRemessaSinteticoPorMunicipio(pracaProtesto, dataInicio, dataFim);
+			return getRelatorioUtils().relatorioSinteticoDeRemessaPorMunicipio(beans, pracaProtesto, dataInicio, dataFim);
+		} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
+//			List<SinteticoJRDataSource> beans = tituloDao.relatorioDeConfirmacaoSinteticoPorMunicipio(pracaProtesto, dataInicio, dataFim);
+//			return getRelatorioUtils().relatorioSinteticoDeConfirmacao(beans ,instituicao, dataInicio, dataFim);
+		} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
+//			List<SinteticoJRDataSource> beans = tituloDao.relatorioDeRetornoSinteticoPorMunicipio(pracaProtesto, dataInicio, dataFim); 
+//			return getRelatorioUtils().relatorioSinteticoDeRetorno(beans, instituicao, dataInicio, dataFim);
+		} else {
+			throw new InfraException("Não foi possível gerar o relatório. Entre em contato com a CRA!");
+		}
+		return null;
+	}
 
-	private byte[] chamarRelatorioAnaliticoPorTipoArquivoBanco(String tipoArquivo) {
-
+	private byte[] chamarRelatorioAnaliticoPorTipoArquivoBanco(String tipoArquivo){
+		
 		TipoArquivoEnum tipo = TipoArquivoEnum.getTipoArquivoEnum(tipoArquivo);
 		if (tipo.equals(TipoArquivoEnum.REMESSA)) {
 			return getRelatorioUtils().relatorioAnaliticoDeRemessaBanco(instituicao, pracaProtesto, dataInicio, dataFim);
@@ -114,9 +154,9 @@ public class RelatorioMediator {
 			throw new InfraException("Não foi possível gerar o relatório. Entre em contato com a CRA!");
 		}
 	}
-
-	private byte[] chamarRelatorioAnaliticoPorTipoArquivoCartorio(String tipoArquivo) {
-
+	
+	private byte[] chamarRelatorioAnaliticoPorTipoArquivoCartorio(String tipoArquivo){
+		
 		TipoArquivoEnum tipo = TipoArquivoEnum.getTipoArquivoEnum(tipoArquivo);
 		if (tipo.equals(TipoArquivoEnum.REMESSA)) {
 			return getRelatorioUtils().relatorioAnaliticoDeRemessaCartorio(instituicao, bancoPortador, dataInicio, dataFim);
@@ -128,8 +168,8 @@ public class RelatorioMediator {
 			throw new InfraException("Não foi possível gerar o relatório. Entre em contato com a CRA!");
 		}
 	}
-
-	private byte[] chamarRelatorioArquivoDetalhado(Arquivo arquivo) {
+	
+	private byte[] chamarRelatorioArquivoDetalhado(Arquivo arquivo){
 		TipoArquivoEnum tipo = TipoArquivoEnum.getTipoArquivoEnum(arquivo.getTipoArquivo().getTipoArquivo().constante);
 		if (tipo.equals(TipoArquivoEnum.REMESSA)) {
 			Arquivo remessa = arquivoDao.buscarArquivoPorNome(arquivo);
@@ -144,4 +184,5 @@ public class RelatorioMediator {
 			throw new InfraException("Não foi possível gerar o relatório. Entre em contato com a CRA!");
 		}
 	}
+
 }

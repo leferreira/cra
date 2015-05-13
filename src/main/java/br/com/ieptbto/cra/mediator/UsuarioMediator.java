@@ -120,11 +120,12 @@ public class UsuarioMediator {
 		/*
 		 * Inserindo a instituição CRA
 		 */
-		Municipio m = new Municipio();
-		m.setNomeMunicipio("Palmas");
-		m.setUf("TO");
-		m.setCodigoIBGE(1721000);
-		m.setSituacao(true);
+//		Municipio m = new Municipio();
+//		m.setNomeMunicipio("Palmas");
+//		m.setUf("TO");
+//		m.setCodigoIBGE(1721000);
+//		m.setSituacao(true);
+		Municipio m = municipioMediator.buscarMunicipio("Palmas");
 		instituicaoDao.inserirInstituicaoInicial(m);
 
 		/*

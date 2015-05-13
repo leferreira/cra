@@ -20,8 +20,7 @@ import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.validacao.FabricaValidacaoArquivo;
 
 /**
- * 
- * @author Lefer
+ * @author Thasso Araújo
  *
  */
 @Service

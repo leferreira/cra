@@ -39,7 +39,7 @@ public class AbstractBaseDAO {
 	protected Session getSession() {
 		return sessionFactory.getCurrentSession();
 	}
-
+	
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public <T extends AbstractEntidade<T>> T merge(T obj) {
 		T t = (T) getSession().get(obj.getClass(), getSession().save(obj));
@@ -121,6 +121,10 @@ public class AbstractBaseDAO {
 	 */
 	public Query createQuery(String queryString) {
 		return getSession().createQuery(queryString);
+	}
+	
+	public Query createSQLQuery(String queryString) {
+		return getSession().createSQLQuery(queryString);
 	}
 
 	public <T extends AbstractEntidade<T>> Criteria getCriteria(Class<T> class1) {

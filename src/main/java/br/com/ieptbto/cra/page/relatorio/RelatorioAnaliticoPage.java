@@ -26,7 +26,7 @@ public class RelatorioAnaliticoPage extends BasePage<Remessa>{
 		
 		form = new Form<Remessa>("form", getModel());
 		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA")){
-			form.add(new RelatorioCraPanel("relatorioPanel", getModel(), getInstituicao()));
+			form.add(new RelatorioCraPanel("relatorioPanel", getModel()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("Cartório")){
 			form.add(new RelatorioCartorioPanel("relatorioPanel", getModel(), getInstituicao()));
 		} else {

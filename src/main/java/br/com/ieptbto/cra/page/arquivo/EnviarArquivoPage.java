@@ -25,8 +25,7 @@ import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
- * 
- * @author Lefer
+ * @author Thasso Araújo
  *
  */
 @AuthorizeInstantiation(value = "USER")
@@ -77,7 +76,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
 				}
-
 			}
 		};
 		form.setMultiPart(true);

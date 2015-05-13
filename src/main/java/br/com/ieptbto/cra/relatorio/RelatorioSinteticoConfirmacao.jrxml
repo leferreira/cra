@@ -1,66 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-05-07T23:26:25 -->
+<!-- 2015-05-12T11:17:38 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RetornoSinteticoBanco" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28e5392a-2b17-468c-9da6-4b66a8cfc921">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Cra"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="CRA"/>
 	<property name="ireport.zoom" value="1.4641000000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="INSTITUICAO_DESTINO_ID" class="java.lang.Integer"/>
 	<parameter name="BANCO" class="java.lang.String"/>
 	<parameter name="DATA_INICIO" class="java.sql.Date"/>
 	<parameter name="DATA_FIM" class="java.sql.Date"/>
 	<queryString language="SQL">
-		<![CDATA[select m.nome_municipio, 
-	Count (titulo.id_titulo) AS total_titulos,
-	sum (CASE WHEN conf.numero_protocolo_cartorio<>'' THEN 1 ELSE 0 END) AS apontados,
-	sum (CASE WHEN conf.tipo_ocorrencia='5' THEN 1 ELSE 0 END) AS devolvidos,
-	sum (titulo.valor_saldo_titulo) AS valor_saldo,
-	sum (titulo.valor_titulo) AS valor_titulo
-from tb_remessa AS r 
-INNER join tb_confirmacao AS conf ON conf.remessa_id=r.id_remessa
-inner join tb_titulo AS titulo ON conf.titulo_id=id_titulo
-inner join tb_arquivo AS a on r.arquivo_id=a.id_arquivo
-inner join tb_tipo_arquivo AS t on a.tipo_arquivo_id=t.id_tipo_arquivo
-inner join tb_instituicao AS i on r.instituicao_origem_id=i.id_instituicao
-INNER JOIN tb_municipio AS m ON i.municipio_id = m.id_municipio
-WHERE r.instituicao_destino_id = 3
-GROUP BY m.nome_municipio]]>
+		<![CDATA[]]>
 	</queryString>
-	<field name="nome_municipio" class="java.lang.String"/>
-	<field name="valor_saldo" class="java.math.BigDecimal"/>
-	<field name="total_titulos" class="java.lang.Long"/>
-	<field name="apontados" class="java.lang.Long"/>
-	<field name="devolvidos" class="java.lang.Long"/>
-	<field name="valor_titulo" class="java.math.BigDecimal"/>
-	<variable name="total_titulos1" class="java.lang.Long" calculation="Sum">
-		<variableExpression><![CDATA[$F{total_titulos}]]></variableExpression>
+	<field name="nomeMunicipio" class="java.lang.String"/>
+	<field name="apontados" class="java.math.BigInteger"/>
+	<field name="irregulares" class="java.math.BigInteger"/>
+	<field name="valorSaldo" class="java.math.BigDecimal"/>
+	<field name="valorTitulo" class="java.math.BigDecimal"/>
+	<field name="totalTitulos" class="java.math.BigInteger"/>
+	<variable name="totalTitulos1" class="java.math.BigInteger" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalTitulos}]]></variableExpression>
 	</variable>
-	<variable name="apontados1" class="java.lang.Long" calculation="Sum">
+	<variable name="apontados1" class="java.math.BigInteger" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{apontados}]]></variableExpression>
 	</variable>
-	<variable name="devolvidos1" class="java.lang.Long" calculation="Sum">
-		<variableExpression><![CDATA[$F{devolvidos}]]></variableExpression>
+	<variable name="irregulares1" class="java.math.BigInteger" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{irregulares}]]></variableExpression>
 	</variable>
-	<variable name="valor_titulo1" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{valor_titulo}]]></variableExpression>
+	<variable name="valorTitulo1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorTitulo}]]></variableExpression>
 	</variable>
-	<variable name="valor_saldo1" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{valor_saldo}]]></variableExpression>
+	<variable name="valorSaldo1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorSaldo}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="61" splitType="Stretch">
+		<band height="60" splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image>
-				<reportElement x="0" y="0" width="379" height="61" uuid="15e2a4ca-5cd8-40fb-9f83-0d476fa73dac"/>
+				<reportElement x="0" y="0" width="379" height="60" uuid="15e2a4ca-5cd8-40fb-9f83-0d476fa73dac">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
 				<imageExpression><![CDATA["C:/Users/Thasso Araújo/git/cra/src/main/webapp/img/ieptb.png"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="379" y="29" width="422" height="30" uuid="1f6653a1-3aa4-42e2-bece-a1e9b5d30425"/>
+				<reportElement x="379" y="30" width="422" height="30" uuid="1f6653a1-3aa4-42e2-bece-a1e9b5d30425"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font size="16" isBold="true"/>
 				</textElement>
@@ -69,31 +57,27 @@ GROUP BY m.nome_municipio]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="45">
+		<band height="36">
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="0" y="10" width="424" height="31" forecolor="#000000" backcolor="#FFFFFF" uuid="9190b570-1514-445d-8db1-8c562e2221f8"/>
+				<reportElement mode="Transparent" x="0" y="6" width="424" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="fac5b501-bf55-43da-8b95-3bb29fb1eaa5">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Instituição: " + $P{BANCO}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="422" y="10" width="378" height="31" forecolor="#000000" backcolor="#FFFFFF" uuid="9bf0013e-815f-45b3-8607-83a3fdfad827"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Período: " + $P{DATA_INICIO} + " à " + $P{DATA_FIM} + "."]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="27" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<rectangle>
-				<reportElement x="0" y="1" width="802" height="25" uuid="0956ba67-8341-4a3d-86de-ca65df3f2ebd">
+				<reportElement x="0" y="-1" width="802" height="25" uuid="0956ba67-8341-4a3d-86de-ca65df3f2ebd">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="local_mesure_unitheight" value="pixel"/>
@@ -101,32 +85,32 @@ GROUP BY m.nome_municipio]]>
 				</reportElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="2" width="280" height="20" uuid="59b20e8a-99d7-4266-a700-97eab0c95e55"/>
+				<reportElement x="1" y="2" width="280" height="20" uuid="59b20e8a-99d7-4266-a700-97eab0c95e55"/>
 				<box leftPadding="5"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true" isUnderline="false"/>
+					<font size="10" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Município]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="400" y="2" width="100" height="20" uuid="13714dd7-9933-4e8f-9a83-942a406d0d0d"/>
+				<reportElement x="401" y="2" width="100" height="20" uuid="13714dd7-9933-4e8f-9a83-942a406d0d0d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Apontados]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="500" y="2" width="100" height="20" uuid="ec35b887-a6d7-4146-a96e-3eddc2b1a511"/>
+				<reportElement x="501" y="2" width="100" height="20" uuid="ec35b887-a6d7-4146-a96e-3eddc2b1a511"/>
 				<box rightPadding="5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Devolvidos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="300" y="2" width="100" height="20" uuid="d708d5fb-643a-4f8f-ba43-915c93f38f6a"/>
+				<reportElement x="301" y="2" width="100" height="20" uuid="d708d5fb-643a-4f8f-ba43-915c93f38f6a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
@@ -148,9 +132,9 @@ GROUP BY m.nome_municipio]]>
 				<reportElement mode="Transparent" x="0" y="4" width="280" height="20" backcolor="#F5F5F5" uuid="c75576db-0480-4193-9a27-d257b61439fe"/>
 				<box leftPadding="5"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{nome_municipio}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nomeMunicipio}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="601" y="3" width="100" height="20" backcolor="#F5F5F5" uuid="95ecb84d-0714-4930-871a-b0bea4b2e113">
@@ -159,9 +143,9 @@ GROUP BY m.nome_municipio]]>
 				</reportElement>
 				<box leftPadding="5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="13"/>
+					<font size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{valor_titulo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{valorTitulo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="701" y="3" width="100" height="20" backcolor="#F5F5F5" uuid="2e2cec1b-6247-4238-b04c-5a02d9ae30d6">
@@ -170,22 +154,22 @@ GROUP BY m.nome_municipio]]>
 				</reportElement>
 				<box leftPadding="5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="13"/>
+					<font size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{valor_saldo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{valorSaldo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="600" y="-25" width="100" height="20" uuid="b92922e1-f593-4ddd-bec9-7822e3d5596d"/>
+				<reportElement x="603" y="-23" width="100" height="20" uuid="b92922e1-f593-4ddd-bec9-7822e3d5596d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Valor Titulo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="700" y="-25" width="100" height="20" uuid="19fdfd93-8128-4d7f-aaf0-fe218235baae"/>
+				<reportElement x="703" y="-23" width="100" height="20" uuid="19fdfd93-8128-4d7f-aaf0-fe218235baae"/>
 				<box rightPadding="5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Vlr. Saldo]]></text>
 			</staticText>
@@ -196,9 +180,9 @@ GROUP BY m.nome_municipio]]>
 				</reportElement>
 				<box leftPadding="5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="13"/>
+					<font size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{devolvidos}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{irregulares}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="401" y="3" width="100" height="20" backcolor="#F5F5F5" uuid="389649eb-4b7e-4fc7-a5e7-54e4e63c4319">
@@ -207,7 +191,7 @@ GROUP BY m.nome_municipio]]>
 				</reportElement>
 				<box leftPadding="5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="13"/>
+					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{apontados}]]></textFieldExpression>
 			</textField>
@@ -218,14 +202,14 @@ GROUP BY m.nome_municipio]]>
 				</reportElement>
 				<box leftPadding="5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="13"/>
+					<font size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total_titulos}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalTitulos}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="74">
+		<band height="73">
 			<rectangle>
 				<reportElement x="0" y="0" width="802" height="69" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="3c8f2df9-6d35-4588-9adc-7f8ee62c9810">
 					<property name="local_mesure_unitheight" value="pixel"/>
@@ -240,44 +224,89 @@ GROUP BY m.nome_municipio]]>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="14" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="305" y="41" width="100" height="19" uuid="fc229471-d01d-432a-9a7e-ba53ce8363ba"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+			<rectangle>
+				<reportElement x="0" y="2" width="802" height="25" uuid="b84cbd0c-5ed7-4c1c-b166-796a6bab31ec">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="500" y="3" width="100" height="20" uuid="799b2942-adeb-476a-9de7-7d839aff04d0"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{total_titulos1}]]></textFieldExpression>
+				<text><![CDATA[Devolvidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="3" width="100" height="20" uuid="2e5f76ec-82eb-41eb-b989-496a458ad1b4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="602" y="3" width="100" height="20" uuid="b1fb83c4-0d59-4fd7-91e6-ed54de2280b7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Titulo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="702" y="1" width="100" height="22" uuid="44d73d28-e4e3-4822-9087-1a9d2c471213"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vlr. Saldo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="3" width="100" height="20" uuid="bd40638c-3547-4080-af86-939c9ef548e3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apontados]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="300" y="41" width="100" height="19" uuid="811e22f3-4bfd-4654-a1a0-c46433d2f5b6"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalTitulos1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="404" y="41" width="99" height="19" uuid="d0e1b799-d0a7-40b7-a591-78581d9640e7"/>
+				<reportElement x="401" y="40" width="99" height="20" uuid="c65c4d18-4b69-415c-acc7-66265e3cc74c"/>
 				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{apontados1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="504" y="41" width="100" height="18" uuid="d55d0a1f-0a37-4f3a-9e00-5902250b0260"/>
+				<reportElement x="501" y="41" width="99" height="18" uuid="1bd4e954-d813-41ed-ad2c-1c6fdfdbad44"/>
 				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{devolvidos1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{irregulares1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="604" y="41" width="100" height="18" uuid="bb38edf0-9e78-4a70-9f52-b7a929ba6054"/>
+				<reportElement x="600" y="41" width="100" height="18" uuid="8a2821c2-1451-40e2-9ef3-68aa7391ebfe"/>
 				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{valor_titulo1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{valorTitulo1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="704" y="41" width="99" height="19" uuid="95206440-c837-431f-bdfa-31ff2a58ada7"/>
+				<reportElement x="701" y="40" width="99" height="18" uuid="1ae6978e-90f7-4ead-837c-86b0226d6a5b"/>
 				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{valor_saldo1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{valorSaldo1}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>
@@ -301,56 +330,4 @@ GROUP BY m.nome_municipio]]>
 			</textField>
 		</band>
 	</lastPageFooter>
-	<summary>
-		<band height="22">
-			<rectangle>
-				<reportElement x="0" y="0" width="802" height="21" uuid="8225b005-e260-4896-9cec-3969a7ba00e2">
-					<property name="local_mesure_unitwidth" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="1" width="142" height="20" uuid="c135aa6f-3c93-419a-9a34-06760f9700b7"/>
-				<textElement textAlignment="Left">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Total]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="305" y="1" width="100" height="19" uuid="bba7bd0e-89ab-44ca-9f8a-54225abbe80b"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{total_titulos1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="404" y="1" width="99" height="19" uuid="70abb62d-bb41-413d-acdd-628cb7bd7902"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{apontados1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="504" y="1" width="100" height="18" uuid="9ae18bdc-3110-48b7-95bd-f17ec4fbc64d"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{devolvidos1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="604" y="1" width="100" height="18" uuid="85f048e3-cffe-4ff4-aeb0-12c95ffa93c2"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{valor_titulo1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="704" y="1" width="99" height="19" uuid="214feff7-9bb5-4980-967d-0cd8476dcab2"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{valor_saldo1}]]></textFieldExpression>
-			</textField>
-		</band>
-	</summary>
 </jasperReport>
