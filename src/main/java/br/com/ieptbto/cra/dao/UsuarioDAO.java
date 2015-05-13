@@ -10,6 +10,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 
@@ -27,6 +28,7 @@ public class UsuarioDAO extends AbstractBaseDAO {
 	@Autowired
 	InstituicaoDAO instituicaoDAO;
 
+	@Transactional(readOnly = true)
 	public Usuario buscarUsuarioPorLogin(String login) {
 		Criteria criteria = getCriteria(Usuario.class);
 		criteria.add(Restrictions.like("login", login, MatchMode.EXACT));

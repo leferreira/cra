@@ -205,4 +205,17 @@ public class DataUtil implements Serializable {
 		// Necessario timezone UTC para nao dar problema com horario de verao
 		return DateTimeFormat.forPattern(formato).withZone(DateTimeZone.UTC);
 	}
+
+	public static String getDataAtual() {
+		SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = new Date();
+		return formatData.format(date);
+	}
+
+	public static String getHoraAtual() {
+		SimpleDateFormat formatHora = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date();
+		return formatHora.format(date);
+	}
+
 }

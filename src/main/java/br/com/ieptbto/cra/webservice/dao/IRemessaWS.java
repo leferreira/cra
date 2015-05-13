@@ -20,7 +20,10 @@ public interface IRemessaWS {
 
 	@WebMethod
 	@GET
-	@Path("arquivo/{nomeArquivo}")
-	public String gerarXML(@PathParam("nomeArquivo") @WebParam(name = "nomeArquivo") String nomeArquivo);
+	@Path("arquivo/{nomeArquivo}/{login}/{senha}/{dados}")
+	public String remessa(@PathParam("nomeArquivo") @WebParam(name = "nomeArquivo") String nomeArquivo,
+	        @PathParam("login") @WebParam(name = "login", header = true) String login,
+	        @PathParam("senha") @WebParam(name = "senha", header = true) String senha,
+	        @PathParam("dados") @WebParam(name = "dados") String dados);
 
 }

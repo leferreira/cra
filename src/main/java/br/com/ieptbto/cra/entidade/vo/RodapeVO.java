@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.entidade.vo;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -16,6 +17,8 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
+@XmlType(propOrder = { "identificacaoRegistro", "numeroCodigoPortador", "nomePortador", "dataMovimento", "somatorioQtdRemessa",
+        "somatorioValorRemessa", "complementoRegistro", "numeroSequencialRegistroArquivo" })
 public class RodapeVO extends AbstractArquivoVO {
 
 	@XmlAttribute(name = "t01")

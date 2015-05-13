@@ -18,7 +18,6 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Titulo;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 
@@ -104,20 +103,27 @@ public class RemessaDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Transactional(readOnly = true)
-	public List<TituloRemessa> buscarArquivosPorNome(String nome) {
+	public Remessa buscarArquivosPorNome(String nome) {
+		List<Titulo> titulos = new ArrayList<Titulo>();
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "arquivo");
 		criteria.add(Restrictions.eq("arquivo.nomeArquivo", nome));
 		criteria.setMaxResults(1);
 		Remessa remessa = Remessa.class.cast(criteria.uniqueResult());
 
+		if (remessa == null) {
+			return null;
+		}
+
 		Criteria criteriaTitulo = getCriteria(Titulo.class);
 		criteriaTitulo.createAlias("remessa", "remessa");
 		criteriaTitulo.add(Restrictions.eq("remessa", remessa));
-		List<TituloRemessa> titulos = new ArrayList<TituloRemessa>();
 		titulos = criteriaTitulo.list();
 
-		return titulos;
+		remessa.setTitulos(titulos);
+
+		return remessa;
 	}
 }

@@ -61,7 +61,7 @@ public class EnumConversor extends AbstractConversor<CraEnum> {
 	public String getValorConvertidoParaString(CraEnum objeto) {
 		int tamanho = getAnotacaoAtributo().tamanho();
 		if (objeto != null) {
-			String codigo = objeto.getLabel();
+			String codigo = objeto.getConstante();
 			return StringUtils.leftPad(codigo, tamanho, VAZIO);
 		}
 		return StringUtils.repeat(VAZIO, tamanho);

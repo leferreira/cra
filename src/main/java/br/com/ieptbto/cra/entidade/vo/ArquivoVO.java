@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -27,7 +26,6 @@ public class ArquivoVO extends AbstractArquivoVO {
 	@XmlElement(name = "tl")
 	private List<RodapeVO> rodapes;
 
-	@XmlAttribute(name = "t01")
 	@IAtributoArquivo(ordem = 1, posicao = 1, tamanho = 1, descricao = "Identificar o registro header no arquivo. Constante 0.", obrigatoriedade = true, validacao = "0", tipo = Integer.class)
 	private String identificacaoRegistro;
 
