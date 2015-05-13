@@ -10,6 +10,7 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
+import br.com.ieptbto.cra.conversor.arquivo.CampoArquivo;
 import br.com.ieptbto.cra.conversor.arquivo.FabricaConversor;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 
@@ -655,8 +656,12 @@ public class TituloVO extends AbstractArquivoVO {
 		for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
 			String propertyName = propertyDescriptor.getName();
 			if (propertyAccessCCR.isReadableProperty(propertyName) && propertyAccessTituloVO.isWritableProperty(propertyName)) {
-				String valor = getValorString(propertyAccessCCR.getPropertyValue(propertyName));
-				propertyAccessTituloVO.setPropertyValue(propertyName, valor);
+				String valor = "";
+				if (propertyAccessCCR.getPropertyValue(propertyName) != null) {
+					valor = getValorString(propertyAccessCCR.getPropertyValue(propertyName),
+					        new CampoArquivo(propertyName, tituloVO.getClass()));
+				}
+				propertyAccessTituloVO.setPropertyValue(propertyName, valor.trim());
 			}
 
 		}
@@ -664,8 +669,7 @@ public class TituloVO extends AbstractArquivoVO {
 		return tituloVO;
 	}
 
-	private static String getValorString(Object propertyValue) {
-		return FabricaConversor.getValorConvertidoParaString(propertyValue.getClass(), propertyValue);
+	private static String getValorString(Object propertyValue, CampoArquivo campoArquivo) {
+		return FabricaConversor.getValorConvertidoParaString(campoArquivo, propertyValue.getClass(), propertyValue);
 	}
-
 }

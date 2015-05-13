@@ -28,38 +28,41 @@ public class RelatorioMediator {
 	TipoArquivoDAO tipoArquivoDao;
 	@Autowired
 	TituloDAO tituloDao;
- 
+
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private Instituicao instituicao;
 	private Municipio pracaProtesto;
 	private Instituicao bancoPortador;
-	
-	public byte[] novoRelatorioDeArquivoDetalhado(Instituicao instituicao,Arquivo arquivo){
-		this.instituicao=instituicao;
+
+	public byte[] novoRelatorioDeArquivoDetalhado(Instituicao instituicao, Arquivo arquivo) {
+		this.instituicao = instituicao;
 		return chamarRelatorioArquivoDetalhado(arquivo);
 	}
+
 	/**
 	 * Método que recebe os parâmetros do relatório sintético para BANCOS.
 	 * 
-	 * 	@param 
-	 * @return 
-	 * 	
+	 * @param
+	 * @return
+	 * 
 	 * */
-	public byte[] novoRelatorioSintetico(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim) throws JRException {
+	public byte[] novoRelatorioSintetico(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim)
+	        throws JRException {
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.instituicao = instituicao;
 		return chamarRelatorioSinteticoPorTipoArquivo(tipoArquivo);
-	}	
+	}
 
 	/**
 	 * Método que recebe os parâmetros do relatório analítico pra BANCOS.
 	 * 
-	 * @param 
-	 * 	
+	 * @param
+	 * 
 	 * */
-	public byte[] novoRelatorioAnaliticoBanco(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim, Municipio municipio) {
+	public byte[] novoRelatorioAnaliticoBanco(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim,
+	        Municipio municipio) {
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.instituicao = instituicao;
@@ -69,22 +72,23 @@ public class RelatorioMediator {
 	/**
 	 * Método que recebe os parâmetros do relatório analítico para Cartórios.
 	 * 
-	 * @param 
-	 * 	
+	 * @param
+	 * 
 	 * */
-	public byte[] novoRelatorioAnaliticoCartorio(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim, Instituicao portador) {
+	public byte[] novoRelatorioAnaliticoCartorio(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim,
+	        Instituicao portador) {
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.instituicao = instituicao;
 		return chamarRelatorioAnaliticoPorTipoArquivoCartorio(tipoArquivo);
 	}
 
-	private RelatorioUtils getRelatorioUtils(){
+	private RelatorioUtils getRelatorioUtils() {
 		return new RelatorioUtils();
 	}
-	
-	private byte[] chamarRelatorioSinteticoPorTipoArquivo(String stringTipo) throws JRException{
-		
+
+	private byte[] chamarRelatorioSinteticoPorTipoArquivo(String stringTipo) throws JRException {
+
 		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(stringTipo);
 		if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
 			return getRelatorioUtils().relatorioSinteticoDeRemessa(instituicao, dataInicio, dataFim);
@@ -97,8 +101,8 @@ public class RelatorioMediator {
 		}
 	}
 
-	private byte[] chamarRelatorioAnaliticoPorTipoArquivoBanco(String tipoArquivo){
-		
+	private byte[] chamarRelatorioAnaliticoPorTipoArquivoBanco(String tipoArquivo) {
+
 		TipoArquivoEnum tipo = TipoArquivoEnum.getTipoArquivoEnum(tipoArquivo);
 		if (tipo.equals(TipoArquivoEnum.REMESSA)) {
 			return getRelatorioUtils().relatorioAnaliticoDeRemessaBanco(instituicao, pracaProtesto, dataInicio, dataFim);
@@ -110,9 +114,9 @@ public class RelatorioMediator {
 			throw new InfraException("Não foi possível gerar o relatório. Entre em contato com a CRA!");
 		}
 	}
-	
-	private byte[] chamarRelatorioAnaliticoPorTipoArquivoCartorio(String tipoArquivo){
-		
+
+	private byte[] chamarRelatorioAnaliticoPorTipoArquivoCartorio(String tipoArquivo) {
+
 		TipoArquivoEnum tipo = TipoArquivoEnum.getTipoArquivoEnum(tipoArquivo);
 		if (tipo.equals(TipoArquivoEnum.REMESSA)) {
 			return getRelatorioUtils().relatorioAnaliticoDeRemessaCartorio(instituicao, bancoPortador, dataInicio, dataFim);
@@ -124,8 +128,8 @@ public class RelatorioMediator {
 			throw new InfraException("Não foi possível gerar o relatório. Entre em contato com a CRA!");
 		}
 	}
-	
-	private byte[] chamarRelatorioArquivoDetalhado(Arquivo arquivo){
+
+	private byte[] chamarRelatorioArquivoDetalhado(Arquivo arquivo) {
 		TipoArquivoEnum tipo = TipoArquivoEnum.getTipoArquivoEnum(arquivo.getTipoArquivo().getTipoArquivo().constante);
 		if (tipo.equals(TipoArquivoEnum.REMESSA)) {
 			Arquivo remessa = arquivoDao.buscarArquivoPorNome(arquivo);

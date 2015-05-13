@@ -5,8 +5,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
+
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * 
@@ -221,8 +224,27 @@ public class CabecalhoVO extends AbstractArquivoVO {
 		this.numeroSequencialRegistroArquivo = numeroSequencialRegistroArquivo;
 	}
 
-	public void parseCabecalho(CabecalhoRemessa cabecalho) {
-		// TODO Auto-generated method stub
+	public static CabecalhoVO parseCabecalho(CabecalhoRemessa cabecalho) {
+		CabecalhoVO cabecalhoVO = new CabecalhoVO();
+		cabecalhoVO.setAgenciaCentralizadora(cabecalho.getAgenciaCentralizadora().trim());
+		cabecalhoVO.setCodigoMunicipio(cabecalho.getCodigoMunicipio().toString());
+		cabecalhoVO.setComplementoRegistro(cabecalho.getComplementoRegistro().trim());
+		cabecalhoVO.setDataMovimento(cabecalho.getDataMovimento().toString(DataUtil.PADRAO_FORMATACAO_DATA_DDMMYYYY));
+		cabecalhoVO.setIdentificacaoRegistro(cabecalho.getIdentificacaoRegistro().getConstante());
+		cabecalhoVO.setIdentificacaoTransacaoDestinatario(cabecalho.getIdentificacaoTransacaoDestinatario());
+		cabecalhoVO.setIdentificacaoTransacaoRemetente(cabecalho.getIdentificacaoTransacaoRemetente());
+		cabecalhoVO.setIdentificacaoTransacaoTipo(cabecalho.getIdentificacaoTransacaoTipo());
+		cabecalhoVO.setNomePortador(cabecalho.getNomePortador().trim());
+		cabecalhoVO.setNumeroCodigoPortador(cabecalho.getNumeroCodigoPortador().trim());
+		cabecalhoVO.setNumeroSequencialRegistroArquivo(cabecalho.getNumeroSequencialRegistroArquivo().trim());
+		cabecalhoVO.setNumeroSequencialRemessa(cabecalho.getNumeroSequencialRemessa().toString());
+		cabecalhoVO.setQtdIndicacoesRemessa(StringUtils.leftPad(cabecalho.getQtdIndicacoesRemessa().toString(), 4, "0"));
+		cabecalhoVO.setQtdOriginaisRemessa(StringUtils.leftPad(cabecalho.getQtdOriginaisRemessa().toString(), 4, "0"));
+		cabecalhoVO.setQtdRegistrosRemessa(StringUtils.leftPad(cabecalho.getQtdRegistrosRemessa().toString(), 4, "0"));
+		cabecalhoVO.setQtdTitulosRemessa(StringUtils.leftPad(cabecalho.getQtdTitulosRemessa().toString(), 4, "0"));
+		cabecalhoVO.setVersaoLayout(cabecalho.getVersaoLayout());
+
+		return cabecalhoVO;
 
 	}
 

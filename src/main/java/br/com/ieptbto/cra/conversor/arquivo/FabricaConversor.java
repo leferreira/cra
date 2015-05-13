@@ -85,8 +85,9 @@ public class FabricaConversor {
 		return conversor;
 	}
 
-	public static String getValorConvertidoParaString(Class<?> propertyType, Object valor) {
+	public static String getValorConvertidoParaString(CampoArquivo campoArquivo, Class<?> propertyType, Object valor) {
 		AbstractConversor<?> conversor = FabricaConversor.getConversor(propertyType);
+		conversor.setCampoArquivo(campoArquivo);
 		return conversor.getValorConvertidoString(valor);
 	}
 
@@ -103,4 +104,5 @@ public class FabricaConversor {
 		conversor.setCampoArquivo(campoArquivo);
 		return conversor.getValorConvertido(valor, propertyType);
 	}
+
 }

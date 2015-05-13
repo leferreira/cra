@@ -15,6 +15,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -86,8 +87,8 @@ public class RemessaMediator {
 	}
 
 	public ArquivoVO buscarArquivos(String nome) {
-		Remessa remessa = remessaDao.buscarArquivosPorNome(nome);
-		ArquivoVO arquivo = conversorRemessaArquivo.converter(remessa);
+		List<TituloRemessa> titulos = remessaDao.buscarArquivosPorNome(nome);
+		ArquivoVO arquivo = conversorRemessaArquivo.converter(titulos);
 
 		return arquivo;
 	}

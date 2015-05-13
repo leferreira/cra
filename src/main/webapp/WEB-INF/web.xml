@@ -20,6 +20,11 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<listener>
+        <listener-class>
+                com.sun.xml.ws.transport.http.servlet.WSServletContextListener
+        </listener-class>
+    </listener>
 	<filter>
 		<filter-name>hibernateSession</filter-name>
 		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
@@ -32,6 +37,11 @@
 			<param-value>br.com.ieptbto.cra.app.CraApplication</param-value>
 		</init-param>
 	</filter>
+	<servlet>
+        <servlet-name>webServices</servlet-name>
+        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 	<filter-mapping>
 		<filter-name>hibernateSession</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -40,4 +50,8 @@
 		<filter-name>wicket.cra</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	<servlet-mapping>
+		<servlet-name>webServices</servlet-name>
+		<url-pattern>/RemessaService</url-pattern>
+	</servlet-mapping>
 </web-app>

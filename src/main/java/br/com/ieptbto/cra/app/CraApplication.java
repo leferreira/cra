@@ -128,34 +128,34 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
-		
+
 		/** Arquivo */
 		mountPage("UsuariosPage", ListaUsuarioPage.class);
 		mountPage("IncluirUsuario", IncluirUsuarioPage.class);
-		mountPage("DetalharUsuario", DetalharUsuarioPage.class );
+		mountPage("DetalharUsuario", DetalharUsuarioPage.class);
 
 		mountPage("InstituicoesPage", ListaInstituicaoPage.class);
 		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
-		mountPage("DetalharInstituicao", DetalharInstituicaoPage.class );
-		
+		mountPage("DetalharInstituicao", DetalharInstituicaoPage.class);
+
 		mountPage("CartoriosPage", ListaCartorioPage.class);
 		mountPage("IncluirCartorio", IncluirCartorioPage.class);
-		mountPage("DetalharCartorio", DetalharCartorioPage.class );
-		
+		mountPage("DetalharCartorio", DetalharCartorioPage.class);
+
 		mountPage("TipoInstituicoesPage", ListaTipoInstituicaoPage.class);
 		mountPage("IncluirTipoInstituicao", IncluirTipoInstituicaoPage.class);
 
 		mountPage("MunicipiosPage", ListaMunicipioPage.class);
 		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
-		mountPage("DetalharMunicipio", DetalharMunicipioPage.class );
-		
+		mountPage("DetalharMunicipio", DetalharMunicipioPage.class);
+
 		/** Arquivo */
 		mountPage("EnviarArquivo", EnviarArquivoPage.class);
 		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 		mountPage("ListaArquivo", ListaArquivosPage.class);
 		mountPage("ArquivosPage", ArquivosEnviadosPage.class);
 		mountPage("TitulosDoArquivo", TitulosDoArquivoPage.class);
-		
+
 		/** Titulos */
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
@@ -168,6 +168,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		/** Batimento */
 		mountPage("Batimento", BatimentoPage.class);
 		mountPage("ConfirmarBatimento", ConfirmarBatimentoPage.class);
+
 	}
 
 	/**

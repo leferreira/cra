@@ -9,12 +9,16 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 
@@ -25,6 +29,8 @@ import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 @SuppressWarnings({ "unchecked" })
 @Repository
 public class RemessaDAO extends AbstractBaseDAO {
+	@Autowired
+	TituloDAO tituloDAO;
 
 	public List<Remessa> listarRemessasPorInstituicao(Instituicao instituicao) {
 		Criteria criteria = getCriteria(Remessa.class);
@@ -98,12 +104,20 @@ public class RemessaDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
-	public Remessa buscarArquivosPorNome(String nome) {
+	@Transactional(readOnly = true)
+	public List<TituloRemessa> buscarArquivosPorNome(String nome) {
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "arquivo");
 		criteria.add(Restrictions.eq("arquivo.nomeArquivo", nome));
 		criteria.setMaxResults(1);
+		Remessa remessa = Remessa.class.cast(criteria.uniqueResult());
 
-		return Remessa.class.cast(criteria.uniqueResult());
+		Criteria criteriaTitulo = getCriteria(Titulo.class);
+		criteriaTitulo.createAlias("remessa", "remessa");
+		criteriaTitulo.add(Restrictions.eq("remessa", remessa));
+		List<TituloRemessa> titulos = new ArrayList<TituloRemessa>();
+		titulos = criteriaTitulo.list();
+
+		return titulos;
 	}
 }

@@ -1,53 +1,61 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.annotation.Resource;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
+import javax.xml.ws.WebServiceContext;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.UsuarioMediator;
 
 /**
  * 
  * @author Lefer
  *
  */
-@WebServlet(urlPatterns = { "/RemessaService" })
-public class RemessaServiceImpl extends HttpServlet {
+// @WebServlet(urlPatterns = { "/RemessaService" })
+@WebService(name = "/RemessaService", endpointInterface = "br.com.ieptbto.cra.webservice.dao.IRemessaWS")
+@Path("/RemessaService")
+public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 
-	@SpringBean
 	RemessaMediator remessaMediator;
+	UsuarioMediator usuarioMediator;
+	Usuario usuario;
+	@Resource
+	WebServiceContext wsctx;
+	ClassPathXmlApplicationContext context;
 
-	/*** */
-	private static final long serialVersionUID = 1L;
+	@WebMethod(operationName = "gerarXML")
+	@GET
+	@Path("arquivo/{nomeArquivo}")
+	public String gerarXML(@PathParam("nomeArquivo") @WebParam(name = "nomeArquivo") String nomeArquivo) {
+		context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
+		remessaMediator = (RemessaMediator) context.getBean("remessaMediator");
+		ArquivoVO arquivo = getArquivo(nomeArquivo);
+		return setResposta(arquivo);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		gerarErro(request, response, gerarXML(), "Leandro");
-	}
-
-	private String gerarXML() {
-		ArquivoVO arquivo = getArquivo("");
+	private String setResposta(ArquivoVO arquivo) {
+		if (arquivo == null) {
+			return setRespostaArquivoInexistente(arquivo);
+		}
 		Writer writer = new StringWriter();
 		JAXBContext context;
 		try {
@@ -66,55 +74,12 @@ public class RemessaServiceImpl extends HttpServlet {
 		return null;
 	}
 
+	private String setRespostaArquivoInexistente(ArquivoVO arquivo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private ArquivoVO getArquivo(String nome) {
 		return remessaMediator.buscarArquivos(nome);
 	}
-
-	// private RodapeVO getRodape() {
-	// RodapeVO rodape = new RodapeVO();
-	// rodape.setIdentificacaoRegistro("9");
-	// rodape.setNumeroCodigoPortador("237");
-	// rodape.setNomePortador("Banco Bradesco");
-	// rodape.setDataMovimento("04022015");
-	// rodape.setNumeroSequencialRegistroArquivo("1");
-	// rodape.setSomatorioQtdRemessa("1");
-	// rodape.setSomatorioValorRemessa("1");
-	// rodape.setComplementoRegistro("");
-	// return rodape;
-	// }
-
-	public void gerarErro(HttpServletRequest request, HttpServletResponse response, String erroXmlParaDownload, String user_arq) {
-
-		File caminho = new File("/logs_de_transmissao");
-		caminho.mkdirs();
-
-		String filename = "erro_envio_" + user_arq + ".xml";
-		String localCompleto = caminho + "/" + filename;
-		File file = new File(localCompleto);
-
-		try {
-			FileWriter arquivo = new FileWriter(new File(localCompleto));
-			arquivo.write(erroXmlParaDownload);
-			arquivo.close();
-
-			FileInputStream in = new FileInputStream(file);
-
-			response.setContentLength((int) file.length());
-
-			OutputStream out = response.getOutputStream();
-			byte[] buf = new byte[(int) file.length()];
-			int count;
-			while ((count = in.read(buf)) >= 0) {
-				out.write(buf, 0, count);
-			}
-			in.close();
-			out.flush();
-			out.close();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

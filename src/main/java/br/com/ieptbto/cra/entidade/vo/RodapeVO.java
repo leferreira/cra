@@ -4,8 +4,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+import org.apache.commons.lang.StringUtils;
+
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
 import br.com.ieptbto.cra.entidade.Rodape;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * 
@@ -111,8 +114,17 @@ public class RodapeVO extends AbstractArquivoVO {
 		this.numeroSequencialRegistroArquivo = numeroSequencialRegistroArquivo;
 	}
 
-	public void parseRodape(Rodape rodape) {
-		// TODO Auto-generated method stub
+	public static RodapeVO parseRodape(Rodape rodape) {
+		RodapeVO rodapeVO = new RodapeVO();
+		rodapeVO.setComplementoRegistro(rodape.getComplementoRegistro().trim());
+		rodapeVO.setDataMovimento(rodape.getDataMovimento().toString(DataUtil.PADRAO_FORMATACAO_DATA_DDMMYYYY));
+		rodapeVO.setIdentificacaoRegistro(rodape.getIdentificacaoRegistro().getConstante().trim());
+		rodapeVO.setNomePortador(rodape.getNomePortador().trim());
+		rodapeVO.setNumeroCodigoPortador(rodape.getNumeroCodigoPortador().trim());
+		rodapeVO.setNumeroSequencialRegistroArquivo(rodape.getNumeroSequencialRegistroArquivo().trim());
+		rodapeVO.setSomatorioQtdRemessa(StringUtils.leftPad(rodape.getSomatorioQtdRemessa().toString().replaceAll("\\D", ""), 5, "0"));
+		rodapeVO.setSomatorioValorRemessa(StringUtils.leftPad(rodape.getSomatorioValorRemessa().toString().replaceAll("\\D", ""), 5, "0"));
 
+		return rodapeVO;
 	}
 }
