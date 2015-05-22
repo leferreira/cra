@@ -47,7 +47,7 @@ public abstract class AbstractConversorArquivo<R extends AbstractArquivoVO, E ex
 	 * @param entidadeVO
 	 * @return
 	 */
-	protected E converter(Class<E> entidade, R entidadeVO) {
+	public E converter(Class<E> entidade, R entidadeVO) {
 		E arquivo = CraConstructorUtils.newInstance(entidade);
 		BeanWrapper propertyAccessEntidadeVO = PropertyAccessorFactory.forBeanPropertyAccess(entidadeVO);
 		BeanWrapper propertyAccessEntidade = PropertyAccessorFactory.forBeanPropertyAccess(arquivo);

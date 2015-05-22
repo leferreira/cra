@@ -11,6 +11,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Historico;
@@ -44,6 +45,7 @@ public class ArquivoDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
+	@Transactional
 	public Arquivo salvar(Arquivo arquivo, Usuario usuarioAcao) {
 		Arquivo arquivoSalvo = new Arquivo();
 		Session session = getSession();
@@ -58,7 +60,7 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				remessa.setRodape(save(remessa.getRodape()));
 				remessa.setArquivo(arquivoSalvo);
 				remessa.setDataRecebimento(new LocalDate());
-				if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)){
+				if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
 					remessa.setSituacaoBatimento(false);
 				}
 				save(remessa);

@@ -18,6 +18,7 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 
@@ -102,17 +103,25 @@ public class RemessaMediator {
 		return arquivo;
 	}
 
-	public String processarArquivoXML(ArquivoVO arquivoRecebido, Usuario usuario, String nomeArquivo) {
+	public String processarArquivoXML(List<RemessaVO> arquivoRecebido, Usuario usuario, String nomeArquivo) {
 		Arquivo arquivo = new Arquivo();
+		logger.info("Iniciar processador do arquivo " + nomeArquivo);
 		processadorArquivo.processarArquivo(arquivoRecebido, usuario, nomeArquivo, arquivo);
-		salvarArquivo(arquivo, usuario);
+		logger.info("Fim processador do arquivo " + nomeArquivo);
+
+		arquivo = salvarArquivo(arquivo, usuario);
+
+		return gerarResposta(arquivo, usuario);
+	}
+
+	private String gerarResposta(Arquivo arquivo, Usuario usuario) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	private Arquivo salvarArquivo(Arquivo arquivo, Usuario usuario) {
 		return arquivoDAO.salvar(arquivo, usuario);
 
-	} 
-	
-	
+	}
+
 }

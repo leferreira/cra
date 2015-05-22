@@ -18,7 +18,10 @@ public class IntegerConversor extends AbstractConversor<Integer> {
 	@Override
 	public Integer getValorConvertido(String valor) {
 		try {
-			return Integer.valueOf(valor);
+			if (StringUtils.isNotBlank(valor) && StringUtils.isNotEmpty(valor)) {
+				return Integer.valueOf(valor);
+			}
+			return null;
 		} catch (NumberFormatException e) {
 			getArquivo();
 			if (getAnotacaoAtributo().obrigatoriedade()) {

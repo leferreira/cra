@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.webservice.dao;
 
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.jws.WebMethod;
@@ -19,8 +20,10 @@ import javax.xml.ws.WebServiceContext;
 import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import br.com.ieptbto.cra.conversor.ConversorArquivoVo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -36,6 +39,7 @@ import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 @Path("/RemessaService")
 public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 
+	public static final Logger logger = Logger.getLogger(RemessaServiceImpl.class);
 	RemessaMediator remessaMediator;
 	UsuarioMediator usuarioMediator;
 	Usuario usuario;
@@ -43,7 +47,7 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 	WebServiceContext wsctx;
 	ClassPathXmlApplicationContext context;
 	ArquivoVO arquivoRecebido;
-	public static final Logger logger = Logger.getLogger(RemessaServiceImpl.class);
+	List<RemessaVO> remessas;
 
 	@WebMethod(operationName = "arquivo")
 	@GET
@@ -54,6 +58,7 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 		remessaMediator = (RemessaMediator) context.getBean("remessaMediator");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 		this.arquivoRecebido = remessa;
+		converterArquivo();
 
 		setUsuario(login, senha);
 
@@ -62,8 +67,12 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 			return setResposta(arquivo, nomeArquivo);
 		}
 
-		return gerarMensagem(remessaMediator.processarArquivoXML(getArquivoRecebido(), getUsuario(), nomeArquivo));
+		return gerarMensagem(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo));
 
+	}
+
+	private void converterArquivo() {
+		setRemessas(ConversorArquivoVo.converterParaRemessaVO(getArquivoRecebido()));
 	}
 
 	private String setResposta(ArquivoVO arquivo, String nomeArquivo) {
@@ -142,5 +151,13 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 
 	public void setArquivoRecebido(ArquivoVO arquivoRecebido) {
 		this.arquivoRecebido = arquivoRecebido;
+	}
+
+	public List<RemessaVO> getRemessas() {
+		return remessas;
+	}
+
+	public void setRemessas(List<RemessaVO> remessas) {
+		this.remessas = remessas;
 	}
 }

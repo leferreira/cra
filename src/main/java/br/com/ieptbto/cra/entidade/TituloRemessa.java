@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.entidade;
 
-import java.beans.PropertyDescriptor;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -19,11 +18,8 @@ import javax.persistence.UniqueConstraint;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.hibernate.envers.Audited;
 import org.joda.time.LocalDate;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.PropertyAccessorFactory;
 
-import br.com.ieptbto.cra.conversor.arquivo.CampoArquivo;
-import br.com.ieptbto.cra.conversor.arquivo.FabricaConversor;
+import br.com.ieptbto.cra.conversor.arquivo.TituloConversor;
 import br.com.ieptbto.cra.entidade.vo.TituloVO;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 
@@ -414,28 +410,8 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	}
 
 	public static TituloRemessa parseTituloVO(TituloVO tituloVO) {
-		TituloRemessa titulo = new TituloRemessa();
-		BeanWrapper propertyAccessCCR = PropertyAccessorFactory.forBeanPropertyAccess(tituloVO);
-		BeanWrapper propertyAccessTituloVO = PropertyAccessorFactory.forBeanPropertyAccess(titulo);
-		PropertyDescriptor[] propertyDescriptors = propertyAccessTituloVO.getPropertyDescriptors();
-		for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-			String propertyName = propertyDescriptor.getName();
-			if (propertyAccessCCR.isReadableProperty(propertyName) && propertyAccessTituloVO.isWritableProperty(propertyName)) {
-				String valor = "";
-				if (propertyAccessCCR.getPropertyValue(propertyName) != null) {
-					valor = getValorString(propertyAccessCCR.getPropertyValue(propertyName),
-					        new CampoArquivo(propertyName, tituloVO.getClass()));
-				}
-				propertyAccessTituloVO.setPropertyValue(propertyName, valor.trim());
-			}
-
-		}
-
+		TituloRemessa titulo = new TituloConversor().converter(TituloRemessa.class, tituloVO);
 		return titulo;
-	}
-
-	private static String getValorString(Object propertyValue, CampoArquivo campoArquivo) {
-		return FabricaConversor.getValorConvertidoParaString(campoArquivo, propertyValue.getClass(), propertyValue);
 	}
 
 }

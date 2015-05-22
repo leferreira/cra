@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
@@ -52,6 +53,7 @@ public class TipoArquivoDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
+	@Transactional(readOnly = true)
 	public TipoArquivo buscarPorTipoArquivo(TipoArquivoEnum tipoArquivo) {
 		Criteria criteria = getCriteria(TipoArquivo.class);
 		criteria.add(Restrictions.eq("tipoArquivo", tipoArquivo));

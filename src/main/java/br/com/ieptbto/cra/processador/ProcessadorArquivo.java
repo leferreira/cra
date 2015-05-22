@@ -24,7 +24,7 @@ import br.com.ieptbto.cra.conversor.arquivo.FabricaDeArquivo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.exception.ValidacaoErroException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
@@ -79,22 +79,26 @@ public class ProcessadorArquivo extends Processador {
 
 	}
 
-	public void processarArquivo(ArquivoVO arquivoRecebido, Usuario usuario, String nomeArquivo, Arquivo arquivo) {
+	public void processarArquivo(List<RemessaVO> arquivoRecebido, Usuario usuario, String nomeArquivo, Arquivo arquivo) {
 		this.usuario = usuario;
 		this.arquivo = arquivo;
 		verificaDiretorio();
 		setArquivoFisico(new File(getPathUsuarioTemp() + ConfiguracaoBase.BARRA + nomeArquivo));
 		salvarXMLTemporario(arquivoRecebido);
 
-		fabricaDeArquivo.processarArquivoXML(arquivoRecebido, usuario, nomeArquivo, arquivo, getErros());
+		arquivo = fabricaDeArquivo.processarArquivoXML(arquivoRecebido, usuario, nomeArquivo, arquivo, getErros());
 
 	}
 
-	private void salvarXMLTemporario(ArquivoVO arquivoRecebido) {
+	private void salvarXMLTemporario(List<RemessaVO> arquivoRecebido) {
 		try {
 			FileWriter fw = new FileWriter(getArquivoFisico());
 			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(gerarXML(arquivoRecebido));
+
+			for (RemessaVO remessaVO : arquivoRecebido) {
+				bw.write(gerarXML(remessaVO));
+			}
+
 			bw.close();
 			fw.close();
 			logger.info("Arquivo XML gerado com Sucesso.");
@@ -104,7 +108,7 @@ public class ProcessadorArquivo extends Processador {
 		}
 	}
 
-	private String gerarXML(ArquivoVO mensagem) {
+	private String gerarXML(RemessaVO mensagem) {
 		Writer writer = new StringWriter();
 		JAXBContext context;
 		try {

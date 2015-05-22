@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,15 +17,20 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.LayoutArquivo;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 
 /**
@@ -41,7 +47,9 @@ public class FabricaDeArquivo {
 	@Autowired
 	private FabricaDeArquivoXML fabricaDeArquivoXML;
 	@Autowired
-	ConversorRemessaArquivo conversorRemessaArquivo;
+	private ConversorRemessaArquivo conversorRemessaArquivo;
+	@Autowired
+	private TipoArquivoMediator tipoArquivoMediator;
 
 	public Arquivo processarArquivoFisico(File arquivoFisico, Arquivo arquivo, List<Exception> erros) {
 
@@ -102,9 +110,21 @@ public class FabricaDeArquivo {
 		}
 	}
 
-	public Arquivo processarArquivoXML(ArquivoVO arquivoRecebido, Usuario usuario, String nomeArquivo, Arquivo arquivo,
+	public Arquivo processarArquivoXML(List<RemessaVO> arquivoRecebido, Usuario usuario, String nomeArquivo, Arquivo arquivo,
 	        List<Exception> erros) {
-		return fabricaDeArquivoXML.fabrica(arquivoRecebido, arquivo, erros);
+		arquivo = fabricaDeArquivoXML.fabrica(arquivoRecebido, arquivo, erros);
+		arquivo.setNomeArquivo(nomeArquivo);
+		arquivo.setDataEnvio(new LocalDate());
+		arquivo.setTipoArquivo(tipoArquivoMediator.buscarTipoPorNome(TipoArquivoEnum.getTipoArquivoEnum(nomeArquivo)));
+		arquivo.setUsuarioEnvio(usuario);
+		arquivo.setStatusArquivo(getStatusEnviado());
+		return arquivo;
 	}
 
+	private StatusArquivo getStatusEnviado() {
+		StatusArquivo status = new StatusArquivo();
+		status.setData(new Date());
+		status.setStatus("Enviado");
+		return status;
+	}
 }
