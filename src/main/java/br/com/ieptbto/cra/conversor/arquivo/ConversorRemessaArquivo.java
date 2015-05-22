@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Rodape;
@@ -56,5 +57,11 @@ public class ConversorRemessaArquivo {
 		CabecalhoVO cabecalhoVO = CabecalhoVO.parseCabecalho(cabecalho);
 		cabecalhos.add(cabecalhoVO);
 		return cabecalhos;
+	}
+
+	public Arquivo converter(ArquivoVO arquivoVO) {
+		Arquivo arquivo = new Arquivo();
+
+		return arquivo;
 	}
 }

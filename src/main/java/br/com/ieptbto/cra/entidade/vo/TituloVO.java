@@ -19,6 +19,7 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
  * @author Lefer
  *
  */
+@SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.NONE)
 public class TituloVO extends AbstractArquivoVO {
 

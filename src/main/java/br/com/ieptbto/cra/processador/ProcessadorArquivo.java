@@ -1,9 +1,19 @@
 package br.com.ieptbto.cra.processador;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -14,10 +24,12 @@ import br.com.ieptbto.cra.conversor.arquivo.FabricaDeArquivo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.exception.ValidacaoErroException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.validacao.FabricaValidacaoArquivo;
+import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 
 /**
  * @author Thasso Araújo
@@ -54,7 +66,7 @@ public class ProcessadorArquivo extends Processador {
 			logger.info("Início do processamento do arquivoFisico " + getFile().getClientFileName() + " do usuário "
 			        + getUsuario().getLogin());
 			verificaDiretorio();
-			copiarArquivoParaDiretorioDoUsuarioTemporario();
+			copiarArquivoParaDiretorioDoUsuarioTemporario(getFile().getClientFileName());
 			validarArquivo();
 			converterArquivo();
 			copiarArquivoEapagarTemporario();
@@ -65,6 +77,52 @@ public class ProcessadorArquivo extends Processador {
 			throw new InfraException("O arquivoFisico " + getFile().getClientFileName() + "enviado não pode ser processado.");
 		}
 
+	}
+
+	public void processarArquivo(ArquivoVO arquivoRecebido, Usuario usuario, String nomeArquivo, Arquivo arquivo) {
+		this.usuario = usuario;
+		this.arquivo = arquivo;
+		verificaDiretorio();
+		setArquivoFisico(new File(getPathUsuarioTemp() + ConfiguracaoBase.BARRA + nomeArquivo));
+		salvarXMLTemporario(arquivoRecebido);
+
+		fabricaDeArquivo.processarArquivoXML(arquivoRecebido, usuario, nomeArquivo, arquivo, getErros());
+
+	}
+
+	private void salvarXMLTemporario(ArquivoVO arquivoRecebido) {
+		try {
+			FileWriter fw = new FileWriter(getArquivoFisico());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(gerarXML(arquivoRecebido));
+			bw.close();
+			fw.close();
+			logger.info("Arquivo XML gerado com Sucesso.");
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		}
+	}
+
+	private String gerarXML(ArquivoVO mensagem) {
+		Writer writer = new StringWriter();
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(mensagem.getClass());
+
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty("jaxb.encoding", "ISO-8859-1");
+			JAXBElement<Object> element = new JAXBElement<Object>(new QName("remessa"), Object.class, mensagem);
+			marshaller.marshal(element, writer);
+			logger.info("Remessa processada com sucesso.");
+			return writer.toString();
+
+		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		}
+		return null;
 	}
 
 	private void copiarArquivoEapagarTemporario() {
@@ -94,10 +152,9 @@ public class ProcessadorArquivo extends Processador {
 		logger.info("Fim validação do arquivoFisico " + getFile().getClientFileName() + " enviado pelo usuário " + getUsuario().getLogin());
 	}
 
-	private void copiarArquivoParaDiretorioDoUsuarioTemporario() {
-		setArquivoFisico(new File(getPathUsuarioTemp() + ConfiguracaoBase.BARRA + getFile().getClientFileName()));
+	private void copiarArquivoParaDiretorioDoUsuarioTemporario(String nomeArquivo) {
+		setArquivoFisico(new File(getPathUsuarioTemp() + ConfiguracaoBase.BARRA + nomeArquivo));
 		try {
-			getArquivoFisico().createNewFile();
 			getFile().writeTo(getArquivoFisico());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e.getCause());
@@ -153,6 +210,15 @@ public class ProcessadorArquivo extends Processador {
 	}
 
 	public File getArquivoFisico() {
+		if (!arquivoFisico.exists()) {
+			try {
+				arquivoFisico.createNewFile();
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e.getCause());
+				getErros().add(new ValidacaoErroException(e.getMessage(), e.getCause()));
+				throw new InfraException("Não foi possível criar arquivo Físico temporário para o arquivo " + arquivoFisico.getName());
+			}
+		}
 		return arquivoFisico;
 	}
 

@@ -28,6 +28,9 @@ public abstract class AbstractFabricaDeArquivo {
 	}
 
 	public Arquivo getArquivo() {
+		if (arquivo == null) {
+			arquivo = new Arquivo();
+		}
 		return arquivo;
 	}
 

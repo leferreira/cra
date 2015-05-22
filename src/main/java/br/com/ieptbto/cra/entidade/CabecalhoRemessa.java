@@ -12,7 +12,9 @@ import org.apache.commons.lang.builder.CompareToBuilder;
 import org.hibernate.envers.Audited;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.entidade.vo.CabecalhoVO;
 import br.com.ieptbto.cra.enumeration.TipoRegistro;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * 
@@ -197,5 +199,28 @@ public class CabecalhoRemessa extends Cabecalho<CabecalhoRemessa> {
 		CompareToBuilder compareToBuilder = new CompareToBuilder();
 		compareToBuilder.append(this.getId(), entidade.getId());
 		return compareToBuilder.toComparison();
+	}
+
+	public static CabecalhoRemessa parseCabecalhoVO(CabecalhoVO cabecalhoVO) {
+		CabecalhoRemessa cabecalho = new CabecalhoRemessa();
+		cabecalho.setAgenciaCentralizadora(cabecalhoVO.getAgenciaCentralizadora());
+		cabecalho.setCodigoMunicipio(Integer.parseInt(cabecalhoVO.getCodigoMunicipio()));
+		cabecalho.setComplementoRegistro(cabecalhoVO.getComplementoRegistro());
+		cabecalho.setDataMovimento(DataUtil.stringToLocalDate(DataUtil.PADRAO_FORMATACAO_DATA_DDMMYYYY, cabecalhoVO.getDataMovimento()));
+		cabecalho.setIdentificacaoRegistro(TipoRegistro.get(cabecalhoVO.getIdentificacaoRegistro()));
+		cabecalho.setIdentificacaoTransacaoDestinatario(cabecalhoVO.getIdentificacaoTransacaoDestinatario());
+		cabecalho.setIdentificacaoTransacaoRemetente(cabecalhoVO.getIdentificacaoTransacaoRemetente());
+		cabecalho.setIdentificacaoTransacaoTipo(cabecalhoVO.getIdentificacaoTransacaoTipo());
+		cabecalho.setNomePortador(cabecalhoVO.getNomePortador());
+		cabecalho.setNumeroCodigoPortador(cabecalhoVO.getNumeroCodigoPortador());
+		cabecalho.setNumeroSequencialRegistroArquivo(cabecalhoVO.getNumeroSequencialRegistroArquivo());
+		cabecalho.setNumeroSequencialRemessa(Integer.parseInt(cabecalhoVO.getNumeroSequencialRemessa()));
+		cabecalho.setQtdIndicacoesRemessa(Integer.parseInt(cabecalhoVO.getQtdIndicacoesRemessa()));
+		cabecalho.setQtdOriginaisRemessa(Integer.parseInt(cabecalhoVO.getQtdOriginaisRemessa()));
+		cabecalho.setQtdRegistrosRemessa(Integer.parseInt(cabecalhoVO.getQtdRegistrosRemessa()));
+		cabecalho.setQtdTitulosRemessa(Integer.parseInt(cabecalhoVO.getQtdTitulosRemessa()));
+		cabecalho.setVersaoLayout(cabecalhoVO.getVersaoLayout());
+
+		return cabecalho;
 	}
 }

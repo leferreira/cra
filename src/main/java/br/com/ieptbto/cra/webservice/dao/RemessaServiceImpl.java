@@ -16,11 +16,13 @@ import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import javax.xml.ws.WebServiceContext;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
@@ -40,27 +42,37 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 	@Resource
 	WebServiceContext wsctx;
 	ClassPathXmlApplicationContext context;
+	ArquivoVO arquivoRecebido;
+	public static final Logger logger = Logger.getLogger(RemessaServiceImpl.class);
 
-	@WebMethod(operationName = "remessa")
+	@WebMethod(operationName = "arquivo")
 	@GET
 	@Override
-	public String remessa(@WebParam(name = "nomeArquivo") String nomeArquivo, @WebParam(name = "login") String login,
-	        @WebParam(name = "senha") String senha, @WebParam(name = "dados") String dados) {
+	public String arquivo(@WebParam(name = "nomeArquivo") String nomeArquivo, @WebParam(name = "login") String login,
+	        @WebParam(name = "senha") String senha, @WebParam(name = "remessa") ArquivoVO dados) {
 		context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		remessaMediator = (RemessaMediator) context.getBean("remessaMediator");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
+		this.arquivoRecebido = dados;
 
 		setUsuario(login, senha);
 
-		ArquivoVO arquivo = getArquivo(nomeArquivo);
-		return setResposta(arquivo, nomeArquivo);
+		if (getArquivoRecebido() == null) {
+			ArquivoVO arquivo = getArquivo(nomeArquivo);
+			return setResposta(arquivo, nomeArquivo);
+		}
+
+		return gerarMensagem(remessaMediator.processarArquivoXML(getArquivoRecebido(), getUsuario(), nomeArquivo));
+
 	}
 
 	private String setResposta(ArquivoVO arquivo, String nomeArquivo) {
 		if (getUsuario() == null) {
+			logger.error("Usuario inválido.");
 			return setRespostaUsuarioInvalido(nomeArquivo);
 		}
 		if (arquivo == null) {
+			logger.error("Remessa não encontrada.");
 			return setRespostaArquivoInexistente(nomeArquivo);
 		}
 
@@ -95,6 +107,7 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 	}
 
 	private void setUsuario(String login, String senha) {
+		logger.info("Inicio WebService pelo usuario= " + login);
 		this.usuario = usuarioMediator.autenticar(login, senha);
 	}
 
@@ -113,12 +126,21 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 			marshaller.setProperty("jaxb.encoding", "ISO-8859-1");
 			JAXBElement<Object> element = new JAXBElement<Object>(new QName("remessa"), Object.class, mensagem);
 			marshaller.marshal(element, writer);
-
+			logger.info("Remessa processada com sucesso.");
 			return writer.toString();
 
 		} catch (JAXBException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
 		return null;
+	}
+
+	public ArquivoVO getArquivoRecebido() {
+		return arquivoRecebido;
+	}
+
+	public void setArquivoRecebido(ArquivoVO arquivoRecebido) {
+		this.arquivoRecebido = arquivoRecebido;
 	}
 }

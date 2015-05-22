@@ -15,6 +15,7 @@ import br.com.ieptbto.cra.entidade.TipoArquivo;
  * @author Lefer
  *
  */
+@SuppressWarnings("serial")
 @XmlRootElement(name = "remessa")
 @XmlAccessorType(XmlAccessType.NONE)
 public class ArquivoVO extends AbstractArquivoVO {
@@ -70,5 +71,4 @@ public class ArquivoVO extends AbstractArquivoVO {
 	public void setRodapes(List<RodapeVO> rodapes) {
 		this.rodapes = rodapes;
 	}
-
 }

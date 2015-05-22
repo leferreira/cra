@@ -14,7 +14,9 @@ import org.apache.commons.lang.builder.CompareToBuilder;
 import org.hibernate.envers.Audited;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.entidade.vo.RodapeVO;
 import br.com.ieptbto.cra.enumeration.TipoRegistro;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * 
@@ -140,5 +142,19 @@ public class Rodape extends AbstractEntidade<Rodape> {
 
 	public void setNumeroSequencialRegistroArquivo(String numeroSequencialRegistroArquivo) {
 		this.numeroSequencialRegistroArquivo = numeroSequencialRegistroArquivo;
+	}
+
+	public static Rodape parseRodapeVO(RodapeVO rodapeVO) {
+		Rodape rodape = new Rodape();
+		rodape.setComplementoRegistro(rodapeVO.getComplementoRegistro());
+		rodape.setDataMovimento(DataUtil.stringToLocalDate(DataUtil.PADRAO_FORMATACAO_DATA_DDMMYYYY, rodapeVO.getDataMovimento()));
+		rodape.setIdentificacaoRegistro(TipoRegistro.get(rodapeVO.getIdentificacaoRegistro()));
+		rodape.setNomePortador(rodapeVO.getNomePortador());
+		rodape.setNumeroCodigoPortador(rodapeVO.getNumeroCodigoPortador());
+		rodape.setNumeroSequencialRegistroArquivo(rodapeVO.getNumeroSequencialRegistroArquivo());
+		rodape.setSomatorioQtdRemessa(new BigDecimal(rodapeVO.getSomatorioQtdRemessa()));
+		rodape.setSomatorioValorRemessa(new BigDecimal(rodapeVO.getSomatorioValorRemessa()));
+
+		return rodape;
 	}
 }

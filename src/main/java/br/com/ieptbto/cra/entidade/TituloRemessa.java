@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.entidade;
 
+import java.beans.PropertyDescriptor;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -18,7 +19,12 @@ import javax.persistence.UniqueConstraint;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.hibernate.envers.Audited;
 import org.joda.time.LocalDate;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 
+import br.com.ieptbto.cra.conversor.arquivo.CampoArquivo;
+import br.com.ieptbto.cra.conversor.arquivo.FabricaConversor;
+import br.com.ieptbto.cra.entidade.vo.TituloVO;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 
 /**
@@ -84,7 +90,7 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 		return confirmacao;
 	}
 
-	@OneToOne(optional = true, mappedBy = "titulo", fetch=FetchType.LAZY)
+	@OneToOne(optional = true, mappedBy = "titulo", fetch = FetchType.LAZY)
 	public Retorno getRetorno() {
 		return retorno;
 	}
@@ -394,17 +400,42 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 
 		return compareToBuilder.toComparison();
 	}
-	
+
 	@Transient
-	public String getSituacaoTitulo(){
-		if (this.confirmacao == null){
+	public String getSituacaoTitulo() {
+		if (this.confirmacao == null) {
 			return "S/ CONFIRMAÇÃO";
-		} else if (this.retorno == null){
+		} else if (this.retorno == null) {
 			return "S/ RETORNO";
 		} else {
 			return TipoOcorrencia.getTipoOcorrencia(this.retorno.getTipoOcorrencia()).getLabel();
 		}
-		/// TRATAR ESTADOS DO TITULO
+		// / TRATAR ESTADOS DO TITULO
+	}
+
+	public static TituloRemessa parseTituloVO(TituloVO tituloVO) {
+		TituloRemessa titulo = new TituloRemessa();
+		BeanWrapper propertyAccessCCR = PropertyAccessorFactory.forBeanPropertyAccess(tituloVO);
+		BeanWrapper propertyAccessTituloVO = PropertyAccessorFactory.forBeanPropertyAccess(titulo);
+		PropertyDescriptor[] propertyDescriptors = propertyAccessTituloVO.getPropertyDescriptors();
+		for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+			String propertyName = propertyDescriptor.getName();
+			if (propertyAccessCCR.isReadableProperty(propertyName) && propertyAccessTituloVO.isWritableProperty(propertyName)) {
+				String valor = "";
+				if (propertyAccessCCR.getPropertyValue(propertyName) != null) {
+					valor = getValorString(propertyAccessCCR.getPropertyValue(propertyName),
+					        new CampoArquivo(propertyName, tituloVO.getClass()));
+				}
+				propertyAccessTituloVO.setPropertyValue(propertyName, valor.trim());
+			}
+
+		}
+
+		return titulo;
+	}
+
+	private static String getValorString(Object propertyValue, CampoArquivo campoArquivo) {
+		return FabricaConversor.getValorConvertidoParaString(campoArquivo, propertyValue.getClass(), propertyValue);
 	}
 
 }

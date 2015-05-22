@@ -16,6 +16,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Lefer
  *
  */
+@SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(propOrder = { "identificacaoRegistro", "numeroCodigoPortador", "nomePortador", "dataMovimento", "somatorioQtdRemessa",
         "somatorioValorRemessa", "complementoRegistro", "numeroSequencialRegistroArquivo" })
