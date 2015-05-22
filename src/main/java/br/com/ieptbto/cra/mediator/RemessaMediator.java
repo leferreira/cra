@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.conversor.arquivo.ConversorRemessaArquivo;
+import br.com.ieptbto.cra.dao.ArquivoDAO;
 import br.com.ieptbto.cra.dao.RemessaDAO;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
@@ -18,6 +19,7 @@ import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 
 /**
  * @author Thasso Araújo
@@ -32,9 +34,13 @@ public class RemessaMediator {
 	@Autowired
 	RemessaDAO remessaDao;
 	@Autowired
+	private ArquivoDAO arquivoDAO;
+	@Autowired
 	ConversorRemessaArquivo conversorRemessaArquivo;
 	private List<Remessa> remessasFiltradas;
 	private List<Remessa> remessas = new ArrayList<Remessa>();
+	@Autowired
+	private ProcessadorArquivo processadorArquivo;
 
 	public List<Remessa> buscarArquivos(Instituicao instituicao, ArrayList<String> tipos, ArrayList<String> situacoes, LocalDate data) {
 		return remessaDao.buscarArquivos(instituicao, tipos, situacoes, data);
@@ -95,4 +101,18 @@ public class RemessaMediator {
 
 		return arquivo;
 	}
+
+	public String processarArquivoXML(ArquivoVO arquivoRecebido, Usuario usuario, String nomeArquivo) {
+		Arquivo arquivo = new Arquivo();
+		processadorArquivo.processarArquivo(arquivoRecebido, usuario, nomeArquivo, arquivo);
+		salvarArquivo(arquivo, usuario);
+		return null;
+	}
+
+	private Arquivo salvarArquivo(Arquivo arquivo, Usuario usuario) {
+		return arquivoDAO.salvar(arquivo, usuario);
+
+	} 
+	
+	
 }
