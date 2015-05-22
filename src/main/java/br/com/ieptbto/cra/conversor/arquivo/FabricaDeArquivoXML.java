@@ -19,6 +19,7 @@ import br.com.ieptbto.cra.entidade.vo.CabecalhoVO;
 import br.com.ieptbto.cra.entidade.vo.RodapeVO;
 import br.com.ieptbto.cra.entidade.vo.TituloVO;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * 
@@ -32,10 +33,12 @@ public class FabricaDeArquivoXML extends AbstractFabricaDeArquivo {
 	@Autowired
 	private InstituicaoMediator instituicaoMediator;
 
-	public FabricaDeArquivoXML(ArquivoVO arquivoFisico, Arquivo arquivo, List<Exception> erros) {
+	public Arquivo fabrica(ArquivoVO arquivoFisico, Arquivo arquivo, List<Exception> erros) {
 		this.arquivoVO = arquivoFisico;
 		this.arquivo = arquivo;
 		this.erros = erros;
+
+		return this.converter();
 	}
 
 	public Arquivo converter() {
@@ -55,7 +58,7 @@ public class FabricaDeArquivoXML extends AbstractFabricaDeArquivo {
 			remessa.setArquivo(arquivo);
 			remessa.setInstituicaoDestino(getInstituicaoDestino(cabecalhosVO.get(i).getCodigoMunicipio()));
 			remessa.setInstituicaoOrigem(getInstituicaoOrigem(cabecalhosVO.get(i).getNumeroCodigoPortador()));
-			remessa.setDataRecebimento(new LocalDate(cabecalhosVO.get(i).getDataMovimento()));
+			remessa.setDataRecebimento(getDataRecebimento(cabecalhosVO.get(i).getDataMovimento()));
 			remessa.setTitulos(getTitulos(titulosVO.subList(0, remessa.getCabecalho().getQtdTitulosRemessa()), remessa));
 			titulosVO.removeAll(titulosVO.subList(0, remessa.getCabecalho().getQtdTitulosRemessa()));
 
@@ -63,6 +66,10 @@ public class FabricaDeArquivoXML extends AbstractFabricaDeArquivo {
 		}
 
 		return arquivo;
+	}
+
+	private LocalDate getDataRecebimento(String dataMovimento) {
+		return DataUtil.stringToLocalDate(DataUtil.PADRAO_FORMATACAO_DATA_DDMMYYYY, dataMovimento);
 	}
 
 	@SuppressWarnings("rawtypes")

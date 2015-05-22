@@ -39,6 +39,8 @@ public class FabricaDeArquivo {
 	@Autowired
 	private FabricaDeArquivoTXT fabricaDeArquivoTXT;
 	@Autowired
+	private FabricaDeArquivoXML fabricaDeArquivoXML;
+	@Autowired
 	ConversorRemessaArquivo conversorRemessaArquivo;
 
 	public Arquivo processarArquivoFisico(File arquivoFisico, Arquivo arquivo, List<Exception> erros) {
@@ -102,7 +104,7 @@ public class FabricaDeArquivo {
 
 	public Arquivo processarArquivoXML(ArquivoVO arquivoRecebido, Usuario usuario, String nomeArquivo, Arquivo arquivo,
 	        List<Exception> erros) {
-		return new FabricaDeArquivoXML(arquivoRecebido, arquivo, erros).converter();
+		return fabricaDeArquivoXML.fabrica(arquivoRecebido, arquivo, erros);
 	}
 
 }

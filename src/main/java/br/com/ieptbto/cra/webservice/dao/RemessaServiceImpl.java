@@ -49,11 +49,11 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 	@GET
 	@Override
 	public String arquivo(@WebParam(name = "nomeArquivo") String nomeArquivo, @WebParam(name = "login") String login,
-	        @WebParam(name = "senha") String senha, @WebParam(name = "remessa") ArquivoVO dados) {
+	        @WebParam(name = "senha") String senha, @WebParam(name = "remessa") ArquivoVO remessa) {
 		context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		remessaMediator = (RemessaMediator) context.getBean("remessaMediator");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
-		this.arquivoRecebido = dados;
+		this.arquivoRecebido = remessa;
 
 		setUsuario(login, senha);
 
