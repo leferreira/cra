@@ -4,15 +4,28 @@
 <meta charset="UTF8">
 </head>
 <body>
-	<wicket:extend>
-		<div class="col-lg-12">
-			<form wicket:id="form" id="formUsuario">
-				<div wicket:id="instituicaoInputPanel" id="instituicaoInputPanel">
+	<wicket:extend>	
+	<div class="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Instituições</div>
+			<div class="panel-body">
+				<fieldset>
+					<legend class="legend">Cadastro de Instituição<a href="InstituicoesPage" style="float: right; font-size: 16px;"><span class="fa fa-mail-reply"></span>Voltar a página anterior!</a>
+					</legend>
+						<form wicket:id="form" id="formUsuario" class="form-horizontal">
+							<div wicket:id="instituicaoInputPanel" id="instituicaoInputPanel">
+							</div>
+							<wicket:child></wicket:child>
+							 <br style="clear: both;" />
+						</form>
+				</fieldset>
 				</div>
-				<wicket:child></wicket:child>
-				 <br style="clear: both;" />
-			</form>
+			<div class="panel-footer">
+				<p>Formulário de cadastro de instituição (bancos,órgãos públicos ou convênios)&nbsp;na CRA-TO. Os campos com
+					* são obrigatórios!</p>
+			</div>
 		</div>
+	</div>
 	</wicket:extend>
 </body>
 </html>

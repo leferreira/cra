@@ -15,7 +15,6 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
@@ -35,48 +34,42 @@ public class RemessaMediator {
 	@Autowired
 	RemessaDAO remessaDao;
 	@Autowired
-	private ArquivoDAO arquivoDAO;
+	ArquivoDAO arquivoDAO;
+	
 	@Autowired
-	ConversorRemessaArquivo conversorRemessaArquivo;
-	private List<Remessa> remessasFiltradas;
-	private List<Remessa> remessas = new ArrayList<Remessa>();
+	private ConversorRemessaArquivo conversorRemessaArquivo;
 	@Autowired
 	private ProcessadorArquivo processadorArquivo;
 
-	public List<Remessa> buscarArquivos(Instituicao instituicao, ArrayList<String> tipos, ArrayList<String> situacoes, LocalDate data) {
-		return remessaDao.buscarArquivos(instituicao, tipos, situacoes, data);
-	}
+	private List<Remessa> remessasFiltradas;
+	private List<Remessa> remessas = new ArrayList<Remessa>();
 
-	public List<Remessa> buscarArquivos(Arquivo arquivo, Municipio municipio, Instituicao portador, LocalDate dataInicio,
-	        LocalDate dataFim, ArrayList<String> tipos, Usuario usuario) {
-
+	public List<Remessa> buscarRemessaAvancado(Arquivo arquivo, Municipio municipio, Instituicao portador, LocalDate dataInicio, LocalDate dataFim, ArrayList<String> tipos, Usuario usuario) {
+		
 		try {
-			remessasFiltradas = new ArrayList<Remessa>();
-			remessas = remessaDao.buscarRemessas(arquivo, municipio, portador, dataInicio, dataFim, usuario, tipos);
-			for (Remessa remessa : remessas) {
-				if (!tipos.isEmpty())
-					filtroTipoArquivo(tipos, remessa);
-				else
-					return remessas;
-			}
+			remessas = remessaDao.buscarRemessaAvancado(arquivo, municipio, portador, dataInicio, dataFim, usuario, tipos);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			new InfraException("Não foi possível realizar a busca, contate a CRA.");
 		}
-		return remessasFiltradas;
+		return remessas;
 	}
 
-	private void filtroTipoArquivo(ArrayList<String> tipos, Remessa remessa) {
-		TipoArquivo tipoArquivo = new TipoArquivo();
-
-		for (String constante : tipos) {
-			if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().getConstante().equals(constante)) {
-				if (!remessasFiltradas.contains(remessa))
-					remessasFiltradas.add(remessa);
-			}
+	public List<Remessa> buscarRemessaSimples(Instituicao instituicao, ArrayList<String> tipos, ArrayList<String> situacoes, LocalDate dataInicio, LocalDate dataFim) {
+		
+		try {
+			remessas = remessaDao.buscarRemessaSimples(instituicao, tipos, situacoes, dataInicio, dataFim);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			new InfraException("Não foi possível realizar a busca, contate a CRA.");
 		}
+		return remessas;
 	}
 
+	public Arquivo buscarArquivoPorNome(String nomeArquivo) {
+		return arquivoDAO.buscarArquivosPorNome(nomeArquivo);
+	}
+	
 	public int buscarTotalRemessas() {
 		return 0;
 	}

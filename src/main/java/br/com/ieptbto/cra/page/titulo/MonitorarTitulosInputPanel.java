@@ -32,7 +32,6 @@ public class MonitorarTitulosInputPanel extends Panel {
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	
-	private TituloRemessa titulo;
 	private TextField<LocalDate> dataEntradaCRA;
 	private DropDownChoice<Instituicao> comboPortador;
 	private IModel<TituloRemessa> model;
@@ -40,7 +39,6 @@ public class MonitorarTitulosInputPanel extends Panel {
 	public MonitorarTitulosInputPanel(String id, IModel<TituloRemessa> model) {
 		super(id, model);
 		this.model = model;
-		this.titulo = new TituloRemessa();
 		adicionarCampos();
 	}
 	
@@ -91,8 +89,8 @@ public class MonitorarTitulosInputPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
-				
-				titulo = model.getObject();
+				TituloRemessa titulo = model.getObject();
+
 				try {
 					if (dataEntradaCRA.getDefaultModelObject() != null)
 						titulo.setDataOcorrencia(DataUtil.stringToLocalDate(dataEntradaCRA.getDefaultModelObject().toString()));

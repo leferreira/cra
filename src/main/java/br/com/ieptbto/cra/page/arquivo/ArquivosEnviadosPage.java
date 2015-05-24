@@ -37,7 +37,7 @@ public class ArquivosEnviadosPage extends BasePage<Arquivo> {
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("Cartório")){
 			form.add(new ArquivosCartorioPanel("enviadosPanel", getModel(), getInstituicao()));
 		} else {
-			form.add(new ArquivosBancoPanel("enviadosPanel", getModel(), getInstituicao()));
+			form.add(new ArquivosInstituicaoPanel("enviadosPanel", getModel(), getInstituicao()));
 		}
 		add(form);
 	}

@@ -8,6 +8,7 @@ public class SinteticoJRDataSource implements Serializable{
 
 	/***/
 	private static final long serialVersionUID = 1L;
+	private String instituicao;
 	private String nomeMunicipio;
 	private BigInteger apontados;
 	private BigInteger totalTitulos;
@@ -128,6 +129,14 @@ public class SinteticoJRDataSource implements Serializable{
 
 	public void setApontados(BigInteger apontados) {
 		this.apontados = apontados;
+	}
+
+	public String getInstituicao() {
+		return instituicao;
+	}
+
+	public void setInstituicao(String instituicao) {
+		this.instituicao = instituicao;
 	}
 	
 	

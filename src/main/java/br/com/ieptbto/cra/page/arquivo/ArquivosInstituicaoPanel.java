@@ -24,6 +24,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -34,7 +35,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-public class ArquivosBancoPanel extends Panel {
+public class ArquivosInstituicaoPanel extends Panel {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -43,12 +44,14 @@ public class ArquivosBancoPanel extends Panel {
 	RemessaMediator remessasMediator;
 
 	private Instituicao instituicao;
-	private LocalDate dataBusca = new LocalDate();
-	private TextField<String> dataEnvio;
+	private LocalDate dataInicio;
+	private LocalDate dataFim;
+	private TextField<LocalDate> dataEnvioInicio;
+	private TextField<LocalDate> dataEnvioFinal;
 	private ArrayList<String> tiposSelect = new ArrayList<String>();
 	private ArrayList<String> statusSelect = new ArrayList<String>();
 
-	public ArquivosBancoPanel(String id, IModel<?> model, Instituicao instituicao) {
+	public ArquivosInstituicaoPanel(String id, IModel<?> model, Instituicao instituicao) {
 		super(id, model);
 		this.instituicao = instituicao;
 		add(new Button("botaoEnviar"){
@@ -58,15 +61,24 @@ public class ArquivosBancoPanel extends Panel {
 			@Override
 			public void onSubmit() {
 				try {
-					if (dataEnvio.getDefaultModelObject() != null)
-						dataBusca = DataUtil.stringToLocalDate(dataEnvio.getDefaultModelObject().toString());
+					if (dataEnvioInicio.getDefaultModelObject() != null){
+						if (dataEnvioFinal.getDefaultModelObject() != null){
+							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
+							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
+							if (!dataInicio.isBefore(dataFim))
+								if (!dataInicio.isEqual(dataFim))
+									throw new InfraException("A data de início deve ser antes da data fim.");
+						}else
+							throw new InfraException("As duas datas devem ser preenchidas.");
+					} 
 				} catch (Exception e) {
 					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
 				}
 			}
 		});
 		add(listViewArquivos());
-		add(campoDataEnvio());
+		add(dataEnvioInicio());
+		add(dataEnvioFinal());
 		add(comboTipoArquivos());
 		add(comboStatus());
 	}
@@ -96,6 +108,7 @@ public class ArquivosBancoPanel extends Panel {
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
+				item.add(new Label("valor", "R$ " + remessa.getArquivo().getRemessas().get(0).getRodape().getSomatorioValorRemessa()));
 				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
 				item.add(downloadArquivo(remessa.getArquivo()));
 			}
@@ -119,7 +132,7 @@ public class ArquivosBancoPanel extends Panel {
 
 			@Override
 			protected List<Remessa> load() {
-				return remessasMediator.buscarArquivos(instituicao, tiposSelect, statusSelect,dataBusca);
+				return remessasMediator.buscarRemessaSimples(instituicao, tiposSelect, statusSelect,dataInicio, dataFim);
 			}
 		};
 	}
@@ -134,11 +147,18 @@ public class ArquivosBancoPanel extends Panel {
 	}
 
 	private Component comboStatus() {
-		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviados","Recebidos" }));
+		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviado","Recebido","Aguardando" }));
 		return new CheckBoxMultipleChoice<String>("statusArquivos",	new Model<ArrayList<String>>(statusSelect), choices);
 	}
 	
-	private TextField<String> campoDataEnvio() {
-		return dataEnvio = new TextField<String>("dataEnvio", new Model<String>(DataUtil.localDateToString(new LocalDate())));
+	private TextField<LocalDate> dataEnvioInicio() {
+		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
+		dataEnvioInicio.setRequired(true);
+		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
+		return dataEnvioInicio;
+	}
+	
+	private TextField<LocalDate> dataEnvioFinal() {
+		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
 	}
 }

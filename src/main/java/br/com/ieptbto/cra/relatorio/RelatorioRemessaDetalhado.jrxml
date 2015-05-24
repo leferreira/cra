@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
+<!-- 2015-05-18T14:47:48 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RetornoSinteticoBanco" columnCount="9" printOrder="Horizontal" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="89" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28e5392a-2b17-468c-9da6-4b66a8cfc921">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="NOME_ARQUIVO" class="java.lang.String"/>
+	<parameter name="DATA_ENVIO" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="nossoNumero" class="java.math.BigInteger"/>
+	<field name="nomeDevedor" class="java.lang.String"/>
+	<field name="documentoDevedor" class="java.lang.String"/>
+	<field name="nomeSacador" class="java.lang.String"/>
+	<field name="documentoSacador" class="java.lang.String"/>
+	<field name="numeroTitulo" class="java.lang.String"/>
+	<field name="valorTitulo" class="java.math.BigDecimal"/>
+	<field name="valorSaldoTitulo" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="82" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="379" height="59" uuid="15e2a4ca-5cd8-40fb-9f83-0d476fa73dac"/>
+				<imageExpression><![CDATA["C:/Users/Thasso Araújo/git/cra/src/main/webapp/img/ieptb.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="379" y="29" width="422" height="30" uuid="1f6653a1-3aa4-42e2-bece-a1e9b5d30425"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO DE ARQUIVO DE REMESSA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="50"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="-1" width="802" height="25" uuid="0956ba67-8341-4a3d-86de-ca65df3f2ebd">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="-2" width="80" height="26" uuid="83bee9f1-6f29-4080-989a-5c6cdd87704b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nosso Número]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="0" width="210" height="24" uuid="2e34b259-068b-4ee3-8c97-aa66c945dc22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Devedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="0" width="210" height="24" uuid="0d6554cc-d613-4917-bc48-e04814d8ebaa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sacador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="0" width="100" height="24" uuid="65abe669-e47a-4ddb-96c9-cfabafa26f28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Título]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="0" width="100" height="24" uuid="86135bfb-1b42-47c9-b76c-a59471ead16c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Titulo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="702" y="0" width="100" height="24" uuid="fdbbff23-d265-4976-af75-201c1ac7238b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Titulo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="-1" width="802" height="25" backcolor="#F2EBDF" uuid="530fd5c5-68c2-4f63-9e22-4dfa4ec6be95">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="80" height="23" uuid="4bcecfd8-7879-48b0-8456-3cb1056a9f75"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nossoNumero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="210" height="23" uuid="cc1c2198-8094-4b69-86b9-24eed5a6bd16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nomeDevedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="0" width="210" height="24" uuid="e6ebc8c9-060f-40ae-92db-02e06057f8f5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nomeSacador}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="1" width="100" height="23" uuid="1d428ae8-4ced-4abe-97ea-be6501e7c021"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{numeroTitulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="600" y="1" width="100" height="23" uuid="710840e2-847e-42a5-9da4-bce1123199ab"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{valorTitulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="700" y="1" width="100" height="22" uuid="0cf94f96-cf2e-47dd-ab17-15f6a67d0e73"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorSaldoTitulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="26">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="32" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="-25" width="802" height="57" forecolor="#FFFFFF" backcolor="#B0B0B0" uuid="17c64b3e-2f74-48c5-b750-3c3706ba1df5">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="25">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="801" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="730d81e5-99ca-4380-8396-1fce59009ecb"/>
+			</frame>
+		</band>
+	</lastPageFooter>
+</jasperReport>

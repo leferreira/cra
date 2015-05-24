@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
+<!-- 2015-05-14T19:14:54 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RetornoSinteticoBanco" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28e5392a-2b17-468c-9da6-4b66a8cfc921">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="CRA"/>
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MUNICIPIO" class="java.lang.String"/>
+	<parameter name="DATA_INICIO" class="java.sql.Date"/>
+	<parameter name="DATA_FIM" class="java.sql.Date"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="instituicao" class="java.lang.String"/>
+	<field name="apontados" class="java.math.BigInteger"/>
+	<field name="irregulares" class="java.math.BigInteger"/>
+	<field name="valorSaldo" class="java.math.BigDecimal"/>
+	<field name="valorTitulo" class="java.math.BigDecimal"/>
+	<field name="totalTitulos" class="java.math.BigInteger"/>
+	<variable name="totalTitulos1" class="java.math.BigInteger" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalTitulos}]]></variableExpression>
+	</variable>
+	<variable name="apontados1" class="java.math.BigInteger" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{apontados}]]></variableExpression>
+	</variable>
+	<variable name="irregulares1" class="java.math.BigInteger" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{irregulares}]]></variableExpression>
+	</variable>
+	<variable name="valorTitulo1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorTitulo}]]></variableExpression>
+	</variable>
+	<variable name="valorSaldo1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorSaldo}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<image>
+				<reportElement x="0" y="0" width="379" height="60" uuid="15e2a4ca-5cd8-40fb-9f83-0d476fa73dac">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA["C:/Users/Thasso Araújo/git/cra/src/main/webapp/img/ieptb.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="379" y="30" width="422" height="30" uuid="1f6653a1-3aa4-42e2-bece-a1e9b5d30425"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO SINTÉTICO DE CONFIRMAÇÃO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="39">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="4" y="18" width="375" height="21" uuid="3f65da62-b633-479c-910e-521459d47121"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Município: " + $P{MUNICIPIO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="-1" width="802" height="25" uuid="0956ba67-8341-4a3d-86de-ca65df3f2ebd">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="2" width="280" height="20" uuid="59b20e8a-99d7-4266-a700-97eab0c95e55"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Município]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="401" y="2" width="100" height="20" uuid="13714dd7-9933-4e8f-9a83-942a406d0d0d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apontados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="501" y="2" width="100" height="20" uuid="ec35b887-a6d7-4146-a96e-3eddc2b1a511"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Devolvidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="301" y="2" width="100" height="20" uuid="d708d5fb-643a-4f8f-ba43-915c93f38f6a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Títulos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="602" y="1" width="100" height="22" uuid="1f344685-6a35-418f-9498-aac4efde40ea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Titulo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="702" y="1" width="100" height="22" uuid="32723a6b-b9de-4dad-94c9-07583dc401a0"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vlr. Saldo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="-1" width="802" height="30" backcolor="#F2EBDF" uuid="530fd5c5-68c2-4f63-9e22-4dfa4ec6be95">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
+				<reportElement mode="Transparent" x="601" y="3" width="100" height="20" backcolor="#F5F5F5" uuid="95ecb84d-0714-4930-871a-b0bea4b2e113">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorTitulo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
+				<reportElement mode="Transparent" x="701" y="3" width="100" height="20" backcolor="#F5F5F5" uuid="2e2cec1b-6247-4238-b04c-5a02d9ae30d6">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorSaldo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="501" y="3" width="100" height="20" backcolor="#F5F5F5" uuid="ae304189-1f7a-46d3-9931-d4076341cbb6">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{irregulares}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="401" y="3" width="100" height="20" backcolor="#F5F5F5" uuid="389649eb-4b7e-4fc7-a5e7-54e4e63c4319">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{apontados}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="301" y="3" width="100" height="20" backcolor="#F5F5F5" uuid="d93dbf6d-2ce1-4b3f-8524-b1059b51e111">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalTitulos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="3" width="271" height="20" uuid="ef65c7a4-c588-481d-9308-9f0d08d8beb8"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{instituicao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="73">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="69" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="3c8f2df9-6d35-4588-9adc-7f8ee62c9810">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="41" width="278" height="20" uuid="b166d89a-8c5a-41db-a823-fb368724242a">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="2" width="802" height="25" uuid="b84cbd0c-5ed7-4c1c-b166-796a6bab31ec">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="500" y="3" width="100" height="20" uuid="799b2942-adeb-476a-9de7-7d839aff04d0"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Devolvidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="3" width="100" height="20" uuid="2e5f76ec-82eb-41eb-b989-496a458ad1b4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Títulos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="602" y="3" width="100" height="20" uuid="b1fb83c4-0d59-4fd7-91e6-ed54de2280b7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Titulo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="702" y="1" width="100" height="22" uuid="44d73d28-e4e3-4822-9087-1a9d2c471213"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vlr. Saldo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="3" width="100" height="20" uuid="bd40638c-3547-4080-af86-939c9ef548e3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apontados]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="300" y="41" width="100" height="19" uuid="811e22f3-4bfd-4654-a1a0-c46433d2f5b6"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalTitulos1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="401" y="40" width="99" height="20" uuid="c65c4d18-4b69-415c-acc7-66265e3cc74c"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{apontados1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="501" y="41" width="99" height="18" uuid="1bd4e954-d813-41ed-ad2c-1c6fdfdbad44"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{irregulares1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
+				<reportElement x="600" y="41" width="100" height="18" uuid="8a2821c2-1451-40e2-9ef3-68aa7391ebfe"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{valorTitulo1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
+				<reportElement x="701" y="40" width="99" height="18" uuid="1ae6978e-90f7-4ead-837c-86b0226d6a5b"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{valorSaldo1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<lastPageFooter>
+		<band height="28">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="4" y="6" width="250" height="20" uuid="1aba79c3-e6f9-45ca-bc1d-dc3eb318e5f7"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="614" y="6" width="187" height="20" uuid="3bd363d1-993f-406c-85e1-3b7d219a0f36"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página: " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

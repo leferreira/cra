@@ -1,0 +1,34 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-2 control-label" for="nomeArquivo">Nome do Arquivo:</label>  
+  <div class="col-md-6">
+  <input id="nomeArquivo" name="nomeArquivo" maxlength="13" type="text" wicket:id="nomeArquivo" placeholder="" class="form-control input-md">
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-2 control-label" for="date">Per&iacute;odo:</label>  
+  <div class="col-md-2">
+  	<input id="date" name="date" type="text" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioInicio"  class="form-control input-md">
+  </div>
+  <div class="col-md-2">
+  	<input id="date1" name="date1" type="text" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioFinal" class="form-control input-md">
+  </div>
+</div>
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-2 control-label" for="portador">Portador:</label>
+  <div class="col-md-6">
+    <select id="portador" wicket:id="portador" name="portador" class="form-control">
+      <option value="1">Option one</option>
+    </select>
+  </div>
+</div>
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-2 control-label" for="enviar"></label>
+  <div class="col-md-6">
+    <button id="enviar" name="enviar" wicket:id="botaoBuscar" class="btn btn-primary">Buscar</button>
+  </div>
+</div>
+</wicket:panel>

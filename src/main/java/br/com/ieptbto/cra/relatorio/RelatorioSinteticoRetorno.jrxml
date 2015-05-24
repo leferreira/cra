@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-05-11T18:46:26 -->
+<!-- 2015-05-14T19:20:34 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RetornoSinteticoBanco" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28e5392a-2b17-468c-9da6-4b66a8cfc921">
 	<property name="ireport.zoom" value="1.9487171000000127"/>
 	<property name="ireport.x" value="297"/>
@@ -208,7 +208,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeMunicipio}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
 				<reportElement mode="Transparent" x="648" y="3" width="77" height="20" backcolor="#F5F5F5" uuid="f2d3a797-9520-453a-8a13-f61fbfdf5663">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -219,7 +219,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorCusta}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
 				<reportElement mode="Transparent" x="725" y="3" width="77" height="20" backcolor="#F5F5F5" uuid="2e2cec1b-6247-4238-b04c-5a02d9ae30d6">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -278,7 +278,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pagos}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
 				<reportElement mode="Transparent" x="494" y="3" width="77" height="20" backcolor="#F5F5F5" uuid="95ecb84d-0714-4930-871a-b0bea4b2e113">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -289,7 +289,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorSaldo}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
 				<reportElement mode="Transparent" x="571" y="3" width="77" height="20" backcolor="#F5F5F5" uuid="587801a6-ca15-41c2-a7cc-f006cc80e7f5">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -303,9 +303,7 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="75">
-			<property name="local_mesure_unitheight" value="pixel"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<band height="74">
 			<rectangle>
 				<reportElement x="0" y="5" width="802" height="69" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="abf1b129-db17-4fee-9e3c-84d3e5cdb066">
 					<property name="local_mesure_unitheight" value="pixel"/>
@@ -372,28 +370,28 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$V{protestados1}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
 				<reportElement x="495" y="43" width="77" height="20" uuid="03f41683-1d31-46fd-86a8-8e263e31f74e"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{valorSaldo1}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
 				<reportElement x="572" y="43" width="77" height="20" uuid="7e6e706b-9896-4074-9a54-915b52c1012a"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{valorRepasse1}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
 				<reportElement x="649" y="43" width="77" height="20" uuid="b60676b8-2034-4f03-aff1-bbd2394d29e8"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{valorCusta1}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
 				<reportElement x="726" y="43" width="77" height="20" uuid="12b71a69-3732-4766-bde3-75a7dac99e8d"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>

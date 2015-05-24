@@ -42,7 +42,8 @@ public class CraMenu extends Panel {
 
 		/**Menus Relatorios*/
 		menuLateral.addItem("RelatorioSintetico", rolesIncluir);
-		menuLateral.addItem("RelatorioAnalitico", rolesIncluir);
+//		menuLateral.addItem("RelatorioAnalitico", rolesIncluir);
+		menuLateral.addItem("RelatorioArquivosTitulos", rolesIncluir);
 
 		/**Menu batimento*/
 	    menuLateral.addItem("Batimento", rolesIncluir);

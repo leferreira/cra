@@ -2,92 +2,118 @@
 <meta charset="UTF8">
 </head>
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
-	<div class="panel panel-primary">
-		<div class="panel-heading">Instituições</div>
-		<div class="panel-body">
-			<fieldset>
-				<legend class="legend">Cadastro de Instituição<a href="InstituicoesPage" style="float: right; font-size: 16px;"><span class="fa fa-mail-reply"></span>Voltar a página anterior!</a>
-				</legend>
-				<div class="col-lg-10 col-md-offset-1" style="text-align: left;">
-					<div class="panel-body-right">
-						<div class="form-group">
-							<label for="instituicao">Intituicao:&nbsp;
-								<small>(Nome Fantasia)</small></label> 
-							<input id="nomeFantasia" autofocus="autofocus" name="nomeFantasia"
-								type="text" wicket:id="nomeFantasia" placeholder="Nome Fantasia" class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="razaoSocial">Razão Social:</label> <input
-								id="razaoSocial" name="razaoSocial" type="text"
-								wicket:id="razaoSocial" placeholder="Razão Social"
-								class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="cnpj">CNPJ:</label> <input id="cnpj" name="cnpj"
-								type="text" wicket:id="cnpj" placeholder="CNPJ" class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="codCompensacao">Código Compensação:</label> <input
-								id="codCompensacao" name="codCompensacao" type="text"
-								wicket:id="codigoCompensacao" placeholder="Código Compensação"
-								class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="responsavel">Agência Centralizadora:</label> <input
-								id="agenciaCentralizadora" name="agenciaCentralizadora" type="text"
-								wicket:id="agenciaCentralizadora"
-								placeholder="Agência Centralizadora" class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="valorConfirmacao">Vlr. Confirmação:</label> <input
-								id="valorConfirmacao" name="valorConfirmacao" type="text"
-								wicket:id="valorConfirmacao" placeholder="Valor Confirmação"
-								class="form-control" />
-						</div>
-			<!-- 				<br	style="clear: both;" /> -->
-						<div class="form-group">
-							<label class="control-label" for="situacao">Situação:</label>
-							<div class="radio inline">
-								<span wicket:id="status"></span>
-							</div>
-						</div>
-					</div>
-					<div class="panel-body-left">
-						<div class="control-group">
-							<label class="control-label" for="tipoInstituicao">Tipo Instituição:</label>
-							<div class="controls">
-								<select wicket:id="tipoInstituicao" id="tipoInstituicao" class="form-control"></select>
-							</div>
-						</div>
-						<br>
-						<div class="form-group">
-							<label for="email">Email:</label> <input id="email" name="email"
-								type="text" wicket:id="email" placeholder="Email"
-								class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="contato">Contato:</label> <input id="telefone"
-								name="contato" type="text" wicket:id="contato" placeholder="Contato"
-								class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="responsavel">Responsável:</label> <input id="responsavel"
-								name="responsavel" type="text" wicket:id="responsavel"
-								placeholder="Responsável" class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="endereco">Endereço:</label>
-							<textarea id="endereco" name="endereco" rows="4" wicket:id="endereco"
-								placeholder="Endereço" class="form-control"></textarea>
-						</div>
-					</div>
-					<button wicket:id="botaoSalvar" type="submit" class="btn btn-primary" style="margin-top: 50px; margin-right: 5%;">Salvar</button>
-					</div>
-			</fieldset>
+<div class="row">
+	<!-- Coluna 1-->
+	<div class="col-md-6"> 
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="nomeFantasia">Nome Fantasia:</label>  
+		  <div class="col-md-6">
+		  <input id="nomeFantasia" name="nomeFantasia" type="text" wicket:id="nomeFantasia" placeholder="" class="form-control input-md">
+		    
+		  </div>
 		</div>
-		<div class="panel-footer">
-			<p>Formulário de cadastro de instituição (bancos,órgãos públicos ou convênios)&nbsp;na CRA-TO. Os campos com
-				* são obrigatórios!</p>
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="razaoSocial">Razão Social:</label>  
+		  <div class="col-md-6">
+		  <input id="razaoSocial" name="razaoSocial" type="text" placeholder="" wicket:id="razaoSocial" class="form-control input-md">
+		  </div>
+		</div>
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="cnpj">CNPJ:</label>  
+		  <div class="col-md-6">
+		  <input id="cnpj" name="cnpj" type="text" placeholder="" wicket:id="cnpj" class="form-control input-md">
+		  </div>
+		</div>
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="codigoCompensacao">Código Compensação:</label>  
+		  <div class="col-md-6">
+		  <input id="codigoCompensacao" wicket:id="codigoCompensacao" name="codigoCompensacao" type="text" placeholder="" class="form-control input-md">
+		    
+		  </div>
+		</div>
+		
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="agencia">Agência Centralizadora:</label>  
+		  <div class="col-md-6">
+		  <input id="agencia" name="agencia" type="text" wicket:id="agenciaCentralizadora" placeholder="" class="form-control input-md">
+		    
+		  </div>
+		</div>
+		
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="confirmacao">Valor Confirmação:</label>  
+		  <div class="col-md-6">
+		  <input id="confirmacao" wicket:id="valorConfirmacao" name="confirmacao" type="text" placeholder="" class="form-control input-md">
+		    
+		  </div>
 		</div>
 	</div>
+	<!-- Coluna 2-->
+	<div class="col-md-6"> 
+	<!-- Select Basic -->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="tipo">Tipo Instituição:</label>
+		  <div class="col-md-6">
+		    <select id="tipo" wicket:id="tipoInstituicao" name="tipo" class="form-control">
+		      <option value="1">1</option>
+		    </select>
+		  </div>
+		</div>
+		<!-- Multiple Radios (inline) -->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="situacao">Situação:</label>
+		  <div class="col-md-5" style="text-align: left;"> 
+		    <label class="radio-inline inline" wicket:id="status" for="situacao-0">
+		      <input type="radio" name="situacao" id="situacao-0" value="1" checked="checked">
+		      1
+		    </label>
+		  </div>
+		</div>
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="email">Email:</label>  
+		  <div class="col-md-6">
+		  <input id="email" name="email" type="text" placeholder="" wicket:id="email" class="form-control input-md">
+		  </div>
+		</div>
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="contato">Contato:</label>  
+		  <div class="col-md-6">
+		  <input id="contato" name="contato" wicket:id="contato" type="text" placeholder="" class="form-control input-md">
+		    
+		  </div>
+		</div>
+		
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="responsavel">Responsável:</label>  
+		  <div class="col-md-6">
+		  <input id="responsavel" wicket:id="responsavel" name="responsavel" type="text" placeholder="" class="form-control input-md">
+		    
+		  </div>
+		</div>
+		
+		<!-- Textarea -->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="endereco">Endereço:</label>
+		  <div class="col-md-6">                     
+		    <textarea class="form-control" wicket:id="endereco" id="endereco" name="endereco"></textarea>
+		  </div>
+		</div>
+		<!-- Button -->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="salvar"></label>
+		  <div class="col-md-6">
+		    <button wicket:id="botaoSalvar" id="salvar" name="salvar" class="btn btn-primary">Salvar</button>
+		  </div>
+		</div>
+	</div>
+</div>
 </wicket:panel>

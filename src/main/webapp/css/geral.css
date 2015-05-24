@@ -1,3 +1,4 @@
+
 body {
 	/*background-color: #337ab7;*/
 	background-color: #f8f8f8;
@@ -23,6 +24,11 @@ body {
 .link{
   color: #337AB7 !important;
   font-weight: bold;
+}
+.filtros{
+	width: 33%; 
+	float: left;
+	text-align: left;
 }
 .panel-label{
   float: left;
@@ -64,25 +70,34 @@ body {
 	display: none !important; 
 }
 .checkbox-inline label {
-	margin-left: 30px !important; 
+	margin-left: 25px !important; 
+}
+.radio-inline label {
+	margin-left: 25px !important; 
 }
 .checkbox-inline input{
+	margin-left: 10px !important;
+}
+.radio-inline input{
 	margin-left: 10px !important;
 }
 .ajuste{
 	margin-left: 0px !important;
 }
+.inline {
+	margin-left: -25px;
+}
 .inline br {
 	display: none !important; 
-}
-.inline label {
-	margin-left: 30px !important; 
 }
 .inline input{
 	margin-left: 10px !important;
 }
 th{
 	text-align: center;
+}
+td{
+	  text-align: center;
 }
 .table{
 	font-size: 12px !important;

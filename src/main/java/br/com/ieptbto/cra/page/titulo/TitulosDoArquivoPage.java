@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -18,6 +17,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -31,19 +31,28 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	TituloMediator tituloMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	RemessaMediator remessaMediator;
 
 	private Remessa remessa;
 	private List<TituloRemessa> titulos;
 	
 	public TitulosDoArquivoPage(Remessa remessa) {
-		this.titulos = tituloMediator.buscarTitulosPorArquivo(remessa);
+		this.titulos = tituloMediator.buscarTitulosPorRemessa(remessa, getUser().getInstituicao());
 		this.remessa = remessa;
 		carregarInformacoes();
 		add(carregarListaTitulos());
 	}
 
+	public TitulosDoArquivoPage(Arquivo arquivo) {
+//		this.remessa = remessaMediator.buscarRemessa(arquivo.getRemessas().get(0));
+//		this.titulos = (List<TituloRemessa>)remessa.getTitulos();
+		carregarInformacoes();
+		add(carregarListaTitulos());
+	}
+	
 	private ListView<TituloRemessa> carregarListaTitulos() {
-		return new ListView<TituloRemessa>("listViewTituloArquivo",buscarTitulos()) {
+		return new ListView<TituloRemessa>("listViewTituloArquivo", getTitulos()) {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -71,18 +80,6 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		        item.add(linkHistorico);
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
 				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
-			}
-		};
-	}
-	
-	public IModel<List<TituloRemessa>> buscarTitulos() {
-		return new LoadableDetachableModel<List<TituloRemessa>>() {
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected List<TituloRemessa> load() {
-				return getTitulos();
 			}
 		};
 	}
@@ -115,14 +112,11 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		return new TextField<String>("tipo", new Model<String>(remessa.getArquivo().getTipoArquivo().getTipoArquivo().getLabel()));
 	}
 	
+	
 	public List<TituloRemessa> getTitulos() {
 		return titulos;
 	}
-	
-	public void setTitulos( List<TituloRemessa> titulos) {
-		this.titulos = titulos;
-	}
-	
+
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(remessa.getArquivo());

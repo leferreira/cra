@@ -1,115 +1,135 @@
 <head>
 <meta charset="UTF8">
 </head>
-<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR"
-	charset="UTF8">
-	 <div class="panel panel-primary">
-		<div class="panel-heading">Cart&oacute;rios</div>
-			<div class="panel-body">
-				<fieldset>
-					<legend class="legend">Cadastro de Cartório
-						<span style="float: right;">
-							<a href="CartoriosPage" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>Voltar para Lista!</a>
-						</span>
-					</legend>
-				<div class="col-lg-10 col-md-offset-1" style="text-align: left;">
-					<div class="panel-body-right">
-						<div class="form-group">
-							<label for="instituicao">Nome do Cartório:&nbsp;<small>(NomeFantasia)</small></label>
-							<input id="nomeFantasia" name="nomeFantasia"
-								autofocus="autofocus" type="text" wicket:id="nomeFantasia"
-								placeholder="Nome Fantasia" class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="razaoSocial">Razão Social:</label> <input
-								id="razaoSocial" name="razaoSocial" type="text"
-								wicket:id="razaoSocial" placeholder="Razão Social"
-								class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="cnpj">CNPJ:</label> <input id="cnpj" name="cnpj"
-								type="text" wicket:id="cnpj" placeholder="CNPJ"
-								class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="email">Email:</label> <input id="email" name="email"
-								type="text" wicket:id="email" placeholder="Email"
-								class="form-control" />
-						</div>
-						<div class="form-group">
-							<label class="control-label" for="situacao">Situação:</label><br
-								style="clear: both;" />
-							<div class="radio inline">
-								<span wicket:id="status"></span>
-							</div>
-						</div>
-					</div>
-					<div class="panel-body-left">
-						<div class="form-group">
-							<label for="municipio">Município:&nbsp;<small>(Comarca)</small></label>
-							<div class="controls">
-								<select id="municipio" wicket:id="municipio"
-									class="form-control">
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="contato">Contato:</label> <input id="telefone"
-								name="contato" type="text" wicket:id="contato"
-								placeholder="Contato" class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="responsavel">Responsável:</label> <input
-								id="responsavel" name="responsavel" type="text"
-								wicket:id="responsavel" placeholder="Responsável"
-								class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="endereco">Endereço:</label>
-							<textarea id="endereco" name="endereco" rows="4"
-								wicket:id="endereco" placeholder="Endereço" class="form-control"></textarea>
-						</div>
-					</div>
-					<br style="clear: both;" />
-					<fieldset>
-						<legend>
-							<small>Informações para Depósitos</small>
-						</legend>
-						<div class="panel-body-right">
-							<div class="form-group">
-								<label for="banco">Banco:</label> <input id="banco" name="banco"
-									type="text" wicket:id="bancoContaCorrente"
-									placeholder="Nome do Banco" class="form-control" />
-							</div>
-							<div class="form-group">
-								<label for="agencia">Agência:</label> <input id="agencia"
-									name="agencia" type="text" wicket:id="agenciaContaCorrente"
-									placeholder="Número da Agência" class="form-control" />
-							</div>
-						</div>
-						<div class="panel-body-left">
-							<div class="form-group">
-								<label for="favorecido">Favorecido:</label> <input
-									id="favorecido" name="favorecido" type="text"
-									wicket:id="favorecido" placeholder="Nome do Favorecido"
-									class="form-control" />
-							</div>
-							<div class="form-group">
-								<label for="conta">Conta Corrente:</label> <input id="conta"
-									name="conta" type="text" wicket:id="numeroContaCorrente"
-									placeholder="Número da Conta" class="form-control" />
-							</div>
-							<br style="clear: both;" />
-						</div>
-					</fieldset>
-					<button wicket:id="botaoSalvar" style="margin-right: 5%;"
-						type="submit" class="btn btn-primary">Salvar</button>
-				</div>
-			</fieldset>
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+<div class="row">
+	<!-- Coluna 1-->
+	<div class="col-md-6"> 
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="nomeFantasia">Nome Fantasia:</label>  
+		  <div class="col-md-6">
+		  <input id="nomeFantasia" name="nomeFantasia" type="text" wicket:id="nomeFantasia" placeholder="" class="form-control input-md">
+		    
+		  </div>
 		</div>
-		<div class="panel-footer">
-			<p>Formulário de cadastro de um cartório na CRA-TO. Os campos com
-				* são obrigatórios!</p>
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="razaoSocial">Razão Social:</label>  
+		  <div class="col-md-6">
+		  <input id="razaoSocial" name="razaoSocial" type="text" placeholder="" wicket:id="razaoSocial" class="form-control input-md">
+		  </div>
+		</div>
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="cnpj">CNPJ:</label>  
+		  <div class="col-md-6">
+		  <input id="cnpj" name="cnpj" type="text" placeholder="" wicket:id="cnpj" class="form-control input-md">
+		  </div>
+		</div>
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="email">Email:</label>  
+		  <div class="col-md-6">
+		  <input id="email" name="email" type="text" placeholder="" wicket:id="email" class="form-control input-md">
+		  </div>
 		</div>
 	</div>
+	<!-- Coluna 2-->
+	<div class="col-md-6"> 
+		<!-- Select Basic -->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="municipio">Município:</label>
+		  <div class="col-md-6">
+		    <select id="municipio" name="municipio" wicket:id="municipio" class="form-control">
+		      <option value="1">1</option>
+		    </select>
+		  </div>
+		</div>
+		<!-- Multiple Radios (inline) -->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="situacao">Situação:</label>
+		  <div class="col-md-5" style="text-align: left;"> 
+		    <label class="radio-inline inline" wicket:id="status" for="situacao-0">
+		      <input type="radio" name="situacao" id="situacao-0" value="1" checked="checked">
+		      1
+		    </label>
+		  </div>
+		</div>
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="contato">Contato:</label>  
+		  <div class="col-md-6">
+		  <input id="contato" name="contato" type="text" placeholder="" wicket:id="contato" class="form-control input-md">
+		    
+		  </div>
+		</div>
+		
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="responsavel">Reponsável:</label>  
+		  <div class="col-md-6">
+		  <input id="responsavel" name="responsavel" type="text" placeholder="" wicket:id="responsavel" class="form-control input-md">
+		    
+		  </div>
+		</div>
+		<!-- Textarea -->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="endereco">Endereço:</label>
+		  <div class="col-md-6">                     
+		    <textarea class="form-control" id="endereco" wicket:id="endereco" name="endereco"></textarea>
+		  </div>
+		</div>
+	</div>
+</div>
+<fieldset>
+	<legend class="legend">
+		<small>Informações para Depósitos</small>
+	</legend>
+	<div class="row">
+		<!-- Coluna 1-->
+		<div class="col-md-6"> 
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="banco">Banco:</label>  
+			  <div class="col-md-6">
+			  <input id="banco" name="banco" type="text" wicket:id="bancoContaCorrente" placeholder="" class="form-control input-md">
+			  </div>
+			</div>
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="agencia">Agência:</label>  
+			  <div class="col-md-6">
+			  <input id="agencia" name="agencia" type="text" wicket:id="agenciaContaCorrente" placeholder="" class="form-control input-md">
+			  </div>
+			</div>
+		</div>
+		<!-- Coluna 2-->
+		<div class="col-md-6"> 
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="conta">Conta Corrente:</label>  
+			  <div class="col-md-6">
+			  <input id="conta" name="conta" wicket:id="numeroContaCorrente" type="text" placeholder="" class="form-control input-md">
+			    
+			  </div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="favorecido">Favorecido:</label>  
+			  <div class="col-md-6">
+			  <input id="favorecido" name="favorecido" wicket:id="favorecido" type="text" placeholder="" class="form-control input-md">
+			  </div>
+			</div>
+			<!-- Button -->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="save"></label>
+			  <div class="col-md-6">
+			    <button wicket:id="botaoSalvar"	id="save" name="save" class="btn btn-primary">Salvar</button>
+			  </div>
+			</div>
+		</div>
+	</div>
+</fieldset>
 </wicket:panel>

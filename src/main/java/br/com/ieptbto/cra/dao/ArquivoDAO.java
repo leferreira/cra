@@ -101,8 +101,10 @@ public class ArquivoDAO extends AbstractBaseDAO {
 		return StatusArquivo.class.cast(criteria.uniqueResult());
 	}
 
-	public Arquivo buscarArquivoPorNome(Arquivo arquivo) {
-		// TODO Auto-generated method stub
-		return null;
+	public Arquivo buscarArquivosPorNome(String nomeArquivo) {
+		Criteria criteria = getCriteria(Arquivo.class);
+		criteria.add(Restrictions.eq("nomeArquivo", nomeArquivo));
+		criteria.setMaxResults(1);
+		return Arquivo.class.cast(criteria.uniqueResult());
 	}
 }

@@ -84,4 +84,8 @@ public class MunicipioMediator {
 	public Municipio buscaMunicipioPorCodigoIBGE(Integer codigoMunicipio) {
 		return municipioDao.buscaMunicipioPorCodigoIBGE(codigoMunicipio);
 	}
+	
+	public Municipio buscarMunicipioDoCartorio(Instituicao cartorio) {
+		return municipioDao.buscarMunicipioDoCartorio(cartorio);
+	}
 }

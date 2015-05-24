@@ -37,7 +37,7 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("Cartório")){
 			form.add(new BuscarArquivoCartorioPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
 		} else {
-			form.add(new BuscarArquivoBancoPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
+			form.add(new BuscarArquivoInstituicaoPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
 		}
 		add(form);
 	}

@@ -3,6 +3,9 @@ package br.com.ieptbto.cra.page.relatorio;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
@@ -15,7 +18,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
@@ -24,14 +26,13 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
-import br.com.ieptbto.cra.relatorio.RelatorioUtils;
+import br.com.ieptbto.cra.util.DataUtil;
 
 
 /**
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("unused")
 public class RelatorioCraPanel extends Panel{
 
 	/***/
@@ -50,12 +51,15 @@ public class RelatorioCraPanel extends Panel{
 	private TextField<LocalDate> fieldDataFim;
 	private DropDownChoice<Instituicao> fieldPortador;
 	private DropDownChoice<Municipio> fieldMunicipio;
+	
+	private LocalDate dataInicio;
+	private LocalDate dataFim;
+	private Municipio pracaProtesto;
+	private Instituicao bancoPortador;
 	private String tipoArquivo;
-	private WebResponse webResponse;
 	
 	public RelatorioCraPanel(String id, IModel<?> model) {
 		super(id, model);
-		this.webResponse = (WebResponse)getResponse();    
 		add(comboTipoArquivos());
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
@@ -66,45 +70,33 @@ public class RelatorioCraPanel extends Panel{
 				private static final long serialVersionUID = 1L;
 				@Override
 				public void onSubmit() {
-//					LocalDate dataInicio = new LocalDate();
-//					LocalDate dataFim = new LocalDate();
-//					Municipio pracaProtesto = new Municipio();
-//					Instituicao bancoPortador = new Instituicao();
-//					
-//					if (fieldDataInicio.getDefaultModelObject() != null){
-//						if (fieldDataFim.getDefaultModelObject() != null){
-//							dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
-//							dataFim = DataUtil.stringToLocalDate(fieldDataFim.getDefaultModelObject().toString());
-//							if (!dataInicio.isBefore(dataFim))
-//								if (!dataInicio.isEqual(dataFim))
-//									throw new InfraException("A data de início deve ser antes da data fim.");
-//						}else
-//							throw new InfraException("As duas datas devem ser preenchidas.");
-//					} 
-//					if (fieldPortador.getModelObject() != null)
-//						bancoPortador = fieldPortador.getModelObject();
-//					if (fieldMunicipio.getModelObject() != null)
-//						pracaProtesto = (Municipio)fieldMunicipio.getDefaultModelObject();
-//					
-//					try {
-//						if (bancoPortador != null && pracaProtesto == null) { 
-//							JasperPrint jasperPrint = relatorioMediator.novoRelatorioSintetico(bancoPortador, getTipoArquivo(), dataInicio, dataFim);
-//							getRelatorioUtils().gerarRelatorio(webResponse, jasperPrint);
-//
-//						} else if (bancoPortador == null && pracaProtesto != null){ 
-//							JasperPrint jasperPrint = relatorioMediator.novoRelatorioSinteticoPorMunicipio(pracaProtesto , getTipoArquivo(),dataInicio, dataFim );
-//							getRelatorioUtils().gerarRelatorio(webResponse, jasperPrint);
-//
-//						} else 
-//							error("Deve ser selecionado o portador ou o município!");
-//						
-//					}catch (JRException e) {
-//						logger.error(e.getMessage(), e);
-//						error("Não foi possível gerar o relatório. \n Entre em contato com a CRA!");
-//					} catch (Exception e) {
-//						logger.error(e.getMessage(), e);
-//						error("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
-//					}
+					
+					verificarDatas();
+					
+					if (fieldPortador.getDefaultModelObject() != null)
+						bancoPortador = (Instituicao)fieldPortador.getDefaultModelObject();
+					if (fieldMunicipio.getDefaultModelObject() != null)
+						pracaProtesto = (Municipio)fieldMunicipio.getDefaultModelObject();
+					
+					try {
+						if (bancoPortador != null && pracaProtesto == null) { 
+							JasperPrint jasperPrint = relatorioMediator.novoRelatorioSintetico(bancoPortador, tipoArquivo, dataInicio, dataFim);
+							setResponsePage(new VerRelatorioPage(jasperPrint));
+
+						} else if (bancoPortador == null && pracaProtesto != null){ 
+							JasperPrint jasperPrint = relatorioMediator.novoRelatorioSinteticoPorMunicipio(pracaProtesto , tipoArquivo,dataInicio, dataFim );
+							setResponsePage(new VerRelatorioPage(jasperPrint));
+							
+						} else 
+							error("Deve ser selecionado o portador ou o município!");
+						
+					}catch (JRException e) {
+						logger.error(e.getMessage(), e);
+						error("Não foi possível gerar o relatório. \n Entre em contato com a CRA!");
+					} catch (Exception e) {
+						logger.error(e.getMessage(), e);
+						error("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
+					}
 				}
 		});
 	}
@@ -131,16 +123,19 @@ public class RelatorioCraPanel extends Panel{
 	
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		this.fieldMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.listarTodos(), renderer);
-		return fieldMunicipio;
+		return fieldMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.listarTodos(), renderer);
 	}
 
-	private String getTipoArquivo() {
-		return tipoArquivo;
+	private void verificarDatas(){
+		if (fieldDataInicio.getDefaultModelObject() != null){
+			if (fieldDataFim.getDefaultModelObject() != null){
+				dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
+				dataFim = DataUtil.stringToLocalDate(fieldDataFim.getDefaultModelObject().toString());
+				if (!dataInicio.isBefore(dataFim))
+					if (!dataInicio.isEqual(dataFim))
+						error("A data de início deve ser antes da data fim.");
+			}else
+				error("As duas datas devem ser preenchidas.");
+		} 
 	}
-	
-	private RelatorioUtils getRelatorioUtils(){
-		return new RelatorioUtils();
-	}
-	
 }

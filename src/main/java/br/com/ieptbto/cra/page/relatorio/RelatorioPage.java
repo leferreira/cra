@@ -1,7 +1,5 @@
 package br.com.ieptbto.cra.page.relatorio;
 
-import java.io.Serializable;
-
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.markup.html.form.Form;
@@ -13,11 +11,16 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
+/**
+ * @author Thasso Araújo
+ *
+ */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
-public class RelatorioPage extends BasePage<Remessa> implements Serializable{
+public class RelatorioPage extends BasePage<Remessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
+	
 	private Remessa remessa;
 	private Form<Remessa> form;
 	private Instituicao instituicao;
@@ -25,14 +28,14 @@ public class RelatorioPage extends BasePage<Remessa> implements Serializable{
 	public RelatorioPage() {
 		this.remessa  = new Remessa();
 		this.instituicao = getUser().getInstituicao();
-		
 		form = new Form<Remessa>("form", getModel());
+		
 		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA")){
 			form.add(new RelatorioCraPanel("relatorioPanel", getModel()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("Cartório")){
-			form.add(new RelatorioCartorioPanel("relatorioPanel", getModel(), getInstituicao()));
+			form.add(new RelatorioCartorioPanel("relatorioPanel", getModel(), instituicao));
 		} else {
-			form.add(new RelatorioBancoPanel("relatorioPanel", getModel(), getInstituicao()));
+			form.add(new RelatorioInstituicaoPanel("relatorioPanel", getModel(), getInstituicao()));
 		}
 		add(form);
 	}
@@ -55,7 +58,6 @@ public class RelatorioPage extends BasePage<Remessa> implements Serializable{
 	public void setInstituicao(Instituicao instituicao) {
 		this.instituicao = instituicao;
 	}
-
 
 	@Override
 	protected IModel<Remessa> getModel() {

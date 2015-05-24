@@ -10,6 +10,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -17,15 +18,16 @@ import org.joda.time.LocalDate;
 import org.postgresql.util.PSQLException;
 import org.springframework.stereotype.Repository;
 
-import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
+import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.relatorio.SinteticoJRDataSource;
 
@@ -37,39 +39,13 @@ import br.com.ieptbto.cra.relatorio.SinteticoJRDataSource;
 @Repository
 public class TituloDAO extends AbstractBaseDAO {
 
-	private Instituicao instituicaoUsuario;
-
-	public List<TituloRemessa> buscarTitulosRemessa(Arquivo arquivo){
-		Criteria criteria = getCriteria(TituloRemessa.class);
-		criteria.createAlias("remessa", "remessa");
-		criteria.add(Restrictions.eq("remessa.arquivo", arquivo));
-		return criteria.list();
-	}
-	
-	public List<Confirmacao> buscarTitulosConfirmacao(Arquivo arquivo) {
-		Criteria criteria = getCriteria(Confirmacao.class);
-		criteria.createAlias("remessa", "remessa");
-		criteria.add(Restrictions.eq("remessa.arquivo", arquivo));
-		return criteria.list();
-	}
-	
-	public List<Retorno> buscarTitulosRetorno(Arquivo arquivo) {
-		Criteria criteria = getCriteria(Retorno.class);
-		criteria.createAlias("remessa", "remessa");
-		criteria.add(Restrictions.eq("remessa.arquivo", arquivo));
-		return criteria.list();
-	}
-	
 	public List<TituloRemessa> buscarListaTitulos(TituloRemessa titulo, Usuario user) {
-		this.instituicaoUsuario = user.getInstituicao();
+		Instituicao instituicaoUsuario = user.getInstituicao();
 
 		Criteria criteria = getCriteria(TituloRemessa.class);
 		criteria.createAlias("remessa", "remessa");
-		criteria.createAlias("remessa.arquivo", "arquivo");
-		if (!instituicaoUsuario.getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
-			criteria.add(Restrictions.disjunction().add(Restrictions.eq("remessa.instituicaoDestino", instituicaoUsuario))
-			        .add(Restrictions.eq("arquivo.instituicaoEnvio", instituicaoUsuario)));
-		}
+		criteria.add(filtrarTitulosPorInstituicao(instituicaoUsuario));
+		
 		if (titulo.getCodigoPortador() != null)
 			criteria.add(Restrictions.ilike("codigoPortador", titulo.getCodigoPortador(), MatchMode.ANYWHERE));
 		
@@ -98,6 +74,33 @@ public class TituloDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
+	public List<TituloRemessa> buscarTitulosPorRemessa(Remessa remessa, Instituicao instituicaoCorrente) {
+		Criteria criteria = getCriteria(TituloRemessa.class);
+		
+		if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)){
+			criteria.createAlias("remessa", "remessa");
+			criteria.add(Restrictions.eq("remessa", remessa));
+		} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
+			criteria.createAlias("confirmacao", "confirmacao");
+			criteria.add(Restrictions.eq("confirmacao.remessa", remessa));
+		} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+			criteria.createAlias("retorno", "retorno");
+			criteria.add(Restrictions.eq("retorno.remessa", remessa));
+		}
+		
+		filtrarTitulosPorInstituicao(instituicaoCorrente);
+		return criteria.list();
+	}
+	
+	private Disjunction filtrarTitulosPorInstituicao(Instituicao instituicaoCorrente){
+		Disjunction disj = Restrictions.disjunction();
+		
+		if (!instituicaoCorrente.getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
+			disj.add(Restrictions.eq("remessa.instituicaoOrigem", instituicaoCorrente)).add(Restrictions.eq("remessa.instituicaoDestino", instituicaoCorrente));
+		}
+		return disj;
+	}
+	
 	public TituloRemessa buscarTituloPorChave(TituloRemessa titulo) {
 		Criteria criteria = getCriteria(TituloRemessa.class);
 		criteria.add(Restrictions.eq("codigoPortador", titulo.getCodigoPortador()));
