@@ -86,7 +86,7 @@ public class BatimentoPage extends BasePage<Batimento> {
 	                item.add(new Check<Remessa>("checkbox", item.getModel()));
 	                item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 					item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
-					item.add(new Label("valorPagos", batimentoMediator.buscarValorDeTitulosPagos(retorno)));
+					item.add(new Label("valorPagos", "R$ " + batimentoMediator.buscarValorDeTitulosPagos(retorno)));
 					Link linkArquivo = new Link("linkArquivo") {
 			            /***/
 						private static final long serialVersionUID = 1L;

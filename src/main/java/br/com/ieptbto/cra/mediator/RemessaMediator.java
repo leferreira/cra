@@ -66,6 +66,10 @@ public class RemessaMediator {
 		return remessas;
 	}
 
+	public List<Remessa> buscarRemessasDoArquivo(Arquivo arquivo, Instituicao instituicao){
+		return remessaDao.buscarRemessasDoArquivo(instituicao, arquivo.getNomeArquivo());
+	}
+	
 	public Arquivo buscarArquivoPorNome(String nomeArquivo) {
 		return arquivoDAO.buscarArquivosPorNome(nomeArquivo);
 	}

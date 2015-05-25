@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.mediator;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
@@ -18,8 +17,7 @@ import br.com.ieptbto.cra.dao.RemessaDAO;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.relatorio.RelatorioUtils;
@@ -54,9 +52,9 @@ public class RelatorioMediator{
 	 * @throws IOException 
 	 * 	
 	 * */
-	public JasperPrint novoRelatorioDeArquivoDetalhado(Instituicao instituicao,Arquivo arquivo) throws JRException{
+	public JasperPrint novoRelatorioDeArquivoDetalhado(Instituicao instituicao,Arquivo arquivo, List<TituloRemessa> titulos) throws JRException{
 		this.instituicao=instituicao;
-		return chamarRelatorioArquivoDetalhado(arquivo);
+		return chamarRelatorioArquivoDetalhado(arquivo, titulos);
 	}
 	
 	/**
@@ -169,19 +167,11 @@ public class RelatorioMediator{
 		return null;
 	}
 	
-	@SuppressWarnings("rawtypes")
-	private JasperPrint chamarRelatorioArquivoDetalhado(Arquivo arquivo) throws JRException{
-		List<Titulo> listTitulos = new ArrayList<Titulo>();
+	private JasperPrint chamarRelatorioArquivoDetalhado(Arquivo arquivo, List<TituloRemessa> titulos) throws JRException{
 
 		TipoArquivoEnum tipo = TipoArquivoEnum.getTipoArquivoEnum(arquivo.getTipoArquivo().getTipoArquivo().getConstante());
-		List<Remessa> remessas = remessaDao.buscarRemessasDoArquivo(instituicao, arquivo.getNomeArquivo());
-		
-		for (Remessa r: remessas){
-			listTitulos.addAll(r.getTitulos());
-		}
-		
 		if (tipo.equals(TipoArquivoEnum.REMESSA)) {
-			return getRelatorioUtils().relatorioArquivoDetalhadoRemessa(arquivo, remessas);
+			return getRelatorioUtils().relatorioArquivoDetalhadoRemessa(arquivo, titulos);
 		} else if (tipo.equals(TipoArquivoEnum.CONFIRMACAO)) {
 //			return getRelatorioUtils().relatorioArquivoDetalhadoConfirmacao(confirmacao);
 		} else if (tipo.equals(TipoArquivoEnum.RETORNO)) {

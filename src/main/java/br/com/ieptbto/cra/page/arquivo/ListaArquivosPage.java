@@ -3,7 +3,6 @@ package br.com.ieptbto.cra.page.arquivo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -75,18 +74,6 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
 				item.add(new Label("valor", "R$ " + remessa.getArquivo().getRemessas().get(0).getRodape().getSomatorioValorRemessa()));
 				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
-				item.add(downloadArquivo(remessa.getArquivo()));
-			}
-			
-			private Component downloadArquivo(final Arquivo file) {
-				return new Link<Arquivo>("downloadArquivo") {
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-					}
-				};
 			}
 		};
 	}

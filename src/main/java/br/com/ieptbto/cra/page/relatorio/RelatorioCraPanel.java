@@ -71,7 +71,16 @@ public class RelatorioCraPanel extends Panel{
 				@Override
 				public void onSubmit() {
 					
-					verificarDatas();
+					if (fieldDataInicio.getDefaultModelObject() != null){
+						if (fieldDataFim.getDefaultModelObject() != null){
+							dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
+							dataFim = DataUtil.stringToLocalDate(fieldDataFim.getDefaultModelObject().toString());
+							if (!dataInicio.isBefore(dataFim))
+								if (!dataInicio.isEqual(dataFim))
+									error("A data de início deve ser antes da data fim.");
+						}else
+							error("As duas datas devem ser preenchidas.");
+					} 
 					
 					if (fieldPortador.getDefaultModelObject() != null)
 						bancoPortador = (Instituicao)fieldPortador.getDefaultModelObject();
@@ -124,18 +133,5 @@ public class RelatorioCraPanel extends Panel{
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
 		return fieldMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.listarTodos(), renderer);
-	}
-
-	private void verificarDatas(){
-		if (fieldDataInicio.getDefaultModelObject() != null){
-			if (fieldDataFim.getDefaultModelObject() != null){
-				dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
-				dataFim = DataUtil.stringToLocalDate(fieldDataFim.getDefaultModelObject().toString());
-				if (!dataInicio.isBefore(dataFim))
-					if (!dataInicio.isEqual(dataFim))
-						error("A data de início deve ser antes da data fim.");
-			}else
-				error("As duas datas devem ser preenchidas.");
-		} 
 	}
 }

@@ -16,7 +16,7 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -138,11 +138,11 @@ public class RelatorioUtils {
 	 * @return
 	 * @throws JRException 
 	 * */
-	public JasperPrint relatorioArquivoDetalhadoRemessa(Arquivo file, List<Remessa> remessas) throws JRException {
+	public JasperPrint relatorioArquivoDetalhadoRemessa(Arquivo file, List<TituloRemessa> titulos) throws JRException {
 		parametros.put("ARQUIVO", file.getNomeArquivo());
 		parametros.put("DATA_ENVIO", DataUtil.localDateToString(file.getDataEnvio()));
 		
-		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(remessas);
+		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulos);
 		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioRemessaDetalhado.jrxml"));
 		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 	}

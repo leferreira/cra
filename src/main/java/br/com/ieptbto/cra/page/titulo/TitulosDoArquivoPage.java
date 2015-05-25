@@ -45,8 +45,8 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	}
 
 	public TitulosDoArquivoPage(Arquivo arquivo) {
-//		this.remessa = remessaMediator.buscarRemessa(arquivo.getRemessas().get(0));
-//		this.titulos = (List<TituloRemessa>)remessa.getTitulos();
+		this.remessa = arquivo.getRemessas().get(0);
+		this.titulos = tituloMediator.buscarTitulosPorArquivo(arquivo, getUser().getInstituicao());
 		carregarInformacoes();
 		add(carregarListaTitulos());
 	}
@@ -112,11 +112,10 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		return new TextField<String>("tipo", new Model<String>(remessa.getArquivo().getTipoArquivo().getTipoArquivo().getLabel()));
 	}
 	
-	
 	public List<TituloRemessa> getTitulos() {
 		return titulos;
 	}
-
+	
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(remessa.getArquivo());

@@ -1,7 +1,5 @@
 package br.com.ieptbto.cra.page.relatorio;
 
-import java.util.ArrayList;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
@@ -23,7 +21,7 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.page.arquivo.ListaArquivosPage;
+import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -52,7 +50,6 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 	private Municipio municipio;
 	private Instituicao portador;
 	
-	private ArrayList<String> tiposArquivo = new ArrayList<String>();
 	private DropDownChoice<Municipio> comboMunicipio;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
@@ -77,7 +74,7 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 			@Override
 			public void onSubmit() {
 				Arquivo arquivoBuscado = new Arquivo();
-
+				
 				if (dataEnvioInicio.getDefaultModelObject() != null){
 					if (dataEnvioFinal.getDefaultModelObject() != null){
 						dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
@@ -99,12 +96,11 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 					if (model.getObject().getNomeArquivo() != null) {
 						arquivoBuscado = remessaMediator.buscarArquivoPorNome(model.getObject().getNomeArquivo());
 						
-						if (arquivoBuscado != null)
-							relatorioMediator.novoRelatorioDeArquivoDetalhado(instituicao, arquivoBuscado);
+						if (arquivoBuscado != null) 
+							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
 						else
 							error ("Arquivo não foi encontrado ou não existe!");
 					}
-					setResponsePage(new ListaArquivosPage(arquivoBuscado, municipio, portador, dataInicio, dataFim, tiposArquivo));
 				
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());

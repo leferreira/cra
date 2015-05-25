@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.dao.TituloDAO;
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
@@ -28,24 +29,10 @@ public class TituloMediator {
 	
 	public List<TituloRemessa> buscarTitulosPorRemessa(Remessa remessa, Instituicao instituicaoCorrente){
 		return tituloDAO.buscarTitulosPorRemessa(remessa, instituicaoCorrente);
-				
-//		List<TituloRemessa> listaTitulos = new ArrayList<TituloRemessa>();
-//		if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
-//			return tituloDAO.buscarTitulosRemessa(remessa.getArquivo());
-//		} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
-//				List<Confirmacao> listaConfirmacao = tituloDAO.buscarTitulosConfirmacao(remessa.getArquivo());
-//				/* Arrumar a busca*/
-//				for (Confirmacao c: listaConfirmacao){
-//					listaTitulos.add(c.getTitulo());
-//				}
-//				return listaTitulos;
-//			} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
-//				List<Retorno> listaRetorno = tituloDAO.buscarTitulosRetorno(remessa.getArquivo());
-//				for (Retorno r: listaRetorno){
-//					listaTitulos.add(r.getTitulo());
-//				}
-//				return listaTitulos;
-//		}
+	}
+	
+	public List<TituloRemessa> buscarTitulosPorArquivo(Arquivo arquivo, Instituicao instituicaoCorrente){
+		return tituloDAO.buscarTitulosPorArquivo(arquivo, instituicaoCorrente);
 	}
 	
 	public List<Historico> getHistoricoTitulo(TituloRemessa titulo){

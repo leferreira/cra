@@ -58,7 +58,16 @@ public class RelatorioInstituicaoPanel extends Panel{
 				@Override
 				public void onSubmit() {
 					
-					verificarDatas();
+					if (fieldDataInicio.getDefaultModelObject() != null){
+						if (fieldDataFim.getDefaultModelObject() != null){
+							dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
+							dataFim = DataUtil.stringToLocalDate(fieldDataFim.getDefaultModelObject().toString());
+							if (!dataInicio.isBefore(dataFim))
+								if (!dataInicio.isEqual(dataFim))
+									error("A data de início deve ser antes da data fim.");
+						}else
+							error("As duas datas devem ser preenchidas.");
+					}
 					
 					try {
 						JasperPrint jasperPrint = relatorioMediator.novoRelatorioSintetico(portador, tipoArquivo, dataInicio, dataFim);
@@ -89,18 +98,5 @@ public class RelatorioInstituicaoPanel extends Panel{
 	
 	private TextField<LocalDate> dataEnvioFinal() {
 		return fieldDataFim = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
-	}
-	
-	private void verificarDatas(){
-		if (fieldDataInicio.getDefaultModelObject() != null){
-			if (fieldDataFim.getDefaultModelObject() != null){
-				dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
-				dataFim = DataUtil.stringToLocalDate(fieldDataFim.getDefaultModelObject().toString());
-				if (!dataInicio.isBefore(dataFim))
-					if (!dataInicio.isEqual(dataFim))
-						error("A data de início deve ser antes da data fim.");
-			}else
-				error("As duas datas devem ser preenchidas.");
-		}
 	}
 }
