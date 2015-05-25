@@ -20,7 +20,8 @@ public interface IRemessaWS {
 
 	@WebMethod
 	@GET
-	public String arquivo(@WebParam(name = "nomeArquivo") String nomeArquivo, @WebParam(name = "login", header = true) String login,
-	        @WebParam(name = "senha", header = true) String senha, @WebParam(name = "remessa") ArquivoVO remessa);
+	public String arquivo(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "remessa") ArquivoVO remessa,
+	        @WebParam(name = "user_sign") String assinatura);
 
 }

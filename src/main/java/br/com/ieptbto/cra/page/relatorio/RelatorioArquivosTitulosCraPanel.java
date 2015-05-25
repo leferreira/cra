@@ -28,6 +28,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("unused")
 public class RelatorioArquivosTitulosCraPanel extends Panel  {
 
 	/***/

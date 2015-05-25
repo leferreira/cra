@@ -39,6 +39,7 @@ import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 @Path("/RemessaService")
 public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 
+	private static final String CONSTANTE_REMESSA_XML = "remessa";
 	public static final Logger logger = Logger.getLogger(RemessaServiceImpl.class);
 	RemessaMediator remessaMediator;
 	UsuarioMediator usuarioMediator;
@@ -49,25 +50,26 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 	ArquivoVO arquivoRecebido;
 	List<RemessaVO> remessas;
 
-	@WebMethod(operationName = "arquivo")
 	@GET
+	@WebMethod
 	@Override
-	public String arquivo(@WebParam(name = "nomeArquivo") String nomeArquivo, @WebParam(name = "login") String login,
-	        @WebParam(name = "senha") String senha, @WebParam(name = "remessa") ArquivoVO remessa) {
+	public String arquivo(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "remessa") ArquivoVO remessa,
+	        @WebParam(name = "user_sign") String assinatura) {
 		context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		remessaMediator = (RemessaMediator) context.getBean("remessaMediator");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 		this.arquivoRecebido = remessa;
-		converterArquivo();
 
 		setUsuario(login, senha);
 
-		if (getArquivoRecebido() == null) {
+		if (getArquivoRecebido() == null || getArquivoRecebido().getCabecalhos() == null) {
 			ArquivoVO arquivo = getArquivo(nomeArquivo);
 			return setResposta(arquivo, nomeArquivo);
 		}
+		converterArquivo();
 
-		return gerarMensagem(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo));
+		return gerarMensagem(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo), "relatorio");
 
 	}
 
@@ -85,12 +87,12 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 			return setRespostaArquivoInexistente(nomeArquivo);
 		}
 
-		return gerarMensagem(arquivo);
+		return gerarMensagem(arquivo, CONSTANTE_REMESSA_XML);
 	}
 
 	private String setRespostaUsuarioInvalido(String nomeArquivo) {
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), CodigoErro.FALHA_NA_AUTENTICACAO);
-		return gerarMensagem(msg.getMensagemErro());
+		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_REMESSA_XML);
 
 	}
 
@@ -108,7 +110,7 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 		}
 
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), codigo);
-		return gerarMensagem(msg.getMensagemErro());
+		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_REMESSA_XML);
 	}
 
 	private ArquivoVO getArquivo(String nome) {
@@ -124,7 +126,7 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 		return usuario;
 	}
 
-	private String gerarMensagem(Object mensagem) {
+	private String gerarMensagem(Object mensagem, String nomeNo) {
 		Writer writer = new StringWriter();
 		JAXBContext context;
 		try {
@@ -133,7 +135,7 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.setProperty("jaxb.encoding", "ISO-8859-1");
-			JAXBElement<Object> element = new JAXBElement<Object>(new QName("remessa"), Object.class, mensagem);
+			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
 			marshaller.marshal(element, writer);
 			logger.info("Remessa processada com sucesso.");
 			return writer.toString();
