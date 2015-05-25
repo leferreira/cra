@@ -153,8 +153,12 @@ public class Rodape extends AbstractEntidade<Rodape> {
 		rodape.setNumeroCodigoPortador(rodapeVO.getNumeroCodigoPortador());
 		rodape.setNumeroSequencialRegistroArquivo(rodapeVO.getNumeroSequencialRegistroArquivo());
 		rodape.setSomatorioQtdRemessa(new BigDecimal(rodapeVO.getSomatorioQtdRemessa()));
-		rodape.setSomatorioValorRemessa(new BigDecimal(rodapeVO.getSomatorioValorRemessa()));
+		rodape.setSomatorioValorRemessa(new BigDecimal(getValorTotalTitulos(rodapeVO.getSomatorioValorRemessa())));
 
 		return rodape;
+	}
+
+	private static Integer getValorTotalTitulos(String valor) {
+		return Integer.parseInt(valor) / 100;
 	}
 }

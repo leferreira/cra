@@ -16,6 +16,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = { "dataEnvio", "tipoArquivo", "nomeArquivo", "dataMovimento", "portador", "usuario" })
 public class Descricao {
 
+	public static String XML_UPLOAD_REMESSA = "XML_UPLOAD_REMESSA";
+
 	@XmlElement(name = "dataEnvio")
 	private String dataEnvio;
 
