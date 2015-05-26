@@ -139,7 +139,7 @@ public class RelatorioUtils {
 	 * @throws JRException 
 	 * */
 	public JasperPrint relatorioArquivoDetalhadoRemessa(Arquivo file, List<TituloRemessa> titulos) throws JRException {
-		parametros.put("ARQUIVO", file.getNomeArquivo());
+		parametros.put("NOME_ARQUIVO", file.getNomeArquivo());
 		parametros.put("DATA_ENVIO", DataUtil.localDateToString(file.getDataEnvio()));
 		
 		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulos);
@@ -148,7 +148,7 @@ public class RelatorioUtils {
 	}
 
 	public JasperPrint relatorioArquivoDetalhadoConfirmacao(Arquivo arquivo, List<TituloRemessa> titulos) throws JRException {
-		parametros.put("ARQUIVO", arquivo.getNomeArquivo());
+		parametros.put("NOME_ARQUIVO", arquivo.getNomeArquivo());
 		parametros.put("DATA_ENVIO", DataUtil.localDateToString(arquivo.getDataEnvio()));
 		
 		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulos);
@@ -157,7 +157,7 @@ public class RelatorioUtils {
 	}
 
 	public JasperPrint relatorioArquivoDetalhadoRetorno(Arquivo arquivo, List<TituloRemessa> titulos) throws JRException {
-		parametros.put("ARQUIVO", arquivo.getNomeArquivo());
+		parametros.put("NOME_ARQUIVO", arquivo.getNomeArquivo());
 		parametros.put("DATA_ENVIO", DataUtil.localDateToString(arquivo.getDataEnvio()));
 		
 		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulos);

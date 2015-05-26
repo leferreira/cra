@@ -21,7 +21,6 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 
 /**
@@ -70,15 +69,13 @@ public class RemessaDAO extends AbstractBaseDAO {
 			criteria.createAlias("a.tipoArquivo", "tipoArquivo");
 			criteria.add(filtrarRemessaPorTipoArquivo(tipos));
 		}
+		
+		if (!situacoes.isEmpty()){
+			criteria.add(filtrarRemessaPorSituacao(situacoes, instituicao));
+		}
 		//filtrar por enviados recebidos ou agurdando
 		
-		if (dataInicio != null) 
-			criteria.add(Restrictions.between("dataRecebimento", dataInicio, dataFim));
-		else {
-			criteria.createAlias("a.statusArquivo", "statusArquivo");
-			criteria.add(Restrictions.eq("statusArquivo.status", SituacaoArquivo.ENVIADO.getLabel()));
-		}
-		
+		criteria.add(Restrictions.between("dataRecebimento", dataInicio, dataFim));
 		criteria.addOrder(Order.asc("dataRecebimento"));
 		return criteria.list();
 	}
@@ -110,6 +107,20 @@ public class RemessaDAO extends AbstractBaseDAO {
 		Disjunction disjunction = Restrictions.disjunction();
 		for (String tipo : tipos){
 			disjunction.add(Restrictions.eq("tipoArquivo.tipoArquivo", TipoArquivoEnum.getTipoArquivoEnum(tipo)));
+		}
+		return disjunction;
+	}
+	
+	/**
+	 * Enviados/Recebidos
+	 * */
+	private Disjunction filtrarRemessaPorSituacao(ArrayList<String> situacao, Instituicao instituicao){
+		Disjunction disjunction = Restrictions.disjunction();
+		for (String s : situacao){
+			if (s.equals("Enviados"))
+				disjunction.add(Restrictions.eq("instituicaoOrigem", instituicao));
+			else 
+				disjunction.add(Restrictions.eq("instituicaoDestino", instituicao));
 		}
 		return disjunction;
 	}

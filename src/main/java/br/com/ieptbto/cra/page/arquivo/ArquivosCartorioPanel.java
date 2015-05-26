@@ -39,10 +39,10 @@ public class ArquivosCartorioPanel extends Panel {
 	private Instituicao instituicao;
 	private ArrayList<String> tiposSelect = new ArrayList<String>();
 	private ArrayList<String> statusSelect = new ArrayList<String>();
-	private LocalDate dataInicio;
-	private LocalDate dataFim;
-	private TextField<LocalDate> dataEnvioInicio;
-	private TextField<LocalDate> dataEnvioFinal;
+	private LocalDate dataInicio = new LocalDate();
+	private LocalDate dataFim = new LocalDate();
+	private TextField<String> dataEnvioInicio;
+	private TextField<String> dataEnvioFinal;
 
 	public ArquivosCartorioPanel(String id, IModel<?> model, Instituicao instituicao) {
 		super(id, model);
@@ -100,7 +100,7 @@ public class ArquivosCartorioPanel extends Panel {
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
-				item.add(new LabelValorMonetario("valor", remessa.getArquivo().getRemessas().get(0).getRodape().getSomatorioValorRemessa()));
+				item.add(new LabelValorMonetario("valor", remessa.getRodape().getSomatorioValorRemessa()));
 				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
 				item.add(downloadArquivo(remessa.getArquivo()));
 			}
@@ -139,18 +139,18 @@ public class ArquivosCartorioPanel extends Panel {
 	}
 
 	private Component comboStatus() {
-		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviado","Recebido","Aguardando" }));
+		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviados","Recebidos" }));
 		return new CheckBoxMultipleChoice<String>("statusArquivos",	new Model<ArrayList<String>>(statusSelect), choices);
 	}
 	
-	private TextField<LocalDate> dataEnvioInicio() {
-		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
+	private TextField<String> dataEnvioInicio() {
+		dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
 		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 	
-	private TextField<LocalDate> dataEnvioFinal() {
-		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
+	private TextField<String> dataEnvioFinal() {
+		return dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataInicio)));
 	}
 }
