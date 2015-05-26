@@ -15,6 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -72,7 +73,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 				}
-				item.add(new Label("valorTitulo", tituloLista.getValorTitulo().toString()));
+				item.add(new LabelValorMonetario("valorTitulo", tituloLista.getValorTitulo()));
 				Link linkHistorico = new Link("linkHistorico") {
 		            /***/
 					private static final long serialVersionUID = 1L;

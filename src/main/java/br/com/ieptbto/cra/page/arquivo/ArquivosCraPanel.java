@@ -19,6 +19,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
@@ -101,7 +102,7 @@ public class ArquivosCraPanel extends Panel {
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
-				item.add(new Label("valor", "R$ " + remessa.getArquivo().getRemessas().get(0).getRodape().getSomatorioValorRemessa()));
+				item.add(new LabelValorMonetario("valor", remessa.getArquivo().getRemessas().get(0).getRodape().getSomatorioValorRemessa()));
 				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
 				item.add(downloadArquivo(remessa.getArquivo()));
 			}

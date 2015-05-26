@@ -19,10 +19,10 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Titulo;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 
 /**
  * @author Thasso Araújo
@@ -55,7 +55,7 @@ public class RemessaDAO extends AbstractBaseDAO {
 		criteria.add(filtraRemessaPorInsituicaoOuPraca(portador, pracaProtesto));
 		
 		criteria.add(Restrictions.between("dataRecebimento", dataInicio, dataFim));
-		criteria.addOrder(Order.desc("dataRecebimento"));
+		criteria.addOrder(Order.asc("dataRecebimento"));
 		return criteria.list();
 	}
 	
@@ -79,7 +79,7 @@ public class RemessaDAO extends AbstractBaseDAO {
 			criteria.add(Restrictions.eq("statusArquivo.status", SituacaoArquivo.ENVIADO.getLabel()));
 		}
 		
-		criteria.addOrder(Order.desc("dataRecebimento"));
+		criteria.addOrder(Order.asc("dataRecebimento"));
 		return criteria.list();
 	}
 	
@@ -146,20 +146,28 @@ public class RemessaDAO extends AbstractBaseDAO {
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "arquivo");
 		
-		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA.getLabel())) {
+		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
 			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", instituicao)).add(Restrictions.eq("instituicaoDestino", instituicao)));
 		}
 		criteria.add(Restrictions.eq("arquivo.nomeArquivo", nomeArquivo));
 		List<Remessa> remessas = criteria.list();
 		
-		for (Remessa r: remessas){
-			Criteria criteriaTitulo = getCriteria(Titulo.class);
-			criteriaTitulo.createAlias("remessa", "remessa");
-			criteriaTitulo.add(Restrictions.eq("remessa", r));
+		for (Remessa remessa: remessas){
+			Criteria criteriaTitulo = getCriteria(TituloRemessa.class);
+			if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)){
+				criteriaTitulo.createAlias("remessa", "remessa");
+				criteriaTitulo.add(Restrictions.eq("remessa", remessa));
+			} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
+				criteriaTitulo.createAlias("confirmacao", "confirmacao");
+				criteriaTitulo.add(Restrictions.eq("confirmacao.remessa", remessa));
+			} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+				criteriaTitulo.createAlias("retorno", "retorno");
+				criteriaTitulo.add(Restrictions.eq("retorno.remessa", remessa));
+			}
 			criteriaTitulo.addOrder(Order.asc("pracaProtesto"));
 			titulos = criteriaTitulo.list();
 			
-			r.setTitulos(titulos);
+			remessa.setTitulos(titulos);
 		}
 		return remessas;
 	}

@@ -78,9 +78,8 @@ public class RelatorioInstituicaoPanel extends Panel{
 						error("Não foi possível gerar o relatório. \n Entre em contato com a CRA!");
 					} catch (Exception e) {
 						logger.error(e.getMessage(), e);
-						error("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
+						error("Não foi possível gerar o relatório. A busca não retornou resultados neste período! ");
 					}
-					setResponsePage(new RelatorioPage());
 				}
 		});
 	}

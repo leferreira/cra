@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.dao.ArquivoDAO;
 import br.com.ieptbto.cra.dao.TipoArquivoDAO;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
@@ -79,5 +81,10 @@ public class ArquivoMediator {
 
 	public Arquivo getArquivo() {
 		return arquivo;
+	}
+
+	public List<Arquivo> buscarArquivosPorInstituicao(Instituicao instituicao,	ArrayList<String> tiposSelect, 
+			ArrayList<String> statusSelect,	LocalDate dataInicio, LocalDate dataFim) {
+		return arquivoDAO.buscarArquivosPorInstituicao(instituicao, tiposSelect, statusSelect, dataInicio, dataFim);
 	}
 }

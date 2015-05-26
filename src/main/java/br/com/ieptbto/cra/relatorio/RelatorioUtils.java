@@ -146,4 +146,42 @@ public class RelatorioUtils {
 		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioRemessaDetalhado.jrxml"));
 		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 	}
+
+	public JasperPrint relatorioArquivoDetalhadoConfirmacao(Arquivo arquivo, List<TituloRemessa> titulos) throws JRException {
+		parametros.put("ARQUIVO", arquivo.getNomeArquivo());
+		parametros.put("DATA_ENVIO", DataUtil.localDateToString(arquivo.getDataEnvio()));
+		
+		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulos);
+		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioConfirmacaoDetalhado.jrxml"));
+		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+	}
+
+	public JasperPrint relatorioArquivoDetalhadoRetorno(Arquivo arquivo, List<TituloRemessa> titulos) throws JRException {
+		parametros.put("ARQUIVO", arquivo.getNomeArquivo());
+		parametros.put("DATA_ENVIO", DataUtil.localDateToString(arquivo.getDataEnvio()));
+		
+		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulos);
+		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioRetornoDetalhado.jrxml"));
+		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+	}
+
+	public JasperPrint relatorioDeTitulosPorInstituicao(Instituicao instituicao, List<TituloRemessa> titulos,LocalDate dataInicio, LocalDate dataFim) throws JRException{
+		parametros.put("DATA_INICIO", DataUtil.localDateToString(dataInicio));
+		parametros.put("DATA_FIM", DataUtil.localDateToString(dataFim));
+		parametros.put("INSTITUICAO", instituicao.getNomeFantasia());
+		
+		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulos);
+		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioTitulos.jrxml"));
+		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+	}
+	
+	public JasperPrint relatorioDeTitulosPorMunicipio(Municipio municipio, List<TituloRemessa> titulos,LocalDate dataInicio, LocalDate dataFim) throws JRException{
+		parametros.put("DATA_INICIO", DataUtil.localDateToString(dataInicio));
+		parametros.put("DATA_FIM", DataUtil.localDateToString(dataFim));
+		parametros.put("MUNICIPIO", municipio.getNomeMunicipio());
+		
+		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulos);
+		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioTitulosPorMunicipio.jrxml"));
+		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+	}
 }

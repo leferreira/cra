@@ -22,10 +22,8 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -41,7 +39,7 @@ public class ArquivosInstituicaoPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	RemessaMediator remessasMediator;
+	ArquivoMediator arquivoMediator;
 
 	private Instituicao instituicao;
 	private LocalDate dataInicio;
@@ -67,15 +65,16 @@ public class ArquivosInstituicaoPanel extends Panel {
 							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
-									throw new InfraException("A data de início deve ser antes da data fim.");
+									error("A data de início deve ser antes da data fim.");
 						}else
-							throw new InfraException("As duas datas devem ser preenchidas.");
+							error("As duas datas devem ser preenchidas.");
 					} 
 				} catch (Exception e) {
 					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
 				}
 			}
 		});
+//		add(listViewRemessas());
 		add(listViewArquivos());
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
@@ -83,34 +82,74 @@ public class ArquivosInstituicaoPanel extends Panel {
 		add(comboStatus());
 	}
 
+//	@SuppressWarnings("rawtypes")
+//	private ListView<Remessa> listViewRemessas(){
+//		return new ListView<Remessa>("listView", buscarRemessas()) {
+//			/** */
+//			private static final long serialVersionUID = -3365063971696545653L;
+//
+//			@Override
+//			protected void populateItem(ListItem<Remessa> item) {
+//				final Remessa remessa = item.getModelObject();
+//				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
+//				
+//				Link linkArquivo = new Link("linkArquivo") {
+//		            /***/
+//					private static final long serialVersionUID = 1L;
+//
+//					public void onClick() {
+//		            	setResponsePage(new TitulosDoArquivoPage(remessa));  
+//		            }
+//		        };
+//		        linkArquivo.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
+//		        item.add(linkArquivo);
+//		        
+//				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
+//				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+//				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
+//				item.add(new LabelValorMonetario("valor", remessa.getArquivo().getRemessas().get(0).getRodape().getSomatorioValorRemessa()));
+//				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
+//				item.add(downloadArquivo(remessa.getArquivo()));
+//			}
+//			
+//			@SuppressWarnings("serial")
+//			private Component downloadArquivo(final Arquivo file) {
+//				return new Link<Arquivo>("downloadArquivo") {
+//					
+//					@Override
+//					public void onClick() {
+//					}
+//				};
+//			}
+//		};
+//	}
+	
 	@SuppressWarnings("rawtypes")
-	private ListView<Remessa> listViewArquivos(){
-		return new ListView<Remessa>("listView", buscarRemessas()) {
+	private ListView<Arquivo> listViewArquivos(){
+		return new ListView<Arquivo>("listView", buscarArquivos()) {
 			/** */
 			private static final long serialVersionUID = -3365063971696545653L;
 
 			@Override
-			protected void populateItem(ListItem<Remessa> item) {
-				final Remessa remessa = item.getModelObject();
-				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
+			protected void populateItem(ListItem<Arquivo> item) {
+				final Arquivo arquivo = item.getModelObject();
+				item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
 				
 				Link linkArquivo = new Link("linkArquivo") {
 		            /***/
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
-		            	setResponsePage(new TitulosDoArquivoPage(remessa));  
+		            	setResponsePage(new TitulosDoArquivoPage(arquivo));  
 		            }
 		        };
-		        linkArquivo.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
+		        linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));
 		        item.add(linkArquivo);
 		        
-				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
-				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
-				item.add(new Label("valor", "R$ " + remessa.getArquivo().getRemessas().get(0).getRodape().getSomatorioValorRemessa()));
-				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
-				item.add(downloadArquivo(remessa.getArquivo()));
+				item.add(new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio())));
+				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("status", arquivo.getStatusArquivo().getStatus()));
+				item.add(downloadArquivo(arquivo));
 			}
 			
 			@SuppressWarnings("serial")
@@ -125,14 +164,26 @@ public class ArquivosInstituicaoPanel extends Panel {
 		};
 	}
 
-	private IModel<List<Remessa>> buscarRemessas() {
-		return new LoadableDetachableModel<List<Remessa>>() {
+//	private IModel<List<Remessa>> buscarRemessas() {
+//		return new LoadableDetachableModel<List<Remessa>>() {
+//			/***/
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			protected List<Remessa> load() {
+//				return remessasMediator.buscarRemessaSimples(instituicao, tiposSelect, statusSelect,dataInicio, dataFim);
+//			}
+//		};
+//	}
+	
+	private IModel<List<Arquivo>> buscarArquivos() {
+		return new LoadableDetachableModel<List<Arquivo>>() {
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected List<Remessa> load() {
-				return remessasMediator.buscarRemessaSimples(instituicao, tiposSelect, statusSelect,dataInicio, dataFim);
+			protected List<Arquivo> load() {
+				return arquivoMediator.buscarArquivosPorInstituicao(instituicao, tiposSelect, statusSelect,dataInicio, dataFim);
 			}
 		};
 	}

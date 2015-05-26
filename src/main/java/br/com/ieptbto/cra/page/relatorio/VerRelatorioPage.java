@@ -7,6 +7,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.Response;
 
 /**
  * @author Thasso Araújo
@@ -31,9 +32,14 @@ public class VerRelatorioPage extends WebPage {
 	 */
 	private void gerarRelatorio() throws JRException{
 	   
-		try {            
+		try {    
+			Response response = getRequestCycle().getResponse();
+			OutputStream servletOutputStream = response.getOutputStream();
+//            JRPdfExporter exporter = new JRPdfExporter();
+//			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+//			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+//			exporter.exportReport();
 			
-		  OutputStream servletOutputStream = getRequestCycle().getResponse().getOutputStream();
 	      JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
 		} catch (JRException e) {      
 	      e.printStackTrace();      

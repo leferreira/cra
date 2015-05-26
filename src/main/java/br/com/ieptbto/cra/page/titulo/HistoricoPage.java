@@ -233,11 +233,11 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	public TextField<String> valorTitulo() {
-		return new TextField<String>("valorTitulo", new Model<String>(tituloRemessa.getValorTitulo().toString()));
+		return new TextField<String>("valorTitulo", new Model<String>("R$ " + tituloRemessa.getValorTitulo().toString()));
 	}
 
 	public TextField<String> saldoTitulo() {
-		return new TextField<String>("saldoTitulo", new Model<String>(tituloRemessa.getSaldoTitulo().toString()));
+		return new TextField<String>("saldoTitulo", new Model<String>("R$ " + tituloRemessa.getSaldoTitulo().toString()));
 	}
 
 	public TextField<String> valorCustaCartorio() {

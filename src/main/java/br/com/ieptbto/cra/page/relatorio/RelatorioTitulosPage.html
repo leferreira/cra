@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+		<div class="panel panel-primary">
+			<div class="panel-heading">Relatório de Títulos</div>
+			<div class="panel-body">
+				<fieldset>
+					<legend class="legend">Dados do Relatório</legend>
+					<div class="row form-horizontal">
+						<div class="col-md-6">
+						 	<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="periodo">Período:</label>  
+							  <div class="col-md-4">
+							  	<input id="periodo" name="dataInicio" wicket:id="dataInicio" type="text" placeholder="" disabled="disabled" class="form-control input-md"/>
+							  </div>
+							  <div class="col-md-4">
+							    <input id="periodo" name="dataFim" wicket:id="dataFim" type="text" placeholder="" disabled="disabled" class="form-control input-md"/>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+						 	<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="instituicao" wicket:id="label"></label>  
+							  <div class="col-md-8">
+							  	<input id="instituicao" name="instituicao" wicket:id="instituicao" type="text" placeholder="" disabled="disabled" class="form-control input-md"/>
+							  </div>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<br style="clear: both;"/>
+				<fieldset>
+				<legend class="legend">Títulos
+					<span style="float: right;">
+						<a href="#" wicket:id="gerarRelatorio" style="font-size: 16px;" onclick="target='_blank';return true;" class="btn btn-sm"><span class="fa fa-th-list"></span>&nbsp;Gerar&nbsp;Relatório</a>
+					</span>
+				</legend>
+				<table id="table" class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Nº Título</th>
+							<th>Nosso Número</th>
+							<th>Protocolo</th>
+							<th>Devedor</th>
+							<th>Portador</th>
+							<th>Praça</th>
+							<th>Vlr. Título</th>
+							<th>Situação</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr wicket:id="listViewTitulos">
+							<td wicket:id="numeroTitulo"></td>
+							<td wicket:id="nossoNumero"></td>
+							<td wicket:id="protocolo"></td>
+							<td><a href="#" wicket:id="linkHistorico"><span class="link" wicket:id="nomeDevedor"></span></a></td>
+							<td wicket:id="portador"></td>
+							<td wicket:id="pracaProtesto"></td>
+							<td wicket:id="valorTitulo"></td>
+							<td wicket:id="situacaoTitulo" class="destaque"></td>
+						</tr>
+					</tbody>
+				</table>
+				</fieldset>
+			</div>
+			<div class="panel-footer">
+			</div>
+		</div>
+	</wicket:extend>
+</body>
+</html>

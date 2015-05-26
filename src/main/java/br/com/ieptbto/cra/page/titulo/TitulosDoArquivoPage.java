@@ -2,7 +2,11 @@ package br.com.ieptbto.cra.page.titulo;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
@@ -13,13 +17,16 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.relatorio.VerRelatorioPage;
 import br.com.ieptbto.cra.util.DataUtil;
 @SuppressWarnings("rawtypes")
 public class TitulosDoArquivoPage extends BasePage<Arquivo> {
@@ -33,22 +40,30 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	RemessaMediator remessaMediator;
+	@SpringBean
+	RelatorioMediator relatorioMediator;
 
 	private Remessa remessa;
+	private Arquivo arquivo;
 	private List<TituloRemessa> titulos;
 	
 	public TitulosDoArquivoPage(Remessa remessa) {
-		this.titulos = tituloMediator.buscarTitulosPorRemessa(remessa, getUser().getInstituicao());
+		setTitulos(tituloMediator.buscarTitulosPorRemessa(remessa, getUser().getInstituicao()));
+		setArquivo(remessa.getArquivo());
 		this.remessa = remessa;
 		carregarInformacoes();
 		add(carregarListaTitulos());
+		add(botaoGerarRelatorio());
 	}
 
 	public TitulosDoArquivoPage(Arquivo arquivo) {
-		this.remessa = arquivo.getRemessas().get(0);
-		this.titulos = tituloMediator.buscarTitulosPorArquivo(arquivo, getUser().getInstituicao());
+		setTitulos(tituloMediator.buscarTitulosPorArquivo(arquivo, getUser().getInstituicao()));
+		setRemessa(arquivo);
+		setArquivo(arquivo);
 		carregarInformacoes();
 		add(carregarListaTitulos());
+		add(botaoGerarRelatorio());
+//		add(botaoDownload());
 	}
 	
 	private ListView<TituloRemessa> carregarListaTitulos() {
@@ -79,8 +94,30 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
 		        item.add(linkHistorico);
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
+				item.add(new LabelValorMonetario("valorTitulo", tituloLista.getValorTitulo()));
 				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
 			}
+		};
+	}
+	
+	private Component botaoGerarRelatorio(){
+		return new Link("gerarRelatorio"){
+
+			/***/
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void onClick() {
+				JasperPrint jasperPrint = null;
+				
+				try {
+					jasperPrint = relatorioMediator.novoRelatorioDeArquivoDetalhado(getUser().getInstituicao(), getArquivo(), getTitulos());
+					setResponsePage(new VerRelatorioPage(jasperPrint));
+				
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
+			
 		};
 	}
 	
@@ -91,29 +128,49 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		add(usuarioEnvio());
 		add(tipoArquivo());
 	}
-	
-	public TextField<String> nomeArquivo(){
+
+	private TextField<String> nomeArquivo(){
 		return new TextField<String>("nomeArquivo", new Model<String>(remessa.getArquivo().getNomeArquivo()));
 	}
 	
-	public TextField<String> portador(){
+	private TextField<String> portador(){
 		return new TextField<String>("nomePortador", new Model<String>(remessa.getCabecalho().getNomePortador()));
 	}
 	
-	public TextField<String> dataEnvio(){
+	private TextField<String> dataEnvio(){
 		return new TextField<String>("dataEnvio", new Model<String>(DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
 	}
 	
-	public TextField<String> usuarioEnvio(){
+	private TextField<String> usuarioEnvio(){
 		return new TextField<String>("usuarioEnvio", new Model<String>(remessa.getArquivo().getUsuarioEnvio().getNome()));
 	}
 	
-	public TextField<String> tipoArquivo(){
+	private TextField<String> tipoArquivo(){
 		return new TextField<String>("tipo", new Model<String>(remessa.getArquivo().getTipoArquivo().getTipoArquivo().getLabel()));
 	}
 	
-	public List<TituloRemessa> getTitulos() {
+	private List<TituloRemessa> getTitulos() {
 		return titulos;
+	}
+	
+	public Remessa getRemessa() {
+		return remessa;
+	}
+
+	public void setRemessa(Arquivo arquivo) {
+		this.remessa = remessaMediator.buscarRemessasDoArquivo(arquivo, getUser().getInstituicao()).get(0);
+	}
+
+	public void setArquivo(Arquivo arquivo) {
+		this.arquivo = arquivo;
+	}
+
+	private Arquivo getArquivo(){
+		return arquivo;
+	}
+	
+	public void setTitulos(List<TituloRemessa> titulos) {
+		this.titulos = titulos;
 	}
 	
 	@Override

@@ -21,6 +21,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -39,6 +40,8 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	RemessaMediator remessaMediator;
 	@SpringBean
 	RelatorioMediator relatorioMediator;
+	@SpringBean
+	DownloadMediator downloadMediator;
 
 	private final Arquivo arquivo;
 	private List<Remessa> remessas;
@@ -77,16 +80,18 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
 				item.add(new LabelValorMonetario("valor", remessa.getRodape().getSomatorioValorRemessa()));
 				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
-				item.add(downloadArquivo(remessa.getArquivo()));
+				item.add(downloadArquivoTXT(remessa));
 			}
 
-			private Component downloadArquivo(final Arquivo file) {
+			private Component downloadArquivoTXT(final Remessa remessa) {
 				return new Link<Arquivo>("downloadArquivo") {
 					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
+						
+//						downloadMediator.baixarArquivoTXT(getUser(), remessa);
 					}
 				};
 			}

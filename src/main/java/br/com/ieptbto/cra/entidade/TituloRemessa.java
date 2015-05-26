@@ -72,7 +72,8 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	private String protestoMotivoFalencia;
 	private String instrumentoProtesto;
 	private String complementoRegistro;
-
+	private String situacaoTitulo;
+	
 	@Id
 	@Column(name = "ID_TITULO", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -400,13 +401,13 @@ public class TituloRemessa extends Titulo<TituloRemessa> {
 	@Transient
 	public String getSituacaoTitulo() {
 		if (this.confirmacao == null) {
-			return "S/ CONFIRMAÇÃO";
+			this.situacaoTitulo = "S/CONFIRMAÇÃO";
 		} else if (this.retorno == null) {
-			return "S/ RETORNO";
+			this.situacaoTitulo = "EM ABERTO";
 		} else {
-			return TipoOcorrencia.getTipoOcorrencia(this.retorno.getTipoOcorrencia()).getLabel();
+			this.situacaoTitulo = TipoOcorrencia.getTipoOcorrencia(this.retorno.getTipoOcorrencia()).getLabel();
 		}
-		// / TRATAR ESTADOS DO TITULO
+		return situacaoTitulo;
 	}
 
 	public static TituloRemessa parseTituloVO(TituloVO tituloVO) {

@@ -82,8 +82,8 @@ public class RemessaMediator {
 		return remessaDao.buscarRemessasDoArquivo(instituicao, arquivo.getNomeArquivo());
 	}
 
-	public Arquivo buscarArquivoPorNome(String nomeArquivo) {
-		return arquivoDAO.buscarArquivosPorNome(nomeArquivo);
+	public Arquivo buscarArquivoPorNome(Instituicao instituicao, String nomeArquivo) {
+		return arquivoDAO.buscarArquivosPorNome(instituicao, nomeArquivo);
 	}
 
 	public int buscarTotalRemessas() {
@@ -153,7 +153,7 @@ public class RemessaMediator {
 		}
 
 		for (Exception ex : getErros()) {
-			XmlCraException exception = XmlCraException.class.cast(ex);
+			XmlCraException exception = XmlCraException.class.cast(ex); 
 			Mensagem mensagem = new Mensagem();
 			mensagem.setCodigo(exception.getErro().getCodigo());
 			mensagem.setMunicipio(exception.getCodigoIbge());

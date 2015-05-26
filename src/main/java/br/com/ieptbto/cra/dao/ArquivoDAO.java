@@ -1,11 +1,14 @@
 package br.com.ieptbto.cra.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Historico;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
@@ -99,10 +103,46 @@ public class ArquivoDAO extends AbstractBaseDAO {
 		return StatusArquivo.class.cast(criteria.uniqueResult());
 	}
 
-	public Arquivo buscarArquivosPorNome(String nomeArquivo) {
+	public Arquivo buscarArquivosPorNome(Instituicao instituicao, String nomeArquivo) {
 		Criteria criteria = getCriteria(Arquivo.class);
+		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
+			criteria.createAlias("remessas", "remessas");
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("remessas.instituicaoOrigem", instituicao)).add(Restrictions.eq("remessas.instituicaoDestino", instituicao)));
+		}
 		criteria.add(Restrictions.eq("nomeArquivo", nomeArquivo));
-		criteria.setMaxResults(1);
 		return Arquivo.class.cast(criteria.uniqueResult());
+	}
+
+	public List<Arquivo> buscarArquivosPorInstituicao(Instituicao instituicao, ArrayList<String> tipos, ArrayList<String> situacoes, LocalDate dataInicio, LocalDate dataFim) {
+		Criteria criteria = getCriteria(Arquivo.class);
+		
+		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA")){
+			criteria.createAlias("remessas", "remessas");
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoEnvio", instituicao)).add(Restrictions.eq("remessas.instituicaoDestino", instituicao)));
+		}
+		
+		if (!tipos.isEmpty()){
+			criteria.createAlias("tipoArquivo", "tipoArquivo");
+			criteria.add(filtrarArquivoPorTipoArquivo(tipos));
+		}
+		
+		if (dataInicio != null) 
+			criteria.add(Restrictions.between("dataEnvio", dataInicio, dataFim));
+		else {
+			criteria.createAlias("statusArquivo", "statusArquivo");
+			criteria.add(Restrictions.eq("statusArquivo.status", SituacaoArquivo.ENVIADO.getLabel()));
+		}
+		
+		criteria.setProjection(Projections.distinct(Projections.property("remessas.arquivo")));
+//		criteria.addOrder(Order.asc("remessas.dataRecebimento"));
+		return criteria.list();
+	}
+	
+	private Disjunction filtrarArquivoPorTipoArquivo(ArrayList<String> tipos){
+		Disjunction disjunction = Restrictions.disjunction();
+		for (String tipo : tipos){
+			disjunction.add(Restrictions.eq("tipoArquivo.tipoArquivo", TipoArquivoEnum.getTipoArquivoEnum(tipo)));
+		}
+		return disjunction;
 	}
 }

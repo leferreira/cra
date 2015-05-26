@@ -19,7 +19,6 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
-import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -28,7 +27,6 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("unused")
 public class RelatorioArquivosTitulosCraPanel extends Panel  {
 
 	/***/
@@ -39,8 +37,6 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
-	@SpringBean
-	RelatorioMediator relatorioMediator;
 	@SpringBean
 	RemessaMediator remessaMediator;
 	
@@ -86,23 +82,27 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 					}else
 						error("As duas datas devem ser preenchidas.");
 				}
-				if (comboMunicipio.getDefaultModelObject() != null)
-					municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
 				
-				if (comboPortador.getDefaultModelObject() != null)
-					portador = Instituicao.class.cast(comboPortador.getDefaultModelObject());
-
-					
 				try {
+					
 					if (model.getObject().getNomeArquivo() != null) {
-						arquivoBuscado = remessaMediator.buscarArquivoPorNome(model.getObject().getNomeArquivo());
-						
-						if (arquivoBuscado != null) 
+						arquivoBuscado = remessaMediator.buscarArquivoPorNome(instituicao ,model.getObject().getNomeArquivo());
+						if (arquivoBuscado != null) {
 							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
-						else
-							error ("Arquivo não foi encontrado ou não existe!");
-					}
-				
+						} else {
+							error ("Arquivo não foi encontrado ou não pertence a esta instituição!");
+						}
+					} else if (comboMunicipio.getModelObject() != null || comboPortador.getModelObject() != null){
+						if (comboMunicipio.getDefaultModelObject() != null)
+							municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
+						
+						if (comboPortador.getDefaultModelObject() != null)
+							portador = Instituicao.class.cast(comboPortador.getDefaultModelObject());
+						
+						setResponsePage(new RelatorioTitulosPage(portador, municipio, dataInicio, dataFim));
+					} else 
+						error("O portador ou o município deve ser selecionado!");
+					
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

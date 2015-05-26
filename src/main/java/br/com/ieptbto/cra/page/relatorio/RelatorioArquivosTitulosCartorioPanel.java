@@ -1,7 +1,5 @@
 package br.com.ieptbto.cra.page.relatorio;
 
-import java.util.ArrayList;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
@@ -21,7 +19,8 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
-import br.com.ieptbto.cra.page.arquivo.ListaArquivosPage;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -38,6 +37,8 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
+	@SpringBean
+	RemessaMediator remessaMediator;
 	
 	private IModel<Arquivo> model;
 	private LocalDate dataInicio;
@@ -45,7 +46,7 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 	private Municipio municipio;
 	private Instituicao portador;
 	
-	private ArrayList<String> tiposArquivo = new ArrayList<String>();
+	private Instituicao instituicaoUsuario;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	private DropDownChoice<Instituicao> comboPortador;
@@ -53,6 +54,7 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 	public RelatorioArquivosTitulosCartorioPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
 		this.model = model;
+		this.instituicaoUsuario = instituicao;
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
 		add(nomeArquivo());
@@ -66,7 +68,7 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
-				Arquivo arquivo = model.getObject();
+				Arquivo arquivoBuscado = model.getObject();
 				
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null){
@@ -80,10 +82,18 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
 					
-					if (comboPortador.getDefaultModelObject() != null)
+					if (model.getObject().getNomeArquivo() != null) {
+						arquivoBuscado = remessaMediator.buscarArquivoPorNome(instituicaoUsuario ,model.getObject().getNomeArquivo());
+						if (arquivoBuscado != null) {
+							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
+						} else {
+							error ("Arquivo não foi encontrado ou não existe!");
+						}
+					} else if (comboPortador.getDefaultModelObject() != null) {
 						portador = Instituicao.class.cast(comboPortador.getDefaultModelObject());
+						setResponsePage(new RelatorioTitulosPage(portador, municipio, dataInicio, dataFim));
+					}
 					
-					setResponsePage(new ListaArquivosPage(arquivo, municipio, portador, dataInicio, dataFim, tiposArquivo));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
