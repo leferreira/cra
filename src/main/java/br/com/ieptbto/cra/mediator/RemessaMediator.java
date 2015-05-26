@@ -22,6 +22,7 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.exception.XmlCraException;
 import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
@@ -48,6 +49,7 @@ public class RemessaMediator {
 	private ConversorRemessaArquivo conversorRemessaArquivo;
 	@Autowired
 	private ProcessadorArquivo processadorArquivo;
+	private List<Exception> erros;
 
 	private List<Remessa> remessasFiltradas;
 	private List<Remessa> remessas = new ArrayList<Remessa>();
@@ -76,10 +78,10 @@ public class RemessaMediator {
 		return remessas;
 	}
 
-	public List<Remessa> buscarRemessasDoArquivo(Arquivo arquivo, Instituicao instituicao){
+	public List<Remessa> buscarRemessasDoArquivo(Arquivo arquivo, Instituicao instituicao) {
 		return remessaDao.buscarRemessasDoArquivo(instituicao, arquivo.getNomeArquivo());
 	}
-	
+
 	public Arquivo buscarArquivoPorNome(String nomeArquivo) {
 		return arquivoDAO.buscarArquivosPorNome(nomeArquivo);
 	}
@@ -113,8 +115,10 @@ public class RemessaMediator {
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public MensagemRetornoXml processarArquivoXML(List<RemessaVO> arquivoRecebido, Usuario usuario, String nomeArquivo) {
 		Arquivo arquivo = new Arquivo();
+		arquivo.setUsuarioEnvio(usuario);
+		arquivo.setRemessas(new ArrayList<Remessa>());
 		logger.info("Iniciar processador do arquivo " + nomeArquivo);
-		arquivo = processadorArquivo.processarArquivo(arquivoRecebido, usuario, nomeArquivo, arquivo);
+		processadorArquivo.processarArquivo(arquivoRecebido, usuario, nomeArquivo, arquivo, getErros());
 		logger.info("Fim processador do arquivo " + nomeArquivo);
 
 		arquivo = salvarArquivo(arquivo, usuario);
@@ -148,6 +152,16 @@ public class RemessaMediator {
 			mensagens.add(mensagem);
 		}
 
+		for (Exception ex : getErros()) {
+			XmlCraException exception = XmlCraException.class.cast(ex);
+			Mensagem mensagem = new Mensagem();
+			mensagem.setCodigo(exception.getErro().getCodigo());
+			mensagem.setMunicipio(exception.getCodigoIbge());
+			mensagem.setDescricao("Município: " + exception.getCodigoIbge() + " - " + exception.getMunicipio() + " - "
+			        + exception.getErro().getDescricao());
+			mensagens.add(mensagem);
+		}
+
 		return mensagemRetorno;
 	}
 
@@ -159,7 +173,16 @@ public class RemessaMediator {
 
 	private Arquivo salvarArquivo(Arquivo arquivo, Usuario usuario) {
 		return arquivoDAO.salvar(arquivo, usuario);
-
 	}
 
+	public List<Exception> getErros() {
+		if (erros == null) {
+			erros = new ArrayList<Exception>();
+		}
+		return erros;
+	}
+
+	public void setErros(List<Exception> erros) {
+		this.erros = erros;
+	}
 }

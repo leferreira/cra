@@ -5,6 +5,7 @@ import java.beans.PropertyDescriptor;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -21,6 +22,9 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
  */
 @SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.NONE)
+@XmlType(propOrder = { "identificacaoRegistro", "codigoPortador", "agenciaCodigoCedente", "nomeCedenteFavorecido", "nomeSacadorVendedor",
+        "documentoSacador", "enderecoSacadorVendedor", "cepSacadorVendedor", "cidadeSacadorVendedor", "ufSacadorVendedor", "nossoNumero",
+        "especieTitulo", "numeroTitulo", "dataEmissaoTitulo", "dataVencimentoTitulo", "tipoMoeda", "valorTitulo", "saldoTitulo" })
 public class TituloVO extends AbstractArquivoVO {
 
 	@XmlAttribute(name = "t01")

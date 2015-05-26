@@ -133,8 +133,8 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 			context = JAXBContext.newInstance(mensagem.getClass());
 
 			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.setProperty("jaxb.encoding", "ISO-8859-1");
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
 			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
 			marshaller.marshal(element, writer);
 			logger.info("Remessa processada com sucesso.");

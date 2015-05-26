@@ -79,14 +79,16 @@ public class ProcessadorArquivo extends Processador {
 
 	}
 
-	public Arquivo processarArquivo(List<RemessaVO> arquivoRecebido, Usuario usuario, String nomeArquivo, Arquivo arquivo) {
+	public void processarArquivo(List<RemessaVO> arquivoRecebido, Usuario usuario, String nomeArquivo, Arquivo arquivo,
+	        List<Exception> erros) {
 		this.usuario = usuario;
 		this.arquivo = arquivo;
+		this.erros = erros;
 		verificaDiretorio();
 		setArquivoFisico(new File(getPathUsuarioTemp() + ConfiguracaoBase.BARRA + nomeArquivo));
 		salvarXMLTemporario(arquivoRecebido);
 
-		return fabricaDeArquivo.processarArquivoXML(arquivoRecebido, usuario, nomeArquivo, arquivo, getErros());
+		fabricaDeArquivo.processarArquivoXML(arquivoRecebido, getUsuario(), nomeArquivo, getArquivo(), getErros());
 
 	}
 

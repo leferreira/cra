@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.conversor.arquivo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,10 @@ import br.com.ieptbto.cra.entidade.vo.CabecalhoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.entidade.vo.RodapeVO;
 import br.com.ieptbto.cra.entidade.vo.TituloVO;
+import br.com.ieptbto.cra.exception.XmlCraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 
 /**
  * 
@@ -34,34 +37,65 @@ public class FabricaDeArquivoXML extends AbstractFabricaDeArquivo {
 	private InstituicaoMediator instituicaoMediator;
 	private Instituicao instituicaoEnvio;
 
-	public Arquivo fabrica(List<RemessaVO> arquivoFisico, Arquivo arquivo, List<Exception> erros) {
+	public void fabrica(List<RemessaVO> arquivoFisico, Arquivo arquivo, List<Exception> erros) {
 		this.arquivoVO = arquivoFisico;
 		this.arquivo = arquivo;
 		this.erros = erros;
-
-		return this.converter();
+		converter();
 	}
 
 	public Arquivo converter() {
-		Arquivo arquivo = new Arquivo();
-		arquivo.setRemessas(new ArrayList<Remessa>());
-
 		for (RemessaVO remessaVO : getArquivoVO()) {
-			Remessa remessa = new Remessa();
-			remessa.setArquivo(getArquivo());
-			remessa.setCabecalho(getCabecalho(remessaVO.getCabecalho()));
-			remessa.getCabecalho().setRemessa(remessa);
-			remessa.setRodape(getRodape(remessaVO.getRodape()));
-			remessa.getRodape().setRemessa(remessa);
-			remessa.setArquivo(arquivo);
-			remessa.setInstituicaoDestino(getInstituicaoDestino(remessaVO.getCabecalho().getCodigoMunicipio()));
-			remessa.setInstituicaoOrigem(getInstituicaoOrigem(remessaVO.getCabecalho().getNumeroCodigoPortador()));
-			remessa.setDataRecebimento(getDataRecebimento(remessaVO.getCabecalho().getDataMovimento()));
-			remessa.setTitulos(getTitulos(remessaVO.getTitulos(), remessa));
-			arquivo.getRemessas().add(remessa);
-			arquivo.setInstituicaoEnvio(getInstituicaoEnvio());
+			if (validar(remessaVO)) {
+				Remessa remessa = new Remessa();
+				remessa.setArquivo(getArquivo());
+				remessa.setCabecalho(getCabecalho(remessaVO.getCabecalho()));
+				remessa.getCabecalho().setRemessa(remessa);
+				remessa.setRodape(getRodape(remessaVO.getRodape()));
+				remessa.getRodape().setRemessa(remessa);
+				remessa.setArquivo(getArquivo());
+				remessa.setInstituicaoDestino(getInstituicaoDestino(remessaVO.getCabecalho().getCodigoMunicipio()));
+				remessa.setInstituicaoOrigem(getInstituicaoOrigem(remessaVO.getCabecalho().getNumeroCodigoPortador()));
+				remessa.setDataRecebimento(getDataRecebimento(remessaVO.getCabecalho().getDataMovimento()));
+				remessa.setTitulos(getTitulos(remessaVO.getTitulos(), remessa));
+				getArquivo().getRemessas().add(remessa);
+				getArquivo().setInstituicaoEnvio(getInstituicaoEnvio());
+			}
 		}
-		return arquivo;
+		return getArquivo();
+	}
+
+	private boolean validar(RemessaVO remessaVO) {
+
+		validarCodigoMunicipio(remessaVO);
+		validarMunicipioAtivo(remessaVO);
+
+		if (getErros().isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+
+	private void validarMunicipioAtivo(RemessaVO remessaVO) {
+		try {
+			getInstituicaoDestino(remessaVO.getCabecalho().getCodigoMunicipio());
+
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex.getCause());
+			getErros().add(
+			        new XmlCraException(ex.getMessage(), remessaVO.getCabecalho().getCodigoMunicipio(), remessaVO.getCabecalho()
+			                .getCodigoMunicipio(), CodigoErro.MUNICIPIO_NAO_CADASTRADO_NA_CRA));
+		}
+	}
+
+	private void validarCodigoMunicipio(RemessaVO remessaVO) {
+		if (StringUtils.isEmpty(remessaVO.getCabecalho().getCodigoMunicipio())) {
+			logger.error(CodigoErro.CODIGO_DO_MUNICIPIO_NAO_INFORMADO.getDescricao());
+			getErros().add(
+			        new XmlCraException(CodigoErro.CODIGO_DO_MUNICIPIO_NAO_INFORMADO.getDescricao(), remessaVO.getCabecalho()
+			                .getCodigoMunicipio(), remessaVO.getCabecalho().getCodigoMunicipio(),
+			                CodigoErro.CODIGO_DO_MUNICIPIO_NAO_INFORMADO));
+		}
 	}
 
 	private LocalDate getDataRecebimento(String dataMovimento) {
