@@ -60,10 +60,10 @@ public class TituloDAO extends AbstractBaseDAO {
 		    criteria.add(Restrictions.ilike("documentoDevedor", titulo.getDocumentoDevedor(), MatchMode.ANYWHERE));
 		
 		if (titulo.getDataEmissaoTitulo() != null)
-		    criteria.add(Restrictions.eq("dataEmissaoTitulo", titulo.getDataEmissaoTitulo()));
+		    criteria.add(Restrictions.between("dataEmissaoTitulo", titulo.getDataEmissaoTitulo(), titulo.getDataEmissaoTitulo()));
 		
 		if (titulo.getDataOcorrencia() != null)
-		    criteria.add(Restrictions.eq("dataOcorrencia", titulo.getDataOcorrencia()));
+		    criteria.add(Restrictions.between("dataOcorrencia", titulo.getDataOcorrencia(), titulo.getDataEmissaoTitulo()));
 		
 		if (titulo.getNossoNumero() != null)
 		    criteria.add(Restrictions.ilike("nossoNumero", titulo.getNossoNumero(), MatchMode.ANYWHERE));

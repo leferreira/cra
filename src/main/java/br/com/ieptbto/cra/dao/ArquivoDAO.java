@@ -62,7 +62,9 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				remessa.setRodape(save(remessa.getRodape()));
 				remessa.setArquivo(arquivoSalvo);
 				remessa.setDataRecebimento(new LocalDate());
-				if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+				if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
+					
+				} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)){
 					remessa.setSituacaoBatimento(false);
 				}
 				save(remessa);
@@ -110,6 +112,7 @@ public class ArquivoDAO extends AbstractBaseDAO {
 			criteria.add(Restrictions.disjunction().add(Restrictions.eq("remessas.instituicaoOrigem", instituicao)).add(Restrictions.eq("remessas.instituicaoDestino", instituicao)));
 		}
 		criteria.add(Restrictions.eq("nomeArquivo", nomeArquivo));
+		criteria.setMaxResults(1);
 		return Arquivo.class.cast(criteria.uniqueResult());
 	}
 
@@ -126,10 +129,21 @@ public class ArquivoDAO extends AbstractBaseDAO {
 			criteria.add(filtrarArquivoPorTipoArquivo(tipos));
 		}
 		
-		if (!situacoes.isEmpty())
+		if (!situacoes.isEmpty()){
+			if (situacoes.contains(SituacaoArquivo.AGUARDANDO.getLabel()))
+				criteria.createAlias("statusArquivo", "statusArquivo");
+			
 			criteria.add(filtrarArquivoPorSituacao(situacoes, instituicao));
+		}
 		
-		criteria.add(Restrictions.between("dataEnvio", dataInicio, dataFim));
+		if (dataInicio == null) {
+			criteria.createAlias("statusArquivo", "statusArquivo");
+			criteria.add(Restrictions.eq("statusArquivo.status", SituacaoArquivo.AGUARDANDO.getLabel()));
+		} 
+
+		if (situacoes.isEmpty() && dataInicio != null) 
+			criteria.add(Restrictions.between("dataEnvio", dataInicio, dataFim));	
+		
 		criteria.setProjection(Projections.distinct(Projections.property("remessas.arquivo")));
 //		criteria.addOrder(Order.asc("remessas.dataRecebimento"));
 		return criteria.list();

@@ -39,8 +39,8 @@ public class ArquivosCartorioPanel extends Panel {
 	private Instituicao instituicao;
 	private ArrayList<String> tiposSelect = new ArrayList<String>();
 	private ArrayList<String> statusSelect = new ArrayList<String>();
-	private LocalDate dataInicio = new LocalDate();
-	private LocalDate dataFim = new LocalDate();
+	private LocalDate dataInicio;
+	private LocalDate dataFim;
 	private TextField<String> dataEnvioInicio;
 	private TextField<String> dataEnvioFinal;
 
@@ -139,18 +139,26 @@ public class ArquivosCartorioPanel extends Panel {
 	}
 
 	private Component comboStatus() {
-		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviados","Recebidos" }));
+		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviado","Recebido","Aguardando" }));
 		return new CheckBoxMultipleChoice<String>("statusArquivos",	new Model<ArrayList<String>>(statusSelect), choices);
 	}
 	
 	private TextField<String> dataEnvioInicio() {
-		dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
+		if (dataInicio!=null)
+			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
+		else 
+			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
+		
 		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 	
 	private TextField<String> dataEnvioFinal() {
-		return dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataInicio)));
+		if (dataFim!=null)
+			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataFim)));
+		else 
+			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
+		return dataEnvioFinal;
 	}
 }

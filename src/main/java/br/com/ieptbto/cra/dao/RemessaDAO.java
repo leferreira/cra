@@ -21,6 +21,7 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 
 /**
@@ -54,7 +55,7 @@ public class RemessaDAO extends AbstractBaseDAO {
 		criteria.add(filtraRemessaPorInsituicaoOuPraca(portador, pracaProtesto));
 		
 		criteria.add(Restrictions.between("dataRecebimento", dataInicio, dataFim));
-		criteria.addOrder(Order.asc("dataRecebimento"));
+		criteria.addOrder(Order.desc("dataRecebimento"));
 		return criteria.list();
 	}
 	
@@ -71,12 +72,21 @@ public class RemessaDAO extends AbstractBaseDAO {
 		}
 		
 		if (!situacoes.isEmpty()){
+			if (situacoes.contains(SituacaoArquivo.AGUARDANDO.getLabel()))
+				criteria.createAlias("a.statusArquivo", "statusArquivo");
+			
 			criteria.add(filtrarRemessaPorSituacao(situacoes, instituicao));
-		}
-		//filtrar por enviados recebidos ou agurdando
+		} 
 		
-		criteria.add(Restrictions.between("dataRecebimento", dataInicio, dataFim));
-		criteria.addOrder(Order.asc("dataRecebimento"));
+		if (dataInicio == null) {
+			criteria.createAlias("a.statusArquivo", "statusArquivo");
+			criteria.add(Restrictions.eq("statusArquivo.status", SituacaoArquivo.AGUARDANDO.getLabel()));
+		} 
+
+		if (situacoes.isEmpty() && dataInicio != null) 
+			criteria.add(Restrictions.between("dataRecebimento", dataInicio, dataFim));			
+
+		criteria.addOrder(Order.desc("dataRecebimento"));
 		return criteria.list();
 	}
 	
@@ -111,16 +121,16 @@ public class RemessaDAO extends AbstractBaseDAO {
 		return disjunction;
 	}
 	
-	/**
-	 * Enviados/Recebidos
-	 * */
 	private Disjunction filtrarRemessaPorSituacao(ArrayList<String> situacao, Instituicao instituicao){
 		Disjunction disjunction = Restrictions.disjunction();
 		for (String s : situacao){
-			if (s.equals("Enviados"))
+			if (s.equals(SituacaoArquivo.ENVIADO.getLabel())){
 				disjunction.add(Restrictions.eq("instituicaoOrigem", instituicao));
-			else 
+			} else if (s.equals(SituacaoArquivo.RECEBIDO.getLabel())) {
 				disjunction.add(Restrictions.eq("instituicaoDestino", instituicao));
+			} else {
+				disjunction.add(Restrictions.eq("statusArquivo.status", SituacaoArquivo.AGUARDANDO.getLabel()));
+			}
 		}
 		return disjunction;
 	}

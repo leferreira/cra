@@ -42,8 +42,8 @@ public class ArquivosInstituicaoPanel extends Panel {
 	ArquivoMediator arquivoMediator;
 
 	private Instituicao instituicao;
-	private LocalDate dataInicio = new LocalDate();
-	private LocalDate dataFim = new LocalDate();
+	private LocalDate dataInicio;
+	private LocalDate dataFim;
 	private TextField<String> dataEnvioInicio;
 	private TextField<String> dataEnvioFinal;
 	private ArrayList<String> tiposSelect = new ArrayList<String>();
@@ -74,55 +74,12 @@ public class ArquivosInstituicaoPanel extends Panel {
 				}
 			}
 		});
-//		add(listViewRemessas());
 		add(listViewArquivos());
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
 		add(comboTipoArquivos());
 		add(comboStatus());
 	}
-
-//	@SuppressWarnings("rawtypes")
-//	private ListView<Remessa> listViewRemessas(){
-//		return new ListView<Remessa>("listView", buscarRemessas()) {
-//			/** */
-//			private static final long serialVersionUID = -3365063971696545653L;
-//
-//			@Override
-//			protected void populateItem(ListItem<Remessa> item) {
-//				final Remessa remessa = item.getModelObject();
-//				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
-//				
-//				Link linkArquivo = new Link("linkArquivo") {
-//		            /***/
-//					private static final long serialVersionUID = 1L;
-//
-//					public void onClick() {
-//		            	setResponsePage(new TitulosDoArquivoPage(remessa));  
-//		            }
-//		        };
-//		        linkArquivo.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
-//		        item.add(linkArquivo);
-//		        
-//				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
-//				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
-//				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
-//				item.add(new LabelValorMonetario("valor", remessa.getArquivo().getRemessas().get(0).getRodape().getSomatorioValorRemessa()));
-//				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
-//				item.add(downloadArquivo(remessa.getArquivo()));
-//			}
-//			
-//			@SuppressWarnings("serial")
-//			private Component downloadArquivo(final Arquivo file) {
-//				return new Link<Arquivo>("downloadArquivo") {
-//					
-//					@Override
-//					public void onClick() {
-//					}
-//				};
-//			}
-//		};
-//	}
 	
 	@SuppressWarnings("rawtypes")
 	private ListView<Arquivo> listViewArquivos(){
@@ -163,18 +120,6 @@ public class ArquivosInstituicaoPanel extends Panel {
 			}
 		};
 	}
-
-//	private IModel<List<Remessa>> buscarRemessas() {
-//		return new LoadableDetachableModel<List<Remessa>>() {
-//			/***/
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			protected List<Remessa> load() {
-//				return remessasMediator.buscarRemessaSimples(instituicao, tiposSelect, statusSelect,dataInicio, dataFim);
-//			}
-//		};
-//	}
 	
 	private IModel<List<Arquivo>> buscarArquivos() {
 		return new LoadableDetachableModel<List<Arquivo>>() {
@@ -198,18 +143,26 @@ public class ArquivosInstituicaoPanel extends Panel {
 	}
 
 	private Component comboStatus() {
-		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviados","Recebidos" }));
+		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviado","Recebido","Aguardando" }));
 		return new CheckBoxMultipleChoice<String>("statusArquivos",	new Model<ArrayList<String>>(statusSelect), choices);
 	}
 	
 	private TextField<String> dataEnvioInicio() {
-		dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
+		if (dataInicio!=null)
+			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
+		else 
+			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
+		
 		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 	
 	private TextField<String> dataEnvioFinal() {
-		return dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataInicio)));
+		if (dataFim!=null)
+			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataFim)));
+		else 
+			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
+		return dataEnvioFinal;
 	}
 }

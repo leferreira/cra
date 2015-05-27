@@ -16,6 +16,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 
@@ -48,7 +49,7 @@ public class ArquivoMediator {
 	private StatusArquivo setStatusArquivo() {
 		StatusArquivo status = new StatusArquivo();
 		status.setData(new Date());
-		status.setStatus("Enviado");
+		status.setStatus(SituacaoArquivo.AGUARDANDO.getLabel());
 		return status;
 	}
 

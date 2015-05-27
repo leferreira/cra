@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-05-26T12:46:43 -->
+<!-- 2015-05-27T11:20:34 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
 	<parameter name="DATA_INICIO" class="java.lang.String">
@@ -218,7 +218,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Data]]></text>
+				<text><![CDATA[Data Sit.]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -332,11 +332,16 @@
 				<textFieldExpression><![CDATA[$F{confirmacao.numeroProtocoloCartorio}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="636" y="0" width="43" height="20" uuid="4d36523e-cfbd-467d-888e-429a7b126a8f"/>
+				<reportElement x="635" y="0" width="44" height="20" uuid="da2263f5-29b6-48be-bab7-a9e9eedb1a4b">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{retorno.dataOcorrencia}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{retorno.dataOcorrencia}.toDate()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

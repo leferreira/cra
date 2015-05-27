@@ -62,6 +62,7 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 		add(label());
 		add(instituicao());
 		add(botaoGerarRelatorio());
+		add(quantidadeDeTitulos());
 //		add(botaoDownload());
 	}
 
@@ -139,6 +140,10 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 	
 	private TextField<String> dataFim(){
 		return new TextField<String>("dataFim", new Model<String>(DataUtil.localDateToString(dataFim)));
+	}
+	
+	private TextField<Integer> quantidadeDeTitulos(){
+		return new TextField<Integer>("totalTitulos", new Model<Integer>(getTitulos().size()));
 	}
 	
 	private Component label(){

@@ -25,6 +25,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -36,10 +37,12 @@ public class ArquivosCraPanel extends Panel {
 
 	@SpringBean
 	RemessaMediator remessasMediator;
+	@SpringBean
+	DownloadMediator downloadMediator;
 
 	private Instituicao instituicao;
-	private LocalDate dataInicio = new LocalDate();
-	private LocalDate dataFim = new LocalDate();
+	private LocalDate dataInicio;
+	private LocalDate dataFim;
 	private ArrayList<String> tiposSelect = new ArrayList<String>();
 	private ArrayList<String> statusSelect = new ArrayList<String>();
 	private TextField<String> dataEnvioInicio;
@@ -113,6 +116,8 @@ public class ArquivosCraPanel extends Panel {
 					
 					@Override
 					public void onClick() {
+						
+						downloadMediator.gerarArquivoTXT(instituicao, file);
 					}
 				};
 			}
@@ -141,18 +146,26 @@ public class ArquivosCraPanel extends Panel {
 	}
 
 	private Component comboStatus() {
-		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviados","Recebidos" }));
+		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviado","Recebido","Aguardando" }));
 		return new CheckBoxMultipleChoice<String>("statusArquivos",	new Model<ArrayList<String>>(statusSelect), choices);
 	}
 	
 	private TextField<String> dataEnvioInicio() {
-		dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
+		if (dataInicio!=null)
+			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
+		else 
+			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
+		
 		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 	
 	private TextField<String> dataEnvioFinal() {
-		return dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataInicio)));
+		if (dataFim!=null)
+			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataFim)));
+		else 
+			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
+		return dataEnvioFinal;
 	}
 }
