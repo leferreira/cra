@@ -1,7 +1,11 @@
 package br.com.ieptbto.cra.conversor.arquivo;
 
 import java.beans.PropertyDescriptor;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
@@ -34,7 +38,11 @@ public abstract class AbstractConversorArquivo<R extends AbstractArquivoVO, E ex
 			String propertyName = propertyDescriptor.getName();
 			if (propertyAccessCRA.isReadableProperty(propertyName) && propertyAccessArquivo.isWritableProperty(propertyName)) {
 				Object valor = propertyAccessCRA.getPropertyValue(propertyName);
-				propertyAccessArquivo.setPropertyValue(propertyName, valor);
+				if (String.class.isInstance(valor)) {
+					propertyAccessArquivo.setPropertyValue(propertyName, valor);
+				} else {
+					propertyAccessArquivo.setPropertyValue(propertyName, converterValor(valor, new CampoArquivo(propertyName, arquivoVO)));
+				}
 			}
 
 		}
@@ -68,5 +76,51 @@ public abstract class AbstractConversorArquivo<R extends AbstractArquivoVO, E ex
 
 	private Object getValorTipado(String valor, Class<?> propertyType, R entidadeVO, CampoArquivo campoArquivo) {
 		return FabricaConversor.getValorConvertido(propertyType, valor, entidadeVO, campoArquivo);
+	}
+
+	public String criarLinhaArquivo(R entidadeVO) {
+		Map<Integer, String> valores = new HashMap<Integer, String>();
+		BeanWrapper propsEntidadeVO = PropertyAccessorFactory.forBeanPropertyAccess(entidadeVO);
+		PropertyDescriptor[] propsDescritores = propsEntidadeVO.getPropertyDescriptors();
+		for (PropertyDescriptor descritor : propsDescritores) {
+			String nomePropriedade = descritor.getName();
+			if (propsEntidadeVO.isReadableProperty(nomePropriedade) && propsEntidadeVO.isWritableProperty(nomePropriedade)) {
+				CampoArquivo anotacoes = new CampoArquivo(nomePropriedade, entidadeVO.getClass());
+				String valor = prepararValor(String.valueOf(propsEntidadeVO.getPropertyValue(nomePropriedade)), anotacoes);
+				valores.put(anotacoes.getOrdem(), valor);
+			}
+		}
+
+		return montarLinha(valores);
+	}
+
+	private String montarLinha(Map<Integer, String> valores) {
+		String linha = "";
+		for (int i = 1; i <= valores.size(); i++) {
+			linha += valores.get(i);
+		}
+
+		return linha;
+	}
+
+	private String prepararValor(String valor, CampoArquivo anotacoes) {
+		if (valor == null) {
+			valor = "";
+		}
+		return StringUtils.leftPad(valor, anotacoes.getTamanho(), anotacoes.getFormato());
+	}
+
+	private String converterValor(Object propriedade, CampoArquivo campo) {
+		if (propriedade == null) {
+			return "";
+		}
+		return FabricaConversor.getValorConvertidoParaString(campo, propriedade.getClass(), propriedade).trim();
+	}
+
+	/**
+	 * @return os campos anotados do registro.
+	 */
+	protected List<CampoArquivo> getAnnotatedFields(R arquivo) {
+		return AtributoArquivoUtil.getAnnotatedFields(arquivo);
 	}
 }

@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.mediator;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,7 +154,7 @@ public class RemessaMediator {
 		}
 
 		for (Exception ex : getErros()) {
-			XmlCraException exception = XmlCraException.class.cast(ex); 
+			XmlCraException exception = XmlCraException.class.cast(ex);
 			Mensagem mensagem = new Mensagem();
 			mensagem.setCodigo(exception.getErro().getCodigo());
 			mensagem.setMunicipio(exception.getCodigoIbge());
@@ -184,5 +185,11 @@ public class RemessaMediator {
 
 	public void setErros(List<Exception> erros) {
 		this.erros = erros;
+	}
+
+	public void baixarRemessaTXT(Remessa remessa) {
+		File remessaTXT = null;
+		remessa = remessaDao.buscarPorPK(remessa);
+		processadorArquivo.processarArquivoTXT(remessa, remessaTXT);
 	}
 }

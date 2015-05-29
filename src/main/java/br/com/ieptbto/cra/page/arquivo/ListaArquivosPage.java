@@ -90,8 +90,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						
-//						downloadMediator.baixarArquivoTXT(getUser(), remessa);
+						remessaMediator.baixarRemessaTXT(remessa);
 					}
 				};
 			}

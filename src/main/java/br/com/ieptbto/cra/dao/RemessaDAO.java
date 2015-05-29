@@ -31,65 +31,68 @@ import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 @SuppressWarnings({ "unchecked" })
 @Repository
 public class RemessaDAO extends AbstractBaseDAO {
-	
+
 	@Autowired
 	TituloDAO tituloDAO;
 	@Autowired
 	InstituicaoDAO instituicaoDAO;
 
 	public List<Remessa> buscarRemessaAvancado(Arquivo arquivo, Municipio pracaProtesto, Instituicao portador, LocalDate dataInicio,
-			LocalDate dataFim, Usuario usuarioCorrente, ArrayList<String> tipos) {
+	        LocalDate dataFim, Usuario usuarioCorrente, ArrayList<String> tipos) {
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "a");
-		
-		if (!usuarioCorrente.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA")) 
-			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoDestino", usuarioCorrente.getInstituicao())).add(Restrictions.eq("instituicaoOrigem", usuarioCorrente.getInstituicao())));
-		
-		if (StringUtils.isNotBlank(arquivo.getNomeArquivo())) 
+
+		if (!usuarioCorrente.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA"))
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoDestino", usuarioCorrente.getInstituicao()))
+			        .add(Restrictions.eq("instituicaoOrigem", usuarioCorrente.getInstituicao())));
+
+		if (StringUtils.isNotBlank(arquivo.getNomeArquivo()))
 			criteria.add(Restrictions.ilike("a.nomeArquivo", arquivo.getNomeArquivo(), MatchMode.ANYWHERE));
 
-		if (!tipos.isEmpty()){
+		if (!tipos.isEmpty()) {
 			criteria.createAlias("a.tipoArquivo", "tipoArquivo");
 			criteria.add(filtrarRemessaPorTipoArquivo(tipos));
 		}
 		criteria.add(filtraRemessaPorInsituicaoOuPraca(portador, pracaProtesto));
-		
+
 		criteria.add(Restrictions.between("dataRecebimento", dataInicio, dataFim));
 		criteria.addOrder(Order.desc("dataRecebimento"));
 		return criteria.list();
 	}
-	
-	public List<Remessa> buscarRemessaSimples(Instituicao instituicao, ArrayList<String> tipos, ArrayList<String> situacoes, LocalDate dataInicio, LocalDate dataFim) {
+
+	public List<Remessa> buscarRemessaSimples(Instituicao instituicao, ArrayList<String> tipos, ArrayList<String> situacoes,
+	        LocalDate dataInicio, LocalDate dataFim) {
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "a");
-		
+
 		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA"))
-			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", instituicao)).add(Restrictions.eq("instituicaoDestino", instituicao)));
-		
-		if (!tipos.isEmpty()){
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", instituicao))
+			        .add(Restrictions.eq("instituicaoDestino", instituicao)));
+
+		if (!tipos.isEmpty()) {
 			criteria.createAlias("a.tipoArquivo", "tipoArquivo");
 			criteria.add(filtrarRemessaPorTipoArquivo(tipos));
 		}
-		
-		if (!situacoes.isEmpty()){
+
+		if (!situacoes.isEmpty()) {
 			if (situacoes.contains(SituacaoArquivo.AGUARDANDO.getLabel()))
 				criteria.createAlias("a.statusArquivo", "statusArquivo");
-			
+
 			criteria.add(filtrarRemessaPorSituacao(situacoes, instituicao));
-		} 
-		
+		}
+
 		if (dataInicio == null) {
 			criteria.createAlias("a.statusArquivo", "statusArquivo");
 			criteria.add(Restrictions.eq("statusArquivo.status", SituacaoArquivo.AGUARDANDO.getLabel()));
-		} 
+		}
 
-		if (situacoes.isEmpty() && dataInicio != null) 
-			criteria.add(Restrictions.between("dataRecebimento", dataInicio, dataFim));			
+		if (situacoes.isEmpty() && dataInicio != null)
+			criteria.add(Restrictions.between("dataRecebimento", dataInicio, dataFim));
 
 		criteria.addOrder(Order.desc("dataRecebimento"));
 		return criteria.list();
 	}
-	
+
 	public List<Remessa> listarRemessasPorInstituicao(Instituicao instituicao) {
 		Criteria criteria = getCriteria(Remessa.class);
 		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
@@ -100,31 +103,32 @@ public class RemessaDAO extends AbstractBaseDAO {
 		return criteria.list();
 	}
 
-	private Disjunction filtraRemessaPorInsituicaoOuPraca(Instituicao portador, Municipio pracaProtesto){
+	private Disjunction filtraRemessaPorInsituicaoOuPraca(Instituicao portador, Municipio pracaProtesto) {
 		Disjunction disjunction = Restrictions.disjunction();
-		
-		if (portador!=null) 
+
+		if (portador != null)
 			disjunction.add(Restrictions.eq("instituicaoOrigem", portador)).add(Restrictions.eq("instituicaoDestino", portador));
-		
-		if (pracaProtesto!=null) {
+
+		if (pracaProtesto != null) {
 			Instituicao cartorioProtesto = instituicaoDAO.buscarCartorioPorMunicipio(pracaProtesto.getNomeMunicipio());
-			disjunction.add(Restrictions.eq("instituicaoOrigem", cartorioProtesto)).add(Restrictions.eq("instituicaoDestino", cartorioProtesto));
+			disjunction.add(Restrictions.eq("instituicaoOrigem", cartorioProtesto)).add(
+			        Restrictions.eq("instituicaoDestino", cartorioProtesto));
 		}
 		return disjunction;
 	}
-	
-	private Disjunction filtrarRemessaPorTipoArquivo(ArrayList<String> tipos){
+
+	private Disjunction filtrarRemessaPorTipoArquivo(ArrayList<String> tipos) {
 		Disjunction disjunction = Restrictions.disjunction();
-		for (String tipo : tipos){
+		for (String tipo : tipos) {
 			disjunction.add(Restrictions.eq("tipoArquivo.tipoArquivo", TipoArquivoEnum.getTipoArquivoEnum(tipo)));
 		}
 		return disjunction;
 	}
-	
-	private Disjunction filtrarRemessaPorSituacao(ArrayList<String> situacao, Instituicao instituicao){
+
+	private Disjunction filtrarRemessaPorSituacao(ArrayList<String> situacao, Instituicao instituicao) {
 		Disjunction disjunction = Restrictions.disjunction();
-		for (String s : situacao){
-			if (s.equals(SituacaoArquivo.ENVIADO.getLabel())){
+		for (String s : situacao) {
+			if (s.equals(SituacaoArquivo.ENVIADO.getLabel())) {
 				disjunction.add(Restrictions.eq("instituicaoOrigem", instituicao));
 			} else if (s.equals(SituacaoArquivo.RECEBIDO.getLabel())) {
 				disjunction.add(Restrictions.eq("instituicaoDestino", instituicao));
@@ -158,24 +162,35 @@ public class RemessaDAO extends AbstractBaseDAO {
 
 		return remessa;
 	}
-	
+
+	public Remessa buscarPorPK(Remessa entidade) {
+		Remessa remessa = super.buscarPorPK(entidade);
+		Criteria criteriaTitulo = getCriteria(Titulo.class);
+		criteriaTitulo.createAlias("remessa", "remessa");
+		criteriaTitulo.add(Restrictions.eq("remessa", remessa));
+		remessa.setTitulos(criteriaTitulo.list());
+
+		return remessa;
+	}
+
 	@SuppressWarnings("rawtypes")
 	@Transactional(readOnly = true)
-	public List<Remessa> buscarRemessasDoArquivo(Instituicao instituicao,String nomeArquivo) {
+	public List<Remessa> buscarRemessasDoArquivo(Instituicao instituicao, String nomeArquivo) {
 		List<Titulo> titulos = new ArrayList<Titulo>();
-		
+
 		Criteria criteria = getCriteria(Remessa.class);
 		criteria.createAlias("arquivo", "arquivo");
-		
+
 		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
-			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", instituicao)).add(Restrictions.eq("instituicaoDestino", instituicao)));
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", instituicao))
+			        .add(Restrictions.eq("instituicaoDestino", instituicao)));
 		}
 		criteria.add(Restrictions.eq("arquivo.nomeArquivo", nomeArquivo));
 		List<Remessa> remessas = criteria.list();
-		
-		for (Remessa remessa: remessas){
+
+		for (Remessa remessa : remessas) {
 			Criteria criteriaTitulo = getCriteria(TituloRemessa.class);
-			if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)){
+			if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
 				criteriaTitulo.createAlias("remessa", "remessa");
 				criteriaTitulo.add(Restrictions.eq("remessa", remessa));
 			} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
@@ -187,7 +202,7 @@ public class RemessaDAO extends AbstractBaseDAO {
 			}
 			criteriaTitulo.addOrder(Order.asc("pracaProtesto"));
 			titulos = criteriaTitulo.list();
-			
+
 			remessa.setTitulos(titulos);
 		}
 		return remessas;

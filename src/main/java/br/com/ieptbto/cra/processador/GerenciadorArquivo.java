@@ -27,9 +27,8 @@ public class GerenciadorArquivo extends AbstractGerenciadorArquivoLinha {
 
 		List<CampoArquivo> camposSequenciais = getAnnotatedFields();
 		for (CampoArquivo campoCorrente : camposSequenciais) {
-			Integer posicaoFinal;
 			Integer posicaoInicial = campoCorrente.getPosicaoInicio() - 1;
-			posicaoFinal = posicaoInicial + campoCorrente.getTamanho();
+			Integer posicaoFinal = posicaoInicial + campoCorrente.getTamanho();
 
 			String valor = StringUtils.substring(linha, posicaoInicial, posicaoFinal);
 

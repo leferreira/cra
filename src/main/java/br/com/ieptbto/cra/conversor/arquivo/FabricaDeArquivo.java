@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
@@ -126,5 +127,9 @@ public class FabricaDeArquivo {
 		status.setData(new Date());
 		status.setStatus("Enviado");
 		return status;
+	}
+
+	public void processarArquivoPersistente(Remessa remessa, File remessaTXT, List<Exception> erros) {
+		fabricaDeArquivoTXT.fabricaTXT(remessaTXT, remessa, erros).converterParaTXT();
 	}
 }

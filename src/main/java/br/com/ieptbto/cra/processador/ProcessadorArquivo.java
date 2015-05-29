@@ -84,12 +84,33 @@ public class ProcessadorArquivo extends Processador {
 		this.usuario = usuario;
 		this.arquivo = arquivo;
 		this.erros = erros;
+
+		logger.info("Início do processamento do arquivoXML" + nomeArquivo + " do usuário " + getUsuario().getLogin());
 		verificaDiretorio();
 		setArquivoFisico(new File(getPathUsuarioTemp() + ConfiguracaoBase.BARRA + nomeArquivo));
 		salvarXMLTemporario(arquivoRecebido);
 
 		fabricaDeArquivo.processarArquivoXML(arquivoRecebido, getUsuario(), nomeArquivo, getArquivo(), getErros());
 
+		logger.info("Fim do processamento do arquivoXML " + nomeArquivo + " do usuário " + getUsuario().getLogin());
+	}
+
+	public void processarArquivoTXT(Remessa remessa, File remessaTXT) {
+		this.arquivo = remessa.getArquivo();
+		this.usuario = remessa.getArquivo().getUsuarioEnvio();
+
+		logger.info("Início do criação de Arquivo TXT" + getArquivo().getNomeArquivo() + " do usuário " + getUsuario().getLogin());
+
+		verificaDiretorio();
+		setArquivoFisico(new File(getPathUsuarioTemp() + ConfiguracaoBase.BARRA + getArquivo().getNomeArquivo()));
+		remessaTXT = getArquivoFisico();
+		fabricaDeArquivo.processarArquivoPersistente(remessa, remessaTXT, getErros());
+
+		logger.info("Fim da criação de Arquivo TXT" + getArquivo().getNomeArquivo() + " do usuário " + getUsuario().getLogin());
+	}
+
+	private void converterArquivo() {
+		fabricaDeArquivo.processarArquivoFisico(getArquivoFisico(), getArquivo(), getErros());
 	}
 
 	private void salvarXMLTemporario(List<RemessaVO> arquivoRecebido) {
@@ -143,10 +164,6 @@ public class ProcessadorArquivo extends Processador {
 			getErros().add(ex);
 			new InfraException("Não foi possível mover o arquivo temporário para o diretório do usuário.");
 		}
-	}
-
-	private void converterArquivo() {
-		fabricaDeArquivo.processarArquivoFisico(getArquivoFisico(), getArquivo(), getErros());
 	}
 
 	private void validarArquivo() {

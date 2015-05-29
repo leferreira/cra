@@ -23,6 +23,7 @@ import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.CabecalhoVO;
+import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.entidade.vo.RodapeVO;
 import br.com.ieptbto.cra.entidade.vo.TituloVO;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
@@ -45,8 +46,11 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 	@Autowired
 	InstituicaoMediator instituicaoMediator;
 	@Autowired
-	ValidarCabecalhoRemessa validarCabecalhoRemessa;
-	List<Exception> errosCabecalho;
+	private ValidarCabecalhoRemessa validarCabecalhoRemessa;
+	@Autowired
+	private GeradorDeArquivosTXT geradorDeArquivosTXT;
+	private List<Exception> errosCabecalho;
+	private Remessa remessa;
 
 	public FabricaDeArquivoTXT fabrica(File arquivoFisico, Arquivo arquivo, List<Exception> erros) {
 		this.arquivoFisico = arquivoFisico;
@@ -55,6 +59,43 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 		this.errosCabecalho = new ArrayList<Exception>();
 		validar();
 		return this;
+	}
+
+	public FabricaDeArquivoTXT fabricaTXT(File remessaTXT, Remessa remessa, List<Exception> erros) {
+		this.arquivoFisico = remessaTXT;
+		this.arquivo = remessa.getArquivo();
+		this.erros = erros;
+		this.remessa = remessa;
+
+		validarTXT();
+
+		return this;
+	}
+
+	public void converterParaTXT() {
+		RemessaVO remessaVO = new RemessaVO();
+		remessaVO.setTitulos(new ArrayList<TituloVO>());
+		remessaVO.setCabecalho(new CabecalhoConversor().converter(getRemessa().getCabecalho(), CabecalhoVO.class));
+		remessaVO.setRodapes(new RodapeConversor().converter(getRemessa().getRodape(), RodapeVO.class));
+
+		for (Titulo titulo : getRemessa().getTitulos()) {
+			TituloVO tituloVO = new TituloConversor().converter(TituloRemessa.class.cast(titulo), TituloVO.class);
+			remessaVO.getTitulos().add(tituloVO);
+		}
+		remessaVO.setIdentificacaoRegistro(getRemessa().getCabecalho().getIdentificacaoRegistro().getConstante());
+		remessaVO.setTipoArquivo(getRemessa().getArquivo().getTipoArquivo());
+
+		gerarTXT(remessaVO);
+
+	}
+
+	private void gerarTXT(RemessaVO remessaVO) {
+		geradorDeArquivosTXT.gerar(remessaVO, getArquivoFisico());
+	}
+
+	private void validarTXT() {
+		// TODO Auto-generated method stub
+
 	}
 
 	public Arquivo converter() {
@@ -150,9 +191,18 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 		}
 	}
 
+	public Remessa getRemessa() {
+		return remessa;
+	}
+
+	public void setRemessa(Remessa remessa) {
+		this.remessa = remessa;
+	}
+
 	@Override
 	public void validar() {
 		new RegraValidaTipoArquivoTXT().validar(arquivoFisico, arquivo.getUsuarioEnvio(), erros);
 
 	}
+
 }

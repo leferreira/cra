@@ -96,6 +96,10 @@ public class CampoArquivo {
 		return field;
 	}
 
+	public String getFormato() {
+		return anotacaoAtributo.formato();
+	}
+
 	/**
 	 * Método responsável por definir o campo field.
 	 * 

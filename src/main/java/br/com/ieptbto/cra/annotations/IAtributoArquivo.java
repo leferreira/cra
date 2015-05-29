@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface IAtributoArquivo {
 
-	/** 
+	/**
 	 * Define o tamanho do campo
 	 * 
 	 * @return
@@ -51,7 +51,7 @@ public @interface IAtributoArquivo {
 	 * 
 	 * @return
 	 */
-	String formato() default "";
+	String formato() default " ";
 
 	/**
 	 * Espaços em branco após o campo.

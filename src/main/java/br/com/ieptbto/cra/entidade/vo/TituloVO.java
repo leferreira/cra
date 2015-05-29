@@ -146,9 +146,7 @@ public class TituloVO extends AbstractArquivoVO {
 	@XmlAttribute(name = "t30")
 	@IAtributoArquivo(ordem = 30, posicao = 444, tamanho = 2, descricao = "Identificar a Unidade Federal do devedor.", obrigatoriedade = true)
 	private String ufDevedor;
-	/*
-	 * Descrições
-	 */
+
 	@XmlAttribute(name = "t31")
 	@IAtributoArquivo(ordem = 31, posicao = 446, tamanho = 2, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
 	private String codigoCartorio;
