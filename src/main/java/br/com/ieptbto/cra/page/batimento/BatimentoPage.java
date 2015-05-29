@@ -18,10 +18,11 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.BatimentoMediator;
+import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -36,14 +37,15 @@ public class BatimentoPage extends BasePage<Batimento> {
 	private static final Logger logger = Logger.getLogger(BatimentoPage.class);
 	
 	@SpringBean
-	private BatimentoMediator batimentoMediator;
-	private Batimento batimento;
+	RetornoMediator batimentoMediator;
+	
+	private Batimento batimento = new Batimento();
 	private Form<Batimento> form;
 	private ListView<Remessa> remessas;
 	
 	public BatimentoPage() {
 		super();
-		final CheckGroup<Remessa> group = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
+		final CheckGroup<Remessa> grupo = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
         form = new Form<Batimento>("form"){
             /***/
 			private static final long serialVersionUID = 1L;
@@ -52,12 +54,13 @@ public class BatimentoPage extends BasePage<Batimento> {
 				List<Remessa> retornosParaConfirmar = new ArrayList<Remessa>();
 				
 				try{
-					if (group.getModelObject().isEmpty()){
+					if (grupo.getModelObject().isEmpty()){
 						error("Ao menos um retorno deve ser selecionado!");
 					} else {
-						retornosParaConfirmar = (List<Remessa>) group.getModelObject();
+						retornosParaConfirmar = (List<Remessa>) grupo.getModelObject();
 						batimentoMediator.confirmarBatimentos(retornosParaConfirmar);
-						setResponsePage(new ConfirmarBatimentoPage());
+						logger.info("");
+						setResponsePage(new BatimentoPage());
 					}
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -69,10 +72,10 @@ public class BatimentoPage extends BasePage<Batimento> {
             }
         };
         form.add(new Button("confirmarBotao"));
-        form.add(group);
+        form.add(grupo);
         add(carregarListaRetornos());
         remessas.setReuseItems(true);
-        group.add(remessas);
+        grupo.add(remessas);
         add(form);
 	}
 	
@@ -86,7 +89,7 @@ public class BatimentoPage extends BasePage<Batimento> {
 	                item.add(new Check<Remessa>("checkbox", item.getModel()));
 	                item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 					item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
-					item.add(new Label("valorPagos", "R$ " + batimentoMediator.buscarValorDeTitulosPagos(retorno)));
+					item.add(new LabelValorMonetario("valorPagos", batimentoMediator.buscarValorDeTitulosPagos(retorno)));
 					Link linkArquivo = new Link("linkArquivo") {
 			            /***/
 						private static final long serialVersionUID = 1L;
@@ -107,6 +110,4 @@ public class BatimentoPage extends BasePage<Batimento> {
 	protected IModel<Batimento> getModel() {
 		return new CompoundPropertyModel<Batimento>(batimento);
 	}
-
-	
 }

@@ -175,7 +175,7 @@ public class RemessaDAO extends AbstractBaseDAO {
 
 	@SuppressWarnings("rawtypes")
 	@Transactional(readOnly = true)
-	public List<Remessa> buscarRemessasDoArquivo(Instituicao instituicao, String nomeArquivo) {
+	public List<Remessa> buscarRemessasDoArquivo(Instituicao instituicao, Arquivo arquivo) {
 		List<Titulo> titulos = new ArrayList<Titulo>();
 
 		Criteria criteria = getCriteria(Remessa.class);
@@ -185,7 +185,12 @@ public class RemessaDAO extends AbstractBaseDAO {
 			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", instituicao))
 			        .add(Restrictions.eq("instituicaoDestino", instituicao)));
 		}
-		criteria.add(Restrictions.eq("arquivo.nomeArquivo", nomeArquivo));
+		
+		TipoArquivoEnum tipoArquivo = arquivo.getTipoArquivo().getTipoArquivo();
+		if (tipoArquivo.equals(TipoArquivoEnum.REMESSA))
+			criteria.add(Restrictions.eq("arquivo", arquivo));
+		else 
+			criteria.add(Restrictions.eq("arquivoGeradoProBanco", arquivo));
 		List<Remessa> remessas = criteria.list();
 
 		for (Remessa remessa : remessas) {

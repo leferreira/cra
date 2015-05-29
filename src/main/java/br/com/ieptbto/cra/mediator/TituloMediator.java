@@ -40,6 +40,10 @@ public class TituloMediator {
 		return tituloDAO.buscarTitulosPorArquivo(arquivo, instituicaoCorrente);
 	}
 	
+	public List<TituloRemessa> buscarTitulosConfirmacaoRetorno(Arquivo arquivo, Instituicao instituicaoCorrente){
+		return tituloDAO.buscarTitulosConfirmacaoRetorno(arquivo, instituicaoCorrente);
+	}
+	
 	public List<Historico> getHistoricoTitulo(TituloRemessa titulo){
 		return tituloDAO.buscarHistoricoDoTitulo(titulo);
 	}

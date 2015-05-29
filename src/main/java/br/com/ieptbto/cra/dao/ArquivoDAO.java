@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -61,11 +60,15 @@ public class ArquivoDAO extends AbstractBaseDAO {
 				remessa.setCabecalho(save(remessa.getCabecalho()));
 				remessa.setRodape(save(remessa.getRodape()));
 				remessa.setArquivo(arquivoSalvo);
+				remessa.setArquivoGeradoProBanco(arquivoSalvo);// gambiarra gigante pra funcionar gerar confirmacao e retorno
 				remessa.setDataRecebimento(new LocalDate());
-				if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
-					
-				} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)){
-					remessa.setSituacaoBatimento(false);
+				
+				if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO) 
+					|| arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO) ){
+					remessa.setSituacao(false);
+					if(arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+						remessa.setSituacaoBatimento(false);
+					}
 				}
 				save(remessa);
 				for (Titulo titulo : remessa.getTitulos()) {
@@ -120,8 +123,7 @@ public class ArquivoDAO extends AbstractBaseDAO {
 		Criteria criteria = getCriteria(Arquivo.class);
 		
 		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA")){
-			criteria.createAlias("remessas", "remessas");
-			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoEnvio", instituicao)).add(Restrictions.eq("remessas.instituicaoDestino", instituicao)));
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoEnvio", instituicao)).add(Restrictions.eq("instituicaoRecebe", instituicao)));
 		}
 		
 		if (!tipos.isEmpty()){
@@ -144,8 +146,7 @@ public class ArquivoDAO extends AbstractBaseDAO {
 		if (situacoes.isEmpty() && dataInicio != null) 
 			criteria.add(Restrictions.between("dataEnvio", dataInicio, dataFim));	
 		
-		criteria.setProjection(Projections.distinct(Projections.property("remessas.arquivo")));
-//		criteria.addOrder(Order.asc("remessas.dataRecebimento"));
+		criteria.addOrder(Order.desc("dataEnvio"));
 		return criteria.list();
 	}
 	

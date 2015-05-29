@@ -18,8 +18,10 @@ import org.apache.wicket.util.lang.Bytes;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -37,6 +39,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
+	
+	@SpringBean
+	InstituicaoMediator instituicaoMediator;
 	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
 
 	private Arquivo arquivo;
@@ -44,8 +49,10 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	private FileUploadField fileUploadField;
 
 	public EnviarArquivoPage() {
+		Instituicao cra = instituicaoMediator.buscarInstituicaoIncial("CRA");
 		arquivo = new Arquivo();
 		arquivo.setInstituicaoEnvio(getUser().getInstituicao());
+		arquivo.setInstituicaoRecebe(cra);
 		arquivo.setUsuarioEnvio(getUser());
 		arquivo.setDataEnvio(new LocalDate());
 

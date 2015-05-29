@@ -34,6 +34,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 
 	private int id;
 	private Arquivo arquivo;
+	private Arquivo arquivoGeradoProBanco;
 	private Batimento batimento;
 	private LocalDate dataRecebimento;
 	private Instituicao instituicaoOrigem;
@@ -43,6 +44,7 @@ public class Remessa extends AbstractEntidade<Remessa> {
 	private List<Historico> historicos;
 	private List<Titulo> titulos;
 	private Boolean situacaoBatimento;
+	private Boolean situacao; // confirmacoes e retornos
 
 	@Id
 	@Column(name = "ID_REMESSA", columnDefinition = "serial")
@@ -62,6 +64,12 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return arquivo;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "ARQUIVO_GERADO_BANCO_ID")
+	public Arquivo getArquivoGeradoProBanco() {
+		return arquivoGeradoProBanco;
+	}
+	
 	@Column(name = "DATA_RECEBIMENTO")
 	public LocalDate getDataRecebimento() {
 		return dataRecebimento;
@@ -101,13 +109,13 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		return batimento;
 	}
 
-	@Column(name="SITUACAO_BATIMENTO", nullable=true)
-	public Boolean getSituacaoBatimento() {
-		return situacaoBatimento;
+	@Column(name="SITUACAO", nullable=true)
+	public Boolean getSituacao() {
+		return situacao;
 	}
 
-	public void setSituacaoBatimento(Boolean situacaoBatimento) {
-		this.situacaoBatimento = situacaoBatimento;
+	public void setSituacao(Boolean situacao) {
+		this.situacao = situacao;
 	}
 
 	public void setBatimento(Batimento batimento) {
@@ -134,6 +142,10 @@ public class Remessa extends AbstractEntidade<Remessa> {
 		this.dataRecebimento = dataRecebimento;
 	}
 
+	public void setArquivoGeradoProBanco(Arquivo arquivoGeradoProBanco) {
+		this.arquivoGeradoProBanco = arquivoGeradoProBanco;
+	}
+	
 	public void setInstituicaoDestino(Instituicao instituicaoDestino) {
 		this.instituicaoDestino = instituicaoDestino;
 	}
@@ -155,5 +167,14 @@ public class Remessa extends AbstractEntidade<Remessa> {
 
 	public void setRodape(Rodape rodape) {
 		this.rodape = rodape;
+	}
+
+	@Column(name="SITUACAO_BATIMENTO")
+	public Boolean getSituacaoBatimento() {
+		return situacaoBatimento;
+	}
+
+	public void setSituacaoBatimento(Boolean situacaoBatimento) {
+		this.situacaoBatimento = situacaoBatimento;
 	}
 }

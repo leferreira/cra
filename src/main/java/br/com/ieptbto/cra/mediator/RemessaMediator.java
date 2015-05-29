@@ -80,7 +80,7 @@ public class RemessaMediator {
 	}
 
 	public List<Remessa> buscarRemessasDoArquivo(Arquivo arquivo, Instituicao instituicao) {
-		return remessaDao.buscarRemessasDoArquivo(instituicao, arquivo.getNomeArquivo());
+		return remessaDao.buscarRemessasDoArquivo(instituicao, arquivo);
 	}
 
 	public Arquivo buscarArquivoPorNome(Instituicao instituicao, String nomeArquivo) {

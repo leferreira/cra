@@ -28,7 +28,7 @@ import br.com.ieptbto.cra.page.arquivo.ListaArquivosPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.batimento.BatimentoPage;
-import br.com.ieptbto.cra.page.batimento.ConfirmarBatimentoPage;
+import br.com.ieptbto.cra.page.batimento.ConfirmacaoRetornoPage;
 import br.com.ieptbto.cra.page.cartorio.DetalharCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
@@ -168,7 +168,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		/** Batimento */
 		mountPage("Batimento", BatimentoPage.class);
-		mountPage("ConfirmarBatimento", ConfirmarBatimentoPage.class);
+		mountPage("ConfirmaçãoRetorno", ConfirmacaoRetornoPage.class);
 
 	}
 

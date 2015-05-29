@@ -38,6 +38,7 @@ public class Arquivo extends AbstractEntidade<Arquivo> {
 	private String path;
 	private LocalDate dataEnvio;
 	private List<Remessa> remessas;
+	private Instituicao instituicaoRecebe;
 	private Instituicao instituicaoEnvio;
 	private TipoArquivo tipoArquivo;
 	private Usuario usuarioEnvio;
@@ -81,6 +82,12 @@ public class Arquivo extends AbstractEntidade<Arquivo> {
 		return instituicaoEnvio;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "INSTITUICAO_RECEBE_ID")
+	public Instituicao getInstituicaoRecebe() {
+		return instituicaoRecebe;
+	}
+	
 	@OneToOne
 	@JoinColumn(name = "TIPO_ARQUIVO_ID")
 	public TipoArquivo getTipoArquivo() {
@@ -123,6 +130,10 @@ public class Arquivo extends AbstractEntidade<Arquivo> {
 		this.tipoArquivo = tipoArquivo;
 	}
 
+	public void setInstituicaoRecebe(Instituicao instituicaoRecebe) {
+		this.instituicaoRecebe = instituicaoRecebe;
+	}
+	
 	public void setUsuarioEnvio(Usuario usuarioEnvio) {
 		this.usuarioEnvio = usuarioEnvio;
 	}

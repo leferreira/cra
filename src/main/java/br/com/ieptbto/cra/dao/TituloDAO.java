@@ -231,6 +231,39 @@ public class TituloDAO extends AbstractBaseDAO {
 		}
 		return listaTitulos;
 	}
+	
+	@Transactional(readOnly = true)
+	public List<TituloRemessa> buscarTitulosConfirmacaoRetorno(Arquivo arquivo,	Instituicao instituicao) {
+		List<TituloRemessa> listaTitulos = new ArrayList<TituloRemessa>();
+		
+		Criteria criteria = getCriteria(Remessa.class);
+		if (!instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA")) {
+			criteria.add(Restrictions.disjunction().add(Restrictions.eq("instituicaoOrigem", instituicao)).add(Restrictions.eq("instituicaoDestino", instituicao)));
+		}
+		criteria.add(Restrictions.eq("arquivoGeradoProBanco", arquivo));
+		List<Remessa> remessas = criteria.list();
+		
+		for (Remessa remessa: remessas){
+			Criteria criteriaTitulo = getCriteria(TituloRemessa.class);
+			List<TituloRemessa> titulos = new ArrayList<TituloRemessa>();
+			
+			if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)){
+				criteriaTitulo.createAlias("remessa", "remessa");
+				criteriaTitulo.add(Restrictions.eq("remessa", remessa));
+			} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
+				criteriaTitulo.createAlias("confirmacao", "confirmacao");
+				criteriaTitulo.add(Restrictions.eq("confirmacao.remessa", remessa));
+			} else if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+				criteriaTitulo.createAlias("retorno", "retorno");
+				criteriaTitulo.add(Restrictions.eq("retorno.remessa", remessa));
+			}
+			criteriaTitulo.addOrder(Order.asc("pracaProtesto"));
+			titulos = criteriaTitulo.list();
+			
+			listaTitulos.addAll(titulos);
+		}
+		return listaTitulos;
+	}
 
 	public List<TituloRemessa> buscarTitulosParaRelatorio(Instituicao instituicao, Instituicao cartorioProtesto, LocalDate dataInicio, LocalDate dataFim, Usuario usuarioCorrente) {
 		Criteria criteria = getCriteria(TituloRemessa.class);

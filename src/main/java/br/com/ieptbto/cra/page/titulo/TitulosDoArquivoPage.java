@@ -21,6 +21,7 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -57,7 +58,12 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	}
 
 	public TitulosDoArquivoPage(Arquivo arquivo) {
-		setTitulos(tituloMediator.buscarTitulosPorArquivo(arquivo, getUser().getInstituicao()));
+		
+		TipoArquivoEnum tipoArquivo = arquivo.getTipoArquivo().getTipoArquivo();
+		if (tipoArquivo.equals(TipoArquivoEnum.REMESSA))
+			setTitulos(tituloMediator.buscarTitulosPorArquivo(arquivo, getUser().getInstituicao()));
+		else 
+			setTitulos(tituloMediator.buscarTitulosConfirmacaoRetorno(arquivo, getUser().getInstituicao()));
 		setRemessa(arquivo);
 		setArquivo(arquivo);
 		carregarInformacoes();

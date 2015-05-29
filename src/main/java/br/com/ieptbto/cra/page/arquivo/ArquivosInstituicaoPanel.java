@@ -105,6 +105,7 @@ public class ArquivosInstituicaoPanel extends Panel {
 		        
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio())));
 				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("instituicaoRecebe", arquivo.getInstituicaoRecebe().getNomeFantasia()));
 				item.add(new Label("status", arquivo.getStatusArquivo().getStatus()));
 				item.add(downloadArquivo(arquivo));
 			}

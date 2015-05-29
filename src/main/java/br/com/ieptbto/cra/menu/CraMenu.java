@@ -47,7 +47,7 @@ public class CraMenu extends Panel {
 
 		/**Menu batimento*/
 	    menuLateral.addItem("Batimento", rolesIncluir);
-	    menuLateral.addItem("ConfirmarBatimento",rolesIncluir);
+	    menuLateral.addItem("ConfirmaçãoRetorno",rolesIncluir);
 
 	    /**Menus Relatorios*/
 	    menuLateral.addItem("CartoriosPage", rolesIncluir);
