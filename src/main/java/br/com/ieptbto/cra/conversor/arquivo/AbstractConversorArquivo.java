@@ -114,7 +114,7 @@ public abstract class AbstractConversorArquivo<R extends AbstractArquivoVO, E ex
 		return StringUtils.rightPad(valor, anotacoes.getTamanho(), anotacoes.getFormato());
 	}
 
-	private String converterValor(Object propriedade, CampoArquivo campo) {
+	protected String converterValor(Object propriedade, CampoArquivo campo) {
 		if (propriedade == null) {
 			return "";
 		}

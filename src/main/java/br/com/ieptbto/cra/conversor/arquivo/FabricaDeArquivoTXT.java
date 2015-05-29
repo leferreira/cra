@@ -79,7 +79,16 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 		remessaVO.setRodapes(new RodapeConversor().converter(getRemessa().getRodape(), RodapeVO.class));
 
 		for (Titulo titulo : getRemessa().getTitulos()) {
-			TituloVO tituloVO = new TituloConversor().converter(TituloRemessa.class.cast(titulo), TituloVO.class);
+			TituloVO tituloVO = new TituloVO();
+			if (TipoArquivoEnum.REMESSA.equals(getRemessa().getArquivo().getTipoArquivo().getTipoArquivo())) {
+				tituloVO = new TituloConversor().converter(TituloRemessa.class.cast(titulo), TituloVO.class);
+			} else if (TipoArquivoEnum.CONFIRMACAO.equals(getRemessa().getArquivo().getTipoArquivo().getTipoArquivo())) {
+				tituloVO = new ConfirmacaoConversor().converter(Confirmacao.class.cast(titulo), TituloVO.class);
+			} else if (TipoArquivoEnum.RETORNO.equals(getRemessa().getArquivo().getTipoArquivo().getTipoArquivo())) {
+				tituloVO = new RetornoConversor().converter(Retorno.class.cast(titulo), TituloVO.class);
+			} else {
+				throw new InfraException("Tipo de Arquivo não identificado");
+			}
 			remessaVO.getTitulos().add(tituloVO);
 		}
 		remessaVO.setIdentificacaoRegistro(getRemessa().getCabecalho().getIdentificacaoRegistro().getConstante());
