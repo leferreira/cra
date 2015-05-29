@@ -187,9 +187,8 @@ public class RemessaMediator {
 		this.erros = erros;
 	}
 
-	public void baixarRemessaTXT(Remessa remessa) {
-		File remessaTXT = null;
+	public File baixarRemessaTXT(Remessa remessa) {
 		remessa = remessaDao.buscarPorPK(remessa);
-		processadorArquivo.processarArquivoTXT(remessa, remessaTXT);
+		return processadorArquivo.processarArquivoTXT(remessa);
 	}
 }

@@ -95,7 +95,7 @@ public class ProcessadorArquivo extends Processador {
 		logger.info("Fim do processamento do arquivoXML " + nomeArquivo + " do usuário " + getUsuario().getLogin());
 	}
 
-	public void processarArquivoTXT(Remessa remessa, File remessaTXT) {
+	public File processarArquivoTXT(Remessa remessa) {
 		this.arquivo = remessa.getArquivo();
 		this.usuario = remessa.getArquivo().getUsuarioEnvio();
 
@@ -103,10 +103,11 @@ public class ProcessadorArquivo extends Processador {
 
 		verificaDiretorio();
 		setArquivoFisico(new File(getPathUsuarioTemp() + ConfiguracaoBase.BARRA + getArquivo().getNomeArquivo()));
-		remessaTXT = getArquivoFisico();
-		fabricaDeArquivo.processarArquivoPersistente(remessa, remessaTXT, getErros());
+		fabricaDeArquivo.processarArquivoPersistente(remessa, getArquivoFisico(), getErros());
 
 		logger.info("Fim da criação de Arquivo TXT" + getArquivo().getNomeArquivo() + " do usuário " + getUsuario().getLogin());
+
+		return getArquivoFisico();
 	}
 
 	private void converterArquivo() {
@@ -246,6 +247,9 @@ public class ProcessadorArquivo extends Processador {
 	}
 
 	public void setArquivoFisico(File arquivo) {
+		if (this.arquivoFisico != null && this.arquivoFisico.exists()) {
+			this.arquivoFisico.delete();
+		}
 		this.arquivoFisico = arquivo;
 	}
 
