@@ -11,6 +11,7 @@ import org.springframework.beans.PropertyAccessorFactory;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
+import br.com.ieptbto.cra.enumeration.PosicaoCampoVazio;
 import br.com.ieptbto.cra.util.CraConstructorUtils;
 
 /**
@@ -107,7 +108,10 @@ public abstract class AbstractConversorArquivo<R extends AbstractArquivoVO, E ex
 		if (valor == null) {
 			valor = "";
 		}
-		return StringUtils.leftPad(valor, anotacoes.getTamanho(), anotacoes.getFormato());
+		if (anotacoes.getPosicaoCampoVazio() == PosicaoCampoVazio.ESQUERDO) {
+			return StringUtils.leftPad(valor, anotacoes.getTamanho(), anotacoes.getFormato());
+		}
+		return StringUtils.rightPad(valor, anotacoes.getTamanho(), anotacoes.getFormato());
 	}
 
 	private String converterValor(Object propriedade, CampoArquivo campo) {

@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
 import br.com.ieptbto.cra.entidade.Rodape;
+import br.com.ieptbto.cra.enumeration.PosicaoCampoVazio;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -39,11 +40,11 @@ public class RodapeVO extends AbstractArquivoVO {
 	private String dataMovimento;
 
 	@XmlAttribute(name = "t05")
-	@IAtributoArquivo(ordem = 5, posicao = 53, tamanho = 5, descricao = "Informar o somatório dos registros. Conforme a regra estabelecida para os campos do registro header. Campos 09,10,11 e 12.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 5, posicao = 53, tamanho = 5, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Informar o somatório dos registros. Conforme a regra estabelecida para os campos do registro header. Campos 09,10,11 e 12.", obrigatoriedade = true)
 	private String somatorioQtdRemessa;
 
 	@XmlAttribute(name = "t06")
-	@IAtributoArquivo(ordem = 6, posicao = 58, tamanho = 19, descricao = "Informar o somatório do Saldos dos Títulos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 6, posicao = 58, tamanho = 18, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Informar o somatório do Saldos dos Títulos.", obrigatoriedade = true)
 	private String somatorioValorRemessa;
 
 	@XmlAttribute(name = "t07")
@@ -51,7 +52,7 @@ public class RodapeVO extends AbstractArquivoVO {
 	private String complementoRegistro;
 
 	@XmlAttribute(name = "t08")
-	@IAtributoArquivo(ordem = 8, posicao = 597, tamanho = 04, descricao = "Informar o número sequêncial do registro.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 8, posicao = 597, tamanho = 04, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Informar o número sequêncial do registro.", obrigatoriedade = true)
 	private String numeroSequencialRegistroArquivo;
 
 	public String getIdentificacaoRegistro() {

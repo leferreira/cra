@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
+import br.com.ieptbto.cra.enumeration.PosicaoCampoVazio;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -34,7 +35,7 @@ public class CabecalhoVO extends AbstractArquivoVO {
 	private String nomePortador;
 
 	@XmlAttribute(name = "h04")
-	@IAtributoArquivo(ordem = 4, posicao = 45, tamanho = 8, formato = "ddMMyyyy HH:mm:ss", descricao = "Identificar a data de envio da Remessa ao serviço de distribuição, no formato DDMMAAAA.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 4, posicao = 45, tamanho = 8, formato = "", descricao = "Identificar a data de envio da Remessa ao serviço de distribuição, no formato DDMMAAAA.", obrigatoriedade = true)
 	private String dataMovimento;
 
 	@XmlAttribute(name = "h05")
@@ -50,27 +51,27 @@ public class CabecalhoVO extends AbstractArquivoVO {
 	private String identificacaoTransacaoTipo;
 
 	@XmlAttribute(name = "h08")
-	@IAtributoArquivo(ordem = 8, posicao = 62, tamanho = 6, descricao = "Controlar o sequencial de remessas, que deverá ser contínuo.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 8, posicao = 62, tamanho = 6, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Controlar o sequencial de remessas, que deverá ser contínuo.", obrigatoriedade = true)
 	private String numeroSequencialRemessa;
 
 	@XmlAttribute(name = "h09")
-	@IAtributoArquivo(ordem = 9, posicao = 68, tamanho = 4, descricao = "Preencher com o somatório da quantidade de registros constantes no arquivo.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 9, posicao = 68, tamanho = 4, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Preencher com o somatório da quantidade de registros constantes no arquivo.", obrigatoriedade = true)
 	private String qtdRegistrosRemessa;
 
 	@XmlAttribute(name = "h10")
-	@IAtributoArquivo(ordem = 10, posicao = 72, tamanho = 4, descricao = "Preencher com o somatório da quantidade de registros constantes no arquivo. Devem constar o somatório de todos os registros, cujo o campo 22 for igual a 1.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 10, posicao = 72, tamanho = 4, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Preencher com o somatório da quantidade de registros constantes no arquivo. Devem constar o somatório de todos os registros, cujo o campo 22 for igual a 1.", obrigatoriedade = true)
 	private String qtdTitulosRemessa;;
 
 	@XmlAttribute(name = "h11")
-	@IAtributoArquivo(ordem = 11, posicao = 76, tamanho = 4, descricao = "Preencher com o somatório da quantidade de títulos do tipo 'DMI', 'DRI' e 'CBI'.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 11, posicao = 76, tamanho = 4, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Preencher com o somatório da quantidade de títulos do tipo 'DMI', 'DRI' e 'CBI'.", obrigatoriedade = true)
 	private String qtdIndicacoesRemessa;
 
 	@XmlAttribute(name = "h12")
-	@IAtributoArquivo(ordem = 12, posicao = 80, tamanho = 4, descricao = "Preencher com o somatório da quantidade dos demais títulos.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 12, posicao = 80, tamanho = 4, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Preencher com o somatório da quantidade dos demais títulos.", obrigatoriedade = true)
 	private String qtdOriginaisRemessa;
 
 	@XmlAttribute(name = "h13")
-	@IAtributoArquivo(ordem = 13, posicao = 84, tamanho = 6, descricao = "Identificar a agência centralizadora - Uso do banco.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 13, posicao = 84, tamanho = 6, posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Identificar a agência centralizadora - Uso do banco.", obrigatoriedade = true)
 	private String agenciaCentralizadora;
 
 	@XmlAttribute(name = "h14")
@@ -78,7 +79,7 @@ public class CabecalhoVO extends AbstractArquivoVO {
 	private String versaoLayout;
 
 	@XmlAttribute(name = "h15")
-	@IAtributoArquivo(ordem = 15, posicao = 93, tamanho = 7, descricao = "Preencher com dois dígitos para o Código da Unidade da Federação e 5 para Código do Município.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 15, posicao = 93, tamanho = 7, posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Preencher com dois dígitos para o Código da Unidade da Federação e 5 para Código do Município.", obrigatoriedade = true)
 	private String codigoMunicipio;
 
 	@XmlAttribute(name = "h16")
@@ -86,7 +87,7 @@ public class CabecalhoVO extends AbstractArquivoVO {
 	private String complementoRegistro;
 
 	@XmlAttribute(name = "h17")
-	@IAtributoArquivo(ordem = 17, posicao = 597, tamanho = 4, descricao = "Constante 0001. Sempre reiniciar a contagem do lote de registros para as praças implantadas no processo de centralização.", obrigatoriedade = true, validacao = "0001")
+	@IAtributoArquivo(ordem = 17, posicao = 597, tamanho = 4, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Constante 0001. Sempre reiniciar a contagem do lote de registros para as praças implantadas no processo de centralização.", obrigatoriedade = true, validacao = "0001")
 	private String numeroSequencialRegistroArquivo;
 
 	public String getNumeroCodigoPortador() {

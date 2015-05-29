@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import org.apache.commons.lang.reflect.FieldUtils;
 
 import br.com.ieptbto.cra.annotations.IAtributoArquivo;
+import br.com.ieptbto.cra.enumeration.PosicaoCampoVazio;
 
 /**
  * 
@@ -85,6 +86,15 @@ public class CampoArquivo {
 	 */
 	public int getOrdem() {
 		return anotacaoAtributo.ordem();
+	}
+
+	/**
+	 * Define em qual lado ficará o campo vazio
+	 * 
+	 * @return
+	 */
+	public PosicaoCampoVazio getPosicaoCampoVazio() {
+		return anotacaoAtributo.posicaoCampoVazio();
 	}
 
 	/**

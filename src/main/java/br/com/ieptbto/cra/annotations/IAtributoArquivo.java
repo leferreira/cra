@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import br.com.ieptbto.cra.enumeration.PosicaoCampoVazio;
+
 /**
  * Classe responsável por mapear os atributos de um arquivo
  * 
@@ -30,6 +32,13 @@ public @interface IAtributoArquivo {
 	 * @return
 	 */
 	int posicao();
+
+	/**
+	 * Define qual o lado dos campo vazio (se esquerdo ou direito do conteudo)
+	 * 
+	 * @return
+	 */
+	PosicaoCampoVazio posicaoCampoVazio() default PosicaoCampoVazio.DIREITO;
 
 	/**
 	 * 

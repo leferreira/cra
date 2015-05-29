@@ -14,6 +14,7 @@ import br.com.ieptbto.cra.annotations.IAtributoArquivo;
 import br.com.ieptbto.cra.conversor.arquivo.CampoArquivo;
 import br.com.ieptbto.cra.conversor.arquivo.FabricaConversor;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.PosicaoCampoVazio;
 
 /**
  * 
@@ -88,15 +89,15 @@ public class TituloVO extends AbstractArquivoVO {
 	private String dataVencimentoTitulo;
 
 	@XmlAttribute(name = "t16")
-	@IAtributoArquivo(ordem = 16, posicao = 244, tamanho = 3, descricao = "Identificar o tipo da moeda corrente. 001 - Real", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 16, posicao = 244, tamanho = 3, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Identificar o tipo da moeda corrente. 001 - Real", obrigatoriedade = true)
 	private String tipoMoeda;
 
 	@XmlAttribute(name = "t17")
-	@IAtributoArquivo(ordem = 17, posicao = 247, tamanho = 14, descricao = "Informar o valor do título.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 17, posicao = 247, tamanho = 14, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Informar o valor do título.", obrigatoriedade = true)
 	private String valorTitulo;
 
 	@XmlAttribute(name = "t18")
-	@IAtributoArquivo(ordem = 18, posicao = 261, tamanho = 14, descricao = "Informar ao cartório sobre principais descontos/abatimentos ou pagamentos parciais. Preencher com o valor remanescente.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 18, posicao = 261, tamanho = 14, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Informar ao cartório sobre principais descontos/abatimentos ou pagamentos parciais. Preencher com o valor remanescente.", obrigatoriedade = true)
 	private String saldoTitulo;
 
 	@XmlAttribute(name = "t19")
@@ -120,11 +121,11 @@ public class TituloVO extends AbstractArquivoVO {
 	private String nomeDevedor;
 
 	@XmlAttribute(name = "t24")
-	@IAtributoArquivo(ordem = 24, posicao = 343, tamanho = 3, descricao = "Identificar o tipo do documento. 001 - CNPJ/002 - CPF", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 24, posicao = 343, tamanho = 3, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Identificar o tipo do documento. 001 - CNPJ/002 - CPF", obrigatoriedade = true)
 	private String tipoIdentificacaoDevedor;
 
 	@XmlAttribute(name = "t25")
-	@IAtributoArquivo(ordem = 25, posicao = 346, tamanho = 14, descricao = "Identificar o número do documento do devedor. Se o documento for diferente de CNPJ ou CPF, preencher com zeros, sendo obrigatório o campo 26.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 25, posicao = 346, tamanho = 14, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Identificar o número do documento do devedor. Se o documento for diferente de CNPJ ou CPF, preencher com zeros, sendo obrigatório o campo 26.", obrigatoriedade = true)
 	private String numeroIdentificacaoDevedor;
 
 	@XmlAttribute(name = "t26")
@@ -148,7 +149,7 @@ public class TituloVO extends AbstractArquivoVO {
 	private String ufDevedor;
 
 	@XmlAttribute(name = "t31")
-	@IAtributoArquivo(ordem = 31, posicao = 446, tamanho = 2, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 31, posicao = 446, tamanho = 2, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
 	private String codigoCartorio;
 
 	@XmlAttribute(name = "t32")
@@ -160,11 +161,11 @@ public class TituloVO extends AbstractArquivoVO {
 	private String tipoOcorrencia;
 
 	@XmlAttribute(name = "t34")
-	@IAtributoArquivo(ordem = 34, posicao = 459, tamanho = 8, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = false)
+	@IAtributoArquivo(ordem = 34, posicao = 459, tamanho = 8, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = false)
 	private String dataProtocolo;
 
 	@XmlAttribute(name = "t35")
-	@IAtributoArquivo(ordem = 35, posicao = 467, tamanho = 10, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
+	@IAtributoArquivo(ordem = 35, posicao = 467, tamanho = 10, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, descricao = "Uso restrito do serviço de distribuição.Preencher com zeros.", obrigatoriedade = true)
 	private String valorCustaCartorio;
 
 	@XmlAttribute(name = "t36")
@@ -224,7 +225,7 @@ public class TituloVO extends AbstractArquivoVO {
 	private String instrumentoProtesto;
 
 	@XmlAttribute(name = "t50")
-	@IAtributoArquivo(ordem = 50, posicao = 568, tamanho = 10, descricao = "Uso restrito dos cartórios. Preencher com zeros.", obrigatoriedade = false)
+	@IAtributoArquivo(ordem = 50, posicao = 568, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, tamanho = 10, descricao = "Uso restrito dos cartórios. Preencher com zeros.", obrigatoriedade = false)
 	private String valorDemaisDespesas;
 
 	@XmlAttribute(name = "t51")
@@ -232,7 +233,7 @@ public class TituloVO extends AbstractArquivoVO {
 	private String complementoRegistro;
 
 	@XmlAttribute(name = "t52")
-	@IAtributoArquivo(ordem = 52, posicao = 597, tamanho = 4, descricao = "Número sequêncial do registro do arquivo, independente da quantidade de praças dentro do arquivo.", obrigatoriedade = false)
+	@IAtributoArquivo(ordem = 52, posicao = 597, formato = "0", posicaoCampoVazio = PosicaoCampoVazio.ESQUERDO, tamanho = 4, descricao = "Número sequêncial do registro do arquivo, independente da quantidade de praças dentro do arquivo.", obrigatoriedade = false)
 	private String numeroSequencialArquivo;
 
 	public String getIdentificacaoRegistro() {
