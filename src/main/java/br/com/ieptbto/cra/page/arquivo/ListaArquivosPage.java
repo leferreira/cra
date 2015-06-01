@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.arquivo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
@@ -90,7 +94,12 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						remessaMediator.baixarRemessaTXT(remessa);
+						File file = remessaMediator.baixarRemessaTXT(remessa);
+						IResourceStream resourceStream = new FileResourceStream(file);
+
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+
 					}
 				};
 			}

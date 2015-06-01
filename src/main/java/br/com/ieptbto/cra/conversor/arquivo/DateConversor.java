@@ -39,7 +39,7 @@ public class DateConversor extends AbstractConversor<LocalDate> {
 	 */
 	public String getValorConvertidoParaString(LocalDate objeto) {
 		if (objeto != null) {
-			return DataUtil.localDateToStringyyyyMMdd(objeto);
+			return DataUtil.localDateToStringddMMyyyy(objeto);
 		}
 		return StringUtils.repeat(" ", getAnotacaoAtributo().tamanho());
 	}

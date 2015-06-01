@@ -146,7 +146,7 @@ public class DataUtil implements Serializable {
 	 * @return {@link String} no formato yyyyMMdd
 	 */
 
-	public static String localDateToStringyyyyMMdd(LocalDate data) {
+	public static String localDateToStringddMMyyyy(LocalDate data) {
 		return data.toString(getDateTimeFormatter(PADRAO_FORMATACAO_DATA_DDMMYYYY));
 	}
 

@@ -8,6 +8,7 @@ import org.springframework.beans.PropertyAccessorFactory;
 import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.vo.TituloVO;
 import br.com.ieptbto.cra.util.CraConstructorUtils;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * 
@@ -24,9 +25,10 @@ public class ConfirmacaoConversor extends AbstractConversorArquivo<TituloVO, Con
 	 * @return
 	 */
 	public TituloVO converter(Confirmacao entidade, Class<TituloVO> arquivoVO) {
-		BeanWrapper propertyAccessCRA = PropertyAccessorFactory.forBeanPropertyAccess(entidade);
-		TituloVO arquivo = CraConstructorUtils.newInstance(arquivoVO);
-		BeanWrapper propertyAccessArquivo = PropertyAccessorFactory.forBeanPropertyAccess(arquivo);
+
+		BeanWrapper propertyAccessCRA = PropertyAccessorFactory.forBeanPropertyAccess(entidade.getTitulo());
+		TituloVO tituloVO = CraConstructorUtils.newInstance(arquivoVO);
+		BeanWrapper propertyAccessArquivo = PropertyAccessorFactory.forBeanPropertyAccess(tituloVO);
 		PropertyDescriptor[] propertyDescriptors = propertyAccessArquivo.getPropertyDescriptors();
 		for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
 			String propertyName = propertyDescriptor.getName();
@@ -40,7 +42,15 @@ public class ConfirmacaoConversor extends AbstractConversorArquivo<TituloVO, Con
 			}
 
 		}
-		return arquivo;
+
+		tituloVO.setCodigoCartorio(entidade.getCodigoCartorio().toString());
+		tituloVO.setNumeroProtocoloCartorio(entidade.getNumeroProtocoloCartorio());
+		tituloVO.setDataProtocolo(DataUtil.localDateToStringddMMyyyy(entidade.getDataProtocolo()));
+		tituloVO.setTipoOcorrencia(entidade.getTipoOcorrencia());
+		tituloVO.setDataOcorrencia(DataUtil.localDateToStringddMMyyyy(entidade.getDataOcorrencia()));
+		tituloVO.setCodigoIrregularidade(entidade.getCodigoIrregularidade());
+
+		return tituloVO;
 	}
 
 }
