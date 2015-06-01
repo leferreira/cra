@@ -21,6 +21,10 @@ body {
 	list-style: none;
 }
 
+.icon-menu {
+	font-size: 35px;
+}
+
 .link{
   color: #337AB7 !important;
   font-weight: bold;
