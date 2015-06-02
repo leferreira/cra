@@ -35,12 +35,19 @@ public class VerRelatorioPage extends WebPage {
 		try {    
 			Response response = getRequestCycle().getResponse();
 			OutputStream servletOutputStream = response.getOutputStream();
-//            JRPdfExporter exporter = new JRPdfExporter();
-//			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-//			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
-//			exporter.exportReport();
 			
 	      JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
+	      JasperExportManager.exportReportToPdf(jasperPrint);  
+	      
+//	      HttpServletResponse response = (HttpServletResponse)getResponse().getContainerResponse();
+//	      response.setContentType("application/pdf");
+//	      response.setHeader("Content-disposition", "attachment: filename=RelatorioCRA.pdf");
+//	      ServletOutputStream servletOutputStream = response.getOutputStream();
+//	      JRPdfExporter exporter = new JRPdfExporter();
+//	      exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT, jasperPrint);
+//	      exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
+//	      exporter.exportReport();
+	      
 		} catch (JRException e) {      
 	      e.printStackTrace();      
 	   } catch(Exception e){      

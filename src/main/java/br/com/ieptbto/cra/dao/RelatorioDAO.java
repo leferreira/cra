@@ -21,7 +21,7 @@ import br.com.ieptbto.cra.relatorio.SinteticoJRDataSource;
 @SuppressWarnings("rawtypes")
 @Repository
 public class RelatorioDAO extends AbstractBaseDAO{
-
+	
 	public List<SinteticoJRDataSource> relatorioDeRemessaSintetico(Instituicao bancoPortador,LocalDate dataInicio, LocalDate dataFim) {
 		Query query = createSQLQuery("select m.nome_municipio,"
 				+ " count(titulo.id_titulo) AS total_titulos,"

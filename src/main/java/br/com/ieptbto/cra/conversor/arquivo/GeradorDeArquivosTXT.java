@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -23,14 +25,20 @@ public class GeradorDeArquivosTXT extends Gerador {
 
 	public void gerar(RemessaVO remessaVO, File arquivoTXT) {
 		try {
+			Map<Integer, String> titulos = new HashMap<Integer, String>();
 			BufferedWriter bWrite = new BufferedWriter(new FileWriter(arquivoTXT));
 
 			bWrite.write(gerarLinha(remessaVO.getCabecalho()));
 			bWrite.newLine();
 			for (TituloVO tituloVO : remessaVO.getTitulos()) {
-				bWrite.write(gerarLinhaTitulo(tituloVO));
+				titulos.put(Integer.parseInt(tituloVO.getNumeroSequencialArquivo()), gerarLinhaTitulo(tituloVO));
+			}
+
+			for (Integer i : titulos.keySet()) {
+				bWrite.write(titulos.get(i));
 				bWrite.newLine();
 			}
+
 			bWrite.write(gerarLinhaRodape(remessaVO.getRodape()));
 			bWrite.newLine();
 

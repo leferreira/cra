@@ -20,6 +20,7 @@ import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
 import br.com.ieptbto.cra.entidade.Remessa;
@@ -69,6 +70,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(StatusArquivo.class);
 		classesHibernate.add(Historico.class);
 		classesHibernate.add(Batimento.class);
+		classesHibernate.add(InstrumentoProtesto.class);
 		// classesHibernate.add(CraCustomRevisionEntity.class);
 	}
 

@@ -23,7 +23,6 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
-import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -37,8 +36,6 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	@SpringBean
-	TituloMediator tituloMediator;
 	@SpringBean
 	RelatorioMediator relatorioMediator;
 	
@@ -55,7 +52,7 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 		this.municipio = municipio;
 		this.dataInicio =dataInicio;
 		this.dataFim = dataFim;
-		setTitulos(tituloMediator.buscarTitulosParaRelatorio(instituicao, municipio, dataInicio, dataFim, getUser()));
+		setTitulos(relatorioMediator.buscarTitulosParaRelatorio(instituicao, municipio, dataInicio, dataFim, getUser()));
 		add(carregarListaTitulos());
 		add(dataInicio());
 		add(dataFim());

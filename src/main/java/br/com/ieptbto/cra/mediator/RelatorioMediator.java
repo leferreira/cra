@@ -13,12 +13,15 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ieptbto.cra.dao.InstituicaoDAO;
 import br.com.ieptbto.cra.dao.RelatorioDAO;
 import br.com.ieptbto.cra.dao.RemessaDAO;
+import br.com.ieptbto.cra.dao.TituloDAO;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.relatorio.RelatorioUtils;
@@ -34,9 +37,13 @@ import br.com.ieptbto.cra.relatorio.SinteticoJRDataSource;
 public class RelatorioMediator{
 
 	@Autowired
-	RemessaDAO remessaDao = new RemessaDAO();
+	RemessaDAO remessaDao;
 	@Autowired
-	RelatorioDAO relatorioDao = new RelatorioDAO();
+	RelatorioDAO relatorioDao;
+	@Autowired
+	InstituicaoDAO instituicaoDAO;
+	@Autowired
+	TituloDAO tituloDao;
 	
 	private RelatorioUtils relatorioUtils = new RelatorioUtils();
 	private LocalDate dataInicio;
@@ -228,4 +235,15 @@ public class RelatorioMediator{
 
 		return jasperPrint; 
 	}
+	
+	public List<TituloRemessa> buscarTitulosParaRelatorio(Instituicao instituicao, Municipio municipio, LocalDate dataInicio,
+			LocalDate dataFim, Usuario usuario) {
+		
+		Instituicao cartorioProtesto = null;
+		if (municipio!=null)
+			cartorioProtesto = instituicaoDAO.buscarCartorioPorMunicipio(municipio.getNomeMunicipio());
+		
+		return tituloDao.buscarTitulosParaRelatorio(instituicao, cartorioProtesto, dataInicio, dataFim, usuario);
+	}
+	
 }

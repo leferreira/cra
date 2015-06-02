@@ -59,7 +59,7 @@ public class BatimentoPage extends BasePage<Batimento> {
 					} else {
 						retornosParaConfirmar = (List<Remessa>) grupo.getModelObject();
 						batimentoMediator.confirmarBatimentos(retornosParaConfirmar);
-						logger.info("");
+						info("Batimento realizado com sucesso!");
 						setResponsePage(new BatimentoPage());
 					}
 				} catch (InfraException ex) {

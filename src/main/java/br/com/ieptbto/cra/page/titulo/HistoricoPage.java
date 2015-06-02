@@ -241,19 +241,19 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	public TextField<String> valorCustaCartorio() {
-		return new TextField<String>("valorCustaCartorio", new Model<String>(tituloRemessa.getValorCustaCartorio().toString()));
+		return new TextField<String>("valorCustaCartorio", new Model<String>("R$ " + tituloRemessa.getValorCustaCartorio().toString()));
 	}
 
 	public TextField<String> valorGravacaoEletronica() {
-		return new TextField<String>("valorGravacaoEletronica", new Model<String>(tituloRemessa.getValorGravacaoEletronica().toString()));
+		return new TextField<String>("valorGravacaoEletronica", new Model<String>("R$ " + tituloRemessa.getValorGravacaoEletronica().toString()));
 	}
 
 	public TextField<String> valorCustasCartorioDistribuidor() {
-		return new TextField<String>("valorCustasCartorioDistribuidor", new Model<String>(tituloRemessa.getValorCustasCartorioDistribuidor().toString()));
+		return new TextField<String>("valorCustasCartorioDistribuidor", new Model<String>("R$ " + tituloRemessa.getValorCustasCartorioDistribuidor().toString()));
 	}
 
 	public TextField<String> valorDemaisDespesas() {
-		return new TextField<String>("valorDemaisDespesas", new Model<String>(tituloRemessa.getValorDemaisDespesas().toString()));
+		return new TextField<String>("valorDemaisDespesas", new Model<String>("R$ " + tituloRemessa.getValorDemaisDespesas().toString()));
 	}
 
 	public TextField<String> nomeCedenteFavorecido() {

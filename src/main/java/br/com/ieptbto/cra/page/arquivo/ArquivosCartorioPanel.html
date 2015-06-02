@@ -44,7 +44,7 @@
 				<thead>
 					<tr>
 						<th>Tipo</th>
-						<th style="width: 61px;">Baixar</th>
+						<th style="width: 60px;">Baixar</th>
 						<th>Nome Arquivo</th>
 						<th>Data Envio</th>
 						<th>Enviado por</th>
@@ -57,8 +57,10 @@
 					<tr wicket:id="listView">
 						<td wicket:id="tipoArquivo"></td>
 						<td style="text-align: center;">
-							<a href="#" title="Download em TXT" wicket:id="downloadArquivo"> TXT&nbsp;</a>
-							<a href="#" title="Download em XML">XML</a>
+							<a href="#" class="link">
+								<img border="0" class="download-ico" title="Download em TXT" src="img/download.png" wicket:id="downloadArquivo">
+								Download
+							</a>
 						</td>
 						<td>
 							<a wicket:id="linkArquivo" style="font-weight: bolder;"><span wicket:id="nomeArquivo"></span></a>
