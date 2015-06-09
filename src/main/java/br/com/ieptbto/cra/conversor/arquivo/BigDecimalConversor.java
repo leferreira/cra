@@ -13,6 +13,7 @@ import br.com.ieptbto.cra.exception.ConvertException;
  *
  */
 public class BigDecimalConversor extends AbstractConversor<BigDecimal> {
+	private static final int TAMANHO_PADRAO_CAMPO_VALOR = 10;
 	private static final String VALOR_ZERO = "0";
 	private static final BigDecimal VALOR_CEM = BigDecimal.valueOf(100);
 
@@ -36,7 +37,10 @@ public class BigDecimalConversor extends AbstractConversor<BigDecimal> {
 	 * {@inheritDoc}
 	 */
 	public String getValorConvertidoParaString(BigDecimal objeto) {
-		int tamanho = getAnotacaoAtributo().tamanho();
+		int tamanho = TAMANHO_PADRAO_CAMPO_VALOR;
+		if (getCampoArquivo() != null) {
+			tamanho = getAnotacaoAtributo().tamanho();
+		}
 		if (objeto != null) {
 			BigDecimal retorno = objeto.multiply(VALOR_CEM);
 			String numero = retorno.toPlainString().replace(".00", StringUtils.EMPTY);

@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.arquivoDePara;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 
+import br.com.ieptbto.cra.entidade.ArquivoDePara;
 import br.com.ieptbto.cra.enumeration.PadraoArquivoDePara;
 
 /**
@@ -17,6 +18,6 @@ public abstract class AbstractDePara<T extends AbstractDePara> {
 	public PadraoArquivoDePara getPadrao() {
 		return this.padrao;
 	}
-	
-	public abstract br.com.ieptbto.cra.entidade.ArquivoDePara processar(FileUpload file);
+
+	public abstract ArquivoDePara processar(FileUpload file);
 }

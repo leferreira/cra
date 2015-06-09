@@ -46,6 +46,11 @@ public class RetornoConversor extends AbstractConversorArquivo<TituloVO, Retorno
 		tituloVO.setTipoOcorrencia(entidade.getTipoOcorrencia());
 		tituloVO.setDataOcorrencia(DataUtil.localDateToStringddMMyyyy(entidade.getDataOcorrencia()));
 		tituloVO.setCodigoIrregularidade(entidade.getCodigoIrregularidade());
+		tituloVO.setCodigoCartorio(entidade.getCodigoCartorio().toString());
+		tituloVO.setNumeroProtocoloCartorio(entidade.getNumeroProtocoloCartorio());
+		tituloVO.setDataProtocolo(DataUtil.localDateToStringddMMyyyy(entidade.getDataProtocolo()));
+		tituloVO.setNumeroSequencialArquivo(entidade.getNumeroSequencialArquivo());
+		tituloVO.setDeclaracaoPortador(" ");
 
 		return tituloVO;
 	}
