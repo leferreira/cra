@@ -9,13 +9,14 @@ import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
 
-@SuppressWarnings("serial")
 @Entity
 @Audited
 @Table(name = "TB_MUNICIPIO")
 @org.hibernate.annotations.Table(appliesTo = "TB_MUNICIPIO")
 public class Municipio extends AbstractEntidade<Municipio> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String nomeMunicipio;
 	private String uf;

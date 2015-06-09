@@ -24,6 +24,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -38,6 +39,8 @@ public class ArquivosInstituicaoPanel extends Panel {
 	/***/
 	private static final long serialVersionUID = 1L;
 
+	@SpringBean
+	RemessaMediator remessaMediator;
 	@SpringBean
 	ArquivoMediator arquivoMediator;
 
@@ -111,11 +114,12 @@ public class ArquivosInstituicaoPanel extends Panel {
 			}
 			
 			@SuppressWarnings("serial")
-			private Component downloadArquivo(final Arquivo file) {
+			private Link downloadArquivo(final Arquivo file) {
 				return new Link<Arquivo>("downloadArquivo") {
 					
 					@Override
 					public void onClick() {
+						
 					}
 				};
 			}

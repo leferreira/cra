@@ -159,15 +159,11 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		return titulos;
 	}
 	
-	public Remessa getRemessa() {
-		return remessa;
-	}
-
-	public void setRemessa(Arquivo arquivo) {
+	private void setRemessa(Arquivo arquivo) {
 		this.remessa = remessaMediator.buscarRemessasDoArquivo(arquivo, getUser().getInstituicao()).get(0);
 	}
 
-	public void setArquivo(Arquivo arquivo) {
+	private void setArquivo(Arquivo arquivo) {
 		this.arquivo = arquivo;
 	}
 

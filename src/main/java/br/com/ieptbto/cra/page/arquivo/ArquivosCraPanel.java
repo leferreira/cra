@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.arquivo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +17,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
@@ -107,17 +111,20 @@ public class ArquivosCraPanel extends Panel {
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
 				item.add(new LabelValorMonetario("valor", remessa.getRodape().getSomatorioValorRemessa()));
 				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
-				item.add(downloadArquivo(remessa.getArquivo()));
+				item.add(downloadArquivo(remessa));
 			}
 			
 			@SuppressWarnings("serial")
-			private Component downloadArquivo(final Arquivo file) {
+			private Link downloadArquivo(final Remessa remessa) {
 				return new Link<Arquivo>("downloadArquivo") {
 					
 					@Override
 					public void onClick() {
-						
-						downloadMediator.gerarArquivoTXT(instituicao, file);
+						File file = remessasMediator.baixarRemessaTXT(remessa);
+						IResourceStream resourceStream = new FileResourceStream(file);
+
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
 					}
 				};
 			}

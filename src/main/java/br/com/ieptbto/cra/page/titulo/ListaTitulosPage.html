@@ -6,42 +6,40 @@
 <body>
 	<wicket:extend>
 		<div class="panel panel-primary">
-			<div class="panel-heading">Títulos</div>
+			<div class="panel-heading">Resultados da Busca por Títulos</div>
 			<div class="panel-body">
-				<fieldset>
-					<legend class="legend">Resultado da Busca por Títulos<a href="MonitorarTitulos"	style="float: right; font-size: 16px;"><span class="fa fa-mail-reply"></span>Voltar à página de busca!</a>
-					</legend>
-					<table id="table" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
-						<thead>
-							<tr>
-								<th>Título</th>
-								<th>Praça</th>
-								<th>Protoc.</th>
-								<th>Devedor</th>
-								<th>Valor</th>
-								<th>Remessa</th>
-								<th>Confir.</th>
-								<th>Retorno</th>
-								<th>Data S.</th>
-								<th>Situação</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr wicket:id="listViewTitulos">
-								<td wicket:id="numeroTitulo"></td>
-								<td wicket:id="pracaProtesto"></td>
-								<td wicket:id="protocolo"></td>
-								<td><a href="#" wicket:id="linkHistorico"><span class="link" style="font-weight: bold;" wicket:id="nomeDevedor"></span></a></td>
-								<td wicket:id="valorTitulo"></td>
-								<td><a href="#" wicket:id="linkArquivo"><span class="link" style="font-weight: bold;" wicket:id="nomeRemessa"></span></a></td>
-								<td wicket:id="dataConfirmacao"></td>
-								<td><a href="#" wicket:id="linkRetorno"><span class="link" style="font-weight: bold;" wicket:id="retorno"></span></a></td>
-								<td wicket:id="dataSituacao"></td>
-								<td wicket:id="situacaoTitulo" class="destaque"></td>
-							</tr>
-						</tbody>
-					</table>
-				</fieldset>
+				<a href="MonitorarTitulos"	style="float: right; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>Voltar à página de busca!</a>
+				<br style="clear: both;">
+				<table id="table" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					<thead>
+						<tr>
+							<th>Título</th>
+							<th>Praça</th>
+							<th>Protoc.</th>
+							<th>Devedor</th>
+							<th>Valor</th>
+							<th>Remessa</th>
+							<th>Confir.</th>
+							<th>Retorno</th>
+							<th>Data S.</th>
+							<th>Situação</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr wicket:id="listViewTitulos">
+							<td wicket:id="numeroTitulo"></td>
+							<td wicket:id="pracaProtesto"></td>
+							<td wicket:id="protocolo"></td>
+							<td><a href="#" wicket:id="linkHistorico"><span class="link" style="font-weight: bold;" wicket:id="nomeDevedor"></span></a></td>
+							<td wicket:id="valorTitulo"></td>
+							<td><a href="#" wicket:id="linkArquivo"><span class="link" style="font-weight: bold;" wicket:id="nomeRemessa"></span></a></td>
+							<td wicket:id="dataConfirmacao"></td>
+							<td><a href="#" wicket:id="linkRetorno"><span class="link" style="font-weight: bold;" wicket:id="retorno"></span></a></td>
+							<td wicket:id="dataSituacao"></td>
+							<td wicket:id="situacaoTitulo" class="destaque"></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 			<div class="panel-footer">
 				<p>Resultado da busca. Para mais informações dos títulos clique no nome do devedor e para irformações sobre os arquivos de remessa e retorno clique no nome dos arquivos!</p>

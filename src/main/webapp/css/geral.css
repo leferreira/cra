@@ -1,4 +1,3 @@
-
 body {
 	/*background-color: #337ab7;*/
 	background-color: #f8f8f8;
@@ -107,7 +106,7 @@ td{
 	font-size: 12px !important;
 }
 .download-ico{
-  	height: 9%;
+  	 width: 40%;
 }
 .page-title{
 	  position: absolute;
@@ -121,4 +120,7 @@ td{
 }
 #table_wrapper{
   margin: 0 -5px;
+}
+.modal-dialog {
+  width: 70%;
 }

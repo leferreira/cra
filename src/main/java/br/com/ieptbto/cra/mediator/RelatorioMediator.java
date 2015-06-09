@@ -100,13 +100,13 @@ public class RelatorioMediator{
 	 * @param 
 	 * 	
 	 * */
-	public JasperPrint novoRelatorioAnalitico(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim, Municipio municipio) {
-		this.dataInicio = dataInicio;
-		this.dataFim = dataFim;
-		this.instituicao = instituicao;
+//	public JasperPrint novoRelatorioAnalitico(Instituicao instituicao, String tipoArquivo, LocalDate dataInicio, LocalDate dataFim, Municipio municipio) {
+//		this.dataInicio = dataInicio;
+//		this.dataFim = dataFim;
+//		this.instituicao = instituicao;
 //		return chamarRelatorioAnaliticoPorTipoArquivo(tipoArquivo);
-		return null;
-	}
+//		return null;
+//	}
 	
 	
 	/**

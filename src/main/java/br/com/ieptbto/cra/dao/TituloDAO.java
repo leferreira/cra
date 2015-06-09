@@ -282,4 +282,23 @@ public class TituloDAO extends AbstractBaseDAO {
 		criteria.add(Restrictions.between("remessa.dataRecebimento", dataInicio, dataFim));
 		return criteria.list();
 	}
+
+	public Retorno buscarTituloProtestado(String numeroProtocolo, Integer codigoIBGE) {
+		Criteria criteria = getCriteria(Retorno.class);
+		criteria.createAlias("titulo", "titulo");
+		criteria.createAlias("cabecalho", "cabecalho");
+		criteria.add(Restrictions.eq("cabecalho.codigoMunicipio", codigoIBGE));
+		criteria.add(Restrictions.eq("numeroProtocoloCartorio", numeroProtocolo));
+		criteria.setMaxResults(1);
+		return Retorno.class.cast(criteria.uniqueResult());
+	}
+
+	public TituloRemessa carregarTitulo(TituloRemessa titulo) {
+		Criteria criteria = getCriteria(TituloRemessa.class);
+		criteria.add(Restrictions.eq("codigoPortador", titulo.getCodigoPortador()));
+		criteria.add(Restrictions.eq("nossoNumero", titulo.getNossoNumero()));
+		
+		criteria.setMaxResults(1);
+		return TituloRemessa.class.cast(criteria.uniqueResult());
+	}
 }

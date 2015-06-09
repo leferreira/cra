@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+		<div class="panel panel-primary">
+			<div class="panel-heading">Entrada Manual de Títulos</div>
+			<div class="panel-body">
+				<button class="btn btn-primary" data-toggle="modal" data-target="#myModal" style="margin-bottom: 5px;"><span class="fa fa-plus-circle"></span>&nbsp;
+                    Adicionar Título
+                </button>
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content col-md-12">
+						   <form wicket:id="form" class="form-horizontal">
+	                            <div class="modal-header">
+	                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	                                <h4 class="modal-title" id="myModalLabel">Novo Título</h4>
+	                            </div>
+	                            <div class="modal-body">
+	                               <div class="row">
+		                               	<div class=col-md-6>
+		                               		<!-- Text input-->
+												<div class="form-group">
+												  <label class="col-md-6 control-label" for="nomeCedenteFavorecido">Cedente/Favorecido:</label>  
+												  <div class="col-md-6">
+												  <input id="nomeCedenteFavorecido" name="nomeCedenteFavorecido" type="text" placeholder="" class="form-control input-md">
+												    
+												  </div>
+												</div>
+												
+												<!-- Text input-->
+												<div class="form-group">
+												  <label class="col-md-6 control-label" for="agenciaCedenteFavorecido">Agência Cedente:</label>  
+												  <div class="col-md-6">
+												  <input id="agenciaCedenteFavorecido" name="agenciaCedenteFavorecido" type="text" placeholder="" class="form-control input-md">
+												    
+												  </div>
+												</div>
+												
+												<!-- Text input-->
+												<div class="form-group">
+												  <label class="col-md-6 control-label" for="valorTitulo">Valor do Titulo:</label>  
+												  <div class="col-md-6">
+												  <input id="valorTitulo" name="valorTitulo" type="text" placeholder="" class="form-control input-md">
+												    
+												  </div>
+												</div>
+												
+												<!-- Text input-->
+												<div class="form-group">
+												  <label class="col-md-6 control-label" for="valorSaldoTitulo">Valor Saldo:</label>  
+												  <div class="col-md-6">
+												  <input id="valorSaldoTitulo" name="valorSaldoTitulo" type="text" placeholder="" class="form-control input-md">
+												    
+												  </div>
+												</div>
+		                               	</div>
+		                               	<div class=col-md-6>
+		                               		<!-- Text input-->
+												<div class="form-group">
+												  <label class="col-md-6 control-label" for="valorCustas">Valor Custas:</label>  
+												  <div class="col-md-6">
+												  <input id="valorCustas" name="valorCustas" type="text" placeholder="" class="form-control input-md">
+												    
+												  </div>
+												</div>
+												
+												<!-- Text input-->
+												<div class="form-group">
+												  <label class="col-md-6 control-label" for="valorDistribuicaoEletronica">Vlr. Distr. Eletrônica:</label>  
+												  <div class="col-md-6">
+												  <input id="valorDistribuicaoEletronica" name="valorDistribuicaoEletronica" type="text" placeholder="" class="form-control input-md">
+												    
+												  </div>
+												</div>
+												
+												<!-- Text input-->
+												<div class="form-group">
+												  <label class="col-md-6 control-label" for="numeroTitulo">Número do Título:</label>  
+												  <div class="col-md-6">
+												  <input id="numeroTitulo" name="numeroTitulo" type="text" placeholder="" class="form-control input-md">
+												    
+												  </div>
+												</div>
+												
+												<!-- Text input-->
+												<div class="form-group">
+												  <label class="col-md-6 control-label" for="dataVencimento">Data Vencimento:</label>  
+												  <div class="col-md-6">
+												  <input id="dataVencimento" name="dataVencimento" type="text" placeholder="__/__/_____" class="form-control input-md">
+												    
+												  </div>
+												</div>
+		                               	</div>
+	                               </div>
+	                            </div>
+	                            <div class="modal-footer">
+	                                <button type="button" class="btn btn-default" style="margin-left: 5px;" data-dismiss="modal">Fechar</button>
+	                                <button type="button" class="btn btn-primary" wicket:id="adicionarTitulo">Adicionar</button>
+	                            </div>
+			               </form>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+				<br style="clear: both;">
+				<table id="table" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					<thead>
+						<tr>
+							<th>Título</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>io</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="panel-footer">
+			</div>
+		</div>
+	</wicket:extend>
+</body>
+</html>

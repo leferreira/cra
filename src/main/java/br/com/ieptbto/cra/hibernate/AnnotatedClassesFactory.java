@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.ArquivoDePara;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.Confirmacao;
@@ -71,6 +72,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Historico.class);
 		classesHibernate.add(Batimento.class);
 		classesHibernate.add(InstrumentoProtesto.class);
+		classesHibernate.add(ArquivoDePara.class);
 		// classesHibernate.add(CraCustomRevisionEntity.class);
 	}
 

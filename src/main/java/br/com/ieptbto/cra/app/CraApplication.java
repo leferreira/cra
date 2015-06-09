@@ -35,6 +35,8 @@ import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.page.instituicao.DetalharInstituicaoPage;
 import br.com.ieptbto.cra.page.instituicao.IncluirInstituicaoPage;
 import br.com.ieptbto.cra.page.instituicao.ListaInstituicaoPage;
+import br.com.ieptbto.cra.page.instrumentoDeProtesto.ImportarArquivoDeParaPage;
+import br.com.ieptbto.cra.page.instrumentoDeProtesto.InstrumentoDeProtestoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.municipio.DetalharMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.IncluirMunicipioPage;
@@ -43,6 +45,7 @@ import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosTitulosPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioPage;
 import br.com.ieptbto.cra.page.tipoInstituicao.IncluirTipoInstituicaoPage;
 import br.com.ieptbto.cra.page.tipoInstituicao.ListaTipoInstituicaoPage;
+import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.page.titulo.ListaTitulosPage;
 import br.com.ieptbto.cra.page.titulo.MonitorarTitulosPage;
@@ -158,6 +161,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		/** Titulos */
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
+		mountPage("EntradaManual", EntradaManualPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
 		mountPage("HistoricoDoTitulo", HistoricoPage.class);
 
@@ -170,6 +174,9 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("Batimento", BatimentoPage.class);
 		mountPage("ConfirmaçãoRetorno", ConfirmacaoRetornoPage.class);
 
+		/** Slip */
+		mountPage("InstrumentoDeProtesto", InstrumentoDeProtestoPage.class);
+		mountPage("ImportarArquivoDePara", ImportarArquivoDeParaPage.class);
 	}
 
 	/**

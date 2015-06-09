@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -87,7 +86,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				item.add(downloadArquivoTXT(remessa));
 			}
 
-			private Component downloadArquivoTXT(final Remessa remessa) {
+			private Link downloadArquivoTXT(final Remessa remessa) {
 				return new Link<Arquivo>("downloadArquivo") {
 					/***/
 					private static final long serialVersionUID = 1L;
