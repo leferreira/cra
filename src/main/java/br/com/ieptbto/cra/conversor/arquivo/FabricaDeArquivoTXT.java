@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,9 +76,11 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 	public void converterParaTXT() {
 		RemessaVO remessaVO = new RemessaVO();
 		remessaVO.setTitulos(new ArrayList<TituloVO>());
+		BigDecimal valorTotalTitulos = BigDecimal.ZERO;
 		remessaVO.setCabecalho(new CabecalhoConversor().converter(getRemessa().getCabecalho(), CabecalhoVO.class));
 		remessaVO.setRodapes(new RodapeConversor().converter(getRemessa().getRodape(), RodapeVO.class));
 
+		int contSequencial = 2;
 		for (Titulo titulo : getRemessa().getTitulos()) {
 			TituloVO tituloVO = new TituloVO();
 			if (TipoArquivoEnum.REMESSA.equals(getRemessa().getArquivo().getTipoArquivo().getTipoArquivo())) {
@@ -89,10 +92,17 @@ public class FabricaDeArquivoTXT extends AbstractFabricaDeArquivo {
 			} else {
 				throw new InfraException("Tipo de Arquivo não identificado");
 			}
+			tituloVO.setNumeroSequencialArquivo(String.valueOf(contSequencial));
+			valorTotalTitulos = valorTotalTitulos.add(titulo.getSaldoTitulo());
 			remessaVO.getTitulos().add(tituloVO);
+			contSequencial++;
 		}
+		remessaVO.getCabecalho().setQtdTitulosRemessa(String.valueOf(remessaVO.getTitulos().size()));
+		remessaVO.getRodape().setSomatorioQtdRemessa(String.valueOf(remessaVO.getTitulos().size()));
+		remessaVO.getRodape().setSomatorioValorRemessa(new BigDecimalConversor().getValorConvertidoParaString(valorTotalTitulos));
 		remessaVO.setIdentificacaoRegistro(getRemessa().getCabecalho().getIdentificacaoRegistro().getConstante());
 		remessaVO.setTipoArquivo(getRemessa().getArquivo().getTipoArquivo());
+		remessaVO.getRodape().setNumeroSequencialRegistroArquivo(String.valueOf(contSequencial));
 
 		gerarTXT(remessaVO);
 

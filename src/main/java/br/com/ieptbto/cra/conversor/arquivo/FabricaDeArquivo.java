@@ -59,6 +59,7 @@ public class FabricaDeArquivo {
 		if (LayoutArquivo.TXT.equals(LayoutArquivo.get(linha))) {
 			return fabricaDeArquivoTXT.fabrica(arquivoFisico, arquivo, erros).converter();
 		} else if (LayoutArquivo.XML.equals(LayoutArquivo.get(linha))) {
+			arquivo.setNomeArquivo(arquivoFisico.getName());
 			return converterXML(arquivoFisico, arquivo, erros);
 		}
 
@@ -91,7 +92,7 @@ public class FabricaDeArquivo {
 			logger.error(e.getMessage(), e.getCause());
 			throw new InfraException(CodigoErro.ARQUIVO_CORROMPIDO.getDescricao());
 		}
-		arquivo = conversorRemessaArquivo.converter(arquivoVO);
+		arquivo = conversorRemessaArquivo.converter(arquivoVO, arquivo, erros);
 		return arquivo;
 	}
 

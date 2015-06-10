@@ -115,6 +115,19 @@ public class RemessaMediator {
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public MensagemRetornoXml processarArquivoXML(List<RemessaVO> arquivoRecebido, Usuario usuario, String nomeArquivo) {
+		Arquivo arquivo = processarArquivoXMLManual(arquivoRecebido, usuario, nomeArquivo);
+
+		return gerarResposta(arquivo, usuario);
+	}
+
+	/**
+	 * 
+	 * @param arquivoRecebido
+	 * @param usuario
+	 * @param nomeArquivo
+	 * @return
+	 */
+	public Arquivo processarArquivoXMLManual(List<RemessaVO> arquivoRecebido, Usuario usuario, String nomeArquivo) {
 		Arquivo arquivo = new Arquivo();
 		arquivo.setUsuarioEnvio(usuario);
 		arquivo.setRemessas(new ArrayList<Remessa>());
@@ -123,8 +136,7 @@ public class RemessaMediator {
 		logger.info("Fim processador do arquivo " + nomeArquivo);
 
 		arquivo = salvarArquivo(arquivo, usuario);
-
-		return gerarResposta(arquivo, usuario);
+		return arquivo;
 	}
 
 	private MensagemRetornoXml gerarResposta(Arquivo arquivo, Usuario usuario) {

@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,30 +53,23 @@ public class ArquivoDAO extends AbstractBaseDAO {
 		Arquivo arquivoSalvo = new Arquivo();
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
-
+		BigDecimal valorTotalSaldo = BigDecimal.ZERO;
 		try {
 			arquivo.setStatusArquivo(save(arquivo.getStatusArquivo()));
 			arquivoSalvo = save(arquivo);
 
 			for (Remessa remessa : arquivo.getRemessas()) {
+				remessa.setArquivo(arquivoSalvo);
 				remessa.setCabecalho(save(remessa.getCabecalho()));
 				remessa.setRodape(save(remessa.getRodape()));
-				remessa.setArquivo(arquivoSalvo);
-				remessa.setArquivoGeradoProBanco(arquivoSalvo);// gambiarra
-															   // gigante pra
-															   // funcionar
-															   // gerar
-															   // confirmacao e
-															   // retorno
-				remessa.setDataRecebimento(new LocalDate());
+				/**
+				 * @TODO gambiarra gigante pra funcionar gerar confirmacao e
+				 *       retorno [feito pelo Thasso] - corrigir o quanto antes.
+				 */
+				remessa.setArquivoGeradoProBanco(arquivoSalvo);
 
-				if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)
-				        || arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
-					remessa.setSituacao(false);
-					if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
-						remessa.setSituacaoBatimento(false);
-					}
-				}
+				remessa.setDataRecebimento(new LocalDate());
+				setSituacaoRemessa(arquivo, remessa);
 				save(remessa);
 				for (Titulo titulo : remessa.getTitulos()) {
 					titulo.setRemessa(remessa);
@@ -91,7 +85,18 @@ public class ArquivoDAO extends AbstractBaseDAO {
 						historico.setTitulo(tituloSalvo);
 						historico.setUsuarioAcao(usuarioAcao);
 						save(historico);
+					} else {
+						titulo.setSaldoTitulo(BigDecimal.ZERO);
+						remessa.getTitulos().remove(titulo);
 					}
+
+					valorTotalSaldo = valorTotalSaldo.add(titulo.getSaldoTitulo());
+					remessa.getCabecalho().setQtdTitulosRemessa(remessa.getTitulos().size());
+					remessa.getRodape().setSomatorioValorRemessa(valorTotalSaldo);
+
+					remessa.setCabecalho(save(remessa.getCabecalho()));
+					remessa.setRodape(save(remessa.getRodape()));
+
 				}
 			}
 			transaction.commit();
@@ -100,15 +105,20 @@ public class ArquivoDAO extends AbstractBaseDAO {
 		} catch (Exception ex) {
 			transaction.rollback();
 			logger.error(ex.getMessage(), ex);
-			// if
-			// (ex.getMessage().contains("duplicar valor da chave viola a restrição de unicidade"))
-			// {
-			// throw new InfraException("O registro já está salvo na CRA.");
-			// }
 			throw new InfraException("Não foi possível inserir esse arquivo na base de dados.");
 		}
 		return arquivoSalvo;
 
+	}
+
+	private void setSituacaoRemessa(Arquivo arquivo, Remessa remessa) {
+		if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)
+		        || arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
+			remessa.setSituacao(false);
+			if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+				remessa.setSituacaoBatimento(false);
+			}
+		}
 	}
 
 	public StatusArquivo buscarStatusArquivo(SituacaoArquivo situacao) {

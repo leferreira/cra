@@ -3,8 +3,11 @@ package br.com.ieptbto.cra.conversor.arquivo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ieptbto.cra.conversor.ConversorArquivoVo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.Remessa;
@@ -13,6 +16,7 @@ import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.CabecalhoVO;
+import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.entidade.vo.RodapeVO;
 import br.com.ieptbto.cra.entidade.vo.TituloVO;
 
@@ -24,6 +28,10 @@ import br.com.ieptbto.cra.entidade.vo.TituloVO;
 @SuppressWarnings("rawtypes")
 @Service
 public class ConversorRemessaArquivo {
+
+	protected static final Logger logger = Logger.getLogger(ConversorRemessaArquivo.class);
+	@Autowired
+	private FabricaDeArquivo fabricaDeArquivo;
 
 	public ArquivoVO converter(Remessa remessa) {
 		ArquivoVO arquivo = new ArquivoVO();
@@ -59,8 +67,11 @@ public class ConversorRemessaArquivo {
 		return cabecalhos;
 	}
 
-	public Arquivo converter(ArquivoVO arquivoVO) {
-		Arquivo arquivo = new Arquivo();
+	public Arquivo converter(ArquivoVO arquivoVO, Arquivo arquivo, List<Exception> erros) {
+		List<RemessaVO> remessas = ConversorArquivoVo.converterParaRemessaVO(arquivoVO);
+		arquivo.setRemessas(new ArrayList<Remessa>());
+
+		fabricaDeArquivo.processarArquivoXML(remessas, arquivo.getUsuarioEnvio(), arquivo.getNomeArquivo(), arquivo, erros);
 
 		return arquivo;
 	}
