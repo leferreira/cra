@@ -1,8 +1,9 @@
 package br.com.ieptbto.cra.arquivoDePara;
 
+import java.util.List;
+
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 
-import br.com.ieptbto.cra.entidade.ArquivoDePara;
 import br.com.ieptbto.cra.enumeration.PadraoArquivoDePara;
 
 /**
@@ -10,8 +11,7 @@ import br.com.ieptbto.cra.enumeration.PadraoArquivoDePara;
  *
  * @param <T>
  */
-@SuppressWarnings("rawtypes")
-public abstract class AbstractDePara<T extends AbstractDePara> {
+public abstract class AbstractDePara {
 
 	protected PadraoArquivoDePara padrao;
 
@@ -19,5 +19,5 @@ public abstract class AbstractDePara<T extends AbstractDePara> {
 		return this.padrao;
 	}
 
-	public abstract ArquivoDePara processar(FileUpload file);
+	public abstract List<?> processar(FileUpload file);
 }

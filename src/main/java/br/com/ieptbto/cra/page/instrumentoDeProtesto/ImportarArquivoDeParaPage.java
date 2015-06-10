@@ -15,7 +15,7 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 
-import br.com.ieptbto.cra.entidade.ArquivoDePara;
+import br.com.ieptbto.cra.entidade.AgenciaCAF;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoDeParaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -26,31 +26,30 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
-public class ImportarArquivoDeParaPage extends BasePage<ArquivoDePara>{
+public class ImportarArquivoDeParaPage extends BasePage<AgenciaCAF>{
 
 	/***/
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(ImportarArquivoDeParaPage.class);
 	
 	@SpringBean
-	ArquivoDeParaMediator arquivoCafMediator; 
+	ArquivoDeParaMediator arquivoDeParaMediator; 
 	
-	private ArquivoDePara arquivoCAF;
+	private AgenciaCAF arquivoCAF;
 	private FileUploadField fileUploadField;
 	
 	public ImportarArquivoDeParaPage() {
-		arquivoCAF = new ArquivoDePara();
-		Form<ArquivoDePara> form = new Form<ArquivoDePara>("form", getModel()) {
+		arquivoCAF = new AgenciaCAF();
+		Form<AgenciaCAF> form = new Form<AgenciaCAF>("form", getModel()) {
 			/****/
 			private static final long serialVersionUID = 1L;
 
-			@SuppressWarnings("unused")
 			@Override
 			protected void onSubmit() {
 				final FileUpload uploadedFile = fileUploadField.getFileUpload();
 
 				try {
-					ArquivoDePara arquivoDePara = arquivoCafMediator.processarArquivo(uploadedFile);
+					arquivoDeParaMediator.processarArquivo(uploadedFile);
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -61,7 +60,6 @@ public class ImportarArquivoDeParaPage extends BasePage<ArquivoDePara>{
 				}
 			}
 		};
-		form.setMultiPart(true);
 		form.setMaxSize(Bytes.megabytes(10));
 
 		form.add(campoArquivo());
@@ -100,8 +98,8 @@ public class ImportarArquivoDeParaPage extends BasePage<ArquivoDePara>{
 	}
 	
 	@Override
-	protected IModel<ArquivoDePara> getModel() {
-		return new CompoundPropertyModel<ArquivoDePara>(arquivoCAF);
+	protected IModel<AgenciaCAF> getModel() {
+		return new CompoundPropertyModel<AgenciaCAF>(arquivoCAF);
 	}
 
 	

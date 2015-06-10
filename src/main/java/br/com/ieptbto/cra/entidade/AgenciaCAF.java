@@ -5,10 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
 import org.hibernate.envers.Audited;
 
 /**
@@ -17,29 +16,28 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-@Table(name = "TB_ARQUIVO_DE_PARA")
-@org.hibernate.annotations.Table(appliesTo = "TB_ARQUIVO_DE_PARA")
-public class ArquivoDePara extends AbstractEntidade<ArquivoDePara> {
+@Table(name = "TB_AGENCIA_CAF")
+@org.hibernate.annotations.Table(appliesTo = "TB_AGENCIA_CAF")
+public class AgenciaCAF extends AbstractEntidade<AgenciaCAF> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private Instituicao banco;
+	private String banco;
 	private String codigoAgencia;
 	private String nomeAgencia;
 	private String cidade;
 	private String uf;
 
 	@Id
-	@Column(name = "ID_ARQUIVO_DE_PARA", columnDefinition = "serial")
+	@Column(name = "ID_AGENCIA_CAF", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
 
-	@ManyToOne
-	@JoinColumn(name="INSTITUICAO_BANCO_ID")
-	public Instituicao getBanco() {
+	@Column(name="BANCO")
+	public String getBanco() {
 		return banco;
 	}
 
@@ -67,7 +65,7 @@ public class ArquivoDePara extends AbstractEntidade<ArquivoDePara> {
 		this.id = id;
 	}
 
-	public void setBanco(Instituicao banco) {
+	public void setBanco(String banco) {
 		this.banco = banco;
 	}
 
@@ -88,9 +86,13 @@ public class ArquivoDePara extends AbstractEntidade<ArquivoDePara> {
 	}
 
 	@Override
-	public int compareTo(ArquivoDePara entidade) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int compareTo(AgenciaCAF entidade) {
+		CompareToBuilder compareTo = new CompareToBuilder();
+		compareTo.append(this.getBanco(), entidade.getBanco());
+		compareTo.append(this.getCodigoAgencia(), entidade.getCodigoAgencia());
+		compareTo.append(this.getUf(), entidade.getUf());
+		compareTo.append(this.getCidade(), entidade.getCidade());
+		return compareTo.toComparison();
 	}
 
 }

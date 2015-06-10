@@ -1,18 +1,20 @@
 package br.com.ieptbto.cra.arquivoDePara;
 
+import java.util.List;
+
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+
+import br.com.ieptbto.cra.entidade.AgenciaBancoDoBrasil;
 
 /**
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("rawtypes")
-public class ArquivoBancoDoBrasil extends AbstractDePara<AbstractDePara>{
+public class ArquivoBancoDoBrasil extends AbstractDePara {
 
 	@Override
-	public br.com.ieptbto.cra.entidade.ArquivoDePara processar(FileUpload file) {
+	public List<AgenciaBancoDoBrasil> processar(FileUpload file) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

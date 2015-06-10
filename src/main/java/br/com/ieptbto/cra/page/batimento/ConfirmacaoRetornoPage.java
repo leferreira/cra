@@ -68,6 +68,7 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 					} else 
 						throw new InfraException("Não há retornos pendentes para envio.");
 						
+					setResponsePage(new RetornoLabel());
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -135,7 +136,8 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 						confirmacaoMediator.gerarConfirmacoes(getUser(), getConfirmacoesParaEnvio());
 					else 
 						throw new InfraException("Não há confirmações pendentes para envio.");
-						
+					
+					setResponsePage(new ConfirmacaoLabel());
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

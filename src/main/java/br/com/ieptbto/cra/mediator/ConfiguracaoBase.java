@@ -15,6 +15,7 @@ public class ConfiguracaoBase {
 	public static String DIRETORIO_TEMP_BASE = "../ARQUIVOS_CRA/TEMP/";
 	public static String DIRETORIO_BASE_INSTITUICAO = DIRETORIO_BASE + "INSTITUICAO/";
 	public static String DIRETORIO_BASE_INSTITUICAO_TEMP = DIRETORIO_TEMP_BASE + "INSTITUICAO/";
+	public static String DIRETORIO_BASE_DE_PARA_TEMP = DIRETORIO_TEMP_BASE + "ARQUIVOS_DE_PARA/";
 	public static String BARRA = "/";
 	public static final int TAMANHO_PADRAO_LINHA = 600;
 	public static final String FECHA_CHAVE = "]";

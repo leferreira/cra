@@ -12,6 +12,7 @@ body {
 
 .feedbackPanelWARNING{
 	color: #8A6D3B;
+	font-weight: bold;
 	background-color: #FCF8E3;
 	border-color: #FAEBCC;
 	padding: 15px;
@@ -33,16 +34,6 @@ body {
 	float: left;
 	text-align: left;
 }
-.panel-label{
-  float: left;
-  width: 30%;
-  text-align: right;
-}
-.panel-input{
-  width: 69%;
-  float: left;
-  margin-left: 1%;
-}
 .input-historico{
 	width: 100%;
 }
@@ -53,14 +44,9 @@ body {
 	width: 15%;
 	background-color: transparent !important;
 }
-
 .dropdown-submenu>.dropdown-menu {
 	border-radius: 0 0px 0px 0px;
 }
-
-/*.glyphicon {
-	color: #f8f8f8;
-}*/
 .glyphicon-folder-open{
 	color: black !important;
 }

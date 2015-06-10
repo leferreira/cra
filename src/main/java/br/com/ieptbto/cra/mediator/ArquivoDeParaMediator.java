@@ -1,12 +1,13 @@
 package br.com.ieptbto.cra.mediator;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ieptbto.cra.arquivoDePara.ArquivoBancoDoBrasil;
+import br.com.ieptbto.cra.arquivoDePara.ArquivoBradesco;
 import br.com.ieptbto.cra.arquivoDePara.ArquivoCAF;
 import br.com.ieptbto.cra.dao.ArquivoDeParaDAO;
-import br.com.ieptbto.cra.entidade.ArquivoDePara;
 import br.com.ieptbto.cra.enumeration.PadraoArquivoDePara;
 import br.com.ieptbto.cra.exception.InfraException;
 
@@ -17,46 +18,19 @@ import br.com.ieptbto.cra.exception.InfraException;
 @Service
 public class ArquivoDeParaMediator {
 
-	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	@Autowired
+	ArquivoDeParaDAO deParaDAO;
 	
-	private ArquivoDePara arquivoDePara;
-	private FileUpload file;
-
-	public ArquivoDePara processarArquivo(FileUpload uploadedFile) throws Exception {
-		this.arquivoDePara = new ArquivoDePara();
-		setFile(file);
-		processar();
+	public void processarArquivo(FileUpload uploadedFile) {
 		
-		return salvarArquivo(); 
-	}
-	
-	private ArquivoDePara salvarArquivo() {
-		return new ArquivoDeParaDAO().salvarArquivoDePara(getArquivoDePara());
-	}
-
-	private void processar() {
-		
-		if (PadraoArquivoDePara.CAF.equals(getFile())) {
-			arquivoDePara = new ArquivoCAF().processar(getFile());
-		} else if (PadraoArquivoDePara.BANCO_DO_BRASIL.equals(getFile())) {
-			
-		} else if (PadraoArquivoDePara.BRADESCO.equals(getFile())) {
-			
+		if (uploadedFile.getClientFileName().contains(PadraoArquivoDePara.CAF.getModelo())) {
+			deParaDAO.salvarArquivoCAF(new ArquivoCAF().processar(uploadedFile));
+		} else if (PadraoArquivoDePara.BANCO_DO_BRASIL.equals(uploadedFile)) {
+			deParaDAO.salvarArquivoBancoDoBrasil(new ArquivoBancoDoBrasil().processar(uploadedFile));
+		} else if (uploadedFile.getClientFileName().toUpperCase().contains(PadraoArquivoDePara.BRADESCO.getModelo())) {
+			deParaDAO.salvarArquivoBradesco(new ArquivoBradesco().processar(uploadedFile));
 		} else {
 			new InfraException("Não foi possível definir o modelo do arquivo de/para ! Entre em contato com a CRA !");
 		}
-	}
-
-	private FileUpload getFile() {
-		return file;
-	}
-
-	private void setFile(FileUpload file) {
-		this.file = file;
-	}
-
-	private ArquivoDePara getArquivoDePara() {
-		return arquivoDePara;
 	}
 }
