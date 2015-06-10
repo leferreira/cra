@@ -15,8 +15,8 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-@Table(name = "TB_AGENCIA_BANCO_BRASIL")
-@org.hibernate.annotations.Table(appliesTo = "TB_AGENCIA_BANCO_BRASIL")
+@Table(name = "TB_AGENCIA_BRADESCO")
+@org.hibernate.annotations.Table(appliesTo = "TB_AGENCIA_BRADESCO")
 public class AgenciaBradesco extends AbstractEntidade<AgenciaBradesco> {
 
 	/***/
@@ -26,7 +26,8 @@ public class AgenciaBradesco extends AbstractEntidade<AgenciaBradesco> {
 	private String cnpj;
 	private String codigoAgenciaCedente;
 	private String agenciaDestino;
-
+	private String orientacao;
+	
 	@Id
 	@Column(name = "ID_AGENCIA_BRADESCO", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +50,11 @@ public class AgenciaBradesco extends AbstractEntidade<AgenciaBradesco> {
 		return codigoAgenciaCedente;
 	}
 
+	@Column(name = "ORIENTACAO")
+	public String getOrientacao() {
+		return orientacao;
+	}
+	
 	@Column(name = "AGENCIA_DESTINO")
 	public String getAgenciaDestino() {
 		return agenciaDestino;
@@ -78,5 +84,9 @@ public class AgenciaBradesco extends AbstractEntidade<AgenciaBradesco> {
 	public int compareTo(AgenciaBradesco entidade) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public void setOrientacao(String orientacao) {
+		this.orientacao = orientacao;
 	}
 }

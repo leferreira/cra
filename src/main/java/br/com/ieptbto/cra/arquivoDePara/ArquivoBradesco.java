@@ -97,13 +97,17 @@ public class ArquivoBradesco extends AbstractDePara {
 	private static List<AgenciaBradesco> processarPlanilha(Workbook obj) {
 		List<AgenciaBradesco> listaAgencias = new ArrayList<AgenciaBradesco>();
 
-		Sheet worksheet = obj.getSheet("NOME_DO_CEDENTE");
+		Sheet worksheet = obj.getSheetAt(0);
 		Row row;
-		for (int i = 2; i <= worksheet.getLastRowNum(); i++) {
+		for (int i = 1; i <= worksheet.getLastRowNum(); i++) {
 			row = worksheet.getRow(i);
 
 			AgenciaBradesco agencia = new AgenciaBradesco();
 			agencia.setNomeCedente(getValorCelula(row, 0));
+			agencia.setCnpj(getValorCelula(row, 1));
+			agencia.setCodigoAgenciaCedente(getValorCelula(row, 2));
+			agencia.setAgenciaDestino(getValorCelula(row, 3));
+			agencia.setOrientacao(getValorCelula(row, 4));
 
 			listaAgencias.add(agencia);
 		}
