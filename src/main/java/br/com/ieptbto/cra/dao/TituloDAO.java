@@ -138,9 +138,9 @@ public class TituloDAO extends AbstractBaseDAO {
 
 	private TituloRemessa salvarTituloRetorno(Retorno tituloRetorno, Transaction transaction) {
 		Criteria criteria = getCriteria(TituloRemessa.class);
-		criteria.add(Restrictions.eq("codigoPortador", tituloRetorno.getCodigoPortador()));
-		criteria.add(Restrictions.eq("nossoNumero", tituloRetorno.getNossoNumero()));
-		criteria.add(Restrictions.eq("agenciaCodigoCedente", tituloRetorno.getAgenciaCodigoCedente()));
+		criteria.add(Restrictions.eq("codigoPortador", tituloRetorno.getCodigoPortador().trim()));
+		criteria.add(Restrictions.eq("nossoNumero", tituloRetorno.getNossoNumero().trim()));
+		criteria.add(Restrictions.eq("agenciaCodigoCedente", tituloRetorno.getAgenciaCodigoCedente().trim()));
 
 		TituloRemessa titulo = TituloRemessa.class.cast(criteria.uniqueResult());
 
