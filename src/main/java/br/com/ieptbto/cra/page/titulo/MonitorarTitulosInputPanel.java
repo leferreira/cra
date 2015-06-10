@@ -59,27 +59,27 @@ public class MonitorarTitulosInputPanel extends Panel {
 		return comboPortador;
 	}
 	
-	public TextField<String> nossoNumero() {
+	private TextField<String> nossoNumero() {
 		return new TextField<String>("nossoNumero");
 	}
 	
-	public TextField<String> numeroTitulo() {
+	private TextField<String> numeroTitulo() {
 		return new TextField<String>("numeroTitulo");
 	}
 	
-	public TextField<LocalDate> dataEntradaCRA() {
+	private TextField<LocalDate> dataEntradaCRA() {
 		return dataEntradaCRA = new TextField<LocalDate>("dataOcorrencia", new Model<LocalDate>());
 	}
 	
-	public TextField<String> nomeDevedor() {
+	private TextField<String> nomeDevedor() {
 		return new TextField<String>("nomeDevedor");
 	}
 	
-	public TextField<String> documentoDevedor() {
+	private TextField<String> documentoDevedor() {
 		return new TextField<String>("documentoDevedor");
 	}
 	
-	public TextField<String> numeroProtocoloCartorio() {
+	private TextField<String> numeroProtocoloCartorio() {
 		return new TextField<String>("numeroProtocoloCartorio");
 	}
 	

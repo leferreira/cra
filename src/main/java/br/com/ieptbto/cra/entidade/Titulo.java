@@ -66,11 +66,17 @@ public abstract class Titulo<T> extends AbstractEntidade<T> {
 
 	@Column(name = "NOSSO_NUMERO", nullable = false)
 	public String getNossoNumero() {
+		if (nossoNumero != null) {
+			return nossoNumero.trim();
+		}
 		return nossoNumero;
 	}
 
 	@Column(name = "NUMERO_TITULO", nullable = false)
 	public String getNumeroTitulo() {
+		if (numeroTitulo != null) {
+			return numeroTitulo.trim();
+		}
 		return numeroTitulo;
 	}
 
@@ -96,6 +102,9 @@ public abstract class Titulo<T> extends AbstractEntidade<T> {
 
 	@Column(name = "NUMERO_PROTOCOLO_CARTORIO")
 	public String getNumeroProtocoloCartorio() {
+		if (numeroProtocoloCartorio != null) {
+			return numeroProtocoloCartorio.trim();
+		}
 		return numeroProtocoloCartorio;
 	}
 
