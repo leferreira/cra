@@ -164,14 +164,15 @@ public class TituloDAO extends AbstractBaseDAO {
 
 	private TituloRemessa salvarTituloConfirmacao(Confirmacao tituloConfirmacao, Transaction transaction) {
 		Criteria criteria = getCriteria(TituloRemessa.class);
-		criteria.add(Restrictions.eq("codigoPortador", tituloConfirmacao.getCodigoPortador()));
-		criteria.add(Restrictions.eq("nossoNumero", tituloConfirmacao.getNossoNumero()));
-		criteria.add(Restrictions.eq("numeroTitulo", tituloConfirmacao.getNumeroTitulo()));
+		criteria.add(Restrictions.eq("codigoPortador", tituloConfirmacao.getCodigoPortador().trim()));
+		criteria.add(Restrictions.eq("nossoNumero", tituloConfirmacao.getNossoNumero().trim()));
+		criteria.add(Restrictions.eq("numeroTitulo", tituloConfirmacao.getNumeroTitulo().trim()));
 
 		TituloRemessa titulo = TituloRemessa.class.cast(criteria.uniqueResult());
 
 		if (titulo == null) {
-			throw new InfraException("Não existe um título para essa confirmação");
+			new InfraException("O título [Nosso número =" + tituloConfirmacao.getNossoNumero() + "] não existe em nossa base de dados.");
+			return null;
 		}
 		try {
 			tituloConfirmacao.setTitulo(titulo);
@@ -181,7 +182,7 @@ public class TituloDAO extends AbstractBaseDAO {
 
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex.getCause());
-			throw new InfraException("Não existe um título para essa confirmação");
+			new InfraException("O título [Nosso número =" + tituloConfirmacao.getNossoNumero() + "] não existe em nossa base de dados.");
 		}
 		return titulo;
 	}
@@ -192,7 +193,7 @@ public class TituloDAO extends AbstractBaseDAO {
 		} catch (Exception ex) {
 			if (PSQLException.class.isInstance(ex)) {
 				logger.error(ex.getMessage(), ex.getCause());
-				new InfraException("O Título número: " + tituloRemessa.getNumeroTitulo() + " já existe já foi inserido.");
+				new InfraException("O Título número: " + tituloRemessa.getNumeroTitulo() + " já existe na base de dados.");
 				return null;
 			} else {
 				transaction.rollback();
