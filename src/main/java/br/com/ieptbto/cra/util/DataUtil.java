@@ -147,6 +147,9 @@ public class DataUtil implements Serializable {
 	 */
 
 	public static String localDateToStringddMMyyyy(LocalDate data) {
+		if (data == null) {
+			return "";
+		}
 		return data.toString(getDateTimeFormatter(PADRAO_FORMATACAO_DATA_DDMMYYYY));
 	}
 
