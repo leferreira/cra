@@ -45,7 +45,6 @@ import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosTitulosPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioPage;
 import br.com.ieptbto.cra.page.tipoInstituicao.IncluirTipoInstituicaoPage;
 import br.com.ieptbto.cra.page.tipoInstituicao.ListaTipoInstituicaoPage;
-import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.page.titulo.ListaTitulosPage;
 import br.com.ieptbto.cra.page.titulo.MonitorarTitulosPage;
@@ -161,7 +160,6 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		/** Titulos */
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
-		mountPage("EntradaManual", EntradaManualPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
 		mountPage("HistoricoDoTitulo", HistoricoPage.class);
 

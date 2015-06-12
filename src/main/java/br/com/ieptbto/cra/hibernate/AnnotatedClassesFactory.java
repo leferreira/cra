@@ -15,11 +15,12 @@ import java.util.List;
 
 import br.com.ieptbto.cra.entidade.AgenciaBancoDoBrasil;
 import br.com.ieptbto.cra.entidade.AgenciaBradesco;
-import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AgenciaCAF;
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.Confirmacao;
+import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Instituicao;
@@ -34,6 +35,7 @@ import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.entidade.UsuarioFiliado;
 
 /**
  * 
@@ -77,6 +79,8 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(AgenciaCAF.class);
 		classesHibernate.add(AgenciaBancoDoBrasil.class);
 		classesHibernate.add(AgenciaBradesco.class);
+		classesHibernate.add(UsuarioFiliado.class);
+		classesHibernate.add(Filiado.class);
 		// classesHibernate.add(CraCustomRevisionEntity.class);
 	}
 
