@@ -120,9 +120,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private TextField<String> numeroProtocoloCartorio() {
 		if (tituloRemessa.getConfirmacao() != null){
 			return new TextField<String>("numeroProtocoloCartorio", new Model<String>(tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-		} else {
+		} else 
 			return new TextField<String>("numeroProtocoloCartorio", new Model<String>(StringUtils.EMPTY));
-		}
 	}
 
 	private TextField<String> dataProtocolo() {
