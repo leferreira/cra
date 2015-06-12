@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.page.relatorio;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.commons.lang.StringUtils;
@@ -60,7 +61,6 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 		add(instituicao());
 		add(botaoGerarRelatorio());
 		add(quantidadeDeTitulos());
-//		add(botaoDownload());
 	}
 
 	private ListView<TituloRemessa> carregarListaTitulos() {
@@ -112,12 +112,12 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 					
 					if (!getTitulos().isEmpty()) {
 						
-						if (instituicao!=null){
+						if (instituicao!=null) {
 							jasperPrint = relatorioMediator.novoRelatorioDeTitulosPorInstituicao(instituicao, getTitulos(), dataInicio, dataFim);
-							setResponsePage(new VerRelatorioPage(jasperPrint));
+							getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 						} else if (municipio!=null){
 							jasperPrint = relatorioMediator.novoRelatorioDeTitulosPorMunicipio(municipio, getTitulos(), dataInicio, dataFim);
-							setResponsePage(new VerRelatorioPage(jasperPrint));
+							getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 						} else {
 							error("Não foi possível gerar o relatório!");
 						}

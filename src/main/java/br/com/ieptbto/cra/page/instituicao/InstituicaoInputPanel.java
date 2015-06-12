@@ -128,10 +128,8 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	private Component comboTipoInstituicao() {
-		IChoiceRenderer<TipoInstituicao> renderer = new ChoiceRenderer<TipoInstituicao>(
-				"tipoInstituicao");
-		combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao",
-				tipoMediator.listaTipoInstituicao(), renderer);
+		IChoiceRenderer<TipoInstituicao> renderer = new ChoiceRenderer<TipoInstituicao>("tipoInstituicao");
+		combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao", tipoMediator.listaTipoInstituicao(), renderer);
 		combo.setLabel(new Model<String>("Tipo Instituição"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);

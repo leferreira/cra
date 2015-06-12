@@ -3,6 +3,8 @@ package br.com.ieptbto.cra.page.instrumentoDeProtesto;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.log4j.Logger;
@@ -33,7 +35,6 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoDeProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.relatorio.VerRelatorioPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.relatorio.SlipUtils;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -71,11 +72,8 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno>{
 		add(carregarListaSlips());
 		titulosSlips.setReuseItems(true);
 		
-		Form<?> formGerar = new Form<Retorno>("formGerar");
-		formGerar.add(botaoGerarListaSlip());
-		formGerar.add(botaoGerarEtiquetas());
-		formGerar.add(botaoGerarEnvelope());
-		add(formGerar);
+		add(botaoGerarListaSlip());
+		add(botaoGerarEtiquetas());
 	}
 	
 	private void adicionarFormularioManual(){
@@ -93,15 +91,15 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno>{
 					tituloProtestado = instrumentoMediator.buscarTituloProtestado(numeroProtocolo, codigoIBGE); 
 					
 					if (tituloProtestado != null){
-						if (!listaRetornoParaSlip.contains(tituloProtestado))
+						if (!listaRetornoParaSlip.contains(tituloProtestado)) {
 							listaRetornoParaSlip.add(tituloProtestado);
-						else 
+							codigoIbge.clearInput();
+						} else 
 							error("A lista já contem o título!");
 					} else { 
 						error("Titulo não encontrado!");
 					}
 					protocoloCartorio.clearInput();
-					codigoIbge.clearInput();
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -132,9 +130,10 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno>{
 					tituloProtestado = instrumentoMediator.buscarTituloProtestado(protocolo, codigoIbge); 
 					
 					if (tituloProtestado != null){
-						if (!listaRetornoParaSlip.contains(tituloProtestado))
+						if (!listaRetornoParaSlip.contains(tituloProtestado)) {
 							listaRetornoParaSlip.add(tituloProtestado);
-						else 
+							codigoInstrumento.clearInput();
+						} else 
 							error("A lista já contem o título!");
 					} else { 
 						error("Titulo não encontrado!");
@@ -199,43 +198,31 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno>{
 		return protocoloCartorio = new TextField<String>("protocoloCartorio", new Model<String>());
 	}
 	
-	private Component botaoGerarListaSlip() {
-		Component button = new Button("gerarLista") {
+	@SuppressWarnings("rawtypes")
+	private Component botaoGerarListaSlip(){
+		return new Link("gerarLista"){
+
 			/***/
 			private static final long serialVersionUID = 1L;
-			public void onSubmit() {
-				
+			@Override
+			public void onClick() {
 				List<InstrumentoProtesto> listaSlip = new ArrayList<InstrumentoProtesto>();
 				JasperPrint jasperPrint;
 				
 				try {
-					listaSlip = instrumentoMediator.processarInstrumentos(listaRetornoParaSlip);
-//					listaSlip = instrumentoMediator.buscarInstrumentosParaSlip();
+					instrumentoMediator.processarInstrumentos(listaRetornoParaSlip);
+					listaSlip = instrumentoMediator.buscarInstrumentosParaSlip();
 					jasperPrint = getSlipUtils().gerarSlipLista(listaSlip);
-					setResponsePage(new VerRelatorioPage(jasperPrint));
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível processar os instrumentos de protesto! Entre em contato com a CRA.");
-				}
-			}
-		};
-		return button;
-	}
-	
-	private Component botaoGerarEnvelope() {
-		Component button = new Button("gerarEnvelope") {
-			/***/
-			private static final long serialVersionUID = 1L;
-			public void onSubmit() {
+					
+					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 				
-				try {
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
+				} catch (JRException e) {
+					e.printStackTrace();
 					error("Não foi possível processar os instrumentos de protesto! Entre em contato com a CRA.");
 				}
 			}
+			
 		};
-		return button;
 	}
 	
 	private Component botaoGerarEtiquetas() {

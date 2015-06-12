@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.log4j.Logger;
@@ -90,11 +91,11 @@ public class RelatorioCraPanel extends Panel{
 					try {
 						if (bancoPortador != null && pracaProtesto == null) { 
 							JasperPrint jasperPrint = relatorioMediator.novoRelatorioSintetico(bancoPortador, tipoArquivo, dataInicio, dataFim);
-							setResponsePage(new VerRelatorioPage(jasperPrint));
+							getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 
 						} else if (bancoPortador == null && pracaProtesto != null){ 
 							JasperPrint jasperPrint = relatorioMediator.novoRelatorioSinteticoPorMunicipio(pracaProtesto , tipoArquivo,dataInicio, dataFim );
-							setResponsePage(new VerRelatorioPage(jasperPrint));
+							getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 							
 						} else 
 							error("Deve ser selecionado o portador ou o município!");

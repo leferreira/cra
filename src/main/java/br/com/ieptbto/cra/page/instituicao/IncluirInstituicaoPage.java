@@ -10,28 +10,28 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 @SuppressWarnings("serial")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 
 	private Instituicao instituicao;
 	private InstituicaoForm form;
-	
+
 	public IncluirInstituicaoPage() {
 		instituicao = new Instituicao();
 		setForm();
 	}
-	
+
 	public IncluirInstituicaoPage(Instituicao instituicao) {
 		this.instituicao = instituicao;
 		setForm();
 	}
-	
-	public void setForm(){
+
+	public void setForm() {
 		form = new InstituicaoForm("form", getModel());
 		form.add(new InstituicaoInputPanel("instituicaoInputPanel", getModel()));
 		add(form);
 	}
-	
+
 	@Override
 	protected IModel<Instituicao> getModel() {
 		return new CompoundPropertyModel<Instituicao>(instituicao);

@@ -36,6 +36,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>br.com.ieptbto.br</groupId>
+			<artifactId>cra-base</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 		<!-- Wicket framework -->
 		<dependency>

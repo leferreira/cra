@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.page.titulo;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.commons.lang.StringUtils;
@@ -27,7 +28,6 @@ import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.relatorio.VerRelatorioPage;
 import br.com.ieptbto.cra.util.DataUtil;
 @SuppressWarnings("rawtypes")
 public class TitulosDoArquivoPage extends BasePage<Arquivo> {
@@ -117,7 +117,8 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 				
 				try {
 					jasperPrint = relatorioMediator.novoRelatorioDeArquivoDetalhado(getUser().getInstituicao(), getArquivo(), getTitulos());
-					setResponsePage(new VerRelatorioPage(jasperPrint));
+					
+					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 				
 				} catch (JRException e) {
 					e.printStackTrace();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-06-08T12:12:48 -->
+<!-- 2015-06-11T10:05:23 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
 	<parameter name="DATA_INICIO" class="java.lang.String">
@@ -34,13 +34,6 @@
 		<band height="60" splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<image>
-				<reportElement x="0" y="0" width="378" height="60" uuid="a9066b64-8720-46f5-a2f9-ce9e0a0d8fb0">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<imageExpression><![CDATA["/usr/share/tomcat/webapps/cra/img/ieptb.png"]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="378" y="30" width="422" height="30" uuid="15274eb0-6884-4585-90cc-cd15ee3c11ac"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
@@ -48,6 +41,13 @@
 				</textElement>
 				<text><![CDATA[RELATÓRIO DE TÍTULOS]]></text>
 			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="378" height="60" uuid="765dda62-70f6-42e0-ab52-d5bdfa49f8e1">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA["/usr/share/tomcat/webapps/cra/img/ieptb.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>

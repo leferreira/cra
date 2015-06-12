@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.log4j.Logger;
@@ -72,7 +73,7 @@ public class RelatorioCartorioPanel extends Panel{
 					
 					try {
 						JasperPrint jasperPrint = relatorioMediator.novoRelatorioSinteticoPorMunicipio(pracaProtesto, tipoArquivo,dataInicio, dataFim );
-						setResponsePage(new VerRelatorioPage(jasperPrint));
+						getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 					
 					} catch (JRException e) {
 						logger.error(e.getMessage(), e);

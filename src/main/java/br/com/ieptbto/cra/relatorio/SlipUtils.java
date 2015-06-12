@@ -9,7 +9,6 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.joda.time.LocalDate;
 
@@ -28,6 +27,6 @@ public class SlipUtils {
 		parametros.put("DATA", DataUtil.localDateToString(new LocalDate()));
 		
 		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("SlipLista.jrxml"));
-		return JasperFillManager.fillReport(jasperReport, parametros, new JRBeanCollectionDataSource(listaSlip));
+		return JasperFillManager.fillReport(jasperReport, parametros);
 	}
 }
