@@ -106,7 +106,7 @@ public class UsuarioInputPanel extends Panel {
 		return new RadioChoice<String>("situacao", status);
 	}
 
-	private Component comboInstituicao() {
+	private DropDownChoice<Instituicao> comboInstituicao() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
 		comboInstituicao = new DropDownChoice<Instituicao>("instituicao",instituicaoMediator.buscarCartoriosInstituicoes(), renderer);
 		comboInstituicao.setLabel(new Model<String>("Instituição"));
@@ -114,7 +114,7 @@ public class UsuarioInputPanel extends Panel {
 		return comboInstituicao;
 	}
 
-	private Component comboGrupoDoUsuario() {
+	private DropDownChoice<GrupoUsuario> comboGrupoDoUsuario() {
 		IChoiceRenderer<GrupoUsuario> renderer = new ChoiceRenderer<GrupoUsuario>("grupo");
 		comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario",grupoUsuarioMediator.listaDeGrupos(), renderer);
 		comboGrupoUsuario.setLabel(new Model<String>("Grupo Usuário"));

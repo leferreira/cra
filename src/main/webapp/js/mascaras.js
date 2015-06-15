@@ -22,4 +22,6 @@ $().ready(function() {
 	$("#celular").mask("(99) 9999-9999");
 	$("#hora").mask("99:99");
 	$("#hora1").mask("99:99");
+	$("#valorTitulo").mask("9.999.999,00");
+	$("#valorSaldoTitulo").mask("9.999.999,00");
 });
