@@ -50,7 +50,8 @@ public class CraMenu extends Panel {
 	    menuLateral.addItem("Batimento", rolesIncluir);
 	    menuLateral.addItem("ConfirmaçãoRetorno",rolesIncluir);
 
-	    /**Menus Relatorios*/
+	    /**Menus Admins*/
+	    menuLateral.addItem("TipoArquivoPage", rolesIncluir);
 	    menuLateral.addItem("CartoriosPage", rolesIncluir);
 	    menuLateral.addItem("InstituicoesPage", rolesIncluir);
 	    menuLateral.addItem("MunicipiosPage", rolesIncluir);

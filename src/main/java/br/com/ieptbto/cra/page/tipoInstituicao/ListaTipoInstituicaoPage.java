@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.tipoInstituicao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.markup.html.basic.Label;
@@ -10,7 +11,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
@@ -34,24 +34,21 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
 	private final TipoInstituicao tipoInstituicao;
 
-	@SuppressWarnings("rawtypes")
 	public ListaTipoInstituicaoPage() {
-		super();
 		this.tipoInstituicao = new TipoInstituicao();
-		add(new Link("botaoNovo") {
-            /***/
-			private static final long serialVersionUID = 1L;
-
-			public void onClick() {
-				setResponsePage(new IncluirTipoInstituicaoPage());
-            }
-        });
 		add(carregarListaTipos());
 	}
 
+	public ListaTipoInstituicaoPage(String mensagem) {
+		info(mensagem);
+		this.tipoInstituicao = new TipoInstituicao();
+		add(carregarListaTipos());
+	}
+
+	
 	@SuppressWarnings("rawtypes")
 	private ListView<TipoInstituicao> carregarListaTipos(){
-		return new ListView<TipoInstituicao>("listViewTipos", listaTiposInstituicao()) {
+		return new ListView<TipoInstituicao>("listViewTipos", tipoInstituicaoMediator.listarTipos()) {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -72,24 +69,16 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 		        item.add(linkAlterar);
 		        
 				List<PermissaoEnvio> permissoes = tipoInstituicaoMediator.permissoesPorTipoInstituicao(tipoLista);
-				for (PermissaoEnvio p : permissoes) {
-					todasPermissoes += p.getTipoArquivo().getTipoArquivo().getConstante() + " ";
+				
+				if (!permissoes.isEmpty()) {
+					for (PermissaoEnvio p : permissoes) {
+						todasPermissoes += p.getTipoArquivo().getTipoArquivo().getConstante() + " ";
+					}
+					item.add(new Label("permissaoEnvio", todasPermissoes));
+				} else {
+					item.add(new Label("permissaoEnvio", StringUtils.EMPTY));
 				}
-				item.add(new Label("permissaoEnvio", todasPermissoes));
 				todasPermissoes = "";
-			}
-		};
-	}
-
-	public IModel<List<TipoInstituicao>> listaTiposInstituicao() {
-		return new LoadableDetachableModel<List<TipoInstituicao>>() {
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected List<TipoInstituicao> load() {
-				List<TipoInstituicao> list = tipoInstituicaoMediator.listarTipos();
-				return list;
 			}
 		};
 	}
