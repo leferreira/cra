@@ -26,42 +26,41 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @SuppressWarnings("serial")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class IncluirTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
 	@SpringBean
 	TipoInstituicaoMediator tipoInstituicaoMediator;
 	@SpringBean
 	TipoArquivoMediator tipoArquivoMediator;
-	
+
 	private TipoInstituicao tipoInstituicao;
-	private CheckBoxMultipleChoice<String> tipoPermitidos;
-	
-	public IncluirTipoInstituicaoPage(){
+
+	public IncluirTipoInstituicaoPage() {
 		tipoInstituicao = new TipoInstituicao();
 		setForm();
 	}
-	
-	public IncluirTipoInstituicaoPage(TipoInstituicao tipoInstituicao){
+
+	public IncluirTipoInstituicaoPage(TipoInstituicao tipoInstituicao) {
 		this.tipoInstituicao = tipoInstituicao;
 		setForm();
 	}
-	
-	private void setForm(){
-		Form<TipoInstituicao> form = new Form<TipoInstituicao>("form", getModel()){
+
+	private void setForm() {
+		Form<TipoInstituicao> form = new Form<TipoInstituicao>("form", getModel()) {
 			/** */
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void onSubmit() {
-				
+
 			}
 		};
 		form.add(campoTipoInstituicao());
 		form.add(comboTipoArquivos());
 		add(form);
 	}
-	
+
 	private TextField<String> campoTipoInstituicao() {
 		TextField<String> nomeTipo = new TextField<String>("tipoInstituicao");
 		nomeTipo.setEnabled(false);
@@ -74,9 +73,9 @@ public class IncluirTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 		for (TipoArquivoEnum tipo : enumLista) {
 			choices.add(tipo.constante);
 		}
-		return tipoPermitidos = new CheckBoxMultipleChoice<String>("arquivosEnvioPermitido", choices);
+		return new CheckBoxMultipleChoice<String>("arquivosEnvioPermitido", choices);
 	}
-	
+
 	@Override
 	protected IModel<TipoInstituicao> getModel() {
 		return new CompoundPropertyModel<TipoInstituicao>(tipoInstituicao);
