@@ -127,8 +127,8 @@ public class InstituicaoInputPanel extends Panel {
 		return new RadioChoice<String>("status", status);
 	}
 
-	private Component comboTipoInstituicao() {
-		IChoiceRenderer<TipoInstituicao> renderer = new ChoiceRenderer<TipoInstituicao>("tipoInstituicao");
+	private DropDownChoice<TipoInstituicao> comboTipoInstituicao() {
+		IChoiceRenderer<TipoInstituicao> renderer = new ChoiceRenderer<TipoInstituicao>("tipoInstituicao.label");
 		combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao", tipoMediator.listaTipoInstituicao(), renderer);
 		combo.setLabel(new Model<String>("Tipo Instituição"));
 		combo.setOutputMarkupId(true);

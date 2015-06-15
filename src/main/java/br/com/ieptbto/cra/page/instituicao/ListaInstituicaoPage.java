@@ -60,7 +60,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 				linkAlterar.add(new Label("nomeFantasia", instituicaoLista.getNomeFantasia()));
 				item.add(linkAlterar);
 
-				item.add(new Label("tipoInstituicao", instituicaoLista.getTipoInstituicao().getTipoInstituicao()));
+				item.add(new Label("tipoInstituicao", instituicaoLista.getTipoInstituicao().getTipoInstituicao().getLabel()));
 				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
 				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new Label("contato", instituicaoLista.getContato()));

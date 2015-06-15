@@ -65,7 +65,7 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 						setResponsePage(new IncluirTipoInstituicaoPage(tipoLista));
 		            }
 		        };
-		        linkAlterar.add(new Label("tipoInstituicao", tipoLista.getTipoInstituicao()));
+		        linkAlterar.add(new Label("tipoInstituicao", tipoLista.getTipoInstituicao().getLabel()));
 		        item.add(linkAlterar);
 		        
 				List<PermissaoEnvio> permissoes = tipoInstituicaoMediator.permissoesPorTipoInstituicao(tipoLista);
