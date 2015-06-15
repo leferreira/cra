@@ -19,7 +19,7 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 @SuppressWarnings("serial")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaInstituicaoPage extends BasePage<Instituicao> {
 
 	@SpringBean
@@ -32,35 +32,35 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 		super();
 		instituicao = new Instituicao();
 		add(new Link("botaoNovo") {
-            /***/
+			/***/
 			private static final long serialVersionUID = 1L;
 
 			public void onClick() {
 				setResponsePage(new IncluirInstituicaoPage());
-            }
-        });
+			}
+		});
 		add(carregarListaInstituicao());
 	}
 
 	@SuppressWarnings("rawtypes")
-	private ListView<Instituicao> carregarListaInstituicao(){
+	private ListView<Instituicao> carregarListaInstituicao() {
 		return new ListView<Instituicao>("listViewInstituicao", listarInstituicoes()) {
 			@Override
 			protected void populateItem(ListItem<Instituicao> item) {
 				final Instituicao instituicaoLista = item.getModelObject();
-				
+
 				Link linkAlterar = new Link("linkAlterar") {
-		            /***/
+					/***/
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new IncluirInstituicaoPage(instituicaoLista));
-		            }
-		        };
-		        linkAlterar.add(new Label("nomeFantasia", instituicaoLista.getNomeFantasia()));
-		        item.add(linkAlterar);
-		        
-		        item.add(new Label("tipoInstituicao", instituicaoLista.getTipoInstituicao().getTipoInstituicao()));
+					}
+				};
+				linkAlterar.add(new Label("nomeFantasia", instituicaoLista.getNomeFantasia()));
+				item.add(linkAlterar);
+
+				item.add(new Label("tipoInstituicao", instituicaoLista.getTipoInstituicao().getTipoInstituicao()));
 				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
 				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new Label("contato", instituicaoLista.getContato()));
@@ -77,8 +77,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 		return new LoadableDetachableModel<List<Instituicao>>() {
 			@Override
 			protected List<Instituicao> load() {
-				List<Instituicao> list = instituicaoMediator
-						.listarTodasInstituicoes();
+				List<Instituicao> list = instituicaoMediator.listarTodasInstituicoes();
 				return list;
 			}
 		};
