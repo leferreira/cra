@@ -27,14 +27,15 @@ import br.com.ieptbto.cra.util.EmailValidator;
 public class UsuarioInputPanel extends Panel {
 
 	private Usuario usuario;
-	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	private GrupoUsuarioMediator grupoUsuarioMediator;
 	private DropDownChoice<Instituicao> comboInstituicao;
 	private DropDownChoice<GrupoUsuario> comboGrupoUsuario;
 	private RadioChoice<String> radioStatus;
 	private Component button;
+	
+	@SpringBean
+	InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	GrupoUsuarioMediator grupoUsuarioMediator;
 
 	public UsuarioInputPanel(String id, IModel<Usuario> model, Usuario usuario) {
 		super(id, model);

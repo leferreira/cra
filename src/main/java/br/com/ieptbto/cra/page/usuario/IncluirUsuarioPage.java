@@ -28,7 +28,6 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 
 	public IncluirUsuarioPage(Usuario usuario) {
 		this.usuario = usuario;
-		;
 		setFormulario();
 	}
 
