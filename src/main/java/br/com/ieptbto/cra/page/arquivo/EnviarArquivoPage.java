@@ -19,6 +19,7 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -36,20 +37,20 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 	/****/
 	private static final long serialVersionUID = 852632145;
+	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
 
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
 	
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
-	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
 
 	private Arquivo arquivo;
 	private Form<Arquivo> form;
 	private FileUploadField fileUploadField;
 
 	public EnviarArquivoPage() {
-		Instituicao cra = instituicaoMediator.buscarInstituicaoIncial("CRA");
+		Instituicao cra = instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString());
 		arquivo = new Arquivo();
 		arquivo.setInstituicaoEnvio(getUser().getInstituicao());
 		arquivo.setInstituicaoRecebe(cra);

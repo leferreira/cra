@@ -44,12 +44,11 @@ public class CraMenu extends Panel {
 		menuLateral.addItem("RelatorioSintetico", rolesIncluir);
 		menuLateral.addItem("RelatorioArquivosTitulos", rolesIncluir);
 
-		/**Menu batimento*/
-	    menuLateral.addItem("Batimento", rolesIncluir);
-	    menuLateral.addItem("ConfirmaçãoRetorno",rolesIncluir);
-
 	    /**Menus Admins*/
-	    menuLateral.addItem("TipoArquivoPage", rolesIncluir);
+		menuLateral.addItem("Batimento", rolesIncluir);
+		menuLateral.addItem("LiberarTituloConvenios", rolesIncluir);
+		menuLateral.addItem("ConfirmacaoRetorno",rolesIncluir);
+//	    menuLateral.addItem("TipoArquivoPage", rolesIncluir);
 	    menuLateral.addItem("CartoriosPage", rolesIncluir);
 	    menuLateral.addItem("InstituicoesPage", rolesIncluir);
 	    menuLateral.addItem("MunicipiosPage", rolesIncluir);

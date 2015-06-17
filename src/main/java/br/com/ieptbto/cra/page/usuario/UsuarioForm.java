@@ -14,8 +14,9 @@ import br.com.ieptbto.cra.page.base.BaseForm;
 public class UsuarioForm extends BaseForm<Usuario> {
 
 	private static final Logger logger = Logger.getLogger(UsuarioForm.class);
+	
 	@SpringBean
-	private UsuarioMediator usuarioMediator;
+	UsuarioMediator usuarioMediator;
 
 	public UsuarioForm(String id, IModel<Usuario> model) {
 		super(id, model);
@@ -38,8 +39,6 @@ public class UsuarioForm extends BaseForm<Usuario> {
 					setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
 				} else {
 					if (usuarioMediator.isLoginNaoExiste(usuario)) {
-						if(!usuario.isStatus())
-							usuario.setStatus(true);
 						Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
 						setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
 					} else 
@@ -48,6 +47,7 @@ public class UsuarioForm extends BaseForm<Usuario> {
 			}else{
 				error("As senhas não são iguais!");
 			}
+			
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage());
 			error(ex.getMessage());

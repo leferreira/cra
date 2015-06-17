@@ -7,6 +7,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
@@ -36,7 +37,7 @@ public class CartorioForm extends BaseForm<Instituicao> {
 	public void onSubmit() {
 
 		Instituicao instituicao = getModelObject();
-		TipoInstituicao tipo = tipoMediator.buscarTipoInstituicao("Cartório");
+		TipoInstituicao tipo = tipoMediator.buscarTipoInstituicao(TipoInstituicaoCRA.CARTORIO.toString());
 		instituicao.setTipoInstituicao(tipo);
 		try{
 			Instituicao cartorio = municipioMediator.isMunicipioTemCartorio(instituicao.getMunicipio());
