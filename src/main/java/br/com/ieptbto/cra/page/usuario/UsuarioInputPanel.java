@@ -80,6 +80,7 @@ public class UsuarioInputPanel extends Panel {
 	private TextField<String> campoSenha() {
 		PasswordTextField senha = new PasswordTextField("senha");
 		senha.setLabel(new Model<String>("Senha"));
+		senha.setRequired(true);
 		return senha;
 	}
 
