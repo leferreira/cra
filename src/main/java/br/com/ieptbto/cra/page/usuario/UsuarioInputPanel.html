@@ -14,8 +14,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="nome">Nome:</label>  
 						  <div class="col-md-6">
-						  <input id="nome" name="nome" type="text" placeholder="" wicket:id="nome" class="form-control input-md" required="required">
-						    
+						  <input onkeyup="this.value = this.value.toUpperCase()" wicket:id="nome" class="form-control input-md">
 						  </div>
 						</div>
 						
@@ -23,8 +22,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="login">Login:</label>  
 						  <div class="col-md-6">
-						  <input id="login" name="login" type="text" placeholder="" wicket:id="login" class="form-control input-md" required="required">
-						    
+						  <input wicket:id="login" class="form-control input-md">
 						  </div>
 						</div>
 					</div>
@@ -33,7 +31,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="senha">Senha:</label>
 						  <div class="col-md-6">
-						    <input id="senha" name="senha" type="password" placeholder="" wicket:id="senha" class="form-control input-md" required="required">
+						    <input type="password" wicket:id="senha" class="form-control input-md">
 						    
 						  </div>
 						</div>
@@ -42,7 +40,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="confirmar">Confirmar Senha:</label>
 						  <div class="col-md-6">
-						    <input id="confirmar" name="confirmar" type="password" wicket:id="confirmarSenha" placeholder="" class="form-control input-md" required="required">
+						    <input type="password" wicket:id="confirmarSenha" class="form-control input-md">
 						    
 						  </div>
 						</div>
@@ -54,7 +52,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="email">Email:</label>  
 						  <div class="col-md-6">
-						  <input id="email" name="email" type="text" wicket:id="email" placeholder="" class="form-control input-md">
+						  <input wicket:id="email" class="form-control input-md">
 						    
 						  </div>
 						</div>
@@ -63,8 +61,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="instituicao">Instituição:</label>
 						  <div class="col-md-6">
-						    <select id="instituicao" name="instituicao" class="form-control" wicket:id="instituicao">
-						      <option value="1">Option one</option>
+						    <select class="form-control" wicket:id="instituicao">
 						    </select>
 						  </div>
 						</div>
@@ -75,8 +72,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="contato">Contato:</label>  
 						  <div class="col-md-6">
-						  <input id="contato" name="contato" wicket:id="contato" type="text" placeholder="" class="form-control input-md">
-						    
+						  <input wicket:id="contato" class="form-control input-md">
 						  </div>
 						</div>
 						
@@ -84,9 +80,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="situacao">Situação:</label>
 						  <div class="col-md-6" style="text-align: left;"> 
-						    <label class="radio-inline inline" for="situacao-0" wicket:id="situacao">
-						      <input type="radio" name="situacao" id="situacao-0" value="1" checked="checked">
-						      1
+						    <label class="radio-inline inline" wicket:id="situacao">
 						    </label>
 						  </div>
 						</div>
@@ -95,16 +89,15 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="grupo">Grupo do Usuário:</label>
 						  <div class="col-md-6">
-						    <select id="grupo" name="grupo" class="form-control" wicket:id="grupoUsuario">
-						      <option value="1">Option one</option>
+						    <select class="form-control" wicket:id="grupoUsuario">
 						    </select>
 						  </div>
 						</div>
 					<!-- Button -->
 					<div class="form-group">
-					  <label class="col-md-4 control-label" for=""></label>
+					  <label class="col-md-4 control-label"></label>
 					  <div class="col-md-6">
-					    <button id="" name="salvar" wicket:id="botaoSalvar" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
+					    <button wicket:id="botaoSalvar" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
 					  </div>
 					</div>
 					</div>
