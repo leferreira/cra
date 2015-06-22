@@ -23,7 +23,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado>{
+public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -31,23 +31,25 @@ public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado>{
 
 	private TituloFiliado titulo;
 	private List<TituloFiliado> listaTitulosConvenios;
-	
+
 	@SpringBean
 	ConvenioMediator convenioMediator;
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
-	
+
 	public LiberarTitulosConvenioPage() {
 		this.titulo = new TituloFiliado();
-		
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
+
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
 			/***/
 			private static final long serialVersionUID = 1L;
+
 			@Override
-            protected void onSubmit(){
+			protected void onSubmit() {
 				try {
-				
-					convenioMediator.gerarRemessas(getUser() ,getListaTitulosConvenios());
+
+					convenioMediator.gerarRemessas(getUser(), getListaTitulosConvenios());
+					setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
 					info("Remessas processados e encaminhadas com sucesso na CRA !");
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -61,9 +63,9 @@ public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado>{
 		add(form);
 		setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
 		add(carregarListaTitulos());
-		
+
 	}
-	
+
 	private ListView<TituloFiliado> carregarListaTitulos() {
 		return new ListView<TituloFiliado>("listViewTitulos", getListaTitulosConvenios()) {
 			/***/
@@ -72,7 +74,7 @@ public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado>{
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
 				final TituloFiliado tituloLista = item.getModelObject();
-				
+
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
 				item.add(new Label("convenio", tituloLista.getFiliado().getInstituicaoConvenio().getRazaoSocial()));
