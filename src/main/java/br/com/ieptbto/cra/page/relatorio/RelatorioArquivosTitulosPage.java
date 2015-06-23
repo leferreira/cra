@@ -6,6 +6,7 @@ import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.page.base.BasePage;
 
 public class RelatorioArquivosTitulosPage extends BasePage<Arquivo> {
@@ -22,11 +23,11 @@ public class RelatorioArquivosTitulosPage extends BasePage<Arquivo> {
 		this.instituicao = getUser().getInstituicao();
 		
 		form = new Form<Arquivo>("form", getModel());
-		if (instituicao.getTipoInstituicao().getTipoInstituicao().equals("CRA")){
+		if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
 			form.add(new RelatorioArquivosTitulosCraPanel("buscarArquivoInputPanel", getModel(), instituicao));
-		} else if (instituicao.getTipoInstituicao().getTipoInstituicao().equals("Cartório")){
+		} else if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){
 			form.add(new RelatorioArquivosTitulosCartorioPanel("buscarArquivoInputPanel", getModel(), instituicao));
-		} else {
+		} else if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 			form.add(new RelatorioArquivosTitulosInstituicaoPanel("buscarArquivoInputPanel", getModel(), instituicao));
 		}
 		add(form);

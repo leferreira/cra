@@ -8,6 +8,7 @@ import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -30,11 +31,11 @@ public class RelatorioPage extends BasePage<Remessa> {
 		this.instituicao = getUser().getInstituicao();
 		form = new Form<Remessa>("form", getModel());
 		
-		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("CRA")){
+		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
 			form.add(new RelatorioCraPanel("relatorioPanel", getModel()));
-		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals("Cartório")){
+		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){
 			form.add(new RelatorioCartorioPanel("relatorioPanel", getModel(), instituicao));
-		} else {
+		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 			form.add(new RelatorioInstituicaoPanel("relatorioPanel", getModel(), getInstituicao()));
 		}
 		add(form);
