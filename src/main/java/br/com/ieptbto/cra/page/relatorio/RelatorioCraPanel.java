@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,6 +54,8 @@ public class RelatorioCraPanel extends Panel{
 	private DropDownChoice<Instituicao> fieldPortador;
 	private DropDownChoice<Municipio> fieldMunicipio;
 	
+	@SuppressWarnings("unused")
+	private String tipoRelatorio;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private Municipio pracaProtesto;
@@ -66,6 +69,7 @@ public class RelatorioCraPanel extends Panel{
 		add(dataEnvioFinal());
 		add(comboPortador());
 		add(pracaProtesto());
+		add(comboTipoRelatorio());
 		add(new Button("botaoGerar"){
 				/****/
 				private static final long serialVersionUID = 1L;
@@ -113,6 +117,13 @@ public class RelatorioCraPanel extends Panel{
 	
 	private Component comboTipoArquivos() {
 		return new RadioChoice<String>("tipoArquivo", new PropertyModel<String>(this, "tipoArquivo"), TIPO_ARQUIVOS).setRequired(true);
+	}
+	
+	private Component comboTipoRelatorio() {
+		List<String> tipoRelatorio = new ArrayList<String>();
+		tipoRelatorio.add("Por Arquivo");
+		tipoRelatorio.add("Por Título");
+		return new RadioChoice<String>("tipoRelatorio", new PropertyModel<String>(this, "tipoRelatorio"), tipoRelatorio).setRequired(true);
 	}
 	
 	private TextField<LocalDate> dataEnvioInicio() {

@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,6 +42,8 @@ public class RelatorioCartorioPanel extends Panel{
 	@SpringBean
 	RelatorioMediator relatorioMediator;
 
+	@SuppressWarnings("unused")
+	private String tipoRelatorio;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private Municipio pracaProtesto;
@@ -53,6 +56,7 @@ public class RelatorioCartorioPanel extends Panel{
 		this.pracaProtesto = municipioMediator.buscarMunicipioDoCartorio(cartorio);
 		add(comboTipoArquivos());
 		add(dataEnvioInicio());
+		add(comboTipoRelatorio());
 		add(dataEnvioFinal());
 		add(new Button("botaoGerar"){
 				/****/
@@ -88,6 +92,13 @@ public class RelatorioCartorioPanel extends Panel{
 	
 	private Component comboTipoArquivos() {
 		return new RadioChoice<String>("tipoArquivo", new PropertyModel<String>(this, "tipoArquivo"), TIPO_ARQUIVOS).setRequired(true);
+	}
+	
+	private Component comboTipoRelatorio() {
+		List<String> tipoRelatorio = new ArrayList<String>();
+		tipoRelatorio.add("Por Arquivo");
+		tipoRelatorio.add("Por Título");
+		return new RadioChoice<String>("tipoRelatorio", new PropertyModel<String>(this, "tipoRelatorio"), tipoRelatorio).setRequired(true);
 	}
 	
 	private TextField<LocalDate> dataEnvioInicio() {
