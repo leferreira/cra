@@ -31,22 +31,21 @@ public class UsuarioForm extends BaseForm<Usuario> {
 	public void onSubmit() {
 		
 		Usuario usuario = getModelObject();
+		
 		try {
-			if (usuario.getSenha() == null || usuario.getConfirmarSenha() == null){
-				error("A senha deve ser informada!");
-			} else if(usuarioMediator.isSenhasIguais(usuario)){
 				if (getModelObject().getId() != 0) {
 					Usuario usuarioSalvo = usuarioMediator.alterar(usuario);
 					setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
 				} else {
-					if (usuarioMediator.isLoginNaoExiste(usuario)) {
-						Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
-						setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
-					} else 
-						error("Usuário não criado. O login já existe!");
+					if(usuarioMediator.isSenhasIguais(usuario)){
+						if (usuarioMediator.isLoginNaoExiste(usuario)) {
+							Usuario usuarioSalvo = usuarioMediator.salvar(usuario);
+							setResponsePage(new DetalharUsuarioPage(usuarioSalvo));
+						} else 
+							error("Usuário não criado. O login já existe!");
+					}else{
+						error("As senhas não são iguais!");
 				}
-			}else{
-				error("As senhas não são iguais!");
 			}
 			
 		} catch (InfraException ex) {

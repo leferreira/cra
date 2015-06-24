@@ -14,7 +14,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="nome">Nome:</label>  
 						  <div class="col-md-6">
-						  <input onkeyup="this.value = this.value.toUpperCase()" wicket:id="nome" class="form-control input-md">
+						  <input autofocus="autofocus" tabindex="1" onkeyup="this.value = this.value.toUpperCase()" wicket:id="nome" class="form-control input-md">
 						  </div>
 						</div>
 						
@@ -22,7 +22,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="login">Login:</label>  
 						  <div class="col-md-6">
-						  <input wicket:id="login" class="form-control input-md">
+						  <input wicket:id="login" tabindex="2" class="form-control input-md">
 						  </div>
 						</div>
 					</div>
@@ -31,7 +31,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="senha">Senha:</label>
 						  <div class="col-md-6">
-						    <input type="password" wicket:id="senha" class="form-control input-md">
+						    <input type="password" tabindex="5" wicket:id="senha" class="form-control input-md">
 						    
 						  </div>
 						</div>
@@ -40,7 +40,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="confirmar">Confirmar Senha:</label>
 						  <div class="col-md-6">
-						    <input type="password" wicket:id="confirmarSenha" class="form-control input-md">
+						    <input type="password" tabindex="6" wicket:id="confirmarSenha" class="form-control input-md">
 						    
 						  </div>
 						</div>
@@ -52,7 +52,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="email">Email:</label>  
 						  <div class="col-md-6">
-						  <input wicket:id="email" class="form-control input-md">
+						  <input wicket:id="email" tabindex="3" class="form-control input-md">
 						    
 						  </div>
 						</div>
@@ -61,7 +61,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="instituicao">Instituição:</label>
 						  <div class="col-md-6">
-						    <select class="form-control" wicket:id="instituicao">
+						    <select class="form-control" tabindex="4" wicket:id="instituicao">
 						    </select>
 						  </div>
 						</div>
@@ -72,7 +72,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="contato">Contato:</label>  
 						  <div class="col-md-6">
-						  <input wicket:id="contato" class="form-control input-md">
+						  <input wicket:id="contato" tabindex="7" class="form-control input-md">
 						  </div>
 						</div>
 						
@@ -80,7 +80,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="situacao">Situação:</label>
 						  <div class="col-md-6" style="text-align: left;"> 
-						    <label class="radio-inline inline" wicket:id="situacao">
+						    <label class="radio-inline inline" tabindex="8" wicket:id="situacao">
 						    </label>
 						  </div>
 						</div>
@@ -89,7 +89,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="grupo">Grupo do Usuário:</label>
 						  <div class="col-md-6">
-						    <select class="form-control" wicket:id="grupoUsuario">
+						    <select class="form-control" tabindex="9" wicket:id="grupoUsuario">
 						    </select>
 						  </div>
 						</div>
@@ -97,7 +97,7 @@
 					<div class="form-group">
 					  <label class="col-md-4 control-label"></label>
 					  <div class="col-md-6">
-					    <button wicket:id="botaoSalvar" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
+					    <button wicket:id="botaoSalvar" tabindex="10" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
 					  </div>
 					</div>
 					</div>

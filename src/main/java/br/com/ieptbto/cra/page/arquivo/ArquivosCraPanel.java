@@ -162,7 +162,6 @@ public class ArquivosCraPanel extends Panel {
 			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
 		else 
 			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
-		
 		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
