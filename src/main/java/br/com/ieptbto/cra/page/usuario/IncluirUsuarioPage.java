@@ -33,7 +33,7 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 
 	private void setFormulario() {
 		form = new UsuarioForm("formUsuario", getModel());
-		form.add(new UsuarioInputPanel("usuarioInputPanel", getModel(), getUser()));
+		form.add(new UsuarioInputPanel("usuarioInputPanel", getModel(), usuario));
 		add(form);
 	}
 
