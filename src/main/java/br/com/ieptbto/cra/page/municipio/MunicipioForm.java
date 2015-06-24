@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.page.municipio;
 
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -8,9 +7,15 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
 
-@SuppressWarnings("serial")
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class MunicipioForm extends BaseForm<Municipio>{
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	
@@ -18,10 +23,6 @@ public class MunicipioForm extends BaseForm<Municipio>{
 		super(id, model);
 	}
 
-	public MunicipioForm(String id, Municipio colaboradorModel) {
-		this(id, new CompoundPropertyModel<Municipio>(colaboradorModel));
-	}
-	
 	@Override
 	public void onSubmit() {
 		Municipio municipio = getModelObject();

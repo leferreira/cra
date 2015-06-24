@@ -23,20 +23,21 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ListaUsuarioPage extends BasePage<Usuario> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+
+	private Usuario usuario;
+
 	@SpringBean
-	private UsuarioMediator usuarioMediator;
+	UsuarioMediator usuarioMediator;
 
-	private final Usuario usuario;
-
-	@SuppressWarnings("rawtypes")
 	public ListaUsuarioPage() {
 		super();
 		usuario = new Usuario();
-		add(new Link("botaoNovo") {
+		add(new Link<Usuario>("botaoNovo") {
             /***/
 			private static final long serialVersionUID = 1L;
 
@@ -50,11 +51,14 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 	@SuppressWarnings("rawtypes")
 	private ListView<Usuario> carregarListaUsuario(){
 		return new ListView<Usuario>("listViewUsuario", buscarUsuarios()) {
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<Usuario> item) {
 				final Usuario usuarioLista = item.getModelObject();
 				
-				Link linkAlterar = new Link("linkAlterar") {
+				Link linkAlterar = new Link<Usuario>("linkAlterar") {
 		            /***/
 					private static final long serialVersionUID = 1L;
 
@@ -81,6 +85,9 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 
 	public IModel<List<Usuario>> buscarUsuarios() {
 		return new LoadableDetachableModel<List<Usuario>>() {
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected List<Usuario> load() {
 				List<Usuario> list = usuarioMediator.listarTodos();

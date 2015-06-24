@@ -11,29 +11,30 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-@SuppressWarnings("serial")
-
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN,
-		CraRoles.SUPER, })
+/**
+ * @author Thasso Araújo
+ *
+ */
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, })
 public class DetalharMunicipioPage extends BasePage<Municipio> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	private Form<Municipio> form;
 	private Municipio municipio;
 	
 	public DetalharMunicipioPage(Municipio m){
 		super();
 		this.municipio = m;
-		carregarComponentes();
 		info("Os dados foram salvos com sucesso!");
-	}
-	
-	private void carregarComponentes(){
 		form = new Form<Municipio>("form");
 		form.add(new MunicipioLabelPanel("municipioLabelPanel", getModel(), municipio));
 		form.add(obterBotaoNovo());
 		add(form);
 	}
 	
+	@SuppressWarnings("serial")
 	private Button obterBotaoNovo() {
 		return new Button("botaoNovo") {
 			@Override

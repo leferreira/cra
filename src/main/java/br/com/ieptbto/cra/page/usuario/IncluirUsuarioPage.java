@@ -17,8 +17,8 @@ import br.com.ieptbto.cra.security.CraRoles;
 public class IncluirUsuarioPage extends BasePage<Usuario> {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Usuario usuario;
-
 	private UsuarioForm form;
 
 	public IncluirUsuarioPage() {

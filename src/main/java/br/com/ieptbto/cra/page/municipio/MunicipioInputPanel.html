@@ -10,21 +10,19 @@
 				<br style="clear: both;">
 				<div class="col-lg-10 col-md-offset-1" style="text-align: left;">
 					<div class="form-group">
-						<label for="nome">Nome do Município:</label> 
-						<input id="nome" name="nome" autofocus="autofocus" style="width: 95%" type="text" wicket:id="nomeMunicipio" placeholder="Município" class="form-control"/>
+						<label >Nome do Município:</label> 
+						<input autofocus="autofocus" style="width: 95%" wicket:id="nomeMunicipio" class="form-control"/>
 					</div>
 					<div class="panel-body-right">
 						<div class="form-group">
-							<label for="codigo">Código do IBGE:</label> <input id="codIBGE" maxlength="7"
-								name="codigo" type="text" wicket:id="codigoIBGE"
-								placeholder="Código do IBGE" class="form-control"/>
+							<label>Código do IBGE:</label> 
+							<input maxlength="7" wicket:id="codigoIBGE"	class="form-control"/>
 						</div>
 					</div>
 					<div class="panel-body-left">
 						<div class="form-group">
-							<label class="control-label" for="uf">UF:</label> 
-								<input id="uf" name="uf" type="text" wicket:id="uf" onkeyup="this.value = this.value.toUpperCase()"
-								class="form-control" maxlength="2" placeholder="Unidade Federal"/>
+							<label class="control-label">UF:</label> 
+								<select wicket:id="uf" class="form-control"></select>
 						</div>
 					</div>
 					<button wicket:id="botaoSalvar" type="submit" style="margin-right: 5%;" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>

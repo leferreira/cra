@@ -18,20 +18,25 @@ import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-@SuppressWarnings("serial")
+/**
+ * @author Thasso Araújo
+ *
+ */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ListaMunicipioPage extends BasePage<Municipio> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
 
-	private final Municipio municipio;
+	private Municipio municipio;
 
-	@SuppressWarnings("rawtypes")
 	public ListaMunicipioPage() {
 		super();
 		this.municipio = new Municipio();
-		add(new Link("botaoNovo") {
+		add(new Link<Municipio>("botaoNovo") {
             /***/
 			private static final long serialVersionUID = 1L;
 
@@ -42,14 +47,16 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 		add(carregarListaMunicipio());
 	}
 
-	@SuppressWarnings("rawtypes")
 	private ListView<Municipio> carregarListaMunicipio(){
 		return new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<Municipio> item) {
 				final Municipio municipioLista = item.getModelObject();
 				
-				Link linkAlterar = new Link("linkAlterar") {
+				Link<Municipio> linkAlterar = new Link<Municipio>("linkAlterar") {
 					/***/
 					private static final long serialVersionUID = 1L;
 					
@@ -68,6 +75,9 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 
 	public IModel<List<Municipio>> buscarMunicipios() {
 		return new LoadableDetachableModel<List<Municipio>>() {
+			/**/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected List<Municipio> load() {
 				List<Municipio> list = municipioMediator.listarTodos();

@@ -17,8 +17,8 @@ import br.com.ieptbto.cra.security.CraRoles;
 public class IncluirMunicipioPage extends BasePage<Municipio>{
 
 	private static final long serialVersionUID = 1L;
-	private Municipio municipio;
 	
+	private Municipio municipio;
 	private MunicipioForm form;
 
 	public IncluirMunicipioPage() {

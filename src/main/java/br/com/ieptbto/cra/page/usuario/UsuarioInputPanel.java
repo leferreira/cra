@@ -23,14 +23,16 @@ import br.com.ieptbto.cra.mediator.GrupoUsuarioMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.EmailValidator;
 
-@SuppressWarnings({ "serial", "unused" })
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class UsuarioInputPanel extends Panel {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+
 	private Usuario usuario;
-	private DropDownChoice<Instituicao> comboInstituicao;
-	private DropDownChoice<GrupoUsuario> comboGrupoUsuario;
-	private RadioChoice<String> radioStatus;
-	private Component button;
 	
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
@@ -40,25 +42,16 @@ public class UsuarioInputPanel extends Panel {
 	public UsuarioInputPanel(String id, IModel<Usuario> model, Usuario usuario) {
 		super(id, model);
 		this.usuario = usuario;
-		adicionarCampos();
-	}
-
-	public UsuarioInputPanel(String id) {
-		super(id);
-		adicionarCampos();
-	}
-
-	private void adicionarCampos() {
 		add(campoNome());
 		add(campoLogin());
 		add(campoSenha());
 		add(campoEmail());
 		add(campoConfirmarSenha());
-		add(botaoSalvar());
 		add(campoContato());
 		add(campoStatus());
 		add(comboInstituicao());
 		add(comboGrupoDoUsuario());
+		add(new Button("botaoSalvar"));
 	}
 
 	private TextField<String> campoNome() {
@@ -80,13 +73,15 @@ public class UsuarioInputPanel extends Panel {
 	private TextField<String> campoSenha() {
 		PasswordTextField senha = new PasswordTextField("senha");
 		senha.setLabel(new Model<String>("Senha"));
-		senha.setRequired(true);
+		senha.setVisible(verificarExistencia());
+		senha.setRequired(verificarExistencia());
 		return senha;
 	}
 
 	private TextField<String> campoConfirmarSenha() {
 		PasswordTextField confirmarSenha = new PasswordTextField("confirmarSenha");
 		confirmarSenha.setLabel(new Model<String>("Confirmar Senha"));
+		confirmarSenha.setVisible(verificarExistencia());
 		return confirmarSenha;
 	}
 
@@ -110,7 +105,7 @@ public class UsuarioInputPanel extends Panel {
 
 	private DropDownChoice<Instituicao> comboInstituicao() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		comboInstituicao = new DropDownChoice<Instituicao>("instituicao",instituicaoMediator.buscarCartoriosInstituicoes(), renderer);
+		DropDownChoice<Instituicao> comboInstituicao = new DropDownChoice<Instituicao>("instituicao",instituicaoMediator.buscarCartoriosInstituicoes(), renderer);
 		comboInstituicao.setLabel(new Model<String>("Instituição"));
 		comboInstituicao.setRequired(true);
 		return comboInstituicao;
@@ -118,15 +113,16 @@ public class UsuarioInputPanel extends Panel {
 
 	private DropDownChoice<GrupoUsuario> comboGrupoDoUsuario() {
 		IChoiceRenderer<GrupoUsuario> renderer = new ChoiceRenderer<GrupoUsuario>("grupo");
-		comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario",grupoUsuarioMediator.listaDeGrupos(), renderer);
+		DropDownChoice<GrupoUsuario> comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario",grupoUsuarioMediator.listaDeGrupos(), renderer);
 		comboGrupoUsuario.setLabel(new Model<String>("Grupo Usuário"));
 		comboGrupoUsuario.setRequired(true);
 		return comboGrupoUsuario;
 	}
-
-	private Component botaoSalvar() {
-		button = new Button("botaoSalvar") {
-		};
-		return button;
+	
+	private boolean verificarExistencia() {
+		if (usuario.getId() == 0) {
+			return true;
+		}
+		return false;
 	}
 }

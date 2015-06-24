@@ -1,34 +1,30 @@
 package br.com.ieptbto.cra.page.municipio;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import br.com.ieptbto.cra.entidade.Municipio;
+import br.com.ieptbto.cra.util.EstadoUtils;
 
-@SuppressWarnings({ "serial" })
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class MunicipioInputPanel extends Panel {
 	
-	Component button;
-
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	public MunicipioInputPanel(String id, IModel<Municipio> model){
 		super(id, model);
-		adicionarCampos();
-	}
-	
-	public MunicipioInputPanel(String id) {
-		super(id);
-		adicionarCampos();
-	}
-	
-	private void adicionarCampos() {
 		add(campoNomeMunicipio());
 		add(campoIBGE());
 		add(campoUF());
-		add(botaoSalvar());
+		add(new Button("botaoSalvar"));
 	}
 	
 	private TextField<String> campoNomeMunicipio() {
@@ -47,16 +43,10 @@ public class MunicipioInputPanel extends Panel {
 		return textField;
 	}
 	
-	private TextField<String> campoUF() {
-		TextField<String> textField = new TextField<String>("uf");
+	private DropDownChoice<String> campoUF() {
+		DropDownChoice<String> textField = new DropDownChoice<String>("uf", EstadoUtils.getEstadosToList());
 		textField.setLabel(new Model<String>("Unidade Federal"));
-		textField.setOutputMarkupId(true);
+		textField.setRequired(true);
 		return textField;
-	}
-	
-	private Component botaoSalvar() {
-		button = new Button("botaoSalvar") {
-		};
-		return button;
 	}
 }

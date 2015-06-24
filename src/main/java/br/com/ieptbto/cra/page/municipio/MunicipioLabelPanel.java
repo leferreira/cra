@@ -8,18 +8,19 @@ import org.apache.wicket.model.Model;
 
 import br.com.ieptbto.cra.entidade.Municipio;
 
-@SuppressWarnings("serial")
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class MunicipioLabelPanel extends Panel {
 	
+	/***/
+	private static final long serialVersionUID = 1L;
 	Municipio municipio;
 	
 	public MunicipioLabelPanel(String id, IModel<?> model, Municipio m) {
 		super(id, model);
 		this.municipio = m;
-		addLabels();
-	}
-	
-	public void addLabels(){
 		add(nomeMunicipio());
 		add(uf());
 		add(codigoIBGE());
