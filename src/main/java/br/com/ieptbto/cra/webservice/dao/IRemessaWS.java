@@ -7,8 +7,6 @@ import javax.ws.rs.GET;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
-
 /**
  * 
  * @author Lefer
@@ -18,10 +16,80 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 @WebService
 public interface IRemessaWS {
 
-	@WebMethod
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param login
+	 * @param senha
+	 * @param dados
+	 * @return
+	 */
+	@WebMethod(operationName = "remessa")
 	@GET
-	public String arquivo(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-	        @WebParam(name = "user_pass") String senha, @WebParam(name = "remessa") ArquivoVO remessa,
-	        @WebParam(name = "user_sign") String assinatura);
+	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
+
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param login
+	 * @param senha
+	 * @return
+	 */
+	@WebMethod(operationName = "confirmacao")
+	@GET
+	public String confirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha);
+
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param login
+	 * @param senha
+	 * @return
+	 */
+	@WebMethod(operationName = "retorno")
+	@GET
+	public String retorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha);
+
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param login
+	 * @param senha
+	 * @param dados
+	 * @return
+	 */
+	@WebMethod(operationName = "cancelamento")
+	@GET
+	public String cancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
+
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param login
+	 * @param senha
+	 * @param dados
+	 * @return
+	 */
+	@WebMethod(operationName = "desistencia")
+	@GET
+	public String desistencia(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
+
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param login
+	 * @param senha
+	 * @param dados
+	 * @return
+	 */
+	@WebMethod(operationName = "autorizacaoCancelamento")
+	@GET
+	public String autorizacaoCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
 
 }
