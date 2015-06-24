@@ -32,7 +32,7 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 	@SpringBean
 	TipoInstituicaoMediator tipoInstituicaoMediator;
 
-	private final TipoInstituicao tipoInstituicao;
+	private TipoInstituicao tipoInstituicao;
 
 	public ListaTipoInstituicaoPage() {
 		this.tipoInstituicao = new TipoInstituicao();
@@ -46,7 +46,6 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 	}
 
 	
-	@SuppressWarnings("rawtypes")
 	private ListView<TipoInstituicao> carregarListaTipos(){
 		return new ListView<TipoInstituicao>("listViewTipos", tipoInstituicaoMediator.listarTipos()) {
 			/***/
@@ -57,7 +56,7 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 				String todasPermissoes = "";
 				final TipoInstituicao tipoLista = item.getModelObject();
 				
-				Link linkAlterar = new Link("linkAlterar") {
+				Link<TipoInstituicao> linkAlterar = new Link<TipoInstituicao>("linkAlterar") {
 		            /***/
 					private static final long serialVersionUID = 1L;
 
