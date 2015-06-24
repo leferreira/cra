@@ -5,19 +5,24 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-public class InstituicaoLabelPanel<Instituicao> extends Panel{
+import br.com.ieptbto.cra.entidade.Instituicao;
+
+/**
+ * @author Thasso Araújo
+ *
+ * @param <Instituicao>
+ */
+@SuppressWarnings("unused")
+public class InstituicaoLabelPanel extends Panel{
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	Instituicao instituicao;
-
-	public InstituicaoLabelPanel(String id, IModel<?> model, Instituicao instituicao) {
+	
+	private Instituicao instituicao;
+	
+	public InstituicaoLabelPanel(String id, IModel<Instituicao> model, Instituicao instituicao) {
 		super(id, model);
 		this.instituicao = instituicao;
-		addLabels();
-	}
-
-	public void addLabels(){
 		add(nomeFantasia());
 		add(razaoSocial());
 		add(cnpj());

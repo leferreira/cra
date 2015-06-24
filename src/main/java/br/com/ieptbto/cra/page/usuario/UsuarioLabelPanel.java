@@ -5,18 +5,20 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
+/**
+ * @author Thasso Araújo
+ *
+ * @param <Usuario>
+ */
 @SuppressWarnings("serial")
 public class UsuarioLabelPanel<Usuario> extends Panel {
 	
-	Usuario usuario;
+	@SuppressWarnings("unused")
+	private Usuario usuario;
 	
-	public UsuarioLabelPanel(String id, IModel<?> model, Usuario u) {
+	public UsuarioLabelPanel(String id, IModel<Usuario> model, Usuario u) {
 		super(id, model);
 		this.usuario = u;
-		addLabels();
-	}
-	
-	public void addLabels(){
 		add(campoNome());
 		add(campoLogin());
 		add(campoEmail());

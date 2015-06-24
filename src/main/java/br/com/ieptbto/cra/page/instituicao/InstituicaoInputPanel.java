@@ -21,26 +21,20 @@ import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.util.EmailValidator;
 
-@SuppressWarnings({ "serial", "unused" })
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class InstituicaoInputPanel extends Panel {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	@SpringBean
-	private TipoInstituicaoMediator tipoMediator;
-	private List<TipoInstituicao> listComboTipo;
-	private DropDownChoice<TipoInstituicao> combo;
-	private Component button;
+	TipoInstituicaoMediator tipoMediator;
 
 	public InstituicaoInputPanel(String id, IModel<Instituicao> model) {
 		super(id, model);
-		adicionarCampos();
-	}
-
-	public InstituicaoInputPanel(String id) {
-		super(id);
-		adicionarCampos();
-	}
-
-	public void adicionarCampos() {
 		add(campoNomeFantasia());
 		add(campoRazaoSocial());
 		add(comboTipoInstituicao());
@@ -53,7 +47,7 @@ public class InstituicaoInputPanel extends Panel {
 		add(campoResponsavel());
 		add(campoAgenciaCentralizadora());
 		add(campoStatus());
-		add(botaoSalvar());
+		add(new Button("botaoSalvar"));
 	}
 
 	private TextField<String> campoNomeFantasia() {
@@ -129,16 +123,10 @@ public class InstituicaoInputPanel extends Panel {
 
 	private DropDownChoice<TipoInstituicao> comboTipoInstituicao() {
 		IChoiceRenderer<TipoInstituicao> renderer = new ChoiceRenderer<TipoInstituicao>("tipoInstituicao.label");
-		combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao", tipoMediator.listaTipoInstituicao(), renderer);
+		DropDownChoice<TipoInstituicao> combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao", tipoMediator.listaTipoInstituicao(), renderer);
 		combo.setLabel(new Model<String>("Tipo Instituição"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
 		return combo;
-	}
-
-	private Component botaoSalvar() {
-		button = new Button("botaoSalvar") {
-		};
-		return button;
 	}
 }

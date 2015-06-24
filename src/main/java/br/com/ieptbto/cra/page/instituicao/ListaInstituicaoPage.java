@@ -18,20 +18,25 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-@SuppressWarnings("serial")
+/**
+ * @author Thasso Araújo
+ *
+ */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaInstituicaoPage extends BasePage<Instituicao> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+
+	private Instituicao instituicao;
+
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 
-	private final Instituicao instituicao;
-
-	@SuppressWarnings("rawtypes")
 	public ListaInstituicaoPage() {
 		super();
 		instituicao = new Instituicao();
-		add(new Link("botaoNovo") {
+		add(new Link<Instituicao>("botaoNovo") {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -42,14 +47,16 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 		add(carregarListaInstituicao());
 	}
 
-	@SuppressWarnings("rawtypes")
 	private ListView<Instituicao> carregarListaInstituicao() {
 		return new ListView<Instituicao>("listViewInstituicao", listarInstituicoes()) {
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<Instituicao> item) {
 				final Instituicao instituicaoLista = item.getModelObject();
 
-				Link linkAlterar = new Link("linkAlterar") {
+				Link<Instituicao> linkAlterar = new Link<Instituicao>("linkAlterar") {
 					/***/
 					private static final long serialVersionUID = 1L;
 
@@ -75,10 +82,12 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 
 	public IModel<List<Instituicao>> listarInstituicoes() {
 		return new LoadableDetachableModel<List<Instituicao>>() {
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected List<Instituicao> load() {
-				List<Instituicao> list = instituicaoMediator.listarTodasInstituicoes();
-				return list;
+				return instituicaoMediator.listarTodasInstituicoes();
 			}
 		};
 	}

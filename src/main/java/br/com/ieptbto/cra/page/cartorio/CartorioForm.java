@@ -1,7 +1,6 @@
 package br.com.ieptbto.cra.page.cartorio;
 
 import org.apache.log4j.Logger;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -14,23 +13,25 @@ import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
 
-@SuppressWarnings("serial")
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class CartorioForm extends BaseForm<Instituicao> {
 
+	/****/
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(CartorioForm.class);
+	
 	@SpringBean
-	private TipoInstituicaoMediator tipoMediator;
+	TipoInstituicaoMediator tipoMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
 
 	public CartorioForm(String id, IModel<Instituicao> model) {
 		super(id, model);
-	}
-
-	public CartorioForm(String id, Instituicao colaboradorModel) {
-		this(id, new CompoundPropertyModel<Instituicao>(colaboradorModel));
 	}
 
 	@Override
@@ -43,7 +44,6 @@ public class CartorioForm extends BaseForm<Instituicao> {
 			Instituicao cartorio = municipioMediator.isMunicipioTemCartorio(instituicao.getMunicipio());
 			if (instituicao.getId() != 0) {
 				if (cartorio.getId() == instituicao.getId()) {
-					System.out.println(cartorio.getId());
 					instituicaoMediator.alterar(instituicao);
 					setResponsePage(new DetalharCartorioPage(instituicao));
 				} else

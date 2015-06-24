@@ -9,11 +9,17 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-@SuppressWarnings("serial")
+/**
+ * @author Thasso Araújo
+ *
+ */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
 	private Instituicao instituicao;
+	
 	private InstituicaoForm form;
 
 	public IncluirInstituicaoPage() {

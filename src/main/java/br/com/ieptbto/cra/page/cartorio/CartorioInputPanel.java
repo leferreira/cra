@@ -22,29 +22,22 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.util.EmailValidator;
 
-@SuppressWarnings("serial")
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class CartorioInputPanel extends Panel {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	
-	private TextField<String> campoInstituicao;
-	private DropDownChoice<Municipio> combo;
-	private Component button;
-
 	public CartorioInputPanel(String id, IModel<Instituicao> model) {
 		super(id, model);
-		adicionarCampos();
-	}
-
-	public CartorioInputPanel(String id) {
-		super(id);
-		adicionarCampos();
-	}
-
-	private void adicionarCampos() {
 		add(campoInstituicao());
 		add(campoRazaoSocial());
 		add(campoCnpj());
@@ -58,11 +51,11 @@ public class CartorioInputPanel extends Panel {
 		add(campoContaCorrente());
 		add(campoFavorecido());
 		add(campoAgenciaConta());
-		add(botaoSalvar());
+		add(new Button("botaoSubmit"));
 	}
 
 	private TextField<String> campoInstituicao() {
-		campoInstituicao = new TextField<String>("nomeFantasia");
+		TextField<String> campoInstituicao = new TextField<String>("nomeFantasia");
 		campoInstituicao.setLabel(new Model<String>("Nome Fantasia"));
 		campoInstituicao.setRequired(true);
 		campoInstituicao.setOutputMarkupId(true);
@@ -138,18 +131,11 @@ public class CartorioInputPanel extends Panel {
 	}
 
 	private Component comboMunicipios() {
-
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		combo = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> combo = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);
 		combo.setLabel(new Model<String>("Município"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
 		return combo;
-	}
-
-	private Component botaoSalvar() {
-		button = new Button("botaoSalvar") {
-		};
-		return button;
 	}
 }

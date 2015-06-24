@@ -7,31 +7,31 @@
 	<div class="col-md-6"> 
 		<!-- Text input-->
 		<div class="form-group">
-		  <label class="col-md-4 control-label" for="nomeFantasia">Nome Fantasia:</label>  
+		  <label class="col-md-4 control-label">Nome Fantasia:</label>  
 		  <div class="col-md-6">
-		  <input id="nomeFantasia" onkeyup="this.value = this.value.toUpperCase()" name="nomeFantasia" type="text" wicket:id="nomeFantasia" placeholder="" class="form-control input-md">
+		  <input autofocus="autofocus" tabindex="1" onkeyup="this.value = this.value.toUpperCase()" wicket:id="nomeFantasia" class="form-control input-md">
 		    
 		  </div>
 		</div>
 		<!-- Text input-->
 		<div class="form-group">
-		  <label class="col-md-4 control-label" for="razaoSocial">Razão Social:</label>  
+		  <label class="col-md-4 control-label">Razão Social:</label>  
 		  <div class="col-md-6">
-		  <input id="razaoSocial" onkeyup="this.value = this.value.toUpperCase()" name="razaoSocial" type="text" placeholder="" wicket:id="razaoSocial" class="form-control input-md">
+		  <input tabindex="2" onkeyup="this.value = this.value.toUpperCase()" wicket:id="razaoSocial" class="form-control input-md">
 		  </div>
 		</div>
 		<!-- Text input-->
 		<div class="form-group">
-		  <label class="col-md-4 control-label" for="cnpj">CNPJ:</label>  
+		  <label class="col-md-4 control-label">CNPJ:</label>  
 		  <div class="col-md-6">
-		  <input id="cnpj" name="cnpj" type="text" placeholder="" wicket:id="cnpj" class="form-control input-md">
+		  <input tabindex="3" wicket:id="cnpj" class="form-control input-md">
 		  </div>
 		</div>
 		<!-- Text input-->
 		<div class="form-group">
-		  <label class="col-md-4 control-label" for="email">Email:</label>  
+		  <label class="col-md-4 control-label">Email:</label>  
 		  <div class="col-md-6">
-		  <input id="email" name="email" type="text" placeholder="" wicket:id="email" class="form-control input-md">
+		  <input tabindex="4" wicket:id="email" class="form-control input-md">
 		  </div>
 		</div>
 	</div>
@@ -39,45 +39,42 @@
 	<div class="col-md-6"> 
 		<!-- Select Basic -->
 		<div class="form-group">
-		  <label class="col-md-4 control-label" for="municipio">Município:</label>
+		  <label class="col-md-4 control-label">Município:</label>
 		  <div class="col-md-6">
-		    <select id="municipio" name="municipio" wicket:id="municipio" class="form-control">
-		      <option value="1">1</option>
+		    <select tabindex="5" wicket:id="municipio" class="form-control">
 		    </select>
 		  </div>
 		</div>
 		<!-- Multiple Radios (inline) -->
 		<div class="form-group">
-		  <label class="col-md-4 control-label" for="situacao">Situação:</label>
+		  <label class="col-md-4 control-label">Situação:</label>
 		  <div class="col-md-5" style="text-align: left;"> 
-		    <label class="radio-inline inline" wicket:id="status" for="situacao-0">
-		      <input type="radio" name="situacao" id="situacao-0" value="1" checked="checked">
-		      1
+		    <label tabindex="6" class="radio-inline inline" wicket:id="status">
 		    </label>
 		  </div>
 		</div>
 		<!-- Text input-->
 		<div class="form-group">
-		  <label class="col-md-4 control-label" for="contato">Contato:</label>  
+		  <label class="col-md-4 control-label">Contato:</label>  
 		  <div class="col-md-6">
-		  <input id="contato" name="contato" type="text" placeholder="" wicket:id="contato" class="form-control input-md">
+		  <input tabindex="7" wicket:id="contato" class="form-control input-md">
 		    
 		  </div>
 		</div>
 		
 		<!-- Text input-->
 		<div class="form-group">
-		  <label class="col-md-4 control-label" for="responsavel">Reponsável:</label>  
+		  <label class="col-md-4 control-label">Reponsável:</label>  
 		  <div class="col-md-6">
-		  <input id="responsavel" name="responsavel" type="text" placeholder="" wicket:id="responsavel" class="form-control input-md">
+		  <input tabindex="8" wicket:id="responsavel" class="form-control input-md">
 		    
 		  </div>
 		</div>
 		<!-- Textarea -->
 		<div class="form-group">
-		  <label class="col-md-4 control-label" for="endereco">Endereço:</label>
+		  <label class="col-md-4 control-label">Endereço:</label>
 		  <div class="col-md-6">                     
-		    <textarea class="form-control" id="endereco" wicket:id="endereco" name="endereco"></textarea>
+		    <textarea tabindex="9" class="form-control" wicket:id="endereco"></textarea>
 		  </div>
 		</div>
 	</div>
@@ -91,16 +88,16 @@
 		<div class="col-md-6"> 
 			<!-- Text input-->
 			<div class="form-group">
-			  <label class="col-md-4 control-label" for="banco">Banco:</label>  
+			  <label class="col-md-4 control-label">Banco:</label>  
 			  <div class="col-md-6">
-			  <input id="banco" name="banco" type="text" wicket:id="bancoContaCorrente" placeholder="" class="form-control input-md">
+			  <input tabindex="10" wicket:id="bancoContaCorrente" class="form-control input-md">
 			  </div>
 			</div>
 			<!-- Text input-->
 			<div class="form-group">
-			  <label class="col-md-4 control-label" for="agencia">Agência:</label>  
+			  <label class="col-md-4 control-label">Agência:</label>  
 			  <div class="col-md-6">
-			  <input id="agencia" name="agencia" type="text" wicket:id="agenciaContaCorrente" placeholder="" class="form-control input-md">
+			  <input tabindex="11" wicket:id="agenciaContaCorrente" class="form-control input-md">
 			  </div>
 			</div>
 		</div>
@@ -108,25 +105,25 @@
 		<div class="col-md-6"> 
 			<!-- Text input-->
 			<div class="form-group">
-			  <label class="col-md-4 control-label" for="conta">Conta Corrente:</label>  
+			  <label class="col-md-4 control-label">Conta Corrente:</label>  
 			  <div class="col-md-6">
-			  <input id="conta" name="conta" wicket:id="numeroContaCorrente" type="text" placeholder="" class="form-control input-md">
+			  <input tabindex="12" wicket:id="numeroContaCorrente" class="form-control input-md">
 			    
 			  </div>
 			</div>
 			
 			<!-- Text input-->
 			<div class="form-group">
-			  <label class="col-md-4 control-label" for="favorecido">Favorecido:</label>  
+			  <label class="col-md-4 control-label">Favorecido:</label>  
 			  <div class="col-md-6">
-			  <input id="favorecido" name="favorecido" wicket:id="favorecido" type="text" placeholder="" class="form-control input-md">
+			  <input tabindex="13" wicket:id="favorecido" type="text" class="form-control input-md">
 			  </div>
 			</div>
 			<!-- Button -->
 			<div class="form-group">
 			  <label class="col-md-4 control-label" for="save"></label>
 			  <div class="col-md-6">
-			    <button wicket:id="botaoSalvar"	id="save" name="save" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
+			    <button wicket:id="botaoSubmit" type="submit" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
 			  </div>
 			</div>
 		</div>

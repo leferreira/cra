@@ -18,19 +18,23 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-@SuppressWarnings({ "serial"})
+/**
+ * @author Thasso Araújo
+ *
+ */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ListaCartorioPage extends BasePage<Instituicao> {
 
-	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	/***/
+	private static final long serialVersionUID = 1L;
 	private Instituicao cartorio;
 
-	@SuppressWarnings("rawtypes")
+	@SpringBean
+	InstituicaoMediator instituicaoMediator;
+
 	public ListaCartorioPage() {
-		super();
 		cartorio = new Instituicao();
-		add(new Link("botaoNovo") {
+		add(new Link<Instituicao>("botaoNovo") {
             /***/
 			private static final long serialVersionUID = 1L;
 
@@ -44,6 +48,9 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 	@SuppressWarnings("rawtypes")
 	private ListView<Instituicao> carregarListaCartorios(){
 		return new ListView<Instituicao>("listViewCartorio", listInstituicoes()) {
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<Instituicao> item) {
 				final Instituicao instituicaoLista = item.getModelObject();
@@ -63,17 +70,19 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
 				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new Label("contato", instituicaoLista.getContato()));
-				if (instituicaoLista.isSituacao()) {
+				if (instituicaoLista.isSituacao())
 					item.add(new Label("situacao", "Sim"));
-				} else {
+				else
 					item.add(new Label("situacao", "Não"));
-				}
 			}
 		};
 	}
 
 	public IModel<List<Instituicao>> listInstituicoes() {
 		return new LoadableDetachableModel<List<Instituicao>>() {
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected List<Instituicao> load() {
 				return instituicaoMediator.listaDeCartorio();
@@ -85,5 +94,4 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 	protected IModel<Instituicao> getModel() {
 		return new CompoundPropertyModel<Instituicao>(cartorio);
 	}
-
 }

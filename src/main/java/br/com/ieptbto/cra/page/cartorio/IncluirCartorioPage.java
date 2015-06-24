@@ -9,10 +9,16 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-@SuppressWarnings("serial")
+/**
+ * @author Thasso Araújo
+ *
+ */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class IncluirCartorioPage extends BasePage<Instituicao> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	private Instituicao cartorio;
 	private CartorioForm form;
 
@@ -29,7 +35,6 @@ public class IncluirCartorioPage extends BasePage<Instituicao> {
 	public void setForm() {
 		form = new CartorioForm("form", getModel());
 		form.add(new CartorioInputPanel("cartorioInputPanel", getModel()));
-		// form.add(new Button("botaoSalvar"));
 		add(form);
 	}
 

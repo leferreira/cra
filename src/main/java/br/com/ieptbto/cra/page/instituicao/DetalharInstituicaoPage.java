@@ -1,7 +1,5 @@
 package br.com.ieptbto.cra.page.instituicao;
 
-import org.apache.wicket.authorization.Action;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -9,10 +7,11 @@ import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
 
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN,
-		CraRoles.SUPER, })
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class DetalharInstituicaoPage extends BasePage<Instituicao> {
 
 	/***/
@@ -29,7 +28,7 @@ public class DetalharInstituicaoPage extends BasePage<Instituicao> {
 	
 	public void carregarComponentes(){
 		form = new Form<Instituicao>("form");
-		form.add(new InstituicaoLabelPanel<Instituicao>("instituicaoLabelPanel", getModel(), instituicao));
+		form.add(new InstituicaoLabelPanel("instituicaoLabelPanel", getModel(), instituicao));
 		form.add(obterBotaoNovo());
 		add(form);
 	}
