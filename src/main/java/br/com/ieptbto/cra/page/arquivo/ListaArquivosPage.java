@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,18 +47,16 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	@SpringBean
 	DownloadMediator downloadMediator;
 
-	private final Arquivo arquivo;
+	private Arquivo arquivo;
 	private List<Remessa> remessas;
 
 	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, Instituicao portador, LocalDate dataInicio, LocalDate dataFim,
 	        ArrayList<String> tiposArquivo) {
-		super();
 		this.arquivo = arquivo;
 		this.remessas = remessaMediator.buscarRemessaAvancado(arquivo, municipio, portador, dataInicio, dataFim, tiposArquivo, getUser());
 		add(carregarListaArquivos());
 	}
 
-	@SuppressWarnings("rawtypes")
 	private ListView<Remessa> carregarListaArquivos() {
 		return new ListView<Remessa>("dataTableRemessa", remessas) {
 			/***/
@@ -67,7 +66,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
 				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
-				Link linkArquivo = new Link("linkArquivo") {
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 					/***/
 					private static final long serialVersionUID = 1L;
 
@@ -81,24 +80,23 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
-				item.add(new LabelValorMonetario("valor", remessa.getRodape().getSomatorioValorRemessa()));
-				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
+				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
+				item.add(new Label("status", remessa.getStatusRemessa().getLabel()));
 				item.add(downloadArquivoTXT(remessa));
 			}
 
-			private Link downloadArquivoTXT(final Remessa remessa) {
-				return new Link<Arquivo>("downloadArquivo") {
+			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
+				return new Link<Remessa>("downloadArquivo") {
 					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarRemessaTXT(remessa);
+						File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
 						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
-
 					}
 				};
 			}

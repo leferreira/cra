@@ -52,11 +52,6 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 		this.batimento = new Batimento();
 		carregarGuiaConfirmacao();
 		carregarGuiaRetorno();
-		carregarGuiaRemessasConvenio();
-	}
-	
-	private void carregarGuiaRemessasConvenio(){
-		
 	}
 	
 	private void carregarGuiaRetorno(){

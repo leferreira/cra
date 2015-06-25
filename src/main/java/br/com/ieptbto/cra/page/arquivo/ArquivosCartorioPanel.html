@@ -6,21 +6,19 @@
 			<!-- Coluna 1-->
 			<div class="col-md-4"> 
 				<div class="form-group">
-				  <label class="col-md-2 control-label" for="date">Data:</label>  
+				  <label class="col-md-2 control-label">Data:</label>  
 				  <div class="col-md-5">
-				  	<input id="date" name="date" wicket:id="dataEnvioInicio" type="text" placeholder="__/__/____" class="form-control input-md">  
+				  	<input id="date" wicket:id="dataEnvioInicio" placeholder="__/__/____" class="form-control input-md">  
 			  	  </div>
 			  	  <div class="col-md-5">
-				  	<input id="date1" name="date1" wicket:id="dataEnvioFinal" type="text" placeholder="__/__/____" class="form-control input-md">  
+				  	<input id="date1" wicket:id="dataEnvioFinal" placeholder="__/__/____" class="form-control input-md">  
 			  	  </div>
 			  	 </div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group">
 				  <div class="col-md-12" style="text-align: center;">
-				    <label class="checkbox-inline inline" for="tipos-0" wicket:id="tipoArquivos">
-				      <input type="checkbox" name="tipos" id="tipos-0" value="1">
-				      1
+				    <label class="checkbox-inline inline" wicket:id="tipoArquivos">
 				    </label>
 				  </div>
 				</div> 
@@ -29,8 +27,7 @@
 				<div class="form-group">
 				  <div class="col-md-12" style="text-align: center;">
 				    <label class="checkbox-inline inline" for="situacao-0" wicket:id="statusArquivos" style="font-size: 13px;">
-				      <input type="checkbox" name="situacao" id="situacao-0" value="1" style="margin-left: 30px !important;">
-				      1
+				      <input type="checkbox" style="margin-left: 30px !important;">
 				    </label>
 				  </div>
 				</div> 
@@ -68,7 +65,7 @@
 						<td wicket:id="instituicao"></td>
 						<td wicket:id="destino"></td>
 						<td wicket:id="valor"></td>
-						<td wicket:id="status"></td>
+						<td wicket:id="status" class="destaque"></td>
 					</tr>
 				</tbody>
 			</table>

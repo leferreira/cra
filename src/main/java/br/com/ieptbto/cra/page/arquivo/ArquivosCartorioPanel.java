@@ -32,6 +32,10 @@ import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class ArquivosCartorioPanel extends Panel {
 
 	/***/
@@ -107,7 +111,7 @@ public class ArquivosCartorioPanel extends Panel {
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
 				item.add(new LabelValorMonetario("valor", remessa.getRodape().getSomatorioValorRemessa()));
-				item.add(new Label("status", remessa.getArquivo().getStatusArquivo().getStatus()));
+				item.add(new Label("status", remessa.getStatusRemessa().getLabel()));
 				item.add(downloadArquivo(remessa));
 			}
 			
@@ -117,7 +121,7 @@ public class ArquivosCartorioPanel extends Panel {
 					
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarRemessaTXT(remessa);
+						File file = remessaMediator.baixarRemessaTXT(instituicao, remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
