@@ -19,7 +19,6 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
@@ -68,12 +67,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
 
 				try {
-					if (verificarPermissaoDeEnvio(getUser(), arquivo)) {
-						error("O usuário " + getUser().getNome() + " não pode enviar arquivos de outra instituição financeira.");
-						logger.error("O usuário " + getUser().getNome() + " não pode enviar arquivos " + arquivo.getNomeArquivo());
-						return;
-					}
-
 					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUser());
 
 					for (Exception exception : arquivoRetorno.getErros()) {
@@ -94,22 +87,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				}
 			}
 
-			private boolean verificarPermissaoDeEnvio(Usuario user, Arquivo arquivo) {
-				String nome = arquivo.getNomeArquivo().substring(1, 4);
-				if (arquivo.getNomeArquivo().length() == 13) {
-					nome = arquivo.getNomeArquivo().substring(2, 5);
-				}
-
-				if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao())
-				        && getUser().getInstituicao().getCodigoCompensacao().equals(nome)) {
-					return false;
-				} else if (TipoInstituicaoCRA.CARTORIO.equals(getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao())
-				        || TipoInstituicaoCRA.CRA.equals(getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao())) {
-					return false;
-				}
-
-				return true;
-			}
 		};
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.megabytes(10));
