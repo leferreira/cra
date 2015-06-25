@@ -30,7 +30,7 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 	private UsuarioMediator usuarioMediator;
 	private Usuario usuario;
 	private ClassPathXmlApplicationContext context;
-	private RemessaService remessaService;
+	// private RemessaService remessaService;
 	private ConfirmacaoService confirmacaoService;
 
 	@Override
@@ -76,7 +76,7 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 
 	private void init(String login, String senha) {
 		context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-		remessaService = (RemessaService) context.getBean("remessaService");
+		// remessaService = (RemessaService) context.getBean("remessaService");
 		confirmacaoService = (ConfirmacaoService) context.getBean("confirmacaoService");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 		setUsuario(login, senha);
