@@ -59,7 +59,6 @@ import br.com.ieptbto.cra.security.ISecureApplication;
 import br.com.ieptbto.cra.security.UserRoleAuthorizationStrategy;
 import br.com.ieptbto.cra.security.UserRolesAuthorizer;
 import br.com.ieptbto.cra.security.UserSession;
-import br.com.ieptbto.cra.util.CargaInicialPage;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
 
@@ -132,7 +131,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	private void montaPaginas() {
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
-		mountPage("CargaInicial", CargaInicialPage.class);
+		// mountPage("CargaInicial", CargaInicialPage.class);
 
 		/** Arquivo */
 		mountPage("UsuariosPage", ListaUsuarioPage.class);
@@ -149,9 +148,9 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		mountPage("TipoInstituicoesPage", ListaTipoInstituicaoPage.class);
 		mountPage("IncluirTipoInstituicao", IncluirTipoInstituicaoPage.class);
-		
-		mountPage("TipoArquivoPage",ListaTipoArquivoPage.class);
-		mountPage("IncluirTipoArquivoPage",IncluirTipoArquivoPage.class);
+
+		mountPage("TipoArquivoPage", ListaTipoArquivoPage.class);
+		mountPage("IncluirTipoArquivoPage", IncluirTipoArquivoPage.class);
 
 		mountPage("MunicipiosPage", ListaMunicipioPage.class);
 		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
@@ -171,8 +170,8 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		/** Relatorios */
 		mountPage("RelatorioSintetico", RelatorioPage.class);
-//		mountPage("RelatorioAnalitico", RelatorioAnaliticoPage.class);
-		mountPage("RelatorioArquivosTitulos", RelatorioArquivosTitulosPage.class);  
+		// mountPage("RelatorioAnalitico", RelatorioAnaliticoPage.class);
+		mountPage("RelatorioArquivosTitulos", RelatorioArquivosTitulosPage.class);
 
 		/** CRA */
 		mountPage("Batimento", BatimentoPage.class);

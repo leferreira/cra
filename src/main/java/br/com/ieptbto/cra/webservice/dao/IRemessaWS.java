@@ -7,6 +7,8 @@ import javax.ws.rs.GET;
 
 import org.springframework.stereotype.Repository;
 
+import br.com.ieptbto.cra.entidade.vo.ArquivoRemessaVO;
+
 /**
  * 
  * @author Lefer
@@ -24,10 +26,10 @@ public interface IRemessaWS {
 	 * @param dados
 	 * @return
 	 */
-	@WebMethod(operationName = "remessa")
+	@WebMethod(operationName = "Remessa")
 	@GET
 	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") ArquivoRemessaVO dados);
 
 	/**
 	 * 
@@ -36,7 +38,7 @@ public interface IRemessaWS {
 	 * @param senha
 	 * @return
 	 */
-	@WebMethod(operationName = "confirmacao")
+	@WebMethod(operationName = "Confirmacao")
 	@GET
 	public String confirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha);
@@ -48,7 +50,7 @@ public interface IRemessaWS {
 	 * @param senha
 	 * @return
 	 */
-	@WebMethod(operationName = "retorno")
+	@WebMethod(operationName = "Retorno")
 	@GET
 	public String retorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha);
@@ -74,7 +76,7 @@ public interface IRemessaWS {
 	 * @param dados
 	 * @return
 	 */
-	@WebMethod(operationName = "desistencia")
+	@WebMethod(operationName = "Desistencia")
 	@GET
 	public String desistencia(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
@@ -87,7 +89,7 @@ public interface IRemessaWS {
 	 * @param dados
 	 * @return
 	 */
-	@WebMethod(operationName = "autorizacaoCancelamento")
+	@WebMethod(operationName = "AutorizacaoCancelamento")
 	@GET
 	public String autorizacaoCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);

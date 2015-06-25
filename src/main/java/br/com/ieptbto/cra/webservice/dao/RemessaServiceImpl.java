@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.entidade.vo.ArquivoRemessaVO;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
 
 /**
@@ -33,13 +34,14 @@ public class RemessaServiceImpl implements IRemessaWS {// extends HttpServlet {
 	private ConfirmacaoService confirmacaoService;
 
 	@Override
-	@WebMethod
+	@WebMethod(operationName = "Remessa")
 	@GET
 	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") ArquivoRemessaVO dados) {
 
 		init(login, senha);
-		return remessaService.processar(nomeArquivo, getUsuario(), dados);
+		// return remessaService.processar(nomeArquivo, getUsuario(), dados);
+		return null;
 	}
 
 	@Override
