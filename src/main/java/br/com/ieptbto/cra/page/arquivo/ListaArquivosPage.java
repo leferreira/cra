@@ -33,6 +33,10 @@ import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
+/**
+ * @author Thasso Araújo
+ *
+ */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ListaArquivosPage extends BasePage<Arquivo> {
@@ -81,7 +85,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
 				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
-				item.add(new Label("status", remessa.getStatusRemessa().getLabel()));
+				item.add(new Label("status", remessa.getStatusRemessa().getLabel()).setMarkupId(remessa.getStatusRemessa().getLabel()));
 				item.add(downloadArquivoTXT(remessa));
 			}
 
@@ -97,6 +101,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
 						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						
 					}
 				};
 			}
