@@ -42,12 +42,10 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	
-	private Arquivo arquivo;
 	private IModel<Arquivo> model;
-	private ArrayList<String> tiposArquivo = new ArrayList<String>();
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
-	private DropDownChoice<Instituicao> comboPortador;
+	private ArrayList<String> tiposArquivo = new ArrayList<String>();
 	
 	public BuscarArquivoCartorioPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
@@ -66,12 +64,10 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
+				Arquivo arquivo = model.getObject();
+				Municipio municipio = null;
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
-				Municipio municipio = null;
-				Instituicao portador =  null;
-				arquivo = model.getObject();
-				
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
@@ -79,15 +75,12 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
-									throw new InfraException("A data de início deve ser antes da data fim.");
+									error("A data de início deve ser antes da data fim.");
 						}else
-							throw new InfraException("As duas datas devem ser preenchidas.");
-					} 
+							error("As duas datas devem ser preenchidas.");
+					}
 					
-					if (comboPortador.getDefaultModelObject() != null)
-						portador = Instituicao.class.cast(comboPortador.getDefaultModelObject());
-					
-					setResponsePage(new ListaArquivosPage(arquivo, municipio, portador, dataInicio, dataFim, tiposArquivo));
+					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -127,7 +120,7 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 
 	private Component comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		this.comboPortador = new DropDownChoice<Instituicao>("portador", new Model<Instituicao>(),instituicaoMediator.getInstituicoesFinanceiras(), renderer);
+		DropDownChoice<Instituicao> comboPortador = new DropDownChoice<Instituicao>("portador", new Model<Instituicao>(),instituicaoMediator.getInstituicoesFinanceiras(), renderer);
 		return comboPortador;
 	}
 	

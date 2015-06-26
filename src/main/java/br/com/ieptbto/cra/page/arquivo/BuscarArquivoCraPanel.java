@@ -42,13 +42,11 @@ public class BuscarArquivoCraPanel extends Panel  {
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	
-	private Arquivo arquivo;
 	private IModel<Arquivo> model;
-	private ArrayList<String> tiposArquivo = new ArrayList<String>();
-	private DropDownChoice<Municipio> comboMunicipio;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
-	private DropDownChoice<Instituicao> comboPortador;
+	private DropDownChoice<Municipio> comboMunicipio;
+	private ArrayList<String> tiposArquivo = new ArrayList<String>();
 	
 	public BuscarArquivoCraPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
@@ -68,11 +66,10 @@ public class BuscarArquivoCraPanel extends Panel  {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
+				Arquivo arquivo = model.getObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 				Municipio municipio = null;
-				Instituicao portador =  null;
-				arquivo = model.getObject();
 				
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null){
@@ -86,13 +83,11 @@ public class BuscarArquivoCraPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
 					
-					if (comboMunicipio.getDefaultModelObject() != null)
+					if (comboMunicipio.getDefaultModelObject() != null){
 						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
+					}
 					
-					if (comboPortador.getDefaultModelObject() != null)
-						portador = Instituicao.class.cast(comboPortador.getDefaultModelObject());
-					
-					setResponsePage(new ListaArquivosPage(arquivo, municipio, portador, dataInicio, dataFim, tiposArquivo));
+					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -115,7 +110,6 @@ public class BuscarArquivoCraPanel extends Panel  {
 			choices.add(tipo.constante);
 		}
 		CheckBoxMultipleChoice<String> tipos = new CheckBoxMultipleChoice<String>("tipoArquivos",new Model<ArrayList<String>>(tiposArquivo), choices);
-		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
 	}
 	
@@ -130,15 +124,15 @@ public class BuscarArquivoCraPanel extends Panel  {
 		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
 	}
 
-	private Component comboPortador() {
+	private DropDownChoice<Instituicao> comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		this.comboPortador = new DropDownChoice<Instituicao>("portador", new Model<Instituicao>(),instituicaoMediator.getInstituicoesFinanceiras(), renderer);
+		DropDownChoice<Instituicao> comboPortador = new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.getInstituicoesFinanceiras(), renderer);
 		return comboPortador;
 	}
 	
-	private Component pracaProtesto() {
+	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		this.comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.listarTodos(), renderer);
-		return comboMunicipio;
+		comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.listarTodos(), renderer);
+		return comboMunicipio; 
 	}
 }

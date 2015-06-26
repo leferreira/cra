@@ -42,12 +42,11 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	
-	private Arquivo arquivo;
 	private IModel<Arquivo> model;
-	private ArrayList<String> tiposArquivo = new ArrayList<String>();
 	private DropDownChoice<Municipio> comboMunicipio;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
+	private ArrayList<String> tiposArquivo = new ArrayList<String>();
 	
 	public BuscarArquivoInstituicaoPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
@@ -66,11 +65,10 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
+				Arquivo arquivo = model.getObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 				Municipio municipio = null;
-				Instituicao portador =  null;
-				arquivo = model.getObject();
 				
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null){
@@ -84,10 +82,11 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
 					
-					if (comboMunicipio.getDefaultModelObject() != null)
+					if (comboMunicipio.getDefaultModelObject() != null){
 						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
+					}
 					
-					setResponsePage(new ListaArquivosPage(arquivo, municipio, portador, dataInicio, dataFim, tiposArquivo));
+					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

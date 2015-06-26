@@ -22,7 +22,6 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
@@ -54,10 +53,9 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
 
-	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, Instituicao portador, LocalDate dataInicio, LocalDate dataFim,
-	        ArrayList<String> tiposArquivo) {
+	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<String> tiposArquivo) {
 		this.arquivo = arquivo;
-		this.remessas = remessaMediator.buscarRemessaAvancado(arquivo, municipio, portador, dataInicio, dataFim, tiposArquivo, getUser());
+		this.remessas = remessaMediator.buscarRemessaAvancado(arquivo, municipio,dataInicio, dataFim, tiposArquivo, getUser());
 		add(carregarListaArquivos());
 	}
 
