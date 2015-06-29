@@ -7,7 +7,9 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -18,13 +20,21 @@ public class MonitorarTitulosPage extends BasePage<TituloRemessa>{
 	/***/
 	private static final long serialVersionUID = 1L;
 	private TituloRemessa titulo;
+	private Instituicao instituicao;
 	private Form<TituloRemessa> form;
 
 	public MonitorarTitulosPage() {
 		this.titulo = new TituloRemessa();
+		this.instituicao = getUser().getInstituicao();
 		
 		form = new Form<TituloRemessa>("form", getModel());		
-		form.add(new MonitorarTitulosInputPanel("titulosInputPanel", getModel()));
+		if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
+			form.add(new MonitorarTitulosCraPanel("titulosInputPanel", getModel()));
+		} else if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){
+			form.add(new MonitorarTitulosCartorioPanel("titulosInputPanel", getModel()));
+		} else if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+			form.add(new MonitorarTitulosInstituicaoPanel("titulosInputPanel", getModel()));
+		}
 		add(form);
 	}
 

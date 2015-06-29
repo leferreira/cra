@@ -1,0 +1,90 @@
+<head>
+<meta charset="UTF8">
+</head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
+<div class="row">
+	<!-- Coluna 1-->
+	<div class="col-md-6" style="text-align: left;">
+		<fieldset>
+			<!-- Form Name -->
+			<legend>Dados do T&iacute;tulo</legend>
+		<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label">Número do Título:</label>  
+			  <div class="col-md-6">
+			  <input wicket:id="numeroTitulo" class="form-control input-md">
+			  </div>
+			</div>
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label">Nosso Número:</label>  
+			  <div class="col-md-6">
+			  <input wicket:id="nossoNumero" class="form-control input-md">
+			  </div>
+			</div>
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label">Número Protocolo:</label>  
+			  <div class="col-md-6">
+			  <input wicket:id="numeroProtocoloCartorio" class="form-control input-md">
+			  </div>
+			</div>
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label">Data Entrada CRA:</label>  
+			  <div class="col-md-6">
+			  <input id="date" name="data" type="text" wicket:id="dataOcorrencia" placeholder="__/__/____" class="form-control input-md">
+			    
+			  </div>
+			</div>
+		</fieldset>
+	</div>
+	<!-- Coluna 2-->
+	<div class="col-md-6" style="text-align: left;">
+	<fieldset>
+		<!-- Form Name -->
+		<legend>Dados do Devedor</legend>
+		
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label">Nome Devedor:</label>  
+		  <div class="col-md-6">
+		  <input wicket:id="nomeDevedor" class="form-control input-md">
+		    
+		  </div>
+		</div>
+		
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label">Documento Devedor:</label>  
+		  <div class="col-md-6">
+		  <input wicket:id="documentoDevedor" class="form-control input-md">
+		    
+		  </div>
+		</div>
+		
+		</fieldset>
+		<fieldset>
+
+		<!-- Form Name -->
+		<legend>Dados do Portador/Praça</legend>
+		
+		<!-- Select Basic -->
+		<div class="form-group">
+		  <label class="col-md-4 control-label">Município:</label>
+		  <div class="col-md-6">
+		    <select wicket:id="municipio" class="form-control">
+		    </select>
+		  </div>
+		</div>
+		  <!-- Button -->
+		</fieldset>
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="buscar"></label>
+		  <div class="col-md-6">
+		    <button wicket:id="botaoBuscar" id="buscar" name="buscar" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>&nbsp;Buscar</button>
+		  </div>
+		</div>
+	</div>
+</div>
+</wicket:panel>

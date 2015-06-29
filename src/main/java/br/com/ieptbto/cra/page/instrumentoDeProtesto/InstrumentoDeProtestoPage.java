@@ -202,9 +202,8 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno> {
 		return protocoloCartorio = new TextField<String>("protocoloCartorio", new Model<String>());
 	}
 
-	@SuppressWarnings("rawtypes")
-	private Component botaoGerarListaSlip() {
-		return new Link("gerarLista") {
+	private Link<Retorno> botaoGerarListaSlip() {
+		return new Link<Retorno>("gerarLista") {
 
 			/***/
 			private static final long serialVersionUID = 1L;

@@ -139,20 +139,20 @@ td {
 	color: #FFF;
 	background: #86BE81 none repeat scroll 0% 0%;
     font-weight: bold;
-    padding: 2px;
+    padding: 4px;
     width: 100%;
 }
 #Recebido{
-    background: #1E90FF none repeat scroll 0% 0%;
+    background: #337AB7 none repeat scroll 0% 0%;
     color: #FFF;
     font-weight: bold;
-    padding: 2px;
+    padding: 4px;
     width: 100%;
 }
 #Enviado{
     background: red none repeat scroll 0% 0%;
     color: #FFF;
     font-weight: bold;
-    padding: 2px;
+    padding: 4px;
     width: 100%;
 }
