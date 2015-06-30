@@ -213,6 +213,13 @@
 			<version>3.9</version>
 		</dependency>
 	
+		<!-- Wicket Extension -->
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-extensions</artifactId>
+			<version>6.18.0</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

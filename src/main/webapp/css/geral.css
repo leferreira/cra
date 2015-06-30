@@ -156,3 +156,12 @@ td {
     padding: 4px;
     width: 100%;
 }
+/**
+MOdal chrome e explorer
+*/
+.w_caption{
+	height: 2.4em !important;
+}
+.w_close{
+	display: none !important;
+}

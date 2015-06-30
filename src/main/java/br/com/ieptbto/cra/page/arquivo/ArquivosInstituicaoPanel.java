@@ -112,13 +112,18 @@ public class ArquivosInstituicaoPanel extends Panel {
 				item.add(downloadArquivo(arquivo));
 			}
 
-			@SuppressWarnings("serial")
 			private Link downloadArquivo(final Arquivo file) {
 				return new Link<Arquivo>("downloadArquivo") {
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
-
+//						File file = remessaMediator.baixarArquivoTXT(instituicao, arquivo);
+//						IResourceStream resourceStream = new FileResourceStream(file);
+//
+//						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+//						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
 					}
 				};
 			}

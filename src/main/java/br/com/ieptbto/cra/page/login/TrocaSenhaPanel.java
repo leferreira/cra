@@ -50,11 +50,18 @@ public class TrocaSenhaPanel extends Panel {
 		Button botao = new Button("botaoSalvar") {
 			@Override
 			public void onSubmit() {
-				if (usuarioMediator.trocarSenha(senha, novaSenha, confirmaSenha, usuario)) {
-					info("Senha Alterada com Sucesso");
-				} else {
-					error("Não foi possível Alterar a sunha Senha");
-				}
+				Usuario user = usuarioMediator.autenticar(usuario.getLogin(), senha);
+				
+				if (user != null) {
+					user.setSenha(senha);
+					user.setConfirmarSenha(confirmaSenha);
+				
+					if (usuarioMediator.isSenhasIguais(usuario)) {
+						usuarioMediator.trocarSenha(user);
+					} else 
+						error("Não foi possível alterar a senha ! A nova senha não coincide com a confirmação |");
+				} else 
+					error("A senha informada está incorreta !");
 			}
 		};
 		return botao;
