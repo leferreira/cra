@@ -1,18 +1,28 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR">
-	<div class="col-lg-2" align="center">
-		<br/><br/>
-		<form role="form" wicket:id="form">
-			<fieldset>
-				<legend>Troca Senha</legend>
+		<form role="form" wicket:id="form" class="form-horizontal">
 				<span wicket:id="mensagemRetorno">Mensagens de erros e etc</span>
-				<div class="form-group">
-					<input type="password" class="input-medium" placeholder="Senha"	wicket:id="senha" /> 
-					<input type="password" class="input-medium" placeholder="Nova Senha" wicket:id="novaSenha" /> 
-					<input type="password" class="input-medium" placeholder="Confirma Senha" wicket:id="confirmaSenha" /> 
-					<input type="button" wicket:id="botaoSalvar" class="btn btn-primary" value="Trocar" />
-				</div>
-			</fieldset>
+		       	<div class="col-md-10 col-md-offset-1">
+					<label>Alterar a senha</label>
+					<!-- Text input-->
+					<div class="form-group">
+					  <div class="col-md-12">
+					  <input placeholder="Senha" class="form-control input-md" type="password" wicket:id="senha">
+					  </div>
+					</div>
+					<!-- Text input-->
+					<div class="form-group">
+					  <div class="col-md-12">
+					  <input placeholder="Nova Senha" class="form-control input-md" type="password" wicket:id="novaSenha">
+					  </div>
+					</div>
+					<!-- Text input-->
+					<div class="form-group">
+					  <div class="col-md-12">
+					  <input placeholder="Confirmar" class="form-control input-md" type="password" wicket:id="confirmaSenha">
+					  </div>
+					</div>
+		       	    <button type="button" wicket:id="botaoSalvar" class="btn btn-small btn-primary">Salvar</button>
+		       	</div>
 		</form>
-	</div>
 </wicket:panel>
  

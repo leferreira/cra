@@ -13,26 +13,24 @@
 							class="icon-bar"></span>
 					</button>
 					<a href="HomePage"><img style="padding: 10px;"
-						class="col-md-2 logo" alt="logo" src="img/logo_cabecalho.jpg" /> </a> <label
-						class="ola" wicket:id="userGreeting">Nome</label>
-
-					<ul class="nav navbar-top-links navbar-right" style="top:0px;">
+						class="col-md-2 logo" alt="logo" src="img/logo_cabecalho.jpg" /> 
+						<label class="ola" ></label>
+					</a> 
+						
+					<ul class="nav navbar-top-links navbar-right">
 						<!-- /.dropdown -->
-						<li class="dropdown"><a class="dropdown-toggle green"
-							data-toggle="dropdown" href="#"> <i class="fa fa-user fa-fw"></i>
+						<li class="dropdown">
+							<a class="dropdown-toggle green" data-toggle="dropdown" href="#"> 
+								<i class="fa fa-user fa-fw"></i><label class="ola" wicket:id="userGreeting" style="  width: 170px;">Nome</label>
 								<i class="fa fa-caret-down"></i>
-						</a>
-							<ul class="dropdown-menu dropdown-user">
-								<li><a href="#"><i class="fa fa-user fa-fw"></i> Perfil</a></li>
-								<li><a href="#"><i class="fa fa-gear fa-fw"></i>Configurações</a></li>
+							</a>
+							<ul class="dropdown-menu dropdown-user" style="top: 80%;">
+								<li><span class="row" wicket:id="trocaSenhaPanel"></span></li>
 								<li class="divider"></li>
-								<li><a wicket:id="url_logout"><i
-										class="fa fa-sign-out fa-fw"></i>Sair</a></li>
-								<li><a wicket:id="trocaSenhaPanel"><i
-										class="fa fa-sign-out fa-fw"></i>Alterar Senha</a></li>
+								<li><a href="#"><i class="fa fa-user fa-fw"></i> Perfil</a></li>
+								<li><a wicket:id="url_logout"><i class="fa fa-sign-out fa-fw"></i>Sair</a></li>
 							</ul>
 						</li>
-						<li></li>
 					</ul>
 				</div>
 				<div class="row" wicket:id="menu" ></div>
