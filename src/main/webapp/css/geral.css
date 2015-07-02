@@ -41,8 +41,8 @@ body {
 	text-align: left;
 }
 
-.input-historico {
-	width: 100%;
+.historico {
+   margin-bottom: 5px !important;	
 }
 
 .destaque {
