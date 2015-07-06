@@ -26,7 +26,7 @@ public class SlipUtils {
 	public JasperPrint gerarSlipLista(List<InstrumentoProtesto> listaSlip) throws JRException {
 		parametros.put("DATA", DataUtil.localDateToString(new LocalDate()));
 		
-		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("SlipLista.jrxml"));
+		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("teste.jrxml"));
 		return JasperFillManager.fillReport(jasperReport, parametros);
 	}
 }

@@ -1,7 +1,5 @@
 package br.com.ieptbto.cra.page.titulo;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -13,7 +11,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -43,10 +40,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 	public HistoricoPage(TituloRemessa titulo){
 		this.tituloRemessa = tituloMediator.carregarDadosHistoricoTitulo(titulo);
-		adicionarCampos();
-	}
-	
-	private void adicionarCampos() {
 		add(getListViewHistorico());
 		add(numeroProtocoloCartorio());
 		add(dataProtocolo());
@@ -85,7 +78,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 	
 	private ListView<Historico> getListViewHistorico(){
-		return new ListView<Historico>("divListaHistorico", buscarHistorico()) {
+		return new ListView<Historico>("divListaHistorico", tituloRemessa.getHistoricos()) {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -109,22 +102,12 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		};
 	}
 	
-	public IModel<List<Historico>> buscarHistorico() {
-		return new LoadableDetachableModel<List<Historico>>() {
-			/***/
-			private static final long serialVersionUID = 1L;
-			@Override
-			protected List<Historico> load() {
-				return tituloMediator.getHistoricoTitulo(tituloRemessa);
-			}
-		};
-	}
-	
 	private TextField<String> numeroProtocoloCartorio() {
-		TextField<String> campoNumeroProtocolo = new TextField<String>("confirmacao.numeroProtocoloCartorio", new Model<String>(StringUtils.EMPTY));
+		String numeroProtocolo = StringUtils.EMPTY;
 		if (tituloRemessa.getConfirmacao() != null){
-			campoNumeroProtocolo = new TextField<String>("confirmacao.numeroProtocoloCartorio", new Model<String>(tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+			numeroProtocolo = tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio();
 		} 
+		TextField<String> campoNumeroProtocolo = new TextField<String>("confirmacao.numeroProtocoloCartorio", new Model<String>(numeroProtocolo));
 		campoNumeroProtocolo.setEnabled(false);
 		return campoNumeroProtocolo;
 	}

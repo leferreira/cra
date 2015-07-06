@@ -13,10 +13,10 @@
 						<div class="col-md-5">
 							<!-- Appended Input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="codigoInstrumento">Código de Barra:</label>
+							  <label class="col-md-4 control-label">Código de Barra:</label>
 							  <div class="col-md-7">
 							    <div class="input-group">
-							      <input id="codigoInstrumento" name="codigoInstrumento" onfocus="onfocus" wicket:id="codigoInstrumento" maxlength="18" class="form-control" placeholder="" type="text">
+							      <input onfocus="onfocus" wicket:id="codigoInstrumento" maxlength="18" class="form-control">
 							      <span class="input-group-addon"><span class="fa fa-barcode"></span></span>
 							    </div>
 							    
@@ -31,10 +31,9 @@
 						<div class="col-md-5">
 							<!-- Select Basic -->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="codigoIbge">Município:</label>
+							  <label class="col-md-4 control-label">Município:</label>
 							  <div class="col-md-7">
-							    <select id="codigoIbge" wicket:id="codigoIbge" name="codigoIbge" class="form-control" required="required">
-							      <option value="1">Option one</option>
+							    <select wicket:id="codigoIbge" class="form-control">
 							    </select>
 							  </div>
 							</div>
@@ -42,10 +41,9 @@
 						<div class="col-md-5">
 							<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="protocoloCartorio">NºProtocolo:</label>  
+							  <label class="col-md-4 control-label">NºProtocolo:</label>  
 							  <div class="col-md-7">
-							  <input id="protocoloCartorio" name="protocoloCartorio" wicket:id="protocoloCartorio" maxlength="10" type="text" required="required" placeholder="" class="form-control input-md">
-							    
+							  <input wicket:id="protocoloCartorio" maxlength="10" class="form-control input-md">
 							  </div>
 							</div>
 						</div>
@@ -85,8 +83,12 @@
 			     <!-- Button -->
 				<div class="row">
 					<div class="col-lg-12">
-				    	<button id="botaoGerar" name="botaoGerar" style="margin-left: 5px;" wicket:id="gerarLista" onclick="target='_blank';return true;" class="btn btn-primary"><span class="fa fa-print"></span>&nbsp;Gerar SLIPS</button>
-						<button id="botaoEtiquetas" name="botaoEtiquetas" style="margin-left: 5px;" wicket:id="gerarEtiquetas" onclick="target='_blank';return true;" class="btn btn-primary"><span class="fa fa-print"></span>&nbsp;Gerar Etiqueta</button>
+						<form wicket:id="formSlips">
+				    		<button style="margin-left: 5px;" type="submit" onclick="target='_blank';return true;" class="btn btn-primary"><span class="fa fa-print"></span>&nbsp;Gerar SLIPS</button>
+						</form>
+						<form wicket:id="formEtiquetas">
+							<button style="margin-left: 5px;" type="submit" onclick="target='_blank';return true;" class="btn btn-primary"><span class="fa fa-print"></span>&nbsp;Gerar Etiqueta</button>
+						</form>
 					</div>
 				</div>
 			</div>

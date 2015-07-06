@@ -1,14 +1,16 @@
 package br.com.ieptbto.cra.page.instrumentoDeProtesto;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
-import org.apache.log4j.Logger;
-import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,12 +32,13 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Retorno;
-import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoDeProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
+import br.com.ieptbto.cra.relatorio.ExportToPdf;
 import br.com.ieptbto.cra.relatorio.SlipUtils;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -43,12 +46,9 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class InstrumentoDeProtestoPage extends BasePage<Retorno> {
-
-	/***/
-	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(InstrumentoDeProtestoPage.class);
+public class InstrumentoDeProtestoPage extends BasePage<InstrumentoProtesto> {
 
 	@SpringBean
 	InstrumentoDeProtestoMediator instrumentoMediator;
@@ -57,57 +57,62 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno> {
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 
-	private Retorno tituloProtestado;
-	private ListView<Retorno> titulosSlips;
-	private List<Retorno> listaRetornoParaSlip = new ArrayList<Retorno>();
+	private InstrumentoProtesto instrumento;
+	private List<Retorno> listaRetornoSlip;
 
 	private TextField<String> codigoInstrumento;
 	private TextField<String> protocoloCartorio;
 	private DropDownChoice<Municipio> codigoIbge;
 
 	public InstrumentoDeProtestoPage() {
+		this.listaRetornoSlip = new ArrayList<Retorno>();
 		adicionarFormularioCodigo();
 		adicionarFormularioManual();
-
+		
 		add(carregarListaSlips());
-		titulosSlips.setReuseItems(true);
-
-		add(botaoGerarListaSlip());
-		add(botaoGerarEtiquetas());
+		add(new Form<InstrumentoProtesto> ("formSlips", getModel()){
+			@Override
+			protected void onSubmit() {
+				
+				try {
+					List<InstrumentoProtesto> listaSlip = instrumentoMediator.processarInstrumentos(getListaRetornoSlip());
+					SimpleDateFormat dataPadraArquivo = new SimpleDateFormat("dd-MM-yy");
+					
+					JasperPrint jasperPrint = getSlipUtils().gerarSlipLista(listaSlip);
+					new ExportToPdf((HttpServletResponse)getResponse().getContainerResponse(), jasperPrint, "INSTRUMENTOS-" 
+							+ dataPadraArquivo.format(new Date()).toString() + ".pdf"); 
+				
+				} catch (JRException e) {
+					e.printStackTrace();
+					error("Não foi possível gerar a lista de SLIP ! Entre em contato com a CRA !");
+				}
+			}
+		});
+		add(new Form<InstrumentoProtesto> ("formEtiquetas", getModel()){
+			@Override
+			protected void onSubmit() {
+				// TODO Auto-generated method stub
+				super.onSubmit();
+			}
+		});
 	}
 
 	private void adicionarFormularioManual() {
 		Form<Retorno> formManual = new Form<Retorno>("formManual") {
 
-			/***/
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			protected void onSubmit() {
-				Retorno tituloProtestado = null;
-				try {
-					String numeroProtocolo = protocoloCartorio.getModelObject();
-					String codigoIBGE = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
+				String numeroProtocolo = protocoloCartorio.getModelObject();
+				String codigoIBGE = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
+				Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(numeroProtocolo, codigoIBGE);
 
-					tituloProtestado = instrumentoMediator.buscarTituloProtestado(numeroProtocolo, codigoIBGE);
-
-					if (tituloProtestado != null) {
-						if (!listaRetornoParaSlip.contains(tituloProtestado)) {
-							listaRetornoParaSlip.add(tituloProtestado);
-							codigoIbge.clearInput();
-						} else
-							error("A lista já contem o título!");
-					} else {
-						error("Titulo não encontrado!");
-					}
-					protocoloCartorio.clearInput();
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
-					error(ex.getMessage());
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível encontrar o título! Entre em contato com a CRA.");
-				}
+				if (tituloProtestado != null) {
+					if (!getListaRetornoSlip().contains(tituloProtestado)) {
+						getListaRetornoSlip().add(tituloProtestado);
+					} else
+						error("A lista já contem o título!");
+				} else
+					error("Titulo não encontrado!");
 			}
 		};
 		formManual.add(codigoIbgeCartorio());
@@ -119,35 +124,19 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno> {
 	private void adicionarFormularioCodigo() {
 		Form<Retorno> formCodigo = new Form<Retorno>("formCodigo") {
 
-			/***/
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			protected void onSubmit() {
-				Retorno tituloProtestado = null;
+				String codigoIbge = codigoInstrumento.getModelObject().substring(1, 8);
+				String protocolo = codigoInstrumento.getModelObject().substring(8, 18);
+				Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(protocolo, codigoIbge);
 
-				try {
-					String codigoIbge = codigoInstrumento.getModelObject().substring(1, 8);
-					String protocolo = codigoInstrumento.getModelObject().substring(8, 18);
-					tituloProtestado = instrumentoMediator.buscarTituloProtestado(protocolo, codigoIbge);
-
-					if (tituloProtestado != null) {
-						if (!listaRetornoParaSlip.contains(tituloProtestado)) {
-							listaRetornoParaSlip.add(tituloProtestado);
-							codigoInstrumento.clearInput();
-						} else
-							error("A lista já contem o título!");
-					} else {
-						error("Titulo não encontrado!");
-					}
-					codigoInstrumento.clearInput();
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
-					error(ex.getMessage());
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível encontrar o título! Entre em contato com a CRA.");
-				}
+				if (tituloProtestado != null) {
+					if (!getListaRetornoSlip().contains(tituloProtestado)) {
+						getListaRetornoSlip().add(tituloProtestado);
+					} else
+						error("A lista já contem o título!");
+				} else 
+					error("Titulo não encontrado!");
 			}
 		};
 		formCodigo.add(campoCodigoDeBarra());
@@ -155,11 +144,8 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno> {
 		add(formCodigo);
 	}
 
-	@SuppressWarnings("rawtypes")
 	private ListView<Retorno> carregarListaSlips() {
-		return titulosSlips = new ListView<Retorno>("instrumentos", listaRetornoParaSlip) {
-			/***/
-			private static final long serialVersionUID = 1L;
+		return new ListView<Retorno>("instrumentos", getListaRetornoSlip()) {
 
 			@Override
 			protected void populateItem(ListItem<Retorno> item) {
@@ -168,7 +154,7 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno> {
 				item.add(new Label("protocolo", retorno.getNumeroProtocoloCartorio()));
 				item.add(new Label("pracaProtesto", retorno.getTitulo().getPracaProtesto()));
 
-				Link linkHistorico = new Link("linkHistorico") {
+				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 					/***/
 					private static final long serialVersionUID = 1L;
 
@@ -179,13 +165,11 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno> {
 				linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));
 				item.add(linkHistorico);
 
-				item.add(new Label("portador", instituicaoMediator.getInstituicaoPorCodigoPortador(retorno.getTitulo().getCodigoPortador())
-				        .getNomeFantasia()));
+				item.add(new Label("portador", instituicaoMediator.getInstituicaoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
-				item.add(new LabelValorMonetario("valorTitulo", retorno.getTitulo().getValorTitulo()));
-				item.add(new LabelValorMonetario("valorSaldo", retorno.getTitulo().getSaldoTitulo()));
+				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
+				item.add(new LabelValorMonetario<BigDecimal>("valorSaldo", retorno.getTitulo().getSaldoTitulo()));
 			}
-
 		};
 	}
 
@@ -195,63 +179,29 @@ public class InstrumentoDeProtestoPage extends BasePage<Retorno> {
 
 	private DropDownChoice<Municipio> codigoIbgeCartorio() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		return codigoIbge = new DropDownChoice<Municipio>("codigoIbge", new Model<Municipio>(), municipioMediator.listarTodos(), renderer);
+		codigoIbge = new DropDownChoice<Municipio>("codigoIbge", new Model<Municipio>(), municipioMediator.listarTodos(), renderer);
+		codigoIbge.setRequired(true);
+		codigoIbge.setLabel(new Model<String>("Município"));
+		return codigoIbge;
 	}
 
 	private TextField<String> numeroProtocoloCartorio() {
-		return protocoloCartorio = new TextField<String>("protocoloCartorio", new Model<String>());
-	}
-
-	private Link<Retorno> botaoGerarListaSlip() {
-		return new Link<Retorno>("gerarLista") {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				List<InstrumentoProtesto> listaSlip = new ArrayList<InstrumentoProtesto>();
-				JasperPrint jasperPrint;
-
-				try {
-					instrumentoMediator.processarInstrumentos(listaRetornoParaSlip);
-					listaSlip = instrumentoMediator.buscarInstrumentosParaSlip();
-					jasperPrint = getSlipUtils().gerarSlipLista(listaSlip);
-
-					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
-
-				} catch (JRException e) {
-					e.printStackTrace();
-					error("Não foi possível processar os instrumentos de protesto! Entre em contato com a CRA.");
-				}
-			}
-
-		};
-	}
-
-	private Component botaoGerarEtiquetas() {
-		Component button = new Button("gerarEtiquetas") {
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			public void onSubmit() {
-
-				try {
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível processar os instrumentos de protesto! Entre em contato com a CRA.");
-				}
-			}
-		};
-		return button;
+		protocoloCartorio = new TextField<String>("protocoloCartorio", new Model<String>());
+		protocoloCartorio.setRequired(true);
+		protocoloCartorio.setLabel(new Model<String>("Número de Protocolo"));
+		return protocoloCartorio;
 	}
 
 	private SlipUtils getSlipUtils() {
 		return new SlipUtils();
 	}
 
+	public List<Retorno> getListaRetornoSlip() {
+		return listaRetornoSlip;
+	}
+	
 	@Override
-	protected IModel<Retorno> getModel() {
-		return new CompoundPropertyModel<Retorno>(tituloProtestado);
+	protected IModel<InstrumentoProtesto> getModel() {
+		return new CompoundPropertyModel<InstrumentoProtesto>(instrumento);
 	}
 }

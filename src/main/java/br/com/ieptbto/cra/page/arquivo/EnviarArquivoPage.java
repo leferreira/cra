@@ -52,7 +52,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	public EnviarArquivoPage() {
 		Instituicao cra = instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString());
 		arquivo = new Arquivo();
-		arquivo.setInstituicaoEnvio(getUser().getInstituicao());
+//		arquivo.setInstituicaoEnvio(getUser().getInstituicao());
 		arquivo.setInstituicaoRecebe(cra);
 		arquivo.setUsuarioEnvio(getUser());
 		arquivo.setDataEnvio(new LocalDate());

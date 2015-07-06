@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
@@ -7,8 +8,8 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -23,13 +24,18 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
-@SuppressWarnings("rawtypes")
+
+/**
+ * @author Thasso Araújo
+ *
+ */
 public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 
 	/***/
@@ -46,6 +52,7 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 
 	private Remessa remessa;
 	private Arquivo arquivo;
+	private TipoArquivoEnum tipoArquivo;
 	private List<TituloRemessa> titulos;
 	
 	public TitulosDoArquivoPage(Remessa remessa) {
@@ -58,18 +65,13 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	}
 
 	public TitulosDoArquivoPage(Arquivo arquivo) {
-		
-		TipoArquivoEnum tipoArquivo = arquivo.getTipoArquivo().getTipoArquivo();
-		if (tipoArquivo.equals(TipoArquivoEnum.REMESSA))
-			setTitulos(tituloMediator.buscarTitulosPorArquivo(arquivo, getUser().getInstituicao()));
-		else 
-			setTitulos(tituloMediator.buscarTitulosConfirmacaoRetorno(arquivo, getUser().getInstituicao()));
+		this.tipoArquivo = arquivo.getTipoArquivo().getTipoArquivo();
+		setTitulos(buscarTitulosDoArquivo());
 		setRemessa(arquivo);
 		setArquivo(arquivo);
 		carregarInformacoes();
 		add(carregarListaTitulos());
 		add(botaoGerarRelatorio());
-//		add(botaoDownload());
 	}
 	
 	private ListView<TituloRemessa> carregarListaTitulos() {
@@ -89,7 +91,7 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 				}
 				item.add(new Label("portador", tituloLista.getRemessa().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				
-				Link linkHistorico = new Link("linkHistorico") {
+				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 		            /***/
 					private static final long serialVersionUID = 1L;
 
@@ -100,19 +102,19 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
 		        item.add(linkHistorico);
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
-				item.add(new LabelValorMonetario("valorTitulo", tituloLista.getValorTitulo()));
+				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
 				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
 			}
 		};
 	}
 	
-	private Component botaoGerarRelatorio(){
-		return new Link("gerarRelatorio"){
+	private Button botaoGerarRelatorio(){
+		return new Button("gerarRelatorio"){
 
 			/***/
 			private static final long serialVersionUID = 1L;
 			@Override
-			public void onClick() {
+			public void onSubmit() {
 				JasperPrint jasperPrint = null;
 				
 				try {
@@ -132,7 +134,6 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		add(nomeArquivo());
 		add(portador());
 		add(dataEnvio());
-		add(usuarioEnvio());
 		add(tipoArquivo());
 	}
 
@@ -146,10 +147,6 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	
 	private TextField<String> dataEnvio(){
 		return new TextField<String>("dataEnvio", new Model<String>(DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
-	}
-	
-	private TextField<String> usuarioEnvio(){
-		return new TextField<String>("usuarioEnvio", new Model<String>(remessa.getArquivo().getUsuarioEnvio().getNome()));
 	}
 	
 	private TextField<String> tipoArquivo(){
@@ -175,6 +172,26 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	public void setTitulos(List<TituloRemessa> titulos) {
 		this.titulos = titulos;
 	}
+	
+	public List<TituloRemessa> buscarTitulosDoArquivo() {
+		if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
+			return tituloMediator.buscarTitulosPorArquivo(arquivo, getUser().getInstituicao());
+		} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
+			return tituloMediator.buscarTitulosConfirmacaoRetorno(arquivo, getUser().getInstituicao());
+		} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
+			return tituloMediator.buscarTitulosConfirmacaoRetorno(arquivo, getUser().getInstituicao());
+		} else if (tipoArquivo.equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
+			
+		} else if (tipoArquivo.equals(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO)) {
+			
+		} else if (tipoArquivo.equals(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO)) {
+			
+		} else {
+			throw new InfraException("Não foi possível identificar o tipo do Arquivo");
+		}
+		return titulos;
+	}
+	
 	
 	@Override
 	protected IModel<Arquivo> getModel() {

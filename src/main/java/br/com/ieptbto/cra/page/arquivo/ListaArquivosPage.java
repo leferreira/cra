@@ -99,7 +99,6 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
 						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
-						
 					}
 				};
 			}
