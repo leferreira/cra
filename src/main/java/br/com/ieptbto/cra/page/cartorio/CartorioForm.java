@@ -38,7 +38,7 @@ public class CartorioForm extends BaseForm<Instituicao> {
 	public void onSubmit() {
 
 		Instituicao instituicao = getModelObject();
-		TipoInstituicao tipo = tipoMediator.buscarTipoInstituicao(TipoInstituicaoCRA.CARTORIO.toString());
+		TipoInstituicao tipo = tipoMediator.buscarTipoInstituicao(TipoInstituicaoCRA.CARTORIO);
 		instituicao.setTipoInstituicao(tipo);
 		try{
 			Instituicao cartorio = municipioMediator.isMunicipioTemCartorio(instituicao.getMunicipio());
