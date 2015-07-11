@@ -63,7 +63,6 @@ public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado> {
 		add(form);
 		setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
 		add(carregarListaTitulos());
-
 	}
 
 	private ListView<TituloFiliado> carregarListaTitulos() {

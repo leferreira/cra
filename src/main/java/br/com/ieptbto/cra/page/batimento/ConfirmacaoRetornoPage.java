@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.batimento;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -19,7 +20,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Batimento;
+import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
@@ -28,14 +31,11 @@ import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
-@SuppressWarnings( { "rawtypes","unused" })
+@SuppressWarnings( "serial" )
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(ConfirmacaoRetornoPage.class);
-	
 	@SpringBean
 	RetornoMediator retornoMediator;
 	@SpringBean
@@ -45,9 +45,6 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 	private List<Remessa> retornosParaEnvio;
 	private List<Remessa> confirmacoesParaEnvio;
 	
-	private ListView<Remessa> retornos;
-	private ListView<Remessa> confirmacao;
-
 	public ConfirmacaoRetornoPage(){
 		this.batimento = new Batimento();
 		carregarGuiaConfirmacao();
@@ -56,11 +53,9 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 	
 	private void carregarGuiaRetorno(){
 		setRetornosParaEnvio(retornoMediator.buscarRetornosConfirmados());
-        Form formRetorno = new Form("form"){
-            /***/
-			private static final long serialVersionUID = 1L;
-			@Override
-            protected void onSubmit(){
+        Form<Retorno> formRetorno = new Form<Retorno>("form"){
+
+        	protected void onSubmit(){
 				try{
 					
 					if (!getRetornosParaEnvio().isEmpty()){
@@ -79,25 +74,21 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
             }
         };
         formRetorno.add(carregarListaRetornos());
-        formRetorno.add(botaoRetorno());
+        formRetorno.add(new Button("botaoRetorno"));
         add(formRetorno);
 	}
 	
 	
 	private ListView<Remessa> carregarListaRetornos(){
-		return retornos = new ListView<Remessa>("retornos", getRetornosParaEnvio()){
-			/***/
-			private static final long serialVersionUID = 1L;
+		return new ListView<Remessa>("retornos", getRetornosParaEnvio()){
 			@Override
 			protected void populateItem(ListItem<Remessa> item){
 				final Remessa retorno = item.getModelObject();
 				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
-				item.add(new LabelValorMonetario("valorPagos", retornoMediator.buscarValorDeTitulosPagos(retorno)));
-				Link linkArquivo = new Link("linkArquivo") {
-					/***/
-					private static final long serialVersionUID = 1L;
-					
+				item.add(new LabelValorMonetario<BigDecimal>("valorPagos", retornoMediator.buscarValorDeTitulosPagos(retorno)));
+				Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
+					@Override
 					public void onClick() {
 						setResponsePage(new TitulosDoArquivoPage(retorno));  
 					}
@@ -109,9 +100,6 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 			
 			private Component removerConfirmado(final Remessa retorno) {
 				return new Link<Arquivo>("removerConfirmado") {
-					/***/
-					private static final long serialVersionUID = 1L;
-					
 					@Override
 					public void onClick() {
 						retornoMediator.removerConfirmado(retorno);
@@ -124,14 +112,11 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 
 	private void carregarGuiaConfirmacao(){
 		setConfirmacoesParaEnvio(confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio());
-		Form formConfirmacao = new Form("formConfirmacao"){
-            /***/
-			private static final long serialVersionUID = 1L;
+		Form<Confirmacao> formConfirmacao = new Form<Confirmacao>("formConfirmacao"){
 			@Override
             protected void onSubmit(){
 				
 				try{
-					
 					if (!getConfirmacoesParaEnvio().isEmpty())
 						confirmacaoMediator.gerarConfirmacoes(getUser(), getConfirmacoesParaEnvio());
 					else 
@@ -148,24 +133,20 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
             }
         };
         formConfirmacao.add(carregarListaConfirmacao());
-        formConfirmacao.add(botaoConfirmacao());
+        formConfirmacao.add(new Button("botaoConfirmacao"));
         add(formConfirmacao);
 	}
 	
 	
 	private ListView<Remessa> carregarListaConfirmacao(){
-		return confirmacao = new ListView<Remessa>("confirmacao", getConfirmacoesParaEnvio()){
-			/***/
-        	private static final long serialVersionUID = 1L;
+		return new ListView<Remessa>("confirmacao", getConfirmacoesParaEnvio()){
 				@Override
 	            protected void populateItem(ListItem<Remessa> item){
 					final Remessa retorno = item.getModelObject();
 					item.add(new Label("arquivo.dataEnvioConfirmacao", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 					item.add(new Label("instituicaoOrigem.nomeFantasiaConfirmacao", retorno.getInstituicaoOrigem().getNomeFantasia()));
 					item.add(new Label("instituicaoDestino.nomeFantasiaConfirmacao", retorno.getInstituicaoDestino().getNomeFantasia()));
-					Link linkArquivo = new Link("linkArquivoConfirmacao") {
-			            /***/
-						private static final long serialVersionUID = 1L;
+					Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivoConfirmacao") {
 
 						public void onClick() {
 			            	setResponsePage(new TitulosDoArquivoPage(retorno));  
@@ -193,21 +174,8 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 		this.confirmacoesParaEnvio = confirmacoesParaEnvio;
 	}
 	
-	@SuppressWarnings("serial")
-	private Component botaoConfirmacao() {
-		return new Button("botaoConfirmacao") {
-		};
-	}
-	
-	@SuppressWarnings("serial")
-	private Component botaoRetorno() {
-		return new Button("botaoRetorno") {
-		};
-	}
-	
 	@Override
 	protected IModel<Batimento> getModel() {
 		return new CompoundPropertyModel<Batimento>(batimento);
 	}
-
 }
