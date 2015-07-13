@@ -36,11 +36,9 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-	
 	@SpringBean
 	TituloMediator tituloMediator;
 	@SpringBean
@@ -55,15 +53,6 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	private TipoArquivoEnum tipoArquivo;
 	private List<TituloRemessa> titulos;
 	
-	public TitulosDoArquivoPage(Remessa remessa) {
-		setTitulos(tituloMediator.buscarTitulosPorRemessa(remessa, getUser().getInstituicao()));
-		setArquivo(remessa.getArquivo());
-		this.remessa = remessa;
-		carregarInformacoes();
-		add(carregarListaTitulos());
-		add(botaoGerarRelatorio());
-	}
-
 	public TitulosDoArquivoPage(Arquivo arquivo) {
 		this.tipoArquivo = arquivo.getTipoArquivo().getTipoArquivo();
 		setTitulos(buscarTitulosDoArquivo());
@@ -73,11 +62,19 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		add(carregarListaTitulos());
 		add(botaoGerarRelatorio());
 	}
+
+	public TitulosDoArquivoPage(Remessa remessa) {
+		setTitulos(tituloMediator.buscarTitulosPorRemessa(remessa, getUser().getInstituicao()));
+		setArquivo(remessa.getArquivo());
+		this.remessa = remessa;
+		carregarInformacoes();
+		add(carregarListaTitulos());
+		add(botaoGerarRelatorio());
+	}
+
 	
 	private ListView<TituloRemessa> carregarListaTitulos() {
 		return new ListView<TituloRemessa>("listViewTituloArquivo", getTitulos()) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
@@ -92,8 +89,6 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 				item.add(new Label("portador", tituloLista.getRemessa().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
-		            /***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));
@@ -111,14 +106,10 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	private Button botaoGerarRelatorio(){
 		return new Button("gerarRelatorio"){
 
-			/***/
-			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
-				JasperPrint jasperPrint = null;
-				
 				try {
-					jasperPrint = relatorioMediator.novoRelatorioDeArquivoDetalhado(getUser().getInstituicao(), getArquivo(), getTitulos());
+					JasperPrint jasperPrint = relatorioMediator.novoRelatorioDeArquivoDetalhado(getUser().getInstituicao(), getArquivo(), getTitulos());
 					
 					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 				
@@ -126,7 +117,6 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 					e.printStackTrace();
 				}
 			}
-			
 		};
 	}
 	
@@ -174,6 +164,7 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	}
 	
 	public List<TituloRemessa> buscarTitulosDoArquivo() {
+		
 		if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
 			return tituloMediator.buscarTitulosPorArquivo(arquivo, getUser().getInstituicao());
 		} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
@@ -191,7 +182,6 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		}
 		return titulos;
 	}
-	
 	
 	@Override
 	protected IModel<Arquivo> getModel() {

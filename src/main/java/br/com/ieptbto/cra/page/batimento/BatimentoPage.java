@@ -28,28 +28,24 @@ import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes","serial"})
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class BatimentoPage extends BasePage<Batimento> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BatimentoPage.class);
 	
 	@SpringBean
 	RetornoMediator batimentoMediator;
 	
-	private Batimento batimento = new Batimento();
-	private Form<Batimento> form;
+	private Batimento batimento;
 	private ListView<Remessa> remessas;
 	
 	public BatimentoPage() {
-		super();
+		this.batimento = new Batimento();
 		final CheckGroup<Remessa> grupo = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
-        form = new Form<Batimento>("form"){
-            /***/
-			private static final long serialVersionUID = 1L;
-			@Override
+		Form<Batimento> form = new Form<Batimento>("form"){
+
+        	@Override
             protected void onSubmit(){
 				List<Remessa> retornosParaConfirmar = new ArrayList<Remessa>();
 				
@@ -80,26 +76,23 @@ public class BatimentoPage extends BasePage<Batimento> {
 	
 	private ListView<Remessa> carregarListaRetornos(){
 		return remessas = new ListView<Remessa>("retornos", batimentoMediator.buscarRetornosParaBatimento()){
-			/***/
-        	private static final long serialVersionUID = 1L;
-				@Override
-	            protected void populateItem(ListItem<Remessa> item){
-					final Remessa retorno = item.getModelObject();
-	                item.add(new Check<Remessa>("checkbox", item.getModel()));
-	                item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
-					item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
-					item.add(new LabelValorMonetario("valorPagos", batimentoMediator.buscarValorDeTitulosPagos(retorno)));
-					Link linkArquivo = new Link("linkArquivo") {
-			            /***/
-						private static final long serialVersionUID = 1L;
 
-						@Override
-						public void onClick() {
-			            	setResponsePage(new TitulosDoArquivoPage(retorno));  
-			            }
-			        };
-			        linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
-			        item.add(linkArquivo);
+			@Override
+            protected void populateItem(ListItem<Remessa> item){
+				final Remessa retorno = item.getModelObject();
+                item.add(new Check<Remessa>("checkbox", item.getModel()));
+                item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
+				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
+				item.add(new LabelValorMonetario("valorPagos", batimentoMediator.buscarValorDeTitulosPagos(retorno)));
+				Link linkArquivo = new Link("linkArquivo") {
+
+					@Override
+					public void onClick() {
+		            	setResponsePage(new TitulosDoArquivoPage(retorno));  
+		            }
+		        };
+		        linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
+		        item.add(linkArquivo);
             }
 
         };

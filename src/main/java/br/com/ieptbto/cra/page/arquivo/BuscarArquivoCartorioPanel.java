@@ -20,9 +20,7 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -31,10 +29,9 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class BuscarArquivoCartorioPanel extends Panel  {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BuscarArquivoCartorioPanel.class);
 	
 	@SpringBean
@@ -60,15 +57,18 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 	
 	private Component botaoEnviar() {
 		return new Button("botaoBuscar") {
-			/** */
-			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit() {
 				Arquivo arquivo = model.getObject();
-				Municipio municipio = null;
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
+				
 				try {
+					if (arquivo.getNomeArquivo() == null) {
+						error("O campo 'Intervalo de datas' deve ser preenchido !");
+					} 
+					
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
 							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
@@ -80,10 +80,8 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 							error("As duas datas devem ser preenchidas.");
 					}
 					
-					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
-					error(ex.getMessage());
+					setResponsePage(new ListaArquivosPage(arquivo, null, dataInicio, dataFim, tiposArquivo));
+
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
@@ -109,8 +107,6 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 	
 	private TextField<LocalDate> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
-		dataEnvioInicio.setRequired(true);
-		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 	
@@ -123,5 +119,4 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 		DropDownChoice<Instituicao> comboPortador = new DropDownChoice<Instituicao>("portador", new Model<Instituicao>(),instituicaoMediator.getInstituicoesFinanceiras(), renderer);
 		return comboPortador;
 	}
-	
 }

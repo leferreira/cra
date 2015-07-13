@@ -31,10 +31,9 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class BuscarArquivoCraPanel extends Panel  {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BuscarArquivoCraPanel.class);
 	
 	@SpringBean
@@ -62,8 +61,7 @@ public class BuscarArquivoCraPanel extends Panel  {
 	
 	private Component botaoEnviar() {
 		return new Button("botaoBuscar") {
-			/** */
-			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit() {
 				Arquivo arquivo = model.getObject();
@@ -72,6 +70,10 @@ public class BuscarArquivoCraPanel extends Panel  {
 				Municipio municipio = null;
 				
 				try {
+					if (arquivo.getNomeArquivo() == null) {
+						error("O campo 'Intervalo de datas' deve ser preenchido !");
+					} 
+					
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
 							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
@@ -88,12 +90,10 @@ public class BuscarArquivoCraPanel extends Panel  {
 					}
 					
 					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
-					error(ex.getMessage());
+
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
+					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA !");
 				}
 			}
 		};
@@ -115,8 +115,6 @@ public class BuscarArquivoCraPanel extends Panel  {
 	
 	private TextField<LocalDate> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
-		dataEnvioInicio.setRequired(true);
-		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 	

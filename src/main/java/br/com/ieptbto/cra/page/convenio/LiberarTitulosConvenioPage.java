@@ -13,7 +13,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConvenioMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -23,10 +22,9 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(LiberarTitulosConvenioPage.class);
 
 	private TituloFiliado titulo;
@@ -39,21 +37,16 @@ public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado> {
 
 	public LiberarTitulosConvenioPage() {
 		this.titulo = new TituloFiliado();
-
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
+				
 				try {
-
 					convenioMediator.gerarRemessas(getUser(), getListaTitulosConvenios());
 					setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
 					info("Remessas processados e encaminhadas com sucesso na CRA !");
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
-					error(ex.getMessage());
+
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
@@ -67,8 +60,6 @@ public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado> {
 
 	private ListView<TituloFiliado> carregarListaTitulos() {
 		return new ListView<TituloFiliado>("listViewTitulos", getListaTitulosConvenios()) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {

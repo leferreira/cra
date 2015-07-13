@@ -39,10 +39,8 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class ArquivosCraPanel extends Panel {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	RemessaMediator remessasMediator;
@@ -61,8 +59,6 @@ public class ArquivosCraPanel extends Panel {
 		super(id, model);
 		this.instituicao=instituicao;
 		add(new Button("botaoEnviar"){
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSubmit() {
@@ -91,8 +87,6 @@ public class ArquivosCraPanel extends Panel {
 	
 	private ListView<Remessa> listViewArquivos(){
 		return new ListView<Remessa>("listView", buscarRemessas()) {
-			/** */
-			private static final long serialVersionUID = -3365063971696545653L;
 
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
@@ -100,8 +94,6 @@ public class ArquivosCraPanel extends Panel {
 				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
 				
 				Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
-		            /***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 		            	setResponsePage(new TitulosDoArquivoPage(remessa));  
@@ -120,8 +112,6 @@ public class ArquivosCraPanel extends Panel {
 			
 			private Link<Arquivo> downloadArquivo(final Remessa remessa) {
 				return new Link<Arquivo>("downloadArquivo") {
-					/***/
-					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -138,8 +128,6 @@ public class ArquivosCraPanel extends Panel {
 
 	private IModel<List<Remessa>> buscarRemessas() {
 		return new LoadableDetachableModel<List<Remessa>>() {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected List<Remessa> load() {

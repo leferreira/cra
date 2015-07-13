@@ -31,11 +31,16 @@ import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
+/**
+ * @author Thasso Araújo
+ *
+ */
 @SuppressWarnings( "serial" )
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 
 	private static final Logger logger = Logger.getLogger(ConfirmacaoRetornoPage.class);
+	
 	@SpringBean
 	RetornoMediator retornoMediator;
 	@SpringBean
@@ -64,9 +69,7 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 						throw new InfraException("Não há retornos pendentes para envio.");
 						
 					setResponsePage(new RetornoLabel());
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
-					error(ex.getMessage());
+
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível realizar o batimento! Entre em contato com a CRA.");
@@ -123,9 +126,7 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 						throw new InfraException("Não há confirmações pendentes para envio.");
 					
 					setResponsePage(new ConfirmacaoLabel());
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
-					error(ex.getMessage());
+
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível gerar a confirmação! Entre em contato com a CRA.");
