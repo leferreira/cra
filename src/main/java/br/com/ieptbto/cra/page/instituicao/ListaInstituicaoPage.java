@@ -22,11 +22,9 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaInstituicaoPage extends BasePage<Instituicao> {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	private Instituicao instituicao;
 
@@ -34,11 +32,8 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 	InstituicaoMediator instituicaoMediator;
 
 	public ListaInstituicaoPage() {
-		super();
 		instituicao = new Instituicao();
 		add(new Link<Instituicao>("botaoNovo") {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			public void onClick() {
 				setResponsePage(new IncluirInstituicaoPage());
@@ -49,16 +44,12 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 
 	private ListView<Instituicao> carregarListaInstituicao() {
 		return new ListView<Instituicao>("listViewInstituicao", listarInstituicoes()) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Instituicao> item) {
 				final Instituicao instituicaoLista = item.getModelObject();
 
 				Link<Instituicao> linkAlterar = new Link<Instituicao>("linkAlterar") {
-					/***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new IncluirInstituicaoPage(instituicaoLista));
@@ -82,8 +73,6 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 
 	public IModel<List<Instituicao>> listarInstituicoes() {
 		return new LoadableDetachableModel<List<Instituicao>>() {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected List<Instituicao> load() {

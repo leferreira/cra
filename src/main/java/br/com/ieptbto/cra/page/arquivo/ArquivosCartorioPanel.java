@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,10 +37,8 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class ArquivosCartorioPanel extends Panel {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	RemessaMediator remessasMediator;
@@ -64,8 +63,6 @@ public class ArquivosCartorioPanel extends Panel {
 		add(comboStatus());
 		
 		add(new Button("botaoEnviar"){
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSubmit() {
@@ -87,19 +84,14 @@ public class ArquivosCartorioPanel extends Panel {
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	private ListView<Remessa> listViewArquivos(){
 		return new ListView<Remessa>("listView", buscarRemessas()) {
-			/** */
-			private static final long serialVersionUID = -3365063971696545653L;
 
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
 				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
-				Link linkArquivo = new Link("linkArquivo") {
-		            /***/
-					private static final long serialVersionUID = 1L;
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					public void onClick() {
 		            	setResponsePage(new TitulosDoArquivoPage(remessa));  
@@ -110,13 +102,12 @@ public class ArquivosCartorioPanel extends Panel {
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
-				item.add(new LabelValorMonetario("valor", remessa.getRodape().getSomatorioValorRemessa()));
-				item.add(new Label("status", remessa.getStatusRemessa().getLabel()).setMarkupId(remessa.getStatusRemessa().getLabel()));
+				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
+				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa().getLabel()));
 				item.add(downloadArquivo(remessa));
 			}
 			
-			@SuppressWarnings("serial")
-			private Link downloadArquivo(final Remessa remessa) {
+			private Link<Arquivo> downloadArquivo(final Remessa remessa) {
 				return new Link<Arquivo>("downloadArquivo") {
 					
 					@Override
@@ -134,8 +125,6 @@ public class ArquivosCartorioPanel extends Panel {
 	
 	private IModel<List<Remessa>> buscarRemessas() {
 		return new LoadableDetachableModel<List<Remessa>>() {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected List<Remessa> load() {
@@ -159,21 +148,20 @@ public class ArquivosCartorioPanel extends Panel {
 	}
 	
 	private TextField<String> dataEnvioInicio() {
-		if (dataInicio!=null)
+		dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
+		if (dataInicio != null) {
 			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
-		else 
-			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
-		
+		}
 		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 	
 	private TextField<String> dataEnvioFinal() {
-		if (dataFim!=null)
+		dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
+		if (dataFim != null) {
 			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataFim)));
-		else 
-			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
+		}
 		return dataEnvioFinal;
 	}
 }

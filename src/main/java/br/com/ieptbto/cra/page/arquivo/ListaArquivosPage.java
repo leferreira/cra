@@ -5,9 +5,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.authorization.Action;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -29,19 +26,14 @@ import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
-import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
  *
  */
-@AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
+@SuppressWarnings("serial")
 public class ListaArquivosPage extends BasePage<Arquivo> {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	RemessaMediator remessaMediator;
@@ -61,16 +53,12 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 
 	private ListView<Remessa> carregarListaArquivos() {
 		return new ListView<Remessa>("dataTableRemessa", remessas) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
 				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
-					/***/
-					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -83,14 +71,12 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
 				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
-				item.add(new Label("status", remessa.getStatusRemessa().getLabel()).setMarkupId(remessa.getStatusRemessa().getLabel()));
+				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa().getLabel()));
 				item.add(downloadArquivoTXT(remessa));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
 				return new Link<Remessa>("downloadArquivo") {
-					/***/
-					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {

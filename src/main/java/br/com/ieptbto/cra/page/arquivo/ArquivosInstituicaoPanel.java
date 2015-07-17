@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
@@ -32,11 +31,8 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@AuthorizeInstantiation(value = "USER")
+@SuppressWarnings("serial")
 public class ArquivosInstituicaoPanel extends Panel {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	RemessaMediator remessaMediator;
@@ -55,8 +51,6 @@ public class ArquivosInstituicaoPanel extends Panel {
 		super(id, model);
 		this.instituicao = instituicao;
 		add(new Button("botaoEnviar") {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSubmit() {
@@ -86,8 +80,6 @@ public class ArquivosInstituicaoPanel extends Panel {
 	@SuppressWarnings("rawtypes")
 	private ListView<Arquivo> listViewArquivos() {
 		return new ListView<Arquivo>("listView", buscarArquivos()) {
-			/** */
-			private static final long serialVersionUID = -3365063971696545653L;
 
 			@Override
 			protected void populateItem(ListItem<Arquivo> item) {
@@ -95,8 +87,6 @@ public class ArquivosInstituicaoPanel extends Panel {
 				item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
 
 				Link linkArquivo = new Link("linkArquivo") {
-					/***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new TitulosDoArquivoPage(arquivo));
@@ -108,14 +98,12 @@ public class ArquivosInstituicaoPanel extends Panel {
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio())));
 				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("instituicaoRecebe", arquivo.getInstituicaoRecebe().getNomeFantasia()));
-				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()).setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
+				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
 				item.add(downloadArquivo(arquivo));
 			}
 
 			private Link downloadArquivo(final Arquivo file) {
 				return new Link<Arquivo>("downloadArquivo") {
-					/***/
-					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {

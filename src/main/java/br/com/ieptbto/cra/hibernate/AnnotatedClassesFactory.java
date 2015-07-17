@@ -17,6 +17,7 @@ import br.com.ieptbto.cra.entidade.AgenciaBancoDoBrasil;
 import br.com.ieptbto.cra.entidade.AgenciaBradesco;
 import br.com.ieptbto.cra.entidade.AgenciaCAF;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.Confirmacao;
@@ -83,7 +84,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(UsuarioFiliado.class);
 		classesHibernate.add(Filiado.class);
 		classesHibernate.add(TituloFiliado.class);
-//		classesHibernate.add(Avalista.class);
+		classesHibernate.add(Avalista.class);
 		// classesHibernate.add(CraCustomRevisionEntity.class);
 	}
 

@@ -140,6 +140,7 @@ td {
 	background: #209515 none repeat scroll 0% 0%;
     font-weight: bold;
     padding: 3px;
+    font-size: 10px;
     width: 100%;
 }
 #Recebido{
@@ -147,6 +148,7 @@ td {
     color: #FFF;
     font-weight: bold;
     padding: 3px;
+    font-size: 10px;
     width: 100%;
 }
 #Enviado{
@@ -154,6 +156,7 @@ td {
     color: #FFF;
     font-weight: bold;
     padding: 3px;
+    font-size: 10px;
     width: 100%;
 }
 /**
