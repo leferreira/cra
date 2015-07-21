@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
@@ -70,8 +71,8 @@ public class BuscarArquivoCraPanel extends Panel  {
 				Municipio municipio = null;
 				
 				try {
-					if (arquivo.getNomeArquivo() == null) {
-						error("O campo 'Intervalo de datas' deve ser preenchido !");
+					if (arquivo.getNomeArquivo() == null || StringUtils.isBlank(arquivo.getNomeArquivo())) {
+						error("O campo 'Intervalo de datas' ou o nome do arquivo deve ser preenchido !");
 					} 
 					
 					if (dataEnvioInicio.getDefaultModelObject() != null){

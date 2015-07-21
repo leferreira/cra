@@ -151,20 +151,20 @@ public class ArquivosCraPanel extends Panel {
 	}
 	
 	private TextField<String> dataEnvioInicio() {
-		if (dataInicio!=null)
+		dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
+		if (dataInicio != null) {
 			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
-		else 
-			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
+		}
 		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 	
 	private TextField<String> dataEnvioFinal() {
-		if (dataFim!=null)
+		dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
+		if (dataFim != null) {
 			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataFim)));
-		else 
-			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
+		}
 		return dataEnvioFinal;
 	}
 }

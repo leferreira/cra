@@ -23,23 +23,23 @@
                               	<fieldset>
 								<button type="submit" style="float: right; margin-bottom: 5px;" wicket:id="botaoConfirmacao" class="btn btn-primary"><span class="fa fa-reply-all"></span>&nbsp;Gerar Confirmação</button>
 								<br style="clear: both;">
-				                  <table id="table1" class="table table-striped table-bordered table-hover">
+				                  <table id="table1" class="table table-striped table-hover">
 				                    <thead>
 										<tr>
-											<th>Arquivo</th>
-											<th>Data Envio</th>
+											<th class="col-center">Arquivo</th>
+											<th class="col-center">Data Envio</th>
 											<th>Enviado por</th>
 											<th>Destino</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr wicket:id="confirmacao">
-											<td>
+											<td class="col-center">
 					                        	<a wicket:id="linkArquivoConfirmacao">
 					                        		<span class="link" wicket:id="arquivo.nomeArquivoConfirmacao"></span>
 					                        	</a>
 					                        </td>
-					                        <td wicket:id="arquivo.dataEnvioConfirmacao"></td>
+					                        <td class="col-center" wicket:id="arquivo.dataEnvioConfirmacao"></td>
 											<td wicket:id="instituicaoOrigem.nomeFantasiaConfirmacao"></td>
 											<td wicket:id="instituicaoDestino.nomeFantasiaConfirmacao"></td>
 										</tr>
@@ -53,25 +53,25 @@
 						<form wicket:id="form">
 							<button style="float: right; margin-bottom: 5px;" wicket:id="botaoRetorno" class="btn btn-primary"><span class="fa fa-reply-all"></span>&nbsp;Gerar Retorno</button>
 								<br style="clear: both;">
-				                  <table id="table" class="table table-striped table-bordered table-hover">
+				                  <table id="table" class="table table-striped table-hover">
 				                    <thead>
 										<tr>
-											<th>Arquivo</th>
-											<th>Valor Pagos</th>
-											<th>Data Envio</th>
+											<th class="col-center">Arquivo</th>
+											<th class="col-center">Valor Pagos</th>
+											<th class="col-center">Data Envio</th>
 											<th>Cartório</th>
 											<th width="width: 60px;"></th>
 										</tr>
 									</thead>
 									<tbody>
 					                    <tr wicket:id="retornos" style="text-align: center;">
-					                        <td>
+					                        <td class="col-center">
 					                        	<a wicket:id="linkArquivo">
 					                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
 					                        	</a>
 					                        </td>
-											<td wicket:id="valorPagos" style="font-weight: bold;"></td>
-											<td wicket:id="arquivo.dataEnvio"></td>
+											<td class="col-center valor" wicket:id="valorPagos" style="font-weight: bold;"></td>
+											<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
 											<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
 											<td style="width: 60px;"><input type="button" value="Remover" wicket:id="removerConfirmado"/></td>
 					                    </tr>

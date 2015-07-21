@@ -2,7 +2,6 @@ body {
 	/*background-color: #337ab7;*/
 	background-color: #f8f8f8;
 }
-
 .panel-historico {
 	border-left: 1px solid #ccc;
 	border-right: 1px solid #ccc;
@@ -111,11 +110,6 @@ th {
 td {
 	text-align: center;
 }
-
-.table {
-	font-size: 12px !important;
-}
-
 .download-ico {
 	width: 25px;
 }
@@ -159,6 +153,14 @@ td {
     font-size: 10px;
     width: 100%;
 }
+.info-titulo{
+	background: #337AB7 none repeat scroll 0% 0%;
+    color: #FFF;
+    font-weight: bold;
+    padding: 3px;
+    font-size: 10px;
+    width: 100%;
+}
 /**
 MOdal chrome e explorer
 */
@@ -168,18 +170,28 @@ MOdal chrome e explorer
 .w_close{
 	display: none !important;
 }
-/***/
-.chat-panel .panel-body {
-  height: 250px;
-  overflow-y: scroll;
+/**
+TABLES
+*/
+th{
+	  text-align: left;
 }
-.pendente-panel{
-	width: 28%;
-	float: right;
+td{
+	  text-align: left;
 }
-.panel-title{
-	font-size: 13px;
+.col-center{
+	text-align: center;
 }
-.pendente-list{
-	padding: 0px !important;
+.col-left{
+	text-align: left;
+}
+.col-right{
+	text-align: right;
+}
+.valor{
+	font-weight: bold;
+}
+table.dataTable thead > tr > th {
+  padding-left: 8px; 
+  padding-right: 0px; 
 }

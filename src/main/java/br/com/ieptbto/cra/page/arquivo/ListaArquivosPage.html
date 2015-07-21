@@ -11,33 +11,33 @@
 				<fieldset>
 					<a href="BuscarArquivo" style="float: right;"><span class="fa fa-mail-reply"></span>Voltar à página de busca!</a>
 					<br style="clear: both;"/>
-					<table id="table" class="table table-striped table-bordered table-hover">
+					<table id="table" class="table table-striped table-hover">
 						<thead>
 							<tr>
-								<th style="width: 60px;">Tipo</th>
-								<th style="width: 60px;">Baixar</th>
-								<th>Nome Arquivo</th>
-								<th>Data Envio</th>
+								<th class="col-center" style="width: 40px;">Tipo</th>
+								<th class="col-center" style="width: 60px;">Baixar</th>
+								<th class="col-center">Nome Arquivo</th>
+								<th class="col-center">Data Envio</th>
 								<th>Enviado por</th>
 								<th>Destino</th>
-								<th>Valor Total</th>
-								<th>Situação</th>
+								<th class="col-right">Valor Total</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr wicket:id="dataTableRemessa">
-								<td wicket:id="tipoArquivo"></td>
-								<td style="text-align: center;">
+								<td class="col-center" wicket:id="tipoArquivo"></td>
+								<td class="col-center">
 									<a href="#" class="link" wicket:id="downloadArquivo">
 										<img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg">
 									</a>
 								</td>
-								<td><a wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
-								<td wicket:id="dataEnvio"></td>
+								<td class="col-center"><a wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
+								<td class="col-center" wicket:id="dataEnvio"></td>
 								<td wicket:id="instituicao"></td>
 								<td wicket:id="destino"></td>
-								<td wicket:id="valor" style="font-weight: bold;"></td>
-								<td><span wicket:id="status"></span></td>
+								<td class="col-right valor" wicket:id="valor"></td>
+								<td class="col-center"><span wicket:id="status"></span></td>
 							</tr>
 						</tbody>
 					</table>

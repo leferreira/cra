@@ -10,33 +10,33 @@
 			<div class="panel-body">
 				<a href="MonitorarTitulos"	style="float: right; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>Voltar à página de busca!</a>
 				<br style="clear: both;">
-				<table id="table" class="table table-striped table-bordered table-hover" style="font-size: 12px !important;">
+				<table id="table" class="table table-striped table-hover" style="font-size: 12px !important;">
 					<thead>
 						<tr>
-							<th>Título</th>
+							<th class="col-center">Título</th>
 							<th>Praça</th>
-							<th>Protoc.</th>
+							<th class="col-center">Protoc.</th>
 							<th>Devedor</th>
-							<th>Valor</th>
-							<th>Remessa</th>
-							<th>Confir.</th>
-							<th>Retorno</th>
-							<th>Data S.</th>
-							<th>Situação</th>
+							<th class="col-right">Valor</th>
+							<th class="col-center">Remessa</th>
+							<th class="col-center">Confir.</th>
+							<th class="col-center">Retorno</th>
+							<th class="col-center">Data S.</th>
+							<th class="col-center">Situação</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr wicket:id="listViewTitulos">
-							<td wicket:id="numeroTitulo"></td>
-							<td wicket:id="pracaProtesto"></td>
-							<td wicket:id="protocolo"></td>
+							<td class="col-center" wicket:id="numeroTitulo"></td>
+							<td class="col-center" wicket:id="pracaProtesto"></td>
+							<td class="col-center" wicket:id="protocolo"></td>
 							<td><a href="#" wicket:id="linkHistorico"><span class="link" style="font-weight: bold;" wicket:id="nomeDevedor"></span></a></td>
-							<td wicket:id="valorTitulo"></td>
-							<td><a href="#" wicket:id="linkArquivo"><span class="link" style="font-weight: bold;" wicket:id="nomeRemessa"></span></a></td>
-							<td wicket:id="dataConfirmacao"></td>
-							<td><a href="#" wicket:id="linkRetorno"><span class="link" style="font-weight: bold;" wicket:id="retorno"></span></a></td>
-							<td wicket:id="dataSituacao"></td>
-							<td wicket:id="situacaoTitulo" class="destaque"></td>
+							<td class="col-right valor" wicket:id="valorTitulo"></td>
+							<td class="col-center" ><a href="#" wicket:id="linkArquivo"><span class="link" style="font-weight: bold;" wicket:id="nomeRemessa"></span></a></td>
+							<td class="col-center" wicket:id="dataConfirmacao"></td>
+							<td class="col-center" ><a href="#" wicket:id="linkRetorno"><span class="link" style="font-weight: bold;" wicket:id="retorno"></span></a></td>
+							<td class="col-center" wicket:id="dataSituacao"></td>
+							<td class="col-center" ><span class="info-titulo" wicket:id="situacaoTitulo"></span></td>
 						</tr>
 					</tbody>
 				</table>

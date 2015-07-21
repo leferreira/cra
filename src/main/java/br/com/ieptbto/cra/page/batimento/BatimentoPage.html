@@ -13,25 +13,22 @@
 								<button style="float: right; margin-bottom: 5px;" class="btn btn-primary" wicket:id="confirmarBotao"><span class="fa fa-check"></span>&nbsp;Confirmar</button>
 								<br style="clear: both;">
 								<div wicket:id="group">
-			                  		<table id="table" class="table table-striped table-bordered table-hover">
+			                  		<table id="table" class="table table-striped table-hover">
 					                    <thead>
 											<tr>
-												<th>Arquivo</th>
-												<th>Valor Pagos</th>
-												<th>Data Envio</th>
+												<th class="col-center">#</th>
+												<th class="col-center">Arquivo</th>
+												<th class="col-right">Valor Pagos</th>
+												<th class="col-center">Data Envio</th>
 												<th>Cartório</th>
 											</tr>
 										</thead>
 										<tbody>
 						                    <tr wicket:id="retornos" style="text-align: center;">
-						                        <td>
-						                        	<input type="checkbox" wicket:id="checkbox"/>&nbsp;&nbsp;&nbsp;&nbsp;
-						                        	<a wicket:id="linkArquivo">
-						                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
-						                        	</a>
-						                        </td>
-												<td wicket:id="valorPagos" style="font-weight: bold; text-align: center;"></td>
-												<td wicket:id="arquivo.dataEnvio"></td>
+						                        <td class="col-center"><input type="checkbox" wicket:id="checkbox"/></td>
+						                        <td class="col-center"><a wicket:id="linkArquivo"><span class="link" wicket:id="arquivo.nomeArquivo"></span></a></td>
+												<td class="col-right" wicket:id="valorPagos" style="font-weight: bold; text-align: center;"></td>
+												<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
 												<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
 						                    </tr>
 					                    </tbody>

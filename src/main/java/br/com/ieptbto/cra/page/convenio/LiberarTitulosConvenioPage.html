@@ -12,29 +12,29 @@
 					<button style="float: right; margin-bottom: 5px;" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span>&nbsp;Gerar Remessas</button>
 				</form>
 				<br style="clear: both;">
-				<table id="table" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+				<table id="table" class="table table-striped table-hover" style="font-size: 12px;">
 					<thead>
 						<tr>
-							<th>Nº Título</th>
-							<th>Praça</th>
+							<th class="col-center">Nº Título</th>
+							<th>Muncípio</th>
 							<th>Convênio</th>
 							<th>Credor</th>
 							<th>Devedor</th>
-							<th>Emissão</th>
-							<th>Vencimento</th>
-							<th>Valor Débito</th>
+							<th class="col-center">Emissão</th>
+							<th class="col-center">Vencimento</th>
+							<th class="col-right valor">Valor Débito</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr wicket:id="listViewTitulos">
-							<td wicket:id="numeroTitulo"></td>
+							<td class="col-center" wicket:id="numeroTitulo"></td>
 							<td wicket:id="pracaProtesto"></td>
 							<td wicket:id="convenio"></td>
 							<td wicket:id="credor"></td>
 							<td wicket:id="devedor"></td>
-							<td wicket:id="dataEmissao"></td>
-							<td wicket:id="dataVencimento"></td>
-							<td wicket:id="valor" style="font-weight: bold;"></td>
+							<td class="col-center" wicket:id="dataEmissao"></td>
+							<td class="col-center" wicket:id="dataVencimento"></td>
+							<td class="col-center valor" wicket:id="valor"></td>
 						</tr>
 					</tbody>
 				</table>

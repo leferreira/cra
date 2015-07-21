@@ -6,31 +6,28 @@
 			<!-- Coluna 1-->
 			<div class="col-md-4"> 
 				<div class="form-group">
-				  <label class="col-md-2 control-label" for="date">Data:</label>  
+				  <label class="col-md-2 control-label">Data:</label>  
 				  <div class="col-md-5">
-				  	<input id="date" name="date" wicket:id="dataEnvioInicio" type="text" placeholder="__/__/____" class="form-control input-md">  
+				  	<input id="date" wicket:id="dataEnvioInicio" placeholder="__/__/____" class="form-control input-md">  
 			  	  </div>
 			  	  <div class="col-md-5">
-				  	<input id="date1" name="date1" wicket:id="dataEnvioFinal" type="text" placeholder="__/__/____" class="form-control input-md">  
+				  	<input id="date1" wicket:id="dataEnvioFinal" placeholder="__/__/____" class="form-control input-md">  
 			  	  </div>
 			  	 </div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group">
-				  <div class="col-md-12" style="text-align: center;">
-				    <label class="checkbox-inline inline" for="tipos-0" wicket:id="tipoArquivos">
-				      <input type="checkbox" name="tipos" id="tipos-0" value="1">
-				      1
+				  <div class="col-md-12 col-center">
+				    <label class="checkbox-inline inline" wicket:id="tipoArquivos">
 				    </label>
 				  </div>
 				</div> 
 			</div>
 			<div class="col-md-4">
 				<div class="form-group">
-				  <div class="col-md-12" style="text-align: center;">
-				    <label class="checkbox-inline inline" for="situacao-0" wicket:id="statusArquivos" style="font-size: 13px;">
+				  <div class="col-md-12 col-center">
+				    <label class="checkbox-inline inline" wicket:id="statusArquivos" style="font-size: 13px;">
 				      <input type="checkbox" name="situacao" id="situacao-0" value="1" style="margin-left: 30px !important;">
-				      1
 				    </label>
 				  </div>
 				</div> 
@@ -40,33 +37,29 @@
 			</div>
 		</div>
 		<fieldset>
-			<table id="table" class="table table-striped table-bordered table-hover">
+			<table id="table" class="table table-striped table-hover">
 				<thead>
 					<tr>
-						<th>Tipo</th>
-						<th style="width: 60px;">Baixar</th>
-						<th>Nome Arquivo</th>
-						<th>Data Envio</th>
+						<th class="col-center" style="width: 40px;">Tipo</th>
+						<th class="col-center" style="width: 60px;">Baixar</th>
+						<th class="col-center">Nome Arquivo</th>
+						<th class="col-center">Data Envio</th>
 						<th>Enviado por</th>
 						<th>Destino</th>
-						<th>Situa&ccedil;&atilde;o</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr wicket:id="listView">
-						<td wicket:id="tipoArquivo"></td>
-						<td>
-							<a href="#" class="link" wicket:id="downloadArquivo">
-								<img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg">
-							</a>
+						<td class="col-center" wicket:id="tipoArquivo"></td>
+						<td class="col-center">
+							<a href="#" class="link" wicket:id="downloadArquivo"><img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg"></a>
 						</td>
-						<td>
-							<a wicket:id="linkArquivo" style="font-weight: bolder;"><span wicket:id="nomeArquivo"></span></a>
-						</td>
-						<td wicket:id="dataEnvio"></td>
+						<td class="col-center"><a wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
+						<td class="col-center" wicket:id="dataEnvio"></td>
 						<td wicket:id="instituicao"></td>
 						<td wicket:id="instituicaoRecebe"></td>
-						<td><span wicket:id="status"></span></td>
+						<td class="col-center"><span wicket:id="status"></span></td>
 					</tr>
 				</tbody>
 			</table>

@@ -11,27 +11,27 @@
 				<fieldset>
 					<button style="float: right; margin-bottom: 5px;" wicket:id="botaoNovo" class="btn btn-primary"><span class="fa fa-plus"></span> Nova Institui&ccedil;&atilde;o</button>
 					<br style="clear: both;">
-					<table id="table" class="table table-striped table-bordered table-hover">
+					<table id="table" class="table table-striped table-hover" style="font-size: 13px;">
 						<thead>
 							<tr>
-								<th>Nome Fantasia</th>
-								<th>Código</th>
+								<th >Nome Fantasia</th>
+								<th class="col-center">Código</th>
 								<th>Tipo</th>
 								<th>Responsável</th>
 								<th>Email</th>
 								<th>Contato</th>
-								<th style="width: 50px !important;">Ativo</th>
+								<th class="col-center" style="width: 50px !important;">Ativo</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr wicket:id="listViewInstituicao">
 								<td><a wicket:id="linkAlterar"><span class="link" wicket:id="nomeFantasia"></span></a></td>
-								<td wicket:id="codigoCompensacao"></td>
+								<td class="col-center" wicket:id="codigoCompensacao"></td>
 								<td wicket:id="tipoInstituicao"></td>
 								<td wicket:id="responsavel"></td>
 								<td wicket:id="email"></td>
 								<td wicket:id="contato"></td>
-								<td wicket:id="situacao"></td>
+								<td class="col-center" wicket:id="situacao"></td>
 							</tr>
 						</tbody>
 					</table>

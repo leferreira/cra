@@ -27,13 +27,11 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
 public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-	
 	@SpringBean
 	TituloMediator tituloMediator;
 	
@@ -46,8 +44,6 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 	private ListView<TituloRemessa> carregarListaTitulos() {
 		return new ListView<TituloRemessa>("listViewTitulos", tituloMediator.buscarListaTitulos(tituloBuscado, getUser())) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
@@ -55,8 +51,6 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
-		            /***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 		            	setResponsePage(new TitulosDoArquivoPage(tituloLista.getRemessa()));  
@@ -75,18 +69,18 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				}
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
-		            /***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));
 		            }
 		        };
-		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
+		        if (tituloLista.getNomeDevedor().length() > 25) {
+		        	linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor().substring(0, 24)));
+		        }else {
+		        	linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
+		        }
 		        item.add(linkHistorico);
 		        Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno") {
-		        	/***/
-		        	private static final long serialVersionUID = 1L;
 		        	
 		        	public void onClick() {
 		        		setResponsePage(new TitulosDoArquivoPage(tituloLista.getRetorno().getRemessa()));  

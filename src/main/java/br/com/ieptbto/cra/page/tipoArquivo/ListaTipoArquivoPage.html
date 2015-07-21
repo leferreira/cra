@@ -11,21 +11,21 @@
 				<fieldset>
 					<a href="TipoInstituicoesPage"	style="float: right;"><span class="fa fa-mail-reply"></span>Voltar a página anterior!</a>
 					<br style="clear: both;">
-					<table id="table" class="table table-striped table-bordered table-hover">
+					<table id="table" class="table table-striped table-hover" style="font-size: 13px;">
 						<thead>
 							<tr>
 								<th>Tipo Arquivo</th>
-								<th>Constante</th>
-								<th>Hora Envio Início</th>
-								<th>Hora Envio Fim</th>
+								<th class="col-center">Constante</th>
+								<th class="col-center">Hora Envio Início</th>
+								<th class="col-center">Hora Envio Fim</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr wicket:id="listViewTipos">
-								<td ><a wicket:id="linkAlterar"><span wicket:id="tipoArquivo"></span></a></td>
-								<td wicket:id="constante"></td>
-								<td wicket:id="horaInicio"></td>
-								<td wicket:id="horaFim"></td>
+								<td ><a class="link" wicket:id="linkAlterar"><span wicket:id="tipoArquivo"></span></a></td>
+								<td class="col-center" wicket:id="constante"></td>
+								<td class="col-center" wicket:id="horaInicio"></td>
+								<td class="col-center" wicket:id="horaFim"></td>
 							</tr>
 						</tbody>
 					</table>
