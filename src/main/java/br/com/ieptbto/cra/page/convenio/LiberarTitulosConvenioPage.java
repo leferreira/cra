@@ -70,8 +70,8 @@ public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado> {
 				item.add(new Label("convenio", tituloLista.getFiliado().getInstituicaoConvenio().getRazaoSocial()));
 				item.add(new Label("credor", tituloLista.getFiliado().getRazaoSocial()));
 				item.add(new Label("devedor", tituloLista.getNomeDevedor()));
-				item.add(new Label("dataEmissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
-				item.add(new Label("dataVencimento", DataUtil.localDateToString(tituloLista.getDataVencimento())));
+//				item.add(new Label("dataEmissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
+				item.add(new Label("dataEnvioCRA", DataUtil.localDateToString(tituloLista.getDataEnvioCRA())));
 				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
 			}
 		};
