@@ -24,6 +24,7 @@ import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Historico;
+import br.com.ieptbto.cra.entidade.HistoricoOcorrenciaTitulo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
@@ -85,6 +86,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Filiado.class);
 		classesHibernate.add(TituloFiliado.class);
 		classesHibernate.add(Avalista.class);
+		classesHibernate.add(HistoricoOcorrenciaTitulo.class);
 		// classesHibernate.add(CraCustomRevisionEntity.class);
 	}
 
