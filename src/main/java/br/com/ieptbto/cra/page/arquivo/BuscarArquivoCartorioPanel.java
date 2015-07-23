@@ -21,6 +21,7 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -63,10 +64,10 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 				Arquivo arquivo = model.getObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
-				
+
 				try {
-					if (arquivo.getNomeArquivo() == null) {
-						error("O campo 'Intervalo de datas' deve ser preenchido !");
+					if (arquivo.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
+						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
 					} 
 					
 					if (dataEnvioInicio.getDefaultModelObject() != null){
@@ -75,16 +76,17 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
-									error("A data de início deve ser antes da data fim.");
+									throw new InfraException("A data de início deve ser antes da data fim.");
 						}else
-							error("As duas datas devem ser preenchidas.");
+							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
-					
 					setResponsePage(new ListaArquivosPage(arquivo, null, dataInicio, dataFim, tiposArquivo));
-
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
+					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
 				}
 			}
 		};

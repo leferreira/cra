@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
@@ -71,10 +70,10 @@ public class BuscarArquivoCraPanel extends Panel  {
 				Municipio municipio = null;
 				
 				try {
-					if (arquivo.getNomeArquivo() == null || StringUtils.isBlank(arquivo.getNomeArquivo())) {
-						error("O campo 'Intervalo de datas' ou o nome do arquivo deve ser preenchido !");
+					if (arquivo.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
+						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
 					} 
-					
+
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
 							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
@@ -85,16 +84,17 @@ public class BuscarArquivoCraPanel extends Panel  {
 						}else
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
-					
+
 					if (comboMunicipio.getDefaultModelObject() != null){
 						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
 					}
-					
 					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
-
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA !");
+					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
 				}
 			}
 		};

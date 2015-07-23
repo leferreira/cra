@@ -69,8 +69,8 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 				Municipio municipio = null;
 				
 				try {
-					if (arquivo.getNomeArquivo() == null) {
-						error("O campo 'Intervalo de datas' deve ser preenchido !");
+					if (arquivo.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
+						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
 					} 
 					
 					if (dataEnvioInicio.getDefaultModelObject() != null){
@@ -87,12 +87,13 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 					if (comboMunicipio.getDefaultModelObject() != null){
 						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
 					}
-					
 					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
-
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
+					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
 				}
 			}
 		};
