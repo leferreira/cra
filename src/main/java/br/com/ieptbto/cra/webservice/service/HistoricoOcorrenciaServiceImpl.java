@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.dao;
+package br.com.ieptbto.cra.webservice.service;
 
 import javax.annotation.Resource;
 import javax.jws.WebMethod;
@@ -13,6 +13,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
+import br.com.ieptbto.cra.webservice.dao.HistoricoOcorrenciaService;
+import br.com.ieptbto.cra.webservice.interf.IHistoricoOcorrenciaWS;
 
 /**
  * @author Thasso Araújo

@@ -85,8 +85,8 @@
 	
 	<bean id="wicketApplication" class="br.com.ieptbto.cra.app.CraApplication"></bean>
 	
-	<bean id="remessaServiceImpl" class="br.com.ieptbto.cra.webservice.dao.RemessaServiceImpl"></bean>
+	<bean id="remessaServiceImpl" class="br.com.ieptbto.cra.webservice.service.RemessaServiceImpl"></bean>
 	
-	<bean id="historicoOcorrenciaServiceImpl" class="br.com.ieptbto.cra.webservice.dao.HistoricoOcorrenciaServiceImpl"></bean>
+	<bean id="historicoOcorrenciaServiceImpl" class="br.com.ieptbto.cra.webservice.service.HistoricoOcorrenciaServiceImpl"></bean>
 	
 </beans>
