@@ -31,7 +31,7 @@ public class HistoricoOcorrenciaServiceImpl implements IHistoricoOcorrenciaWS {
 	private Usuario usuario;
 	
 	@Override
-	@WebMethod(operationName = "Remessa")
+	@WebMethod(operationName = "Ocorrencia")
 	@GET
 	public String ocorrencia(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, 
 			@WebParam(name = "user_ocor") String ocorrencia, @WebParam(name = "user_code_Portador") String codigoPortador,
