@@ -1,15 +1,17 @@
 package br.com.ieptbto.cra.page.instrumentoDeProtesto;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -27,20 +29,22 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.ireport.EtiquetasJRDataSource;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoDeProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
-import br.com.ieptbto.cra.relatorio.ExportToPdf;
-import br.com.ieptbto.cra.relatorio.SlipUtils;
 import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
@@ -56,32 +60,25 @@ public class InstrumentoDeProtestoPage extends BasePage<InstrumentoProtesto> {
 	MunicipioMediator municipioMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
-
 	private InstrumentoProtesto instrumento;
 	private List<Retorno> listaRetornoSlip;
-
 	private TextField<String> codigoInstrumento;
 	private TextField<String> protocoloCartorio;
 	private DropDownChoice<Municipio> codigoIbge;
 
 	public InstrumentoDeProtestoPage() {
 		this.listaRetornoSlip = new ArrayList<Retorno>();
+		
 		adicionarFormularioCodigo();
 		adicionarFormularioManual();
-		
 		add(carregarListaSlips());
 		add(new Form<InstrumentoProtesto> ("formSlips", getModel()){
+		
 			@Override
 			protected void onSubmit() {
-				
 				try {
-					List<InstrumentoProtesto> listaSlip = instrumentoMediator.processarInstrumentos(getListaRetornoSlip());
-					SimpleDateFormat dataPadraArquivo = new SimpleDateFormat("dd-MM-yy");
-					
-					JasperPrint jasperPrint = getSlipUtils().gerarSlipLista(listaSlip);
-					new ExportToPdf((HttpServletResponse)getResponse().getContainerResponse(), jasperPrint, "INSTRUMENTOS-" 
-							+ dataPadraArquivo.format(new Date()).toString() + ".pdf"); 
-				
+					JasperPrint jasperPrint = gerarSlipLista(instrumentoMediator.processarInstrumentos(getListaRetornoSlip()));
+					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 				} catch (JRException e) {
 					e.printStackTrace();
 					error("Não foi possível gerar a lista de SLIP ! Entre em contato com a CRA !");
@@ -91,7 +88,6 @@ public class InstrumentoDeProtestoPage extends BasePage<InstrumentoProtesto> {
 		add(new Form<InstrumentoProtesto> ("formEtiquetas", getModel()){
 			@Override
 			protected void onSubmit() {
-				// TODO Auto-generated method stub
 				super.onSubmit();
 			}
 		});
@@ -102,17 +98,21 @@ public class InstrumentoDeProtestoPage extends BasePage<InstrumentoProtesto> {
 
 			@Override
 			protected void onSubmit() {
-				String numeroProtocolo = protocoloCartorio.getModelObject();
-				String codigoIBGE = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
-				Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(numeroProtocolo, codigoIBGE);
-
-				if (tituloProtestado != null) {
-					if (!getListaRetornoSlip().contains(tituloProtestado)) {
-						getListaRetornoSlip().add(tituloProtestado);
-					} else
-						error("A lista já contem o título!");
-				} else
-					error("Titulo não encontrado!");
+				try { 
+					String numeroProtocolo = protocoloCartorio.getModelObject();
+					String codigoIBGE = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
+					Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(numeroProtocolo, codigoIBGE);
+					
+					if (tituloProtestado != null) {
+						if (!getListaRetornoSlip().contains(tituloProtestado)) {
+							getListaRetornoSlip().add(tituloProtestado);
+						} else
+							throw new InfraException("A lista já contem o título!");
+					} else 
+						throw new InfraException("Titulo não encontrado!");
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				}
 			}
 		};
 		formManual.add(codigoIbgeCartorio());
@@ -126,17 +126,21 @@ public class InstrumentoDeProtestoPage extends BasePage<InstrumentoProtesto> {
 
 			@Override
 			protected void onSubmit() {
-				String codigoIbge = codigoInstrumento.getModelObject().substring(1, 8);
-				String protocolo = codigoInstrumento.getModelObject().substring(8, 18);
-				Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(protocolo, codigoIbge);
-
-				if (tituloProtestado != null) {
-					if (!getListaRetornoSlip().contains(tituloProtestado)) {
-						getListaRetornoSlip().add(tituloProtestado);
-					} else
-						error("A lista já contem o título!");
-				} else 
-					error("Titulo não encontrado!");
+				try { 
+					String codigoIbge = codigoInstrumento.getModelObject().substring(1, 8);
+					String protocolo = codigoInstrumento.getModelObject().substring(8, 18);
+					Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(protocolo, codigoIbge);
+					
+					if (tituloProtestado != null) {
+						if (!getListaRetornoSlip().contains(tituloProtestado)) {
+							getListaRetornoSlip().add(tituloProtestado);
+						} else
+							throw new InfraException("A lista já contem o título!");
+					} else 
+						throw new InfraException("Titulo não encontrado!");
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				}
 			}
 		};
 		formCodigo.add(campoCodigoDeBarra());
@@ -153,10 +157,7 @@ public class InstrumentoDeProtestoPage extends BasePage<InstrumentoProtesto> {
 				item.add(new Label("numeroTitulo", retorno.getTitulo().getNumeroTitulo()));
 				item.add(new Label("protocolo", retorno.getNumeroProtocoloCartorio()));
 				item.add(new Label("pracaProtesto", retorno.getTitulo().getPracaProtesto()));
-
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
-					/***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new HistoricoPage(retorno.getTitulo()));
@@ -164,11 +165,15 @@ public class InstrumentoDeProtestoPage extends BasePage<InstrumentoProtesto> {
 				};
 				linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));
 				item.add(linkHistorico);
-
 				item.add(new Label("portador", instituicaoMediator.getInstituicaoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
-				item.add(new LabelValorMonetario<BigDecimal>("valorSaldo", retorno.getTitulo().getSaldoTitulo()));
+				item.add(new Link<Retorno>("remover") {
+					@Override
+					public void onClick() {
+						getListaRetornoSlip().remove(retorno);
+					}
+				});
 			}
 		};
 	}
@@ -192,8 +197,20 @@ public class InstrumentoDeProtestoPage extends BasePage<InstrumentoProtesto> {
 		return protocoloCartorio;
 	}
 
-	private SlipUtils getSlipUtils() {
-		return new SlipUtils();
+	public JasperPrint gerarSlipLista(List<InstrumentoProtesto> instrumentos) throws JRException {
+		List<EtiquetasJRDataSource> listaEtiquetas = new ArrayList<EtiquetasJRDataSource>();
+		HashMap<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("DATA", DataUtil.localDateToString(new LocalDate()));
+		
+		for (InstrumentoProtesto instrumento: instrumentos) {
+			EtiquetasJRDataSource novaEtiqueta = new EtiquetasJRDataSource();
+			novaEtiqueta.parseToTituloRemessa(instrumento.getTitulo());
+			listaEtiquetas.add(novaEtiqueta);
+		}
+		
+		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(listaEtiquetas);
+		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("teste.jrxml"));
+		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 	}
 
 	public List<Retorno> getListaRetornoSlip() {

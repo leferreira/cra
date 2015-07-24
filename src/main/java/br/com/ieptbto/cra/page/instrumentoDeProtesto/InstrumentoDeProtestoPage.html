@@ -11,7 +11,6 @@
 				<div class="row">
 					<form wicket:id="formCodigo" class="form-horizontal">
 						<div class="col-md-5">
-							<!-- Appended Input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label">Código de Barra:</label>
 							  <div class="col-md-7">
@@ -29,7 +28,6 @@
 				<div class="row">
 					<form wicket:id="formManual" class="form-horizontal">
 						<div class="col-md-5">
-							<!-- Select Basic -->
 							<div class="form-group">
 							  <label class="col-md-4 control-label">Município:</label>
 							  <div class="col-md-7">
@@ -39,7 +37,6 @@
 							</div>
 						</div>
 						<div class="col-md-5">
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label">NºProtocolo:</label>  
 							  <div class="col-md-7">
@@ -63,7 +60,7 @@
 								<th>Portador</th>
 								<th class="col-center">Espécie</th>
 								<th class="col-right">Valor Titulo</th>
-								<th class="col-right">Valor Saldo</th>
+								<th style="width: 30px;"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -74,8 +71,8 @@
 								<td><a href="#" wicket:id="linkHistorico"><span class="link" wicket:id="nomeDevedor"></span></a></td>
 								<td wicket:id="portador"></td>
 								<td class="col-center" wicket:id="especie"></td>
-								<td class="col-center valor" wicket:id="valorTitulo"></td>
-								<td class="col-center valor" wicket:id="valorSaldo"></td>
+								<td class="col-right valor" wicket:id="valorTitulo"></td>
+								<td class="col-center"><button wicket:id="remover"><span class="fa fa-trash-o"></span></button></td>
 		                    </tr>
 	                    </tbody>
 	                </table>

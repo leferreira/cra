@@ -62,14 +62,15 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 
         	protected void onSubmit(){
 				try{
-					
 					if (!getRetornosParaEnvio().isEmpty()){
 						retornoMediator.gerarRetornos(getUser(), getRetornosParaEnvio());
 					} else 
 						throw new InfraException("Não há retornos pendentes para envio.");
-						
+					
 					setResponsePage(new RetornoLabel());
-
+				} catch (InfraException e) {
+					logger.error(e.getMessage(), e);
+					error(e.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível realizar o batimento! Entre em contato com a CRA.");
@@ -126,7 +127,9 @@ public class ConfirmacaoRetornoPage extends BasePage<Batimento> {
 						throw new InfraException("Não há confirmações pendentes para envio.");
 					
 					setResponsePage(new ConfirmacaoLabel());
-
+				} catch (InfraException e) {
+					logger.error(e.getMessage(), e);
+					error(e.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível gerar a confirmação! Entre em contato com a CRA.");

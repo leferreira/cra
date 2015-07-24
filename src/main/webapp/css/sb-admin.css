@@ -69,8 +69,8 @@ body {
 @media ( min-width :768px) {
 	#page-wrapper {
 		position: inherit;
-		margin: 0 0 5% 15%;
-		padding: 0 30px;
+		margin: 0 0 5% 14%;
+		padding: 0 10px;
 		min-height: auto;
 		border-left: 2px solid #e7e7e7;
 		/*box-shadow: 0 1px #28705c;*/
@@ -111,7 +111,7 @@ body {
 	min-width: 189px;
 	height: auto !important;
 	max-height: 150px;
-	 width: 15%;
+	 width: 14%;
 }
 
 .green {

@@ -23,6 +23,7 @@ import br.com.ieptbto.cra.webservice.VO.CodigoErro;
  *
  */
 public class CraWebService {
+	
 	protected static final Logger logger = Logger.getLogger(CraWebService.class);
 	private static final String CONSTANTE_REMESSA_XML = "remessa";
 	protected Usuario usuario;

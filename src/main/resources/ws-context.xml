@@ -74,7 +74,7 @@
 	
 	<!-- tells Spring to put transactional advice on any class
 			or method that has an @Transactional annotation on it  -->
-	<tx:annotation-driven />
+	<tx:annotation-driven /> 
 	
 <!-- 	<bean id="Envers" class="org.hibernate.envers.event.BaseEnversEventListener"> -->
 <!-- 		<property name="sessionFactory" ref="sessionFactory" /> -->
@@ -86,5 +86,7 @@
 	<bean id="wicketApplication" class="br.com.ieptbto.cra.app.CraApplication"></bean>
 	
 	<bean id="remessaServiceImpl" class="br.com.ieptbto.cra.webservice.dao.RemessaServiceImpl"></bean>
+	
+	<bean id="historicoOcorrenciaServiceImpl" class="br.com.ieptbto.cra.webservice.dao.HistoricoOcorrenciaServiceImpl"></bean>
 	
 </beans>
