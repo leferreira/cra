@@ -132,7 +132,7 @@ public class CartorioInputPanel extends Panel {
 
 	private Component comboMunicipios() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> combo = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> combo = new DropDownChoice<Municipio>("municipio", municipioMediator.getMunicipiosTocantins(), renderer);
 		combo.setLabel(new Model<String>("Município"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);

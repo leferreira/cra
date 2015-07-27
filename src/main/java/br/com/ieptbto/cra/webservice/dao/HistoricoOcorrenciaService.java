@@ -42,7 +42,7 @@ public class HistoricoOcorrenciaService {
 		
 		try {
 			buscarTituloReferente();
-			setTipoOcorrencia(TipoOcorrencia.getTipoOcorrencia(ocorrencia));
+			buscarTipoOcorrencia(ocorrencia);
 
 			historicoMediator.salvarHistoricoOcorrencia(getTituloRemessa(), getTipoOcorrencia(), getDataOcorrencia());
 		} catch (InfraException ex) {
@@ -63,10 +63,18 @@ public class HistoricoOcorrenciaService {
 		
 		setTituloRemessa(tituloMediator.buscarTituloPorChave(titulo));
 	}
+
+	private void buscarTipoOcorrencia(String ocorrencia) {
+		TipoOcorrencia tipoOcorrencia = TipoOcorrencia.getTipoOcorrencia(ocorrencia);
+		if (tipoOcorrencia == null) {
+			throw new InfraException(MensagemHistoricoOcorrencia.OCORRENCIA_NAO_ENCONTRADA_OU_NAO_EXISTE.getMensagem());
+		}
+		setTipoOcorrencia(tipoOcorrencia);
+	}
 	
 	public String getResposta() {
 		if (resposta == null) {
-			this.resposta = MensagemHistoricoOcorrencia.ERRO_DE_PRECESSAMENTO_CRA.getMensagem();
+			this.resposta = MensagemHistoricoOcorrencia.OCORRENCIA_PROCESSADA_COM_SUCESSO.getMensagem();
 		}
 		return resposta;
 	}

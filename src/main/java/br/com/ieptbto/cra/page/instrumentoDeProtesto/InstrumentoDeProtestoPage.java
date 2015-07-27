@@ -184,7 +184,7 @@ public class InstrumentoDeProtestoPage extends BasePage<InstrumentoProtesto> {
 
 	private DropDownChoice<Municipio> codigoIbgeCartorio() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		codigoIbge = new DropDownChoice<Municipio>("codigoIbge", new Model<Municipio>(), municipioMediator.listarTodos(), renderer);
+		codigoIbge = new DropDownChoice<Municipio>("codigoIbge", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
 		codigoIbge.setRequired(true);
 		codigoIbge.setLabel(new Model<String>("Município"));
 		return codigoIbge;
