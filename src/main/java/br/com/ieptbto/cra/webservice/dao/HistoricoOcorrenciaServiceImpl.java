@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.service;
+package br.com.ieptbto.cra.webservice.dao;
 
 import javax.annotation.Resource;
 import javax.jws.WebMethod;
@@ -13,8 +13,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
-import br.com.ieptbto.cra.webservice.dao.HistoricoOcorrenciaService;
-import br.com.ieptbto.cra.webservice.interf.IHistoricoOcorrenciaWS;
 
 /**
  * @author Thasso Araújo
@@ -36,12 +34,12 @@ public class HistoricoOcorrenciaServiceImpl implements IHistoricoOcorrenciaWS {
 	@WebMethod(operationName = "Ocorrencia")
 	@GET
 	public String ocorrencia(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, 
-			@WebParam(name = "user_ocor") String ocorrencia, @WebParam(name = "user_code_Portador") String codigoPortador,
-			@WebParam(name = "user_prot") String protocolo, @WebParam(name = "user_nosso_num") String nossoNumero,
-			@WebParam(name = "user_num_titulo") String numeroTitulo) {
+			@WebParam(name = "id_ocorrencia") String ocorrencia, @WebParam(name = "data_ocorrencia") String dataOcorrencia, 
+			@WebParam(name = "cod_portador") String codigoPortador,@WebParam(name = "nosso_num") String nossoNumero,
+			@WebParam(name = "num_titulo") String numeroTitulo) {
 		
 		init(login, senha);
-		return historicoService.processarOcorrencia();
+		return historicoService.processarOcorrencia(codigoPortador, nossoNumero, numeroTitulo, ocorrencia, dataOcorrencia);
 	}
 	
 	private void init(String login, String senha) {

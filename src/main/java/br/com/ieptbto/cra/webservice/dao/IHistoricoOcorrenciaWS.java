@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.interf;
+package br.com.ieptbto.cra.webservice.dao;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -29,7 +29,7 @@ public interface IHistoricoOcorrenciaWS {
 	@WebMethod(operationName = "Ocorrencia")
 	@GET
 	public String ocorrencia(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, 
-			@WebParam(name = "user_ocor") String ocorrencia, @WebParam(name = "user_code_Portador") String codigoPortador,
-			@WebParam(name = "user_prot") String protocolo, @WebParam(name = "user_nosso_num") String nossoNumero,
-			@WebParam(name = "user_num_titulo") String numeroTitulo);
+			@WebParam(name = "id_ocorrencia") String ocorrencia, @WebParam(name = "data_ocorrencia") String dataOcorrencia, 
+			@WebParam(name = "cod_portador") String codigoPortador,@WebParam(name = "nosso_num") String nossoNumero,
+			@WebParam(name = "num_titulo") String numeroTitulo);
 }

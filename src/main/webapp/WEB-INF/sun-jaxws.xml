@@ -4,10 +4,10 @@
   version="2.0">
   <endpoint
       name="RemessaService"
-      implementation="br.com.ieptbto.cra.webservice.service.RemessaServiceImpl"
+      implementation="br.com.ieptbto.cra.webservice.dao.RemessaServiceImpl"
       url-pattern="/RemessaService"/>
   <endpoint
 	  name="HistoricoOcorrenciaService"
-	  implementation="br.com.ieptbto.cra.webservice.service.HistoricoOcorrenciaServiceImpl"
+	  implementation="br.com.ieptbto.cra.webservice.dao.HistoricoOcorrenciaServiceImpl"
 	  url-pattern="/HistoricoOcorrenciaService"/>
 </endpoints>

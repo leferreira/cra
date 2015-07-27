@@ -23,7 +23,8 @@
 	http://cxf.apache.org/schemas/jaxws.xsd">
 	
 	<context:component-scan base-package="br.com.ieptbto.cra.dao, br.com.ieptbto.cra.mediator, br.com.ieptbto.cra.processador, 
-	br.com.ieptbto.cra.conversor, br.com.ieptbto.cra.validacao, br.com.ieptbto.cra.webservice.dao " />
+	br.com.ieptbto.cra.conversor, br.com.ieptbto.cra.validacao, , br.com.ieptbto.cra.webservice.dao, br.com.ieptbto.cra.webservice.interf
+	br.com.ieptbto.cra.webservice.service " />
 	
 	<bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
@@ -85,8 +86,8 @@
 	
 	<bean id="wicketApplication" class="br.com.ieptbto.cra.app.CraApplication"></bean>
 	
-	<bean id="remessaServiceImpl" class="br.com.ieptbto.cra.webservice.service.RemessaServiceImpl"></bean>
+	<bean id="remessaServiceImpl" class="br.com.ieptbto.cra.webservice.dao.RemessaServiceImpl"></bean>
 	
-	<bean id="historicoOcorrenciaServiceImpl" class="br.com.ieptbto.cra.webservice.service.HistoricoOcorrenciaServiceImpl"></bean>
+	<bean id="historicoOcorrenciaServiceImpl" class="br.com.ieptbto.cra.webservice.dao.HistoricoOcorrenciaServiceImpl"></bean>
 	
 </beans>

@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.interf;
+package br.com.ieptbto.cra.webservice.dao;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
