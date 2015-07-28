@@ -4,7 +4,7 @@ package br.com.ieptbto.cra.webservice.dao;
  * @author Thasso Araújo
  *
  */
-public enum MensagemHistoricoOcorrencia {
+public enum MensagemCartorioProtesto {
 
 	ERRO_DE_PRECESSAMENTO_CRA("Erro de processamento, informe à CRA !"),
 	CODIGO_PORTADOR_INVALIDO(""),
@@ -15,7 +15,7 @@ public enum MensagemHistoricoOcorrencia {
 	
 	private String mensagem;
 	
-	private MensagemHistoricoOcorrencia(String mensagem) {
+	private MensagemCartorioProtesto(String mensagem) {
 		this.mensagem = mensagem;
 	}
 

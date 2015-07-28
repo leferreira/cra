@@ -88,6 +88,6 @@
 	
 	<bean id="remessaServiceImpl" class="br.com.ieptbto.cra.webservice.dao.RemessaServiceImpl"></bean>
 	
-	<bean id="historicoOcorrenciaServiceImpl" class="br.com.ieptbto.cra.webservice.dao.HistoricoOcorrenciaServiceImpl"></bean>
+	<bean id="cartorioProtestoServiceImpl" class="br.com.ieptbto.cra.webservice.dao.CartorioProtestoServiceImpl"></bean>
 	
 </beans>

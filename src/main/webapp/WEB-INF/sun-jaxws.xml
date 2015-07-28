@@ -7,7 +7,7 @@
       implementation="br.com.ieptbto.cra.webservice.dao.RemessaServiceImpl"
       url-pattern="/RemessaService"/>
   <endpoint
-	  name="HistoricoOcorrenciaService"
-	  implementation="br.com.ieptbto.cra.webservice.dao.HistoricoOcorrenciaServiceImpl"
-	  url-pattern="/HistoricoOcorrenciaService"/>
+	  name="CartorioProtestoService"
+	  implementation="br.com.ieptbto.cra.webservice.dao.CartorioProtestoServiceImpl"
+	  url-pattern="/CartorioProtestoService"/>
 </endpoints>
