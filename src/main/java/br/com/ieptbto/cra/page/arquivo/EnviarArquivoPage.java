@@ -15,6 +15,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
@@ -53,7 +54,8 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		arquivo = new Arquivo();
 		arquivo.setInstituicaoRecebe(cra);
 		arquivo.setUsuarioEnvio(getUser());
-
+		arquivo.setDataEnvio(new LocalDate());
+		
 		form = new Form<Arquivo>("form", getModel()) {
 			/****/
 			private static final long serialVersionUID = 1L;

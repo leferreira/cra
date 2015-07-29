@@ -102,7 +102,7 @@ public class ArquivosCraPanel extends Panel {
 		        linkArquivo.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
 		        item.add(linkArquivo);
 		        
-				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
+				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getDataRecebimento())));
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
 				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
