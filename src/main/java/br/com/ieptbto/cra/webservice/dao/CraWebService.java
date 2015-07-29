@@ -43,6 +43,12 @@ public class CraWebService {
 		return gerarMensagem(arquivo, CONSTANTE_REMESSA_XML);
 	}
 
+	protected String setRespostaArquivoEmBranco(String nomeArquivo) {
+		logger.error("dados enviados em branco");
+		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.DADOS_DE_ENVIO_INVALIDOS);
+		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_REMESSA_XML);
+	}
+
 	private String setRespostaUsuarioInvalido(String nomeArquivo) {
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), CodigoErro.FALHA_NA_AUTENTICACAO);
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_REMESSA_XML);

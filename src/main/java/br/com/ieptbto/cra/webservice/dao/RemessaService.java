@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
@@ -70,6 +71,11 @@ public class RemessaService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
+		if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+			return setRespostaArquivoEmBranco(nomeArquivo);
+		}
 		return processar(nomeArquivo, usuario, converterStringArquivoVO(dados));
 	}
 
