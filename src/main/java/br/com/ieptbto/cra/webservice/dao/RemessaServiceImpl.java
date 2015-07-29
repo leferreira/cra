@@ -73,7 +73,9 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	private void init(String login, String senha) {
-		context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		if (context == null) {
+			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		}
 		remessaService = (RemessaService) context.getBean("remessaService");
 		confirmacaoService = (ConfirmacaoService) context.getBean("confirmacaoService");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
@@ -82,7 +84,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 
 	private void setUsuario(String login, String senha) {
 		logger.info("Inicio WebService pelo usuario= " + login);
-		this.usuario = usuarioMediator.autenticar(login, senha);
+		this.usuario = usuarioMediator.autenticarWS(login, senha);
 	}
 
 	public Usuario getUsuario() {

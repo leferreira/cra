@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.webservice.dao;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -23,7 +24,7 @@ import br.com.ieptbto.cra.webservice.VO.CodigoErro;
  *
  */
 public class CraWebService {
-	
+
 	protected static final Logger logger = Logger.getLogger(CraWebService.class);
 	private static final String CONSTANTE_REMESSA_XML = "remessa";
 	protected Usuario usuario;
@@ -77,9 +78,14 @@ public class CraWebService {
 			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
 			marshaller.marshal(element, writer);
 			logger.info("Remessa processada com sucesso.");
-			return writer.toString();
+			String msg = writer.toString();
+			writer.close();
+			return msg;
 
 		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		} catch (IOException e) {
 			logger.error(e.getMessage(), e.getCause());
 			new InfraException(CodigoErro.ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}

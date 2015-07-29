@@ -6,8 +6,4 @@
       name="RemessaService"
       implementation="br.com.ieptbto.cra.webservice.dao.RemessaServiceImpl"
       url-pattern="/RemessaService"/>
-  <endpoint
-	  name="CartorioProtestoService"
-	  implementation="br.com.ieptbto.cra.webservice.dao.CartorioProtestoServiceImpl"
-	  url-pattern="/CartorioProtestoService"/>
 </endpoints>
