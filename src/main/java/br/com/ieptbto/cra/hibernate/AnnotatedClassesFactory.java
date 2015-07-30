@@ -19,8 +19,11 @@ import br.com.ieptbto.cra.entidade.AgenciaCAF;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Batimento;
+import br.com.ieptbto.cra.entidade.CabecalhoArquivo;
+import br.com.ieptbto.cra.entidade.CabecalhoCartorio;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.Confirmacao;
+import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Historico;
@@ -28,10 +31,14 @@ import br.com.ieptbto.cra.entidade.HistoricoOcorrenciaTitulo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
+import br.com.ieptbto.cra.entidade.PedidoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.RemessaDesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.Rodape;
+import br.com.ieptbto.cra.entidade.RodapeArquivo;
+import br.com.ieptbto.cra.entidade.RodapeCartorio;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
@@ -88,6 +95,14 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Avalista.class);
 		classesHibernate.add(HistoricoOcorrenciaTitulo.class);
 		// classesHibernate.add(CraCustomRevisionEntity.class);
+		classesHibernate.add(RemessaDesistenciaProtesto.class);
+		classesHibernate.add(CabecalhoArquivo.class);
+		classesHibernate.add(CabecalhoCartorio.class);
+		classesHibernate.add(RodapeArquivo.class);
+		classesHibernate.add(RodapeCartorio.class);
+		classesHibernate.add(DesistenciaProtesto.class);
+		classesHibernate.add(PedidoDesistenciaCancelamento.class);
+
 	}
 
 	/**
