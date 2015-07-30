@@ -29,6 +29,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -61,7 +62,6 @@ public class ArquivosCartorioPanel extends Panel {
 		add(dataEnvioFinal());
 		add(comboTipoArquivos());
 		add(comboStatus());
-		
 		add(new Button("botaoEnviar"){
 
 			@Override
@@ -73,10 +73,12 @@ public class ArquivosCartorioPanel extends Panel {
 							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
-									error("A data de início deve ser antes da data fim.");
-						}else
-							error("As duas datas devem ser preenchidas.");
+									new InfraException("A data de início deve ser antes da data fim.");
+						} else
+							new InfraException("As duas datas devem ser preenchidas.");
 					} 
+				} catch (InfraException ex) {
+					error(ex.getMessage());
 				} catch (Exception e) {
 					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
 				}

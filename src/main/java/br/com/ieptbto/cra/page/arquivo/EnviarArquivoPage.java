@@ -46,13 +46,13 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	InstituicaoMediator instituicaoMediator;
 
 	private Arquivo arquivo;
+	private Instituicao cra;
 	private Form<Arquivo> form;
 	private FileUploadField fileUploadField;
 
 	public EnviarArquivoPage() {
-		Instituicao cra = instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString());
 		arquivo = new Arquivo();
-		arquivo.setInstituicaoRecebe(cra);
+		arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
 		arquivo.setUsuarioEnvio(getUser());
 		arquivo.setDataEnvio(new LocalDate());
 		
@@ -76,7 +76,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 						info("O arquivo " + arquivo.getNomeArquivo() + " com " + arquivoRetorno.getArquivo().getRemessas().size()
 						        + " Remessa(s), salvo com sucesso.");
 					}
-
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -128,6 +127,14 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(arquivo);
+	}
+
+	public Instituicao getCra() {
+		return cra;
+	}
+
+	public void setCra(Instituicao cra) {
+		this.cra = cra;
 	}
 
 }

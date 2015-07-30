@@ -36,8 +36,8 @@ import br.com.ieptbto.cra.page.convenio.LiberarTitulosConvenioPage;
 import br.com.ieptbto.cra.page.instituicao.DetalharInstituicaoPage;
 import br.com.ieptbto.cra.page.instituicao.IncluirInstituicaoPage;
 import br.com.ieptbto.cra.page.instituicao.ListaInstituicaoPage;
-import br.com.ieptbto.cra.page.instrumentoDeProtesto.ImportarArquivoDeParaPage;
-import br.com.ieptbto.cra.page.instrumentoDeProtesto.InstrumentoDeProtestoPage;
+import br.com.ieptbto.cra.page.instrumentoProtesto.ImportarArquivoDeParaPage;
+import br.com.ieptbto.cra.page.instrumentoProtesto.InstrumentoProtestoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.municipio.DetalharMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.IncluirMunicipioPage;
@@ -179,7 +179,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("LiberarTituloConvenios", LiberarTitulosConvenioPage.class);
 
 		/** Slip */
-		mountPage("InstrumentoDeProtesto", InstrumentoDeProtestoPage.class);
+		mountPage("InstrumentoDeProtesto", InstrumentoProtestoPage.class);
 		mountPage("ImportarArquivoDePara", ImportarArquivoDeParaPage.class);
 	}
 

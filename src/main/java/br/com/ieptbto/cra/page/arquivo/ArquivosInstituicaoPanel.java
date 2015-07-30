@@ -22,9 +22,9 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -61,10 +61,12 @@ public class ArquivosInstituicaoPanel extends Panel {
 							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
-									error("A data de início deve ser antes da data fim.");
+									new InfraException("A data de início deve ser antes da data fim.");
 						} else
-							error("As duas datas devem ser preenchidas.");
+							new InfraException("As duas datas devem ser preenchidas.");
 					}
+				} catch (InfraException ex) {
+					error(ex.getMessage());
 				} catch (Exception e) {
 					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
 				}
@@ -85,16 +87,14 @@ public class ArquivosInstituicaoPanel extends Panel {
 			protected void populateItem(ListItem<Arquivo> item) {
 				final Arquivo arquivo = item.getModelObject();
 				item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
-
 				Link linkArquivo = new Link("linkArquivo") {
 
 					public void onClick() {
-						setResponsePage(new TitulosDoArquivoPage(arquivo));
+//						setResponsePage(new TitulosDoArquivoPage(arquivo));
 					}
 				};
 				linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));
 				item.add(linkArquivo);
-
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio())));
 				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("instituicaoRecebe", arquivo.getInstituicaoRecebe().getNomeFantasia()));

@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.instrumentoDeProtesto;
+package br.com.ieptbto.cra.page.instrumentoProtesto;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;

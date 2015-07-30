@@ -20,17 +20,15 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class RelatorioArquivosTitulosCraPanel extends Panel  {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(RelatorioArquivosTitulosCraPanel.class);
 	
 	@SpringBean
@@ -56,41 +54,33 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 		super(id, model);
 		this.instituicao = instituicao;
 		this.model = model;
-		add(dataEnvioInicio());
-		add(dataEnvioFinal());
-		add(nomeArquivo());
-		add(comboPortador());
-		add(pracaProtesto());
-		add(botaoEnviar());
+		adicionarCampos();
 	}
 	
-	private Component botaoEnviar() {
+	private Button botaoEnviar() {
 		return new Button("botaoBuscar") {
-			/** */
-			private static final long serialVersionUID = 1L;
+			
 			@Override
 			public void onSubmit() {
 				Arquivo arquivoBuscado = new Arquivo();
-				
-				if (dataEnvioInicio.getDefaultModelObject() != null){
-					if (dataEnvioFinal.getDefaultModelObject() != null){
-						dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
-						dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
-						if (!dataInicio.isBefore(dataFim))
-							if (!dataInicio.isEqual(dataFim))
-								error("A data de início deve ser antes da data fim.");
-					}else
-						error("As duas datas devem ser preenchidas.");
-				}
-				
 				try {
+					if (dataEnvioInicio.getDefaultModelObject() != null){
+						if (dataEnvioFinal.getDefaultModelObject() != null){
+							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
+							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
+							if (!dataInicio.isBefore(dataFim))
+								if (!dataInicio.isEqual(dataFim))
+									throw new InfraException("A data de início deve ser antes da data fim.");
+						}else
+							throw new InfraException("As duas datas devem ser preenchidas.");
+					}
 					
 					if (model.getObject().getNomeArquivo() != null) {
 						arquivoBuscado = remessaMediator.buscarArquivoPorNome(instituicao ,model.getObject().getNomeArquivo());
 						if (arquivoBuscado != null) {
-							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
+//							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
 						} else {
-							error ("Arquivo não foi encontrado ou não pertence a esta instituição!");
+							throw new InfraException("Arquivo não foi encontrado ou não pertence a esta instituição!");
 						}
 					} else if (comboMunicipio.getModelObject() != null || comboPortador.getModelObject() != null){
 						if (comboMunicipio.getDefaultModelObject() != null)
@@ -101,7 +91,7 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 						
 						setResponsePage(new RelatorioTitulosPage(portador, municipio, dataInicio, dataFim));
 					} else 
-						error("O portador ou o município deve ser selecionado!");
+						throw new InfraException("O portador ou o município deve ser selecionado!");
 					
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -112,6 +102,15 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 				}
 			}
 		};
+	}
+
+	private void adicionarCampos() {
+		add(dataEnvioInicio());
+		add(dataEnvioFinal());
+		add(nomeArquivo());
+		add(comboPortador());
+		add(pracaProtesto());
+		add(botaoEnviar());
 	}
 	
 	private TextField<String> nomeArquivo() {

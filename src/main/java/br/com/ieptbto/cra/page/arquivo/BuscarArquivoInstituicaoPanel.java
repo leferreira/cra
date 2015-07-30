@@ -84,8 +84,8 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
 					
-					if (comboMunicipio.getDefaultModelObject() != null){
-						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
+					if (comboMunicipio.getModelObject() != null){
+						municipio = comboMunicipio.getModelObject();
 					}
 					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
 				} catch (InfraException ex) {
@@ -103,7 +103,7 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 		return new TextField<String>("nomeArquivo");
 	}
 	
-	private Component comboTipoArquivos() {
+	private CheckBoxMultipleChoice<String> comboTipoArquivos() {
 		List<String> choices = new ArrayList<String>();
 		List<TipoArquivoEnum> enumLista = Arrays.asList(TipoArquivoEnum.values());
 		for (TipoArquivoEnum tipo : enumLista) {
@@ -123,7 +123,7 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
 	}
 
-	private Component pracaProtesto() {
+	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
 		this.comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;

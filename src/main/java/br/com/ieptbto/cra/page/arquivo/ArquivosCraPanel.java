@@ -70,9 +70,11 @@ public class ArquivosCraPanel extends Panel {
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
 									throw new InfraException("A data de início deve ser antes da data fim.");
-						}else
+						} else
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
+				} catch (InfraException ex) {
+					error(ex.getMessage());
 				} catch (Exception e) {
 					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
 				}

@@ -20,19 +20,16 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class RelatorioArquivosTitulosInstituicaoPanel extends Panel  {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(RelatorioArquivosTitulosInstituicaoPanel.class);
-	
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
@@ -55,6 +52,10 @@ public class RelatorioArquivosTitulosInstituicaoPanel extends Panel  {
 		super(id, model);
 		this.model = model;
 		this.instituicao = instituicao;
+		adicionarCampos();
+	}
+	
+	private void adicionarCampos() {
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
 		add(nomeArquivo());
@@ -64,12 +65,10 @@ public class RelatorioArquivosTitulosInstituicaoPanel extends Panel  {
 	
 	private Component botaoEnviar() {
 		return new Button("botaoBuscar") {
-			/** */
-			private static final long serialVersionUID = 1L;
+			
 			@Override
 			public void onSubmit() {
 				Arquivo arquivoBuscado = model.getObject();
-				
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
@@ -85,9 +84,9 @@ public class RelatorioArquivosTitulosInstituicaoPanel extends Panel  {
 					if (model.getObject().getNomeArquivo() != null) {
 						arquivoBuscado = remessaMediator.buscarArquivoPorNome(instituicao, model.getObject().getNomeArquivo());
 						if (arquivoBuscado != null) {
-							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
+//							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
 						} else {
-							error ("Arquivo não foi encontrado ou não existe!");
+							throw new InfraException("Arquivo não foi encontrado ou não existe!");
 						}
 					} else if (comboMunicipio.getDefaultModelObject() != null) {
 						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());

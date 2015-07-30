@@ -40,29 +40,18 @@ import br.com.ieptbto.cra.util.DataUtil;
 public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 
 	@SpringBean
-	TituloMediator tituloMediator;
+	private TituloMediator tituloMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	RelatorioMediator relatorioMediator;
-
+	private RelatorioMediator relatorioMediator;
 	private Remessa remessa;
 	private Arquivo arquivo;
 	private TipoArquivoEnum tipoArquivo;
 	private List<TituloRemessa> titulos;
 	
-	public TitulosDoArquivoPage(Arquivo arquivo) {
-		this.tipoArquivo = arquivo.getTipoArquivo().getTipoArquivo();
-		setTitulos(buscarTitulosDoArquivo());
-		setRemessa(arquivo);
-		setArquivo(arquivo);
-		carregarInformacoes();
-		add(carregarListaTitulos());
-		add(botaoGerarRelatorio());
-	}
-
 	public TitulosDoArquivoPage(Remessa remessa) {
 		setTitulos(tituloMediator.buscarTitulosPorRemessa(remessa, getUser().getInstituicao()));
 		setArquivo(remessa.getArquivo());
@@ -71,7 +60,6 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		add(carregarListaTitulos());
 		add(botaoGerarRelatorio());
 	}
-
 	
 	private ListView<TituloRemessa> carregarListaTitulos() {
 		return new ListView<TituloRemessa>("listViewTituloArquivo", getTitulos()) {
@@ -83,6 +71,8 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
 				if (tituloLista.getConfirmacao() != null) {
 					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
+				} else if (tituloLista.getRetorno() != null) {
+					item.add(new Label("protocolo", tituloLista.getRetorno().getNumeroProtocoloCartorio()));
 				} else { 
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 				}
@@ -96,7 +86,7 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		        };
 		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
 		        item.add(linkHistorico);
-				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
+				item.add(new Label("praca", tituloLista.getPracaProtesto()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
 				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
 			}
@@ -105,14 +95,11 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	
 	private Button botaoGerarRelatorio(){
 		return new Button("gerarRelatorio"){
-
 			@Override
 			public void onSubmit() {
 				try {
 					JasperPrint jasperPrint = relatorioMediator.novoRelatorioDeArquivoDetalhado(getUser().getInstituicao(), getArquivo(), getTitulos());
-					
 					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
-				
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -145,10 +132,6 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 	
 	private List<TituloRemessa> getTitulos() {
 		return titulos;
-	}
-	
-	private void setRemessa(Arquivo arquivo) {
-		this.remessa = remessaMediator.buscarRemessasDoArquivo(arquivo, getUser().getInstituicao()).get(0);
 	}
 
 	private void setArquivo(Arquivo arquivo) {

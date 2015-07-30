@@ -20,19 +20,16 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(RelatorioArquivosTitulosCartorioPanel.class);
-	
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
@@ -55,21 +52,15 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 		super(id, model);
 		this.model = model;
 		this.instituicaoUsuario = instituicao;
-		add(dataEnvioInicio());
-		add(dataEnvioFinal());
-		add(nomeArquivo());
-		add(comboPortador());
-		add(botaoEnviar());
+		adicionarCampos();
 	}
-	
+
 	private Component botaoEnviar() {
 		return new Button("botaoBuscar") {
-			/** */
-			private static final long serialVersionUID = 1L;
+			
 			@Override
 			public void onSubmit() {
 				Arquivo arquivoBuscado = model.getObject();
-				
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
@@ -85,15 +76,14 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 					if (model.getObject().getNomeArquivo() != null) {
 						arquivoBuscado = remessaMediator.buscarArquivoPorNome(instituicaoUsuario ,model.getObject().getNomeArquivo());
 						if (arquivoBuscado != null) {
-							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
+//							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
 						} else {
-							error ("Arquivo não foi encontrado ou não existe!");
+							throw new InfraException("Arquivo não foi encontrado ou não existe!");
 						}
 					} else if (comboPortador.getDefaultModelObject() != null) {
 						portador = Instituicao.class.cast(comboPortador.getDefaultModelObject());
 						setResponsePage(new RelatorioTitulosPage(portador, municipio, dataInicio, dataFim));
 					}
-					
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -105,6 +95,14 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 		};
 	}
 	
+	private void adicionarCampos() {
+		add(dataEnvioInicio());
+		add(dataEnvioFinal());
+		add(nomeArquivo());
+		add(comboPortador());
+		add(botaoEnviar());
+	}
+
 	private TextField<String> nomeArquivo() {
 		return new TextField<String>("nomeArquivo");
 	}

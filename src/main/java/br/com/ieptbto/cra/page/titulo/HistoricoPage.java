@@ -122,12 +122,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		return textField;
 	}
 
-//	private TextField<String> codigoCartorio() {
-//		TextField<String> textField = new TextField<String>("codigoCartorio", new Model<String>(tituloRemessa.getCodigoCartorio().toString()));
-//		textField.setEnabled(false);
-//		return textField;
-//	}
-
 	private TextField<String> cartorio(){
 		TextField<String> textField = new TextField<String>("remessa.instituicaoDestino.nomeFantasia", new Model<String>(StringUtils.EMPTY));
 		textField.setEnabled(false);

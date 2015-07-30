@@ -7,25 +7,25 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<title>
-		<band height="79" splitType="Stretch">
+	<field name="razaoSocialPortador" class="java.lang.String"/>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="bde1f7b5-9885-441d-8a8d-2df86f3e69c2"/>
-				<text><![CDATA[static]]></text>
+				<reportElement x="0" y="0" width="100" height="20" uuid="79553de5-97ad-46f8-8019-e5ac86d4c1f2"/>
+				<text><![CDATA[razaoSocialPortador]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="221" y="16" width="100" height="20" uuid="1b81a354-2d56-425a-8e08-a0bec6876e15"/>
+				<reportElement x="702" y="2" width="100" height="20" uuid="c9ea94b1-9008-4e0c-9645-d438793d18b3"/>
 				<textFieldExpression><![CDATA[$P{DATA}]]></textFieldExpression>
 			</textField>
 		</band>
-	</title>
-	<pageHeader>
-		<band height="35" splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band height="61" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="23" splitType="Stretch"/>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="3" width="100" height="20" uuid="2c5f3e86-444a-42c7-b2ae-5e0611223ca1"/>
+				<textFieldExpression><![CDATA[$F{razaoSocialPortador}]]></textFieldExpression>
+			</textField>
+		</band>
 	</detail>
 </jasperReport>
