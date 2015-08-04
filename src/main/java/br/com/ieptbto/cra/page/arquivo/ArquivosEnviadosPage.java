@@ -18,7 +18,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ArquivosEnviadosPage extends BasePage<Arquivo> {
 
 	/***/
@@ -31,11 +31,11 @@ public class ArquivosEnviadosPage extends BasePage<Arquivo> {
 	public ArquivosEnviadosPage() {
 		this.arquivo = new Arquivo();
 		this.instituicao = getUser().getInstituicao();
-		
+
 		form = new Form<Arquivo>("form", getModel());
-		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
+		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 			form.add(new ArquivosCraPanel("enviadosPanel", getModel(), getInstituicao()));
-		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){
+		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 			form.add(new ArquivosCartorioPanel("enviadosPanel", getModel(), getInstituicao()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 			form.add(new ArquivosInstituicaoPanel("enviadosPanel", getModel(), getInstituicao()));
@@ -46,11 +46,11 @@ public class ArquivosEnviadosPage extends BasePage<Arquivo> {
 	public Instituicao getInstituicao() {
 		return instituicao;
 	}
-	
+
 	public void setInstituicao(Instituicao instituicao) {
 		this.instituicao = instituicao;
 	}
-	
+
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(arquivo);

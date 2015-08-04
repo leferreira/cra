@@ -91,19 +91,22 @@ public class RemessaService extends CraWebService {
 		try {
 			context = JAXBContext.newInstance(ArquivoVO.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			String xmlDeTeste = "";
+			String xmlRecebido = "";
 
 			Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
 			while (scanner.hasNext()) {
-				xmlDeTeste = xmlDeTeste + scanner.nextLine().replaceAll("& ", "&amp;");
+				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
+				if (xmlRecebido.contains("<?xml version=")) {
+					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
+				}
 			}
 			scanner.close();
 
-			InputStream xml = new ByteArrayInputStream(xmlDeTeste.getBytes());
+			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
 			arquivo = (ArquivoVO) unmarshaller.unmarshal(new InputSource(xml));
 
 		} catch (JAXBException e) {
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(), e.getCause());
 			new InfraException(e.getMessage(), e.getCause());
 		}
 		return arquivo;
