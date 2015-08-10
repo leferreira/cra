@@ -1,7 +1,6 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -39,11 +38,10 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
-	
 	private IModel<Arquivo> model;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
-	private ArrayList<String> tiposArquivo = new ArrayList<String>();
+	private ArrayList<TipoArquivoEnum> tiposArquivo = new ArrayList<TipoArquivoEnum>();
 	
 	public BuscarArquivoCartorioPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
@@ -96,13 +94,12 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 		return new TextField<String>("nomeArquivo");
 	}
 	
-	private Component comboTipoArquivos() {
-		List<String> choices = new ArrayList<String>();
-		List<TipoArquivoEnum> enumLista = Arrays.asList(TipoArquivoEnum.values());
-		for (TipoArquivoEnum tipo : enumLista) {
-			choices.add(tipo.constante);
-		}
-		CheckBoxMultipleChoice<String> tipos = new CheckBoxMultipleChoice<String>("tipoArquivos",new Model<ArrayList<String>>(tiposArquivo), choices);
+	private CheckBoxMultipleChoice<TipoArquivoEnum> comboTipoArquivos() {
+		List<TipoArquivoEnum> listaTipos = new ArrayList<TipoArquivoEnum>();
+		listaTipos.add(TipoArquivoEnum.REMESSA);
+		listaTipos.add(TipoArquivoEnum.CONFIRMACAO);
+		listaTipos.add(TipoArquivoEnum.RETORNO);
+		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
 		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
 	}

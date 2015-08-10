@@ -100,6 +100,7 @@ public class RemessaService extends CraWebService {
 					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
 				}
 			}
+			System.out.println("Oi");
 			scanner.close();
 
 			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());

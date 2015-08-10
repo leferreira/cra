@@ -46,14 +46,16 @@ public class CraMenu extends Panel {
 
 		/** Menus Admins */
 		menuLateral.addItem("Batimento", rolesIncluir);
-		menuLateral.addItem("LiberarTituloConvenios", rolesIncluir);
-		menuLateral.addItem("ConfirmacaoRetorno", rolesIncluir);
+		menuLateral.addItem("RemessasConvenio", rolesIncluir);
+		menuLateral.addItem("ConfirmacaoPage", rolesIncluir);
+		menuLateral.addItem("RetornoPage", rolesIncluir);
 		// menuLateral.addItem("TipoArquivoPage", rolesIncluir);
 		menuLateral.addItem("CartoriosPage", rolesIncluir);
 		menuLateral.addItem("InstituicoesPage", rolesIncluir);
 		menuLateral.addItem("MunicipiosPage", rolesIncluir);
 		menuLateral.addItem("TipoInstituicoesPage", rolesIncluir);
 		menuLateral.addItem("UsuariosPage", rolesIncluir);
+		menuLateral.addItem("FiliadosPage", rolesIncluir);
 
 		/** Instrumento de Protesto */
 		menuLateral.addItem("InstrumentoDeProtesto", rolesIncluir);

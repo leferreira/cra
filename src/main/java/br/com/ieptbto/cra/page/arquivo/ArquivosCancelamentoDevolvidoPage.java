@@ -19,7 +19,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
-public class ArquivosEnviadosPage extends BasePage<Arquivo> {
+public class ArquivosCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -28,17 +28,17 @@ public class ArquivosEnviadosPage extends BasePage<Arquivo> {
 	private Form<Arquivo> form;
 	private Instituicao instituicao;
 
-	public ArquivosEnviadosPage() {
+	public ArquivosCancelamentoDevolvidoPage() {
 		this.arquivo = new Arquivo();
 		this.instituicao = getUser().getInstituicao();
 
 		form = new Form<Arquivo>("form", getModel());
 		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
-			form.add(new ArquivosCraPanel("enviadosPanel", getModel(), getInstituicao()));
+			form.add(new CancelamentoDevolvidoCraPanel("enviadosPanel", getModel(), getInstituicao()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-			form.add(new ArquivosCartorioPanel("enviadosPanel", getModel(), getInstituicao()));
+			form.add(new CancelamentoDevolvidoCartorioPanel("enviadosPanel", getModel(), getInstituicao()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-			form.add(new ArquivosInstituicaoPanel("enviadosPanel", getModel(), getInstituicao()));
+			form.add(new CancelamentoDevolvidoInstituicaoPanel("enviadosPanel", getModel(), getInstituicao()));
 		}
 		add(form);
 	}

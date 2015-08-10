@@ -1,13 +1,13 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -31,29 +31,27 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
-public class ArquivosInstituicaoPanel extends Panel {
+@SuppressWarnings( {"serial","unused" })
+public class CancelamentoDevolvidoInstituicaoPanel extends Panel {
 
 	@SpringBean
 	RemessaMediator remessaMediator;
 	@SpringBean
 	ArquivoMediator arquivoMediator;
-
 	private Instituicao instituicao;
-	private LocalDate dataInicio;
-	private LocalDate dataFim;
 	private TextField<String> dataEnvioInicio;
 	private TextField<String> dataEnvioFinal;
-	private ArrayList<String> tiposSelect = new ArrayList<String>();
-	private ArrayList<String> statusSelect = new ArrayList<String>();
+	private ArrayList<TipoArquivoEnum> tiposSelect = new ArrayList<TipoArquivoEnum>();
 
-	public ArquivosInstituicaoPanel(String id, IModel<?> model, Instituicao instituicao) {
+	public CancelamentoDevolvidoInstituicaoPanel(String id, IModel<?> model, Instituicao instituicao) {
 		super(id, model);
 		this.instituicao = instituicao;
 		add(new Button("botaoEnviar") {
 
 			@Override
 			public void onSubmit() {
+				LocalDate dataInicio = null;
+				LocalDate dataFim = null;
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null) {
 						if (dataEnvioFinal.getDefaultModelObject() != null) {
@@ -76,7 +74,6 @@ public class ArquivosInstituicaoPanel extends Panel {
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
 		add(comboTipoArquivos());
-		add(comboStatus());
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -125,41 +122,35 @@ public class ArquivosInstituicaoPanel extends Panel {
 
 			@Override
 			protected List<Arquivo> load() {
-				return arquivoMediator.buscarArquivosPorInstituicao(instituicao, tiposSelect, statusSelect, dataInicio, dataFim);
+				return null;
 			}
 		};
 	}
 
-	private Component comboTipoArquivos() {
-		List<String> choices = new ArrayList<String>();
-		List<TipoArquivoEnum> enumLista = Arrays.asList(TipoArquivoEnum.values());
-		for (TipoArquivoEnum tipo : enumLista) {
-			choices.add(tipo.constante);
-		}
-		return new CheckBoxMultipleChoice<String>("tipoArquivos", new Model<ArrayList<String>>(tiposSelect), choices);
-	}
-
-	private Component comboStatus() {
-		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] { "Enviado", "Recebido", "Aguardando" }));
-		return new CheckBoxMultipleChoice<String>("statusArquivos", new Model<ArrayList<String>>(statusSelect), choices);
+	private CheckBoxMultipleChoice<TipoArquivoEnum> comboTipoArquivos() {
+		IChoiceRenderer<TipoArquivoEnum> renderer = new ChoiceRenderer<>("constante");
+		List<TipoArquivoEnum> choices = new ArrayList<TipoArquivoEnum>();
+		choices.add(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO);
+		choices.add(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO);
+		choices.add(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO);
+		return new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",new Model<ArrayList<TipoArquivoEnum>>(tiposSelect), choices, renderer);
 	}
 
 	private TextField<String> dataEnvioInicio() {
-		if (dataInicio != null)
-			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
-		else
-			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
-
+		dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
+		if (dataEnvioInicio.getModelObject() != null) {
+			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(dataEnvioInicio.getModelObject()));
+		}
 		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
 		return dataEnvioInicio;
 	}
 
 	private TextField<String> dataEnvioFinal() {
-		if (dataFim != null)
-			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataFim)));
-		else
-			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
+		dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
+		if (dataEnvioFinal.getModelObject() != null) {
+			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(dataEnvioFinal.getModelObject()));
+		}
 		return dataEnvioFinal;
 	}
 }

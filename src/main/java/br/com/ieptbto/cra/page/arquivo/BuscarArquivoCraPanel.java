@@ -1,7 +1,6 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -40,12 +39,11 @@ public class BuscarArquivoCraPanel extends Panel  {
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
-	
 	private IModel<Arquivo> model;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	private DropDownChoice<Municipio> comboMunicipio;
-	private ArrayList<String> tiposArquivo = new ArrayList<String>();
+	private ArrayList<TipoArquivoEnum> tiposArquivo = new ArrayList<TipoArquivoEnum>();
 	
 	public BuscarArquivoCraPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
@@ -85,8 +83,8 @@ public class BuscarArquivoCraPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
 
-					if (comboMunicipio.getDefaultModelObject() != null){
-						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
+					if (comboMunicipio.getModelObject() != null){
+						municipio = comboMunicipio.getModelObject();
 					}
 					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
 				} catch (InfraException ex) {
@@ -104,13 +102,13 @@ public class BuscarArquivoCraPanel extends Panel  {
 		return new TextField<String>("nomeArquivo");
 	}
 	
-	private Component comboTipoArquivos() {
-		List<String> choices = new ArrayList<String>();
-		List<TipoArquivoEnum> enumLista = Arrays.asList(TipoArquivoEnum.values());
-		for (TipoArquivoEnum tipo : enumLista) {
-			choices.add(tipo.constante);
-		}
-		CheckBoxMultipleChoice<String> tipos = new CheckBoxMultipleChoice<String>("tipoArquivos",new Model<ArrayList<String>>(tiposArquivo), choices);
+	private CheckBoxMultipleChoice<TipoArquivoEnum> comboTipoArquivos() {
+		List<TipoArquivoEnum> listaTipos = new ArrayList<TipoArquivoEnum>();
+		listaTipos.add(TipoArquivoEnum.REMESSA);
+		listaTipos.add(TipoArquivoEnum.CONFIRMACAO);
+		listaTipos.add(TipoArquivoEnum.RETORNO);
+		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
+		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
 	}
 	
@@ -131,8 +129,7 @@ public class BuscarArquivoCraPanel extends Panel  {
 	
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
-		comboMunicipio.setLabel(new Model<String>("Município"));
+		this.comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;
 	}
 }

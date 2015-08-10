@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -23,6 +24,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @SuppressWarnings("serial")
+@AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaInstituicaoPage extends BasePage<Instituicao> {
 

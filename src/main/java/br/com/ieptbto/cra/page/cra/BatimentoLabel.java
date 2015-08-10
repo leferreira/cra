@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.batimento;
+package br.com.ieptbto.cra.page.cra;
 
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;

@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+		<div class="panel panel-primary">
+			<div class="panel-heading">Gerar Arquivos de Confirmação</div>
+			<div class="panel-body">
+				<form wicket:id="formConfirmacao">
+	                           	<fieldset>
+						<button type="submit" style="float: right; margin-bottom: 5px;" wicket:id="botaoConfirmacao" class="btn btn-primary"><span class="fa fa-reply-all"></span>&nbsp;Gerar Confirmação</button>
+						<br style="clear: both;">
+		                  <table id="table1" class="table table-striped table-hover">
+		                    <thead>
+								<tr>
+									<th class="col-center">Arquivo</th>
+									<th class="col-center">Data Envio</th>
+									<th>Enviado por</th>
+									<th>Destino</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr wicket:id="confirmacao">
+									<td class="col-center">
+			                        	<a wicket:id="linkArquivoConfirmacao">
+			                        		<span class="link" wicket:id="arquivo.nomeArquivoConfirmacao"></span>
+			                        	</a>
+			                        </td>
+			                        <td class="col-center" wicket:id="arquivo.dataEnvioConfirmacao"></td>
+									<td wicket:id="instituicaoOrigem.nomeFantasiaConfirmacao"></td>
+									<td wicket:id="instituicaoDestino.nomeFantasiaConfirmacao"></td>
+								</tr>
+		                    </tbody>
+		                  </table>
+				   	</fieldset>
+                </form>
+            </div>
+            <div class="panel-footer">
+			</div>
+        </div>
+	</wicket:extend>
+</body>
+</html>

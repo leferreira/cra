@@ -3,13 +3,13 @@ package br.com.ieptbto.cra.page.arquivo;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -40,28 +40,27 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @SuppressWarnings("serial")
-public class ArquivosCraPanel extends Panel {
+public class CancelamentoDevolvidoCraPanel extends Panel {
 
 	@SpringBean
 	RemessaMediator remessasMediator;
 	@SpringBean
 	DownloadMediator downloadMediator;
-
 	private Instituicao instituicao;
-	private LocalDate dataInicio;
-	private LocalDate dataFim;
-	private ArrayList<String> tiposSelect = new ArrayList<String>();
-	private ArrayList<String> statusSelect = new ArrayList<String>();
 	private TextField<String> dataEnvioInicio;
 	private TextField<String> dataEnvioFinal;
+	private ArrayList<TipoArquivoEnum> tiposSelect = new ArrayList<TipoArquivoEnum>();
 	
-	public ArquivosCraPanel(String id, IModel<?> model, Instituicao instituicao) {
+	public CancelamentoDevolvidoCraPanel(String id, IModel<?> model, Instituicao instituicao) {
 		super(id, model);
 		this.instituicao=instituicao;
 		add(new Button("botaoEnviar"){
 
 			@Override
 			public void onSubmit() {
+				LocalDate dataInicio = null;
+				LocalDate dataFim = null;
+				
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
@@ -84,7 +83,6 @@ public class ArquivosCraPanel extends Panel {
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
 		add(comboTipoArquivos());
-		add(comboStatus());
 	}
 	
 	private ListView<Remessa> listViewArquivos(){
@@ -133,29 +131,24 @@ public class ArquivosCraPanel extends Panel {
 
 			@Override
 			protected List<Remessa> load() {
-				return remessasMediator.buscarRemessaSimples(instituicao, tiposSelect, statusSelect,dataInicio, dataFim);
+				return null;
 			}
 		};
 	}
 	
-	private Component comboTipoArquivos() {
-		List<String> choices = new ArrayList<String>();
-		List<TipoArquivoEnum> enumLista = Arrays.asList(TipoArquivoEnum.values());
-		for (TipoArquivoEnum tipo : enumLista) {
-			choices.add(tipo.constante);
-		}
-		return new CheckBoxMultipleChoice<String>("tipoArquivos",new Model<ArrayList<String>>(tiposSelect), choices);
+	private CheckBoxMultipleChoice<TipoArquivoEnum> comboTipoArquivos() {
+		IChoiceRenderer<TipoArquivoEnum> renderer = new ChoiceRenderer<>("constante");
+		List<TipoArquivoEnum> choices = new ArrayList<TipoArquivoEnum>();
+		choices.add(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO);
+		choices.add(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO);
+		choices.add(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO);
+		return new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",new Model<ArrayList<TipoArquivoEnum>>(tiposSelect), choices, renderer);
 	}
 
-	private Component comboStatus() {
-		List<String> choices = new ArrayList<String>(Arrays.asList(new String[] {"Enviado","Recebido","Aguardando" }));
-		return new CheckBoxMultipleChoice<String>("statusArquivos",	new Model<ArrayList<String>>(statusSelect), choices);
-	}
-	
 	private TextField<String> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
-		if (dataInicio != null) {
-			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
+		if (dataEnvioInicio.getModelObject() != null) {
+			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(dataEnvioInicio.getModelObject()));
 		}
 		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
@@ -164,8 +157,8 @@ public class ArquivosCraPanel extends Panel {
 	
 	private TextField<String> dataEnvioFinal() {
 		dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
-		if (dataFim != null) {
-			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataFim)));
+		if (dataEnvioFinal.getModelObject() != null) {
+			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(dataEnvioFinal.getModelObject()));
 		}
 		return dataEnvioFinal;
 	}

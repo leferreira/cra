@@ -2,33 +2,28 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">Arquivos Enviados e Recebidos</div>
 	<div class="panel-body">
-        <div class="row">
+		<div class="row">
 			<!-- Coluna 1-->
-			<div class="col-md-4"> 
+			<div class="col-md-6"> 
 				<div class="form-group">
-				  <label class="col-md-2 control-label">Data:</label>  
-				  <div class="col-md-5">
+				  <label class="col-md-3 control-label">Data:</label>  
+				  <div class="col-md-4">
 				  	<input id="date" wicket:id="dataEnvioInicio" placeholder="__/__/____" class="form-control input-md">  
 			  	  </div>
-			  	  <div class="col-md-5">
+			  	  <div class="col-md-4">
 				  	<input id="date1" wicket:id="dataEnvioFinal" placeholder="__/__/____" class="form-control input-md">  
 			  	  </div>
 			  	 </div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-6">
 				<div class="form-group">
-				  <div class="col-md-12 col-center">
-				    <label class="checkbox-inline inline" wicket:id="tipoArquivos">
-				    </label>
-				  </div>
-				</div> 
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-				  <div class="col-md-12 col-center">
-				    <label class="checkbox-inline inline" wicket:id="statusArquivos" style="font-size: 13px;">
-				      <input type="checkbox" name="situacao" id="situacao-0" value="1" style="margin-left: 30px !important;">
-				    </label>
+					<label class="col-md-3 control-label">Tipo Arquivo:</label>  
+				  <div class="col-md-9 col-center">
+				    <label class="checkbox-inline inline aling-left" wicket:id="tipoArquivos">
+				    </label><br>
+				    <small class="inline aling-left" style="margin-left: 5px;">
+				    	<b>CP</b> - Cancelamento&nbsp;/&nbsp;<b>DP</b> - Devolu&ccedil;&atilde;o&nbsp;/&nbsp;<b>AC</b> - Autoriza&ccedil;&atilde;o de Canc.
+				    </small>
 				  </div>
 				</div> 
 			</div>
@@ -46,6 +41,8 @@
 						<th class="col-center">Data Envio</th>
 						<th>Enviado por</th>
 						<th>Destino</th>
+						<th>Registros</th>
+						<th class="col-right">Valor Total</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -53,12 +50,16 @@
 					<tr wicket:id="listView">
 						<td class="col-center" wicket:id="tipoArquivo"></td>
 						<td class="col-center">
-							<a href="#" class="link" wicket:id="downloadArquivo"><img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg"></a>
+							<a href="#" class="link" wicket:id="downloadArquivo">
+								<img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg">
+							</a>
 						</td>
 						<td class="col-center"><a wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
 						<td class="col-center" wicket:id="dataEnvio"></td>
 						<td wicket:id="instituicao"></td>
-						<td wicket:id="instituicaoRecebe"></td>
+						<td wicket:id="destino"></td>
+						<td class="col-center"></td>
+						<td class="col-right valor" wicket:id="valor"></td>
 						<td class="col-center"><span wicket:id="status"></span></td>
 					</tr>
 				</tbody>

@@ -85,7 +85,7 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 
 			@Override
 			protected List<Instituicao> load() {
-				return instituicaoMediator.listaDeCartorio();
+				return instituicaoMediator.getCartorios();
 			}
 		};
 	}

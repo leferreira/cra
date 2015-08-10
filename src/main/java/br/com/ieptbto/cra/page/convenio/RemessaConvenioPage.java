@@ -3,6 +3,8 @@ package br.com.ieptbto.cra.page.convenio;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -16,6 +18,7 @@ import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.mediator.ConvenioMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -23,9 +26,10 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @SuppressWarnings("serial")
-public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado> {
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+public class RemessaConvenioPage extends BasePage<TituloFiliado> {
 
-	private static final Logger logger = Logger.getLogger(LiberarTitulosConvenioPage.class);
+	private static final Logger logger = Logger.getLogger(RemessaConvenioPage.class);
 
 	private TituloFiliado titulo;
 	private List<TituloFiliado> listaTitulosConvenios;
@@ -35,7 +39,7 @@ public class LiberarTitulosConvenioPage extends BasePage<TituloFiliado> {
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
 
-	public LiberarTitulosConvenioPage() {
+	public RemessaConvenioPage() {
 		this.titulo = new TituloFiliado();
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
 

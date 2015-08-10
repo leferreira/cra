@@ -90,7 +90,9 @@ body {
 .ajuste {
 	margin-left: 0px !important;
 }
-
+.aling-left {
+	float: left !important;
+}
 .inline {
 	margin-left: -25px;
 }
@@ -194,4 +196,10 @@ td{
 table.dataTable thead > tr > th {
   padding-left: 8px; 
   padding-right: 0px; 
+}
+.dropdown-submenu>.dropdown-menu{
+    margin-top: 0px;
+}
+.menu-bottom{
+    margin-top: -30px !important;
 }

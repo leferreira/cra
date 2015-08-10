@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+			<form wicket:id="form" id="form" class="form-horizontal">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Cadastro de Empresa Associada</div>
+					<div class="panel-body">
+						<a href="FiliadosPage" style="float: right; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>Voltar a página anterior!</a>
+						<br style="clear: both;">
+						<fieldset>
+						<div class="row">
+								<div class="col-md-6">
+									<!-- Text input-->
+									<div class="form-group">
+									  <label class="col-md-4 control-label">Razão Social:</label>  
+									  <div class="col-md-6">
+									  <input wicket:id="razaoSocial" tabindex="1" autofocus="autofocus" maxlength="45" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md uppercase react">
+									    
+									  </div>
+									</div>
+									<!-- Text input-->
+									<div class="form-group">
+									  <label class="col-md-4 control-label">CPF/CNPJ:</label>  
+									  <div class="col-md-6">
+									  <input wicket:id="cnpjCpf" maxlength="18"  tabindex="2" onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+							 				onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" class="form-control input-md">
+									    
+									  </div>
+									</div>
+									<!-- Multiple Radios (inline) -->
+									<div class="form-group">
+									  <label class="col-md-4 control-label" >Situação:</label>
+									  <div class="col-md-6" style="text-align: left;"> 
+									    <label class="radio-inline inline" tabindex="3" wicket:id="situacao">
+									    </label>
+									  </div>
+									</div>
+											
+									<!-- Textarea -->
+									<div class="form-group">
+									  <label class="col-md-4 control-label">Endereço:</label>
+									  <div class="col-md-4">                     
+									    <textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
+									  </div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<!-- Select Basic -->
+									<div class="form-group">
+									  <label class="col-md-4 control-label">Convênio:</label>
+									  <div class="col-md-6">
+									    <select wicket:id="instituicaoConvenio" tabindex="5" class="form-control">
+									    </select>
+									  </div>
+									</div>
+									<!-- Select Basic -->
+									<div class="form-group">
+									  <label class="col-md-4 control-label">Município:</label>
+									  <div class="col-md-6">
+									    <select wicket:id="municipio" tabindex="6" class="form-control">
+									    </select>
+									  </div>
+									</div>
+									<!-- Text input-->
+									<div class="form-group">
+									  <label class="col-md-4 control-label">CEP:</label>  
+									  <div class="col-md-6">
+									  <input id="cep" wicket:id="cep" tabindex="7" class="form-control input-md">
+									    
+									  </div>
+									</div>
+									<!-- Text input-->
+									<div class="form-group">
+									  <label class="col-md-4 control-label" for="uf">UF:</label>  
+									  <div class="col-md-6">
+									 	<select wicket:id="uf" tabindex="8" class="form-control">
+									    </select>
+									    
+									  </div>
+									</div>
+									<!-- Button -->
+									<div class="form-group">
+									  <label class="col-md-2 control-label"></label>
+									  <div class="col-md-8">
+									    <button id="salvar" type="submit" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
+									  </div>
+									</div>
+								</div>
+							</div>		
+						</fieldset>
+					</div>
+					<div class="panel-footer">
+					</div>
+				</div>
+			</form>
+	</wicket:extend>
+</body>
+</html>
