@@ -30,9 +30,8 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
+import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -44,8 +43,6 @@ public class CancelamentoDevolvidoCraPanel extends Panel {
 
 	@SpringBean
 	RemessaMediator remessasMediator;
-	@SpringBean
-	DownloadMediator downloadMediator;
 	private Instituicao instituicao;
 	private TextField<String> dataEnvioInicio;
 	private TextField<String> dataEnvioFinal;
@@ -96,7 +93,7 @@ public class CancelamentoDevolvidoCraPanel extends Panel {
 				Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
 
 					public void onClick() {
-		            	setResponsePage(new TitulosDoArquivoPage(remessa));  
+		            	setResponsePage(new TitulosArquivoPage(remessa));  
 		            }
 		        };
 		        linkArquivo.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));

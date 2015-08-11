@@ -26,7 +26,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial","unused"})
 public class RelatorioArquivosTitulosInstituicaoPanel extends Panel  {
 
 	private static final Logger logger = Logger.getLogger(RelatorioArquivosTitulosInstituicaoPanel.class);
@@ -81,17 +81,17 @@ public class RelatorioArquivosTitulosInstituicaoPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
 					
-					if (model.getObject().getNomeArquivo() != null) {
-						arquivoBuscado = remessaMediator.buscarArquivoPorNome(instituicao, model.getObject().getNomeArquivo());
-						if (arquivoBuscado != null) {
-//							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
-						} else {
-							throw new InfraException("Arquivo não foi encontrado ou não existe!");
-						}
-					} else if (comboMunicipio.getDefaultModelObject() != null) {
-						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
-						setResponsePage(new RelatorioTitulosPage(portador, municipio, dataInicio, dataFim));
-					}
+//					if (model.getObject().getNomeArquivo() != null) {
+//						arquivoBuscado = remessaMediator.buscarArquivoPorNome(instituicao, model.getObject().getNomeArquivo());
+//						if (arquivoBuscado != null) {
+////							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
+//						} else {
+//							throw new InfraException("Arquivo não foi encontrado ou não existe!");
+//						}
+//					} else if (comboMunicipio.getDefaultModelObject() != null) {
+//						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
+//						setResponsePage(new RelatorioTitulosPage(portador, municipio, dataInicio, dataFim));
+//					}
 					
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());

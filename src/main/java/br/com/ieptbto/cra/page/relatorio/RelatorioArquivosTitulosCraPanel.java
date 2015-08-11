@@ -26,7 +26,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
+@SuppressWarnings( {"serial","unused"})
 public class RelatorioArquivosTitulosCraPanel extends Panel  {
 
 	private static final Logger logger = Logger.getLogger(RelatorioArquivosTitulosCraPanel.class);
@@ -52,7 +52,7 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 	
 	public RelatorioArquivosTitulosCraPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
-		this.instituicao = instituicao;
+//		this.instituicao = instituicao;
 		this.model = model;
 		adicionarCampos();
 	}
@@ -75,23 +75,23 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
 					
-					if (model.getObject().getNomeArquivo() != null) {
-						arquivoBuscado = remessaMediator.buscarArquivoPorNome(instituicao ,model.getObject().getNomeArquivo());
-						if (arquivoBuscado != null) {
-//							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
-						} else {
-							throw new InfraException("Arquivo não foi encontrado ou não pertence a esta instituição!");
-						}
-					} else if (comboMunicipio.getModelObject() != null || comboPortador.getModelObject() != null){
-						if (comboMunicipio.getDefaultModelObject() != null)
-							municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
-						
-						if (comboPortador.getDefaultModelObject() != null)
-							portador = Instituicao.class.cast(comboPortador.getDefaultModelObject());
-						
-						setResponsePage(new RelatorioTitulosPage(portador, municipio, dataInicio, dataFim));
-					} else 
-						throw new InfraException("O portador ou o município deve ser selecionado!");
+//					if (model.getObject().getNomeArquivo() != null) {
+////						arquivoBuscado = remessaMediator.buscarArquivoPorNome(instituicao ,model.getObject().getNomeArquivo());
+//						if (arquivoBuscado != null) {
+////							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
+//						} else {
+//							throw new InfraException("Arquivo não foi encontrado ou não pertence a esta instituição!");
+//						}
+//					} else if (comboMunicipio.getModelObject() != null || comboPortador.getModelObject() != null){
+//						if (comboMunicipio.getDefaultModelObject() != null)
+//							municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
+//						
+//						if (comboPortador.getDefaultModelObject() != null)
+//							portador = Instituicao.class.cast(comboPortador.getDefaultModelObject());
+//						
+//						setResponsePage(new RelatorioTitulosPage(portador, municipio, dataInicio, dataFim));
+//					} else 
+//						throw new InfraException("O portador ou o município deve ser selecionado!");
 					
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());

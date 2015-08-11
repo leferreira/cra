@@ -31,7 +31,7 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
+import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -93,7 +93,7 @@ public class CancelamentoDevolvidoCartorioPanel extends Panel {
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					public void onClick() {
-		            	setResponsePage(new TitulosDoArquivoPage(remessa));  
+		            	setResponsePage(new TitulosArquivoPage(remessa));  
 		            }
 		        };
 		        linkArquivo.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));

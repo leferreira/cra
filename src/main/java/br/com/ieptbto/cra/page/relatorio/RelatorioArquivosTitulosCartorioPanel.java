@@ -17,9 +17,9 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -35,24 +35,26 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	@SpringBean
-	RemessaMediator remessaMediator;
-	
-	private IModel<Arquivo> model;
-	private LocalDate dataInicio;
-	private LocalDate dataFim;
-	private Municipio municipio;
-	private Instituicao portador;
-	
-	private Instituicao instituicaoUsuario;
+	ArquivoMediator arquivoMediator;
+	private Arquivo arquivo;
+//	private Instituicao instituicaoUsuario;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	private DropDownChoice<Instituicao> comboPortador;
 	
 	public RelatorioArquivosTitulosCartorioPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
-		this.model = model;
-		this.instituicaoUsuario = instituicao;
+		this.arquivo = model.getObject();
+//		this.instituicaoUsuario = instituicao;
 		adicionarCampos();
+	}
+
+	private void adicionarCampos() {
+		add(dataEnvioInicio());
+		add(dataEnvioFinal());
+		add(nomeArquivo());
+		add(comboPortador());
+		add(botaoEnviar());
 	}
 
 	private Component botaoEnviar() {
@@ -60,7 +62,11 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 			
 			@Override
 			public void onSubmit() {
-				Arquivo arquivoBuscado = model.getObject();
+				LocalDate dataInicio = null;
+				LocalDate dataFim = null;
+				Municipio municipio = null;
+				Instituicao portador = null;
+				
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
@@ -73,9 +79,9 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
 					
-					if (model.getObject().getNomeArquivo() != null) {
-						arquivoBuscado = remessaMediator.buscarArquivoPorNome(instituicaoUsuario ,model.getObject().getNomeArquivo());
-						if (arquivoBuscado != null) {
+					if (getArquivo().getNomeArquivo() != null) {
+//						setArquivo(arquivoMediator.buscarArquivoPorNome(instituicaoUsuario ,getArquivo().getNomeArquivo()));
+						if (getArquivo() != null) {
 //							setResponsePage(new TitulosDoArquivoPage(arquivoBuscado));
 						} else {
 							throw new InfraException("Arquivo não foi encontrado ou não existe!");
@@ -95,13 +101,6 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 		};
 	}
 	
-	private void adicionarCampos() {
-		add(dataEnvioInicio());
-		add(dataEnvioFinal());
-		add(nomeArquivo());
-		add(comboPortador());
-		add(botaoEnviar());
-	}
 
 	private TextField<String> nomeArquivo() {
 		return new TextField<String>("nomeArquivo");
@@ -121,5 +120,8 @@ public class RelatorioArquivosTitulosCartorioPanel extends Panel  {
 		this.comboPortador = new DropDownChoice<Instituicao>("portador", new Model<Instituicao>(),instituicaoMediator.getInstituicoesFinanceiras(), renderer);
 		return comboPortador;
 	}
-	
+
+	public Arquivo getArquivo() {
+		return arquivo;
+	}
 }

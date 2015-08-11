@@ -1,7 +1,6 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +16,14 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
+import br.com.ieptbto.cra.page.titulo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
@@ -33,51 +31,52 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @SuppressWarnings("serial")
-public class ListaArquivosPage extends BasePage<Arquivo> {
+public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 
+	@SpringBean
+	ArquivoMediator arquivoMediator;
 	@SpringBean
 	RemessaMediator remessaMediator;
 	@SpringBean
 	RelatorioMediator relatorioMediator;
 	private Arquivo arquivo;
-	private List<Remessa> remessas;
+	private List<Arquivo> arquivos;
 
-	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo) {
+	public ListaArquivosInstituicaoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo) {
 		this.arquivo = arquivo;
-		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio,dataInicio, dataFim, tiposArquivo, getUser());
+		this.arquivos = arquivoMediator.buscarArquivosAvancado(arquivo, getUser().getInstituicao(), tiposArquivo, municipio, dataInicio, dataFim);
 		add(carregarListaArquivos());
 	}
 
-	private ListView<Remessa> carregarListaArquivos() {
-		return new ListView<Remessa>("dataTableRemessa", remessas) {
+	private ListView<Arquivo> carregarListaArquivos() {
+		return new ListView<Arquivo>("dataTableArquivo", getArquivos()) {
 
 			@Override
-			protected void populateItem(ListItem<Remessa> item) {
-				final Remessa remessa = item.getModelObject();
-				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
+			protected void populateItem(ListItem<Arquivo> item) {
+				final Arquivo arquivo = item.getModelObject();
+				item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					@Override
 					public void onClick() {
-						setResponsePage(new TitulosArquivoPage(remessa));
+						setResponsePage(new TitulosArquivoInstituicaoPage(arquivo));
 					}
 				};
-				linkArquivo.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
+				linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));
 				item.add(linkArquivo);
-				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getDataRecebimento())));
-				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
-				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
-				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa().getLabel()));
-				item.add(downloadArquivoTXT(remessa));
+				item.add(new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio())));
+				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
+				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
+				item.add(downloadArquivoTXT(arquivo));
 			}
 
-			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
-				return new Link<Remessa>("downloadArquivo") {
+			private Link<Arquivo> downloadArquivoTXT(final Arquivo arquivo) {
+				return new Link<Arquivo>("downloadArquivo") {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
+						File file = remessaMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
@@ -86,6 +85,10 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				};
 			}
 		};
+	}
+
+	public List<Arquivo> getArquivos() {
+		return arquivos;
 	}
 
 	@Override

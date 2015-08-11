@@ -25,7 +25,7 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.TitulosDoArquivoPage;
+import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -90,7 +90,7 @@ public class BatimentoPage extends BasePage<Batimento> {
 
 					@Override
 					public void onClick() {
-		            	setResponsePage(new TitulosDoArquivoPage(retorno));  
+		            	setResponsePage(new TitulosArquivoPage(retorno));  
 		            }
 		        };
 		        linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));

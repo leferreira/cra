@@ -20,14 +20,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
-import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -37,26 +32,26 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @SuppressWarnings("serial")
-public class TitulosDoArquivoPage extends BasePage<Arquivo> {
+public class TitulosArquivoPage extends BasePage<Remessa> {
 
 	@SpringBean
 	private TituloMediator tituloMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	private RemessaMediator remessaMediator;
-	@SpringBean
 	private RelatorioMediator relatorioMediator;
 	private Remessa remessa;
-	private Arquivo arquivo;
-	private TipoArquivoEnum tipoArquivo;
 	private List<TituloRemessa> titulos;
 	
-	public TitulosDoArquivoPage(Remessa remessa) {
-		setTitulos(tituloMediator.buscarTitulosPorRemessa(remessa, getUser().getInstituicao()));
-		setArquivo(remessa.getArquivo());
-		this.remessa = remessa;
+	public TitulosArquivoPage(Remessa remessa) {
+		this.titulos = tituloMediator.buscarTitulosPorRemessa(remessa, getUser().getInstituicao()); 
+		setRemessa(remessa);
 		carregarInformacoes();
+	}
+	
+	private void carregarInformacoes(){
+		add(nomeArquivo());
+		add(portador());
+		add(dataEnvio());
+		add(tipoArquivo());
 		add(carregarListaTitulos());
 		add(botaoGerarRelatorio());
 	}
@@ -98,7 +93,7 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 			@Override
 			public void onSubmit() {
 				try {
-					JasperPrint jasperPrint = relatorioMediator.novoRelatorioDeArquivoDetalhado(getUser().getInstituicao(), getArquivo(), getTitulos());
+					JasperPrint jasperPrint = relatorioMediator.novoRelatorioDeArquivoDetalhado(getUser().getInstituicao(), getRemessa().getArquivo(), getTitulos());
 					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -107,67 +102,36 @@ public class TitulosDoArquivoPage extends BasePage<Arquivo> {
 		};
 	}
 	
-	private void carregarInformacoes(){
-		add(nomeArquivo());
-		add(portador());
-		add(dataEnvio());
-		add(tipoArquivo());
-	}
-
 	private TextField<String> nomeArquivo(){
-		return new TextField<String>("nomeArquivo", new Model<String>(remessa.getArquivo().getNomeArquivo()));
+		return new TextField<String>("nomeArquivo", new Model<String>(getRemessa().getArquivo().getNomeArquivo()));
 	}
 	
 	private TextField<String> portador(){
-		return new TextField<String>("nomePortador", new Model<String>(remessa.getCabecalho().getNomePortador()));
+		return new TextField<String>("nomePortador", new Model<String>(getRemessa().getCabecalho().getNomePortador()));
 	}
 	
 	private TextField<String> dataEnvio(){
-		return new TextField<String>("dataEnvio", new Model<String>(DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
+		return new TextField<String>("dataEnvio", new Model<String>(DataUtil.localDateToString(getRemessa().getArquivo().getDataEnvio())));
 	}
 	
 	private TextField<String> tipoArquivo(){
-		return new TextField<String>("tipo", new Model<String>(remessa.getArquivo().getTipoArquivo().getTipoArquivo().getLabel()));
+		return new TextField<String>("tipo", new Model<String>(getRemessa().getArquivo().getTipoArquivo().getTipoArquivo().getLabel()));
 	}
 	
 	private List<TituloRemessa> getTitulos() {
 		return titulos;
 	}
 
-	private void setArquivo(Arquivo arquivo) {
-		this.arquivo = arquivo;
-	}
-
-	private Arquivo getArquivo(){
-		return arquivo;
+	public Remessa getRemessa() {
+		return remessa;
 	}
 	
-	public void setTitulos(List<TituloRemessa> titulos) {
-		this.titulos = titulos;
-	}
-	
-	public List<TituloRemessa> buscarTitulosDoArquivo() {
-		
-		if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
-			return tituloMediator.buscarTitulosPorArquivo(arquivo, getUser().getInstituicao());
-		} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
-			return tituloMediator.buscarTitulosConfirmacaoRetorno(arquivo, getUser().getInstituicao());
-		} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
-			return tituloMediator.buscarTitulosConfirmacaoRetorno(arquivo, getUser().getInstituicao());
-		} else if (tipoArquivo.equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
-			
-		} else if (tipoArquivo.equals(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO)) {
-			
-		} else if (tipoArquivo.equals(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO)) {
-			
-		} else {
-			throw new InfraException("Não foi possível identificar o tipo do Arquivo");
-		}
-		return titulos;
+	public void setRemessa(Remessa remessa) {
+		this.remessa = remessa;
 	}
 	
 	@Override
-	protected IModel<Arquivo> getModel() {
-		return new CompoundPropertyModel<Arquivo>(remessa.getArquivo());
+	protected IModel<Remessa> getModel() {
+		return new CompoundPropertyModel<Remessa>(remessa);
 	}
 }

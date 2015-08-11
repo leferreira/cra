@@ -53,7 +53,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					public void onClick() {
-		            	setResponsePage(new TitulosDoArquivoPage(tituloLista.getRemessa()));  
+		            	setResponsePage(new TitulosArquivoPage(tituloLista.getRemessa()));  
 		            }
 		        };
 		        linkArquivo.add(new Label("nomeRemessa", tituloLista.getRemessa().getArquivo().getNomeArquivo()));
@@ -83,7 +83,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		        Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno") {
 		        	
 		        	public void onClick() {
-		        		setResponsePage(new TitulosDoArquivoPage(tituloLista.getRetorno().getRemessa()));  
+		        		setResponsePage(new TitulosArquivoPage(tituloLista.getRetorno().getRemessa()));  
 		        	}
 		        };
 		        if (tituloLista.getRetorno() != null){

@@ -91,7 +91,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 					@Override
 					public void onClick() {
-		            	setResponsePage(new TitulosDoArquivoPage(historico.getRemessa()));  
+		            	setResponsePage(new TitulosArquivoPage(historico.getRemessa()));  
 		            }
 		        };
 		        linkArquivo.add(new Label("nomeArquivo", historico.getRemessa().getArquivo().getNomeArquivo()));

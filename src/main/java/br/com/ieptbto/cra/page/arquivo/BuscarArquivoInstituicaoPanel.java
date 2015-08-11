@@ -85,7 +85,7 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 					if (comboMunicipio.getModelObject() != null){
 						municipio = comboMunicipio.getModelObject();
 					}
-					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
+					setResponsePage(new ListaArquivosInstituicaoPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
