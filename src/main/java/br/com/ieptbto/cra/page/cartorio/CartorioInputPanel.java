@@ -86,6 +86,8 @@ public class CartorioInputPanel extends Panel {
 	private TextField<String> campoContato() {
 		TextField<String> textField = new TextField<String>("contato");
 		textField.setLabel(new Model<String>("Contato"));
+		textField.setOutputMarkupId(true);
+		textField.setMarkupId("telefone");
 		return textField;
 	}
 

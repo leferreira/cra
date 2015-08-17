@@ -24,12 +24,10 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ListaUsuarioPage extends BasePage<Usuario> {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	private Usuario usuario;
 
@@ -38,31 +36,34 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 
 	public ListaUsuarioPage() {
 		super();
-		usuario = new Usuario();
-		add(new Link<Usuario>("botaoNovo") {
-            /***/
-			private static final long serialVersionUID = 1L;
-
-			public void onClick() {
-				setResponsePage(new IncluirUsuarioPage());
-            }
-        });
-		add(carregarListaUsuario());
+		carregarPage();
+	}
+	
+	public ListaUsuarioPage(String mensagem) {
+		info(mensagem);
+		carregarPage();
 	}
 
+	private void carregarPage(){
+		this.usuario = new Usuario();
+		add(new Link<Usuario>("botaoNovo") {
+			
+			public void onClick() {
+				setResponsePage(new IncluirUsuarioPage());
+			}
+		});
+		add(carregarListaUsuario());
+	}
+	
 	@SuppressWarnings("rawtypes")
 	private ListView<Usuario> carregarListaUsuario(){
 		return new ListView<Usuario>("listViewUsuario", buscarUsuarios()) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Usuario> item) {
 				final Usuario usuarioLista = item.getModelObject();
 				
 				Link linkAlterar = new Link<Usuario>("linkAlterar") {
-		            /***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new IncluirUsuarioPage(usuarioLista));
@@ -87,8 +88,6 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 
 	public IModel<List<Usuario>> buscarUsuarios() {
 		return new LoadableDetachableModel<List<Usuario>>() {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected List<Usuario> load() {

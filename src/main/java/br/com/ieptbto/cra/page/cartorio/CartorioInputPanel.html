@@ -9,7 +9,8 @@
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Nome Fantasia:</label>  
 		  <div class="col-md-6">
-		  <input autofocus="autofocus" tabindex="1" onkeyup="this.value = this.value.toUpperCase()" wicket:id="nomeFantasia" class="form-control input-md">
+		  <input tabindex="1" onkeyup="this.value = this.value.toUpperCase()" autofocus="autofocus" maxlength="45" 
+		  	wicket:id="nomeFantasia" class="form-control input-md">
 		    
 		  </div>
 		</div>
@@ -17,21 +18,22 @@
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Razão Social:</label>  
 		  <div class="col-md-6">
-		  <input tabindex="2" onkeyup="this.value = this.value.toUpperCase()" wicket:id="razaoSocial" class="form-control input-md">
+		  <input tabindex="2" onkeyup="this.value = this.value.toUpperCase()" maxlength="45" wicket:id="razaoSocial" class="form-control input-md">
 		  </div>
 		</div>
 		<!-- Text input-->
 		<div class="form-group">
 		  <label class="col-md-4 control-label">CNPJ:</label>  
 		  <div class="col-md-6">
-		  <input tabindex="3" wicket:id="cnpj" class="form-control input-md">
+		  <input tabindex="3" onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)" onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+			   wicket:id="cnpj" class="form-control input-md" maxlength="18">
 		  </div>
 		</div>
 		<!-- Text input-->
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Email:</label>  
 		  <div class="col-md-6">
-		  <input tabindex="4" wicket:id="email" class="form-control input-md">
+		  <input tabindex="4" wicket:id="email" maxlength="45" class="form-control input-md">
 		  </div>
 		</div>
 	</div>
@@ -55,7 +57,7 @@
 		</div>
 		<!-- Text input-->
 		<div class="form-group">
-		  <label class="col-md-4 control-label">Contato:</label>  
+		  <label class="col-md-4 control-label">Telefone:</label>  
 		  <div class="col-md-6">
 		  <input tabindex="7" wicket:id="contato" class="form-control input-md">
 		    
@@ -66,7 +68,7 @@
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Reponsável:</label>  
 		  <div class="col-md-6">
-		  <input tabindex="8" wicket:id="responsavel" class="form-control input-md">
+		  <input tabindex="8" wicket:id="responsavel" maxlength="45" class="form-control input-md">
 		    
 		  </div>
 		</div>
@@ -74,7 +76,7 @@
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Endereço:</label>
 		  <div class="col-md-6">                     
-		    <textarea tabindex="9" class="form-control" wicket:id="endereco"></textarea>
+		    <textarea tabindex="9" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
 		  </div>
 		</div>
 	</div>
@@ -90,14 +92,14 @@
 			<div class="form-group">
 			  <label class="col-md-4 control-label">Banco:</label>  
 			  <div class="col-md-6">
-			  <input tabindex="10" wicket:id="bancoContaCorrente" class="form-control input-md">
+			  <input tabindex="10" wicket:id="bancoContaCorrente" maxlength="45" class="form-control input-md">
 			  </div>
 			</div>
 			<!-- Text input-->
 			<div class="form-group">
 			  <label class="col-md-4 control-label">Agência:</label>  
 			  <div class="col-md-6">
-			  <input tabindex="11" wicket:id="agenciaContaCorrente" class="form-control input-md">
+			  <input tabindex="11" wicket:id="agenciaContaCorrente" maxlength="10" class="form-control input-md">
 			  </div>
 			</div>
 		</div>
@@ -107,7 +109,7 @@
 			<div class="form-group">
 			  <label class="col-md-4 control-label">Conta Corrente:</label>  
 			  <div class="col-md-6">
-			  <input tabindex="12" wicket:id="numeroContaCorrente" class="form-control input-md">
+			  <input tabindex="12" wicket:id="numeroContaCorrente" maxlength="10" class="form-control input-md">
 			    
 			  </div>
 			</div>
@@ -116,7 +118,7 @@
 			<div class="form-group">
 			  <label class="col-md-4 control-label">Favorecido:</label>  
 			  <div class="col-md-6">
-			  <input tabindex="13" wicket:id="favorecido" type="text" class="form-control input-md">
+			  <input tabindex="13" wicket:id="favorecido" maxlength="45" class="form-control input-md">
 			  </div>
 			</div>
 			<!-- Button -->

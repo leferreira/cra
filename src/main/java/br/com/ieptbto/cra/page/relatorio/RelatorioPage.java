@@ -34,7 +34,7 @@ public class RelatorioPage extends BasePage<Remessa> {
 		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
 			form.add(new RelatorioCraPanel("relatorioPanel", getModel()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){
-			form.add(new RelatorioCartorioPanel("relatorioPanel", getModel(), instituicao));
+			form.add(new RelatorioCartorioPanel("relatorioPanel", getModel(), getInstituicao()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 			form.add(new RelatorioInstituicaoPanel("relatorioPanel", getModel(), getInstituicao()));
 		}

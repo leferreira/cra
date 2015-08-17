@@ -26,13 +26,11 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
 public class HistoricoPage extends BasePage<TituloRemessa> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-	
 	private TituloRemessa tituloRemessa;
 
 	@SpringBean
@@ -79,8 +77,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	
 	private ListView<Historico> getListViewHistorico(){
 		return new ListView<Historico>("divListaHistorico", tituloRemessa.getHistoricos()) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Historico> item) {
@@ -202,25 +198,37 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 	
 	public TextField<String> valorCustaCartorio() {
-		TextField<String> textField = new TextField<String>("valorCustaCartorio", new Model<String>("R$ " + tituloRemessa.getValorCustaCartorio().toString()));
+		TextField<String> textField = new TextField<String>("valorCustaCartorio", new Model<String>("R$ 00,00"));
+		if (tituloRemessa.getValorCustaCartorio() != null) {
+			textField = new TextField<String>("valorCustaCartorio", new Model<String>("R$ " + tituloRemessa.getValorCustaCartorio().toString()));			
+		}
 		textField.setEnabled(false);
 		return textField;
 	}
 	
 	public TextField<String> valorGravacaoEletronica() {
-		TextField<String> textField = new TextField<String>("valorGravacaoEletronica", new Model<String>("R$ " + tituloRemessa.getValorGravacaoEletronica().toString()));
+		TextField<String> textField = new TextField<String>("valorGravacaoEletronica", new Model<String>("R$ 00,00"));
+		if (tituloRemessa.getValorGravacaoEletronica() != null) {
+			textField = new TextField<String>("valorGravacaoEletronica", new Model<String>("R$ " + tituloRemessa.getValorGravacaoEletronica().toString()));
+		}
 		textField.setEnabled(false);
 		return textField;
 	}
 	
 	public TextField<String> valorCustasCartorioDistribuidor() {
-		TextField<String> textField = new TextField<String>("valorCustasCartorioDistribuidor", new Model<String>("R$ " + tituloRemessa.getValorCustasCartorioDistribuidor().toString()));
+		TextField<String> textField = new TextField<String>("valorCustasCartorioDistribuidor", new Model<String>("R$ 00,00"));
+		if (tituloRemessa.getValorCustasCartorioDistribuidor() != null) {
+			textField = new TextField<String>("valorCustasCartorioDistribuidor", new Model<String>("R$ " + tituloRemessa.getValorCustasCartorioDistribuidor().toString()));
+		}
 		textField.setEnabled(false);
 		return textField;
 	}
 	
 	public TextField<String> valorDemaisDespesas() {
-		TextField<String> textField = new TextField<String>("valorDemaisDespesas", new Model<String>("R$ " + tituloRemessa.getValorDemaisDespesas().toString()));
+		TextField<String> textField = new TextField<String>("valorDemaisDespesas", new Model<String>("R$ 00,00"));
+		if (tituloRemessa.getValorDemaisDespesas() != null) {
+			textField = new TextField<String>("valorDemaisDespesas", new Model<String>("R$ " + tituloRemessa.getValorDemaisDespesas().toString()));
+		}
 		textField.setEnabled(false);
 		return textField;
 	}
@@ -280,7 +288,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	private TextField<String> documentoDevedor() {
-		TextField<String> textField = new TextField<String>("documentoDevedor", new Model<String>(tituloRemessa.getDocumentoDevedor()));
+		TextField<String> textField = new TextField<String>("documentoDevedor", new Model<String>(tituloRemessa.getNumeroIdentificacaoDevedor()));
 		textField.setEnabled(false);
 		return textField;
 	}

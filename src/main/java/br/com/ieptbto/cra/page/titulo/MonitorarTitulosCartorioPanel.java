@@ -11,7 +11,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
@@ -23,16 +22,14 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class MonitorarTitulosCartorioPanel extends Panel {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(MonitorarTitulosCartorioPanel.class);
 	
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
-	
-	private TextField<LocalDate> dataEntradaCRA;
+	private TextField<String> dataEntradaCRA;
 	private DropDownChoice<Instituicao> comboPortador;
 	private IModel<TituloRemessa> model;
 	
@@ -50,6 +47,8 @@ public class MonitorarTitulosCartorioPanel extends Panel {
 		add(comboPortador());
 		add(nomeDevedor());
 		add(documentoDevedor()); 
+		add(nomeSacador());
+		add(documentoSacador()); 
 		add(botaoEnviar());
 	}
 	
@@ -67,8 +66,8 @@ public class MonitorarTitulosCartorioPanel extends Panel {
 		return new TextField<String>("numeroTitulo");
 	}
 	
-	private TextField<LocalDate> dataEntradaCRA() {
-		return dataEntradaCRA = new TextField<LocalDate>("dataOcorrencia", new Model<LocalDate>());
+	private TextField<String> dataEntradaCRA() {
+		return dataEntradaCRA = new TextField<String>("dataOcorrencia", new Model<String>());
 	}
 	
 	private TextField<String> nomeDevedor() {
@@ -76,7 +75,15 @@ public class MonitorarTitulosCartorioPanel extends Panel {
 	}
 	
 	private TextField<String> documentoDevedor() {
-		return new TextField<String>("documentoDevedor");
+		return new TextField<String>("numeroIdentificacaoDevedor");
+	}
+	
+	private TextField<String> nomeSacador() {
+		return new TextField<String>("nomeSacadorVendedor");
+	}
+	
+	private TextField<String> documentoSacador() {
+		return new TextField<String>("documentoSacador");
 	}
 	
 	private TextField<String> numeroProtocoloCartorio() {
@@ -85,15 +92,14 @@ public class MonitorarTitulosCartorioPanel extends Panel {
 	
 	private Component botaoEnviar() {
 		return new Button("botaoBuscar") {
-			/** */
-			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit() {
 				TituloRemessa titulo = model.getObject();
 
 				try {
-					if (dataEntradaCRA.getDefaultModelObject() != null)
-						titulo.setDataOcorrencia(DataUtil.stringToLocalDate(dataEntradaCRA.getDefaultModelObject().toString()));
+					if (dataEntradaCRA.getModelObject() != null)
+						titulo.setDataCadastro(DataUtil.stringToLocalDate(dataEntradaCRA.getModelObject()).toDate());
 					if (comboPortador.getDefaultModelObject() != null)
 						titulo.setCodigoPortador(titulo.getRemessa().getInstituicaoOrigem().getCodigoCompensacao());
 					

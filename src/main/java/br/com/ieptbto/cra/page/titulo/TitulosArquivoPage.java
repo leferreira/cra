@@ -1,15 +1,21 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import java.io.File;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -17,12 +23,17 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.mediator.RelatorioMediator;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.ireport.TituloJRDataSource;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -37,7 +48,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	@SpringBean
 	private TituloMediator tituloMediator;
 	@SpringBean
-	private RelatorioMediator relatorioMediator;
+	private RemessaMediator remessaMediator;
 	private Remessa remessa;
 	private List<TituloRemessa> titulos;
 	
@@ -54,6 +65,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 		add(tipoArquivo());
 		add(carregarListaTitulos());
 		add(botaoGerarRelatorio());
+		add(downloadArquivoTXT(getRemessa()));
 	}
 	
 	private ListView<TituloRemessa> carregarListaTitulos() {
@@ -88,16 +100,56 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 		};
 	}
 	
-	private Button botaoGerarRelatorio(){
-		return new Button("gerarRelatorio"){
+	private Link<Remessa> botaoGerarRelatorio(){
+		return new Link<Remessa>("gerarRelatorio"){
+			
 			@Override
-			public void onSubmit() {
+			public void onClick() {
 				try {
-					JasperPrint jasperPrint = relatorioMediator.novoRelatorioDeArquivoDetalhado(getUser().getInstituicao(), getRemessa().getArquivo(), getTitulos());
+					HashMap<String, Object> parametros = new HashMap<String, Object>();
+					if (getTitulos().isEmpty())
+						throw new InfraException("Não foi possível gerar o relatório. A busca não retornou resultados!");
+					
+					parametros.put("NOME_ARQUIVO", getRemessa().getArquivo().getNomeArquivo());
+					parametros.put("DATA_ENVIO", DataUtil.localDateToString(getRemessa().getDataRecebimento()));
+						
+					List<TituloJRDataSource> titulosJR = converterTitulos();
+					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulosJR);
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioArquivoDetalhado.jrxml"));
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+					
+					jasperPrint.setName("relatorio.pdf");
 					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
-				} catch (JRException e) {
+				} catch (InfraException ex) { 
+					error(ex.getMessage());
+				} catch (JRException e) { 
+					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
 					e.printStackTrace();
 				}
+			}
+			
+			private List<TituloJRDataSource> converterTitulos() {
+				List<TituloJRDataSource> lista = new ArrayList<>();
+				for (TituloRemessa tituloRemessa : getTitulos()) {
+					TituloJRDataSource tituloJR = new TituloJRDataSource();
+					tituloJR.parseToTituloRemessa(tituloRemessa);
+					lista.add(tituloJR);
+				}
+				return lista;
+			}
+		};
+	}
+	
+	private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
+		return new Link<Remessa>("downloadArquivo") {
+
+			@Override
+			public void onClick() {
+				File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
+				IResourceStream resourceStream = new FileResourceStream(file);
+
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(
+				        new ResourceStreamRequestHandler(resourceStream, file.getName()));
 			}
 		};
 	}

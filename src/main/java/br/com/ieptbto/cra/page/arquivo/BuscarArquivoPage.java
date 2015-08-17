@@ -45,18 +45,17 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 	}
 
 	
-	@Override
-	protected IModel<Arquivo> getModel() {
-		return new CompoundPropertyModel<Arquivo>(arquivo);
-	}
-
-
 	public Instituicao getInstituicao() {
 		return instituicao;
 	}
-
-
+	
+	
 	public void setInstituicao(Instituicao instituicao) {
 		this.instituicao = instituicao;
+	}
+
+	@Override
+	protected IModel<Arquivo> getModel() {
+		return new CompoundPropertyModel<Arquivo>(arquivo);
 	}
 }

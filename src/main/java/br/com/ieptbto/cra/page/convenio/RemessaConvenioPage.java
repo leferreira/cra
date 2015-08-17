@@ -41,16 +41,25 @@ public class RemessaConvenioPage extends BasePage<TituloFiliado> {
 
 	public RemessaConvenioPage() {
 		this.titulo = new TituloFiliado();
+		carrrgarPageRemessaConvenio();
+	}
+	
+	public RemessaConvenioPage(String mensagem) {
+		this.titulo = new TituloFiliado();
+		info(mensagem);
+		carrrgarPageRemessaConvenio();
+	}
+	
+	private void carrrgarPageRemessaConvenio() {
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
-
+			
 			@Override
 			protected void onSubmit() {
 				
 				try {
 					convenioMediator.gerarRemessas(getUser(), getListaTitulosConvenios());
 					setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
-					info("Remessas processados e encaminhadas com sucesso na CRA !");
-
+					setResponsePage(new RemessaConvenioPage("Remessas processados e encaminhadas com sucesso na CRA !"));
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
@@ -71,10 +80,9 @@ public class RemessaConvenioPage extends BasePage<TituloFiliado> {
 
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
-				item.add(new Label("convenio", tituloLista.getFiliado().getInstituicaoConvenio().getRazaoSocial()));
+				item.add(new Label("convenio", tituloLista.getFiliado().getInstituicaoConvenio().getNomeFantasia()));
 				item.add(new Label("credor", tituloLista.getFiliado().getRazaoSocial()));
 				item.add(new Label("devedor", tituloLista.getNomeDevedor()));
-//				item.add(new Label("dataEmissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
 				item.add(new Label("dataEnvioCRA", DataUtil.localDateToString(tituloLista.getDataEnvioCRA())));
 				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
 			}

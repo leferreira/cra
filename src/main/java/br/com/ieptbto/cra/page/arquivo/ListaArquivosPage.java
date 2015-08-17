@@ -21,6 +21,7 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -42,9 +43,9 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
 
-	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo) {
+	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<StatusRemessa> situacoes) {
 		this.arquivo = arquivo;
-		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio,dataInicio, dataFim, tiposArquivo, getUser());
+		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio,dataInicio, dataFim, tiposArquivo, getUser(), situacoes);
 		add(carregarListaArquivos());
 	}
 

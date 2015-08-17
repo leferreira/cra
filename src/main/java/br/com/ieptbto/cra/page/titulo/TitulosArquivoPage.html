@@ -10,15 +10,12 @@
 			<div class="panel-body">
 					<div class="row form-horizontal">
 						<div class="col-md-6">
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label">Nome do Arquivo:</label>  
 							  <div class="col-md-8">
 							  <input wicket:id="nomeArquivo" class="form-control input-md" disabled="disabled">
 							  </div>
 							</div>
-							
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label">Portador:</label>  
 							  <div class="col-md-8">
@@ -27,15 +24,12 @@
 							</div>
 						</div>
 						<div class="col-md-6">
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label">Tipo do Arquivo:</label>  
 							  <div class="col-md-8">
 							  <input wicket:id="tipo" class="form-control input-md" disabled="disabled">
 							  </div>
 							</div>
-							
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label">Data do Envio:</label>  
 							  <div class="col-md-8">
@@ -43,13 +37,11 @@
 							    
 							  </div>
 							</div>
-							
-							<!-- Button (Double) -->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="relatorio"></label>
 							  <div class="col-md-8">
-							    <button id="relatorio" wicket:id="gerarRelatorio" name="relatorio" class="btn btn-primary"><span class="fa fa-print"></span>&nbsp;Gerar Relatório</button>
-							    <button id="button2id" name="button2id" class="btn btn-primary" style="  margin-right: 1%;"><span class="fa fa-arrow-down"></span>&nbsp;Baixar Arquivo</button>
+							     <button id="download" wicket:id="downloadArquivo" class="btn btn-primary"><span class="fa fa-arrow-down"></span>&nbsp;Download</button>
+							    <a id="relatorio" wicket:id="gerarRelatorio" class="btn btn-primary" target="_blank"><span class="fa fa-print"></span>&nbsp;Relatório</a>
 							  </div>
 							</div>
 						</div>
@@ -73,7 +65,7 @@
 							<td class="col-center" wicket:id="numeroTitulo"></td>
 							<td class="col-center" wicket:id="nossoNumero"></td>
 							<td class="col-center" wicket:id="protocolo"></td>
-							<td><a href="#" wicket:id="linkHistorico"><span class="link" wicket:id="nomeDevedor"></span></a></td>
+							<td><a href="#" target="_blank" wicket:id="linkHistorico"><span class="link" wicket:id="nomeDevedor"></span></a></td>
 							<td wicket:id="portador"></td>
 							<td wicket:id="praca"></td>
 							<td class="col-right valor" wicket:id="valorTitulo"></td>

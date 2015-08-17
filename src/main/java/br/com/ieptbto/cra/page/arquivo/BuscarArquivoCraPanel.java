@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -20,6 +21,7 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
+import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -43,12 +45,15 @@ public class BuscarArquivoCraPanel extends Panel  {
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	private DropDownChoice<Municipio> comboMunicipio;
-	private ArrayList<TipoArquivoEnum> tiposArquivo = new ArrayList<TipoArquivoEnum>();
+	
+	private ArrayList<TipoArquivoEnum> tiposArquivo = new ArrayList<TipoArquivoEnum>();;
+	private ArrayList<StatusRemessa> situacaoRemessa = new ArrayList<StatusRemessa>();;
 	
 	public BuscarArquivoCraPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
 		this.model = model;
 		add(comboTipoArquivos());
+		add(comboSituacaoArquivos());
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
 		add(nomeArquivo());
@@ -69,6 +74,9 @@ public class BuscarArquivoCraPanel extends Panel  {
 				
 				try {
 					if (arquivo.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
+						if (arquivo.getNomeArquivo().length() < 4) {
+							throw new InfraException("Por favor, informe ao menos 4 caracteres!");
+						}
 						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
 					} 
 
@@ -86,7 +94,7 @@ public class BuscarArquivoCraPanel extends Panel  {
 					if (comboMunicipio.getModelObject() != null){
 						municipio = comboMunicipio.getModelObject();
 					}
-					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, tiposArquivo));
+					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo(), getSituacaoRemessa()));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -112,6 +120,14 @@ public class BuscarArquivoCraPanel extends Panel  {
 		return tipos;
 	}
 	
+	private CheckBoxMultipleChoice<StatusRemessa> comboSituacaoArquivos() {
+		IChoiceRenderer<StatusRemessa> renderer = new ChoiceRenderer<StatusRemessa>("label");
+		List<StatusRemessa> listaSituacao = Arrays.asList(StatusRemessa.values());
+		CheckBoxMultipleChoice<StatusRemessa> situacao = new CheckBoxMultipleChoice<StatusRemessa>("situacaoArquivos",new Model<ArrayList<StatusRemessa>>(situacaoRemessa), listaSituacao, renderer);
+		situacao.setLabel(new Model<String>("Situacao do Arquivo"));
+		return situacao;
+	}
+	
 	private TextField<LocalDate> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
 		return dataEnvioInicio;
@@ -131,5 +147,13 @@ public class BuscarArquivoCraPanel extends Panel  {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
 		this.comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;
+	}
+
+	public ArrayList<TipoArquivoEnum> getTiposArquivo() {
+		return tiposArquivo;
+	}
+
+	public ArrayList<StatusRemessa> getSituacaoRemessa() {
+		return situacaoRemessa;
 	}
 }

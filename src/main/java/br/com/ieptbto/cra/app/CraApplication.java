@@ -54,8 +54,8 @@ import br.com.ieptbto.cra.page.tipoInstituicao.ListaTipoInstituicaoPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.page.titulo.ListaTitulosPage;
 import br.com.ieptbto.cra.page.titulo.MonitorarTitulosPage;
+import br.com.ieptbto.cra.page.titulo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
-import br.com.ieptbto.cra.page.usuario.DetalharUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.IncluirUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.ListaUsuarioPage;
 import br.com.ieptbto.cra.security.ISecureApplication;
@@ -139,7 +139,6 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		/** Arquivo */
 		mountPage("UsuariosPage", ListaUsuarioPage.class);
 		mountPage("IncluirUsuario", IncluirUsuarioPage.class);
-		mountPage("DetalharUsuario", DetalharUsuarioPage.class);
 
 		mountPage("InstituicoesPage", ListaInstituicaoPage.class);
 		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
@@ -167,7 +166,8 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 		mountPage("ListaArquivo", ListaArquivosPage.class);
 		mountPage("ArquivosPage", ArquivosCancelamentoDevolvidoPage.class);
-		mountPage("TitulosDoArquivo", TitulosArquivoPage.class);
+		mountPage("TitulosArquivo", TitulosArquivoPage.class);
+		mountPage("TitulosArquivoInstituicao", TitulosArquivoInstituicaoPage.class);
 
 		/** Titulos */
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
