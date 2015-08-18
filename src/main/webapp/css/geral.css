@@ -94,6 +94,7 @@ body {
 	float: left !important;
 }
 .inline {
+	font-size: 13px;
 	margin-left: -25px;
 }
 

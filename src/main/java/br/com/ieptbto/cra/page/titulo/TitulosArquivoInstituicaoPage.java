@@ -8,10 +8,8 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
@@ -110,16 +108,14 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 					if (getTitulos().isEmpty())
 						throw new InfraException("Não foi possível gerar o relatório. A busca não retornou resultados!");
 					
-					parametros.put("TIPO_ARQUIVO", getArquivo().getTipoArquivo().getTipoArquivo().getLabel().toUpperCase());
 					parametros.put("NOME_ARQUIVO", getArquivo().getNomeArquivo());
 					parametros.put("DATA_ENVIO", DataUtil.localDateToString(getArquivo().getDataEnvio()));
 						
 					List<TituloJRDataSource> titulosJR = converterTitulos();
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulosJR);
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioArquivoDetalhado.jrxml"));
-					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
-					
-					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
+
+					getResponse().write(JasperRunManager.runReportToPdf(jasperReport, parametros, beanCollection));
 				} catch (InfraException ex) { 
 					error(ex.getMessage());
 				} catch (JRException e) { 

@@ -21,6 +21,7 @@ import org.joda.time.DateTimeZone;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
+import br.com.ieptbto.cra.page.admin.RemoverArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.ArquivosCancelamentoDevolvidoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
@@ -168,6 +169,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("ArquivosPage", ArquivosCancelamentoDevolvidoPage.class);
 		mountPage("TitulosArquivo", TitulosArquivoPage.class);
 		mountPage("TitulosArquivoInstituicao", TitulosArquivoInstituicaoPage.class);
+		mountPage("RemoverArquivo", RemoverArquivoPage.class);
 
 		/** Titulos */
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
