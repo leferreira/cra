@@ -82,8 +82,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			protected void populateItem(ListItem<Historico> item) {
 				final Historico historico = item.getModelObject();
 				Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
-		            /***/
-					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {

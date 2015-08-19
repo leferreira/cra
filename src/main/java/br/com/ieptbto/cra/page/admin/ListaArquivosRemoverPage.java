@@ -76,8 +76,8 @@ public class ListaArquivosRemoverPage extends BasePage<Arquivo> {
 					@Override
 					public void onClick() {
 						try {
-							administracaoMediator.removerArquivo(arquivo, getUser().getInstituicao());
-							info("O arquivo "+ arquivo.getNomeArquivo() +" foi removido com sucesso !");
+							administracaoMediator.removerArquivo(arquivo, getUser().getInstituicao()).getArquivo();
+							setResponsePage(new RemoverArquivoPage("O arquivo "+ arquivo.getNomeArquivo() +" foi removido com sucesso !"));
 						} catch (InfraException ex) {
 							error(ex.getMessage());
 						} catch (Exception e) {

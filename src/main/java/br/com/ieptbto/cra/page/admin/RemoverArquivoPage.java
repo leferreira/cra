@@ -49,6 +49,15 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 	private ArrayList<TipoArquivoEnum> tiposArquivo = new ArrayList<TipoArquivoEnum>();;
 	
 	public RemoverArquivoPage() {
+		carregarPage();
+	}
+	
+	public RemoverArquivoPage(String mensagem) {
+		info(mensagem);
+		carregarPage();
+	}
+	
+	private void carregarPage() {
 		this.arquivo = new Arquivo();
 		Form<Arquivo> form = new Form<Arquivo>("form", getModel()){
 			
@@ -66,7 +75,7 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 						}
 						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
 					} 
-
+					
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
 							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
@@ -77,7 +86,7 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 						}else
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
-
+					
 					if (comboMunicipio.getModelObject() != null){
 						municipio = comboMunicipio.getModelObject();
 					}
