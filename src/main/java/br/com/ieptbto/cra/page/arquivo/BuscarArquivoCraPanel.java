@@ -74,11 +74,12 @@ public class BuscarArquivoCraPanel extends Panel  {
 				
 				try {
 					if (arquivo.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
+						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
+					} else if (arquivo.getNomeArquivo() != null) {
 						if (arquivo.getNomeArquivo().length() < 4) {
 							throw new InfraException("Por favor, informe ao menos 4 caracteres!");
 						}
-						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
-					} 
+					}
 
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
@@ -91,8 +92,8 @@ public class BuscarArquivoCraPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
 
-					if (comboMunicipio.getModelObject() != null){
-						municipio = comboMunicipio.getModelObject();
+					if (comboMunicipio.getDefaultModelObject() != null){
+						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
 					}
 					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo(), getSituacaoRemessa()));
 				} catch (InfraException ex) {
@@ -100,7 +101,7 @@ public class BuscarArquivoCraPanel extends Panel  {
 					error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
+					error("Não foi possível buscar os arquivos ! \n Entre em contato com a CRA ");
 				}
 			}
 		};
@@ -139,13 +140,13 @@ public class BuscarArquivoCraPanel extends Panel  {
 
 	private DropDownChoice<Instituicao> comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		DropDownChoice<Instituicao> comboPortador = new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.getInstituicoesFinanceiras(), renderer);
+		DropDownChoice<Instituicao> comboPortador = new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
 		return comboPortador;
 	}
 	
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		this.comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.getMunicipiosTocantins(), renderer);
+		comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;
 	}
 
