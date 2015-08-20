@@ -113,29 +113,24 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 					parametros.put("NOME_ARQUIVO", getRemessa().getArquivo().getNomeArquivo());
 					parametros.put("DATA_ENVIO", DataUtil.localDateToString(getRemessa().getDataRecebimento()));
 						
-					List<TituloJRDataSource> titulosJR = converterTitulos();
+					List<TituloJRDataSource> titulosJR = new ArrayList<TituloJRDataSource>();
+					for (TituloRemessa tituloRemessa : getTitulos()) {
+						TituloJRDataSource tituloJR = new TituloJRDataSource();
+						tituloJR.parseToTituloRemessa(tituloRemessa);
+						titulosJR.add(tituloJR);
+					}
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulosJR);
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioArquivoDetalhado.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 					
-					jasperPrint.setName("relatorio.pdf");
-					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
+					jasperPrint.setName("RELATORIO_TITULOS_" + getRemessa().getArquivo().getNomeArquivo().replace(".", "_"));
+					JasperExportManager.exportReportToPdfStream(jasperPrint, getResponse().getOutputStream());
 				} catch (InfraException ex) { 
 					error(ex.getMessage());
 				} catch (JRException e) { 
 					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
 					e.printStackTrace();
 				}
-			}
-			
-			private List<TituloJRDataSource> converterTitulos() {
-				List<TituloJRDataSource> lista = new ArrayList<>();
-				for (TituloRemessa tituloRemessa : getTitulos()) {
-					TituloJRDataSource tituloJR = new TituloJRDataSource();
-					tituloJR.parseToTituloRemessa(tituloRemessa);
-					lista.add(tituloJR);
-				}
-				return lista;
 			}
 		};
 	}

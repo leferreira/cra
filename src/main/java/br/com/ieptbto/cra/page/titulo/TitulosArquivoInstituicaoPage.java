@@ -8,8 +8,10 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
@@ -111,27 +113,24 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 					parametros.put("NOME_ARQUIVO", getArquivo().getNomeArquivo());
 					parametros.put("DATA_ENVIO", DataUtil.localDateToString(getArquivo().getDataEnvio()));
 						
-					List<TituloJRDataSource> titulosJR = converterTitulos();
+					List<TituloJRDataSource> titulosJR = new ArrayList<TituloJRDataSource>();
+					for (TituloRemessa tituloRemessa : getTitulos()) {
+						TituloJRDataSource tituloJR = new TituloJRDataSource();
+						tituloJR.parseToTituloRemessa(tituloRemessa);
+						titulosJR.add(tituloJR);
+					}
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulosJR);
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioArquivoDetalhado.jrxml"));
-
-					getResponse().write(JasperRunManager.runReportToPdf(jasperReport, parametros, beanCollection));
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+					
+					jasperPrint.setName("RELATORIO_TITULOS_" + getArquivo().getNomeArquivo().replace(".", "_"));
+					JasperExportManager.exportReportToPdfStream(jasperPrint, getResponse().getOutputStream());
 				} catch (InfraException ex) { 
 					error(ex.getMessage());
 				} catch (JRException e) { 
 					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
 					e.printStackTrace();
 				}
-			}
-
-			private List<TituloJRDataSource> converterTitulos() {
-				List<TituloJRDataSource> lista = new ArrayList<>();
-				for (TituloRemessa tituloRemessa : getTitulos()) {
-					TituloJRDataSource tituloJR = new TituloJRDataSource();
-					tituloJR.parseToTituloRemessa(tituloRemessa);
-					lista.add(tituloJR);
-				}
-				return lista;
 			}
 		};
 	}

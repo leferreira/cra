@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
 	<property name="ireport.zoom" value="1.6105100000000008"/>
-	<property name="ireport.x" value="438"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="NOME_ARQUIVO" class="java.lang.String"/>
 	<parameter name="DATA_ENVIO" class="java.lang.String"/>
@@ -319,7 +319,7 @@
 				<textFieldExpression><![CDATA[$F{numeroProtocoloCartorio}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="636" y="0" width="43" height="18" uuid="00a03e4c-051e-4912-9a59-35e5bbe59d3c"/>
+				<reportElement x="636" y="0" width="43" height="19" uuid="59617022-5ee3-4305-b2a0-bd192688e9b8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>

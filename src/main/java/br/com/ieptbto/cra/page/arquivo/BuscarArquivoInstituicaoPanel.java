@@ -72,11 +72,12 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 				
 				try {
 					if (arquivo.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
+						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
+					} else if (arquivo.getNomeArquivo() != null) {
 						if (arquivo.getNomeArquivo().length() < 4) {
 							throw new InfraException("Por favor, informe ao menos 4 caracteres!");
 						}
-						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
-					} 
+					}
 					
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
