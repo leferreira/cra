@@ -47,8 +47,10 @@ import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.municipio.DetalharMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.IncluirMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.ListaMunicipioPage;
+import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosListaPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosTitulosPage;
-import br.com.ieptbto.cra.page.relatorio.RelatorioPage;
+import br.com.ieptbto.cra.page.relatorio.RelatorioSinteticoPage;
+import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosPage;
 import br.com.ieptbto.cra.page.tipoArquivo.IncluirTipoArquivoPage;
 import br.com.ieptbto.cra.page.tipoArquivo.ListaTipoArquivoPage;
 import br.com.ieptbto.cra.page.tipoInstituicao.IncluirTipoInstituicaoPage;
@@ -179,10 +181,12 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("HistoricoDoTitulo", HistoricoPage.class);
 
 		/** Relatorios */
-		mountPage("RelatorioSintetico", RelatorioPage.class);
+		mountPage("RelatorioSintetico", RelatorioSinteticoPage.class);
 		// mountPage("RelatorioAnalitico", RelatorioAnaliticoPage.class);
 		mountPage("RelatorioArquivosTitulos", RelatorioArquivosTitulosPage.class);
-
+		mountPage("RelatorioTitulos", RelatorioTitulosPage.class);
+		mountPage("RelatorioArquivosListaPage", RelatorioArquivosListaPage.class);
+		
 		/** CRA */
 		mountPage("Batimento", BatimentoPage.class);
 		mountPage("ConfirmacaoPage", ConfirmacaoPage.class);

@@ -1,36 +1,59 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
 <div class="col-lg-12 col-md-offset-1">
-	<!-- Text input-->
-	<div class="form-group">
-	  <label class="col-md-2 control-label" for="nomeArquivo">Nome do Arquivo:</label>  
-	  <div class="col-md-6">
-	  <input id="nomeArquivo" name="nomeArquivo" maxlength="13" type="text" wicket:id="nomeArquivo" placeholder="" class="form-control input-md">
-	  </div>
-	</div>
-	<div class="form-group">
-	  <label class="col-md-2 control-label" for="date">Per&iacute;odo:</label>  
-	  <div class="col-md-2">
-	  	<input id="date" name="date" type="text" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioInicio"  class="form-control input-md">
-	  </div>
-	  <div class="col-md-2">
-	  	<input id="date1" name="date1" type="text" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioFinal" class="form-control input-md">
-	  </div>
-	</div>
-	<!-- Select Basic -->
-	<div class="form-group">
-	  <label class="col-md-2 control-label" for="municipio">Munic&iacute;pio:</label>
-	  <div class="col-md-6">
-	    <select id="portador" wicket:id="municipio" name="municipio" class="form-control">
-	      <option value="1">Option one</option>
-	    </select>
-	  </div>
-	</div>
-	<!-- Button -->
-	<div class="form-group">
-	  <label class="col-md-2 control-label" for="enviar"></label>
-	  <div class="col-md-6">
-	    <button id="enviar" name="enviar" wicket:id="botaoBuscar" onclick="target='_blank';return true;" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>&nbsp;Buscar</button>
-	  </div>
-	</div>
+	<form wicket:id="formArquivo" id="form" class="form-horizontal">
+		<fieldset>
+			<legend class="legend">Relat&oacute;rio de Arquivos</legend>
+			<div class="form-group">
+			  <label class="col-md-2 control-label">Nome do Arquivo:</label>  
+			  <div class="col-md-7">
+			  <input name="nomeArquivo" maxlength="13" wicket:id="nomeArquivo" class="form-control input-md">
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-md-2 control-label"></label>
+			  <div class="col-md-7">
+			    <button wicket:id="submitFormArquivo" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>&nbsp;Buscar</button>
+			  </div>
+			</div>
+		</fieldset>
+	</form>
+	<form wicket:id="formTitulo" id="form" class="form-horizontal">
+		<fieldset>
+			<legend class="legend">Relat&oacute;rio de T&iacute;tulos</legend>
+			<div class="form-group">
+			  <label class="col-md-2 control-label">Per&iacute;odo:<br><small>&nbsp;(Data de entrada na CRA)</small></label>  
+			  <div class="col-md-2">
+			  	<input maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioInicio"  class="form-control input-md">
+			  </div>
+			  <div class="col-md-2">
+			  	<input maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioFinal" class="form-control input-md">
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-md-2 control-label">Situa&ccedil;&atilde;o dos T&iacute;tulos:</label>
+			  <div class="col-md-8">
+			    <label class="radio-inline inline" wicket:id="tipoRelatorio" style="font-size: 12px; float: left; text-align: left;">
+			    </label>
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-md-2 control-label">Institui&ccedil;&atilde;o:</label>
+<!-- 			  <div class="col-md-3"> -->
+<!-- 			    <select wicket:id="tipoInstituicao" class="form-control"> -->
+<!-- 			    </select> -->
+<!-- 			  </div> -->
+			  <div class="col-md-7">
+			    <select wicket:id="instituicaoOrigem" class="form-control">
+			    </select>
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-md-2 control-label"></label>
+			  <div class="col-md-7">
+			    <button wicket:id="submitFormTitulo" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>&nbsp;Buscar</button>
+			  </div>
+			</div>
+		</fieldset>
+	</form>
 </div>
 </wicket:panel>

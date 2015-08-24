@@ -16,27 +16,24 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
-public class RelatorioPage extends BasePage<Remessa> {
+public class RelatorioSinteticoPage extends BasePage<Remessa> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-	
 	private Remessa remessa;
-	private Form<Remessa> form;
 	private Instituicao instituicao;
 	
-	public RelatorioPage() {
+	public RelatorioSinteticoPage() {
 		this.remessa  = new Remessa();
 		this.instituicao = getUser().getInstituicao();
-		form = new Form<Remessa>("form", getModel());
 		
+		Form<Remessa> form = new Form<Remessa>("form", getModel());
 		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
-			form.add(new RelatorioCraPanel("relatorioPanel", getModel()));
+			form.add(new RelatorioSinteticoCraPanel("relatorioPanel", getModel()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){
-			form.add(new RelatorioCartorioPanel("relatorioPanel", getModel(), getInstituicao()));
+			form.add(new RelatorioSinteticoCartorioPanel("relatorioPanel", getModel(), getInstituicao()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-			form.add(new RelatorioInstituicaoPanel("relatorioPanel", getModel(), getInstituicao()));
+			form.add(new RelatorioSinteticoInstituicaoPanel("relatorioPanel", getModel(), getInstituicao()));
 		}
 		add(form);
 	}

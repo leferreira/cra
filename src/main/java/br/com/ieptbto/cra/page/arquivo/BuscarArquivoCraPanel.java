@@ -41,6 +41,7 @@ public class BuscarArquivoCraPanel extends Panel  {
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
+	
 	private IModel<Arquivo> model;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;

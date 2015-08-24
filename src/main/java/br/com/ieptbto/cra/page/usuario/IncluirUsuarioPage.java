@@ -165,7 +165,7 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 
 	private DropDownChoice<Instituicao> comboInstituicao() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		DropDownChoice<Instituicao> comboInstituicao = new DropDownChoice<Instituicao>("instituicao",instituicaoMediator.buscarCartoriosInstituicoes(), renderer);
+		DropDownChoice<Instituicao> comboInstituicao = new DropDownChoice<Instituicao>("instituicao",instituicaoMediator.listarTodas(), renderer);
 		comboInstituicao.setLabel(new Model<String>("Instituição"));
 		comboInstituicao.setRequired(true);
 		return comboInstituicao;

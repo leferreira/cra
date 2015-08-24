@@ -13,6 +13,7 @@
 	<parameter name="INSTITUICAO" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
+	<parameter name="TIPO_RELATORIO" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -35,13 +36,13 @@
 		<band height="60" splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<staticText>
-				<reportElement x="378" y="30" width="422" height="30" uuid="15274eb0-6884-4585-90cc-cd15ee3c11ac"/>
+			<textField>
+				<reportElement x="378" y="30" width="424" height="30" uuid="91d1e67e-c2b3-4eca-9cbe-76a43ea60525"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[RELATÓRIO DE TÍTULOS]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["RELATÓRIO DE TÍTULOS " + $P{TIPO_RELATORIO}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

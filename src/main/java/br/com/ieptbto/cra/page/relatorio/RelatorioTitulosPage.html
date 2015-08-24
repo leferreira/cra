@@ -10,65 +10,54 @@
 			<div class="panel-body">
 					<div class="row form-horizontal">
 						<div class="col-md-6">
-						 	<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="periodo">Período:</label>  
+							  <label class="col-md-4 control-label">Período:</label>  
 							  <div class="col-md-4">
-							  	<input id="periodo" name="dataInicio" wicket:id="dataInicio" type="text" placeholder="" disabled="disabled" class="form-control input-md"/>
+							  	<input wicket:id="dataInicio" class="form-control input-md" disabled="disabled"/>
 							  </div>
 							  <div class="col-md-4">
-							    <input id="periodo" name="dataFim" wicket:id="dataFim" type="text" placeholder="" disabled="disabled" class="form-control input-md"/>
+							    <input wicket:id="dataFim" class="form-control input-md" disabled="disabled"/>
 								</div>
-							</div>
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="total_titulos">Qtd. de Títulos:</label>  
-							  <div class="col-md-8">
-							  	<input id="instituicao" name="instituicao" type="text" wicket:id="totalTitulos" placeholder="" disabled="disabled" class="form-control input-md"/>
-							  </div>
 							</div>
 						</div>
 						<div class="col-md-6">
-						 	<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="instituicao" wicket:id="label"></label>  
+							  <label class="col-md-4 control-label" wicket:id="label"></label>  
 							  <div class="col-md-8">
-							  	<input id="instituicao" name="instituicao" wicket:id="instituicao" type="text" placeholder="" disabled="disabled" class="form-control input-md"/>
+							  	<input wicket:id="instituicao" class="form-control input-md" disabled="disabled"/>
 							  </div>
 							</div>
-												
-							<!-- Button (Double) -->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="relatorio"></label>
+							  <label class="col-md-4 control-label"></label>
 							  <div class="col-md-8">
-							    <button id="relatorio" wicket:id="gerarRelatorio" name="relatorio" class="btn btn-primary"><span class="fa fa-print"></span>&nbsp;Gerar Relatório</button>
+							    <a href="#" wicket:id="gerarRelatorio" target="_blank" style="float: right;" class="btn btn-primary"><span class="fa fa-print"></span>&nbsp;Relatório</a>
 							  </div>
 							</div>
 						</div>
 					</div>
-				<br style="clear: both;"/>
-				<table id="table" class="table table-striped table-bordered table-hover">
+				<a href="RelatorioArquivosTitulos" style="float: right; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>&nbsp;Voltar à página anterior!</a>
+				<br style="clear: both;">
+				<table id="table" class="table table-striped table-hover" style="font-size: 12px !important;">
 					<thead>
 						<tr>
-							<th>Nº Título</th>
-							<th>Nosso Número</th>
-							<th>Protocolo</th>
-							<th>Devedor</th>
-							<th>Portador</th>
+							<th class="col-center">Título</th>
+							<th class="col-center">Protoc.</th>
 							<th>Praça</th>
-							<th>Vlr. Título</th>
-							<th>Situação</th>
+							<th>Devedor</th>
+							<th class="col-right">Valor</th>
+							<th>Portador</th>
+							<th class="col-center">Situação</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr wicket:id="listViewTitulos">
-							<td wicket:id="numeroTitulo"></td>
-							<td wicket:id="nossoNumero"></td>
-							<td wicket:id="protocolo"></td>
-							<td><a href="#" wicket:id="linkHistorico"><span class="link" wicket:id="nomeDevedor"></span></a></td>
-							<td wicket:id="portador"></td>
+							<td class="col-center" wicket:id="numeroTitulo"></td>
+							<td class="col-center" wicket:id="protocolo"></td>
 							<td wicket:id="pracaProtesto"></td>
-							<td wicket:id="valorTitulo"></td>
-							<td wicket:id="situacaoTitulo" class="destaque"></td>
+							<td><a href="#" target="_blank" wicket:id="linkHistorico"><span class="link" style="font-weight: bold;" wicket:id="nomeDevedor"></span></a></td>
+							<td class="col-right valor" wicket:id="valorTitulo"></td>
+							<td wicket:id="portador"></td>
+							<td class="col-center" ><span class="info-titulo" wicket:id="situacaoTitulo"></span></td>
 						</tr>
 					</tbody>
 				</table>

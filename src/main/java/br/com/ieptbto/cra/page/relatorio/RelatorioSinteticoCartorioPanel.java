@@ -29,9 +29,9 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @SuppressWarnings("serial")
-public class RelatorioCartorioPanel extends Panel{
+public class RelatorioSinteticoCartorioPanel extends Panel{
 
-	private static final Logger logger = Logger.getLogger(RelatorioCartorioPanel.class);
+	private static final Logger logger = Logger.getLogger(RelatorioSinteticoCartorioPanel.class);
 	
 	@SpringBean
 	MunicipioMediator municipioMediator;
@@ -42,7 +42,7 @@ public class RelatorioCartorioPanel extends Panel{
 	private TextField<String> fieldDataFim;
 	private TipoArquivoEnum tipoArquivo;
 	
-	public RelatorioCartorioPanel(String id, IModel<?> model, Instituicao cartorio) {
+	public RelatorioSinteticoCartorioPanel(String id, IModel<?> model, Instituicao cartorio) {
 		super(id, model);
 		setCartorio(cartorio);
 		carregarComponentes();

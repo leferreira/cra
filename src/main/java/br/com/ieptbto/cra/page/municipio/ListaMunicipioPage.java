@@ -50,7 +50,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 	}
 
 	private ListView<Municipio> carregarListaMunicipio(){
-		return new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {
+		ListView<Municipio> listView = new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -73,6 +73,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				item.add(new Label("codIBGE", municipioLista.getCodigoIBGE()));
 			}
 		};
+		return listView;
 	}
 
 	public IModel<List<Municipio>> buscarMunicipios() {

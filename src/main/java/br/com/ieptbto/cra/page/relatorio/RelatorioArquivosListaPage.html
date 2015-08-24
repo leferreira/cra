@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+		<div class="panel panel-primary">
+			<div class="panel-heading">Resultado da Busca</div>
+			<div class="panel-body">
+				<fieldset>
+					<a href="RelatorioArquivosTitulos" style="float: right;"><span class="fa fa-mail-reply"></span>Voltar à página anterior!</a>
+					<br style="clear: both;"/>
+					<table id="table" class="table table-striped table-hover">
+						<thead>
+							<tr>
+								<th class="col-center" style="width: 40px;">Tipo</th>
+								<th class="col-center">Nome Arquivo</th>
+								<th class="col-center">Data Envio</th>
+								<th>Enviado por</th>
+								<th>Destino</th>
+								<th class="col-center" style="width: 80px;">Relatório</th>
+								<th style="width: 80px;"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr wicket:id="dataTableArquivo">
+								<td class="col-center" wicket:id="tipoArquivo"></td>
+								<td class="col-center"><a target="_blank" wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
+								<td class="col-center" wicket:id="dataEnvio"></td>
+								<td wicket:id="instituicao"></td>
+								<td wicket:id="destino"></td>
+								<td class="col-center">
+									<a type="button" target="_blank" wicket:id="gerarRelatorio" style="float: inherit !important;">
+									<span class="fa fa-print"></span></a>
+								</td>
+								<td class="col-center"><span wicket:id="status"></span></td>
+							</tr>
+						</tbody>
+					</table>
+				</fieldset>
+			</div>
+			<div class="panel-footer">
+			</div>
+		</div>
+	</wicket:extend>
+</body>
+</html>

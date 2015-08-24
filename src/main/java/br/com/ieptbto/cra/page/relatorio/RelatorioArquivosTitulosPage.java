@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.page.relatorio;
 
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
@@ -9,28 +8,35 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.page.base.BasePage;
 
+/**
+ * @author Thasso Araújo
+ *
+ */
+@SuppressWarnings("serial")
 public class RelatorioArquivosTitulosPage extends BasePage<Arquivo> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-
 	private Arquivo arquivo;
-	private Form<Arquivo> form;
 	private Instituicao instituicao;
 
 	public RelatorioArquivosTitulosPage() {
 		this.arquivo = new Arquivo();
 		this.instituicao = getUser().getInstituicao();
 		
-		form = new Form<Arquivo>("form", getModel());
 		if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
-			form.add(new RelatorioArquivosTitulosCraPanel("buscarArquivoInputPanel", getModel(), instituicao));
+			add(new RelatorioArquivosTitulosCraPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
 		} else if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){
-			form.add(new RelatorioArquivosTitulosCartorioPanel("buscarArquivoInputPanel", getModel(), instituicao));
+			add(new RelatorioArquivosTitulosCartorioPanel("buscarArquivoInputPanel", getModel(), getInstituicao(), getUser()));
 		} else if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-			form.add(new RelatorioArquivosTitulosInstituicaoPanel("buscarArquivoInputPanel", getModel(), instituicao));
+			add(new RelatorioArquivosTitulosInstituicaoPanel("buscarArquivoInputPanel", getModel(), getInstituicao(), getUser()));
 		}
-		add(form);
+	}
+
+	public Instituicao getInstituicao() {
+		return instituicao;
+	}
+	
+	public void setInstituicao(Instituicao instituicao) {
+		this.instituicao = instituicao;
 	}
 
 	@Override

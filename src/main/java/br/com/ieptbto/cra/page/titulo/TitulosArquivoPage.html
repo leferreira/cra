@@ -40,8 +40,12 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="relatorio"></label>
 							  <div class="col-md-8">
-							     <button id="download" wicket:id="downloadArquivo" class="btn btn-primary"><span class="fa fa-arrow-down"></span>&nbsp;Download</button>
-							    <a id="relatorio" wicket:id="gerarRelatorio" class="btn btn-primary" target="_blank"><span class="fa fa-print"></span>&nbsp;Relatório</a>
+							     <button wicket:id="downloadArquivo" class="btn btn-primary" style="float: right; margin-left: 2%;">
+							     	<span class="fa fa-arrow-down"></span>&nbsp;Baixar Arquivo
+							     </button>
+							     <a wicket:id="gerarRelatorio" class="btn btn-primary" target="_blank" style="float: right;">
+							     	<span class="fa fa-print"></span>&nbsp;Relatório
+							     </a>
 							  </div>
 							</div>
 						</div>

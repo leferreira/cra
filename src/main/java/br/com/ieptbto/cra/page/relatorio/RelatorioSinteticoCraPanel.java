@@ -9,6 +9,9 @@ import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -19,61 +22,83 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.util.DataUtil;
+
 
 /**
  * @author Thasso Araújo
  *
  */
 @SuppressWarnings("serial")
-public class RelatorioInstituicaoPanel extends Panel{
+public class RelatorioSinteticoCraPanel extends Panel{
 
-	private static final Logger logger = Logger.getLogger(RelatorioInstituicaoPanel.class);
-
+	private static final Logger logger = Logger.getLogger(RelatorioSinteticoCraPanel.class);
+	
+	@SpringBean
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	@SpringBean
 	RelatorioMediator relatorioMediator;
-	private Instituicao instituicao;
 	private TextField<String> fieldDataInicio;
 	private TextField<String> fieldDataFim;
+	private DropDownChoice<Instituicao> fieldPortador;
+	private DropDownChoice<Municipio> fieldMunicipio;
 	private TipoArquivoEnum tipoArquivo;
 	
-	public RelatorioInstituicaoPanel(String id, IModel<?> model, Instituicao instituicao) {
+	public RelatorioSinteticoCraPanel(String id, IModel<?> model) {
 		super(id, model);
-		this.instituicao = instituicao;
 		carregarComponentes();
 	}
-			
+	
 	private void carregarComponentes() {
 		add(comboTipoArquivos());
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
+		add(comboPortador());
+		add(pracaProtesto());
 		add(new Button("botaoGerar"){
-
+			
 			@Override
 			public void onSubmit() {
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
+				Municipio pracaProtesto = null;
+				Instituicao bancoPortador = null;
 				
-				if (fieldDataInicio.getDefaultModelObject() != null){
-					if (fieldDataFim.getDefaultModelObject() != null){
-						dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
-						dataFim = DataUtil.stringToLocalDate(fieldDataFim.getDefaultModelObject().toString());
+				if (fieldDataInicio.getModelObject() != null){
+					if (fieldDataFim.getModelObject() != null){
+						dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getModelObject());
+						dataFim = DataUtil.stringToLocalDate(fieldDataFim.getModelObject());
 						if (!dataInicio.isBefore(dataFim))
 							if (!dataInicio.isEqual(dataFim))
 								error("A data de início deve ser antes da data fim.");
 					}else
 						error("As duas datas devem ser preenchidas.");
-				}
+				} 
+				
+				if (fieldPortador.getDefaultModelObject() != null)
+					bancoPortador = (Instituicao)fieldPortador.getDefaultModelObject();
+				if (fieldMunicipio.getDefaultModelObject() != null)
+					pracaProtesto = (Municipio)fieldMunicipio.getDefaultModelObject();
 				
 				try {
-					JasperPrint jasperPrint = relatorioMediator.novoRelatorioSintetico(getInstituicao(), tipoArquivo, dataInicio, dataFim);
-					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
-				
+					if (bancoPortador != null && pracaProtesto == null) { 
+						JasperPrint jasperPrint = relatorioMediator.novoRelatorioSintetico(bancoPortador, tipoArquivo, dataInicio, dataFim);
+						getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
+
+					} else if (bancoPortador == null && pracaProtesto != null){ 
+						JasperPrint jasperPrint = relatorioMediator.novoRelatorioSinteticoPorMunicipio(pracaProtesto , tipoArquivo,dataInicio, dataFim );
+						getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
+						
+					} else 
+						error("Deve ser selecionado o portador ou o município!");
+					
 				}catch (JRException e) {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível gerar o relatório. \n Entre em contato com a CRA!");
@@ -97,7 +122,7 @@ public class RelatorioInstituicaoPanel extends Panel{
 	
 	private TextField<String> dataEnvioInicio() {
 		fieldDataInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
-		fieldDataInicio.setLabel(new Model<String>("intervalo da data do envio"));
+		fieldDataInicio.setLabel(new Model<String>("intervalo da data do relatório"));
 		fieldDataInicio.setRequired(true);
 		return fieldDataInicio;
 	}
@@ -105,8 +130,14 @@ public class RelatorioInstituicaoPanel extends Panel{
 	private TextField<String> dataEnvioFinal() {
 		return fieldDataFim = new TextField<String>("dataEnvioFinal", new Model<String>());
 	}
-
-	public Instituicao getInstituicao() {
-		return instituicao;
+	
+	private DropDownChoice<Instituicao> comboPortador() {
+		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
+		return fieldPortador = new DropDownChoice<Instituicao>("portador", new Model<Instituicao>(),instituicaoMediator.getInstituicoesFinanceiras(), renderer);
+	}
+	
+	private DropDownChoice<Municipio> pracaProtesto() {
+		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
+		return fieldMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.getMunicipiosTocantins(), renderer);
 	}
 }
