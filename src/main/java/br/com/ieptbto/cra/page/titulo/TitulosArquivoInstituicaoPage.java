@@ -1,12 +1,12 @@
 package br.com.ieptbto.cra.page.titulo;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -123,11 +123,14 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioArquivoDetalhado.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 					
-					jasperPrint.setName("RELATORIO_TITULOS_" + getArquivo().getNomeArquivo().replace(".", "_"));
-					JasperExportManager.exportReportToPdfStream(jasperPrint, getResponse().getOutputStream());
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+					        new ResourceStreamRequestHandler(resourceStream, "CRA_TITULOS_" + getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 				} catch (InfraException ex) { 
 					error(ex.getMessage());
-				} catch (JRException e) { 
+				} catch (Exception e) { 
 					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
 					e.printStackTrace();
 				}

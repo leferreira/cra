@@ -1,10 +1,11 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -13,7 +14,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
@@ -22,7 +22,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
@@ -43,8 +46,6 @@ import br.com.ieptbto.cra.util.DataUtil;
 @SuppressWarnings("serial")
 public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 
-	private static final Logger logger = Logger.getLogger(RelatorioTitulosPage.class);
-	
 	@SpringBean
 	RelatorioMediator relatorioMediator;
 	private TituloRemessa titulo;
@@ -140,13 +141,16 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 						}
 					}
 					
-					JasperExportManager.exportReportToPdfStream(jasperPrint, getResponse().getOutputStream());
-				} catch (InfraException ex) {
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+					        new ResourceStreamRequestHandler(resourceStream, "CRA_TITULOS.pdf"));
+				} catch (InfraException ex) { 
 					error(ex.getMessage());
-					logger.error(ex.getMessage());
-				} catch (JRException e) {
-					logger.error(e);
-					error("Não foi possível gerar o relatório! A busca não retornou títulos!");
+				} catch (Exception e) { 
+					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+					e.printStackTrace();
 				}
 			}
 			

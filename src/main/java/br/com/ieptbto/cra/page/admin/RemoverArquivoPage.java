@@ -49,15 +49,6 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 	private ArrayList<TipoArquivoEnum> tiposArquivo = new ArrayList<TipoArquivoEnum>();;
 	
 	public RemoverArquivoPage() {
-		carregarPage();
-	}
-	
-	public RemoverArquivoPage(String mensagem) {
-		info(mensagem);
-		carregarPage();
-	}
-	
-	private void carregarPage() {
 		this.arquivo = new Arquivo();
 		Form<Arquivo> form = new Form<Arquivo>("form", getModel()){
 			
