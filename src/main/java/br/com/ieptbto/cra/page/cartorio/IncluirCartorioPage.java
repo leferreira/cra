@@ -23,7 +23,7 @@ public class IncluirCartorioPage extends BasePage<Instituicao> {
 	private CartorioForm form;
 
 	public IncluirCartorioPage() {
-		cartorio = new Instituicao();
+		this.cartorio = new Instituicao();
 		setForm();
 	}
 

@@ -22,42 +22,44 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ListaCartorioPage extends BasePage<Instituicao> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	private Instituicao cartorio;
 
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 
+	public ListaCartorioPage(String mensagem) {
+		info(mensagem);
+		carregarListaMunicipioPage();
+	}
+	
 	public ListaCartorioPage() {
-		cartorio = new Instituicao();
-		add(new Link<Instituicao>("botaoNovo") {
-            /***/
-			private static final long serialVersionUID = 1L;
+		carregarListaMunicipioPage();
+	}
 
+	private void carregarListaMunicipioPage() {
+		this.cartorio = new Instituicao();
+		add(new Link<Instituicao>("botaoNovo") {
+			
 			public void onClick() {
 				setResponsePage(new IncluirCartorioPage());
-            }
-        });
+			}
+		});
 		add(carregarListaCartorios());
 	}
 
-	@SuppressWarnings("rawtypes")
+
 	private ListView<Instituicao> carregarListaCartorios(){
 		return new ListView<Instituicao>("listViewCartorio", listInstituicoes()) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Instituicao> item) {
 				final Instituicao instituicaoLista = item.getModelObject();
-				
-				Link linkAlterar = new Link("linkAlterar") {
-		            /***/
-					private static final long serialVersionUID = 1L;
+
+				Link<Instituicao> linkAlterar = new Link<Instituicao>("linkAlterar") {
 
 					public void onClick() {
 						setResponsePage(new IncluirCartorioPage(instituicaoLista));
@@ -68,8 +70,8 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 		        
 				item.add(new Label("municipio", instituicaoLista.getMunicipio().getNomeMunicipio()));
 				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
-				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new Label("contato", instituicaoLista.getContato()));
+				item.add(new Label("codigoCartorio", instituicaoLista.getCodigoCartorio()));
 				if (instituicaoLista.isSituacao())
 					item.add(new Label("situacao", "Sim"));
 				else

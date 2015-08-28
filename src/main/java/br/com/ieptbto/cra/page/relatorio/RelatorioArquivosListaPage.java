@@ -28,7 +28,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.ireport.TituloJRDataSource;
+import br.com.ieptbto.cra.ireport.TituloBean;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
@@ -95,9 +95,9 @@ public class RelatorioArquivosListaPage extends BasePage<Arquivo> {
 							parametros.put("NOME_ARQUIVO", remessa.getArquivo().getNomeArquivo());
 							parametros.put("DATA_ENVIO", DataUtil.localDateToString(remessa.getDataRecebimento()));
 								
-							List<TituloJRDataSource> titulosJR = new ArrayList<TituloJRDataSource>();
+							List<TituloBean> titulosJR = new ArrayList<TituloBean>();
 							for (TituloRemessa tituloRemessa : titulos) {
-								TituloJRDataSource tituloJR = new TituloJRDataSource();
+								TituloBean tituloJR = new TituloBean();
 								tituloJR.parseToTituloRemessa(tituloRemessa);
 								titulosJR.add(tituloJR);
 							}

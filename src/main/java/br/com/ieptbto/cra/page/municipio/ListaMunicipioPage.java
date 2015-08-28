@@ -38,16 +38,28 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 	public ListaMunicipioPage() {
 		super();
 		this.municipio = new Municipio();
-		add(new Link<Municipio>("botaoNovo") {
-            /***/
-			private static final long serialVersionUID = 1L;
+		carregarListaMunicipioPage();
+	}
 
+	public ListaMunicipioPage(String mensagem) {
+		super();
+		this.municipio = new Municipio();
+		info(mensagem);
+		carregarListaMunicipioPage();
+	}
+	
+	private void carregarListaMunicipioPage() {
+		add(new Link<Municipio>("botaoNovo") {
+			/***/
+			private static final long serialVersionUID = 1L;
+			
 			public void onClick() {
 				setResponsePage(new IncluirMunicipioPage());
-            }
-        });
+			}
+		});
 		add(carregarListaMunicipio());
 	}
+
 
 	private ListView<Municipio> carregarListaMunicipio(){
 		ListView<Municipio> listView = new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {

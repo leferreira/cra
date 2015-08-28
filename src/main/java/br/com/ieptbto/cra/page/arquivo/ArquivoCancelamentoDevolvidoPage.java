@@ -19,7 +19,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
-public class ArquivosCancelamentoDevolvidoPage extends BasePage<Arquivo> {
+public class ArquivoCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -28,25 +28,28 @@ public class ArquivosCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 	private Form<Arquivo> form;
 	private Instituicao instituicao;
 
-	public ArquivosCancelamentoDevolvidoPage() {
+	public ArquivoCancelamentoDevolvidoPage() {
 		this.arquivo = new Arquivo();
+		
 		this.instituicao = getUser().getInstituicao();
-
 		form = new Form<Arquivo>("form", getModel());
-		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
-			form.add(new CancelamentoDevolvidoCraPanel("enviadosPanel", getModel(), getInstituicao()));
-		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-			form.add(new CancelamentoDevolvidoCartorioPanel("enviadosPanel", getModel(), getInstituicao()));
+		
+		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
+			form.add(new CancelamentoDevolvidoCraPanel("cancelamentoDevolvidoInputPanel", getModel(), getInstituicao()));
+		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){
+			form.add(new CancelamentoDevolvidoCartorioPanel("cancelamentoDevolvidoInputPanel", getModel(), getInstituicao()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-			form.add(new CancelamentoDevolvidoInstituicaoPanel("enviadosPanel", getModel(), getInstituicao()));
+			form.add(new CancelamentoDevolvidoInstituicaoPanel("cancelamentoDevolvidoInputPanel", getModel(), getInstituicao()));
 		}
 		add(form);
 	}
 
+	
 	public Instituicao getInstituicao() {
 		return instituicao;
 	}
-
+	
+	
 	public void setInstituicao(Instituicao instituicao) {
 		this.instituicao = instituicao;
 	}

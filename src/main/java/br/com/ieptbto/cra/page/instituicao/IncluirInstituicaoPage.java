@@ -70,12 +70,12 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 				
 				try {
 					if (getModelObject().getId() != 0) {
-						Instituicao instituicaoSalvo = instituicaoMediator.alterar(instituicao);
-						setResponsePage(new DetalharInstituicaoPage(instituicaoSalvo));
+						instituicaoMediator.alterar(instituicao);
+						setResponsePage(new ListaInstituicaoPage("Os dados da instituição foram salvos com sucesso !"));
 					}else{
 						if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
-							Instituicao instituicaoSalvo = instituicaoMediator.salvar(instituicao);
-							setResponsePage(new DetalharInstituicaoPage(instituicaoSalvo));
+							instituicaoMediator.salvar(instituicao);
+							setResponsePage(new ListaInstituicaoPage("Os dados da instituição foram salvos com sucesso !"));
 						} else {
 							error("Instituição não criada, pois já existe!");
 						}

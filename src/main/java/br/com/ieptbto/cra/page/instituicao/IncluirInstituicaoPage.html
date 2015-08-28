@@ -8,13 +8,11 @@
 		<div class="panel panel-primary">
 			<div class="panel-heading">Cadastro de Instituição</div>
 			<div class="panel-body">
-				<a href="InstituicoesPage" style="float: right; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>Voltar a página anterior!</a>
+				<a href="InstituicoesPage" style="float: left; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>&nbsp;Voltar à página anterior</a>
 				<br style="clear: both;">
 				<form wicket:id="form" id="formUsuario" class="form-horizontal">
 					<div class="row">
-						<!-- Coluna 1-->
 						<div class="col-md-6"> 
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="nomeFantasia">Nome Fantasia:</label>  
 							  <div class="col-md-6">
@@ -22,14 +20,12 @@
 							  	class="form-control input-md">
 							  </div>
 							</div>
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="razaoSocial">Razão Social:</label>  
 							  <div class="col-md-6">
 							  <input onkeyup="this.value = this.value.toUpperCase()" maxlength="45" wicket:id="razaoSocial" class="form-control input-md">
 							  </div>
 							</div>
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="cnpj">CPF/CNPJ:</label>  
 							  <div class="col-md-6">
@@ -37,7 +33,6 @@
 							  	class="form-control input-md" maxlength="18">		
 							  </div>
 							</div>
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="codigoCompensacao">Código Compensação:</label>  
 							  <div class="col-md-6">
@@ -45,8 +40,6 @@
 							    
 							  </div>
 							</div>
-							
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="agencia">Agência Centralizadora:</label>  
 							  <div class="col-md-6">
@@ -54,19 +47,14 @@
 							    
 							  </div>
 							</div>
-							
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="confirmacao">Valor Confirmação:</label>  
 							  <div class="col-md-6">
 							  <input wicket:id="valorConfirmacao" onkeypress="FormataValor(this.id, 12, event);" maxlength="15" class="form-control input-md">
-							    
 							  </div>
 							</div>
 						</div>
-						<!-- Coluna 2-->
 						<div class="col-md-6"> 
-						<!-- Select Basic -->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="tipo">Tipo Instituição:</label>
 							  <div class="col-md-6">
@@ -74,7 +62,6 @@
 							    </select>
 							  </div>
 							</div>
-							<!-- Multiple Radios (inline) -->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="situacao">Situação:</label>
 							  <div class="col-md-5" style="text-align: left;"> 
@@ -82,28 +69,22 @@
 							    </label>
 							  </div>
 							</div>
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="email">Email:</label>  
 							  <div class="col-md-6">
 							  <input type="text" wicket:id="email" maxlength="45" class="form-control input-md">
 							  </div>
 							</div>
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="contato">Telefone:</label>  
 							  <div class="col-md-6">
 							  <input wicket:id="contato" class="form-control input-md">
-							    
 							  </div>
 							</div>
-							
-							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="responsavel">Responsável:</label>  
 							  <div class="col-md-6">
 							  <input wicket:id="responsavel" maxlength="45" class="form-control input-md">
-							    
 							  </div>
 							</div>
 							<div class="form-group">
@@ -113,14 +94,12 @@
 							    </select>
 							  </div>
 							</div>
-							<!-- Textarea -->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="endereco">Endereço:</label>
 							  <div class="col-md-6">                     
 							    <textarea class="form-control" maxlength="45" wicket:id="endereco"></textarea>
 							  </div>
 							</div>
-							<!-- Button -->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="salvar"></label>
 							  <div class="col-md-6">

@@ -35,7 +35,7 @@ public class CraMenu extends Panel {
 		/** Menus arquivos */
 		menuLateral.addItem("BuscarArquivo", rolesPesquisar);
 		menuLateral.addItem("EnviarArquivo", rolesPesquisar);
-		menuLateral.addItem("ArquivosPage", rolesPesquisar);
+		menuLateral.addItem("ArquivosCancelamentoDevolvidoPage", rolesPesquisar);
 
 		/** Menus titulos */
 		menuLateral.addItem("MonitorarTitulos", rolesPesquisar);

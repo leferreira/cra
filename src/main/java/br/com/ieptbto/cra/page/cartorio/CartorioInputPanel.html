@@ -3,25 +3,20 @@
 </head>
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
 <div class="row">
-	<!-- Coluna 1-->
 	<div class="col-md-6"> 
-		<!-- Text input-->
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Nome Fantasia:</label>  
 		  <div class="col-md-6">
 		  <input tabindex="1" onkeyup="this.value = this.value.toUpperCase()" autofocus="autofocus" maxlength="45" 
 		  	wicket:id="nomeFantasia" class="form-control input-md">
-		    
 		  </div>
 		</div>
-		<!-- Text input-->
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Razão Social:</label>  
 		  <div class="col-md-6">
 		  <input tabindex="2" onkeyup="this.value = this.value.toUpperCase()" maxlength="45" wicket:id="razaoSocial" class="form-control input-md">
 		  </div>
 		</div>
-		<!-- Text input-->
 		<div class="form-group">
 		  <label class="col-md-4 control-label">CNPJ:</label>  
 		  <div class="col-md-6">
@@ -29,17 +24,20 @@
 			   wicket:id="cnpj" class="form-control input-md" maxlength="18">
 		  </div>
 		</div>
-		<!-- Text input-->
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Email:</label>  
 		  <div class="col-md-6">
 		  <input tabindex="4" wicket:id="email" maxlength="45" class="form-control input-md">
 		  </div>
 		</div>
+		<div class="form-group">
+		  <label class="col-md-4 control-label">Reponsável:</label>  
+		  <div class="col-md-6">
+		  <input tabindex="9" wicket:id="responsavel" maxlength="45" class="form-control input-md">
+		  </div>
+		</div>
 	</div>
-	<!-- Coluna 2-->
 	<div class="col-md-6"> 
-		<!-- Select Basic -->
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Município:</label>
 		  <div class="col-md-6">
@@ -47,36 +45,30 @@
 		    </select>
 		  </div>
 		</div>
+		<div class="form-group">
+		  <label class="col-md-4 control-label">Código Cartório:</label>  
+		  <div class="col-md-6">
+		  <input tabindex="6" wicket:id="codigoCartorio" maxlength="2" class="form-control input-md">
+		  </div>
+		</div>
 		<!-- Multiple Radios (inline) -->
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Situação:</label>
 		  <div class="col-md-5" style="text-align: left;"> 
-		    <label tabindex="6" class="radio-inline inline" wicket:id="status">
+		    <label tabindex="7" class="radio-inline inline" wicket:id="status">
 		    </label>
 		  </div>
 		</div>
-		<!-- Text input-->
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Telefone:</label>  
 		  <div class="col-md-6">
-		  <input tabindex="7" wicket:id="contato" class="form-control input-md">
-		    
+		  <input tabindex="8" wicket:id="contato" class="form-control input-md">
 		  </div>
 		</div>
-		
-		<!-- Text input-->
-		<div class="form-group">
-		  <label class="col-md-4 control-label">Reponsável:</label>  
-		  <div class="col-md-6">
-		  <input tabindex="8" wicket:id="responsavel" maxlength="45" class="form-control input-md">
-		    
-		  </div>
-		</div>
-		<!-- Textarea -->
 		<div class="form-group">
 		  <label class="col-md-4 control-label">Endereço:</label>
 		  <div class="col-md-6">                     
-		    <textarea tabindex="9" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
+		    <textarea tabindex="10" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
 		  </div>
 		</div>
 	</div>
@@ -86,42 +78,33 @@
 		<small>Informações para Depósitos</small>
 	</legend>
 	<div class="row">
-		<!-- Coluna 1-->
 		<div class="col-md-6"> 
-			<!-- Text input-->
 			<div class="form-group">
 			  <label class="col-md-4 control-label">Banco:</label>  
 			  <div class="col-md-6">
-			  <input tabindex="10" wicket:id="bancoContaCorrente" maxlength="45" class="form-control input-md">
+			  <input tabindex="11" wicket:id="bancoContaCorrente" maxlength="45" class="form-control input-md">
 			  </div>
 			</div>
-			<!-- Text input-->
 			<div class="form-group">
 			  <label class="col-md-4 control-label">Agência:</label>  
 			  <div class="col-md-6">
-			  <input tabindex="11" wicket:id="agenciaContaCorrente" maxlength="10" class="form-control input-md">
+			  <input tabindex="12" wicket:id="agenciaContaCorrente" maxlength="10" class="form-control input-md">
 			  </div>
 			</div>
 		</div>
-		<!-- Coluna 2-->
 		<div class="col-md-6"> 
-			<!-- Text input-->
 			<div class="form-group">
 			  <label class="col-md-4 control-label">Conta Corrente:</label>  
 			  <div class="col-md-6">
-			  <input tabindex="12" wicket:id="numeroContaCorrente" maxlength="10" class="form-control input-md">
-			    
+			  <input tabindex="13" wicket:id="numeroContaCorrente" maxlength="10" class="form-control input-md">
 			  </div>
 			</div>
-			
-			<!-- Text input-->
 			<div class="form-group">
 			  <label class="col-md-4 control-label">Favorecido:</label>  
 			  <div class="col-md-6">
-			  <input tabindex="13" wicket:id="favorecido" maxlength="45" class="form-control input-md">
+			  <input tabindex="14" wicket:id="favorecido" maxlength="45" class="form-control input-md">
 			  </div>
 			</div>
-			<!-- Button -->
 			<div class="form-group">
 			  <label class="col-md-4 control-label" for="save"></label>
 			  <div class="col-md-6">

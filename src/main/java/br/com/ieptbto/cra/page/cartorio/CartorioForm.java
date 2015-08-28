@@ -45,14 +45,14 @@ public class CartorioForm extends BaseForm<Instituicao> {
 			if (instituicao.getId() != 0) {
 				if (cartorio.getId() == instituicao.getId()) {
 					instituicaoMediator.alterar(instituicao);
-					setResponsePage(new DetalharCartorioPage(instituicao));
+					setResponsePage(new ListaCartorioPage("Os dados do cartório foram alterados com sucesso !"));
 				} else
 					throw new InfraException("Já existe um cartório cadastrado nesta cidade!");
 			}else{
 				if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
 					if (cartorio == null) {
 						instituicaoMediator.salvar(instituicao);
-						setResponsePage(new DetalharCartorioPage(instituicao));
+						setResponsePage(new ListaCartorioPage("Os dados do cartório foram salvos com sucesso !"));
 					} else
 						throw new InfraException("Já existe um cartório cadastrado nesta cidade!");
 				} else 

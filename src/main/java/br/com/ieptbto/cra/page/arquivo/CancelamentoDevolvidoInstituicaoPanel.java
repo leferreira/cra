@@ -3,154 +3,120 @@ package br.com.ieptbto.cra.page.arquivo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.ArquivoMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings( {"serial","unused" })
-public class CancelamentoDevolvidoInstituicaoPanel extends Panel {
+@SuppressWarnings("serial")
+public class CancelamentoDevolvidoInstituicaoPanel extends Panel  {
 
+	private static final Logger logger = Logger.getLogger(CancelamentoDevolvidoInstituicaoPanel.class);
+	
 	@SpringBean
-	RemessaMediator remessaMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	ArquivoMediator arquivoMediator;
-	private Instituicao instituicao;
-	private TextField<String> dataEnvioInicio;
-	private TextField<String> dataEnvioFinal;
-	private ArrayList<TipoArquivoEnum> tiposSelect = new ArrayList<TipoArquivoEnum>();
-
-	public CancelamentoDevolvidoInstituicaoPanel(String id, IModel<?> model, Instituicao instituicao) {
+	MunicipioMediator municipioMediator;
+	private IModel<Arquivo> model;
+	private TextField<LocalDate> dataEnvioInicio;
+	private TextField<LocalDate> dataEnvioFinal;
+	private ArrayList<TipoArquivoEnum> tiposArquivo = new ArrayList<TipoArquivoEnum>();
+	
+	public CancelamentoDevolvidoInstituicaoPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
-		this.instituicao = instituicao;
-		add(new Button("botaoEnviar") {
+		this.model = model;
+		add(comboTipoArquivos());
+		add(dataEnvioInicio());
+		add(dataEnvioFinal());
+		add(nomeArquivo());
+		add(botaoEnviar());
+	}
+	
+	private Component botaoEnviar() {
+		return new Button("botaoBuscar") {
 
 			@Override
 			public void onSubmit() {
+				Arquivo arquivo = model.getObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
+				Municipio municipio = null;
+				
 				try {
-					if (dataEnvioInicio.getDefaultModelObject() != null) {
-						if (dataEnvioFinal.getDefaultModelObject() != null) {
+					if (arquivo.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
+						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
+					} else if (arquivo.getNomeArquivo() != null) {
+						if (arquivo.getNomeArquivo().length() < 4) {
+							throw new InfraException("Por favor, informe ao menos 5 caracteres!");
+						}
+					}
+					
+					if (dataEnvioInicio.getDefaultModelObject() != null){
+						if (dataEnvioFinal.getDefaultModelObject() != null){
 							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
 							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
-									new InfraException("A data de início deve ser antes da data fim.");
-						} else
-							new InfraException("As duas datas devem ser preenchidas.");
-					}
+									throw new InfraException("A data de início deve ser antes da data fim.");
+						}else
+							throw new InfraException("As duas datas devem ser preenchidas.");
+					} 
+					
+					setResponsePage(new ListaCancelamentoDevolvidoPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo()));
 				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
 					error(ex.getMessage());
 				} catch (Exception e) {
-					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
+					logger.error(e.getMessage(), e);
+					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
 				}
 			}
-		});
-		add(listViewArquivos());
-		add(dataEnvioInicio());
-		add(dataEnvioFinal());
-		add(comboTipoArquivos());
-	}
-
-	@SuppressWarnings("rawtypes")
-	private ListView<Arquivo> listViewArquivos() {
-		return new ListView<Arquivo>("listView", buscarArquivos()) {
-
-			@Override
-			protected void populateItem(ListItem<Arquivo> item) {
-				final Arquivo arquivo = item.getModelObject();
-				item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
-				Link linkArquivo = new Link("linkArquivo") {
-
-					public void onClick() {
-//						setResponsePage(new TitulosDoArquivoPage(arquivo));
-					}
-				};
-				linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));
-				item.add(linkArquivo);
-				item.add(new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio())));
-				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("instituicaoRecebe", arquivo.getInstituicaoRecebe().getNomeFantasia()));
-				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
-				item.add(downloadArquivo(arquivo));
-			}
-
-			private Link downloadArquivo(final Arquivo file) {
-				return new Link<Arquivo>("downloadArquivo") {
-
-					@Override
-					public void onClick() {
-//						File file = remessaMediator.baixarArquivoTXT(instituicao, arquivo);
-//						IResourceStream resourceStream = new FileResourceStream(file);
-//
-//						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-//						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
-					}
-				};
-			}
 		};
 	}
-
-	private IModel<List<Arquivo>> buscarArquivos() {
-		return new LoadableDetachableModel<List<Arquivo>>() {
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected List<Arquivo> load() {
-				return null;
-			}
-		};
+	
+	private TextField<String> nomeArquivo() {
+		return new TextField<String>("nomeArquivo");
 	}
-
+	
 	private CheckBoxMultipleChoice<TipoArquivoEnum> comboTipoArquivos() {
-		IChoiceRenderer<TipoArquivoEnum> renderer = new ChoiceRenderer<>("constante");
-		List<TipoArquivoEnum> choices = new ArrayList<TipoArquivoEnum>();
-		choices.add(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO);
-		choices.add(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO);
-		choices.add(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO);
-		return new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",new Model<ArrayList<TipoArquivoEnum>>(tiposSelect), choices, renderer);
+		List<TipoArquivoEnum> listaTipos = new ArrayList<TipoArquivoEnum>();
+		listaTipos.add(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO);
+		listaTipos.add(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO);
+		listaTipos.add(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO);
+		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
+		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
+		return tipos;
 	}
-
-	private TextField<String> dataEnvioInicio() {
-		dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
-		if (dataEnvioInicio.getModelObject() != null) {
-			dataEnvioInicio = new TextField<String>("dataEnvioInicio", new Model<String>(dataEnvioInicio.getModelObject()));
-		}
-		dataEnvioInicio.setRequired(true);
-		dataEnvioInicio.setLabel(new Model<String>("intervalo da data do envio"));
+	
+	private TextField<LocalDate> dataEnvioInicio() {
+		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
 		return dataEnvioInicio;
 	}
+	
+	private TextField<LocalDate> dataEnvioFinal() {
+		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
+	}
 
-	private TextField<String> dataEnvioFinal() {
-		dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>());
-		if (dataEnvioFinal.getModelObject() != null) {
-			dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(dataEnvioFinal.getModelObject()));
-		}
-		return dataEnvioFinal;
+	public ArrayList<TipoArquivoEnum> getTiposArquivo() {
+		return tiposArquivo;
 	}
 }

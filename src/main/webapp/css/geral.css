@@ -206,3 +206,7 @@ table.dataTable thead > tr > th {
 .menu-bottom{
     margin-top: -30px !important;
 }
+.text-muted {
+    color: #777;
+    margin-top: 3px;
+}

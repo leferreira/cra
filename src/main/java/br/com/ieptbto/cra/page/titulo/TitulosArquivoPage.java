@@ -32,7 +32,7 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.ireport.TituloJRDataSource;
+import br.com.ieptbto.cra.ireport.TituloBean;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -113,9 +113,9 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 					parametros.put("NOME_ARQUIVO", getRemessa().getArquivo().getNomeArquivo());
 					parametros.put("DATA_ENVIO", DataUtil.localDateToString(getRemessa().getDataRecebimento()));
 						
-					List<TituloJRDataSource> titulosJR = new ArrayList<TituloJRDataSource>();
+					List<TituloBean> titulosJR = new ArrayList<TituloBean>();
 					for (TituloRemessa tituloRemessa : getTitulos()) {
-						TituloJRDataSource tituloJR = new TituloJRDataSource();
+						TituloBean tituloJR = new TituloBean();
 						tituloJR.parseToTituloRemessa(tituloRemessa);
 						titulosJR.add(tituloJR);
 					}

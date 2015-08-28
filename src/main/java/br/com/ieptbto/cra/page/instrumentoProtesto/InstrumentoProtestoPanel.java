@@ -1,11 +1,13 @@
 package br.com.ieptbto.cra.page.instrumentoProtesto;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -21,7 +23,10 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
@@ -29,7 +34,8 @@ import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.ireport.EtiquetasJRDataSource;
+import br.com.ieptbto.cra.ireport.SlipEnvelopeBean;
+import br.com.ieptbto.cra.ireport.SlipEtiquetaBean;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoDeProtestoMediator;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
@@ -98,28 +104,28 @@ public class InstrumentoProtestoPanel extends Panel {
 		formEtiquetas.add(new Button("botaoEtiqueta"){
 			@Override
 			public void onSubmit() {
+				SimpleDateFormat dataPadrao= new SimpleDateFormat("dd_MM_yy");
+
 				try {
-					setInstrumentos(instrumentoMediator.processarInstrumentos(getRetornos()));
-					List<EtiquetasJRDataSource> listaEtiquetas = new ArrayList<EtiquetasJRDataSource>();
+					List<SlipEtiquetaBean> etiquetas = instrumentoMediator.processarInstrumentos(getRetornos()).getEtiquetas();
+
 					HashMap<String, Object> parametros = new HashMap<String, Object>();
 					parametros.put("DATA", DataUtil.localDateToString(new LocalDate()));
-					
-					for (InstrumentoProtesto instrumento: getInstrumentos()) {
-						EtiquetasJRDataSource novaEtiqueta = new EtiquetasJRDataSource();
-						novaEtiqueta.parseToTituloRemessa(instrumento.getTitulo());
-						listaEtiquetas.add(novaEtiqueta);
-					}
-					
-					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(listaEtiquetas);
+					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(etiquetas);
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("Teste.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
-					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
+					
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+					        new ResourceStreamRequestHandler(resourceStream, "CRA_ETIQUETAS_" + dataPadrao.format(new Date()).toString()  + ".pdf"));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());
-				} catch (JRException e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível gerar as Etiquetas de SLIP ! Entre em contato com a CRA !");
+				} catch (Exception ex) { 
+					error("Não foi possível gerar as etiquetas ! Entre em contato com a CRA !");
+					logger.error(ex.getMessage(), ex);
 				}
 			}
 		});
@@ -131,7 +137,29 @@ public class InstrumentoProtestoPanel extends Panel {
 		formEnvelopes.add(new Button("botaoEnvelope"){
 			@Override
 			public void onSubmit() {
-				
+				SimpleDateFormat dataPadrao= new SimpleDateFormat("dd_MM_yy");
+
+				try {
+					List<SlipEnvelopeBean> envelopes = instrumentoMediator.gerarEnvelopes(getRetornos());
+
+					HashMap<String, Object> parametros = new HashMap<String, Object>();
+					parametros.put("DATA", DataUtil.localDateToString(new LocalDate()));
+					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(envelopes);
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("Teste.jrxml"));
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+					
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+					        new ResourceStreamRequestHandler(resourceStream, "CRA_ENVELOPES_" + dataPadrao.format(new Date()).toString()  + ".pdf"));
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage(), ex);
+					error(ex.getMessage());
+				} catch (Exception ex) { 
+					error("Não foi possível gerar as etiquetas ! Entre em contato com a CRA !");
+					logger.error(ex.getMessage(), ex);
+				}
 			}
 		});
 		return formEnvelopes;

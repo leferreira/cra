@@ -51,6 +51,7 @@ public class CartorioInputPanel extends Panel {
 		add(campoContaCorrente());
 		add(campoFavorecido());
 		add(campoAgenciaConta());
+		add(campoCodigoCartorio());
 		add(new Button("botaoSubmit"));
 	}
 
@@ -130,6 +131,12 @@ public class CartorioInputPanel extends Panel {
 	private Component campoStatus() {
 		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
 		return new RadioChoice<String>("status", status);
+	}
+	
+	private TextField<String> campoCodigoCartorio() {
+		TextField<String> text = new TextField<String>("codigoCartorio");
+		text.setLabel(new Model<String>("Código do Cartório"));
+		return text;
 	}
 
 	private Component comboMunicipios() {

@@ -21,6 +21,7 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
@@ -42,15 +43,36 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	RelatorioMediator relatorioMediator;
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
+	private Link<Void> relatorioConfirmacoes;
 
 	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<StatusRemessa> situacoes) {
 		this.arquivo = arquivo;
 		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio,dataInicio, dataFim, tiposArquivo, getUser(), situacoes);
 		add(carregarListaArquivos());
+		add(relatorioConfirmacoes());
+		this.relatorioConfirmacoes.setVisible(false);
+	}
+
+	public ListaArquivosPage(Usuario usuario) {
+		this.arquivo = new Arquivo();
+		this.remessas = remessaMediator.confirmacoesPendentes(usuario.getInstituicao());
+		add(carregarListaArquivos());
+		add(relatorioConfirmacoes());
+		this.relatorioConfirmacoes.setEnabled(true);
+	}
+
+	private Link<Void> relatorioConfirmacoes() {
+		relatorioConfirmacoes = new Link<Void>("relatorioConfirmacoes"){
+			public void onClick() {
+				
+				
+			};
+		};
+		return relatorioConfirmacoes;
 	}
 
 	private ListView<Remessa> carregarListaArquivos() {
-		return new ListView<Remessa>("dataTableRemessa", remessas) {
+		return new ListView<Remessa>("dataTableRemessa", getRemessas()) {
 
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
@@ -87,6 +109,12 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				};
 			}
 		};
+	}
+	
+	
+	
+	public List<Remessa> getRemessas() {
+		return remessas;
 	}
 
 	@Override

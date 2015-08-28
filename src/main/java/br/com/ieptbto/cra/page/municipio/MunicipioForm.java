@@ -29,7 +29,7 @@ public class MunicipioForm extends BaseForm<Municipio>{
 		if (getModelObject().getId() != 0) {
 			Municipio municipioSalvo = municipioMediator.alterarMunicipio(municipio);
 			if (municipioSalvo != null) {
-				setResponsePage(new DetalharMunicipioPage(municipioSalvo));
+				setResponsePage(new ListaMunicipioPage("Os dados do município foram salvos com sucesso!"));
 			} else {
 				error("Município não alterado");
 			}
@@ -40,7 +40,7 @@ public class MunicipioForm extends BaseForm<Municipio>{
 				}
 				Municipio municipioSalvo = municipioMediator.adicionarMunicipio(municipio);
 				if (municipioSalvo != null) {
-					setResponsePage(new DetalharMunicipioPage(municipioSalvo));
+					setResponsePage(new ListaMunicipioPage("Os dados do município foram salvos com sucesso!"));
 				} else {
 					error("Município não criado");
 				}

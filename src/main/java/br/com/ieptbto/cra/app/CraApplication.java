@@ -23,13 +23,12 @@ import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.admin.ListaArquivosRemoverPage;
 import br.com.ieptbto.cra.page.admin.RemoverArquivoPage;
-import br.com.ieptbto.cra.page.arquivo.ArquivosCancelamentoDevolvidoPage;
+import br.com.ieptbto.cra.page.arquivo.ArquivoCancelamentoDevolvidoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
-import br.com.ieptbto.cra.page.cartorio.DetalharCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.page.convenio.RemessaConvenioPage;
@@ -38,13 +37,11 @@ import br.com.ieptbto.cra.page.cra.ConfirmacaoPage;
 import br.com.ieptbto.cra.page.cra.RetornoPage;
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
-import br.com.ieptbto.cra.page.instituicao.DetalharInstituicaoPage;
 import br.com.ieptbto.cra.page.instituicao.IncluirInstituicaoPage;
 import br.com.ieptbto.cra.page.instituicao.ListaInstituicaoPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.ImportarArquivoDeParaPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.InstrumentoProtestoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
-import br.com.ieptbto.cra.page.municipio.DetalharMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.IncluirMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.ListaMunicipioPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosListaPage;
@@ -146,11 +143,9 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		mountPage("InstituicoesPage", ListaInstituicaoPage.class);
 		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
-		mountPage("DetalharInstituicao", DetalharInstituicaoPage.class);
 
 		mountPage("CartoriosPage", ListaCartorioPage.class);
 		mountPage("IncluirCartorio", IncluirCartorioPage.class);
-		mountPage("DetalharCartorio", DetalharCartorioPage.class);
 
 		mountPage("TipoInstituicoesPage", ListaTipoInstituicaoPage.class);
 		mountPage("IncluirTipoInstituicao", IncluirTipoInstituicaoPage.class);
@@ -160,7 +155,6 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		mountPage("MunicipiosPage", ListaMunicipioPage.class);
 		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
-		mountPage("DetalharMunicipio", DetalharMunicipioPage.class);
 		
 		mountPage("FiliadosPage", ListaFiliadoPage.class);
 		mountPage("IncluirFiliado", IncluirFiliadoPage.class);
@@ -169,7 +163,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("EnviarArquivo", EnviarArquivoPage.class);
 		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 		mountPage("ListaArquivo", ListaArquivosPage.class);
-		mountPage("ArquivosPage", ArquivosCancelamentoDevolvidoPage.class);
+		mountPage("ArquivosCancelamentoDevolvidoPage", ArquivoCancelamentoDevolvidoPage.class);
 		mountPage("TitulosArquivo", TitulosArquivoPage.class);
 		mountPage("TitulosArquivoInstituicao", TitulosArquivoInstituicaoPage.class);
 		mountPage("RemoverArquivo", RemoverArquivoPage.class);

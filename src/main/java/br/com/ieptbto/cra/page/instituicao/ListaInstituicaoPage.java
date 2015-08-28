@@ -34,9 +34,18 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 	InstituicaoMediator instituicaoMediator;
 
 	public ListaInstituicaoPage() {
+		carregarListaInstituicaoPage();
+	}
+
+	public ListaInstituicaoPage(String mensagem) {
+		info(mensagem);
+		carregarListaInstituicaoPage();
+	}
+
+	private void carregarListaInstituicaoPage() {
 		instituicao = new Instituicao();
 		add(new Link<Instituicao>("botaoNovo") {
-
+			
 			public void onClick() {
 				setResponsePage(new IncluirInstituicaoPage());
 			}
