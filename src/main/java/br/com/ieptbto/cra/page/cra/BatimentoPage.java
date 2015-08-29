@@ -85,6 +85,7 @@ public class BatimentoPage extends BasePage<Batimento> {
                 item.add(new Check<Remessa>("checkbox", item.getModel()));
                 item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
+				item.add(new Check<Remessa>("checkbox2", item.getModel()));
 				item.add(new LabelValorMonetario("valorPagos", batimentoMediator.buscarValorDeTitulosPagos(retorno)));
 				Link linkArquivo = new Link("linkArquivo") {
 

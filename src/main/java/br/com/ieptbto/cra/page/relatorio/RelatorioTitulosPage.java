@@ -112,7 +112,7 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 				
 				parametros.put("DATA_INICIO", DataUtil.localDateToString(dataInicio));
 				parametros.put("DATA_FIM", DataUtil.localDateToString(dataFim));
-				parametros.put("INSTITUICAO", getInstituicao().getNomeFantasia());
+				parametros.put("INSTITUICAO", getInstituicao().getNomeFantasia().toUpperCase());
 
 				try {
 					if (getTitulos().isEmpty()) {
@@ -120,7 +120,7 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 					}
 					
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getTitulos());
-					if (getTipoRelatorio().equals(TipoRelatorio.GERAL) || getTipoRelatorio().equals(TipoRelatorio.EM_ABERTO)) {
+					if (getTipoRelatorio().equals(TipoRelatorio.GERAL)) {
 						if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || 
 								getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CONVENIO)) {
 							JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioTitulos.jrxml"));
@@ -130,7 +130,6 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 							jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 						}
 					} else {
-						parametros.put("TIPO_RELATORIO", getTipoRelatorio().getLabel().toUpperCase());
 						if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || 
 								getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CONVENIO)) {
 							JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioTitulosPorSituacao.jrxml"));
@@ -145,7 +144,7 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_TITULOS.pdf"));
+					        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_TITULOS_"+ DataUtil.localDateToString(new LocalDate()).replace("/", "_") +".pdf"));
 				} catch (InfraException ex) { 
 					error(ex.getMessage());
 				} catch (Exception e) { 

@@ -13,7 +13,6 @@
 	<parameter name="INSTITUICAO" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
-	<parameter name="TIPO_RELATORIO" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -36,13 +35,13 @@
 		<band height="60" splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<textField>
-				<reportElement x="378" y="30" width="424" height="30" uuid="58895a1e-1871-4a1c-9c13-b303768802b8"/>
+			<staticText>
+				<reportElement x="378" y="30" width="422" height="30" uuid="15274eb0-6884-4585-90cc-cd15ee3c11ac"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["RELATÓRIO DE TÍTULOS " + $P{TIPO_RELATORIO}]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[RELATÓRIO DE TÍTULOS]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
@@ -50,11 +49,11 @@
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
-				<reportElement x="378" y="0" width="422" height="30" uuid="b2919ed5-39f1-4a93-b73d-b187a3b78578"/>
+				<reportElement x="410" y="0" width="390" height="30" uuid="b2919ed5-39f1-4a93-b73d-b187a3b78578"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Período: Entre " + $P{DATA_INICIO} + " e " + $P{DATA_FIM} + "."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["PERÍODO: " + $P{DATA_INICIO} + " e " + $P{DATA_FIM} + "."]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="0" width="378" height="30" uuid="2016bdc4-7566-44e3-9c64-561b6c70f413">
@@ -64,7 +63,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Instituição :" + $P{INSTITUICAO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["INSTITUIÇÃO : " + $P{INSTITUICAO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

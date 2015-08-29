@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
-	<property name="ireport.zoom" value="1.6105100000000008"/>
-	<property name="ireport.x" value="19"/>
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="NOME_ARQUIVO" class="java.lang.String"/>
 	<parameter name="DATA_ENVIO" class="java.lang.String"/>
@@ -33,7 +33,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[RELATÓRIO DE TÍTULOS DO ARQUIVO]]></text>
+				<text><![CDATA[RELATÓRIO DE TÍTULOS]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -56,7 +56,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Data do Envio : " + $P{DATA_ENVIO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["DATA DO ENVIO : " + $P{DATA_ENVIO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -143,7 +143,7 @@
 					<property name="local_mesure_unitwidth" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Saldo Titulo]]></text>
 			</staticText>
