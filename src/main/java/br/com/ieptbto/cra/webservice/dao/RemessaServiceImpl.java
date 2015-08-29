@@ -31,6 +31,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	private ClassPathXmlApplicationContext context;
 	private RemessaService remessaService;
 	private ConfirmacaoService confirmacaoService;
+	private DesistenciaProtestoService desistenciaProtestoService;
 
 	@Override
 	@WebMethod(operationName = "Remessa")
@@ -51,7 +52,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@Override
 	public String retorno(String nomeArquivo, String login, String senha) {
 		init(login, senha);
-		return null;
+		return confirmacaoService.processar(nomeArquivo, getUsuario());
 	}
 
 	@Override
@@ -63,7 +64,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@Override
 	public String desistencia(String nomeArquivo, String login, String senha, String dados) {
 		init(login, senha);
-		return null;
+		return desistenciaProtestoService.processar(nomeArquivo, usuario, dados);
 	}
 
 	@Override
