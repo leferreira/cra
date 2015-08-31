@@ -94,6 +94,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	
 	public HomePage(PageParameters parameters) {
 		error(parameters.get("error"));
+		carregarHomePage();
 	}
 
 	/**

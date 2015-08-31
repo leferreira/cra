@@ -66,11 +66,13 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
 				
 				try {
+					getFeedbackMessages().clear();
 					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUser());
 					
 					for (Exception exception : arquivoRetorno.getErros()) {
 						warn(exception.getMessage());
 					}
+					arquivoRetorno.getErros().clear();
 					
 					if (!arquivoRetorno.getArquivo().getRemessas().isEmpty()) {
 						info("O arquivo " + arquivo.getNomeArquivo() + " com " + arquivoRetorno.getArquivo().getRemessas().size()

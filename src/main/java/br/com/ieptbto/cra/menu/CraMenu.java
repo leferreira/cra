@@ -41,7 +41,7 @@ public class CraMenu extends Panel {
 		menuLateral.addItem("MonitorarTitulos", rolesPesquisar);
 
 		/** Menus Relatorios */
-		menuLateral.addItem("RelatorioSintetico", rolesIncluir);
+//		menuLateral.addItem("RelatorioSintetico", rolesIncluir);
 		menuLateral.addItem("RelatorioArquivosTitulos", rolesIncluir);
 
 		/** Menus Admins */
