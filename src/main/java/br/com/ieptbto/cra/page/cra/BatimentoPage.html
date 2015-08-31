@@ -16,21 +16,22 @@
 			                  		<table id="table" class="table table-striped table-hover">
 					                    <thead>
 											<tr>
-												<th class="col-center">#</th>
+												<th>Cartório</th>
 												<th class="col-center">Arquivo</th>
+												<th class="col-center">#</th>
 												<th class="col-right">Valor Pagos</th>
 												<th class="col-center">Data Envio</th>
-												<th>Cartório</th>
+												<th class="col-center" style="width: 100px;"></th>
 											</tr>
 										</thead>
 										<tbody>
 						                    <tr wicket:id="retornos" style="text-align: center;">
-						                        <td class="col-center"><input type="checkbox" wicket:id="checkbox"/></td>
+												<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
 						                        <td class="col-center"><a wicket:id="linkArquivo"><span class="link" wicket:id="arquivo.nomeArquivo"></span></a></td>
-												<td class="col-center"><input type="checkbox" wicket:id="checkbox2"/></td>
+						                        <td class="col-center"><input type="checkbox" wicket:id="checkbox"/></td>
 												<td class="col-right valor" wicket:id="valorPagos"></td>
 												<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
-												<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
+												<td class="col-center"><button type="button" wicket:id="gerarRelatorio" style="float: inherit;"><span class="col-center fa fa-print"></span>&nbsp;Relatório</button></td>
 						                    </tr>
 					                    </tbody>
 					                </table>

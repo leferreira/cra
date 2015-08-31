@@ -9,15 +9,15 @@
    				</div>
 				<div class="col-md-4">
 					<div class="panel-group" id="accordion" style="float: right; width: 360px; font-size: 14px;">
-                                <div class="panel panel-primary">
+								<div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" style="float: left; font-weight: bolder; font-size: 14px;" class="collapsed">Confirmações Pendentes</a>
+                                        	<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" style="float: left; font-weight: bolder; font-size: 14px;">Confirmações Pendentes</a>
                                         	<a href="#" style="float: right; color: white !important; font-size: 12px;" class="link" wicket:id="arquivosConfirmacoesPendetes"><span class="fa fa-mail-forward"></span>&nbsp;ver arquivos...</a><br>
                                         </h4>
                                     </div>
-                                    <div id="collapseOne" class="panel-collapse collapse in" aria-expanded="true" style="height: 0px;">
-                                        <div class="panel-body" style="height: 250px; overflow-y: scroll;">
+                                    <div id="collapseOne" class="panel-collapse collapse in">
+                                        <div class="panel-body" style="height: 240px; overflow-y: scroll;">
                                         	<div data-brackets-id="12674" class="list-unstyled ui-sortable">
 										    	<div class="list-view-confirmacao">
 										    		<div style="padding-bottom: 5px; margin-bottom: 5px;" wicket:id="listConfirmacoes">
@@ -26,13 +26,13 @@
 													        [municipio]
 												         </small>
 												        <small class="pull-right text-muted">
-												        	<span class="glyphicon glyphicon-time"></span>&nbsp;<span wicket:id="pendente"></span><span>&nbsp;dias</span>
+												        	<span class="glyphicon glyphicon-time"></span>&nbsp;<span wicket:id="pendente">[quantidade de dias]</span><span>&nbsp;dia(s)</span>
 												        </small>
 												        <br>
 											        </div>
 										    	</div>
-										    </div>
-                                       	</div>
+										    </div>    
+                                        </div>
                                     </div>
                                 </div>
 <!--                                 <div class="panel panel-primary"> -->

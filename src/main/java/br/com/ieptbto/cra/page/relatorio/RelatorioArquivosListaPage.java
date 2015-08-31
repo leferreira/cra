@@ -109,7 +109,7 @@ public class RelatorioArquivosListaPage extends BasePage<Arquivo> {
 							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 							IResourceStream resourceStream = new FileResourceStream(pdf);
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							        new ResourceStreamRequestHandler(resourceStream, "CRA_TITULOS_" + remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+							        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 						} catch (InfraException ex) { 
 							error(ex.getMessage());
 						} catch (Exception e) { 

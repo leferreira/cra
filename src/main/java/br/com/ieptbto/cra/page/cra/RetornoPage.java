@@ -84,7 +84,12 @@ public class RetornoPage extends BasePage<Retorno> {
 				final Remessa retorno = item.getModelObject();
 				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
-				item.add(new LabelValorMonetario<BigDecimal>("valorPagos", retornoMediator.buscarValorDeTitulosPagos(retorno)));
+				BigDecimal valorPagos = retornoMediator.buscarValorDeTitulosPagos(retorno);
+				if (valorPagos==null || valorPagos.equals(BigDecimal.ZERO)) {
+					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", BigDecimal.ZERO));
+				} else {
+					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", valorPagos));
+				}
 				Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
 					@Override
 					public void onClick() {

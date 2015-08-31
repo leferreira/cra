@@ -61,7 +61,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	private void labelArquivosPendentes() {
 		if (!getConfirmacoesPendentes().isEmpty()) {
-			warn("Existe(m) [ "+ getConfirmacoesPendentes().size() +" ] arquivo(s) pendente(s) de confirmação !");
+			warn("Há [ "+ getConfirmacoesPendentes().size() +" ] arquivo(s) pendente(s) de confirmação!");
 		}
 	}
 
