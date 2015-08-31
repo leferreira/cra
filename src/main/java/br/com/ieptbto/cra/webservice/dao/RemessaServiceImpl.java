@@ -79,6 +79,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 		}
 		remessaService = (RemessaService) context.getBean("remessaService");
 		confirmacaoService = (ConfirmacaoService) context.getBean("confirmacaoService");
+		desistenciaProtestoService = (DesistenciaProtestoService) context.getBean("desistenciaProtestoService");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 		setUsuario(login, senha);
 	}
