@@ -1,31 +1,20 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xml.sax.InputSource;
 
-import br.com.ieptbto.cra.conversor.arquivo.ConversorArquivoDesistenciaProtesto;
-import br.com.ieptbto.cra.dao.ArquivoDAO;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.ArquivoDesistenciaProtestoVO;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
-import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.exception.XmlCraException;
+import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -45,9 +34,7 @@ public class DesistenciaProtestoService extends CraWebService {
 	@Autowired
 	private TipoArquivoMediator tipoArquivoMediator;
 	@Autowired
-	private ConversorArquivoDesistenciaProtesto conversorArquivoDesistenciaProtesto;
-	@Autowired
-	private ArquivoDAO arquivoDAO;
+	private DesistenciaProtestoMediator desistenciaProtestoMediator;
 	@Autowired
 	private InstituicaoMediator instituicaoMediator;
 	private List<Exception> erros;
@@ -112,51 +99,14 @@ public class DesistenciaProtestoService extends CraWebService {
 
 	private Arquivo gerarArquivoDesistencia(Arquivo arquivo, String dados) {
 
-		logger.info("Iniciar processador do arquivo de desistencia" + getNomeArquivo());
-
-		arquivo = conversorArquivoDesistenciaProtesto.converter(converterStringParaVO(dados), getErros());
+		logger.info("Iniciar processador do arquivo de desistencia " + getNomeArquivo());
+		arquivo = desistenciaProtestoMediator.processar(arquivo, dados, getErros(), getUsuario());
 		arquivo.setInstituicaoEnvio(getUsuario().getInstituicao());
 		arquivo.setNomeArquivo(getNomeArquivo());
 		arquivo.setUsuarioEnvio(getUsuario());
-
-		logger.info("Fim processador do arquivo de desistencia" + getNomeArquivo());
-
-		arquivo = salvarArquivo(arquivo, usuario);
-
+		logger.info("Fim processador do arquivo de desistencia " + getNomeArquivo());
 		return arquivo;
 
-	}
-
-	private Arquivo salvarArquivo(Arquivo arquivo, Usuario usuario) {
-		return arquivoDAO.salvar(arquivo, usuario);
-	}
-
-	private ArquivoDesistenciaProtestoVO converterStringParaVO(String dados) {
-		JAXBContext context;
-		ArquivoDesistenciaProtestoVO desistenciaVO = null;
-
-		try {
-			context = JAXBContext.newInstance(ArquivoDesistenciaProtestoVO.class);
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-			String xmlRecebido = "";
-
-			Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
-			while (scanner.hasNext()) {
-				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
-				if (xmlRecebido.contains("<?xml version=")) {
-					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
-				}
-			}
-			scanner.close();
-
-			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
-			desistenciaVO = (ArquivoDesistenciaProtestoVO) unmarshaller.unmarshal(new InputSource(xml));
-
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(e.getMessage(), e.getCause());
-		}
-		return desistenciaVO;
 	}
 
 	private String getMunicipio(DesistenciaProtesto desistenciaProtesto) {

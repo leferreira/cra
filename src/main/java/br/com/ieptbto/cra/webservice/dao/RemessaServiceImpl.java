@@ -62,7 +62,10 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
-	public String desistencia(String nomeArquivo, String login, String senha, String dados) {
+	@WebMethod(operationName = "Desistencia")
+	@GET
+	public String desistencia(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
 		init(login, senha);
 		return desistenciaProtestoService.processar(nomeArquivo, usuario, dados);
 	}
