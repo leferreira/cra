@@ -49,7 +49,7 @@ import br.com.ieptbto.cra.util.DataUtil;
 
 @SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
 public class BatimentoPage extends BasePage<Batimento> {
 
 	private static final Logger logger = Logger.getLogger(BatimentoPage.class);

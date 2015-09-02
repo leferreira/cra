@@ -35,7 +35,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 @SuppressWarnings( "serial" )
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
 public class RetornoPage extends BasePage<Retorno> {
 
 	private static final Logger logger = Logger.getLogger(RetornoPage.class);
