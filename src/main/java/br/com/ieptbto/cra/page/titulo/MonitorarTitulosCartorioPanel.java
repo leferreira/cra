@@ -100,8 +100,8 @@ public class MonitorarTitulosCartorioPanel extends Panel {
 				try {
 					if (dataEntradaCRA.getModelObject() != null)
 						titulo.setDataCadastro(DataUtil.stringToLocalDate(dataEntradaCRA.getModelObject()).toDate());
-					if (comboPortador.getDefaultModelObject() != null)
-						titulo.setCodigoPortador(titulo.getRemessa().getInstituicaoOrigem().getCodigoCompensacao());
+					if (comboPortador.getModelObject() != null)
+						titulo.setCodigoPortador(comboPortador.getModelObject().getCodigoCompensacao());
 					
 					setResponsePage(new ListaTitulosPage(titulo));
 				} catch (InfraException ex) {

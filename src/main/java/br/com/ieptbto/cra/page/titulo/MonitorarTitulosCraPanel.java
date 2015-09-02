@@ -63,9 +63,9 @@ public class MonitorarTitulosCraPanel extends Panel {
 				try {
 					if (dataEntradaCRA.getModelObject() != null)
 						titulo.setDataCadastro(DataUtil.stringToLocalDate(dataEntradaCRA.getModelObject()).toDate());
-					if (comboPortador.getDefaultModelObject() != null)
-						titulo.setCodigoPortador(titulo.getRemessa().getInstituicaoOrigem().getCodigoCompensacao());
-					if (comboMunicipio.getDefaultModelObject() != null)
+					if (comboPortador.getModelObject() != null) 
+						titulo.setCodigoPortador(comboPortador.getModelObject().getCodigoCompensacao());
+					if (comboMunicipio.getModelObject() != null)
 						titulo.setPracaProtesto(comboMunicipio.getModelObject().getNomeMunicipio());
 					
 					setResponsePage(new ListaTitulosPage(titulo));

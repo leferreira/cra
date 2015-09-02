@@ -35,15 +35,15 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 	@SpringBean
 	TituloMediator tituloMediator;
 	
-	private TituloRemessa tituloBuscado;
+	private TituloRemessa tituloRemessa;
 	
 	public ListaTitulosPage(TituloRemessa titulo) {
-		this.tituloBuscado=titulo;
+		this.tituloRemessa=titulo;
 		add(carregarListaTitulos());
 	}
 
 	private ListView<TituloRemessa> carregarListaTitulos() {
-		return new ListView<TituloRemessa>("listViewTitulos", tituloMediator.buscarListaTitulos(tituloBuscado, getUser())) {
+		return new ListView<TituloRemessa>("listViewTitulos", tituloMediator.buscarListaTitulos(getTituloRemessa(), getUser())) {
 
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
@@ -100,8 +100,13 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		};
 	}
 	
+	public TituloRemessa getTituloRemessa() {
+		return tituloRemessa;
+	}
+
 	@Override
 	protected IModel<TituloRemessa> getModel() {
-		return new CompoundPropertyModel<TituloRemessa>(tituloBuscado);
+		return new CompoundPropertyModel<TituloRemessa>(tituloRemessa);
 	}
+
 }
