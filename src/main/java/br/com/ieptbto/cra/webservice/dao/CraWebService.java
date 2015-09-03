@@ -26,11 +26,12 @@ import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 public class CraWebService {
 
 	protected static final Logger logger = Logger.getLogger(CraWebService.class);
-	private static final String CONSTANTE_REMESSA_XML = "remessa";
+	public static final String CONSTANTE_REMESSA_XML = "remessa";
+	public static final String CONSTANTE_CONFIRMACAO_XML = "confirmacao";
 	protected Usuario usuario;
 	protected String nomeArquivo;
 
-	protected String setResposta(ArquivoVO arquivo, String nomeArquivo) {
+	protected String setResposta(ArquivoVO arquivo, String nomeArquivo, String nomeNode) {
 		if (getUsuario() == null) {
 			logger.error("Usuario inválido.");
 			return setRespostaUsuarioInvalido(nomeArquivo);
@@ -40,7 +41,7 @@ public class CraWebService {
 			return setRespostaArquivoInexistente(nomeArquivo);
 		}
 
-		return gerarMensagem(arquivo, CONSTANTE_REMESSA_XML);
+		return gerarMensagem(arquivo, nomeNode);
 	}
 
 	protected String setRespostaArquivoEmBranco(String nomeArquivo) {

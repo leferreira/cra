@@ -55,7 +55,7 @@ public class RemessaService extends CraWebService {
 
 		if (getArquivoVO() == null || getUsuario() == null) {
 			ArquivoVO arquivo = new ArquivoVO();
-			return setResposta(arquivo, nomeArquivo);
+			return setResposta(arquivo, nomeArquivo, CONSTANTE_REMESSA_XML);
 		}
 
 		setRemessas(ConversorArquivoVo.converterParaRemessaVO(getArquivoVO()));

@@ -45,7 +45,7 @@ public class DesistenciaProtestoService extends CraWebService {
 		setNomeArquivo(nomeArquivo);
 
 		if (getUsuario() == null) {
-			return setResposta(new ArquivoVO(), nomeArquivo);
+			return setResposta(new ArquivoVO(), nomeArquivo, CONSTANTE_REMESSA_XML);
 		}
 
 		if (dados == null || StringUtils.isEmpty(dados) || StringUtils.isBlank(dados)) {
