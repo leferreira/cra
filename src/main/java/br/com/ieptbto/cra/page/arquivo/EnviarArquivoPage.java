@@ -55,28 +55,35 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
 		arquivo.setUsuarioEnvio(getUser());
 		arquivo.setDataEnvio(new LocalDate());
-		
+
 		form = new Form<Arquivo>("form", getModel()) {
 			/****/
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void onSubmit() {
 				final FileUpload uploadedFile = fileUploadField.getFileUpload();
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
-				
+
 				try {
 					getFeedbackMessages().clear();
 					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUser());
-					
+
 					for (Exception exception : arquivoRetorno.getErros()) {
 						warn(exception.getMessage());
 					}
 					arquivoRetorno.getErros().clear();
-					
-					if (!arquivoRetorno.getArquivo().getRemessas().isEmpty()) {
-						info("O arquivo " + arquivo.getNomeArquivo() + " com " + arquivoRetorno.getArquivo().getRemessas().size()
-								+ " Remessa(s), salvo com sucesso.");
+
+					if (arquivoRetorno.getArquivo() != null) {
+						if (!arquivoRetorno.getArquivo().getRemessas().isEmpty()) {
+							info("O arquivo " + arquivo.getNomeArquivo() + " com " + arquivoRetorno.getArquivo().getRemessas().size()
+							        + " Remessa(s), salvo com sucesso.");
+						} else if (arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto() != null) {
+							info("A desistência de protesto " + arquivo.getNomeArquivo() + " com "
+							        + arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto().size()
+							        + " desistencia(s), foi salvo com sucesso.");
+						}
+
 					}
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -86,16 +93,16 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
 				}
 			}
-			
+
 		};
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.megabytes(10));
-		
+
 		form.add(campoArquivo());
 		form.add(botaoEnviar());
 		add(form);
 	}
-	
+
 	private FileUploadField campoArquivo() {
 		fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
 		fileUploadField.setRequired(true);
