@@ -37,36 +37,36 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@SpringBean
 	RemessaMediator remessaMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	private Usuario usuario;
 	private List<Remessa> confirmacoesPendentes;
-	
+
 	public HomePage() {
 		super();
 		carregarHomePage();
 	}
-	
+
 	private void carregarHomePage() {
 		this.usuario = getUser();
 		this.confirmacoesPendentes = remessaMediator.confirmacoesPendentes(getUsuario().getInstituicao());
 		labelArquivosPendentes();
 		add(listaConfirmacoesPendentes());
 		add(listaArquivosConfirmacoesPendentes());
-//		listaRetornosPendentes();
+		// listaRetornosPendentes();
 	}
 
 	private void labelArquivosPendentes() {
 		if (!getConfirmacoesPendentes().isEmpty()) {
-			warn("Há [ "+ getConfirmacoesPendentes().size() +" ] arquivo(s) pendente(s) de confirmação!");
+			warn("Há [ " + getConfirmacoesPendentes().size() + " ] arquivo(s) pendente(s) de confirmação!");
 		}
 	}
 
 	private Link<Remessa> listaArquivosConfirmacoesPendentes() {
-		return new Link<Remessa>("arquivosConfirmacoesPendetes"){
+		return new Link<Remessa>("arquivosConfirmacoesPendetes") {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -77,7 +77,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		};
 	}
 
-	private ListView<Remessa> listaConfirmacoesPendentes(){
+	private ListView<Remessa> listaConfirmacoesPendentes() {
 		return new ListView<Remessa>("listConfirmacoes", getConfirmacoesPendentes()) {
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -91,7 +91,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			}
 		};
 	}
-	
+
 	public HomePage(PageParameters parameters) {
 		error(parameters.get("error"));
 		carregarHomePage();
