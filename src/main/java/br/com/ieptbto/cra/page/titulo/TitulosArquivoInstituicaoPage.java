@@ -112,6 +112,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 					
 					parametros.put("NOME_ARQUIVO", getArquivo().getNomeArquivo());
 					parametros.put("DATA_ENVIO", DataUtil.localDateToString(getArquivo().getDataEnvio()));
+					parametros.put("INSTITUICAO", getArquivo().getInstituicaoEnvio().getNomeFantasia());
 						
 					List<TituloBean> titulosJR = new ArrayList<TituloBean>();
 					for (TituloRemessa tituloRemessa : getTitulos()) {
@@ -147,7 +148,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 				IResourceStream resourceStream = new FileResourceStream(file);
 
 				getRequestCycle().scheduleRequestHandlerAfterCurrent(
-				        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+				        new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
 			}
 		};
 	}

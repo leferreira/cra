@@ -38,6 +38,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.ireport.TituloBean;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
@@ -72,8 +73,8 @@ public class BatimentoPage extends BasePage<Batimento> {
 				List<Remessa> retornosParaConfirmar = new ArrayList<Remessa>();
 				
 				try{
-					if (grupo.getModelObject().isEmpty()){
-						error("Ao menos um retorno deve ser selecionado!");
+					if (grupo.getModelObject().isEmpty() || grupo.getModelObject().size() == 0){
+						throw new InfraException("Ao menos um retorno deve ser selecionado!");
 					} else {
 						retornosParaConfirmar = (List<Remessa>) grupo.getModelObject();
 						batimentoMediator.confirmarBatimentos(retornosParaConfirmar);
@@ -111,7 +112,13 @@ public class BatimentoPage extends BasePage<Batimento> {
 				} else {
 					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", valorPagos));
 				}
-				item.add(botaoGerarRelatorio(retorno));
+				
+				BigDecimal valorCustas = batimentoMediator.buscarValorDeCustasCartorio(retorno);
+				if (valorCustas==null || valorCustas.equals(BigDecimal.ZERO)) {
+					item.add(new LabelValorMonetario<BigDecimal>("valorCustas", BigDecimal.ZERO));
+				} else {
+					item.add(new LabelValorMonetario<BigDecimal>("valorCustas", valorCustas));
+				}
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					@Override
@@ -121,29 +128,43 @@ public class BatimentoPage extends BasePage<Batimento> {
 		        };
 		        linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
 		        item.add(linkArquivo);
+		        item.add(botaoGerarRelatorio(retorno));
             }
 
-			private Link<Remessa> botaoGerarRelatorio(final Remessa remessa){
+			private Link<Remessa> botaoGerarRelatorio(final Remessa retorno){
 				return new Link<Remessa>("gerarRelatorio"){
 					
 					@Override
 					public void onClick() {
 						try {
-							HashMap<String, Object> parametros = new HashMap<String, Object>();
-							List<TituloRemessa> titulos = tituloMediator.buscarTitulosPorRemessa(remessa, remessa.getArquivo().getInstituicaoEnvio(), remessa.getInstituicaoDestino());
+							List<TituloRemessa> titulos = tituloMediator.buscarTitulosPorRemessa(retorno, retorno.getInstituicaoOrigem());
 							if (titulos.isEmpty())
-								throw new InfraException("Não foi possível gerar o relatório. A busca não retornou resultados!");
+								throw new InfraException("Não foi possível gerar o relatório. O arquivo não contém titulos !");
 							
-							parametros.put("NOME_ARQUIVO", remessa.getArquivo().getNomeArquivo());
-							parametros.put("DATA_ENVIO", DataUtil.localDateToString(remessa.getDataRecebimento()));
-							parametros.put("INSTITUICAO", remessa.getInstituicaoOrigem().getNomeFantasia());
-								
+							Integer numeroPagos = 0;
+							Integer numeroProtestadosRetirados = 0;
 							List<TituloBean> titulosJR = new ArrayList<TituloBean>();
 							for (TituloRemessa tituloRemessa : titulos) {
 								TituloBean tituloJR = new TituloBean();
 								tituloJR.parseToTituloRemessa(tituloRemessa);
+								if (TipoOcorrencia.getTipoOcorrencia(tituloRemessa.getRetorno().getTipoOcorrencia()).equals(TipoOcorrencia.PAGO)) {
+									numeroPagos = numeroPagos + 1;
+								} else if ((TipoOcorrencia.getTipoOcorrencia(tituloRemessa.getRetorno().getTipoOcorrencia()).equals(TipoOcorrencia.PROTESTADO)) ||
+										(TipoOcorrencia.getTipoOcorrencia(tituloRemessa.getRetorno().getTipoOcorrencia()).equals(TipoOcorrencia.RETIRADO))) {
+									numeroProtestadosRetirados = numeroProtestadosRetirados + 1;
+								}
 								titulosJR.add(tituloJR);
 							}
+							HashMap<String, Object> parametros = new HashMap<String, Object>();
+							parametros.put("NOME_ARQUIVO", retorno.getArquivo().getNomeArquivo());
+							parametros.put("DATA_ENVIO", DataUtil.localDateToString(retorno.getDataRecebimento()));
+							parametros.put("INSTITUICAO", retorno.getInstituicaoOrigem().getNomeFantasia().toUpperCase());
+							parametros.put("TOTAL_TITULOS", Integer.class.cast(titulosJR.size()));
+							parametros.put("TOTAL_PAGOS", batimentoMediator.buscarValorDeTitulosPagos(retorno));
+							parametros.put("TOTAL_CUSTAS", batimentoMediator.buscarValorDeCustasCartorio(retorno));
+							parametros.put("QTD_PAGOS", numeroPagos);
+							parametros.put("QTD_PROTESTADOS_RETIRADOS", numeroProtestadosRetirados);
+
 							JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulosJR);
 							JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
 							JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
@@ -152,7 +173,7 @@ public class BatimentoPage extends BasePage<Batimento> {
 							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 							IResourceStream resourceStream = new FileResourceStream(pdf);
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+							        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + retorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 						} catch (InfraException ex) { 
 							error(ex.getMessage());
 						} catch (Exception e) { 

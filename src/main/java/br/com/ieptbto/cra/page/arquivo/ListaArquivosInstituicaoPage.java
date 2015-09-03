@@ -81,7 +81,7 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						        new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
 					}
 				};
 			}

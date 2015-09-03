@@ -35,7 +35,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 @SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
 public class RemoverArquivoPage extends BasePage<Arquivo> {
 
 	@SpringBean
