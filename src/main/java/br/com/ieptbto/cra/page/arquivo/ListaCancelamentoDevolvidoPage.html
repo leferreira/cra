@@ -18,26 +18,20 @@
 								<th class="col-center" style="width: 60px;">Baixar</th>
 								<th class="col-center">Nome Arquivo</th>
 								<th class="col-center">Data Envio</th>
-								<th>Enviado por</th>
-								<th>Destino</th>
-								<th class="col-right">Valor Total</th>
-								<th></th>
+								<th class="col-center">Enviado por</th>
+								<th class="col-right">Valor Total (R$)</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr wicket:id="dataTableRemessa">
 								<td class="col-center" wicket:id="tipoArquivo"></td>
 								<td class="col-center">
-									<a href="#" class="link" wicket:id="downloadArquivo">
-										<img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg">
-									</a>
+									<a href="#" class="link" wicket:id="downloadArquivo"><img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg"></a>
 								</td>
-								<td class="col-center"><a target="_blank" wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
+								<td class="col-center"><a target="_blank"><span class="link" wicket:id="nomeArquivo"></span></a></td>
 								<td class="col-center" wicket:id="dataEnvio"></td>
-								<td wicket:id="instituicao"></td>
-								<td wicket:id="destino"></td>
-								<td class="col-right valor" wicket:id="valor"></td>
-								<td class="col-center"><span wicket:id="status"></span></td>
+								<td class="col-center" wicket:id="instituicao"></td>
+								<td class="col-right valor" wicket:id="valor"></td> 
 							</tr>
 						</tbody>
 					</table>

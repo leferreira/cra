@@ -15,6 +15,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -43,7 +45,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	private Usuario usuario;
-	private List<Remessa> confirmacoesPendentes;
+	private Arquivo confirmacoesPendentes;
 
 	public HomePage() {
 		super();
@@ -56,6 +58,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		labelArquivosPendentes();
 		add(listaConfirmacoesPendentes());
 		add(listaArquivosConfirmacoesPendentes());
+		add(listaConfirmacoesPendentesDesistenciaProtesto());
 		// listaRetornosPendentes();
 	}
 
@@ -92,6 +95,26 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		};
 	}
 
+	private ListView<DesistenciaProtesto> listaConfirmacoesPendentesDesistenciaProtesto() {
+		return new ListView<DesistenciaProtesto>("listDesistencias", getConfirmacoesPendentesDesistenciaProtesto()) {
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<DesistenciaProtesto> item) {
+				final DesistenciaProtesto remessa = item.getModelObject();
+				item.add(new Label("desistencia", remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+				item.add(new Label("banco", remessa.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaDesistenciaProtesto().getArquivo()
+				        .getDataEnvio().toDate(), new Date())));
+			}
+		};
+	}
+
+	private List<DesistenciaProtesto> getConfirmacoesPendentesDesistenciaProtesto() {
+		return confirmacoesPendentes.getRemessaDesistenciaProtesto().getDesistenciaProtesto();
+	}
+
 	public HomePage(PageParameters parameters) {
 		error(parameters.get("error"));
 		carregarHomePage();
@@ -109,7 +132,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	}
 
 	public List<Remessa> getConfirmacoesPendentes() {
-		return confirmacoesPendentes;
+		return confirmacoesPendentes.getRemessas();
 	}
 
 	@Override

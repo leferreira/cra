@@ -56,9 +56,10 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	private List<Remessa> remessas;
 	private Link<Void> relatorioConfirmacoes;
 
-	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<StatusRemessa> situacoes) {
+	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim,
+	        ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<StatusRemessa> situacoes) {
 		this.arquivo = arquivo;
-		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio,dataInicio, dataFim, tiposArquivo, getUser(), situacoes);
+		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio, dataInicio, dataFim, tiposArquivo, getUser(), situacoes);
 		add(carregarListaArquivos());
 		add(relatorioConfirmacoes());
 		this.relatorioConfirmacoes.setVisible(false);
@@ -66,40 +67,42 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 
 	public ListaArquivosPage(Usuario usuario) {
 		this.arquivo = new Arquivo();
-		this.remessas = remessaMediator.confirmacoesPendentes(usuario.getInstituicao());
+		this.remessas = remessaMediator.confirmacoesPendentesRelatorio(usuario.getInstituicao());
 		add(carregarListaArquivos());
 		add(relatorioConfirmacoes());
 		this.relatorioConfirmacoes.setEnabled(true);
 	}
 
 	private Link<Void> relatorioConfirmacoes() {
-		relatorioConfirmacoes = new Link<Void>("relatorioConfirmacoes"){
+		relatorioConfirmacoes = new Link<Void>("relatorioConfirmacoes") {
 			public void onClick() {
 				try {
 					if (getRemessas().isEmpty())
 						throw new InfraException("Não foi possível gerar o relatório. A busca não retornou resultados!");
 					HashMap<String, Object> parametros = new HashMap<String, Object>();
 					parametros.put("DATA_ENVIO", DataUtil.localDateToString(new LocalDate()));
-					
+
 					List<ConfirmacaoPendenteBean> listaBeans = new ArrayList<ConfirmacaoPendenteBean>();
 					for (Remessa r : getRemessas()) {
 						ConfirmacaoPendenteBean bean = new ConfirmacaoPendenteBean();
 						bean.parseToRemessa(r);
 						listaBeans.add(bean);
 					}
-					
+
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getRemessas());
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioConfirmacoesPendentes.jrxml"));
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(
+					        "../../relatorio/RelatorioConfirmacoesPendentes.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
-					
+
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_CONFIRMACOES_PENDENTES_" + DataUtil.localDateToString(new LocalDate()).replace("/", "_") + ".pdf"));
-				} catch (InfraException ex) { 
+					        new ResourceStreamRequestHandler(resourceStream, "CRA_CONFIRMACOES_PENDENTES_"
+					                + DataUtil.localDateToString(new LocalDate()).replace("/", "_") + ".pdf"));
+				} catch (InfraException ex) {
 					error(ex.getMessage());
-				} catch (Exception e) { 
+				} catch (Exception e) {
 					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
 					e.printStackTrace();
 				}
@@ -128,7 +131,8 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
 				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
-				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa().getLabel()));
+				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa()
+				        .getLabel()));
 				item.add(downloadArquivoTXT(remessa));
 			}
 
@@ -147,9 +151,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 			}
 		};
 	}
-	
-	
-	
+
 	public List<Remessa> getRemessas() {
 		return remessas;
 	}

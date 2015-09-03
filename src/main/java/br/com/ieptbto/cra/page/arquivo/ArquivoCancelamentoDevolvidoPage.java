@@ -30,26 +30,24 @@ public class ArquivoCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 
 	public ArquivoCancelamentoDevolvidoPage() {
 		this.arquivo = new Arquivo();
-		
+
 		this.instituicao = getUser().getInstituicao();
 		form = new Form<Arquivo>("form", getModel());
-		
-		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
+
+		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 			form.add(new CancelamentoDevolvidoCraPanel("cancelamentoDevolvidoInputPanel", getModel(), getInstituicao()));
-		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){
-			form.add(new CancelamentoDevolvidoCartorioPanel("cancelamentoDevolvidoInputPanel", getModel(), getInstituicao()));
+		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+			form.add(new CancelamentoDevolvidoCartorioPanel("cancelamentoDevolvidoInputPanel", getModel(), getInstituicao(), getUser()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 			form.add(new CancelamentoDevolvidoInstituicaoPanel("cancelamentoDevolvidoInputPanel", getModel(), getInstituicao()));
 		}
 		add(form);
 	}
 
-	
 	public Instituicao getInstituicao() {
 		return instituicao;
 	}
-	
-	
+
 	public void setInstituicao(Instituicao instituicao) {
 		this.instituicao = instituicao;
 	}

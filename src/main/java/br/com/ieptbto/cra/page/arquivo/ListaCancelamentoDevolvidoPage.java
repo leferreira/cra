@@ -3,7 +3,6 @@ package br.com.ieptbto.cra.page.arquivo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -14,11 +13,14 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.RemessaDesistenciaProtesto;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.mediator.RelatorioMediator;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -29,33 +31,41 @@ import br.com.ieptbto.cra.util.DataUtil;
 @SuppressWarnings("serial")
 public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 
-//	@SpringBean
-//	RemessaDesistenciaMediator remessaDesistenciaMediator;
+	// @SpringBean
+	// RemessaDesistenciaMediator remessaDesistenciaMediator;
 	@SpringBean
-	RelatorioMediator relatorioMediator;
+	RemessaMediator remessaMediator;
 	private Arquivo arquivo;
-	private List<RemessaDesistenciaProtesto> remessasCancelamentoDevolucao;
+	private List<DesistenciaProtesto> desistenciaProtesto;
 
-	public ListaCancelamentoDevolvidoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo) {
+	public ListaCancelamentoDevolvidoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim,
+	        ArrayList<TipoArquivoEnum> tiposArquivo) {
 		this.arquivo = arquivo;
-		this.remessasCancelamentoDevolucao = new ArrayList<RemessaDesistenciaProtesto>();
-//		this.remessasCancelamentoDevolucao = remessaDesistenciaMediator.buscarRemessasCancelamentoDevolvido(arquivo, municipio,dataInicio, dataFim, tiposArquivo, getUser());
 		add(carregarListaArquivos());
 	}
 
-	private ListView<RemessaDesistenciaProtesto> carregarListaArquivos() {
-		return new ListView<RemessaDesistenciaProtesto>("dataTableRemessa", getRemessasCancelamentoDevolucao()) {
+	public ListaCancelamentoDevolvidoPage(Arquivo arquivo, LocalDate dataInicio, LocalDate dataFim,
+	        ArrayList<TipoArquivoEnum> tiposArquivo, Instituicao portador, Usuario usuario) {
+		this.desistenciaProtesto = remessaMediator.buscarRemessaDesistenciaProtesto(arquivo, dataInicio, dataFim, tiposArquivo, portador,
+		        usuario);
+		add(carregarListaArquivos());
+	}
+
+	private ListView<DesistenciaProtesto> carregarListaArquivos() {
+		return new ListView<DesistenciaProtesto>("dataTableRemessa", getRemessasCancelamentoDevolucao()) {
 
 			@Override
-			protected void populateItem(ListItem<RemessaDesistenciaProtesto> item) {
-				final RemessaDesistenciaProtesto remessa = item.getModelObject();
-				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().constante));
-				item.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
-				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
-				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("destino", StringUtils.EMPTY));
-				item.add(new Label("valor", remessa.getRodape().getSomaTotalCancelamentoDesistencia()));
-				item.add(downloadArquivoTXT(remessa));
+			protected void populateItem(ListItem<DesistenciaProtesto> item) {
+				final DesistenciaProtesto desistencia = item.getModelObject();
+				item.add(new Label("tipoArquivo", desistencia.getRemessaDesistenciaProtesto().getArquivo().getTipoArquivo()
+				        .getTipoArquivo().constante));
+				item.add(new Label("nomeArquivo", desistencia.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+				item.add(new Label("dataEnvio", DataUtil.localDateToString(desistencia.getRemessaDesistenciaProtesto().getArquivo()
+				        .getDataEnvio())));
+				item.add(new Label("instituicao", desistencia.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio()
+				        .getNomeFantasia()));
+				item.add(new Label("valor", desistencia.getRemessaDesistenciaProtesto().getRodape().getSomatorioValorTitulo()));
+				item.add(downloadArquivoTXT(desistencia.getRemessaDesistenciaProtesto()));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final RemessaDesistenciaProtesto remessa) {
@@ -68,9 +78,9 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 			}
 		};
 	}
-	
-	public List<RemessaDesistenciaProtesto> getRemessasCancelamentoDevolucao() {
-		return remessasCancelamentoDevolucao;
+
+	public List<DesistenciaProtesto> getRemessasCancelamentoDevolucao() {
+		return desistenciaProtesto;
 	}
 
 	@Override
