@@ -28,8 +28,10 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.RemessaDesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
@@ -62,13 +64,15 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio, dataInicio, dataFim, tiposArquivo, getUser(), situacoes);
 		add(carregarListaArquivos());
 		add(relatorioConfirmacoes());
+		add(carregarListaArquivosDesistenciaProtesto());
 		this.relatorioConfirmacoes.setVisible(false);
 	}
 
 	public ListaArquivosPage(Usuario usuario) {
-		this.arquivo = new Arquivo();
-		this.remessas = remessaMediator.confirmacoesPendentesRelatorio(usuario.getInstituicao());
+		this.arquivo = remessaMediator.confirmacoesPendentes(usuario.getInstituicao());
+		this.remessas = this.arquivo.getRemessas();
 		add(carregarListaArquivos());
+		add(carregarListaArquivosDesistenciaProtesto());
 		add(relatorioConfirmacoes());
 		this.relatorioConfirmacoes.setEnabled(true);
 	}
@@ -150,6 +154,61 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				};
 			}
 		};
+	}
+
+	private ListView<DesistenciaProtesto> carregarListaArquivosDesistenciaProtesto() {
+		return new ListView<DesistenciaProtesto>("dataTableDesistencia", getRemessasDesistenciaProtesto()) {
+
+			@Override
+			protected void populateItem(ListItem<DesistenciaProtesto> item) {
+				final DesistenciaProtesto desistenciaProtesto = item.getModelObject();
+				item.add(new Label("tipoArquivo", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getTipoArquivo()
+				        .getTipoArquivo().constante));
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					@Override
+					public void onClick() {
+						// setResponsePage(new TitulosArquivoPage(remessa));
+					}
+				};
+				linkArquivo
+				        .add(new Label("nomeArquivo", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+				item.add(linkArquivo);
+				item.add(new Label("dataEnvio", DataUtil.localDateToString(desistenciaProtesto.getRemessaDesistenciaProtesto()
+				        .getCabecalho().getDataMovimento())));
+				item.add(new Label("instituicao", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio()
+				        .getNomeFantasia()));
+				item.add(new Label("destino", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoRecebe()
+				        .getNomeFantasia()));
+				item.add(new LabelValorMonetario<BigDecimal>("valor", desistenciaProtesto.getRemessaDesistenciaProtesto().getRodape()
+				        .getSomatorioValorTitulo()));
+				item.add(new Label("status", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getStatusArquivo()
+				        .getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(desistenciaProtesto.getRemessaDesistenciaProtesto()
+				        .getArquivo().getStatusArquivo().getSituacaoArquivo().getLabel()));
+				item.add(downloadArquivoTXT(desistenciaProtesto.getRemessaDesistenciaProtesto()));
+			}
+
+			private Link<Remessa> downloadArquivoTXT(final RemessaDesistenciaProtesto remessa) {
+				return new Link<Remessa>("downloadArquivo") {
+
+					@Override
+					public void onClick() {
+						File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
+						IResourceStream resourceStream = new FileResourceStream(file);
+
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+					}
+				};
+			}
+		};
+	}
+
+	private List<DesistenciaProtesto> getRemessasDesistenciaProtesto() {
+		if (arquivo.getRemessaDesistenciaProtesto() == null) {
+			return new ArrayList<DesistenciaProtesto>();
+		}
+		return this.arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto();
 	}
 
 	public List<Remessa> getRemessas() {
