@@ -31,7 +31,6 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.RemessaDesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
@@ -164,6 +163,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				final DesistenciaProtesto desistenciaProtesto = item.getModelObject();
 				item.add(new Label("tipoArquivo", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getTipoArquivo()
 				        .getTipoArquivo().constante));
+
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					@Override
@@ -185,15 +185,15 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				item.add(new Label("status", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getStatusArquivo()
 				        .getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(desistenciaProtesto.getRemessaDesistenciaProtesto()
 				        .getArquivo().getStatusArquivo().getSituacaoArquivo().getLabel()));
-				item.add(downloadArquivoTXT(desistenciaProtesto.getRemessaDesistenciaProtesto()));
+				item.add(downloadArquivoTXT(desistenciaProtesto));
 			}
 
-			private Link<Remessa> downloadArquivoTXT(final RemessaDesistenciaProtesto remessa) {
+			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto desistenciaProtesto) {
 				return new Link<Remessa>("downloadArquivo") {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
+						File file = remessaMediator.baixarRemessaTXT(getUser(), desistenciaProtesto);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
