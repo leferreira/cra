@@ -120,7 +120,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 						titulosJR.add(tituloJR);
 					}
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulosJR);
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioArquivoDetalhado.jrxml"));
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/Relatorio"+getRemessa().getArquivo().getTipoArquivo().getTipoArquivo().getLabel()+".jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 					
 					File pdf = File.createTempFile("report", ".pdf");
