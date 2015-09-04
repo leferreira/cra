@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
 	<property name="ireport.zoom" value="1.9487171000000019"/>
-	<property name="ireport.x" value="369"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="NOME_ARQUIVO" class="java.lang.String"/>
 	<parameter name="DATA_ENVIO" class="java.lang.String"/>
@@ -49,6 +49,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{INSTITUICAO}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement x="0" y="0" width="380" height="60" uuid="26444015-2c74-42c6-bc39-ed4f15e9c408"/>
+				<imageExpression><![CDATA["//usr//share//tomcat//webapps//img//ieptb.gif"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
