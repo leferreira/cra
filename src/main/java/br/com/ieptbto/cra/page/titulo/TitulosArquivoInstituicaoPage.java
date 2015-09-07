@@ -16,13 +16,11 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
@@ -31,7 +29,6 @@ import org.apache.wicket.util.resource.IResourceStream;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.ireport.TituloBean;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -61,9 +58,11 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 	
 	private void carregarInformacoes(){
 		add(nomeArquivo());
-		add(portador());
-		add(dataEnvio());
 		add(tipoArquivo());
+		add(instituicaoEnvio());
+		add(instituicaoDestino());
+		add(dataEnvio());
+		add(usuarioEnvio());
 		add(carregarListaTitulos());
 		add(botaoGerarRelatorio());
 		add(downloadArquivoTXT(getArquivo()));
@@ -153,29 +152,28 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 		};
 	}
 	
-	private TextField<String> nomeArquivo(){
-		return new TextField<String>("nomeArquivo", new Model<String>(getArquivo().getNomeArquivo()));
+	private Label nomeArquivo(){
+		return new Label("nomeArquivo", getArquivo().getNomeArquivo());
 	}
 	
-	private TextField<String> portador(){
-		return new TextField<String>("nomePortador", new Model<String>(getPortador()));
+	private Label tipoArquivo(){
+		return new Label("tipo", getArquivo().getTipoArquivo().getTipoArquivo().getLabel());
+	}
+
+	private Label instituicaoEnvio(){
+		return new Label("instituicaoEnvio", getArquivo().getInstituicaoEnvio().getNomeFantasia());
 	}
 	
-	private TextField<String> dataEnvio(){
-		return new TextField<String>("dataEnvio", new Model<String>(DataUtil.localDateToString(getArquivo().getDataEnvio())));
+	private Label instituicaoDestino(){
+		return new Label("instituicaoDestino", getArquivo().getInstituicaoRecebe().getNomeFantasia());
 	}
 	
-	private TextField<String> tipoArquivo(){
-		return new TextField<String>("tipo", new Model<String>(getArquivo().getTipoArquivo().getTipoArquivo().getLabel()));
+	private Label usuarioEnvio(){
+		return new Label("usuario", getArquivo().getUsuarioEnvio().getNome());
 	}
 	
-	private String getPortador(){
-		if (getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA) || 
-			getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO) ||
-			getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO)) {
-			return getArquivo().getInstituicaoEnvio().getNomeFantasia();
-		}
-		return getArquivo().getInstituicaoRecebe().getNomeFantasia();
+	private Label dataEnvio(){
+		return new Label("dataEnvio", DataUtil.localDateToString(getArquivo().getDataEnvio()));
 	}
 	
 	public Arquivo getArquivo() {

@@ -54,7 +54,7 @@ public class MonitorarTitulosCartorioPanel extends Panel {
 	
 	private Component comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		this.comboPortador = new DropDownChoice<Instituicao>("remessa.instituicaoOrigem",instituicaoMediator.getInstituicoesFinanceiras(), renderer);
+		this.comboPortador = new DropDownChoice<Instituicao>("remessa.instituicaoOrigem",instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
 		return comboPortador;
 	}
 	

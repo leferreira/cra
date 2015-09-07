@@ -36,7 +36,7 @@ public class RelatorioSinteticoCartorioPanel extends Panel{
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	@SpringBean
-	RelatorioMediator relatorioMediator;
+	RelatorioMediator relatorioGerador;
 	private Instituicao cartorio;
 	private TextField<String> fieldDataInicio;
 	private TextField<String> fieldDataFim;
@@ -71,7 +71,7 @@ public class RelatorioSinteticoCartorioPanel extends Panel{
 				} 
 				
 				try {
-					JasperPrint jasperPrint = relatorioMediator.novoRelatorioSinteticoPorMunicipio(getCartorio().getMunicipio(), tipoArquivo,dataInicio, dataFim );
+					JasperPrint jasperPrint = relatorioGerador.relatorioSinteticoPorMunicipio(getCartorio().getMunicipio(), tipoArquivo,dataInicio, dataFim );
 					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 				
 				} catch (JRException e) {

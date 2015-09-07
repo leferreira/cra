@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.base;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -11,14 +12,18 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPage;
@@ -64,7 +69,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	private void labelArquivosPendentes() {
 		if (!getConfirmacoesPendentes().isEmpty()) {
-			warn("Há [ " + getConfirmacoesPendentes().size() + " ] arquivo(s) pendente(s) de confirmação!");
+			warn("Exite(m) [ " + getConfirmacoesPendentes().size() + " ] arquivo(s) pendente(s)!");
 		}
 	}
 
@@ -88,8 +93,27 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
-				item.add(new Label("arquivo", remessa.getArquivo().getNomeArquivo()));
-				item.add(new Label("instituicao", remessa.getInstituicaoDestino().getMunicipio().getNomeMunicipio()));
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
+						IResourceStream resourceStream = new FileResourceStream(file);
+
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+					}
+				};
+				linkArquivo.add(new Label("arquivo", remessa.getArquivo().getNomeArquivo()));
+				item.add(linkArquivo);
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+					item.add(new Label("instituicao", remessa.getInstituicaoOrigem().getNomeFantasia()));
+				} else {
+					item.add(new Label("instituicao", remessa.getInstituicaoDestino().getMunicipio().getNomeMunicipio()));
+				}
 				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
 			}
 		};
@@ -103,7 +127,23 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			@Override
 			protected void populateItem(ListItem<DesistenciaProtesto> item) {
 				final DesistenciaProtesto remessa = item.getModelObject();
-				item.add(new Label("desistencia", remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+				
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
+						IResourceStream resourceStream = new FileResourceStream(file);
+
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+					}
+				};
+				linkArquivo.add(new Label("desistencia", remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+				item.add(linkArquivo);
 				item.add(new Label("banco", remessa.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaDesistenciaProtesto().getArquivo()
 				        .getDataEnvio().toDate(), new Date())));

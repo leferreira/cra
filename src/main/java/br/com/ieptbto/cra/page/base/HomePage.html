@@ -12,8 +12,8 @@
 								<div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                        	<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" style="float: left; font-weight: bolder; font-size: 14px;">Confirmações Pendentes</a>
-                                        	<a href="#" style="float: right; color: white !important; font-size: 12px;" class="link" wicket:id="arquivosConfirmacoesPendetes"><span class="fa fa-mail-forward"></span>&nbsp;ver arquivos...</a><br>
+                                        	<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" style="float: left; font-weight: bolder; font-size: 14px;">Arquivos Pendentes</a>
+                                        	<a href="#" target="_blank" style="float: right; color: white !important; font-size: 12px;" class="link" wicket:id="arquivosConfirmacoesPendetes"><span class="fa fa-mail-forward"></span>&nbsp;ver arquivos...</a><br>
                                         </h4>
                                     </div>
                                     <div id="collapseOne" class="panel-collapse collapse in">
@@ -21,20 +21,27 @@
                                         	<div data-brackets-id="12674" class="list-unstyled ui-sortable">
 										    	<div class="list-view-confirmacao">
 										    		<div style="padding-bottom: 5px; margin-bottom: 5px;" wicket:id="listConfirmacoes">
-										    			<strong class="pull-left primary-font link" wicket:id="arquivo" style="margin-right: 5px;">[arquivo]</strong>
+										    			<strong class="pull-left primary-font link" style="margin-right: 5px; margin-left: -5px;">
+										    				<a wicket:id="linkArquivo" title="Clique para baixar o arquivo">
+										    				<span wicket:id="arquivo">[arquivo]</span></a>
+									    				</strong>
 												         <small class="pull-left text-muted" wicket:id="instituicao">
 													        [municipio]
 												         </small>
 												        <small class="pull-right text-muted">
-												        	<span class="glyphicon glyphicon-time"></span>&nbsp;<span wicket:id="pendente">[quantidade de dias]</span><span>&nbsp;dia(s)</span>
+												        	<span class="glyphicon glyphicon-time"></span>&nbsp;
+												        	<span wicket:id="pendente">[quantidade de dias]</span><span>&nbsp;dia(s)</span>
 												        </small>
 												        <br>
 											        </div>
 										    	</div>
 										    	<div class="list-view-confirmacao">
 										    		<div style="padding-bottom: 5px; margin-bottom: 5px;" wicket:id="listDesistencias">
-										    			<strong class="pull-left primary-font link" wicket:id="desistencia" style="margin-right: 5px;"></strong>
-												         <small class="pull-left text-muted" wicket:id="banco"> </small>
+										    			<strong class="pull-left primary-font link" style="margin-right: 5px; margin-left: -5px;">
+										    				<a wicket:id="linkArquivo" title="Clique para baixar o arquivo">
+										    				<span wicket:id="desistencia">[desistencia]</span></a>
+										    			</strong>
+												         <small class="pull-left text-muted" wicket:id="banco">[banco]</small>
 												        <small class="pull-right text-muted">
 												        	<span class="glyphicon glyphicon-time"></span>&nbsp;<span wicket:id="dias"></span><span>&nbsp;dia(s)</span>
 												        </small>

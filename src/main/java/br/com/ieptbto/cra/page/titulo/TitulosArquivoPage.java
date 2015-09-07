@@ -16,13 +16,11 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
@@ -60,9 +58,11 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	
 	private void carregarInformacoes(){
 		add(nomeArquivo());
-		add(portador());
-		add(dataEnvio());
 		add(tipoArquivo());
+		add(instituicaoEnvio());
+		add(instituicaoDestino());
+		add(dataEnvio());
+		add(usuarioEnvio());
 		add(carregarListaTitulos());
 		add(botaoGerarRelatorio());
 		add(downloadArquivoTXT(getRemessa()));
@@ -152,21 +152,30 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 		};
 	}
 	
-	private TextField<String> nomeArquivo(){
-		return new TextField<String>("nomeArquivo", new Model<String>(getRemessa().getArquivo().getNomeArquivo()));
+	private Label nomeArquivo(){
+		return new Label("nomeArquivo", getRemessa().getArquivo().getNomeArquivo());
 	}
 	
-	private TextField<String> portador(){
-		return new TextField<String>("nomePortador", new Model<String>(getRemessa().getCabecalho().getNomePortador()));
+	private Label tipoArquivo(){
+		return new Label("tipo", getRemessa().getArquivo().getTipoArquivo().getTipoArquivo().getLabel());
+	}
+
+	private Label instituicaoEnvio(){
+		return new Label("instituicaoEnvio", getRemessa().getInstituicaoOrigem().getNomeFantasia());
 	}
 	
-	private TextField<String> dataEnvio(){
-		return new TextField<String>("dataEnvio", new Model<String>(DataUtil.localDateToString(getRemessa().getArquivo().getDataEnvio())));
+	private Label instituicaoDestino(){
+		return new Label("instituicaoDestino", getRemessa().getInstituicaoDestino().getNomeFantasia());
 	}
 	
-	private TextField<String> tipoArquivo(){
-		return new TextField<String>("tipo", new Model<String>(getRemessa().getArquivo().getTipoArquivo().getTipoArquivo().getLabel()));
+	private Label usuarioEnvio(){
+		return new Label("usuario", getRemessa().getArquivo().getUsuarioEnvio().getNome());
 	}
+	
+	private Label dataEnvio(){
+		return new Label("dataEnvio", DataUtil.localDateToString(getRemessa().getArquivo().getDataEnvio()));
+	}
+	
 	
 	private List<TituloRemessa> getTitulos() {
 		return titulos;

@@ -8,48 +8,63 @@
 		<div class="panel panel-primary">
 			<div class="panel-heading">Informações do Arquivo</div>
 			<div class="panel-body">
-					<div class="row form-horizontal">
-						<div class="col-md-6">
-							<div class="form-group">
-							  <label class="col-md-4 control-label">Nome do Arquivo:</label>  
-							  <div class="col-md-8">
-							  <input wicket:id="nomeArquivo" class="form-control input-md" disabled="disabled">
-							  </div>
-							</div>
-							<div class="form-group">
-							  <label class="col-md-4 control-label">Portador:</label>  
-							  <div class="col-md-8">
-							  <input wicket:id="nomePortador" class="form-control input-md" disabled="disabled">
-							  </div>
-							</div>
+				<div class="col-md-12 form-horizontal">
+					<div class="col-md-4">
+						<div class="form-group">
+						  <label class="col-md-5 control-label">Nome Arquivo:</label>  
+						  <div class="col-md-7">
+						  <span wicket:id="nomeArquivo" class="form-control" style="text-align: left;"></span>
+						  </div>
 						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-							  <label class="col-md-4 control-label">Tipo do Arquivo:</label>  
-							  <div class="col-md-8">
-							  <input wicket:id="tipo" class="form-control input-md" disabled="disabled">
-							  </div>
-							</div>
-							<div class="form-group">
-							  <label class="col-md-4 control-label">Data do Envio:</label>  
-							  <div class="col-md-8">
-							  <input wicket:id="dataEnvio" class="form-control input-md" disabled="disabled">
-							    
-							  </div>
-							</div>
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="relatorio"></label>
-							  <div class="col-md-8">
-							     <button wicket:id="downloadArquivo" class="btn btn-primary" style="float: right; margin-left: 2%;">
-							     	<span class="fa fa-arrow-down"></span>&nbsp;Baixar Arquivo
-							     </button>
-							     <a wicket:id="gerarRelatorio" class="btn btn-primary" target="_blank" style="float: right;">
-							     	<span class="fa fa-print"></span>&nbsp;Relatório
-							     </a>
-							  </div>
-							</div>
+						<div class="form-group">
+						  <label class="col-md-5 control-label">Enviado Por:</label>  
+						  <div class="col-md-7">
+						  <span wicket:id="instituicaoEnvio" class="form-control" style="text-align: left;"></span>
+						  </div	>
 						</div>
 					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+						  <label class="col-md-5 control-label">Tipo do Arquivo:</label>  
+						  <div class="col-md-7">
+						  <span wicket:id="tipo" class="form-control" style="text-align: left;"></span>
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-5 control-label">Destino:</label>  
+						  <div class="col-md-7">
+						  <span wicket:id="instituicaoDestino" class="form-control" style="text-align: left;"></span>
+						  </div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+						  <label class="col-md-5 control-label">Data do Envio:</label>  
+						  <div class="col-md-7">
+						  <span wicket:id="dataEnvio" class="form-control" style="text-align: left;"></span>
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-5 control-label">Usuário:</label>  
+						  <div class="col-md-7">
+						  <span wicket:id="usuario" class="form-control" style="text-align: left;"></span>
+						  </div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+						  <label class="col-md-6 control-label" for="relatorio"></label>
+						  <div class="col-md-6">
+						     <button wicket:id="downloadArquivo" class="btn btn-primary" style="float: right; margin-left: 2%;">
+						     	<span class="fa fa-arrow-down"></span>&nbsp;Baixar Arquivo
+						     </button>
+						     <a wicket:id="gerarRelatorio" class="btn btn-primary" target="_blank" style="float: right;">
+						     	<span class="fa fa-print"></span>&nbsp;Relatório
+						     </a>
+						  </div>
+						</div>
+					</div>
+				</div>
 				<br style="clear: both;"/>
 				<table id="table" class="table table-striped table-hover" style="font-size: 12px;">
 					<thead>

@@ -4,15 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
@@ -37,12 +32,9 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.ireport.TituloBean;
+import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
-import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -58,8 +50,7 @@ public class BatimentoPage extends BasePage<Batimento> {
 	@SpringBean
 	RetornoMediator batimentoMediator;
 	@SpringBean
-	TituloMediator tituloMediator;
-	
+	RelatorioMediator relatorioMediator;
 	private Batimento batimento;
 	private ListView<Remessa> remessas;
 	
@@ -137,37 +128,7 @@ public class BatimentoPage extends BasePage<Batimento> {
 					@Override
 					public void onClick() {
 						try {
-							List<TituloRemessa> titulos = tituloMediator.buscarTitulosPorRemessa(retorno, retorno.getInstituicaoOrigem());
-							if (titulos.isEmpty())
-								throw new InfraException("Não foi possível gerar o relatório. O arquivo não contém titulos !");
-							
-							Integer numeroPagos = 0;
-							Integer numeroProtestadosRetirados = 0;
-							List<TituloBean> titulosJR = new ArrayList<TituloBean>();
-							for (TituloRemessa tituloRemessa : titulos) {
-								TituloBean tituloJR = new TituloBean();
-								tituloJR.parseToTituloRemessa(tituloRemessa);
-								if (TipoOcorrencia.getTipoOcorrencia(tituloRemessa.getRetorno().getTipoOcorrencia()).equals(TipoOcorrencia.PAGO)) {
-									numeroPagos = numeroPagos + 1;
-								} else if ((TipoOcorrencia.getTipoOcorrencia(tituloRemessa.getRetorno().getTipoOcorrencia()).equals(TipoOcorrencia.PROTESTADO)) ||
-										(TipoOcorrencia.getTipoOcorrencia(tituloRemessa.getRetorno().getTipoOcorrencia()).equals(TipoOcorrencia.RETIRADO))) {
-									numeroProtestadosRetirados = numeroProtestadosRetirados + 1;
-								}
-								titulosJR.add(tituloJR);
-							}
-							HashMap<String, Object> parametros = new HashMap<String, Object>();
-							parametros.put("NOME_ARQUIVO", retorno.getArquivo().getNomeArquivo());
-							parametros.put("DATA_ENVIO", DataUtil.localDateToString(retorno.getDataRecebimento()));
-							parametros.put("INSTITUICAO", retorno.getInstituicaoOrigem().getNomeFantasia().toUpperCase());
-							parametros.put("TOTAL_TITULOS", Integer.class.cast(titulosJR.size()));
-							parametros.put("TOTAL_PAGOS", batimentoMediator.buscarValorDeTitulosPagos(retorno));
-							parametros.put("TOTAL_CUSTAS", batimentoMediator.buscarValorDeCustasCartorio(retorno));
-							parametros.put("QTD_PAGOS", numeroPagos);
-							parametros.put("QTD_PROTESTADOS_RETIRADOS", numeroProtestadosRetirados);
-
-							JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulosJR);
-							JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
-							JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+							JasperPrint jasperPrint = relatorioMediator.relatorioRetorno(retorno, getUser().getInstituicao());
 							
 							File pdf = File.createTempFile("report", ".pdf");
 							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));

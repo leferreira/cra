@@ -44,7 +44,7 @@ public class RelatorioSinteticoCraPanel extends Panel{
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	@SpringBean
-	RelatorioMediator relatorioMediator;
+	RelatorioMediator relatorioGerador;
 	private TextField<String> fieldDataInicio;
 	private TextField<String> fieldDataFim;
 	private DropDownChoice<Instituicao> fieldPortador;
@@ -89,11 +89,11 @@ public class RelatorioSinteticoCraPanel extends Panel{
 				
 				try {
 					if (bancoPortador != null && pracaProtesto == null) { 
-						JasperPrint jasperPrint = relatorioMediator.novoRelatorioSintetico(bancoPortador, tipoArquivo, dataInicio, dataFim);
+						JasperPrint jasperPrint = relatorioGerador.relatorioSintetico(bancoPortador, tipoArquivo, dataInicio, dataFim);
 						getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 
 					} else if (bancoPortador == null && pracaProtesto != null){ 
-						JasperPrint jasperPrint = relatorioMediator.novoRelatorioSinteticoPorMunicipio(pracaProtesto , tipoArquivo,dataInicio, dataFim );
+						JasperPrint jasperPrint = relatorioGerador.relatorioSinteticoPorMunicipio(pracaProtesto , tipoArquivo,dataInicio, dataFim );
 						getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 						
 					} else 

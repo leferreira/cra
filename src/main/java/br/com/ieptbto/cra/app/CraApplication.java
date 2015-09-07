@@ -24,6 +24,7 @@ import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.admin.ListaArquivosRemoverPage;
 import br.com.ieptbto.cra.page.admin.RemoverArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.ArquivoCancelamentoDevolvidoPage;
+import br.com.ieptbto.cra.page.arquivo.BuscarArquivoCraInstituicaoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPage;
@@ -162,6 +163,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		/** Arquivo */
 		mountPage("EnviarArquivo", EnviarArquivoPage.class);
 		mountPage("BuscarArquivo", BuscarArquivoPage.class);
+		mountPage("BuscarArquivoInstituicao", BuscarArquivoCraInstituicaoPage.class);
 		mountPage("ListaArquivo", ListaArquivosPage.class);
 		mountPage("ArquivosCancelamentoDevolvidoPage", ArquivoCancelamentoDevolvidoPage.class);
 		mountPage("TitulosArquivo", TitulosArquivoPage.class);
