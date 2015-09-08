@@ -3,16 +3,10 @@ package br.com.ieptbto.cra.page.titulo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
@@ -29,8 +23,9 @@ import org.apache.wicket.util.resource.IResourceStream;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.ireport.TituloBean;
+import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -44,9 +39,11 @@ import br.com.ieptbto.cra.util.DataUtil;
 public class TitulosArquivoPage extends BasePage<Remessa> {
 
 	@SpringBean
-	private TituloMediator tituloMediator;
+	TituloMediator tituloMediator;
 	@SpringBean
-	private RemessaMediator remessaMediator;
+	RelatorioMediator relatorioMediator;
+	@SpringBean
+	RemessaMediator remessaMediator;
 	private Remessa remessa;
 	private List<TituloRemessa> titulos;
 	
@@ -105,29 +102,23 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 			
 			@Override
 			public void onClick() {
+				TipoArquivoEnum tipoArquivo = remessa.getArquivo().getTipoArquivo().getTipoArquivo();
+				JasperPrint jasperPrint = null;
+
 				try {
-					HashMap<String, Object> parametros = new HashMap<String, Object>();
-					if (getTitulos().isEmpty())
-						throw new InfraException("Não foi possível gerar o relatório. A busca não retornou resultados!");
-					
-					parametros.put("NOME_ARQUIVO", getRemessa().getArquivo().getNomeArquivo());
-					parametros.put("DATA_ENVIO", DataUtil.localDateToString(getRemessa().getDataRecebimento()));
-						
-					List<TituloBean> titulosJR = new ArrayList<TituloBean>();
-					for (TituloRemessa tituloRemessa : getTitulos()) {
-						TituloBean tituloJR = new TituloBean();
-						tituloJR.parseToTituloRemessa(tituloRemessa);
-						titulosJR.add(tituloJR);
+					if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
+						jasperPrint = relatorioMediator.relatorioRemessa(remessa, getUser().getInstituicao());
+					} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
+						jasperPrint = relatorioMediator.relatorioConfirmacao(remessa, getUser().getInstituicao());
+					} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
+						jasperPrint = relatorioMediator.relatorioRetorno(remessa, getUser().getInstituicao());
 					}
-					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(titulosJR);
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/Relatorio"+getRemessa().getArquivo().getTipoArquivo().getTipoArquivo().getLabel()+".jrxml"));
-					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 					
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_TITULOS_" + getRemessa().getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+					        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 				} catch (InfraException ex) { 
 					error(ex.getMessage());
 				} catch (Exception e) { 

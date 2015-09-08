@@ -1,10 +1,14 @@
 package br.com.ieptbto.cra.page.cra;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+
 import org.apache.log4j.Logger;
-import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -16,13 +20,17 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
@@ -42,6 +50,8 @@ public class RetornoPage extends BasePage<Retorno> {
 	
 	@SpringBean
 	private RetornoMediator retornoMediator;
+	@SpringBean
+	private RelatorioMediator relatorioMediator;
 	private Retorno retorno;
 	private List<Remessa> retornosParaEnvio;
 	
@@ -90,6 +100,13 @@ public class RetornoPage extends BasePage<Retorno> {
 				} else {
 					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", valorPagos));
 				}
+				
+				BigDecimal valorCustas = retornoMediator.buscarValorDeCustasCartorio(retorno);
+				if (valorCustas==null || valorCustas.equals(BigDecimal.ZERO)) {
+					item.add(new LabelValorMonetario<BigDecimal>("valorCustas", BigDecimal.ZERO));
+				} else {
+					item.add(new LabelValorMonetario<BigDecimal>("valorCustas", valorCustas));
+				}
 				Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
 					@Override
 					public void onClick() {
@@ -99,14 +116,38 @@ public class RetornoPage extends BasePage<Retorno> {
 				linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
 				item.add(removerConfirmado(retorno));
+				item.add(botaoGerarRelatorio(retorno));
 			}
 			
-			private Component removerConfirmado(final Remessa retorno) {
+			private Link<Arquivo> removerConfirmado(final Remessa retorno) {
 				return new Link<Arquivo>("removerConfirmado") {
 					@Override
 					public void onClick() {
 						retornoMediator.removerConfirmado(retorno);
 						setResponsePage(new RetornoPage());
+					}
+				};
+			}
+			
+			private Link<Remessa> botaoGerarRelatorio(final Remessa retorno){
+				return new Link<Remessa>("gerarRelatorio"){
+					
+					@Override
+					public void onClick() {
+						try {
+							JasperPrint jasperPrint = relatorioMediator.relatorioRetorno(retorno, getUser().getInstituicao());
+							
+							File pdf = File.createTempFile("report", ".pdf");
+							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+							IResourceStream resourceStream = new FileResourceStream(pdf);
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + retorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+						} catch (InfraException ex) { 
+							error(ex.getMessage());
+						} catch (Exception e) { 
+							error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+							e.printStackTrace();
+						}
 					}
 				};
 			}

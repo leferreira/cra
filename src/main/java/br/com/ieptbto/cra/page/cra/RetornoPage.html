@@ -15,22 +15,26 @@
 		                    <thead>
 								<tr>
 									<th class="col-center">Data Envio</th>
+									<th>Cartório</th>
 									<th class="col-center">Arquivo</th>
 									<th class="col-right">Valor Pagos</th>
-									<th>Cartório</th>
+									<th class="col-right">Valor Custas</th>
+									<th class="col-center" style="width: 80px;">Relatório</th>
 									<th class="col-center" style="width: 75px;">Cancelar</th>
 								</tr>
 							</thead>
 							<tbody>
 			                    <tr wicket:id="retornos" style="text-align: center;">
 									<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
+									<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
 			                        <td class="col-center">
 			                        	<a wicket:id="linkArquivo">
 			                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
 			                        	</a>
 			                        </td>
-									<td class="col-right valor" wicket:id="valorPagos" style="font-weight: bold;"></td>
-									<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
+									<td class="col-right valor" wicket:id="valorPagos"></td>
+									<td class="col-right valor" wicket:id="valorCustas"></td>
+									<td class="col-center"><button type="button" wicket:id="gerarRelatorio" style="float: inherit;"><span class="col-center fa fa-print"></span></button></td>
 									<td class="col-center">
 										<button type="button" wicket:id="removerConfirmado" style="float: inherit;"><span class="fa fa-edit"></span></button>
 									</td>

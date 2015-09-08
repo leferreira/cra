@@ -15,22 +15,22 @@
 		                  <table id="table" class="table table-striped table-hover">
 		                    <thead>
 								<tr>
-									<th class="col-center">Arquivo</th>
 									<th class="col-center">Data Envio</th>
+									<th class="col-center">Arquivo</th>
 									<th>Enviado por</th>
 									<th>Destino</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr wicket:id="confirmacao">
+			                        <td class="col-center" wicket:id="arquivo.dataEnvio"></td>
 									<td class="col-center">
-			                        	<a wicket:id="linkArquivoConfirmacao">
-			                        		<span class="link" wicket:id="arquivo.nomeArquivoConfirmacao"></span>
+			                        	<a wicket:id="linkArquivo">
+			                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
 			                        	</a>
 			                        </td>
-			                        <td class="col-center" wicket:id="arquivo.dataEnvioConfirmacao"></td>
-									<td wicket:id="instituicaoOrigem.nomeFantasiaConfirmacao"></td>
-									<td wicket:id="instituicaoDestino.nomeFantasiaConfirmacao"></td>
+									<td wicket:id="instituicaoOrigem.nomeFantasia"></td>
+									<td wicket:id="instituicaoDestino.nomeFantasia"></td>
 								</tr>
 		                    </tbody>
 		                  </table>

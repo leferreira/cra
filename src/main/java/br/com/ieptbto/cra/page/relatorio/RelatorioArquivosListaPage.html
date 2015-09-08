@@ -15,22 +15,22 @@
 						<thead>
 							<tr>
 								<th class="col-center" style="width: 40px;">Tipo</th>
+								<th style="width: 80px;">Relatório</th>
 								<th class="col-center">Nome Arquivo</th>
 								<th class="col-center">Data Envio</th>
 								<th>Enviado por</th>
 								<th>Destino</th>
 								<th class="col-center" style="width: 120px;"></th>
-								<th style="width: 80px;"></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr wicket:id="dataTableArquivo">
 								<td class="col-center" wicket:id="tipoArquivo"></td>
+								<td class="col-center"><button type="button" wicket:id="gerarRelatorio" style="float: inherit;"><span class="col-center fa fa-print"></span>&nbsp;Relatório</button></td>
 								<td class="col-center"><a target="_blank" wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
 								<td class="col-center" wicket:id="dataEnvio"></td>
 								<td wicket:id="instituicao"></td>
 								<td wicket:id="destino"></td>
-								<td class="col-center"><button type="button" wicket:id="gerarRelatorio" style="float: inherit;"><span class="col-center fa fa-print"></span>&nbsp;Relatório</button></td>
 								<td class="col-center"><span wicket:id="status"></span></td>
 							</tr>
 						</tbody>

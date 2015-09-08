@@ -1,8 +1,12 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -20,6 +24,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -70,6 +75,7 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 				item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
 				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
 				item.add(downloadArquivoTXT(arquivo));
+				item.add(relatorioArquivo(arquivo));
 			}
 
 			private Link<Arquivo> downloadArquivoTXT(final Arquivo arquivo) {
@@ -82,6 +88,38 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
 						        new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
+					}
+				};
+			}
+			
+			private Link<Arquivo> relatorioArquivo(final Arquivo arquivo) {
+				return new Link<Arquivo>("gerarRelatorio") {
+
+					@Override
+					public void onClick() {
+						TipoArquivoEnum tipoArquivo = arquivo.getTipoArquivo().getTipoArquivo();
+						JasperPrint jasperPrint = null;
+
+						try {
+							if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
+								jasperPrint = relatorioMediator.relatorioRemessa(arquivo, getUser().getInstituicao());
+							} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
+								jasperPrint = relatorioMediator.relatorioConfirmacao(arquivo, getUser().getInstituicao());
+							} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
+								jasperPrint = relatorioMediator.relatorioRetorno(arquivo, getUser().getInstituicao());
+							}
+							
+							File pdf = File.createTempFile("report", ".pdf");
+							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+							IResourceStream resourceStream = new FileResourceStream(pdf);
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + arquivo.getNomeArquivo().replace(".", "_") + ".pdf"));
+						} catch (InfraException ex) { 
+							error(ex.getMessage());
+						} catch (Exception e) { 
+							error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+							e.printStackTrace();
+						}
 					}
 				};
 			}

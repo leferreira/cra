@@ -49,7 +49,6 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	RelatorioMediator relatorioMediator;
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
-	private Link<Void> relatorioConfirmacoes;
 
 	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim,
 	        ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<StatusRemessa> situacoes) {
@@ -57,7 +56,6 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio, dataInicio, dataFim, tiposArquivo, getUser(), situacoes);
 		add(carregarListaArquivos());
 		add(carregarListaArquivosDesistenciaProtesto());
-		this.relatorioConfirmacoes.setVisible(false);
 	}
 
 	public ListaArquivosPage(Usuario usuario) {
@@ -65,7 +63,6 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 		this.remessas = this.arquivo.getRemessas();
 		add(carregarListaArquivos());
 		add(carregarListaArquivosDesistenciaProtesto());
-		this.relatorioConfirmacoes.setEnabled(true);
 	}
 
 	private ListView<Remessa> carregarListaArquivos() {
