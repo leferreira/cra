@@ -6,8 +6,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
@@ -128,7 +130,8 @@ public class BatimentoPage extends BasePage<Batimento> {
 					@Override
 					public void onClick() {
 						try {
-							JasperPrint jasperPrint = relatorioMediator.relatorioRetorno(retorno, getUser().getInstituicao());
+							JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
+							JasperPrint jasperPrint = relatorioMediator.relatorioRetorno(jasperReport ,retorno, getUser().getInstituicao());
 							
 							File pdf = File.createTempFile("report", ".pdf");
 							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));

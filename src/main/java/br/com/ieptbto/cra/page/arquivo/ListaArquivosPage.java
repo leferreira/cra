@@ -6,8 +6,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -115,11 +117,14 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 
 						try {
 							if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
-								jasperPrint = relatorioMediator.relatorioRemessa(remessa, getUser().getInstituicao());
+								JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRemessa.jrxml"));
+								jasperPrint = relatorioMediator.relatorioRemessa(jasperReport ,remessa, getUser().getInstituicao());
 							} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
-								jasperPrint = relatorioMediator.relatorioConfirmacao(remessa, getUser().getInstituicao());
+								JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioConfirmação.jrxml"));
+								jasperPrint = relatorioMediator.relatorioConfirmacao(jasperReport, remessa, getUser().getInstituicao());
 							} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
-								jasperPrint = relatorioMediator.relatorioRetorno(remessa, getUser().getInstituicao());
+								JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
+								jasperPrint = relatorioMediator.relatorioRetorno(jasperReport ,remessa, getUser().getInstituicao());
 							}
 							
 							File pdf = File.createTempFile("report", ".pdf");
