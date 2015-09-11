@@ -78,14 +78,16 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 						if (!arquivoRetorno.getArquivo().getRemessas().isEmpty()) {
 							info("O arquivo " + arquivo.getNomeArquivo() + " com " + arquivoRetorno.getArquivo().getRemessas().size()
 							        + " Remessa(s), salvo com sucesso.");
-						} else if (arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto() != null) {
+						} else if (arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto() != null
+						        && arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto() != null
+						        && !arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
 							info("A desistência de protesto " + arquivo.getNomeArquivo() + " com "
 							        + arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto().size()
 							        + " desistencia(s), foi salvo com sucesso.");
 						}
 
 					}
-					
+
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
