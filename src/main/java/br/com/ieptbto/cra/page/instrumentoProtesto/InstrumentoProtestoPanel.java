@@ -34,8 +34,6 @@ import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.ireport.SlipEnvelopeBean;
-import br.com.ieptbto.cra.ireport.SlipEtiquetaBean;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoDeProtestoMediator;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
@@ -65,7 +63,6 @@ public class InstrumentoProtestoPanel extends Panel {
 	private void adicionarCampos() {
 		add(carregarListaSlips());
 		add(formGerarEtiquetas());
-		add(formGerarEnvelopes());
 	}
 	
 	private ListView<Retorno> carregarListaSlips() {
@@ -100,18 +97,22 @@ public class InstrumentoProtestoPanel extends Panel {
 	}
 	
 	private Form<InstrumentoProtesto> formGerarEtiquetas() {
-		Form<InstrumentoProtesto> formEtiquetas = new Form<InstrumentoProtesto> ("formEtiquetas");
-		formEtiquetas.add(new Button("botaoEtiqueta"){
+		Form<InstrumentoProtesto> formEtiquetas = new Form<InstrumentoProtesto> ("formSlip");
+		formEtiquetas.add(new Button("botaoSlip"){
 			@Override
 			public void onSubmit() {
 				SimpleDateFormat dataPadrao= new SimpleDateFormat("dd_MM_yy");
 
 				try {
-					List<SlipEtiquetaBean> etiquetas = instrumentoMediator.processarInstrumentos(getRetornos()).getEtiquetas();
+					InstrumentoDeProtestoMediator instrumento = instrumentoMediator.processarInstrumentos(getRetornos());
+					
+					if (instrumento.getEtiquetas().isEmpty()) {
+						throw new InfraException("Não foi possível gerar SLIPs. Não há entrada de títulos processados !");
+					}
 
 					HashMap<String, Object> parametros = new HashMap<String, Object>();
 					parametros.put("DATA", DataUtil.localDateToString(new LocalDate()));
-					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(etiquetas);
+					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(instrumento.getEtiquetas());
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("Teste.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 					
@@ -119,7 +120,19 @@ public class InstrumentoProtestoPanel extends Panel {
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_ETIQUETAS_" + dataPadrao.format(new Date()).toString()  + ".pdf"));
+					        new ResourceStreamRequestHandler(resourceStream, "CRA_SLIP_" + dataPadrao.format(new Date()).toString()  + ".pdf"));
+				
+				
+					beanCollection = new JRBeanCollectionDataSource(instrumento.getEnvelopes());
+					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("Teste.jrxml"));
+					jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+					
+					pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+					        new ResourceStreamRequestHandler(resourceStream, "CRA_ENVELOPES_" + dataPadrao.format(new Date()).toString()  + ".pdf"));
+					
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());
@@ -132,39 +145,6 @@ public class InstrumentoProtestoPanel extends Panel {
 		return formEtiquetas;
 	}
 	
-	private Form<InstrumentoProtesto> formGerarEnvelopes() {
-		Form<InstrumentoProtesto> formEnvelopes = new Form<InstrumentoProtesto> ("formEnvelopes");
-		formEnvelopes.add(new Button("botaoEnvelope"){
-			@Override
-			public void onSubmit() {
-				SimpleDateFormat dataPadrao= new SimpleDateFormat("dd_MM_yy");
-
-				try {
-					List<SlipEnvelopeBean> envelopes = instrumentoMediator.gerarEnvelopes(getRetornos());
-
-					HashMap<String, Object> parametros = new HashMap<String, Object>();
-					parametros.put("DATA", DataUtil.localDateToString(new LocalDate()));
-					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(envelopes);
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("Teste.jrxml"));
-					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
-					
-					File pdf = File.createTempFile("report", ".pdf");
-					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_ENVELOPES_" + dataPadrao.format(new Date()).toString()  + ".pdf"));
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage(), ex);
-					error(ex.getMessage());
-				} catch (Exception ex) { 
-					error("Não foi possível gerar as etiquetas ! Entre em contato com a CRA !");
-					logger.error(ex.getMessage(), ex);
-				}
-			}
-		});
-		return formEnvelopes;
-	}
-
 	public List<Retorno> getRetornos() {
 		return retornos;
 	}

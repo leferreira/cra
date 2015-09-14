@@ -169,7 +169,10 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	}
 	
 	private Label dataEnvio(){
-		return new Label("dataEnvio", DataUtil.localDateToString(getRemessa().getArquivo().getDataEnvio()));
+//		if (getRemessa().getArquivo().getHoraEnvio() != null) {
+//			return new Label("dataEnvio", DataUtil.localDateToString(getRemessa().getArquivo().getDataEnvio()) + " " + getRemessa().getArquivo().getHoraEnvio());			
+//		}
+		return new Label("dataEnvio", DataUtil.localDateToString(getRemessa().getArquivo().getDataEnvio()));			
 	}
 	
 	
