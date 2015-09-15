@@ -57,6 +57,7 @@ public class CancelamentoDevolvidoInstituicaoPanel extends Panel  {
 			@Override
 			public void onSubmit() {
 				Arquivo arquivo = model.getObject();
+				ArrayList<TipoArquivoEnum> tipoArquivos = getTiposArquivo();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 				Municipio municipio = null;
@@ -65,7 +66,7 @@ public class CancelamentoDevolvidoInstituicaoPanel extends Panel  {
 					if (arquivo.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
 						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
 					} else if (arquivo.getNomeArquivo() != null) {
-						if (arquivo.getNomeArquivo().length() < 4) {
+						if (arquivo.getNomeArquivo().length() < 5) {
 							throw new InfraException("Por favor, informe ao menos 5 caracteres!");
 						}
 					}
@@ -80,8 +81,7 @@ public class CancelamentoDevolvidoInstituicaoPanel extends Panel  {
 						}else
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
-					
-					setResponsePage(new ListaCancelamentoDevolvidoPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo()));
+					setResponsePage(new ListaCancelamentoDevolvidoPage(arquivo, tipoArquivos, municipio, dataInicio, dataFim));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

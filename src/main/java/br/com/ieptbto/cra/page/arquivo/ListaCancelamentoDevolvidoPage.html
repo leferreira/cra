@@ -18,8 +18,10 @@
 								<th class="col-center" style="width: 60px;">Baixar</th>
 								<th class="col-center">Nome Arquivo</th>
 								<th class="col-center">Data Envio</th>
-								<th class="col-center">Enviado por</th>
-								<th class="col-right">Valor Total (R$)</th>
+								<th >Enviado por</th>
+								<th >Destino</th>
+								<th class="col-center">Hora Envio</th>
+								<th class="col-center"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -30,8 +32,10 @@
 								</td>
 								<td class="col-center"><a target="_blank"><span class="link" wicket:id="nomeArquivo"></span></a></td>
 								<td class="col-center" wicket:id="dataEnvio"></td>
-								<td class="col-center" wicket:id="instituicao"></td>
-								<td class="col-right valor" wicket:id="valor"></td> 
+								<td wicket:id="instituicao"></td>
+								<td wicket:id="destino"></td> 
+								<td class="col-center" wicket:id="horaEnvio"></td>
+								<td class="col-center"> <span wicket:id="status"></span></td>
 							</tr>
 						</tbody>
 					</table>

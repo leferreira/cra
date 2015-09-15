@@ -19,6 +19,7 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -65,16 +66,17 @@ public class CancelamentoDevolvidoCartorioPanel extends Panel {
 			@Override
 			public void onSubmit() {
 				Arquivo arquivo = model.getObject();
+				ArrayList<TipoArquivoEnum> tipoArquivos = getTiposArquivo();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
-				Instituicao portador = comboPortador.getModelObject();
+				Municipio municipio = null;
 
 				try {
 					if (arquivo.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
 						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
 					} else if (arquivo.getNomeArquivo() != null) {
-						if (arquivo.getNomeArquivo().length() < 4) {
-							throw new InfraException("Por favor, informe ao menos 4 caracteres!");
+						if (arquivo.getNomeArquivo().length() < 5) {
+							throw new InfraException("Por favor, informe ao menos 5 caracteres!");
 						}
 					}
 
@@ -88,8 +90,7 @@ public class CancelamentoDevolvidoCartorioPanel extends Panel {
 						} else
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
-					setResponsePage(new ListaCancelamentoDevolvidoPage(arquivo, dataInicio, dataFim, getTiposArquivo(), portador,
-					        getUsuario()));
+					setResponsePage(new ListaCancelamentoDevolvidoPage(arquivo, tipoArquivos, municipio, dataInicio, dataFim));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

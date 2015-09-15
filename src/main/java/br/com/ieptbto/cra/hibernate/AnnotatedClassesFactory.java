@@ -44,6 +44,7 @@ import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.TituloSemTaxaCRA;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
 
@@ -102,6 +103,8 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(RodapeCartorio.class);
 		classesHibernate.add(DesistenciaProtesto.class);
 		classesHibernate.add(PedidoDesistenciaCancelamento.class);
+		
+		classesHibernate.add(TituloSemTaxaCRA.class);
 
 	}
 
