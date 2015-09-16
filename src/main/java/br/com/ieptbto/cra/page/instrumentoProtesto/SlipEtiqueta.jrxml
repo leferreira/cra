@@ -1,263 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-06-03T10:55:38 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0dfc8efe-6dda-4d22-be84-ab5020ec3941">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="1.8150000000000004"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="data_arquivo" class="java.util.Date">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<parameter name="id_destinatario" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<parameter name="id_instituicao_origem" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
 	<queryString>
-		<![CDATA[SELECT DISTINCT(retorno.id_titulo_bcr),
-arquivo_retorno.arquivo AS ARQRETORNO,
-SUBSTRING(arquivo_retorno.arquivo,2,3) AS CODBANCO,
-caf.nome_agencia AS NOMEAGENCIACAF,
-caf.cidade AS CIDADE,
-caf.uf AS UF,
-instituicao_destino.instituicao AS NOMEBANCO,
-confirmacao.agencia_codigo_cedente,
-retorno.data_ocorrencia,
-confirmacao.numero_titulo,
-confirmacao.nome_cedente_favorecido,
-confirmacao.valor_titulo,
-cast( cast(confirmacao.valor_titulo as text) as FLOAT)/100 AS valor_titulo_formatado,
-confirmacao.especie_titulo,
-SUBSTRING(confirmacao.agencia_codigo_cedente, 3, 4) AS AGENCIA,
-SUBSTRING(confirmacao.agencia_codigo_cedente, 11) AS CONTA,
-retorno.nosso_numero,
-cabecalho_retorno.agencia_centralizadora as CENTRALIZADORA,
-confirmacao.data_vencimento AS VENCIMENTO,
-cast( cast(confirmacao.numero_protocolo_cartorio as text) as INT) AS PROTOCOLO,
-confirmacao.data_protocolo as DATAPROTOCOLO,
-confirmacao.nome_devedor AS SACADO,
-confirmacao.numero_identificacao_devedor AS CNPJ,
-confirmacao.tipo_identificacao_devedor as TIPO_DOCUMENTO,
-instituicao_origem.nome_fantasia,
-instituicao_origem.instituicao,
-municipio_origem.comarca,
-instituicao_destino.id_instituicao
-
-FROM titulo_bcr retorno
-INNER JOIN cabecalho_bcr AS cabecalho_retorno ON cabecalho_retorno.id_cabecalho_bcr = retorno.cabecalho_bcr_id
-INNER JOIN arquivo AS arquivo_retorno ON arquivo_retorno.id_arquivo = cabecalho_retorno.arquivo_id AND arquivo_retorno.tipo_arquivo_id = 3
-INNER JOIN titulo_bcr confirmacao ON confirmacao.numero_protocolo_cartorio = retorno.numero_protocolo_cartorio
-INNER JOIN cabecalho_bcr AS cabecalho_confirmacao ON cabecalho_confirmacao.id_cabecalho_bcr = confirmacao.cabecalho_bcr_id AND cabecalho_confirmacao.codigo_municipal = cabecalho_retorno.codigo_municipal
-INNER JOIN arquivo AS arquivo_confirmacao ON arquivo_confirmacao.id_arquivo = cabecalho_confirmacao.arquivo_id AND arquivo_confirmacao.tipo_arquivo_id = 2
-INNER JOIN usuario as usuario ON usuario.id_usuario = arquivo_retorno.usuario_envio_id
-INNER JOIN instituicao as instituicao_origem ON instituicao_origem.id_instituicao = usuario.instituicao_id
-INNER JOIN municipio AS municipio_origem ON municipio_origem.id_municipio = instituicao_origem.municipio_id
-LEFT JOIN instituicao as instituicao_destino ON instituicao_destino.codigo_compensacao = cabecalho_confirmacao.codigo_portador
-LEFT JOIN arquivo_caf AS caf ON caf.banco = confirmacao.codigo_portador and caf.codigo_agencia = SUBSTRING(confirmacao.agencia_codigo_cedente, 3, 4)
-
-WHERE date(arquivo_retorno.data_envio) = $P{data_arquivo}
-AND instituicao_origem.tipo_instituicao_id = 3
-AND retorno.tipo_ocorrencia = '2'
-AND cabecalho_retorno.codigo_municipal = cabecalho_confirmacao.codigo_municipal
-AND confirmacao.id_titulo_bcr <> retorno.id_titulo_bcr
-AND instituicao_destino.id_instituicao = $P{id_destinatario}
-AND instituicao_origem.id_instituicao = $P{id_instituicao_origem}
-ORDER BY municipio_origem.comarca, retorno.id_titulo_bcr ASC]]>
+		<![CDATA[]]>
 	</queryString>
-	<field name="id_titulo_bcr" class="java.lang.Integer"/>
-	<field name="arqretorno" class="java.lang.String"/>
-	<field name="codbanco" class="java.lang.String"/>
-	<field name="nomebanco" class="java.lang.String"/>
-	<field name="agencia_codigo_cedente" class="java.lang.String"/>
-	<field name="data_ocorrencia" class="java.lang.String"/>
-	<field name="numero_titulo" class="java.lang.String"/>
-	<field name="nome_cedente_favorecido" class="java.lang.String"/>
-	<field name="valor_titulo" class="java.lang.String"/>
-	<field name="valor_titulo_formatado" class="java.lang.Double"/>
-	<field name="especie_titulo" class="java.lang.String"/>
-	<field name="agencia" class="java.lang.String"/>
-	<field name="conta" class="java.lang.String"/>
-	<field name="nosso_numero" class="java.lang.String"/>
-	<field name="centralizadora" class="java.lang.String"/>
-	<field name="vencimento" class="java.lang.String"/>
-	<field name="protocolo" class="java.lang.Integer"/>
-	<field name="dataprotocolo" class="java.lang.String"/>
-	<field name="sacado" class="java.lang.String"/>
-	<field name="cnpj" class="java.lang.String"/>
-	<field name="tipo_documento" class="java.lang.String"/>
-	<field name="nome_fantasia" class="java.lang.String"/>
-	<field name="instituicao" class="java.lang.String"/>
-	<field name="comarca" class="java.lang.String"/>
-	<field name="id_instituicao" class="java.lang.Integer"/>
-	<field name="NOMEAGENCIACAF" class="java.lang.String"/>
-	<field name="cidade" class="java.lang.String"/>
-	<field name="uf" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="35" splitType="Stretch">
-			<rectangle>
-				<reportElement mode="Transparent" x="0" y="5" width="555" height="28" uuid="ee388c62-b5e6-4fbf-8b5a-870040c42f61"/>
-			</rectangle>
-			<textField>
-				<reportElement x="51" y="5" width="132" height="28" uuid="75b50246-8c04-443f-ac31-3a8bad7a2ca4"/>
-				<textElement>
-					<font size="16"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{arqretorno}]]></textFieldExpression>
-			</textField>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="461" y="21" width="77" height="14" uuid="ffd0c5a5-dc68-4f89-a7df-a63e4ebd785d"/>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="5" width="51" height="28" uuid="07f0c0b6-ed9b-4102-856f-d91919c4cf50"/>
-				<textElement textAlignment="Center">
-					<font size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SLIP:]]></text>
-			</staticText>
-			<textField pattern="HH:mm">
-				<reportElement x="493" y="21" width="77" height="14" uuid="10b7fab4-7d6c-4fd4-97bc-0dca5c8566c7"/>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="235" y="5" width="309" height="20" uuid="e918ada0-4aac-4410-867a-8e4addffec69"/>
-				<textElement textAlignment="Right">
-					<font size="10" isBold="true" isItalic="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{instituicao}]]></textFieldExpression>
-			</textField>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="3" splitType="Stretch"/>
-	</pageHeader>
 	<detail>
-		<band height="225" splitType="Stretch">
+		<band height="205" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="555" height="208" uuid="b08fdc16-956b-4bdc-ab75-d5f7ed703363"/>
+				<reportElement x="0" y="0" width="555" height="202" uuid="b08fdc16-956b-4bdc-ab75-d5f7ed703363"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="9" y="162" width="281" height="20" uuid="519d83e6-2f38-4abf-836b-7c68be40ba27"/>
+				<reportElement x="9" y="168" width="281" height="20" uuid="519d83e6-2f38-4abf-836b-7c68be40ba27"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Recebi o instrumento de protesto indicado acima.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="9" y="176" width="537" height="20" uuid="d57e0280-d27c-4a18-8efa-6bff1903f335"/>
+				<reportElement x="9" y="182" width="537" height="20" uuid="d57e0280-d27c-4a18-8efa-6bff1903f335"/>
 				<text><![CDATA[____/____/_____ __________________________ _______________________________________________________]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="9" y="35" width="361" height="25" uuid="12258693-da7b-4636-8e42-82c335771e48"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{agencia} +" - "+ $F{NOMEAGENCIACAF}]]></textFieldExpression>
-			</textField>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="370" y="34" width="180" height="26" uuid="9a051cce-d50c-401f-b1db-7720090b46bf"/>
-				<textElement textAlignment="Right">
-					<font size="16" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{data_ocorrencia}.length()==8?
-"CRA-TO  " +$F{data_ocorrencia}.toString().substring(0,2)+"/"+$F{data_ocorrencia}.toString().substring(2,4)+"/"+$F{data_ocorrencia}.toString().substring(4,8): "CRA-TO "]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="444" y="194" width="106" height="17" uuid="c817dd75-4e20-40e0-be3d-5537cba12f2d"/>
-				<textElement textAlignment="Right">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{comarca}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="198" y="82" width="12" height="20" uuid="03469c51-220c-42f2-ab9a-899ee55d84ee"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[/]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="210" y="82" width="98" height="20" uuid="2283214c-42de-487d-86a3-d4f61465d926"/>
-				<textFieldExpression><![CDATA[$F{conta}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="171" y="62" width="137" height="20" uuid="11d5ca7d-443f-48b9-9df9-061acf0e58fe"/>
-				<textFieldExpression><![CDATA[$F{centralizadora}]]></textFieldExpression>
-			</textField>
-			<textField pattern="">
-				<reportElement x="46" y="142" width="262" height="20" uuid="a4194847-6752-4fcf-96da-2cab8afd7579"/>
-				<textFieldExpression><![CDATA[$F{tipo_documento}.equals("1") ? $F{cnpj}.substring(0, 2)+"."+$F{cnpj}.substring(2, 5)+"."+$F{cnpj}.substring(5, 8)+"/"+$F{cnpj}.substring(8, 12)+"-"+$F{cnpj}.substring(12, 14) : $F{cnpj}.substring(3, 6)+"."+$F{cnpj}.substring(6, 9)+"."+$F{cnpj}.substring(9, 12)+"-"+$F{cnpj}.substring(12, 14)]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="64" y="122" width="244" height="20" uuid="382448de-eabe-4407-aaeb-217e93cd5076"/>
-				<textFieldExpression><![CDATA[$F{sacado}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="70" y="102" width="238" height="20" uuid="f7459bd9-01b5-4e9f-831f-1a7613681a35"/>
-				<textFieldExpression><![CDATA[$F{nome_cedente_favorecido}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="146" y="82" width="54" height="20" uuid="fd254c11-6e4e-4dd5-a595-a1ee5366e2f5"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{agencia}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="9" y="62" width="162" height="20" uuid="c124a672-ca87-41be-81e8-204b71f7f3a4"/>
+				<reportElement x="9" y="64" width="162" height="20" uuid="c124a672-ca87-41be-81e8-204b71f7f3a4"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[AGÊNCIA CENTRALIZADORA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="9" y="82" width="137" height="20" uuid="fa03fd57-6096-4418-8b14-3864711bffdf"/>
+				<reportElement x="9" y="84" width="137" height="20" uuid="fa03fd57-6096-4418-8b14-3864711bffdf"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[AGÊNCIA/CÓD. CEDENTE:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="9" y="102" width="66" height="20" uuid="e3ca13db-9595-4b70-97a9-66c02e54fba4"/>
+				<reportElement x="9" y="104" width="66" height="20" uuid="e3ca13db-9595-4b70-97a9-66c02e54fba4"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[CEDENTE:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="9" y="122" width="55" height="20" uuid="d2daa779-8c00-4ae6-9659-b2c3b497beaa"/>
+				<reportElement x="9" y="124" width="55" height="20" uuid="d2daa779-8c00-4ae6-9659-b2c3b497beaa"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[SACADO:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="9" y="142" width="40" height="20" uuid="e03be257-09b7-4926-ad42-2d66f46dfdbd"/>
+				<reportElement x="9" y="144" width="40" height="20" uuid="e03be257-09b7-4926-ad42-2d66f46dfdbd"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[CNPJ:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="9" y="4" width="201" height="26" forecolor="#000000" backcolor="#FFFFFF" uuid="4a7fed1b-278f-45e2-bf20-ac0e4e2bf856"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="16" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{nomebanco}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement mode="Transparent" x="210" y="4" width="340" height="26" forecolor="#000000" backcolor="#FFFFFF" uuid="42b11ccc-8855-407a-9298-d2e3fcbe4c1b"/>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="16" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{cidade} + "-" +$F{uf}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="312" y="62" width="102" height="20" uuid="6f058611-7f4b-4297-ae57-f80dccf046ca"/>
 				<textElement textAlignment="Left">
@@ -265,16 +72,6 @@ ORDER BY municipio_origem.comarca, retorno.id_titulo_bcr ASC]]>
 				</textElement>
 				<text><![CDATA[NOSSO NÚMERO:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="414" y="62" width="136" height="20" uuid="1e895651-601b-455e-afce-1c68952be935"/>
-				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[$F{nosso_numero}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="414" y="82" width="136" height="20" uuid="a484a5af-c88d-46be-8570-8b52946f9391"/>
-				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[$F{numero_titulo}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="312" y="82" width="102" height="20" uuid="9bf17172-947c-47fb-bf07-554ebfbe0c72"/>
 				<textElement textAlignment="Left">
@@ -289,17 +86,6 @@ ORDER BY municipio_origem.comarca, retorno.id_titulo_bcr ASC]]>
 				</textElement>
 				<text><![CDATA[VENCIMENTO:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="414" y="102" width="136" height="20" uuid="f1f8cb43-9161-41a2-8032-8a68b9ce043c"/>
-				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[$F{vencimento}.length()==8?
-$F{vencimento}.toString().substring(0,2)+"/"+$F{vencimento}.toString().substring(2,4)+"/"+$F{vencimento}.toString().substring(4,8): ""]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="414" y="122" width="136" height="20" uuid="8afcec7d-2fa0-4970-a815-e863713463d3"/>
-				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[$F{valor_titulo_formatado}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="312" y="122" width="102" height="20" uuid="14b711f2-9c10-443a-8f11-9feff8614a6d"/>
 				<textElement textAlignment="Left">
@@ -314,37 +100,13 @@ $F{vencimento}.toString().substring(0,2)+"/"+$F{vencimento}.toString().substring
 				</textElement>
 				<text><![CDATA[PROTOCOLO:]]></text>
 			</staticText>
-			<textField pattern="">
-				<reportElement x="390" y="142" width="94" height="20" uuid="fe81985f-d08b-4b21-968f-adccac157864"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{protocolo} + " em "]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="486" y="142" width="64" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="1b86041e-a418-4df8-a1b5-30b9e14173d1"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<staticText>
+				<reportElement x="223" y="4" width="323" height="21" uuid="4a500409-8543-41a4-aa83-492e40c21f80"/>
+				<textElement textAlignment="Right">
+					<font size="16" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{dataprotocolo}.length()==8?
-$F{dataprotocolo}.toString().substring(0,2)+"/"+$F{dataprotocolo}.toString().substring(2,4)+"/"+$F{dataprotocolo}.toString().substring(4,8): ""]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[INSTRUMENTO DE PROTESTO]]></text>
+			</staticText>
 		</band>
 	</detail>
-	<pageFooter>
-		<band height="13">
-			<textField>
-				<reportElement x="435" y="0" width="80" height="13" uuid="c40eb85f-566f-42f4-a668-d070b44e38ee"/>
-				<textElement textAlignment="Right">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Pág. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement x="515" y="0" width="40" height="13" uuid="a4166a3a-3a21-4e7d-a357-4085d00fcacc"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-		</band>
-	</pageFooter>
 </jasperReport>

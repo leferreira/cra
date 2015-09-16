@@ -1,117 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-06-03T10:55:37 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lista_etiquetas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ff5bfdee-ba70-4545-9938-56431633f64b">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="data_arquivo" class="java.util.Date">
-		<parameterDescription><![CDATA[]]></parameterDescription>
-	</parameter>
-	<parameter name="id_destinatario" class="java.lang.Integer"/>
-	<parameter name="id_instituicao_origem" class="java.lang.Integer"/>
+	<parameter name="CODE_BAR" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT 
-count(SUBSTRING(confirmacao.agencia_codigo_cedente, 3, 4)) as QUANTIDADE,
-SUBSTRING(confirmacao.agencia_codigo_cedente, 3, 4) AS CODAGENCIA,
-SUBSTRING(arquivo_retorno.arquivo,2,3) AS CODBANCO,
-caf.nome_agencia AS NOMEAGENCIA,
-caf.cidade AS CIDADE,
-caf.uf AS UF,
-instituicao_destino.instituicao AS NOMEBANCO,
-confirmacao.especie_titulo AS ESPECIE_TITULO
-FROM titulo_bcr retorno
-INNER JOIN cabecalho_bcr AS cabecalho_retorno ON cabecalho_retorno.id_cabecalho_bcr = retorno.cabecalho_bcr_id
-INNER JOIN arquivo AS arquivo_retorno ON arquivo_retorno.id_arquivo = cabecalho_retorno.arquivo_id AND arquivo_retorno.tipo_arquivo_id = 3
-INNER JOIN titulo_bcr confirmacao ON confirmacao.numero_protocolo_cartorio = retorno.numero_protocolo_cartorio
-INNER JOIN cabecalho_bcr AS cabecalho_confirmacao ON cabecalho_confirmacao.id_cabecalho_bcr = confirmacao.cabecalho_bcr_id AND cabecalho_confirmacao.codigo_municipal = cabecalho_retorno.codigo_municipal
-INNER JOIN arquivo AS arquivo_confirmacao ON arquivo_confirmacao.id_arquivo = cabecalho_confirmacao.arquivo_id AND arquivo_confirmacao.tipo_arquivo_id = 2
-INNER JOIN usuario as usuario ON usuario.id_usuario = arquivo_retorno.usuario_envio_id
-INNER JOIN instituicao as instituicao_origem ON instituicao_origem.id_instituicao = usuario.instituicao_id
-INNER JOIN municipio AS municipio_origem ON municipio_origem.id_municipio = instituicao_origem.municipio_id
-LEFT JOIN instituicao as instituicao_destino ON instituicao_destino.codigo_compensacao = cabecalho_confirmacao.codigo_portador
-LEFT JOIN arquivo_caf AS caf ON caf.banco = confirmacao.codigo_portador and caf.codigo_agencia = SUBSTRING(confirmacao.agencia_codigo_cedente, 3, 4)
-WHERE date(arquivo_retorno.data_envio) = $P{data_arquivo}
-AND instituicao_origem.tipo_instituicao_id = 3
-AND retorno.tipo_ocorrencia = '2'
-AND cabecalho_retorno.codigo_municipal = cabecalho_confirmacao.codigo_municipal
-AND confirmacao.id_titulo_bcr <> retorno.id_titulo_bcr
-AND instituicao_destino.id_instituicao = $P{id_destinatario}
-AND instituicao_origem.id_instituicao = $P{id_instituicao_origem}
-GROUP BY SUBSTRING(confirmacao.agencia_codigo_cedente, 3, 4), SUBSTRING(arquivo_retorno.arquivo,2,3), caf.nome_agencia, caf.cidade, caf.uf, instituicao_destino.instituicao, confirmacao.especie_titulo
-ORDER BY SUBSTRING(confirmacao.agencia_codigo_cedente, 3, 4)]]>
+		<![CDATA[]]>
 	</queryString>
-	<field name="QUANTIDADE" class="java.lang.String"/>
-	<field name="CODAGENCIA" class="java.lang.String"/>
-	<field name="CODBANCO" class="java.lang.String"/>
-	<field name="NOMEAGENCIA" class="java.lang.String"/>
-	<field name="CIDADE" class="java.lang.String"/>
-	<field name="UF" class="java.lang.String"/>
-	<field name="NOMEBANCO" class="java.lang.String"/>
-	<field name="ESPECIE_TITULO" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
 		<band height="247">
 			<rectangle>
-				<reportElement x="11" y="7" width="529" height="233" uuid="b0592fd2-a76f-481e-b31d-ee15a002ba6c"/>
+				<reportElement x="0" y="0" width="555" height="233" uuid="b0592fd2-a76f-481e-b31d-ee15a002ba6c"/>
 			</rectangle>
-			<textField>
-				<reportElement x="250" y="20" width="248" height="28" uuid="8bcda4e3-fac6-4a8f-b3c2-c4dfd0d160f2"/>
-				<textElement textAlignment="Right">
-					<font size="16" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{CIDADE} == null || $F{CIDADE} == "" ? "" : $F{CIDADE}.toUpperCase() +"-"+$F{UF}.toUpperCase()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="210" y="57" width="263" height="30" uuid="528d6fef-606a-4fc0-9268-2c0660787683"/>
-				<textElement textAlignment="Left" verticalAlignment="Bottom">
-					<font size="18" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{NOMEAGENCIA} == null || $F{NOMEAGENCIA} == "" ? "" : $F{UF}.toUpperCase() + " "+ $F{NOMEAGENCIA}.toUpperCase()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="60" y="20" width="180" height="28" uuid="3f8d3973-3677-497d-b5d6-e1e076b9e527"/>
-				<textElement>
-					<font size="16" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{NOMEBANCO} == null || $F{NOMEBANCO} == "" ? ""  : $F{NOMEBANCO}.toUpperCase()]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="373" y="148" width="125" height="20" uuid="f85b4870-1811-4a19-a37d-6bc379e97aa7"/>
+				<reportElement x="373" y="142" width="125" height="20" uuid="f85b4870-1811-4a19-a37d-6bc379e97aa7"/>
 				<textElement textAlignment="Right">
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[CRA-TO]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="60" y="148" width="251" height="20" uuid="1d6446c1-952a-497f-9aa6-ab23adc4093c"/>
-				<textElement>
-					<font size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Quantidade: " + $F{QUANTIDADE}]]></textFieldExpression>
-			</textField>
-			<componentElement>
-				<reportElement x="210" y="181" width="225" height="50" uuid="10421c4f-fe84-4a05-90c4-4a9adac943a8"/>
-				<jr:Code39 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
-					<jr:codeExpression><![CDATA[$F{UF} == null || $F{UF}=="" ?  $F{CODAGENCIA}+new java.text.SimpleDateFormat("ddMMyy").format(new java.util.Date()) :$F{CODAGENCIA}+$F{UF}.toUpperCase()+new java.text.SimpleDateFormat("ddMMyy").format(new java.util.Date())]]></jr:codeExpression>
-				</jr:Code39>
-			</componentElement>
-			<textField isBlankWhenNull="true">
-				<reportElement x="80" y="57" width="118" height="30" uuid="76c128ea-c842-44c3-8d04-f61fa3d5f4dd"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="18" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{CODAGENCIA} == null || $F{CODAGENCIA} == "" ?  "" : $F{CODAGENCIA}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="60" y="101" width="438" height="30" uuid="e31126db-0fbc-44e0-9b96-70becfb838a0"/>
+				<reportElement x="60" y="95" width="438" height="30" uuid="e31126db-0fbc-44e0-9b96-70becfb838a0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="18" isBold="true"/>
 				</textElement>
 				<text><![CDATA[INSTRUMENTOS DE PROTESTO]]></text>
 			</staticText>
+			<componentElement>
+				<reportElement x="231" y="162" width="65" height="61" uuid="8ef256ac-18df-43a3-852a-a6c9e366075d"/>
+				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$P{CODE_BAR}]]></jr:codeExpression>
+				</jr:Code128>
+			</componentElement>
 		</band>
 	</detail>
 </jasperReport>

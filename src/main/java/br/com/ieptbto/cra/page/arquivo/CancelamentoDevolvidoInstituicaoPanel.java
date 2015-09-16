@@ -7,6 +7,9 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -37,6 +40,7 @@ public class CancelamentoDevolvidoInstituicaoPanel extends Panel  {
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	private IModel<Arquivo> model;
+	private DropDownChoice<Municipio> comboMunicipio;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	private ArrayList<TipoArquivoEnum> tiposArquivo = new ArrayList<TipoArquivoEnum>();
@@ -48,6 +52,7 @@ public class CancelamentoDevolvidoInstituicaoPanel extends Panel  {
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
 		add(nomeArquivo());
+		add(pracaProtesto());
 		add(botaoEnviar());
 	}
 	
@@ -81,6 +86,11 @@ public class CancelamentoDevolvidoInstituicaoPanel extends Panel  {
 						}else
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
+					
+					if (comboMunicipio.getDefaultModelObject() != null){
+						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
+					}
+					
 					setResponsePage(new ListaCancelamentoDevolvidoPage(arquivo, tipoArquivos, municipio, dataInicio, dataFim));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -105,6 +115,12 @@ public class CancelamentoDevolvidoInstituicaoPanel extends Panel  {
 		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
 		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
+	}
+	
+	private DropDownChoice<Municipio> pracaProtesto() {
+		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
+		comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
+		return comboMunicipio;
 	}
 	
 	private TextField<LocalDate> dataEnvioInicio() {

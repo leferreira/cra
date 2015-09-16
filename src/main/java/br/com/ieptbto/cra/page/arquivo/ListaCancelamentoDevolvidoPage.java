@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -43,7 +42,7 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 	private List<DesistenciaProtesto> desistenciaProtesto;
 
 	public ListaCancelamentoDevolvidoPage(Arquivo arquivo, ArrayList<TipoArquivoEnum> tiposArquivo, Municipio municipio ,LocalDate dataInicio, LocalDate dataFim) {
-		this.desistenciaProtesto = remessaMediator.buscarRemessaDesistenciaProtesto(arquivo, dataInicio, dataFim, tiposArquivo, arquivo.getInstituicaoEnvio(), getUser());
+		this.desistenciaProtesto = remessaMediator.buscarRemessaDesistenciaProtesto(arquivo, arquivo.getInstituicaoEnvio(), municipio, dataInicio, dataFim, tiposArquivo, getUser());
 		add(carregarListaArquivos());
 	}
 
@@ -56,7 +55,7 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 				item.add(new Label("tipoArquivo", desistencia.getRemessaDesistenciaProtesto().getArquivo().getTipoArquivo().getTipoArquivo().constante));
 				item.add(new Label("nomeArquivo", desistencia.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(desistencia.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio())));
-				item.add(new Label("horaEnvio", StringUtils.EMPTY));
+				item.add(new Label("horaEnvio", desistencia.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio()));
 				item.add(new Label("instituicao", desistencia.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(desistencia.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
 				item.add(new Label("status", verificaDownload(desistencia).getLabel().toUpperCase()).setMarkupId(verificaDownload(desistencia).getLabel()));
