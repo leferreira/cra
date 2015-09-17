@@ -95,6 +95,7 @@ public class RetornoPage extends BasePage<Retorno> {
 			protected void populateItem(ListItem<Remessa> item){
 				final Remessa retorno = item.getModelObject();
 				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
+				item.add(new Label("horaEnvio", DataUtil.localTimeToString(retorno.getArquivo().getHoraEnvio())));
 				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
 				BigDecimal valorPagos = retornoMediator.buscarValorDeTitulosPagos(retorno);
 				if (valorPagos==null || valorPagos.equals(BigDecimal.ZERO)) {

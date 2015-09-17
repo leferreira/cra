@@ -50,7 +50,7 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 
 	public ListaArquivosInstituicaoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<SituacaoArquivo> situacoes) {
 		this.arquivo = arquivo;
-		this.arquivos = arquivoMediator.buscarArquivosAvancado(arquivo, getUser().getInstituicao(), tiposArquivo, municipio, dataInicio, dataFim, situacoes);
+		this.arquivos = arquivoMediator.buscarArquivosAvancado(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, situacoes);
 		add(carregarListaArquivos());
 	}
 
@@ -71,6 +71,7 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 				linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));
 				item.add(linkArquivo);
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio())));
+				item.add(new Label("horaEnvio", DataUtil.localTimeToString(arquivo.getHoraEnvio())));
 				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
 				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));

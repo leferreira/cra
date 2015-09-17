@@ -81,6 +81,7 @@ public class ConfirmacaoPage extends BasePage<Confirmacao> {
 	            protected void populateItem(ListItem<Remessa> item){
 					final Remessa retorno = item.getModelObject();
 					item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
+					item.add(new Label("horaEnvio", DataUtil.localTimeToString(retorno.getArquivo().getHoraEnvio())));
 					item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
 					item.add(new Label("instituicaoDestino.nomeFantasia", retorno.getInstituicaoDestino().getNomeFantasia()));
 					Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
