@@ -43,7 +43,7 @@ public class ListaArquivosRemoverPage extends BasePage<Arquivo> {
 	public ListaArquivosRemoverPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo) {
 		this.arquivo = arquivo;
 		ArrayList<SituacaoArquivo> situacaoArquivos = new ArrayList<SituacaoArquivo>();
-		this.arquivos = arquivoMediator.buscarArquivosAvancado(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, situacaoArquivos);
+		this.arquivos = administracaoMediator.buscarArquivosRemover(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, situacaoArquivos);
 		add(carregarListaArquivos());
 	}
 

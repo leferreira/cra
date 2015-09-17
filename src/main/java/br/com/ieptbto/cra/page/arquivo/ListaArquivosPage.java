@@ -32,6 +32,7 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -49,6 +50,8 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	RemessaMediator remessaMediator;
 	@SpringBean
 	RelatorioMediator relatorioMediator;
+	@SpringBean
+	InstituicaoMediator instituicaoMediator;
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
 
@@ -168,8 +171,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				        .getCabecalho().getDataMovimento())));
 				item.add(new Label("instituicao", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio()
 				        .getNomeFantasia()));
-				item.add(new Label("destino", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoRecebe()
-				        .getNomeFantasia()));
+				item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
 				item.add(new LabelValorMonetario<BigDecimal>("valor", desistenciaProtesto.getRemessaDesistenciaProtesto().getRodape()
 				        .getSomatorioValorTitulo()));
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio())));

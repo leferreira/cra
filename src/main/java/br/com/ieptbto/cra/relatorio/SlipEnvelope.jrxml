@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lista_etiquetas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ff5bfdee-ba70-4545-9938-56431633f64b">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lista_etiquetas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ff5bfdee-ba70-4545-9938-56431633f64b">
 	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -16,7 +16,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="247">
+		<band height="235">
 			<rectangle>
 				<reportElement x="0" y="0" width="555" height="233" uuid="b0592fd2-a76f-481e-b31d-ee15a002ba6c"/>
 			</rectangle>
@@ -34,12 +34,6 @@
 				</textElement>
 				<text><![CDATA[INSTRUMENTOS DE PROTESTO]]></text>
 			</staticText>
-			<componentElement>
-				<reportElement x="239" y="167" width="65" height="50" uuid="fe00eaf4-5e32-403d-8ac0-5dc4e41a9215"/>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
-					<jr:codeExpression><![CDATA[$F{codeBar}]]></jr:codeExpression>
-				</jr:Code128>
-			</componentElement>
 			<staticText>
 				<reportElement x="28" y="136" width="114" height="31" uuid="63106b0e-1600-4274-a826-51f215f20b02"/>
 				<textElement verticalAlignment="Middle">
@@ -48,32 +42,18 @@
 				<text><![CDATA[QUANTIDADE:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="28" y="58" width="309" height="24" uuid="ce96a3d1-f2a8-4ad2-9734-9faae011d6d4"/>
+				<reportElement x="28" y="87" width="309" height="24" uuid="ce96a3d1-f2a8-4ad2-9734-9faae011d6d4"/>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeApresentante}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="28" y="82" width="62" height="24" uuid="1eaec56f-c3b3-4db5-bec6-db2afa3f9934"/>
+				<reportElement x="28" y="111" width="419" height="24" uuid="1eaec56f-c3b3-4db5-bec6-db2afa3f9934"/>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{numeroAgencia}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="90" y="82" width="247" height="24" uuid="369f311b-08d5-494c-8758-ba7a6bba07bf"/>
-				<textElement verticalAlignment="Middle">
-					<font size="16" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{municipio}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="28" y="112" width="100" height="24" uuid="6bed7755-50b4-4963-953d-990aeadf5aef"/>
-				<textElement verticalAlignment="Middle">
-					<font size="16" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{uf}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{numeroAgencia} + " - " + $F{municipio} + " - " + $F{uf}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="142" y="136" width="100" height="31" uuid="90ce4e00-6aff-4af3-81b2-9250ab7efda7"/>
@@ -82,6 +62,12 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{quantidadeInstrumentos}]]></textFieldExpression>
 			</textField>
+			<componentElement>
+				<reportElement x="218" y="175" width="190" height="50" uuid="71690d10-4ab6-48bf-abea-cbd22f4d8d5e"/>
+				<jr:Code39 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{codeBar}]]></jr:codeExpression>
+				</jr:Code39>
+			</componentElement>
 		</band>
 	</detail>
 </jasperReport>

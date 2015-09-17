@@ -144,7 +144,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				};
 				linkArquivo.add(new Label("desistencia", remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				item.add(new Label("banco", remessa.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("banco", instituicaoMediator.getCartorioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
 				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaDesistenciaProtesto().getArquivo()
 				        .getDataEnvio().toDate(), new Date())));
 			}
