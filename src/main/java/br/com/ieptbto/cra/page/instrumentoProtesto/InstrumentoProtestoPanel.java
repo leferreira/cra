@@ -47,10 +47,11 @@ import br.com.ieptbto.cra.util.DataUtil;
 public class InstrumentoProtestoPanel extends Panel {
 
 	private static final Logger logger = Logger.getLogger(InstrumentoProtestoPanel.class);
+	
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private InstrumentoDeProtestoMediator instrumentoMediator;
+	InstrumentoDeProtestoMediator instrumentoMediator;
 	private List<Retorno> retornos;
 	private List<InstrumentoProtesto> instrumentos;
 	

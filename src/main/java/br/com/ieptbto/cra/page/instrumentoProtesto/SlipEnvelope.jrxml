@@ -3,10 +3,15 @@
 	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="CODE_BAR" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
+	<field name="nomeApresentante" class="java.lang.String"/>
+	<field name="numeroAgencia" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="uf" class="java.lang.String"/>
+	<field name="quantidadeInstrumentos" class="java.lang.Integer"/>
+	<field name="codeBar" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -16,25 +21,67 @@
 				<reportElement x="0" y="0" width="555" height="233" uuid="b0592fd2-a76f-481e-b31d-ee15a002ba6c"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="373" y="142" width="125" height="20" uuid="f85b4870-1811-4a19-a37d-6bc379e97aa7"/>
-				<textElement textAlignment="Right">
+				<reportElement x="0" y="38" width="555" height="20" uuid="f85b4870-1811-4a19-a37d-6bc379e97aa7"/>
+				<textElement textAlignment="Center">
 					<font size="14"/>
 				</textElement>
-				<text><![CDATA[CRA-TO]]></text>
+				<text><![CDATA[CENTRAL DE REMESSA DE ARQUIVOS - TOCANTINS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="60" y="95" width="438" height="30" uuid="e31126db-0fbc-44e0-9b96-70becfb838a0"/>
+				<reportElement x="0" y="8" width="555" height="30" uuid="e31126db-0fbc-44e0-9b96-70becfb838a0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="18" isBold="true"/>
 				</textElement>
 				<text><![CDATA[INSTRUMENTOS DE PROTESTO]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="231" y="162" width="65" height="61" uuid="8ef256ac-18df-43a3-852a-a6c9e366075d"/>
+				<reportElement x="239" y="167" width="65" height="50" uuid="fe00eaf4-5e32-403d-8ac0-5dc4e41a9215"/>
 				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
-					<jr:codeExpression><![CDATA[$P{CODE_BAR}]]></jr:codeExpression>
+					<jr:codeExpression><![CDATA[$F{codeBar}]]></jr:codeExpression>
 				</jr:Code128>
 			</componentElement>
+			<staticText>
+				<reportElement x="28" y="136" width="114" height="31" uuid="63106b0e-1600-4274-a826-51f215f20b02"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[QUANTIDADE:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="28" y="58" width="309" height="24" uuid="ce96a3d1-f2a8-4ad2-9734-9faae011d6d4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeApresentante}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="28" y="82" width="62" height="24" uuid="1eaec56f-c3b3-4db5-bec6-db2afa3f9934"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroAgencia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="90" y="82" width="247" height="24" uuid="369f311b-08d5-494c-8758-ba7a6bba07bf"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{municipio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="28" y="112" width="100" height="24" uuid="6bed7755-50b4-4963-953d-990aeadf5aef"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uf}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="136" width="100" height="31" uuid="90ce4e00-6aff-4af3-81b2-9250ab7efda7"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidadeInstrumentos}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
