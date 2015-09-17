@@ -55,7 +55,7 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 				item.add(new Label("tipoArquivo", desistencia.getRemessaDesistenciaProtesto().getArquivo().getTipoArquivo().getTipoArquivo().constante));
 				item.add(new Label("nomeArquivo", desistencia.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(desistencia.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio())));
-				item.add(new Label("horaEnvio", desistencia.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio()));
+				item.add(new Label("horaEnvio", DataUtil.localTimeToString(desistencia.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio())));
 				item.add(new Label("instituicao", desistencia.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(desistencia.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
 				item.add(new Label("status", verificaDownload(desistencia).getLabel().toUpperCase()).setMarkupId(verificaDownload(desistencia).getLabel()));

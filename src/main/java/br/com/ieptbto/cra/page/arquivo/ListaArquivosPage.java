@@ -89,6 +89,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
 				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa()
 				        .getLabel()));
+				item.add(new Label("horaEnvio", DataUtil.localTimeToString(remessa.getArquivo().getHoraEnvio())));
 				item.add(downloadArquivoTXT(remessa));
 				item.add(relatorioArquivo(remessa));
 			}
@@ -171,6 +172,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				        .getNomeFantasia()));
 				item.add(new LabelValorMonetario<BigDecimal>("valor", desistenciaProtesto.getRemessaDesistenciaProtesto().getRodape()
 				        .getSomatorioValorTitulo()));
+				item.add(new Label("horaEnvio", DataUtil.localTimeToString(desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio())));
 				item.add(new Label("status", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getStatusArquivo()
 				        .getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(desistenciaProtesto.getRemessaDesistenciaProtesto()
 				        .getArquivo().getStatusArquivo().getSituacaoArquivo().getLabel()));
