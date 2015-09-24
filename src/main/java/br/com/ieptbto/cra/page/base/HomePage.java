@@ -64,7 +64,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		add(listaConfirmacoesPendentes());
 		add(listaArquivosConfirmacoesPendentes());
 		add(listaConfirmacoesPendentesDesistenciaProtesto());
-		// listaRetornosPendentes();
 	}
 
 	private void labelArquivosPendentes() {
@@ -110,9 +109,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				linkArquivo.add(new Label("arquivo", remessa.getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-					item.add(new Label("instituicao", remessa.getInstituicaoOrigem().getNomeFantasia()));
+					String nomeFantasia = remessa.getInstituicaoOrigem().getNomeFantasia();
+					item.add(new Label("instituicao", nomeFantasia));
 				} else {
-					item.add(new Label("instituicao", remessa.getInstituicaoDestino().getMunicipio().getNomeMunicipio()));
+					String nomeFantasia = remessa.getInstituicaoDestino().getNomeFantasia();
+					item.add(new Label("instituicao", nomeFantasia));
 				}
 				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
 			}

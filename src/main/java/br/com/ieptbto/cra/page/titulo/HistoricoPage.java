@@ -1,11 +1,14 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -14,13 +17,17 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.bean.ArquivoOcorrenciaBean;
+import br.com.ieptbto.cra.component.label.DataUtil;
+import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
@@ -31,288 +38,343 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
 public class HistoricoPage extends BasePage<TituloRemessa> {
 
-	private TituloRemessa tituloRemessa;
-
 	@SpringBean
-	TituloMediator tituloMediator;
+	private TituloMediator tituloMediator;
+	private TituloRemessa tituloRemessa;
+	private List<ArquivoOcorrenciaBean> arquivosOcorrencias;
 
 	public HistoricoPage(TituloRemessa titulo){
 		this.tituloRemessa = tituloMediator.carregarDadosHistoricoTitulo(titulo);
-		add(getListViewHistorico());
-		add(numeroProtocoloCartorio());
-		add(dataProtocolo());
-//		add(codigoCartorio());
-		add(pracaProtesto());
-		add(cartorio());
-		add(status());
-		add(nomeSacadorVendedor());
-		add(documentoSacador());
-		add(ufSacadorVendedor());
-		add(cepSacadorVendedor());
-		add(cidadeSacadorVendedor());
-		add(enderecoSacadorVendedor());
-		add(nomeDevedor());
-		add(documentoDevedor());
-		add(ufDevedor());
-		add(cepDevedor());
-		add(cidadeDevedor());
-		add(enderecoDevedor());
-		add(numeroTitulo());
-		add(dataRemessa());
-		add(portador());
-		add(agencia());
-		add(nossoNumero());
-		add(especieTitulo());
-		add(dataEmissaoTitulo());
-		add(dataVencimentoTitulo());
-		add(valorTitulo());
-		add(saldoTitulo());
-		add(valorCustaCartorio());
-		add(valorGravacaoEletronica());
-		add(valorCustasCartorioDistribuidor());
-		add(valorDemaisDespesas());
-		add(nomeCedenteFavorecido());
-		add(agenciaCodigoCedente());
+		carregarCampos();
+		carregarArquivosOcorrencias();
 	}
 	
-	private ListView<Historico> getListViewHistorico(){
-		return new ListView<Historico>("divListaHistorico", tituloRemessa.getHistoricos()) {
+	private void carregarArquivosOcorrencias() {
+		List<Historico> historicoArquivos = getTituloRemessa().getHistoricos();
+		
+		for (Historico historico : historicoArquivos) {
+			ArquivoOcorrenciaBean novaOcorrencia = new ArquivoOcorrenciaBean();
+			novaOcorrencia.parseToHistorico(historico);
+			
+			getArquivosOcorrencias().add(novaOcorrencia);
+			if (historico.getRemessa().getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO) ||
+					historico.getRemessa().getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+				if (historico.getRemessa().getArquivoGeradoProBanco() != historico.getRemessa().getArquivo()) {
+					ArquivoOcorrenciaBean novaOcorrenciaArquivo = new ArquivoOcorrenciaBean();
+					novaOcorrenciaArquivo.parseToArquivoGerado(historico.getRemessa().getArquivoGeradoProBanco());
+					getArquivosOcorrencias().add(novaOcorrenciaArquivo);
+				}
+			}
+		}
+		
+		if (getTituloRemessa().getPedidoDesistencia() != null) {
+			ArquivoOcorrenciaBean novaOcorrencia = new ArquivoOcorrenciaBean();
+			novaOcorrencia.parseToDesistenciaProtesto(getTituloRemessa().getPedidoDesistencia().getDesistenciaProtesto());
+			
+			getArquivosOcorrencias().add(novaOcorrencia);
+		}
+		
+		add(listArquivoOcorrenciaBean());
+	}
+
+	private ListView<ArquivoOcorrenciaBean> listArquivoOcorrenciaBean(){
+		return new ListView<ArquivoOcorrenciaBean>("divListaHistorico", getArquivosOcorrencias()) {
 
 			@Override
-			protected void populateItem(ListItem<Historico> item) {
-				final Historico historico = item.getModelObject();
-				Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
-
-					@Override
-					public void onClick() {
-		            	setResponsePage(new TitulosArquivoPage(historico.getRemessa()));  
-		            }
-		        };
-		        linkArquivo.add(new Label("nomeArquivo", historico.getRemessa().getArquivo().getNomeArquivo()));
-		        item.add(linkArquivo);
-				item.add(new Label("dataOcorrencia", DataUtil.localDateTimeToString(historico.getDataOcorrencia())));
-				item.add(new Label("usuarioAcao", historico.getUsuarioAcao().getNome()));
+			protected void populateItem(ListItem<ArquivoOcorrenciaBean> item) {
+				final ArquivoOcorrenciaBean arquivoOcorrenciaBean = item.getModelObject();
+				
+				if (arquivoOcorrenciaBean.getRemessa() != null) {
+					Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
+						
+						@Override
+						public void onClick() {
+							setResponsePage(new TitulosArquivoPage(arquivoOcorrenciaBean.getRemessa()));  
+						}
+					};
+					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getRemessa().getArquivo().getNomeArquivo()));
+					item.add(linkArquivo);
+					item.add(new Label("acao", " enviado em "));
+				} 
+				
+				if (arquivoOcorrenciaBean.getArquivoGerado() != null) {
+					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+						
+						@Override
+						public void onClick() {
+						}
+					};
+					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getArquivoGerado()));
+					item.add(linkArquivo);
+					item.add(new Label("acao", " liberado em "));
+				}
+				
+				if (arquivoOcorrenciaBean.getDesistenciaProtesto() != null) {
+					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+						
+						@Override
+						public void onClick() {
+						}
+					};
+					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+					item.add(linkArquivo);
+					item.add(new Label("acao", " enviado em "));
+				}
+				
+				item.add(new Label("dataOcorrencia", arquivoOcorrenciaBean.getDataHora()));
+				item.add(new Label("usuarioAcao", arquivoOcorrenciaBean.getNomeUsuario()));
 			}
 		};
 	}
 	
-	private TextField<String> numeroProtocoloCartorio() {
-		String numeroProtocolo = StringUtils.EMPTY;
-		if (tituloRemessa.getConfirmacao() != null){
-			numeroProtocolo = tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio();
-		} 
-		TextField<String> campoNumeroProtocolo = new TextField<String>("confirmacao.numeroProtocoloCartorio", new Model<String>(numeroProtocolo));
-		campoNumeroProtocolo.setEnabled(false);
-		return campoNumeroProtocolo;
-	}
-
-	private TextField<String> dataProtocolo() {
-		String dataProtocolo = StringUtils.EMPTY;
-		if (tituloRemessa.getConfirmacao() != null){
-			dataProtocolo = DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataProtocolo()); 
-		}
-		TextField<String> textField = new TextField<String>("confirmacao.dataProtocolo", new Model<String>(dataProtocolo));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> cartorio(){
-		TextField<String> textField = new TextField<String>("remessa.instituicaoDestino.nomeFantasia", new Model<String>(StringUtils.EMPTY));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> pracaProtesto() {
-		TextField<String> textField = new TextField<String>("pracaProtesto", new Model<String>(tituloRemessa.getPracaProtesto()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	 private TextField<String> status(){
-		TextField<String> textField = new TextField<String>("situacaoTitulo", new Model<String>(tituloRemessa.getSituacaoTitulo()));
-		textField.setEnabled(false);
-		return textField;
-	 }
-
-	 private TextField<String> numeroTitulo() {
-		TextField<String> textField = new TextField<String>("numeroTitulo", new Model<String>(tituloRemessa.getNumeroTitulo()));
-		textField.setEnabled(false);
-		return textField;
-	 }
-
- 	private TextField<String> dataRemessa(){
- 		TextField<String> textField = new TextField<String>("remessa.arquivo.dataEnvio", 
- 				new Model<String>(DataUtil.localDateToString(tituloRemessa.getRemessa().getArquivo().getDataEnvio())));
-		textField.setEnabled(false);
-		return textField;
-	}
 	
- 	private TextField<String> portador(){
- 		TextField<String> textField = new TextField<String>("remessa.arquivo.instituicaoEnvio.nomeFantasia", new Model<String>(tituloRemessa.getRemessa().getCabecalho().getNomePortador()));
-		textField.setEnabled(false);
-		return textField;
+    private void carregarCampos() {
+    	add(numeroProtocoloCartorio());
+    	add(dataProtocolo());
+    	add(codigoCartorio());
+    	add(confirmacao());
+    	add(irregularidade());
+    	add(codigoMunicipio());
+    	add(pracaProtesto());
+    	add(cartorio());
+    	add(status());
+    	add(nomeSacadorVendedor());
+    	add(documentoSacador());
+    	add(ufSacadorVendedor());
+    	add(cepSacadorVendedor());
+    	add(cidadeSacadorVendedor());
+    	add(enderecoSacadorVendedor());
+    	add(nomeDevedor());
+    	add(documentoDevedor());
+    	add(ufDevedor());
+    	add(cepDevedor());
+    	add(cidadeDevedor());
+    	add(enderecoDevedor());
+    	add(numeroTitulo());
+    	add(portador());
+    	add(agencia());
+    	add(nossoNumero());
+    	add(especieTitulo());
+    	add(dataEmissaoTitulo());
+    	add(dataVencimentoTitulo());
+    	add(valorTitulo());
+    	add(saldoTitulo());
+    	add(valorCustaCartorio());
+    	add(valorCustasCartorioDistribuidor());
+    	add(valorDemaisDespesas());
+    	add(valorGravacaoEletronica());
+    	add(nomeCedenteFavorecido());
+    	add(agenciaCodigoCedente());
+	}
+
+	private Label codigoCartorio() {
+		return new Label("codigoCartorio", new Model<String>(getTituloRemessa().getRemessa().getInstituicaoDestino().getCodigoCartorio()));
+	}
+
+    private Label confirmacao() {
+    	String confirmacao = StringUtils.EMPTY;
+    	if (getTituloRemessa().getConfirmacao() != null) {
+    		confirmacao = getTituloRemessa().getConfirmacao().getRemessa().getArquivo().getNomeArquivo();
+    	}
+		return new Label("confirmacao", new Model<String>(confirmacao));
+	}
+    
+    private Label irregularidade() {
+    	String irregularidade = StringUtils.EMPTY;
+//    	if (getTituloRemessa().getConfirmacao() != null) {
+//    		if (getTituloRemessa().getConfirmacao().getCodigoIrregularidade() != null && 
+//    				getTituloRemessa().getConfirmacao().getCodigoIrregularidade() != "  ") {
+//    		}
+//    	}
+		return new Label("irregularidade", new Model<String>(irregularidade));
+	}
+    
+    private Label codigoMunicipio() {
+		return new Label("codigoMunicipio", new Model<String>(getTituloRemessa().getRemessa().getCabecalho().getCodigoMunicipio()));
+	}
+    
+    private Label valorGravacaoEletronica() {
+    	return new LabelValorMonetario<BigDecimal>("valorGravacaoEletronica", getTituloRemessa().getRemessa().getInstituicaoOrigem().getValorConfirmacao());
+    }
+    
+	private Label numeroProtocoloCartorio() {
+		String numeroProtocolo = StringUtils.EMPTY;
+		if (getTituloRemessa().getConfirmacao() != null){
+			numeroProtocolo = getTituloRemessa().getConfirmacao().getNumeroProtocoloCartorio();
+		} 
+		return new Label("numeroProtocoloCartorio", new Model<String>(numeroProtocolo));
+	}
+
+	private Label dataProtocolo() {	
+		String dataProtocolo = StringUtils.EMPTY;
+		if (getTituloRemessa().getConfirmacao() != null){
+			dataProtocolo = DataUtil.localDateToString(getTituloRemessa().getConfirmacao().getDataProtocolo()); 
+		}
+		return new Label("dataProtocolo", new Model<String>(dataProtocolo));
+	}
+
+	private Label cartorio(){
+		return new Label("cartorio", new Model<String>(getTituloRemessa().getRemessa().getInstituicaoDestino().getNomeFantasia().toUpperCase()));
+	}
+
+	private Label pracaProtesto() {
+		return new Label("pracaProtesto", new Model<String>(getTituloRemessa().getPracaProtesto()));
+	}
+
+	 private Label status(){
+		return new Label("situacaoTitulo", new Model<String>(getTituloRemessa().getSituacaoTitulo()));
+	 }
+
+	 private Label numeroTitulo() {
+		return new Label("numeroTitulo", new Model<String>(getTituloRemessa().getNumeroTitulo()));
+	 }
+
+ 	private Label portador(){
+		return new Label("portador", new Model<String>(getTituloRemessa().getRemessa().getCabecalho().getNomePortador()));
  	}
 
-	 private TextField<String> agencia(){
-		TextField<String> textField = new TextField<String>("agencia", new Model<String>(tituloRemessa.getRemessa().getCabecalho().getAgenciaCentralizadora()));
-		textField.setEnabled(false);
-		return textField;
+	 private Label agencia(){
+		return new Label("agencia", new Model<String>(getTituloRemessa().getRemessa().getCabecalho().getAgenciaCentralizadora()));
 	 }
 	
-	private TextField<String> nossoNumero() {
-		TextField<String> textField = new TextField<String>("nossoNumero", new Model<String>(tituloRemessa.getNossoNumero()));
-		textField.setEnabled(false);
+	private Label nossoNumero() {
+		return new Label("nossoNumero", new Model<String>(getTituloRemessa().getNossoNumero()));
+	}
+	
+	private Label especieTitulo() {
+		return new Label("especieTitulo", new Model<String>(getTituloRemessa().getEspecieTitulo()));
+	}
+	
+	private Label dataEmissaoTitulo() {
+		return new Label("dataEmissaoTitulo", new Model<String>(DataUtil.localDateToString(getTituloRemessa().getDataEmissaoTitulo())));
+	}
+	
+	private Label dataVencimentoTitulo() {
+		return new Label("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(getTituloRemessa().getDataVencimentoTitulo())));
+	}
+	
+	public Label valorTitulo() {
+		Label textField = new Label("valorTitulo", new Model<String>("R$ " + getTituloRemessa().getValorTitulo().toString()));
 		return textField;
 	}
 	
-	private TextField<String> especieTitulo() {
-		TextField<String> textField = new TextField<String>("especieTitulo", new Model<String>(tituloRemessa.getEspecieTitulo()));
-		textField.setEnabled(false);
+	public Label saldoTitulo() {
+		Label textField = new Label("saldoTitulo", new Model<String>("R$ " + getTituloRemessa().getSaldoTitulo().toString()));
 		return textField;
 	}
 	
-	private TextField<String> dataEmissaoTitulo() {
-		TextField<String> textField = new TextField<String>("dataEmissaoTitulo", new Model<String>(DataUtil.localDateToString(tituloRemessa.getDataEmissaoTitulo())));
-		textField.setEnabled(false);
-		return textField;
-	}
-	
-	private TextField<String> dataVencimentoTitulo() {
-		TextField<String> textField = new TextField<String>("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(tituloRemessa.getDataVencimentoTitulo())));
-		textField.setEnabled(false);
-		return textField;
-	}
-	
-	public TextField<String> valorTitulo() {
-		TextField<String> textField = new TextField<String>("valorTitulo", new Model<String>("R$ " + tituloRemessa.getValorTitulo().toString()));
-		textField.setEnabled(false);
-		return textField;
-	}
-	
-	public TextField<String> saldoTitulo() {
-		TextField<String> textField = new TextField<String>("saldoTitulo", new Model<String>("R$ " + tituloRemessa.getSaldoTitulo().toString()));
-		textField.setEnabled(false);
-		return textField;
-	}
-	
-	public TextField<String> valorCustaCartorio() {
-		TextField<String> textField = new TextField<String>("valorCustaCartorio", new Model<String>("R$ 00,00"));
-		if (tituloRemessa.getValorCustaCartorio() != null) {
-			textField = new TextField<String>("valorCustaCartorio", new Model<String>("R$ " + tituloRemessa.getValorCustaCartorio().toString()));			
+	public Label valorCustaCartorio() {
+		String valorCustaCartorio = "00,00";
+		if (getTituloRemessa().getConfirmacao() != null) {
+			valorCustaCartorio = getTituloRemessa().getConfirmacao().getValorCustaCartorio().toString();
 		}
-		textField.setEnabled(false);
-		return textField;
-	}
-	
-	public TextField<String> valorGravacaoEletronica() {
-		TextField<String> textField = new TextField<String>("valorGravacaoEletronica", new Model<String>("R$ 00,00"));
-		if (tituloRemessa.getValorGravacaoEletronica() != null) {
-			textField = new TextField<String>("valorGravacaoEletronica", new Model<String>("R$ " + tituloRemessa.getValorGravacaoEletronica().toString()));
+		if (getTituloRemessa().getRetorno() != null) {
+			valorCustaCartorio = getTituloRemessa().getRetorno().getValorCustaCartorio().toString();
 		}
-		textField.setEnabled(false);
-		return textField;
+		return new Label("valorCustaCartorio", new Model<String>("R$ " + valorCustaCartorio));
 	}
 	
-	public TextField<String> valorCustasCartorioDistribuidor() {
-		TextField<String> textField = new TextField<String>("valorCustasCartorioDistribuidor", new Model<String>("R$ 00,00"));
-		if (tituloRemessa.getValorCustasCartorioDistribuidor() != null) {
-			textField = new TextField<String>("valorCustasCartorioDistribuidor", new Model<String>("R$ " + tituloRemessa.getValorCustasCartorioDistribuidor().toString()));
+	public Label valorCustasCartorioDistribuidor() {
+		String valorCustasCartorioDistribuidor = "00,00";
+		if (getTituloRemessa().getConfirmacao() != null) {
+			valorCustasCartorioDistribuidor = getTituloRemessa().getConfirmacao().getValorCustasCartorioDistribuidor().toString();
 		}
-		textField.setEnabled(false);
-		return textField;
-	}
-	
-	public TextField<String> valorDemaisDespesas() {
-		TextField<String> textField = new TextField<String>("valorDemaisDespesas", new Model<String>("R$ 00,00"));
-		if (tituloRemessa.getValorDemaisDespesas() != null) {
-			textField = new TextField<String>("valorDemaisDespesas", new Model<String>("R$ " + tituloRemessa.getValorDemaisDespesas().toString()));
+		if (getTituloRemessa().getRetorno() != null) {
+			valorCustasCartorioDistribuidor = getTituloRemessa().getRetorno().getValorCustasCartorioDistribuidor().toString();
 		}
-		textField.setEnabled(false);
+		return new Label("valorCustasCartorioDistribuidor", new Model<String>("R$ " + valorCustasCartorioDistribuidor));
+	}
+	
+	public Label valorDemaisDespesas() {
+		String valorDemaisDespesas = "00,00";
+		if (getTituloRemessa().getConfirmacao() != null) {
+			valorDemaisDespesas = getTituloRemessa().getConfirmacao().getValorDemaisDespesas().toString();
+		}
+		if (getTituloRemessa().getRetorno() != null) {
+			valorDemaisDespesas = getTituloRemessa().getRetorno().getValorDemaisDespesas().toString();
+		}
+		return new Label("valorDemaisDespesas", new Model<String>("R$ " + valorDemaisDespesas));
+	}
+	
+	public Label nomeCedenteFavorecido() {
+		Label textField = new Label("nomeCedenteFavorecido", new Model<String>(getTituloRemessa().getNomeCedenteFavorecido()));
 		return textField;
 	}
 	
-	public TextField<String> nomeCedenteFavorecido() {
-		TextField<String> textField = new TextField<String>("nomeCedenteFavorecido", new Model<String>(tituloRemessa.getNomeCedenteFavorecido()));
-		textField.setEnabled(false);
+	public Label agenciaCodigoCedente() {
+		Label textField = new Label("agenciaCodigoCedente", new Model<String>(getTituloRemessa().getAgenciaCodigoCedente()));
 		return textField;
 	}
 	
-	public TextField<String> agenciaCodigoCedente() {
-		TextField<String> textField = new TextField<String>("agenciaCodigoCedente", new Model<String>(tituloRemessa.getAgenciaCodigoCedente()));
-		textField.setEnabled(false);
+	private Label nomeSacadorVendedor() {
+		Label textField = new Label("nomeSacadorVendedor", new Model<String>(getTituloRemessa().getNomeSacadorVendedor()));
+		return textField;
+	}
+
+	private Label documentoSacador() {
+		Label textField = new Label("documentoSacador", new Model<String>(getTituloRemessa().getDocumentoSacador()));
+		return textField;
+	}
+
+	private Label ufSacadorVendedor() {
+		Label textField = new Label("ufSacadorVendedor", new Model<String>(getTituloRemessa().getUfSacadorVendedor()));
+		return textField;
+	}
+
+	private Label cepSacadorVendedor() {
+		Label textField = new Label("cepSacadorVendedor", new Model<String>(getTituloRemessa().getCepSacadorVendedor()));
+		return textField;
+	}
+
+	private Label cidadeSacadorVendedor() {
+		Label textField = new Label("cidadeSacadorVendedor", new Model<String>(getTituloRemessa().getCidadeSacadorVendedor()));
+		return textField;
+	}
+
+	private Label enderecoSacadorVendedor() {
+		Label textField = new Label("enderecoSacadorVendedor", new Model<String>(getTituloRemessa().getEnderecoSacadorVendedor()));
+		return textField;
+	}
+
+	private Label nomeDevedor() {
+		Label textField = new Label("nomeDevedor", new Model<String>(getTituloRemessa().getNomeDevedor()));
+		return textField;
+	}
+
+	private Label documentoDevedor() {
+		Label textField = new Label("documentoDevedor", new Model<String>(getTituloRemessa().getNumeroIdentificacaoDevedor()));
+		return textField;
+	}
+
+	private Label ufDevedor() {
+		Label textField = new Label("ufDevedor", new Model<String>(getTituloRemessa().getUfDevedor()));
+		return textField;
+	}
+
+	private Label cepDevedor() {
+		Label textField = new Label("cepDevedor", new Model<String>(getTituloRemessa().getCepDevedor()));
+		return textField;
+	}
+
+	private Label cidadeDevedor() {
+		Label textField = new Label("cidadeDevedor", new Model<String>(getTituloRemessa().getCidadeDevedor()));
+		return textField;
+	}
+
+	private Label enderecoDevedor() {
+		Label textField = new Label("enderecoDevedor", new Model<String>(getTituloRemessa().getEnderecoDevedor()));
 		return textField;
 	}
 	
-	private TextField<String> nomeSacadorVendedor() {
-		TextField<String> textField = new TextField<String>("nomeSacadorVendedor", new Model<String>(tituloRemessa.getNomeSacadorVendedor()));
-		textField.setEnabled(false);
-		return textField;
+	private TituloRemessa getTituloRemessa() {
+		return tituloRemessa;
 	}
-
-	private TextField<String> documentoSacador() {
-		TextField<String> textField = new TextField<String>("documentoSacador", new Model<String>(tituloRemessa.getDocumentoSacador()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> ufSacadorVendedor() {
-		TextField<String> textField = new TextField<String>("ufSacadorVendedor", new Model<String>(tituloRemessa.getUfSacadorVendedor()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> cepSacadorVendedor() {
-		TextField<String> textField = new TextField<String>("cepSacadorVendedor", new Model<String>(tituloRemessa.getCepSacadorVendedor()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> cidadeSacadorVendedor() {
-		TextField<String> textField = new TextField<String>("cidadeSacadorVendedor", new Model<String>(tituloRemessa.getCidadeSacadorVendedor()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> enderecoSacadorVendedor() {
-		TextField<String> textField = new TextField<String>("enderecoSacadorVendedor", new Model<String>(tituloRemessa.getEnderecoSacadorVendedor()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> nomeDevedor() {
-		TextField<String> textField = new TextField<String>("nomeDevedor", new Model<String>(tituloRemessa.getNomeDevedor()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> documentoDevedor() {
-		TextField<String> textField = new TextField<String>("documentoDevedor", new Model<String>(tituloRemessa.getNumeroIdentificacaoDevedor()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> ufDevedor() {
-		TextField<String> textField = new TextField<String>("ufDevedor", new Model<String>(tituloRemessa.getUfDevedor()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> cepDevedor() {
-		TextField<String> textField = new TextField<String>("cepDevedor", new Model<String>(tituloRemessa.getCepDevedor()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> cidadeDevedor() {
-		TextField<String> textField = new TextField<String>("cidadeDevedor", new Model<String>(tituloRemessa.getCidadeDevedor()));
-		textField.setEnabled(false);
-		return textField;
-	}
-
-	private TextField<String> enderecoDevedor() {
-		TextField<String> textField = new TextField<String>("enderecoDevedor", new Model<String>(tituloRemessa.getEnderecoDevedor()));
-		textField.setEnabled(false);
-		return textField;
+	
+	public List<ArquivoOcorrenciaBean> getArquivosOcorrencias() {
+		if (arquivosOcorrencias == null) {
+			arquivosOcorrencias = new ArrayList<ArquivoOcorrenciaBean>();
+		}
+		return arquivosOcorrencias;
 	}
 	
 	@Override

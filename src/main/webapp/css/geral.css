@@ -41,12 +41,13 @@ body {
 }
 
 .historico {
-   margin-bottom: 5px !important;	
+   width: 190px;
 }
 
 .destaque {
 	color: red;
 	font-weight: bold;
+	font-size: 15px;
 }
 
 .sidebar {
@@ -163,7 +164,16 @@ td {
     color: #FFF;
     font-weight: bold;
     padding: 3px;
-    font-size: 10px;
+    font-size: 12px;
+    width: 100%;
+}
+
+.cabecalho-historico{
+	background: #337AB7 none repeat scroll 0% 0%;
+    color: #FFF;
+    font-weight: bolder;
+    padding: 3px;
+    font-size: 18px;
     width: 100%;
 }
 /**

@@ -9,6 +9,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -30,7 +37,6 @@ import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
-import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
@@ -45,13 +51,6 @@ import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  * @author Thasso Araújo
@@ -80,8 +79,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
 	public InstrumentoProtestoPage() {
 		this.instrumento = new InstrumentoProtesto();
-		this.retornos = new ArrayList<Retorno>();
-		this.envelopes = new ArrayList<EnvelopeSLIP>();
+		this.retornos = null;
+		this.envelopes = null;
 		adicionarFormularioCodigo();
 		adicionarFormularioManual();
 		add(carregarListaSlips());
@@ -89,18 +88,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 		add(botaoGerarEnvelopes());
 	}
 	
-	public InstrumentoProtestoPage(String mensagem) {
-		this.instrumento = new InstrumentoProtesto();
-		this.retornos = new ArrayList<Retorno>();
-		this.envelopes = new ArrayList<EnvelopeSLIP>();
-		info(mensagem);
-		adicionarFormularioCodigo();
-		adicionarFormularioManual();
-		add(carregarListaSlips());
-		add(botaoGerarEtiquetas());
-		add(botaoGerarEnvelopes());
-	}
-
 	private void adicionarFormularioManual() {
 		Form<Retorno> formManual = new Form<Retorno>("formManual") {
 
@@ -202,7 +189,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
 					getEnvelopes().addAll(instrumento.getEnvelopes());
 					HashMap<String, Object> parametros = new HashMap<String, Object>();
-					parametros.put("DATA", DataUtil.localDateToString(new LocalDate()));
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(instrumento.getEtiquetas());
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEtiqueta.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
@@ -237,7 +223,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					}
 
 					HashMap<String, Object> parametros = new HashMap<String, Object>();
-					parametros.put("DATA", DataUtil.localDateToString(new LocalDate()));
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getEnvelopes());
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEnvelope.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);

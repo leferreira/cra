@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0dfc8efe-6dda-4d22-be84-ab5020ec3941">
 	<property name="ireport.zoom" value="1.8150000000000004"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="75"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[]]>
@@ -20,23 +20,25 @@
 	<field name="valorSaldoTitulo" class="java.math.BigDecimal"/>
 	<field name="numeroProtocoloCartorio" class="java.lang.String"/>
 	<field name="agenciaCentralizadora" class="java.lang.String"/>
+	<field name="pracaProtesto" class="java.lang.String"/>
+	<field name="dataProtocolo" class="java.util.Date"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="200" splitType="Stretch">
+		<band height="224" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="555" height="199" uuid="b08fdc16-956b-4bdc-ab75-d5f7ed703363"/>
+				<reportElement x="0" y="0" width="555" height="224" uuid="b08fdc16-956b-4bdc-ab75-d5f7ed703363"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="9" y="165" width="303" height="20" uuid="519d83e6-2f38-4abf-836b-7c68be40ba27"/>
+				<reportElement x="9" y="181" width="303" height="20" uuid="519d83e6-2f38-4abf-836b-7c68be40ba27"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[RECEBI O INSTRUMENTO DE PROTESTO INDICADO ACIMA.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="9" y="179" width="537" height="20" uuid="d57e0280-d27c-4a18-8efa-6bff1903f335"/>
+				<reportElement x="9" y="194" width="537" height="20" uuid="d57e0280-d27c-4a18-8efa-6bff1903f335"/>
 				<text><![CDATA[____/____/_____ __________________________ _______________________________________________________]]></text>
 			</staticText>
 			<staticText>
@@ -165,26 +167,42 @@
 				<textFieldExpression><![CDATA[$F{nossoNumero}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="386" y="84" width="128" height="20" uuid="c3826585-b860-446f-901f-311b71e4241b"/>
+				<reportElement x="386" y="84" width="131" height="20" uuid="c3826585-b860-446f-901f-311b71e4241b"/>
 				<textFieldExpression><![CDATA[$F{numeroTitulo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="386" y="104" width="128" height="20" uuid="5eea8959-fa23-466f-b60a-ad3b501c3e14"/>
+				<reportElement x="386" y="104" width="131" height="20" uuid="5eea8959-fa23-466f-b60a-ad3b501c3e14"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dataVencimento}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="355" y="125" width="159" height="20" uuid="49d7f49a-e07d-4f8a-9c74-ce8c9db8ce95"/>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="354" y="124" width="162" height="21" uuid="49d7f49a-e07d-4f8a-9c74-ce8c9db8ce95"/>
 				<textFieldExpression><![CDATA[$F{valorSaldoTitulo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="386" y="144" width="128" height="20" uuid="9a590e3c-b51f-4e1b-9dec-1a3898664848"/>
+				<reportElement x="386" y="144" width="131" height="20" uuid="9a590e3c-b51f-4e1b-9dec-1a3898664848"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numeroProtocoloCartorio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="355" y="204" width="191" height="20" uuid="2571b9a3-dd6c-4f4e-a865-aab4c514a6d5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{pracaProtesto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="312" y="163" width="43" height="20" uuid="877d103c-902c-4cf9-87ad-d307b35e511c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATA : ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="354" y="164" width="100" height="20" uuid="c64102a7-babc-4b9e-8b39-037b34496eb3"/>
+				<textFieldExpression><![CDATA[$F{dataProtocolo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
