@@ -37,7 +37,7 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 	public ListaUsuarioPage() {
 		super();
 		carregarPage();
-	}
+	} 
 	
 	public ListaUsuarioPage(String mensagem) {
 		info(mensagem);

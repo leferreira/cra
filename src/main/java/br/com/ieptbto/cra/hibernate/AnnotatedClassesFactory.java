@@ -24,6 +24,8 @@ import br.com.ieptbto.cra.entidade.CabecalhoCartorio;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
+import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
+import br.com.ieptbto.cra.entidade.EtiquetaSLIP;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Historico;
@@ -87,6 +89,8 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Historico.class);
 		classesHibernate.add(Batimento.class);
 		classesHibernate.add(InstrumentoProtesto.class);
+		classesHibernate.add(EnvelopeSLIP.class);
+		classesHibernate.add(EtiquetaSLIP.class);
 		classesHibernate.add(AgenciaCAF.class);
 		classesHibernate.add(AgenciaBancoDoBrasil.class);
 		classesHibernate.add(AgenciaBradesco.class);

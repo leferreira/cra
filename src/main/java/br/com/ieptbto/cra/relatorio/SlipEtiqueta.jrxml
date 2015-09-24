@@ -6,20 +6,20 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="razaoSocialPortador" class="java.lang.String"/>
-	<field name="dataVencimento" class="java.lang.String"/>
-	<field name="nomeCedente" class="java.lang.String"/>
-	<field name="nomeSacador" class="java.lang.String"/>
+	<field name="banco" class="java.lang.String"/>
+	<field name="agenciaDestino" class="java.lang.String"/>
+	<field name="municipioAgenciaDestino" class="java.lang.String"/>
+	<field name="ufAgenciaDestino" class="java.lang.String"/>
+	<field name="agenciaCodigoCedente" class="java.lang.String"/>
+	<field name="nomeCedenteFavorecido" class="java.lang.String"/>
+	<field name="nomeSacadorVendedor" class="java.lang.String"/>
 	<field name="documentoSacador" class="java.lang.String"/>
 	<field name="nossoNumero" class="java.lang.String"/>
 	<field name="numeroTitulo" class="java.lang.String"/>
+	<field name="dataVencimento" class="java.util.Date"/>
 	<field name="valorSaldoTitulo" class="java.math.BigDecimal"/>
-	<field name="numeroProtocolo" class="java.lang.String"/>
+	<field name="numeroProtocoloCartorio" class="java.lang.String"/>
 	<field name="agenciaCentralizadora" class="java.lang.String"/>
-	<field name="codigoAgencia" class="java.lang.String"/>
-	<field name="municipioAgencia" class="java.lang.String"/>
-	<field name="ufAgencia" class="java.lang.String"/>
-	<field name="agenciaCodigoCedente" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -128,14 +128,14 @@
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{razaoSocialPortador}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{banco}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="9" y="25" width="259" height="20" uuid="55938c0b-5e54-4071-b484-0bb058763656"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{codigoAgencia} + " - " + $F{municipioAgencia}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{agenciaDestino} + " - " + $F{municipioAgenciaDestino} + " - " + $F{ufAgenciaDestino}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="159" y="64" width="143" height="20" uuid="de754bf5-f65b-4ff0-b546-af50aead01d4"/>
@@ -147,14 +147,14 @@
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="64" y="104" width="238" height="20" uuid="700934b9-b8bf-42cc-b6d8-d6c25de5919d"/>
-				<textFieldExpression><![CDATA[$F{nomeCedente}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nomeCedenteFavorecido}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="59" y="124" width="243" height="20" uuid="363205f2-a053-4ba0-ae88-3fae2407add9"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{nomeSacador}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nomeSacadorVendedor}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="64" y="145" width="238" height="20" uuid="5338535e-dc7b-4289-86b5-930db065f21a"/>
@@ -168,7 +168,7 @@
 				<reportElement x="386" y="84" width="128" height="20" uuid="c3826585-b860-446f-901f-311b71e4241b"/>
 				<textFieldExpression><![CDATA[$F{numeroTitulo}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="386" y="104" width="128" height="20" uuid="5eea8959-fa23-466f-b60a-ad3b501c3e14"/>
 				<textElement>
 					<font isBold="true"/>
@@ -184,7 +184,7 @@
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{numeroProtocolo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{numeroProtocoloCartorio}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -60,6 +60,8 @@ public class CraMenu extends Panel {
 		/** Instrumento de Protesto */
 		menuLateral.addItem("InstrumentoDeProtesto", rolesIncluir);
 		menuLateral.addItem("ImportarArquivoDePara", rolesIncluir);
+		menuLateral.addItem("BuscarInstrumentoProtesto", rolesIncluir);
+		menuLateral.addItem("LiberarEnvelopes", rolesIncluir);
 	}
 
 }

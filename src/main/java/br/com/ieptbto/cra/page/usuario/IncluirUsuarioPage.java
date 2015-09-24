@@ -56,7 +56,7 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 	public IncluirUsuarioPage() {
 		this.usuario = new Usuario();
 		setFormulario();
-	}
+	} 
 
 	public IncluirUsuarioPage(Usuario usuario) {
 		this.usuario = usuario;

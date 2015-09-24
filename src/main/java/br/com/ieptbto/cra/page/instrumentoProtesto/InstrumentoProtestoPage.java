@@ -9,13 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -40,12 +33,12 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.ireport.SlipEnvelopeBean;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoDeProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
@@ -53,6 +46,12 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  * @author Thasso Araújo
@@ -74,7 +73,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	
 	private InstrumentoProtesto instrumento;
 	private List<Retorno> retornos;
-	private List<SlipEnvelopeBean> envelopes;
+	private List<EnvelopeSLIP> envelopes;
 	private TextField<String> codigoInstrumento;
 	private TextField<String> protocoloCartorio;
 	private DropDownChoice<Municipio> codigoIbge;
@@ -82,7 +81,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	public InstrumentoProtestoPage() {
 		this.instrumento = new InstrumentoProtesto();
 		this.retornos = new ArrayList<Retorno>();
-		this.envelopes = new ArrayList<SlipEnvelopeBean>();
+		this.envelopes = new ArrayList<EnvelopeSLIP>();
 		adicionarFormularioCodigo();
 		adicionarFormularioManual();
 		add(carregarListaSlips());
@@ -93,7 +92,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	public InstrumentoProtestoPage(String mensagem) {
 		this.instrumento = new InstrumentoProtesto();
 		this.retornos = new ArrayList<Retorno>();
-		this.envelopes = new ArrayList<SlipEnvelopeBean>();
+		this.envelopes = new ArrayList<EnvelopeSLIP>();
 		info(mensagem);
 		adicionarFormularioCodigo();
 		adicionarFormularioManual();
@@ -192,7 +191,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 			
 			@Override
 			public void onClick() {
-				SimpleDateFormat dataPadrao= new SimpleDateFormat("dd_MM_yy");
+				SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
 
 				try {
 					InstrumentoDeProtestoMediator instrumento = instrumentoMediator.processarInstrumentos(getRetornos());
@@ -290,14 +289,14 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 		this.retornos = retornos;
 	}
 
-	public List<SlipEnvelopeBean> getEnvelopes() {
+	public List<EnvelopeSLIP> getEnvelopes() {
 		if (envelopes == null) {
-			envelopes = new ArrayList<SlipEnvelopeBean>();
+			envelopes = new ArrayList<EnvelopeSLIP>();
 		}
 		return envelopes;
 	}
 
-	public void setEnvelopes(List<SlipEnvelopeBean> envelopes) {
+	public void setEnvelopes(List<EnvelopeSLIP> envelopes) {
 		this.envelopes = envelopes;
 	}
 	

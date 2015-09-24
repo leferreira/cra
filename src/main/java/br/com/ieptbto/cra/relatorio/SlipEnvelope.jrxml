@@ -6,12 +6,13 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="nomeApresentante" class="java.lang.String"/>
-	<field name="numeroAgencia" class="java.lang.String"/>
-	<field name="municipio" class="java.lang.String"/>
-	<field name="uf" class="java.lang.String"/>
+	<field name="banco" class="java.lang.String"/>
+	<field name="agenciaDestino" class="java.lang.String"/>
+	<field name="municipioAgenciaDestino" class="java.lang.String"/>
+	<field name="ufAgenciaDestino" class="java.lang.String"/>
 	<field name="quantidadeInstrumentos" class="java.lang.Integer"/>
 	<field name="codeBar" class="java.lang.String"/>
+	<field name="codigoCRA" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -46,14 +47,14 @@
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{nomeApresentante}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{banco}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="28" y="111" width="419" height="24" uuid="1eaec56f-c3b3-4db5-bec6-db2afa3f9934"/>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{numeroAgencia} + " - " + $F{municipio} + " - " + $F{uf}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{agenciaDestino} + " - " + $F{municipioAgenciaDestino} + " - " + $F{ufAgenciaDestino}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="142" y="136" width="100" height="31" uuid="90ce4e00-6aff-4af3-81b2-9250ab7efda7"/>
@@ -63,11 +64,18 @@
 				<textFieldExpression><![CDATA[$F{quantidadeInstrumentos}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="218" y="175" width="190" height="50" uuid="71690d10-4ab6-48bf-abea-cbd22f4d8d5e"/>
+				<reportElement x="218" y="172" width="119" height="50" uuid="71690d10-4ab6-48bf-abea-cbd22f4d8d5e"/>
 				<jr:Code39 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
 					<jr:codeExpression><![CDATA[$F{codeBar}]]></jr:codeExpression>
 				</jr:Code39>
 			</componentElement>
+			<textField>
+				<reportElement x="351" y="210" width="201" height="20" uuid="10532e98-ed32-4f86-a6c4-4021ff7fd176"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigoCRA}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

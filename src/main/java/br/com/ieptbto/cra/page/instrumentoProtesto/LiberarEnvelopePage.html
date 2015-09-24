@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+	<div class="panel panel-primary">
+		<div class="panel-heading">Liberar Envelopes</div>
+		<div class="panel-body">
+			<form wicket:id="form" class="form-horizontal">
+				<button style="float: right; margin-bottom: 5px;" class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-send"></span>&nbsp;Liberar</button>
+				<br style="clear: both;">
+				<fieldset>
+					<div wicket:id="group">
+			   			<table id="table" class="table table-striped table-hover">
+				           <thead>
+								<tr>
+									<th class="col-center">#</th>
+									<th >Banco</th>
+									<th >Município</th>
+									<th class="col-center">Agência</th>
+									<th class="col-center">UF</th>
+									<th class="col-center">Qtd.</th>
+									<th class="col-center">Cód. CRA</th>
+								</tr>
+							</thead>
+							<tbody>
+			                   <tr wicket:id="envelopes">
+			                   		<td class="col-center"><input type="checkbox" wicket:id="checkbox"/></td>
+			                   		<td wicket:id="banco"></td>
+			                   		<td wicket:id="municipio"></td>
+			                   		<td class="col-center" wicket:id="agencia"></td>
+			                   		<td class="col-center" wicket:id="uf"></td>
+			                   		<td class="col-center valor" wicket:id="quantidade"></td>
+			                   		<td class="col-center" wicket:id="codigoCRA"></td>
+			                   </tr>
+			                 </tbody>
+			             </table>
+			          </div>
+		    	 </fieldset>
+			</form>
+		</div>
+		<div class="panel-footer">
+		</div>
+	</div>
+</wicket:extend>
+</body>
+</html>
