@@ -25,6 +25,7 @@ import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -194,7 +195,16 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
     
     private Label valorGravacaoEletronica() {
-    	return new LabelValorMonetario<BigDecimal>("valorGravacaoEletronica", getTituloRemessa().getRemessa().getInstituicaoOrigem().getValorConfirmacao());
+    	BigDecimal valorGravacao = BigDecimal.ZERO;
+    	if (getTituloRemessa().getConfirmacao() != null) {
+    		if (getTituloRemessa().getConfirmacao().getTipoOcorrencia() != null) {
+    			String tipoOcorrencia = getTituloRemessa().getConfirmacao().getTipoOcorrencia().trim();
+    			if (!tipoOcorrencia.equals(StringUtils.EMPTY) || tipoOcorrencia.equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
+    				valorGravacao = getTituloRemessa().getRemessa().getInstituicaoOrigem().getValorConfirmacao();
+    			}
+    		}
+    	}
+    	return new LabelValorMonetario<BigDecimal>("valorGravacaoEletronica", valorGravacao);
     }
     
 	private Label numeroProtocoloCartorio() {
@@ -264,36 +274,36 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 	
 	public Label valorCustaCartorio() {
-		String valorCustaCartorio = "00,00";
+		BigDecimal valorCustaCartorio = BigDecimal.ZERO;
 		if (getTituloRemessa().getConfirmacao() != null) {
-			valorCustaCartorio = getTituloRemessa().getConfirmacao().getValorCustaCartorio().toString();
+			valorCustaCartorio = getTituloRemessa().getConfirmacao().getValorCustaCartorio();
 		}
 		if (getTituloRemessa().getRetorno() != null) {
-			valorCustaCartorio = getTituloRemessa().getRetorno().getValorCustaCartorio().toString();
+			valorCustaCartorio = getTituloRemessa().getRetorno().getValorCustaCartorio();
 		}
-		return new Label("valorCustaCartorio", new Model<String>("R$ " + valorCustaCartorio));
+		return new LabelValorMonetario<BigDecimal>("valorCustaCartorio", valorCustaCartorio);
 	}
 	
 	public Label valorCustasCartorioDistribuidor() {
-		String valorCustasCartorioDistribuidor = "00,00";
+		BigDecimal valorCustasCartorioDistribuidor = BigDecimal.ZERO;
 		if (getTituloRemessa().getConfirmacao() != null) {
-			valorCustasCartorioDistribuidor = getTituloRemessa().getConfirmacao().getValorCustasCartorioDistribuidor().toString();
+			valorCustasCartorioDistribuidor = getTituloRemessa().getConfirmacao().getValorCustasCartorioDistribuidor();
 		}
 		if (getTituloRemessa().getRetorno() != null) {
-			valorCustasCartorioDistribuidor = getTituloRemessa().getRetorno().getValorCustasCartorioDistribuidor().toString();
+			valorCustasCartorioDistribuidor = getTituloRemessa().getRetorno().getValorCustasCartorioDistribuidor();
 		}
-		return new Label("valorCustasCartorioDistribuidor", new Model<String>("R$ " + valorCustasCartorioDistribuidor));
+		return new LabelValorMonetario<BigDecimal>("valorCustasCartorioDistribuidor", valorCustasCartorioDistribuidor);
 	}
 	
 	public Label valorDemaisDespesas() {
-		String valorDemaisDespesas = "00,00";
+		BigDecimal valorDemaisDespesas = BigDecimal.ZERO;
 		if (getTituloRemessa().getConfirmacao() != null) {
-			valorDemaisDespesas = getTituloRemessa().getConfirmacao().getValorDemaisDespesas().toString();
+			valorDemaisDespesas = getTituloRemessa().getConfirmacao().getValorDemaisDespesas();
 		}
 		if (getTituloRemessa().getRetorno() != null) {
-			valorDemaisDespesas = getTituloRemessa().getRetorno().getValorDemaisDespesas().toString();
+			valorDemaisDespesas = getTituloRemessa().getRetorno().getValorDemaisDespesas();
 		}
-		return new Label("valorDemaisDespesas", new Model<String>("R$ " + valorDemaisDespesas));
+		return new LabelValorMonetario<BigDecimal>("valorDemaisDespesas", valorDemaisDespesas);
 	}
 	
 	public Label nomeCedenteFavorecido() {

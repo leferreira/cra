@@ -24,7 +24,7 @@ import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -48,7 +48,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	@SpringBean
 	RemessaMediator remessaMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	MunicipioMediator municipioMediator;
 	private Usuario usuario;
 	private Arquivo confirmacoesPendentes;
 
@@ -110,10 +110,12 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				item.add(linkArquivo);
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = remessa.getInstituicaoOrigem().getNomeFantasia();
+					if (nomeFantasia.length() > 28) {
+						nomeFantasia = nomeFantasia.substring(0, 27);
+					}
 					item.add(new Label("instituicao", nomeFantasia));
 				} else {
-					String nomeFantasia = remessa.getInstituicaoDestino().getNomeFantasia();
-					item.add(new Label("instituicao", nomeFantasia));
+					item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio()));
 				}
 				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
 			}
@@ -147,9 +149,13 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				item.add(linkArquivo);
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
 						getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", instituicaoMediator.getCartorioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
+					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio()));
 				} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-					item.add(new Label("banco", remessa.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+					String nomeFantasia = remessa.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
+					if (nomeFantasia.length() > 28) {
+						nomeFantasia = nomeFantasia.substring(0, 27);
+					}
+					item.add(new Label("banco", nomeFantasia));
 				}
 				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaDesistenciaProtesto().getArquivo()
 				        .getDataEnvio().toDate(), new Date())));

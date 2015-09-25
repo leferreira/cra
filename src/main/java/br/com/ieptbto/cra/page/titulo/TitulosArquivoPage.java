@@ -82,7 +82,6 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 				} else { 
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 				}
-				item.add(new Label("portador", tituloLista.getRemessa().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 

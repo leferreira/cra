@@ -97,13 +97,22 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					String numeroProtocolo = protocoloCartorio.getModelObject();
 					String codigoIBGE = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
 					Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(numeroProtocolo, codigoIBGE);
+					InstrumentoProtesto instrumento = instrumentoMediator.isTituloJaFoiGeradoInstrumento(tituloProtestado);
+					
+					
 					if (tituloProtestado != null) {
-						if (!getRetornos().contains(tituloProtestado)) {
-							getRetornos().add(tituloProtestado);
-						} else
-							throw new InfraException("A lista já contem o título!");
-					} else 
-						throw new InfraException("Titulo não encontrado!");
+						if (instrumento == null) {
+							if (!getRetornos().contains(tituloProtestado)) {
+								getRetornos().add(tituloProtestado);
+							} else {
+								throw new InfraException("O título já existe na lista!");
+							}
+						} else {
+							throw new InfraException("Este instrumento já foi processado anteriormente!");
+						}
+					} else {
+						throw new InfraException("O título não foi encontrado ou não foi protestado pelo cartório!");
+					}
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				}
@@ -126,12 +135,18 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(protocolo, codigoIbge);
 					
 					if (tituloProtestado != null) {
-						if (!getRetornos().contains(tituloProtestado)) {
-							getRetornos().add(tituloProtestado);
-						} else
-							throw new InfraException("A lista já contem o título!");
-					} else 
-						throw new InfraException("Titulo não encontrado!");
+						if (instrumento == null) {
+							if (!getRetornos().contains(tituloProtestado)) {
+								getRetornos().add(tituloProtestado);
+							} else {
+								throw new InfraException("O título já existe na lista!");
+							}
+						} else {
+							throw new InfraException("Este instrumento já foi processado anteriormente!");
+						}
+					} else {
+						throw new InfraException("O título não foi encontrado ou não foi protestado pelo cartório!");
+					}
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				}
