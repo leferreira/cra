@@ -130,7 +130,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			@Override
 			protected void populateItem(ListItem<DesistenciaProtesto> item) {
 				final DesistenciaProtesto remessa = item.getModelObject();
-				
+				item.add(new Label("tipoArquivo", remessa.getRemessaDesistenciaProtesto().getArquivo().getTipoArquivo().getTipoArquivo().getConstante()));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					@Override
@@ -142,10 +142,10 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
 						getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio()));
+					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = remessa.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
-					item.add(new Label("banco", nomeFantasia));
+					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
 				
 				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
