@@ -99,7 +99,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(numeroProtocolo, codigoIBGE);
 					InstrumentoProtesto instrumento = instrumentoMediator.isTituloJaFoiGeradoInstrumento(tituloProtestado);
 					
-					
 					if (tituloProtestado != null) {
 						if (instrumento == null) {
 							if (!getRetornos().contains(tituloProtestado)) {
@@ -133,6 +132,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					String codigoIbge = codigoInstrumento.getModelObject().substring(1, 8);
 					String protocolo = codigoInstrumento.getModelObject().substring(8, 18);
 					Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(protocolo, codigoIbge);
+					InstrumentoProtesto instrumento = instrumentoMediator.isTituloJaFoiGeradoInstrumento(tituloProtestado);
 					
 					if (tituloProtestado != null) {
 						if (instrumento == null) {

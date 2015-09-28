@@ -63,6 +63,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 				if (historico.getRemessa().getArquivoGeradoProBanco().getId() != historico.getRemessa().getArquivo().getId()) {
 					ArquivoOcorrenciaBean novaOcorrenciaArquivo = new ArquivoOcorrenciaBean();
 					novaOcorrenciaArquivo.parseToArquivoGerado(historico.getRemessa().getArquivoGeradoProBanco());
+					
 					getArquivosOcorrencias().add(novaOcorrenciaArquivo);
 				}
 			}
