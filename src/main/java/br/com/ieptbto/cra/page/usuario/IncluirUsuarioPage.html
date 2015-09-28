@@ -5,97 +5,98 @@
 </head>
 <body>
 	<wicket:extend>
-			<form wicket:id="formUsuario" id="formUsuario" class="form-horizontal">
-				<div class="panel panel-primary">
-		<div class="panel-heading">Cadastro de Usuários</div>
-		<div class="panel-body">
-				<a href="UsuariosPage" style="float: left; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>Voltar à página anterior</a>
-				<br style="clear: both;">
-			<fieldset>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="nome">Nome:</label>  
-						  <div class="col-md-6">
-						  <input autofocus="autofocus" onkeyup="this.value = this.value.toUpperCase()" maxlength="45" tabindex="1" wicket:id="nome" class="form-control input-md">
-						  </div>
+		<form wicket:id="formUsuario" id="formUsuario" class="form-horizontal">
+			<div class="col-lg-12 col-md-6">
+				<div class="panel panel-default">
+		             <div class="panel-body borda-esquerda" style="zoom: 1.0;">
+						<h4 class="titulo-top">CADASTRO DE USUÁRIOS
+						<span class="pull-right">
+							<a href="UsuariosPage" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+						</span>
+						</h4>
+						<br style="clear: both;"/>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="nome">NOME:</label>  
+								  <div class="col-md-6">
+								  <input autofocus="autofocus" onkeyup="this.value = this.value.toUpperCase()" maxlength="45" tabindex="1" wicket:id="nome" class="form-control input-md">
+								  </div>
+								</div>
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="login">LOGIN:</label>  
+								  <div class="col-md-6">
+								  <input wicket:id="login" maxlength="20" tabindex="2" class="form-control input-md">
+								  </div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="senha">SENHA:</label>
+								  <div class="col-md-6">
+								    <input type="password" tabindex="5" wicket:id="senha" class="form-control input-md">
+								    
+								  </div>
+								</div>
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="confirmar">CONFIRMAR SENHA:</label>
+								  <div class="col-md-6">
+								    <input type="password" tabindex="6" wicket:id="confirmarSenha" class="form-control input-md">
+								  </div>
+								</div>
+							</div>
 						</div>
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="login">Login:</label>  
-						  <div class="col-md-6">
-						  <input wicket:id="login" maxlength="20" tabindex="2" class="form-control input-md">
-						  </div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="email">EMAIL:</label>  
+								  <div class="col-md-6">
+								  <input wicket:id="email" maxlength="45" tabindex="3" class="form-control input-md">
+								  </div>
+								</div>
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="instituicao">INSTITUIÇÃO:</label>
+								  <div class="col-md-6">
+								    <select class="form-control" tabindex="4" wicket:id="instituicao">
+								    </select>
+								  </div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="contato">TELEFONE:</label>  
+								  <div class="col-md-6">
+								  <input wicket:id="contato" tabindex="7" class="form-control input-md">
+								  </div>
+								</div>
+								
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="situacao">SITUAÇÃO:</label>
+								  <div class="col-md-6" style="text-align: left;"> 
+								    <label class="radio-inline inline" tabindex="8" wicket:id="situacao">
+								    </label>
+								  </div>
+								</div>
+								
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="grupo">GRUPO DO USUÁRIO:</label>
+								  <div class="col-md-6">
+								    <select class="form-control" tabindex="9" wicket:id="grupoUsuario">
+								    </select>
+								  </div>
+								</div>
+							<div class="form-group">
+							  <label class="col-md-4 control-label"></label>
+							  <div class="col-md-6">
+							    <button wicket:id="botaoSalvar" tabindex="10" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
+							  </div>
+							</div>
+							</div>
 						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="senha">Senha:</label>
-						  <div class="col-md-6">
-						    <input type="password" tabindex="5" wicket:id="senha" class="form-control input-md">
-						    
-						  </div>
-						</div>
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="confirmar">Confirmar Senha:</label>
-						  <div class="col-md-6">
-						    <input type="password" tabindex="6" wicket:id="confirmarSenha" class="form-control input-md">
-						  </div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="email">Email:</label>  
-						  <div class="col-md-6">
-						  <input wicket:id="email" maxlength="45" tabindex="3" class="form-control input-md">
-						  </div>
-						</div>
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="instituicao">Instituição:</label>
-						  <div class="col-md-6">
-						    <select class="form-control" tabindex="4" wicket:id="instituicao">
-						    </select>
-						  </div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="contato">Telefone:</label>  
-						  <div class="col-md-6">
-						  <input wicket:id="contato" tabindex="7" class="form-control input-md">
-						  </div>
-						</div>
-						
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="situacao">Situação:</label>
-						  <div class="col-md-6" style="text-align: left;"> 
-						    <label class="radio-inline inline" tabindex="8" wicket:id="situacao">
-						    </label>
-						  </div>
-						</div>
-						
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="grupo">Grupo do Usuário:</label>
-						  <div class="col-md-6">
-						    <select class="form-control" tabindex="9" wicket:id="grupoUsuario">
-						    </select>
-						  </div>
-						</div>
-					<div class="form-group">
-					  <label class="col-md-4 control-label"></label>
-					  <div class="col-md-6">
-					    <button wicket:id="botaoSalvar" tabindex="10" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
-					  </div>
-					</div>
-					</div>
-				</div>
-			</fieldset>
-		</div>
-		<div class="panel-footer">
-		</div>
-	</div>	
-			</form>
+		            </div>
+	           </div>
+			</div>
+		</form>
 	</wicket:extend>
 </body>
 </html>

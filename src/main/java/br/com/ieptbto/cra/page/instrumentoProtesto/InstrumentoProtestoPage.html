@@ -5,20 +5,24 @@
 </head>
 <body>
 	<wicket:extend>
-		<div class="panel panel-primary">
-			<div class="panel-heading">Entrada de Instrumento de Protesto</div>
-			<div class="panel-body">
+		<div class="col-lg-12 col-md-6">
+		<div class="panel panel-default">
+			 <div class="panel-body borda-esquerda">
+				<h4 class="titulo-top">ENTRADA DE INSTRUMENTO DE PROTESTO
+					<button wicket:id="botaoSlip" class="btn btn-primary"><span class="fa fa-print"></span> GERAR SLIP</button>
+					<button wicket:id="botaoEnvelope" class="btn btn-primary" style="margin-right: 10px;"><span class="fa fa-print"></span> GERAR ENVELOPES</button>
+				</h4>
+				<br style="clear: both;"/>
 				<div class="row">
 					<form wicket:id="formCodigo" class="form-horizontal">
 						<div class="col-md-5">
 							<div class="form-group">
-							  <label class="col-md-4 control-label">Código de Barra:</label>
+							  <label class="col-md-4 control-label">CÓDIGO DE BARRA:</label>
 							  <div class="col-md-7">
 							    <div class="input-group">
 							      <input onfocus="onfocus" wicket:id="codigoInstrumento" maxlength="18" class="form-control">
 							      <span class="input-group-addon"><span class="fa fa-barcode"></span></span>
 							    </div>
-							    
 							  </div>
 							</div>
 						</div>
@@ -29,7 +33,7 @@
 					<form wicket:id="formManual" class="form-horizontal">
 						<div class="col-md-5">
 							<div class="form-group">
-							  <label class="col-md-4 control-label">Município:</label>
+							  <label class="col-md-4 control-label">MUNICÍPIO:</label>
 							  <div class="col-md-7">
 							    <select wicket:id="codigoIbge" class="form-control">
 							    </select>
@@ -38,59 +42,46 @@
 						</div>
 						<div class="col-md-5">
 							<div class="form-group">
-							  <label class="col-md-4 control-label">NºProtocolo:</label>  
+							  <label class="col-md-4 control-label">NºPROTOCOLO:</label>  
 							  <div class="col-md-7">
 							  <input wicket:id="protocoloCartorio" maxlength="10" class="form-control input-md">
 							  </div>
 							</div>
 						</div>
 						<div class="col-md-2">
-					    	<button class="btn btn-primary" style="float: right; margin-bottom: 5px;" wicket:id="addManual"><span class="fa fa-plus-circle"></span>&nbsp;Adicionar</button>
+							<button wicket:id="addManual" class="btn btn-primary"><span class="fa fa-plus"></span>ADICIONAR À LISTA</button>
 						</div>
 					</form>
 				</div>
-				<fieldset>
-		   		<table id="table" class="table table-striped table-hover">
-		           <thead>
+	   			<table id="table" class="table table-striped table-hover">
+	           		<thead>
 						<tr>
-							<th class="col-center">Nº Titulo</th>
-							<th class="col-center">Protocolo</th>
-							<th>Praça Protesto</th>
-							<th>Nome Devedor</th>
-							<th>Portador</th>
-							<th class="col-center">Espécie</th>
-							<th class="col-right">Valor Titulo</th>
+							<th class="col-center">Nº TITULO</th>
+							<th class="col-center">PROTOCOLO</th>
+							<th>PRAÇA PROTESTO</th>
+							<th>NOME DEVEDOR</th>
+							<th>BANCO</th>
+							<th class="col-center">ESPÉCIE</th>
+							<th class="col-right">VALOR TITULO</th>
 							<th style="width: 30px;"></th>
 						</tr>
 					</thead>
 					<tbody>
-		                   <tr wicket:id="instrumentos">
-							<td class="col-center" wicket:id="numeroTitulo"></td>
-							<td class="col-center" wicket:id="protocolo"></td>
-							<td wicket:id="pracaProtesto"></td>
-							<td><a href="#" wicket:id="linkHistorico"><span class="link" wicket:id="nomeDevedor"></span></a></td>
-								<td wicket:id="portador"></td>
-							<td class="col-center" wicket:id="especie"></td>
-							<td class="col-right valor" wicket:id="valorTitulo"></td>
-							<td class="col-center"><button wicket:id="remover"><span class="fa fa-trash-o"></span></button></td>
-		                   </tr>
-		                  </tbody>
-		              </table>
-		     </fieldset>
-			<div class="row">
-				<div class="col-lg-12">
-		    		<button wicket:id="botaoSlip" style="margin-bottom: 5px; margin-left: 5px;" class="btn btn-primary">
-		    			<span class="fa fa-print"></span>&nbsp;Imprimir SLIPS
-		    		</button>
-		    		<button wicket:id="botaoEnvelope" style="margin-bottom: 5px;" class="btn btn-danger">
-		    			<span class="fa fa-print"></span>&nbsp;Imprimir Envelopes
-		    		</button>
-				</div>
-			</div>
-			</div>
-			<div class="panel-footer">
-			</div>
-		</div>
+	                   <tr wicket:id="instrumentos">
+						<td class="col-center" wicket:id="numeroTitulo"></td>
+						<td class="col-center" wicket:id="protocolo"></td>
+						<td wicket:id="pracaProtesto"></td>
+						<td><a href="#" wicket:id="linkHistorico"><span class="link" wicket:id="nomeDevedor"></span></a></td>
+							<td wicket:id="portador"></td>
+						<td class="col-center" wicket:id="especie"></td>
+						<td class="col-right valor" wicket:id="valorTitulo"></td>
+						<td class="col-center"><button wicket:id="remover"><span class="fa fa-trash-o"></span></button></td>
+	                   </tr>
+	                  </tbody>
+	             </table>
+			 </div>
+		 </div>
+ 	</div>
 	</wicket:extend>
 </body>
 </html>

@@ -123,9 +123,8 @@ public class BuscarArquivoCraPanel extends Panel  {
 	}
 	
 	private CheckBoxMultipleChoice<StatusRemessa> comboSituacaoArquivos() {
-		IChoiceRenderer<StatusRemessa> renderer = new ChoiceRenderer<StatusRemessa>("label");
 		List<StatusRemessa> listaSituacao = Arrays.asList(StatusRemessa.values());
-		CheckBoxMultipleChoice<StatusRemessa> situacao = new CheckBoxMultipleChoice<StatusRemessa>("situacaoArquivos",new Model<ArrayList<StatusRemessa>>(situacaoRemessa), listaSituacao, renderer);
+		CheckBoxMultipleChoice<StatusRemessa> situacao = new CheckBoxMultipleChoice<StatusRemessa>("situacaoArquivos",new Model<ArrayList<StatusRemessa>>(situacaoRemessa), listaSituacao);
 		situacao.setLabel(new Model<String>("Situacao do Arquivo"));
 		return situacao;
 	}

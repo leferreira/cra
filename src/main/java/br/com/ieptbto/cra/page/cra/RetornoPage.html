@@ -5,23 +5,27 @@
 </head>
 <body>
 	<wicket:extend>
-		<div class="panel panel-primary">
-			<div class="panel-heading">Gerar Arquivos de Retorno</div>
-			<div class="panel-body">
-				<form wicket:id="form">
-					<button style="float: right; margin-bottom: 5px;" wicket:id="botaoRetorno" class="btn btn-primary"><span class="fa fa-reply-all"></span>&nbsp;Gerar Retorno</button>
-						<br style="clear: both;">
-		                  <table id="table" class="table table-striped table-hover">
+		<form wicket:id="form">
+			<div class="col-lg-12 col-md-6">
+				<div class="panel panel-default">
+					 <div class="panel-body borda-esquerda">
+						<h4 class="titulo-top">GERAR RETORNOS
+						<span class="pull-right">
+							<button wicket:id="botaoRetorno" class="btn btn-primary"><span class="fa fa-plus"></span> LIBERAR RETORNOS</button>
+						</span>
+						</h4>
+						<br style="clear: both;"/>
+		                  <table id="table" class="table table-striped table-hover" style="font-size: 15px;">
 		                    <thead>
 								<tr>
-									<th class="col-center">Data Envio</th>
-									<th class="col-center" style="width: 50px;">Hora</th>
-									<th>Cartório</th>
-									<th class="col-center">Arquivo</th>
-									<th class="col-right">Valor Pagos</th>
-									<th class="col-right">Valor Custas</th>
-									<th class="col-center" style="width: 80px;">Relatório</th>
-									<th class="col-center" style="width: 75px;">Cancelar</th>
+									<th class="col-center">DATA ENVIO</th>
+									<th class="col-center" style="width: 60px;">HORA</th>
+									<th>CARTÓRIO</th>
+									<th class="col-center">ARQUIVO</th>
+									<th class="col-right">VALOR PAGOS</th>
+									<th class="col-right">VALOR CUSTAS</th>
+									<th class="col-center" style="width: 100px;">RELATÓRIO</th>
+									<th class="col-center" style="width: 90px;">CANCELAR</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -43,11 +47,10 @@
 			                    </tr>
 		                    </tbody>
 		                  </table>
-				     </form>
-         		</div>
-            <div class="panel-footer">
-			</div>
-		</div>
+					 </div>
+				 </div>
+ 			</div>
+ 		</form>
 	</wicket:extend>
 </body>
 </html>

@@ -8,13 +8,13 @@
 		<div class="col-lg-12 col-md-6">
 			<div class="panel panel-default">
 				 <div class="panel-body borda-esquerda">
-					<h4 class="titulo-top">RESULTADO DA BUSCA
+					<h4 class="titulo-top">ARQUIVOS PENDENTES
 					<span class="pull-right">
-						<a href="BuscarArquivo" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+						<a href="HomePage" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
 					</span>
 					</h4>
 					<br style="clear: both;"/>
-					<table id="table" class="table table-responsive table-striped table-hover" style="font-size: 15px;">
+					<table id="table" class="table table-striped table-hover" style="font-size: 15px;">
 						<thead>
 							<tr>
 								<th class="col-center" style="width: 43px;">TIPO</th>
@@ -38,6 +38,22 @@
 									</a>
 								</td>
 								<td class="col-center"><button wicket:id="gerarRelatorio" type="button" style="float: inherit;"><span class="col-center fa fa-print"></span></button></td>
+								<td class="col-center"><a target="_blank" wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
+								<td class="col-center" wicket:id="dataEnvio"></td>
+								<td class="col-center" wicket:id="horaEnvio"></td>
+								<td wicket:id="instituicao"></td>
+								<td wicket:id="destino"></td>
+								<td class="col-right valor" wicket:id="valor"></td>
+								<td class="col-center"><span wicket:id="status"></span></td>
+							</tr>
+							<tr wicket:id="dataTableDesistencia">
+								<td class="col-center" wicket:id="tipoArquivo"></td>
+								<td class="col-center">
+									<a href="#" class="link" wicket:id="downloadArquivo">
+										<img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg">
+									</a>
+								</td>
+								<td></td>
 								<td class="col-center"><a target="_blank" wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
 								<td class="col-center" wicket:id="dataEnvio"></td>
 								<td class="col-center" wicket:id="horaEnvio"></td>

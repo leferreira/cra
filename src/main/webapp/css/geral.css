@@ -1,7 +1,19 @@
+html {
+	    background-color: #337AB7;
+}
 body {
 	/*background-color: #337ab7;*/
 	background-color: #f8f8f8;
-}
+	/*font-family: 'TitilliumWebRegular';
+	src: url('../fonts/TitilliumWebRegular.eot');
+	src: local('TitilliumWebRegular'),
+		url('../fonts/TitilliumWebRegular.woff') format('woff'),
+		url('../fonts/TitilliumWebRegular.ttf') format('truetype');
+	font-size: 16px;
+    font-weight: 500;*/
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+}	
 .panel-historico {
 	border-left: 1px solid #ccc;
 	border-right: 1px solid #ccc;
@@ -10,8 +22,22 @@ body {
 	border-radius: 5px;
 }
 
+.borda-esquerda{
+	border-right: 4px solid #337AB7;  
+	border-radius: 10px;
+    border-top: 4px solid #337AB7;
+}
 .nav>li:last-child ul {
 	top: -80%;
+}
+
+.navbar-collapse{
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+}
+
+.font-menu{
+	font-size: 16px;
 }
 
 .feedbackPanelWARNING {
@@ -44,6 +70,18 @@ body {
    width: 190px;
 }
 
+.mensagem-feed{
+	font-size: 20px;
+}
+
+.navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse{
+	min-height: 600px;
+    background-color: #F8F8F8;
+}
+
+.fa-3x{
+	font-size: 40px !important;
+}
 .destaque {
 	color: red;
 	font-weight: bold;
@@ -51,10 +89,14 @@ body {
 }
 
 .sidebar {
-	width: 14%;
-	background-color: transparent !important;
+	width: 15%;
+    font-size: 15px;
+    background-color: transparent !important;
+    font-weight: bolder;
 }
-
+.icon-home {
+	font-size: 16px !important;
+}
 .dropdown-submenu>.dropdown-menu {
 	border-radius: 0 0px 0px 0px;
 }
@@ -62,10 +104,16 @@ body {
 .glyphicon-folder-open {
 	color: black !important;
 }
+.mensagem-feed{
+    font-size: 18px;
+}
 
 .link-icones {
 	text-align: center;
 	/*color: #f8f8f8;*/
+}
+.chat-body{
+	font-size: 15px;
 }
 
 .checkbox-inline br {
@@ -74,12 +122,12 @@ body {
 
 .checkbox-inline label {
 	margin-left: 25px !important;
-	font-size: 13px;
-	font-weight: bold;
+	font-size: 14px;
 }
 
 .radio-inline label {
 	margin-left: 25px !important;
+	font-size: 14px;
 }
 
 .checkbox-inline input {
@@ -97,7 +145,7 @@ body {
 	float: left !important;
 }
 .inline {
-	font-size: 13px;
+	font-size: 16px;
 	margin-left: -25px;
 }
 
@@ -124,11 +172,18 @@ td {
 	position: absolute;
 	font-size: 16px;
 }
+.home-page{
+	font-family: 'TitilliumWebRegular';
+}
 
+.titulo-top {
+    text-align: left;
+    font-size: 22px;
+    font-family: 'TitilliumWebRegular';
+}
 .legend {
-	text-align: left;
-	font-size: 16px;
-	font-style: italic;
+    text-align: left;
+    font-size: 16px;
 }
 
 #table_wrapper {
@@ -167,6 +222,9 @@ td {
     font-size: 10px;
     width: 100%;
 }
+.huge{
+	padding: 4px; 7px;
+}
 
 .cabecalho-historico{
 	background: #337AB7 none repeat scroll 0% 0%;
@@ -188,6 +246,10 @@ MOdal chrome e explorer
 /**
 TABLES
 */
+#table{
+	font-size: 14px !important;
+}
+
 th{
 	  text-align: left;
 }

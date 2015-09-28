@@ -15,7 +15,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -156,23 +155,23 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 		};
 	}
 	
-	private TextField<String> dataInicio(){
-		return new TextField<String>("dataInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
+	private Label dataInicio(){
+		return new Label("dataInicio", new Model<String>(DataUtil.localDateToString(dataInicio)));
 	}
 	
-	private TextField<String> dataFim(){
-		return new TextField<String>("dataFim", new Model<String>(DataUtil.localDateToString(dataFim)));
+	private Label dataFim(){
+		return new Label("dataFim", new Model<String>(DataUtil.localDateToString(dataFim)));
 	}
 	
 	private Label label(){
 		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-			return new Label("label", new Model<String>("Portador:"));
+			return new Label("label", new Model<String>("PORTADOR:"));
 		}
-		return new Label("label", new Model<String>("Cartório:"));
+		return new Label("label", new Model<String>("CARTÓRIO:"));
 	}
 	
-	private TextField<String> instituicao(){
-		return new TextField<String>("instituicao", new Model<String>(getInstituicao().getNomeFantasia()));
+	private Label instituicao(){
+		return new Label("instituicao", new Model<String>(getInstituicao().getNomeFantasia()));
 	}
 	
 	public List<TituloRemessa> getTitulos() {

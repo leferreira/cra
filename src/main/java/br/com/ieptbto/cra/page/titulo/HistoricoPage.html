@@ -2,102 +2,104 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 	<wicket:extend>
-		<div class="panel panel-primary">
-			<div class="panel-heading">Informa&ccedil;&otilde;es do T&iacute;tulo</div>
-			<div class="panel-body" style="zoom: 0.95;">
-				<div class="row">
-					<div class="col-md-6">	
-						<div class="table-responsive well well-sm">
-							<span style="font-size: 16px; font-weight: bolder; float: left;">DADOS DO T&Iacute;TULO</span>			
-		                     <table class="table">
-		                         <tbody>
-		                             <tr>
-		                                 <td class="col-right valor historico">N&uacute;mero T&iacute;tulo:</td>
-		                                 <td><span class="info-titulo" wicket:id="numeroTitulo" style="font-size: 13px;"></span></td>
-		                             </tr>
-		                             <tr>
-		                                 <td class="col-right valor historico">Apresentante:</td>
-		                                 <td><span wicket:id="portador"></span></td>
-		                             </tr>
-		                             <tr>
-		                                 <td class="col-right valor historico">Ag. Centralizad.:</td>
-		                                 <td><span wicket:id="agencia"></span></td>
-		                             </tr>
-		                             <tr>
-		                                 <td class="col-right valor historico">Nosso N&uacute;mero:</td>
-		                                 <td><span wicket:id="nossoNumero"></span></td>
-		                             </tr>
-		                             <tr>
-		                                 <td class="col-right valor historico">Esp&eacute;cie:</td>
-		                                 <td><span wicket:id="especieTitulo"></span></td>
-		                             </tr>
-		                             <tr>
-		                                 <td class="col-right valor historico">Emiss&atilde;o:</td>
-		                                 <td><span wicket:id="dataEmissaoTitulo"></span></td>
-		                             </tr>
-		                             <tr>
-		                                 <td class="col-right valor historico">Vencimento:</td>
-		                                 <td><span wicket:id="dataVencimentoTitulo"></span></td>
-		                             </tr>
-		                             <tr>
-		                                 <td class="col-right valor historico">Ced. Favorecido:</td>
-		                                 <td><span wicket:id="nomeCedenteFavorecido"></span></td>
-		                             </tr>
-		                             <tr>
-		                                 <td class="col-right valor historico">Ag./C&oacute;d.Cedente:</td>
-		                                 <td><span wicket:id="agenciaCodigoCedente"></span></td>
-		                             </tr>
-		                         </tbody>
-		                     </table>
-		                 </div>
-	               </div>
-	               <div class="col-md-6">	
+		<div class="col-lg-12 col-md-6">
+			<div class="panel panel-default">
+				 <div class="panel-body borda-esquerda">
+					<h4 class="titulo-top">INFORMA&Ccedil;&Otilde;ES DO T&Iacute;TULO</h4>
+					<br style="clear: both;"/>
+					<div class="row">
+						<div class="col-md-6">	
 							<div class="table-responsive well well-sm">
-								<span style="font-size: 16px; font-weight: bolder; float: left;">DADOS DO PROTOCOLO</span>			
+								<span style="font-size: 16px; font-weight: bolder; float: left;">DADOS DO T&Iacute;TULO</span>			
 			                     <table class="table">
 			                         <tbody>
 			                             <tr>
-			                                 <td class="col-right valor historico">Situa&ccedil;&atilde;o:</td>
-			                                 <td><span class="info-titulo" wicket:id="situacaoTitulo" style="font-size: 13px;"></span></td>
+			                                 <td class="col-right valor historico">N&uacute;MERO T&iacute;TULO:</td>
+			                                 <td><span class="info-titulo" wicket:id="numeroTitulo" style="font-size: 13px;"></span></td>
 			                             </tr>
 			                             <tr>
-			                                 <td class="col-right valor historico">Protocolo:</td>
-			                                 <td><span wicket:id="numeroProtocoloCartorio"></span></td>
+			                                 <td class="col-right valor historico">APRESENTANTE:</td>
+			                                 <td><span wicket:id="portador"></span></td>
 			                             </tr>
 			                             <tr>
-			                                 <td class="col-right valor historico">Data Protocolo:</td>
-			                                 <td><span wicket:id="dataProtocolo"></span></td>
-			                             </tr>
-			                              <tr>
-			                                 <td class="col-right valor historico">Confirma&ccedil;&atilde;o:</td>
-			                                 <td><span wicket:id="confirmacao"></span></td>
+			                                 <td class="col-right valor historico">AG. CENTRALIZAD.:</td>
+			                                 <td><span wicket:id="agencia"></span></td>
 			                             </tr>
 			                             <tr>
-			                                 <td class="col-right valor historico">Irregularidade:</td>
-			                                 <td><span class="destaque" wicket:id="irregularidade"></span></td>
+			                                 <td class="col-right valor historico">NOSSO N&Uacute;MERO:</td>
+			                                 <td><span wicket:id="nossoNumero"></span></td>
 			                             </tr>
 			                             <tr>
-			                                 <td class="col-right valor historico">Cart&oacute;rio:</td>
-			                                 <td><span wicket:id="cartorio"></span></td>
+			                                 <td class="col-right valor historico">ESP&Eacute;CIE:</td>
+			                                 <td><span wicket:id="especieTitulo"></span></td>
 			                             </tr>
 			                             <tr>
-			                                 <td class="col-right valor historico">C&oacute;d. Cart&oacute;rio:</td>
-			                                 <td><span wicket:id="codigoCartorio"></span></td>
+			                                 <td class="col-right valor historico">EMISS&Atilde;O:</td>
+			                                 <td><span wicket:id="dataEmissaoTitulo"></span></td>
 			                             </tr>
 			                             <tr>
-			                                 <td class="col-right valor historico">Pra&ccedil;a Protesto:</td>
-			                                 <td><span wicket:id="pracaProtesto"></span></td>
+			                                 <td class="col-right valor historico">VENCIMENTO:</td>
+			                                 <td><span wicket:id="dataVencimentoTitulo"></span></td>
 			                             </tr>
 			                             <tr>
-			                                 <td class="col-right valor historico">C&oacute;d. Munic&iacute;pio:</td>
-			                                 <td><span wicket:id="codigoMunicipio"></span></td>
+			                                 <td class="col-right valor historico">CED. FAVORECIDO:</td>
+			                                 <td><span wicket:id="nomeCedenteFavorecido"></span></td>
+			                             </tr>
+			                             <tr>
+			                                 <td class="col-right valor historico">AG./C&Oacute;D.CEDENTE:</td>
+			                                 <td><span wicket:id="agenciaCodigoCedente"></span></td>
 			                             </tr>
 			                         </tbody>
 			                     </table>
 			                 </div>
 		               </div>
-           		</div>
-	             <div class="row">
+		               <div class="col-md-6">	
+								<div class="table-responsive well well-sm">
+									<span style="font-size: 16px; font-weight: bolder; float: left;">DADOS DO PROTOCOLO</span>			
+				                     <table class="table">
+				                         <tbody>
+				                             <tr>
+				                                 <td class="col-right valor historico">SITUA&Ccedil;&Atilde;O:</td>
+				                                 <td><span class="info-titulo" wicket:id="situacaoTitulo" style="font-size: 13px;"></span></td>
+				                             </tr>
+				                             <tr>
+				                                 <td class="col-right valor historico">PROTOCOLO:</td>
+				                                 <td><span wicket:id="numeroProtocoloCartorio"></span></td>
+				                             </tr>
+				                             <tr>
+				                                 <td class="col-right valor historico">DATA PROTOCOLO:</td>
+				                                 <td><span wicket:id="dataProtocolo"></span></td>
+				                             </tr>
+				                              <tr>
+				                                 <td class="col-right valor historico">CONFIRMA&Ccedil;&Atilde;O:</td>
+				                                 <td><span wicket:id="confirmacao"></span></td>
+				                             </tr>
+				                             <tr>
+				                                 <td class="col-right valor historico">IRREGULARIDADE:</td>
+				                                 <td><span class="destaque" wicket:id="irregularidade"></span></td>
+				                             </tr>
+				                             <tr>
+				                                 <td class="col-right valor historico">CART&Oacute;RIO:</td>
+				                                 <td><span wicket:id="cartorio"></span></td>
+				                             </tr>
+				                             <tr>
+				                                 <td class="col-right valor historico">C&Oacute;D. CART&Oacute;RIO:</td>
+				                                 <td><span wicket:id="codigoCartorio"></span></td>
+				                             </tr>
+				                             <tr>
+				                                 <td class="col-right valor historico">PRA&Ccedil;A PROTESTO:</td>
+				                                 <td><span wicket:id="pracaProtesto"></span></td>
+				                             </tr>
+				                             <tr>
+				                                 <td class="col-right valor historico">C&Oacute;D. MUNIC&Iacute;PIO:</td>
+				                                 <td><span wicket:id="codigoMunicipio"></span></td>
+				                             </tr>
+				                         </tbody>
+				                     </table>
+				                 </div>
+			               </div>
+           			 </div>
+           			 <div class="row">
 	               <div class="col-md-6">
 						<div class="table-responsive well well-sm" style="height: 305px;">
 		               		<span style="font-size: 16px; font-weight: bolder; float: left;" class="info-titulo">ARQUIVOS E OCORR&Egrave;NCIAS</span>			
@@ -138,7 +140,7 @@
 				                     <table class="table">
 				                         <tbody>
 				                             <tr>
-				                                 <td class="col-right valor historico">Nome Devedor:</td>
+				                                 <td class="col-right valor historico">NOME DEVEDOR:</td>
 				                                 <td><span wicket:id="nomeDevedor"></span></td>
 				                             </tr>
 				                             <tr>
@@ -154,11 +156,11 @@
 				                                 <td><span wicket:id="cepDevedor"></span></td>
 				                             </tr>
 				                             <tr>
-				                                 <td class="col-right valor historico">Cidade:</td>
+				                                 <td class="col-right valor historico">CIDADE:</td>
 				                                 <td><span wicket:id="cidadeDevedor"></span></td>
 				                             </tr>
 				                              <tr>
-				                                 <td class="col-right valor historico">Endere&ccedil;o:</td>
+				                                 <td class="col-right valor historico">ENDERE&Ccedil;O:</td>
 				                                 <td><span wicket:id="enderecoDevedor"></span></td>
 				                             </tr>
 				                         </tbody>
@@ -170,7 +172,7 @@
 				                     <table class="table">
 				                         <tbody>
 				                             <tr>
-				                                 <td class="col-right valor historico">Nome Sacador:</td>
+				                                 <td class="col-right valor historico">NOME SACADOR:</td>
 				                                 <td><span wicket:id="nomeSacadorVendedor"></span></td>
 				                             </tr>
 				                             <tr>
@@ -186,11 +188,11 @@
 				                                 <td><span wicket:id="cepSacadorVendedor"></span></td>
 				                             </tr>
 				                             <tr>
-				                                 <td class="col-right valor historico">Cidade:</td>
+				                                 <td class="col-right valor historico">CIDADE:</td>
 				                                 <td><span wicket:id="cidadeSacadorVendedor"></span></td>
 				                             </tr>
 				                              <tr>
-				                                 <td class="col-right valor historico">Endere&ccedil;o:</td>
+				                                 <td class="col-right valor historico">ENDERE&Ccedil;O:</td>
 				                                 <td><span wicket:id="enderecoSacadorVendedor"></span></td>
 				                             </tr>
 				                         </tbody>
@@ -202,27 +204,27 @@
 				                     <table class="table">
 				                         <tbody>
 				                             <tr>
-				                                 <td class="col-right valor historico">Valor do T&iacute;tulo:</td>
+				                                 <td class="col-right valor historico">VALOR DO T&Iacute;TULO:</td>
 				                                 <td><span wicket:id="valorTitulo" class="destaque"></span></td>
 				                             </tr>
 				                             <tr>
-				                                 <td class="col-right valor historico">Saldo T&iacute;tulo:</td>
+				                                 <td class="col-right valor historico">SALDO T&iacute;TULO:</td>
 				                                 <td><span wicket:id="saldoTitulo" class="destaque"></span></td>
 				                             </tr>
 				                             <tr>
-				                                 <td class="col-right valor historico">Grava&ccedil;&atilde;o Eletr&ograve;:</td>
+				                                 <td class="col-right valor historico">GRAVA&Ccedil;&Atilde;O ELETR&Ograve;:</td>
 				                                 <td><span wicket:id="valorGravacaoEletronica" class="destaque"></span></td>
 				                             </tr>
 				                             <tr>
-				                                 <td class="col-right valor historico">Custas Cart&oacute;rio:</td>
+				                                 <td class="col-right valor historico">CUSTAS CART&Oacute;RIO:</td>
 				                                 <td><span wicket:id="valorCustaCartorio" class="destaque"></span></td>
 				                             </tr>
 				                             <tr>
-				                                 <td class="col-right valor historico">Custas Distrib:</td>
+				                                 <td class="col-right valor historico">CUSTAS DISTRIB:</td>
 				                                 <td><span wicket:id="valorCustasCartorioDistribuidor" class="destaque"></span></td>
 				                             </tr>
 				                             <tr>
-				                                 <td class="col-right valor historico">Demais Desp:</td>
+				                                 <td class="col-right valor historico">DEMAIS DESP:</td>
 				                                 <td><span wicket:id="valorDemaisDespesas" class="destaque"></span></td>
 				                             </tr>
 				                            </tbody>
@@ -232,9 +234,9 @@
                            </div>
              		</div>
 	             </div>
-			</div>
-			<div class="panel-footer"></div>
-		</div>
+				 </div>
+			 </div>
+ 		</div>
 	</wicket:extend>
 </body>
 </html>

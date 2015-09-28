@@ -5,17 +5,20 @@
 </head>
 <body>
 	<wicket:extend>
-			<form wicket:id="form" id="form" class="form-horizontal">
-				<div class="panel panel-primary">
-					<div class="panel-heading">Cadastro de Empresa Associada</div>
-					<div class="panel-body">
-						<a href="FiliadosPage" style="float: left; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>&nbsp;Voltar à página anterior</a>
-						<br style="clear: both;">
-						<fieldset>
+		<form wicket:id="form" id="form" class="form-horizontal">
+			<div class="col-lg-12 col-md-6">
+				<div class="panel panel-default">
+					 <div class="panel-body borda-esquerda">
+						<h4 class="titulo-top">CADASTRO DE EMPRESA ASSOCIADA
+						<span class="pull-right">
+							<a href="FiliadosPage" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+						</span>
+						</h4>
+						<br style="clear: both;"/>
 						<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-									  <label class="col-md-4 control-label">Razão Social:</label>  
+									  <label class="col-md-4 control-label">RAZÃO SOCIAL:</label>  
 									  <div class="col-md-6">
 									  <input wicket:id="razaoSocial" tabindex="1" autofocus="autofocus" maxlength="45" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md uppercase react">
 									    
@@ -30,14 +33,14 @@
 									  </div>
 									</div>
 									<div class="form-group">
-									  <label class="col-md-4 control-label" >Situação:</label>
+									  <label class="col-md-4 control-label" >SITUAÇÃO:</label>
 									  <div class="col-md-6" style="text-align: left;"> 
 									    <label class="radio-inline inline" tabindex="3" wicket:id="situacao">
 									    </label>
 									  </div>
 									</div>
 									<div class="form-group">
-									  <label class="col-md-4 control-label">Endereço:</label>
+									  <label class="col-md-4 control-label">ENDEREÇO:</label>
 									  <div class="col-md-4">                     
 									    <textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
 									  </div>
@@ -45,7 +48,7 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-									  <label class="col-md-4 control-label">Convênio:</label>
+									  <label class="col-md-4 control-label">CONVÊNIO:</label>
 									  <div class="col-md-6">
 									    <select wicket:id="instituicaoConvenio" tabindex="5" class="form-control">
 									    </select>
@@ -53,7 +56,7 @@
 									</div>
 									<!-- Select Basic -->
 									<div class="form-group">
-									  <label class="col-md-4 control-label">Município:</label>
+									  <label class="col-md-4 control-label">MUNICÍPIO:</label>
 									  <div class="col-md-6">
 									    <select wicket:id="municipio" tabindex="6" class="form-control">
 									    </select>
@@ -77,17 +80,15 @@
 									<div class="form-group">
 									  <label class="col-md-2 control-label"></label>
 									  <div class="col-md-8">
-									    <button id="salvar" type="submit" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
+									    <button id="salvar" type="submit" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
 									  </div>
 									</div>
 								</div>
 							</div>		
-						</fieldset>
-					</div>
-					<div class="panel-footer">
-					</div>
-				</div>
-			</form>
+					 </div>
+				 </div>
+			 </div>
+		</form>
 	</wicket:extend>
 </body>
 </html>

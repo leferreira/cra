@@ -112,9 +112,8 @@ public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo>  {
 	}
 	
 	private CheckBoxMultipleChoice<SituacaoArquivo> comboSituacaoArquivos() {
-		IChoiceRenderer<SituacaoArquivo> renderer = new ChoiceRenderer<SituacaoArquivo>("label");
 		List<SituacaoArquivo> listaSituacao = Arrays.asList(SituacaoArquivo.values());
-		CheckBoxMultipleChoice<SituacaoArquivo> situacao = new CheckBoxMultipleChoice<SituacaoArquivo>("situacaoArquivos",new Model<ArrayList<SituacaoArquivo>>(situacaoArquivo), listaSituacao, renderer);
+		CheckBoxMultipleChoice<SituacaoArquivo> situacao = new CheckBoxMultipleChoice<SituacaoArquivo>("situacaoArquivos",new Model<ArrayList<SituacaoArquivo>>(situacaoArquivo), listaSituacao);
 		situacao.setLabel(new Model<String>("Situacao do Arquivo"));
 		return situacao;
 	}

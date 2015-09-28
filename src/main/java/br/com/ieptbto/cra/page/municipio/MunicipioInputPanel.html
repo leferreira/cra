@@ -2,20 +2,23 @@
 <meta charset="UTF8">
 </head>
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
-	<div class="panel panel-primary">
-		<div class="panel-heading">Cadastros de Municípios</div>
-		<div class="panel-body">
-			<fieldset>
-				<a href="MunicipiosPage" style="float: left; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>&nbsp;Voltar à página anterior</a>
-				<br style="clear: both;">
+	<div class="col-lg-12 col-md-6">
+		<div class="panel panel-default">
+			 <div class="panel-body borda-esquerda">
+				<h4 class="titulo-top">CADASTRO DE MUNICÍPIO
+				<span class="pull-right">
+					<a href="MunicipiosPage" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+				</span>
+				</h4>
+				<br style="clear: both;"/>
 				<div class="col-lg-10 col-md-offset-1" style="text-align: left;">
 					<div class="form-group">
-						<label >Nome do Município:</label> 
+						<label >NOME DO MUNICÍPIO:</label> 
 						<input autofocus="autofocus" maxlength="45" style="width: 95%" wicket:id="nomeMunicipio" class="form-control"/>
 					</div>
 					<div class="panel-body-right">
 						<div class="form-group">
-							<label>Código do IBGE:</label> 
+							<label>CÓDIGO DO IBGE:</label> 
 							<input maxlength="7" wicket:id="codigoIBGE" class="form-control"/>
 						</div>
 					</div>
@@ -25,11 +28,9 @@
 								<select wicket:id="uf" class="form-control"></select>
 						</div>
 					</div>
-					<button wicket:id="botaoSalvar" type="submit" style="margin-right: 5%;" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
+					<button wicket:id="botaoSalvar" type="submit" style="margin-right: 5%;" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
 				</div>
-			</fieldset>
-		</div>
-		<div class="panel-footer">
-		</div>
-	</div>
+			 </div>
+		 </div>
+ 	</div>
 </wicket:panel>

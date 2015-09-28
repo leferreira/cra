@@ -60,16 +60,17 @@ body {
 }
 
 #page-wrapper {
-	padding: 0 15px;
-	min-height: 568px;
-	/*background-color: #fff;*/
-	background-color: #f8f8f8;
+	position: inherit;
+    margin: 0 0 0 15%;
+    padding: 0 0px;
+    min-height: auto;
+    border-left: 2px solid #e7e7e7;
 }
 
 @media ( min-width :768px) {
 	#page-wrapper {
 		position: inherit;
-		margin: 0 0 5% 14%;
+		margin: 0 0 5% 15%;
 		padding: 0 10px;
 		min-height: auto;
 		border-left: 2px solid #e7e7e7;
@@ -111,7 +112,7 @@ body {
 	min-width: 189px;
 	height: auto !important;
 	max-height: 150px;
-	 width: 14%;
+	 width: 15%;
 }
 
 .green {
@@ -132,10 +133,10 @@ body {
 		z-index: 1;
 		position: absolute;
 		/*width: 250px;*/
-		width: 16%;
+		width: 15%;
 		/*  margin-top: 40px;*/
 		  margin-top: 3.5%;
-		  padding-top: 20PX;
+		/*  padding-top: 20PX;*/
 	}
 	.navbar-top-links .dropdown-messages, .navbar-top-links .dropdown-tasks,
 		.navbar-top-links .dropdown-alerts {

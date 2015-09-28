@@ -2,35 +2,37 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 	<wicket:extend>
-		<div class="panel panel-primary">
-			<div class="panel-heading">Buscar Arquivo</div>
-				<div class="panel-body">
-					<form class="form-horizontal" wicket:id="form">
-						<a href="BuscarArquivo" style="float: right; margin-bottom: 5px;" class="link"><span class="fa fa-eye"></span>&nbsp;ALTERAR PARA CART&Oacute;RIOS</a>
+		<form wicket:id="form" class="form-horizontal">
+			<div class="col-lg-12 col-md-6">
+				<div class="panel panel-default">
+					 <div class="panel-body borda-esquerda">
+						<h4 class="titulo-top">BUSCAR ARQUIVOS
+							<a href="BuscarArquivo" class="link pull-right" style="font-size: 16px;"><span class="fa fa-eye"></span>&nbsp;VIS&Atilde;O CART&Oacute;RIO</a>
+						</h4>
 						<br style="clear: both;"/>
 						<div class="col-lg-12 col-md-offset-1">
 							<div class="form-group">
-							  <label class="col-md-2 control-label">Nome do Arquivo:</label>  
+							  <label class="col-md-2 control-label">NOME DO ARQUIVO:</label>  
 							  <div class="col-md-6">
 							  <input maxlength="13" wicket:id="nomeArquivo" class="form-control input-md">
 							  </div>
 							</div>
 							<div class="form-group">
-							  <label class="col-md-2 control-label">Tipo Arquivo:</label>
+							  <label class="col-md-2 control-label">TIPO ARQUIVO:</label>
 							  <div class="col-md-6" style="text-align: left;">
 							    <label class="checkbox-inline inline" wicket:id="tipoArquivos">
 							    </label>
 							  </div>
 							</div>
 							<div class="form-group">
-							  <label class="col-md-2 control-label">Situa&ccedil;&atilde;o:</label>
+							  <label class="col-md-2 control-label">SITUA&Ccedil;&Atilde;O:</label>
 							  <div class="col-md-6" style="text-align: left;">
 							    <label class="checkbox-inline inline" wicket:id="situacaoArquivos">
 							    </label>
 							  </div>
 							</div>
 							<div class="form-group">
-							  <label class="col-md-2 control-label">Per&iacute;odo:</label>  
+							  <label class="col-md-2 control-label">PER&Iacute;ODO:</label>  
 							  <div class="col-md-2">
 							  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioInicio"  class="form-control input-md">
 							  </div>
@@ -39,7 +41,7 @@
 							  </div>
 							</div>
 							<div class="form-group">
-							  <label class="col-md-2 control-label">Bancos e Conv&egrave;nios</label>
+							  <label class="col-md-2 control-label">BANCOS E CONV&Egrave;NIOS</label>
 							  <div class="col-md-6">
 							    <select wicket:id="instituicaoEnvio" class="form-control">
 							    </select>
@@ -48,16 +50,15 @@
 							<div class="form-group">
 							  <label class="col-md-2 control-label"></label>
 							  <div class="col-md-6">
-							    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>&nbsp;Buscar</button>
+							    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
 							  </div>
 							</div>
 							<br style="clear: both;" />
 						</div>
-					</form>
-				</div>
-				<div class="panel-footer">
-				</div>
-			</div>
+					 </div>
+				 </div>
+			 </div>
+		</form>
 	</wicket:extend>
 </body>
 </html>

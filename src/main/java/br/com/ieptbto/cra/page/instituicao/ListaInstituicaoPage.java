@@ -72,7 +72,6 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 				item.add(new Label("tipoInstituicao", instituicaoLista.getTipoInstituicao().getTipoInstituicao().getLabel()));
 				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
 				item.add(new Label("email", instituicaoLista.getEmail()));
-				item.add(new Label("contato", instituicaoLista.getContato()));
 				if (instituicaoLista.isSituacao()) {
 					item.add(new Label("situacao", "Sim"));
 				} else {

@@ -74,7 +74,6 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 		        
 		        item.add(new Label("loginUsuario", usuarioLista.getLogin()));
 				item.add(new Label("emailUsuario", usuarioLista.getEmail()));
-				item.add(new Label("contato", usuarioLista.getContato()));
 				item.add(new Label("instituicaoUsuario", usuarioLista
 						.getInstituicao().getNomeFantasia()));
 				if (usuarioLista.isStatus()){

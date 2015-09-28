@@ -8,8 +8,6 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -41,7 +39,6 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	private IModel<Arquivo> model;
-//	private DropDownChoice<Municipio> comboMunicipio;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	
@@ -56,7 +53,6 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 		add(dataEnvioInicio());
 		add(dataEnvioFinal());
 		add(nomeArquivo());
-//		add(pracaProtesto());
 		add(botaoEnviar());
 	}
 	
@@ -90,9 +86,6 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
 					
-//					if (comboMunicipio.getModelObject() != null){
-//						municipio = comboMunicipio.getModelObject();
-//					}
 					setResponsePage(new ListaArquivosInstituicaoPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo(), getSituacaoArquivo()));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -120,9 +113,8 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 	}
 	
 	private CheckBoxMultipleChoice<SituacaoArquivo> comboSituacaoArquivos() {
-		IChoiceRenderer<SituacaoArquivo> renderer = new ChoiceRenderer<SituacaoArquivo>("label");
 		List<SituacaoArquivo> listaSituacao = Arrays.asList(SituacaoArquivo.values());
-		CheckBoxMultipleChoice<SituacaoArquivo> situacao = new CheckBoxMultipleChoice<SituacaoArquivo>("situacaoArquivos",new Model<ArrayList<SituacaoArquivo>>(situacaoArquivo), listaSituacao, renderer);
+		CheckBoxMultipleChoice<SituacaoArquivo> situacao = new CheckBoxMultipleChoice<SituacaoArquivo>("situacaoArquivos",new Model<ArrayList<SituacaoArquivo>>(situacaoArquivo), listaSituacao);
 		situacao.setLabel(new Model<String>("Situacao do Arquivo"));
 		return situacao;
 	}
@@ -135,12 +127,6 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 	private TextField<LocalDate> dataEnvioFinal() {
 		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
 	}
-
-//	private DropDownChoice<Municipio> pracaProtesto() {
-//		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-//		this.comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.getMunicipiosTocantins(), renderer);
-//		return comboMunicipio;
-//	}
 
 	public ArrayList<TipoArquivoEnum> getTiposArquivo() {
 		return tiposArquivo;
