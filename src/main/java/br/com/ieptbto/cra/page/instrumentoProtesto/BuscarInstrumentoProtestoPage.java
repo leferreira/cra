@@ -14,6 +14,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.component.label.DateTextField;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -50,7 +51,7 @@ public class BuscarInstrumentoProtestoPage extends BasePage<InstrumentoProtesto>
 	}
 	
 	private Form<InstrumentoProtesto> adicionarFormulario() {
-		return new Form<InstrumentoProtesto>("form") {
+		Form<InstrumentoProtesto> form = new Form<InstrumentoProtesto>("form") {
 
 			@Override
 			protected void onSubmit() {
@@ -60,6 +61,8 @@ public class BuscarInstrumentoProtestoPage extends BasePage<InstrumentoProtesto>
 				}
 			}
 		};
+		form.add(new DateTextField("date", "dd/MM/yyyy"));
+		return form;
 	}
 
 	private ListView<InstrumentoProtesto> carregarListaSlips() {

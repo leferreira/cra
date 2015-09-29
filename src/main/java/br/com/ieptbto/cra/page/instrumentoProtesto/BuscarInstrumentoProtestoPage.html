@@ -10,6 +10,54 @@
 				 <div class="panel-body borda-esquerda">
 					<h4 class="titulo-top">BUSCAR INSTRUMENTO DE PROTESTO</h4>
 					<form wicket:id="form" class="form-horizontal">
+						<div class="col-md-6">
+							<div class="form-group">
+							  <label class="col-md-4 control-label">CÓDIGO DE BARRA:</label>
+							  <div class="col-md-8">
+							    <div class="input-group">
+							      <input maxlength="18" class="form-control">
+							      <span class="input-group-addon"><span class="fa fa-barcode"></span></span>
+							    </div>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label class="col-md-4 control-label">MUNICÍPIO:</label>
+							  <div class="col-md-8">
+							    <select class="form-control"></select>
+							  </div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+							  <label class="col-md-4 control-label">CÓDIGO ENVELOPE:</label>
+							  <div class="col-md-8">
+							    <div class="input-group">
+							      <input maxlength="18" class="form-control">
+							      <span class="input-group-addon"><span class="fa fa-envelope-o"></span></span>
+							    </div>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label class="col-md-4 control-label">PROTOCOLO:</label>
+							  <div class="col-md-8">
+							   	<input maxlength="10" class="form-control">
+							   </div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+							  <label class="col-md-2 control-label">DATA ENTRADA:</label>
+						   	  <div class="col-md-2">
+							  	<input id="date" name="date" wicket:id="date" type="text" maxlength="10" placeholder="__/__/____" class="form-control input-md">
+							  </div>
+							  <div class="col-md-2">
+							  	<input id="date1" name="date1" type="text" maxlength="10" placeholder="__/__/____" class="form-control input-md">
+							  </div>
+							   <div class="col-md-2 pull-right">
+							 	 <button class="btn btn-primary"><span class="fa fa-search"></span>&nbsp;&nbsp;BUSCAR</button>
+							   </div>
+							</div>
+						</div>
 					</form>
 					<br style="clear: both;"/>
 		   			<table id="table" class="table table-striped table-hover" style="font-size: 14px;">

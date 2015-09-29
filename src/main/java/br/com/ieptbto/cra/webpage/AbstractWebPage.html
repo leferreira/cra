@@ -6,35 +6,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CRA - Central de Remessa de Arquivos</title>
 
+<link href='https://fonts.googleapis.com/css?family=Lato:400italic,400,700' rel='stylesheet' type='text/css' />
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css"	media="screen" title="Stylesheet" />
 <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" title="Stylesheet" />
-<link href="css/jquery-ui.css" rel="stylesheet">
-
-<!-- <link href="font-awesome/css/font-awesome.css" rel="stylesheet"> -->
-<link href='https://fonts.googleapis.com/css?family=Lato:400italic,400,700' rel='stylesheet' type='text/css'>
-<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-<link href="css/plugins/timeline/timeline.css" rel="stylesheet">
+<link href="css/jquery-ui.css" type="text/css" media="screen" rel="stylesheet" title="Stylesheet" />
+<link href="css/jquery-ui.theme.css" type="text/css" media="screen" rel="stylesheet" title="Stylesheet" />
 
 <link href="js/plugins/dataTables2/dataTables.bootstrap.css" rel="stylesheet">
 <link href="js/plugins/dataTables2/dataTables.responsive.css" rel="stylesheet">
 	
 <link href="css/sb-admin.css" rel="stylesheet">
 <link href="css/geral.css" rel="stylesheet">
-<script src="js/formatador.js"></script>
+
+
 </head>
 <body>
 	<wicket:child>
 			Aqui vai o conteúdo da página.
 	</wicket:child>
 
-
+	<script src="js/formatador.js"></script>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/mascaras.js"></script>
 	<script src="js/jquery.maskedinput.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-<!-- 	<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script> -->
-	<!-- DataTables JavaScript -->
 	<script src="js/jquery.dataTables.min.js"></script>
 	<script src="js/dataTables.bootstrap.min.js"></script>
 	<script src="js/sb-admin.js"></script>
@@ -67,7 +63,6 @@
 					    }
             }
         } );
-
         jQuery(function($){
             $.datepicker.regional['pt-BR'] = {
                     closeText: 'Fechar',
@@ -87,14 +82,12 @@
                     yearSuffix: ''};
             $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
         });
-
          $(function() {
             $( "#date" ).datepicker();
           });
          $(function() {
              $( "#date1" ).datepicker();
           });
-
         
     } );
 	</script>
