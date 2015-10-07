@@ -16,7 +16,6 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.exception.XmlCraException;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
@@ -31,8 +30,6 @@ import br.com.ieptbto.cra.webservice.VO.MensagemRetornoXml;
 @Service
 public class DesistenciaProtestoService extends CraWebService {
 
-	@Autowired
-	private TipoArquivoMediator tipoArquivoMediator;
 	@Autowired
 	private DesistenciaProtestoMediator desistenciaProtestoMediator;
 	@Autowired
@@ -114,8 +111,8 @@ public class DesistenciaProtestoService extends CraWebService {
 	}
 
 	private String formatarMensagemRetorno(DesistenciaProtesto desistenciaProtesto) {
-		Instituicao instituicao = instituicaoMediator.getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio()
-		        .getCodigoMunicipio());
+		Instituicao instituicao = instituicaoMediator
+		        .getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio());
 		return instituicao.getNomeFantasia() + " (" + desistenciaProtesto.getDesistencias().size() + ") ";
 
 	}

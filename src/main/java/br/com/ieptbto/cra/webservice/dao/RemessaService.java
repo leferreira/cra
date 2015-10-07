@@ -20,8 +20,6 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
-import br.com.ieptbto.cra.mediator.UsuarioMediator;
 
 /**
  * 
@@ -33,10 +31,6 @@ public class RemessaService extends CraWebService {
 
 	@Autowired
 	private RemessaMediator remessaMediator;
-	@Autowired
-	private UsuarioMediator usuarioMediator;
-	@Autowired
-	private TipoArquivoMediator tipoArquivoMediator;
 	private String arquivoRecebido;
 	private List<RemessaVO> remessas;
 	private ArquivoVO arquivoVO;
