@@ -8,61 +8,45 @@
 
 <title>CRA - Central de Remessa de Arquivos</title>
 
- 	<!-- DataTables CSS -->
-    <link href="js/plugins/dataTables2/dataTables.bootstrap.css" rel="stylesheet">
-
-    <!-- DataTables Responsive CSS -->
-    <link href="js/plugins/dataTables2/dataTables.responsive.css" rel="stylesheet">
-    
-<!-- Core CSS - Include with every page -->
-<link href="css/bootstrap.min.css" rel="stylesheet">
-<link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-
-<!-- SB Admin CSS - Include with every page -->
-<link href="css/sb-admin.css" rel="stylesheet">
+<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+<link href="dist/css/sb-admin-2.css" rel="stylesheet">
+<link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 </head>
 
 <body style="background-color: #3d8cbe;">
+
 	<div class="container">
-		<div class="row">
-			<div class="col-md-4 col-md-offset-4">
-				<div class="login-panel panel panel-default">
-					<div class="panel-heading" align="center">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading" align="center">
 						<img alt="logo" style="width: 65%;" src="img/logo_login.jpg" />
 					</div>
-					<div class="panel-body">
-						<form role="form" wicket:id="loginForm">
-							<fieldset>
-								<div class="form-group">
-									<input wicket:id="login" class="form-control" placeholder="Login" name="login" type="text" autofocus>
-								</div>
-								<div class="form-group">
-									<input wicket:id="senha" class="form-control" placeholder="Senha" name="senha" type="password" value="">
-								</div>
-								<!-- Change this to a button or input when using this as a form -->
-								<div class="checkbox">
-									<label> <span wicket:id="feedback" class="text-error">Mensagens	de erros e etc</span>
-									</label>
-								</div>
-								<button type="submit" wicket:id="botaoSalvar"	class="btn btn-lg btn-primary btn-block">Entrar</button>
-							</fieldset>
-						</form>
-					</div>
-				</div>
+                    <div class="panel-body">
+                        <form role="form" wicket:id="loginForm">
+                            <fieldset>
+                                <div class="form-group">
+                                	<input wicket:id="login" class="form-control" placeholder="Login" name="login" type="text"/>
+                                </div>
+                                <div class="form-group">
+                                    <input wicket:id="senha" class="form-control" placeholder="Senha" name="senha" type="password" value="">
+                                </div>
+                                <div wicket:id="feedback"></div>
+                                <button type="submit" wicket:id="botaoSalvar"	class="btn btn-lg btn-primary btn-block">Entrar</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-			</div>
-		</div>
-	</div>
-
-	<!-- Core Scripts - Include with every page -->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-	
-	<!-- SB Admin Scripts - Include with every page -->
-	<script src="js/sb-admin.js"></script>
-
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="dist/js/sb-admin-2.js"></script>
 </body>
 
 </html>

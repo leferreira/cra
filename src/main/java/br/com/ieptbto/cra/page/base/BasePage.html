@@ -2,63 +2,43 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 	<wicket:extend>
-		<div id="wrapper">
-			<nav class="navbar navbar-default navbar-fixed-top" role="navigation"
-				style="margin-bottom: 0;">
-				<div class=" ">
-					<button type="button" class="navbar-toggle" data-toggle="collapse"
-						data-target=".sidebar-collapse">
-						<span class="sr-only">Toggle navigation</span> <span
-							class="icon-bar">teste</span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
-					</button>
-					<a href="HomePage"><img style="padding: 10px;"
-						class="col-md-2 logo" alt="logo" src="img/logo_cabecalho.jpg" /> 
-						<label class="ola"></label>
-					</a> 
-						
-					<ul class="nav navbar-top-links navbar-right">
-						<li class="dropdown">
-		                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true" style=" width: 240px;">
-		                        <i class="fa fa-user fa-fw"></i>
-		                        &nbsp;<label wicket:id="userGreeting">Nome</label>&nbsp;
-		                        <i class="fa fa-caret-down" style="float: right;"></i>
-		                    </a>
-		                    <ul class="dropdown-menu dropdown-user" style="top: 80%;  width: 100%;">
-		                        <li><span class="row" wicket:id="trocaSenhaPanel"></span></li>
-								<li class="divider"></li>
-								<li><a href="#"><i class="fa fa-user fa-fw"></i> Perfil</a></li>
-								<li><a wicket:id="url_logout"><i class="fa fa-sign-out fa-fw"></i>Sair</a></li>
-		                    </ul>
-		                    <!-- /.dropdown-user -->
-		                </li>
-					</ul>
-				</div>
-			</nav>
-			<div class="row" wicket:id="menu" ></div>
-
-			<!-- 		CONTEUDO	 -->
-			<div id="page-wrapper">
-				<div class="container-fluid">
-					<div class="row" style="min-height: 640px;">
-						<div class="col-lg-12" style="margin-top: 5%; ">
-							<span wicket:id="feedback">Mensagens de erros e etc</span>
-							<div class="row" align="center" style="zoom: 0.9;">
-								<wicket:child>Aqui vai o conteudo da pagina.</wicket:child>
-							</div>
-						</div>
-					</div>
-				</div>
-				<br style="clear: both;"/>
-			</div>
-		</div>
-		<footer style="margin-top: -40px !important;">
-			<div class="col-lg-12" style="  text-align: center; color: #f8f8f8; background-color: #337AB7;  padding-bottom: 2%;">
-				<span style="color: #f8f8f8; font-weight: italic;">Copyright © 2015 IEPTB-TO. Todos os Direitos Reservados.<br/>
-						<b style="font-size: 16px; ">Desenvolvido por IEPTB-TOCANTINS</b>
-				</span>
-			</div>
-		</footer>
+		<nav class="navbar navbar-default navbar-static-top">
+	     	<div class="container-fluid">
+			    <div class="navbar-header">
+			      <a class="navbar-brand" href="HomePage" style="padding: 1px 15px;">
+		          	<img alt="logo" src="img/logo_cabecalho.jpg" width="150"/> 
+				  </a>
+			    </div>
+			
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+   			      <div class="row" wicket:id="menu" ></div>
+			      
+			      <ul class="nav navbar-nav navbar-right">
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+			          	<i class="fa fa-user fa-fw"></i>&nbsp;<label wicket:id="userGreeting">[USUARIO]</label>&nbsp;<span class="caret"></span>
+			          </a>
+			          <ul class="dropdown-menu">
+			            <li><span class="row" wicket:id="trocaSenhaPanel"></span></li>
+			            <li role="separator" class="divider"></li>
+			            <li><a wicket:id="url_logout"><i class="fa fa-sign-out fa-fw"></i>Sair</a></li>
+			          </ul>
+			        </li>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+	    </nav>
+    	<!--	CONTEUDO	 -->
+		<div class="col-lg-12" id="page-wrapper">
+			<span wicket:id="feedback">Mensagens de erros e etc</span>
+			<wicket:child>[CONTEUDO]</wicket:child>
+			<br style="clear: both;"/>
+		</div> 
+<!-- 		<div class="col-lg-12" style="text-align: center; color: #f8f8f8; background-color: #337AB7;  padding-bottom: 1%;"> -->
+<!-- 			<span style="color: #f8f8f8; font-weight: italic;"><b>CRA - Central de Remessa de Arquivos</b> - Vers&atilde;o: 2.0<br/> -->
+<!-- 					<b style="font-size: 14px; ">Desenvolvido por IEPTB-TO</b>  -->
+<!-- 			</span> -->
+<!-- 		</div> -->
 	</wicket:extend>
 </body>
 </html>

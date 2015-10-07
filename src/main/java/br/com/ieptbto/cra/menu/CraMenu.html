@@ -1,80 +1,51 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 	<wicket:panel>
-		<!-- MENU  -->
-		<div class="navbar-default sidebar" role="navigation" wicket:id="CraMenu" style="zoom: 0.93;">
-			<div class="sidebar-nav navbar-collapse" wicket:id="menuLateral">
-				<div class="nav">
-				<ul class="nav" id="side-menu">
-					<li class="dropdown-submenu">
-						<a href="EnviarArquivo" wicket:id="EnviarArquivo" class="link-icones">
-							<span class="glyphicon glyphicon-file fa-3x" ></span>
-							<br><span class="font-menu">Enviar Arquivo</span>
-						</a> 
-					</li>
-					<li class="dropdown-submenu">
-						<a href="#" class="link-icones">
-							<span class="glyphicon glyphicon-align-left fa-3x" ></span>
-							<br><span class="font-menu">Consultas</span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="BuscarArquivo" wicket:id="BuscarArquivo" class="font-menu">Buscar Arquivos</a></li>
-							<li><a wicket:id="MonitorarTitulos" href="MonitorarTitulos" class="font-menu">Buscar T&iacute;tulos</a></li>
-							<li><a wicket:id="ArquivosCancelamentoDevolvidoPage" href="ArquivosCancelamentoDevolvidoPage" class="font-menu">Buscar Cancelamentos<br>e Devolu&ccedil;&otilde;es</a></li>
-						</ul>
-					</li>
-
-					<li class="dropdown-submenu">
-						<a href="#" class="link-icones">
-							<span class="glyphicon glyphicon-list-alt fa-3x" ></span>
-							<br><span class="font-menu">Relat&oacute;rios</span>
-						</a>
-						<ul class="dropdown-menu" style="font-size: 16px;">
-<!-- 							<li><a href="RelatorioSintetico" wicket:id="RelatorioSintetico" class="font-menu">Sint&eacute;ticos de Arquivos</a></li> -->
-							<li><a href="RelatorioArquivosTitulos" wicket:id="RelatorioArquivosTitulos" class="font-menu">Anal&iacute;tico de T&iacute;tulos</a></li>
-						</ul>
-					</li>
-					<li class="dropdown-submenu">
-						<a href="#" class="link-icones">
-						 	<span class="fa fa-envelope-o fa-3x" ></span> 
-						 	<br><span class="font-menu">Instrumento<br>de Protesto</span>
-						 </a>
-						 <ul class="dropdown-menu" style="font-size: 16px;">
-							<li><a href="InstrumentoDeProtesto" wicket:id="InstrumentoDeProtesto" class="font-menu">Entrada de Instrumentos</a></li>
-							<li><a href="BuscarInstrumentoProtesto" wicket:id="BuscarInstrumentoProtesto" class="font-menu">Consultar SLIPS</a></li>
-							<li><a href="LiberarEnvelopes" wicket:id="LiberarEnvelopes" class="font-menu">Liberar Envelopes</a></li>
-							<li><a href="ImportarArquivoDePara" wicket:id="ImportarArquivoDePara" class="font-menu">Importar De/Para</a></li>
-						</ul>
-					</li>
-					<li class="dropdown-submenu">
-						<a href="#" class="link-icones">
-						 	<span class="fa-3x" style="font-style: italic;">CRA</span> 
-						 	<br><span class="font-menu">Central de Remessa<br>de Arquivos</span>
-						</a>
-						<ul class="dropdown-menu" style="font-size: 16px;">
-							<li><a wicket:id="Batimento" href="Batimento" class="font-menu">Batimento</a></li>
-							<li><a wicket:id="RemessasConvenio" href="RemessasConvenio" class="font-menu">Remessas Conv&ecirc;nios</a></li>
-							<li><a wicket:id="ConfirmacaoPage" href="ConfirmacaoPage" class="font-menu">Gerar Confirma&ccedil;&otilde;es</a></li>
-							<li><a wicket:id="RetornoPage" href="RetornoPage" class="font-menu">Gerar Retornos</a></li>
-						</ul>
-					</li>
-					<li class="dropdown-submenu">
-						<a href="#" class="link-icones">
-						 	<span class="fa fa-gear fa-3x" ></span>
-								<br><span class="font-menu">Administra&ccedil;&atilde;o</span>
-						</a>
-						<ul class="dropdown-menu menu-bottom" style="font-size: 16px;">
-<!-- 							<li><a wicket:id="TipoArquivoPage" href="TipoArquivoPage">Tipos de Arquivo</a></li> -->
-							<li><a href="InstituicoesPage" wicket:id="InstituicoesPage" class="font-menu">Bancos e Conv&egrave;nios</a></li>
-							<li><a wicket:id="CartoriosPage" href="CartoriosPage" class="font-menu">Cart&oacute;rios de Protesto</a></li>
-							<li><a wicket:id="FiliadosPage" href="FiliadosPage" class="font-menu">Empresas Associadas</a></li>
-							<li><a href="MunicipiosPage" wicket:id="MunicipiosPage" class="font-menu">Munic&iacute;pios</a></li>
-							<li><a href="TipoInstituicoesPage" wicket:id="TipoInstituicoesPage" class="font-menu">Tipo de Institui&ccedil;&otilde;es</a></li>
-							<li><a href="UsuariosPage" wicket:id="UsuariosPage" class="font-menu">Usu&aacute;rios</a></li>
-						</ul>
-					</li>
-				</ul>
-			</div>
+		<div wicket:id="CraMenu">
+			<div wicket:id="menuLateral">
+			 <ul class="nav navbar-nav">
+		        <li class="active"><a href="HomePage" >In&iacute;cio <span class="sr-only"></span></a></li>
+		        <li><a href="EnviarArquivo" wicket:id="EnviarArquivo" >Enviar Arquivo</a></li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Buscar Arquivos<span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+		            <li><a href="BuscarArquivo" wicket:id="BuscarArquivo">Buscar B, C e R</a></li>
+					<li><a wicket:id="ArquivosCancelamentoDevolvidoPage" href="ArquivosCancelamentoDevolvidoPage">Buscar Cancelamentos<br>e Devolu&ccedil;&otilde;es</a></li>
+				  </ul>
+		        </li>
+		        <li><a wicket:id="MonitorarTitulos" href="MonitorarTitulos" >Buscar T&iacute;tulos</a></li>
+		      	<li class="dropdown">
+		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relat&oacute;rios<span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+				 	<li><a href="RelatorioArquivosTitulos" wicket:id="RelatorioArquivosTitulos" class="font-menu">Anal&iacute;tico de T&iacute;tulos</a></li>
+				  </ul>
+		        </li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Instrumento de Protesto<span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+				 	<li><a href="InstrumentoDeProtesto" wicket:id="InstrumentoDeProtesto" class="font-menu">Entrada de Instrumentos</a></li>
+					<li><a href="BuscarInstrumentoProtesto" wicket:id="BuscarInstrumentoProtesto" class="font-menu">Consultar SLIPS</a></li>
+					<li><a href="LiberarEnvelopes" wicket:id="LiberarEnvelopes" class="font-menu">Liberar Envelopes</a></li>
+					<li><a href="ImportarArquivoDePara" wicket:id="ImportarArquivoDePara" class="font-menu">Importar De/Para</a></li>
+				  </ul>
+		        </li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administra&ccedil;&atilde;o<span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+				 	<li><a wicket:id="Batimento" href="Batimento" class="font-menu">Batimento</a></li>
+					<li><a wicket:id="RemessasConvenio" href="RemessasConvenio" class="font-menu">Remessas Conv&ecirc;nios</a></li>
+					<li><a wicket:id="ConfirmacaoPage" href="ConfirmacaoPage" class="font-menu">Gerar Confirma&ccedil;&otilde;es</a></li>
+					<li><a wicket:id="RetornoPage" href="RetornoPage" class="font-menu">Gerar Retornos</a></li>
+				  	<li role="separator" class="divider"></li>
+				  	<li><a href="InstituicoesPage" wicket:id="InstituicoesPage" class="font-menu">Bancos e Conv&egrave;nios</a></li>
+					<li><a wicket:id="CartoriosPage" href="CartoriosPage" class="font-menu">Cart&oacute;rios de Protesto</a></li>
+					<li><a wicket:id="FiliadosPage" href="FiliadosPage" class="font-menu">Empresas Associadas</a></li>
+					<li><a href="MunicipiosPage" wicket:id="MunicipiosPage" class="font-menu">Munic&iacute;pios</a></li>
+					<li><a href="TipoInstituicoesPage" wicket:id="TipoInstituicoesPage" class="font-menu">Tipo de Institui&ccedil;&otilde;es</a></li>
+					<li><a href="UsuariosPage" wicket:id="UsuariosPage" class="font-menu">Usu&aacute;rios</a></li>
+				  </ul>
+		        </li>
+		      </ul>
 			</div>
 		</div>
 	</wicket:panel>

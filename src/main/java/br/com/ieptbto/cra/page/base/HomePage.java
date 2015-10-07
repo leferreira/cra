@@ -47,7 +47,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	private Usuario usuario;
-	private Arquivo confirmacoesPendentes;
+	private Arquivo arquivo;
 
 	public HomePage() {
 		super();
@@ -56,28 +56,44 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	private void carregarHomePage() {
 		this.usuario = getUser();
-		this.confirmacoesPendentes = remessaMediator.confirmacoesPendentes(getUsuario().getInstituicao());
+		this.arquivo = remessaMediator.confirmacoesPendentes(getUsuario().getInstituicao());
 		labelArquivosPendentes();
+		labelOrigemDestino();
+		add(linkConfirmacoesPendentes());
+		add(linkCancelamentosPendentes());
+		
 		add(listaConfirmacoesPendentes());
-		add(listaArquivosConfirmacoesPendentes());
-		add(listaConfirmacoesPendentesDesistenciaProtesto());
+		add(listaDesistenciaCancelamentoPendentes());
 	}
 
 	private void labelArquivosPendentes() {
-		if (!getConfirmacoesPendentes().isEmpty()) {
-			warn("Você tem [ "+ getConfirmacoesPendentes().size() +" ] arquivo(s) pendentes");
+		if (!getConfirmacoesPendentes().isEmpty() || !getDesistenciaCancelamentoPendentes().isEmpty()) {
+			Integer totalPendentes = getConfirmacoesPendentes().size() + getDesistenciaCancelamentoPendentes().size(); 
+			warn("Você tem [ "+ totalPendentes +" ] arquivo(s) pendentes");
+		}
+	}
+	
+	private void labelOrigemDestino() {
+		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
+				getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+			add(new Label("labelRemessas", "DESTINO"));
+			add(new Label("labelCancelamentos", "DESTINO"));
+		} else {
+			add(new Label("labelRemessas", "ORIGEM"));
+			add(new Label("labelCancelamentos", "ORIGEM"));
 		}
 	}
 
-	private Link<Remessa> listaArquivosConfirmacoesPendentes() {
+	private Link<Remessa> linkConfirmacoesPendentes() {
 		return new Link<Remessa>("arquivosConfirmacoesPendetes") {
 
 			@Override
 			public void onClick() {
-				setResponsePage(new ListaArquivosPendentesPage(confirmacoesPendentes));
+				setResponsePage(new ListaArquivosPendentesPage(getUser(), getConfirmacoesPendentes()));
 			}
 		};
 	}
+	
 
 	private ListView<Remessa> listaConfirmacoesPendentes() {
 		return new ListView<Remessa>("listConfirmacoes", getConfirmacoesPendentes()) {
@@ -85,8 +101,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
-				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().getConstante()));
-				
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					@Override
@@ -124,13 +138,22 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		};
 	}
 
-	private ListView<DesistenciaProtesto> listaConfirmacoesPendentesDesistenciaProtesto() {
-		return new ListView<DesistenciaProtesto>("listDesistencias", getConfirmacoesPendentesDesistenciaProtesto()) {
+	private Link<DesistenciaProtesto> linkCancelamentosPendentes() {
+		return new Link<DesistenciaProtesto>("arquivosCancelamentosPendetes") {
+			
+			@Override
+			public void onClick() {
+				setResponsePage(new ListaArquivosPendentesPage(getDesistenciaCancelamentoPendentes()));
+			}
+		};
+	}
+
+	private ListView<DesistenciaProtesto> listaDesistenciaCancelamentoPendentes() {
+		return new ListView<DesistenciaProtesto>("listDesistencias", getDesistenciaCancelamentoPendentes()) {
 
 			@Override
 			protected void populateItem(ListItem<DesistenciaProtesto> item) {
 				final DesistenciaProtesto remessa = item.getModelObject();
-				item.add(new Label("tipoArquivo", remessa.getRemessaDesistenciaProtesto().getArquivo().getTipoArquivo().getTipoArquivo().getConstante()));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					@Override
@@ -168,8 +191,12 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		};
 	}
 	
-	private List<DesistenciaProtesto> getConfirmacoesPendentesDesistenciaProtesto() {
-		return confirmacoesPendentes.getRemessaDesistenciaProtesto().getDesistenciaProtesto();
+	private List<DesistenciaProtesto> getDesistenciaCancelamentoPendentes() {
+		return arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto();
+	}
+	
+	private List<Remessa> getConfirmacoesPendentes() {
+		return arquivo.getRemessas();
 	}
 
 	public HomePage(PageParameters parameters) {
@@ -188,8 +215,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		return usuario;
 	}
 
-	public List<Remessa> getConfirmacoesPendentes() {
-		return confirmacoesPendentes.getRemessas();
+	public Arquivo getArquivo() {
+		return arquivo;
 	}
 
 	@Override

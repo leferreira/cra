@@ -66,7 +66,8 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
-				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().getConstante()));
+				item.add(downloadArquivoTXT(remessa));
+				item.add(relatorioArquivo(remessa));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					@Override
@@ -77,14 +78,20 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				linkArquivo.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
-				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
+				
+				if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
+					item.add(new Label("instituicao", remessa.getInstituicaoOrigem().getNomeFantasia()));
+					item.add(new Label("envio", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
+					item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
+				} else {
+					item.add(new Label("instituicao", remessa.getInstituicaoDestino().getNomeFantasia()));
+					item.add(new Label("envio", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+					item.add(new Label("destino", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
+				}
+				
 				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
-				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa()
-				        .getLabel()));
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(remessa.getArquivo().getHoraEnvio())));
-				item.add(downloadArquivoTXT(remessa));
-				item.add(relatorioArquivo(remessa));
+				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa().getLabel()));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {

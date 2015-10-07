@@ -51,28 +51,30 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 	InstituicaoMediator instituicaoMediator;
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
+	private List<DesistenciaProtesto> desistenciasCancelamento;
+	
+	public ListaArquivosPendentesPage(Usuario user, List<Remessa> remessas) {
+		this.arquivo = new Arquivo();
+		this.remessas = remessas;
+		add(carregarListaArquivos());
+		add(carregarListaArquivosDesistenciaProtesto());
+	}
+	
+	public ListaArquivosPendentesPage(List<DesistenciaProtesto> confirmacoesPendentesDesistenciaProtesto) {
+		this.arquivo = new Arquivo();
+		this.desistenciasCancelamento = confirmacoesPendentesDesistenciaProtesto;
+		add(carregarListaArquivos());
+		add(carregarListaArquivosDesistenciaProtesto());
+	}
 
-	public ListaArquivosPendentesPage(Usuario usuario) {
-		this.arquivo = remessaMediator.confirmacoesPendentes(usuario.getInstituicao());
-		this.remessas = this.arquivo.getRemessas();
-		add(carregarListaArquivos());
-		add(carregarListaArquivosDesistenciaProtesto());
-	}
-	
-	public ListaArquivosPendentesPage(Arquivo arquivo) {
-		this.arquivo = arquivo;
-		this.remessas = arquivo.getRemessas();
-		add(carregarListaArquivos());
-		add(carregarListaArquivosDesistenciaProtesto());
-	}
-	
 	private ListView<Remessa> carregarListaArquivos() {
 		return new ListView<Remessa>("dataTableRemessa", getRemessas()) {
 
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
-				item.add(new Label("tipoArquivo", remessa.getArquivo().getTipoArquivo().getTipoArquivo().getConstante()));
+				item.add(downloadArquivoTXT(remessa));
+				item.add(relatorioArquivo(remessa));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					@Override
@@ -83,14 +85,20 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 				linkArquivo.add(new Label("nomeArquivo", remessa.getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
-				item.add(new Label("instituicao", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
+				
+				if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
+					item.add(new Label("instituicao", remessa.getInstituicaoOrigem().getNomeFantasia()));
+					item.add(new Label("envio", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
+					item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
+				} else {
+					item.add(new Label("instituicao", remessa.getInstituicaoDestino().getNomeFantasia()));
+					item.add(new Label("envio", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+					item.add(new Label("destino", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
+				}
+				
 				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
-				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa()
-				        .getLabel()));
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(remessa.getArquivo().getHoraEnvio())));
-				item.add(downloadArquivoTXT(remessa));
-				item.add(relatorioArquivo(remessa));
+				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa().getLabel()));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
@@ -145,14 +153,12 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 	}
 
 	private ListView<DesistenciaProtesto> carregarListaArquivosDesistenciaProtesto() {
-		return new ListView<DesistenciaProtesto>("dataTableDesistencia", getRemessasDesistenciaProtesto()) {
+		return new ListView<DesistenciaProtesto>("dataTableDesistencia", getDesistenciasCancelamento()) {
 
 			@Override
 			protected void populateItem(ListItem<DesistenciaProtesto> item) {
 				final DesistenciaProtesto desistenciaProtesto = item.getModelObject();
-				item.add(new Label("tipoArquivo", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getTipoArquivo()
-				        .getTipoArquivo().constante));
-
+				item.add(downloadArquivoTXT(desistenciaProtesto));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					@Override
@@ -165,14 +171,17 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 				item.add(linkArquivo);
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(desistenciaProtesto.getRemessaDesistenciaProtesto()
 				        .getCabecalho().getDataMovimento())));
-				item.add(new Label("instituicao", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio()
-				        .getNomeFantasia()));
+				
+				item.add(new Label("instituicao", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("envio", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoRecebe().getNomeFantasia()));
 				item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
+				
+				
+				
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio())));
 				item.add(new Label("status", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getStatusArquivo()
 				        .getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(desistenciaProtesto.getRemessaDesistenciaProtesto()
 				        .getArquivo().getStatusArquivo().getSituacaoArquivo().getLabel()));
-				item.add(downloadArquivoTXT(desistenciaProtesto));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto desistenciaProtesto) {
@@ -191,15 +200,23 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 		};
 	}
 
-	private List<DesistenciaProtesto> getRemessasDesistenciaProtesto() {
-		if (arquivo.getRemessaDesistenciaProtesto() == null) {
-			return new ArrayList<DesistenciaProtesto>();
+	public List<Remessa> getRemessas() {
+		if (remessas == null) {
+			remessas = new ArrayList<Remessa>();
 		}
-		return this.arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto();
+		return remessas;
 	}
 
-	public List<Remessa> getRemessas() {
-		return remessas;
+	public List<DesistenciaProtesto> getDesistenciasCancelamento() {
+		if (desistenciasCancelamento == null) {
+			desistenciasCancelamento = new ArrayList<DesistenciaProtesto>();
+		}
+		return desistenciasCancelamento;
+	}
+
+	public void setDesistenciasCancelamento(
+			List<DesistenciaProtesto> desistenciasCancelamento) {
+		this.desistenciasCancelamento = desistenciasCancelamento;
 	}
 
 	@Override

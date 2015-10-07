@@ -23,7 +23,9 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -74,25 +76,51 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 			protected void populateItem(ListItem<TituloRemessa> item) {
 				final TituloRemessa tituloLista = item.getModelObject();
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					public void onClick() {
+		            	setResponsePage(new TitulosArquivoPage(tituloLista.getRemessa()));  
+		            }
+		        };
+		        linkArquivo.add(new Label("nomeRemessa", tituloLista.getRemessa().getArquivo().getNomeArquivo()));
+		        item.add(linkArquivo);
+		        
+				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
 				if (tituloLista.getConfirmacao() != null) {
+					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getDataRecebimento())));
 					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
-				} else if (tituloLista.getRetorno() != null) {
-					item.add(new Label("protocolo", tituloLista.getRetorno().getNumeroProtocoloCartorio()));
 				} else { 
+					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 				}
-				
+				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));
 		            }
 		        };
-		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
+		        if (tituloLista.getNomeDevedor().length() > 25) {
+		        	linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor().substring(0, 24)));
+		        }else {
+		        	linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
+		        }
 		        item.add(linkHistorico);
-				item.add(new Label("praca", tituloLista.getPracaProtesto()));
-				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
+		        Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno") {
+		        	
+		        	public void onClick() {
+		        		setResponsePage(new TitulosArquivoPage(tituloLista.getRetorno().getRemessa()));  
+		        	}
+		        };
+		        if (tituloLista.getRetorno() != null){
+	        		linkRetorno.add(new Label("retorno", tituloLista.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
+	        		item.add(linkRetorno);
+	        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getRetorno().getDataOcorrencia())));
+		        } else {
+		        	linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
+	        		item.add(linkRetorno);
+		        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getDataOcorrencia())));
+		        }
 				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
 			}
 		};
@@ -156,7 +184,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	}
 
 	private Label instituicaoEnvio(){
-		return new Label("instituicaoEnvio", getRemessa().getInstituicaoOrigem().getNomeFantasia());
+		return new Label("instituicaoEnvio", getRemessa().getArquivo().getInstituicaoEnvio().getNomeFantasia());
 	}
 	
 	private Label instituicaoDestino(){
