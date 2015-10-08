@@ -28,6 +28,10 @@ body {
 	color: #337AB7;
 }
 
+.fa-4x {
+    font-size: 4.6em;
+}
+
 .navbar-nav > li > .dropdown-menu{
 	background-color: #F8F8F8;
 }
