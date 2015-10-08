@@ -17,28 +17,30 @@
 					<table id="table" class="table table-responsive table-striped table-hover" style="font-size: 15px;">
 						<thead>
 							<tr>
-								<th class="col-center">TIPO</th>
 								<th class="col-center">BAIXAR</th>
-								<th class="col-center">NOME DO ARQUIVO</th>
-								<th class="col-center">DATA ENVIO</th>
+								<th>INSTITUIÇÃO</th>
+								<th class="col-center">ARQUIVO</th>
+								<th class="col-center">DATA</th>
 								<th class="col-center">HORA</th>
-								<th >ENVIADO POR</th>
-								<th >DESTINO</th>
-								<th class="col-center"></th>
+								<th>ENVIADO POR</th>
+								<th>DESTINO</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr wicket:id="dataTableRemessa">
-								<td class="col-center" wicket:id="tipoArquivo"></td>
-								<td class="col-center">
-									<a href="#" class="link" wicket:id="downloadArquivo"><img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg"></a>
+								<td class="col-center" style="width: 75px !important;">
+									<a href="#" class="link" wicket:id="downloadArquivo">
+										<img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg">
+									</a>
 								</td>
-								<td class="col-center"><a target="_blank"><span class="link" wicket:id="nomeArquivo"></span></a></td>
+								<td wicket:id="instituicao"></td>
+								<td class="col-center"><a target="_blank" wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
 								<td class="col-center" wicket:id="dataEnvio"></td>
 								<td class="col-center" wicket:id="horaEnvio"></td>
-								<td wicket:id="instituicao"></td>
-								<td wicket:id="destino"></td> 
-								<td class="col-center"> <span wicket:id="status"></span></td>
+								<td wicket:id="envio"></td>
+								<td wicket:id="destino"></td>
+								<td class="col-center"><span wicket:id="status"></span></td>
 							</tr>
 						</tbody>
 					</table>

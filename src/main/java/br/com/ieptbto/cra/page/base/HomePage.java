@@ -17,6 +17,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Arquivo;
@@ -29,6 +30,7 @@ import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPendentesPage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
 
 /**
@@ -57,6 +59,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private void carregarHomePage() {
 		this.usuario = getUser();
 		this.arquivo = remessaMediator.confirmacoesPendentes(getUsuario().getInstituicao());
+		labelDataHoje();
 		labelArquivosPendentes();
 		labelOrigemDestino();
 		add(linkConfirmacoesPendentes());
@@ -64,6 +67,10 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		
 		add(listaConfirmacoesPendentes());
 		add(listaDesistenciaCancelamentoPendentes());
+	}
+
+	private void labelDataHoje() {
+		add(new Label("dataHoje", DataUtil.localDateToString(new LocalDate())));
 	}
 
 	private void labelArquivosPendentes() {

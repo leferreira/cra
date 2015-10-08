@@ -1,7 +1,6 @@
 body {
     font-family: Lato,sans-serif;
     font-size: 13.3px;
-    /*background-color: #F8F8F8;*/
     background-color: #337AB7;
 }
 
@@ -10,20 +9,17 @@ body {
 }
  
  .navbar-nav{
- 	font-size: 15px;
+ 	font-size: 14px;
  }
  
 #page-wrapper{
 	zoom: 0.95;
 	width: 100%;
-    /**background-color: #FFF;*/
-    background-color: ##fdfdfd;
-    /*background-color: #337AB7;*/
+    background-color: #fdfdfd;
     margin: 0 auto;
     position: absolute;
-    min-height: 85%;
+    min-height: 83%;
 }
-/**style="zoom: 0.9; min-height: 550px; background-color: #fff; width: 98%; margin: 0 auto;"**/
 .navbar-default .navbar-nav>li>a{
 	color: #337AB7;
 }
@@ -40,16 +36,18 @@ body {
 	color: #337AB7;
 }
 
-.panel-body{
-	/*background-color: #F8F8F8;*/
-	background-color: ##fdfdfd;
+.footer-cra{
+	text-align: center;
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
 
-.footer {
-	position: absolute;
-	bottom:0;
-	width:100%;
-	padding-top: 2%;
+.navbar-right{
+    width: 205px;
+}
+
+.panel-body{
+	background-color: #fdfdfd;
 }
 
 .col-10{
@@ -200,6 +198,7 @@ legend{
 	border: 1px solid transparent;
 	border-radius: 4px;
 	list-style: none;
+    margin-bottom: 5px;
 }
 
 .feedbackPanelINFO {
@@ -211,6 +210,7 @@ legend{
 	border: 1px solid transparent;
 	border-radius: 4px;
 	list-style: none;
+   	margin-bottom: 5px;
 }
 
 .feedbackPanelERROR{
@@ -222,6 +222,7 @@ legend{
     border: 1px solid transparent;
     border-radius: 4px;
     list-style: none;
+    margin-bottom: 5px;
 }
 
 #Aguardando{
@@ -232,7 +233,7 @@ legend{
     font-size: 10px;
     width: 100%;
 }
-#Recebido{
+#Baixado{
     background: #4480B3 none repeat scroll 0% 0%;
     color: #FFF;
     font-weight: bold;

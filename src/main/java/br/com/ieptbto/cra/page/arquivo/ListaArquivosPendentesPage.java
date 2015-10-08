@@ -27,7 +27,9 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
@@ -98,6 +100,7 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 				
 				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(remessa.getArquivo().getHoraEnvio())));
+				System.out.println(remessa.getId());
 				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa().getLabel()));
 			}
 
@@ -175,13 +178,8 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 				item.add(new Label("instituicao", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("envio", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoRecebe().getNomeFantasia()));
 				item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
-				
-				
-				
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio())));
-				item.add(new Label("status", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getStatusArquivo()
-				        .getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(desistenciaProtesto.getRemessaDesistenciaProtesto()
-				        .getArquivo().getStatusArquivo().getSituacaoArquivo().getLabel()));
+				item.add(new Label("status", verificaDownload(desistenciaProtesto).getLabel().toUpperCase()).setMarkupId(verificaDownload(desistenciaProtesto).getLabel()));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto desistenciaProtesto) {
@@ -196,6 +194,16 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
 					}
 				};
+			}
+			
+			private StatusRemessa verificaDownload(DesistenciaProtesto desistencia) {
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					return StatusRemessa.ENVIADO;
+				}
+				if (desistencia.getDownload().equals(false)) {
+					return StatusRemessa.AGUARDANDO;
+				}
+				return StatusRemessa.RECEBIDO;
 			}
 		};
 	}

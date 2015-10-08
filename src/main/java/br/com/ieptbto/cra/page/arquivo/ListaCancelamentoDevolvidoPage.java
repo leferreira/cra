@@ -22,6 +22,7 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -52,14 +53,21 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 			@Override
 			protected void populateItem(ListItem<DesistenciaProtesto> item) {
 				final DesistenciaProtesto desistencia = item.getModelObject();
-				item.add(new Label("tipoArquivo", desistencia.getRemessaDesistenciaProtesto().getArquivo().getTipoArquivo().getTipoArquivo().constante));
-				item.add(new Label("nomeArquivo", desistencia.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
-				item.add(new Label("dataEnvio", DataUtil.localDateToString(desistencia.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio())));
-				item.add(new Label("horaEnvio", DataUtil.localTimeToString(desistencia.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio())));
-				item.add(new Label("instituicao", desistencia.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(desistencia.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
-				item.add(new Label("status", verificaDownload(desistencia).getLabel().toUpperCase()).setMarkupId(verificaDownload(desistencia).getLabel()));
 				item.add(downloadArquivoTXT(desistencia));
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					@Override
+					public void onClick() {
+					}
+				};
+				linkArquivo.add(new Label("nomeArquivo", desistencia.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+				item.add(linkArquivo);
+				item.add(new Label("dataEnvio", DataUtil.localDateToString(desistencia.getRemessaDesistenciaProtesto().getCabecalho().getDataMovimento())));
+				item.add(new Label("instituicao", desistencia.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("envio", desistencia.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoRecebe().getNomeFantasia()));
+				item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(desistencia.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
+				item.add(new Label("horaEnvio", DataUtil.localTimeToString(desistencia.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio())));
+				item.add(new Label("status", verificaDownload(desistencia).getLabel().toUpperCase()).setMarkupId(verificaDownload(desistencia).getLabel()));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto remessa) {
@@ -77,6 +85,9 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 			}
 			
 			private StatusRemessa verificaDownload(DesistenciaProtesto desistencia) {
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					return StatusRemessa.ENVIADO;
+				}
 				if (desistencia.getDownload().equals(false)) {
 					return StatusRemessa.AGUARDANDO;
 				}

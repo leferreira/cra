@@ -14,25 +14,25 @@
 					</span>
 					</h4>
 					<br style="clear: both;"/>
-					<table id="table" class="table table-striped table-hover" style="font-size: 15px;">
+					<table id="table" class="table table-striped table-hover" style="font-size: 14px;">
 						<thead>
 							<tr>
 								<th>CARTÓRIO</th>
 								<th>MUNICÍPIO/COMARCA</th>
-								<th class="col-center" style="width: 90px;">CÓDIGO</th>
+								<th class="col-center">CÓDIGO</th>
 								<th>RESPONSÁVEL</th>
 								<th>CONTATO</th>
-								<th class="col-center" style="width: 60px">ATIVO</th>
+								<th class="col-center">ATIVO</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr wicket:id="listViewCartorio">
 								<td ><a wicket:id="linkAlterar"><span title="Clique para alterar!" class="link" wicket:id="nomeFantasia"></span></a></td>
 								<td wicket:id="municipio"></td>
-								<td class="col-center" wicket:id="codigoCartorio"></td>
+								<td class="col-center" style="width: 90px;" wicket:id="codigoCartorio"></td>
 								<td wicket:id="responsavel"></td>
 								<td wicket:id="contato"></td>
-								<td class="col-center" wicket:id="situacao"></td>
+								<td class="col-center" style="width: 60px" wicket:id="situacao"></td>
 							</tr>
 						</tbody>
 					</table>
