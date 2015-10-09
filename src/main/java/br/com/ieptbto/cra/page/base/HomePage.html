@@ -2,6 +2,7 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 	<body>
 		<wicket:extend>
+			<br style="clear: both;">
 			<div class="col-md-12" style="zoom: 0.93;">
 				<div class="row">
 	                <div class="col-20 col-md-6">
@@ -111,9 +112,9 @@
 	                </div>
             	</div>
 				<div class="col-40 col-md-6" style="padding-right: 1%; padding-left: 0px;">
-					<div class="panel panel-primary">
-                        <div class="panel-heading cabecalho-painel">
-	                       REMESSAS PENDENTES
+					<div class="panel panel-primary"> 
+                        <div class="panel-heading cabecalho-painel"> 
+	                       REMESSAS PENDENTES&nbsp;&nbsp;<button type="button" class="btn btn-danger btn-small" style="padding: 5px 10px;"><span wicket:id="qtdRemessas"></span></button>
 	                       <a href="#" wicket:id="arquivosConfirmacoesPendetes" target="_blank" style="font-size: 13px; color: #fff; font-weight: bolder;" class="pull-right">VER ARQUIVOS&nbsp;<span class="glyphicon glyphicon-share-alt"></span>&nbsp;</a>
                         </div> 
                         <div class="panel-body" style="padding: 0px;">
@@ -152,9 +153,9 @@
                     </div>
 				</div>
 				<div class="col-40 col-md-6" style="padding-right: 0.3%;">
-					<div class="panel panel-primary">
+					<div class="panel panel-primary"> 
                         <div class="panel-heading cabecalho-painel">
-		                	DEVOLU&Ccedil;&Otilde;ES E CANCELAMENTOS PENDENTES
+		                	DEVOLU&Ccedil;&Otilde;ES E CANCELAMENTOS PENDENTES&nbsp;&nbsp;<button type="button" class="btn btn-danger btn-small" style="padding: 5px 10px;"><span wicket:id="qtdCancelamentos"></span></button>
 		                	<a href="#" wicket:id="arquivosCancelamentosPendetes" target="_blank" style="font-size: 13px; color: #fff; font-weight: bolder;" class="pull-right">VER ARQUIVOS&nbsp;<span class="glyphicon glyphicon-share-alt"></span>&nbsp;</a>
                         </div>
                         <div class="panel-body" style="padding: 0px;">
@@ -197,13 +198,46 @@
                         <div class="panel-heading cabecalho-painel">
 	                        INFORMA&Ccedil;&Otilde;ES
                         </div>
-                        <div class="panel-body" style="height: 280px;">
-                            <div class="chat-body clearfix">
-                                <p class="mensagem-feed">
-                                	Seja bem-vindo(a) a CRA!<br>
-                                    <small class=" text-muted"><i class="fa fa-calendar fa-fw"></i><span wicket:id="dataHoje">[data]</span></small><br>
-                                </p>
-                            </div>
+                        <div class="panel-body" style="height: 290px; padding: 5px;">
+                       		 <ul class="chat">
+                                <li class="clearfix">
+                                    <div class="chat-body clearfix">
+		                            	<p class="mensagem-feed">
+		                                	<i class="fa fa-exclamation-circle" style="color: red;"></i>
+		                                	<b>Ofício Corregedoria</b><br style="clear: both;">Selos Diferidos.&nbsp;<a href="#" class="link" wicket:id="donwloadOficio"><i>download</i></a><br>
+		                                </p>
+		                                
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="chat well">
+                                <li class="clearfix">
+                                    <div class="chat-body clearfix">
+		                            	<p class="mensagem-feed">
+		                            		<b>IEPTB-TO</b><br>
+		                                	Acesse nosso site!&nbsp;&nbsp;<a href="#" class="link" target="_blank" wicket:id="acesseNossoSite"><i>clique aqui</i></a><br>
+		                                </p>
+                                    </div> 
+                                </li>
+                            </ul>
+                            <ul class="chat">
+                                <li class="clearfix">
+                                    <div class="chat-body clearfix">
+		                            	<p class="mensagem-feed">
+		                                	<b>Fale Conosco!</b><br>Telefone: (63) 3212-0900
+		                                </p>
+                                    </div> 
+                                </li>
+                            </ul>
+                             <ul class="chat well">
+                                <li class="clearfix">
+                                    <div class="chat-body clearfix">
+			                            <p class="mensagem-feed">
+		                                	Seja bem-vindo(a) a CRA!<br>
+		                                </p>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 	            </div>

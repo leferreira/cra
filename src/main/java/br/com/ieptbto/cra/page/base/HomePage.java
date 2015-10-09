@@ -8,6 +8,7 @@ import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -17,7 +18,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
-import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Arquivo;
@@ -25,12 +25,13 @@ import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPendentesPage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
 
 /**
@@ -59,27 +60,35 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private void carregarHomePage() {
 		this.usuario = getUser();
 		this.arquivo = remessaMediator.confirmacoesPendentes(getUsuario().getInstituicao());
-		labelDataHoje();
-		labelArquivosPendentes();
-		labelOrigemDestino();
+		labelOrigemDestino(); 
+		labelQuantidadeConfirmacoes();
+		labelQuantidadeCancelamentos();
+
+		add(linkAcesseNossoSiteIEPTB());
+		add(downloadOficioCorregedoria());
 		add(linkConfirmacoesPendentes());
 		add(linkCancelamentosPendentes());
-		
 		add(listaConfirmacoesPendentes());
 		add(listaDesistenciaCancelamentoPendentes());
 	}
 
-	private void labelDataHoje() {
-		add(new Label("dataHoje", DataUtil.localDateToString(new LocalDate())));
+
+	private void labelQuantidadeCancelamentos() {
+		int quantidade = 0;
+		if (getDesistenciaCancelamentoPendentes() != null) {
+			quantidade = getDesistenciaCancelamentoPendentes().size();
+		}
+		add(new Label("qtdCancelamentos", quantidade));
 	}
 
-	private void labelArquivosPendentes() {
-		if (!getConfirmacoesPendentes().isEmpty() || !getDesistenciaCancelamentoPendentes().isEmpty()) {
-			Integer totalPendentes = getConfirmacoesPendentes().size() + getDesistenciaCancelamentoPendentes().size(); 
-			warn("Você tem [ "+ totalPendentes +" ] arquivo(s) pendentes");
+	private void labelQuantidadeConfirmacoes() {
+		int quantidade = 0;
+		if (getConfirmacoesPendentes() != null) {
+			quantidade = getConfirmacoesPendentes().size();
 		}
+		add(new Label("qtdRemessas", quantidade));
 	}
-	
+
 	private void labelOrigemDestino() {
 		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
 				getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
@@ -90,7 +99,25 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			add(new Label("labelCancelamentos", "ORIGEM"));
 		}
 	}
+	
+	private ExternalLink linkAcesseNossoSiteIEPTB() {
+		return new ExternalLink("acesseNossoSite", "http://www.ieptbto.com.br/");
+	}
+	
+	private Link<T> downloadOficioCorregedoria(){
+		return new Link<T>("donwloadOficio") {
+			@Override
+			public void onClick() {
+				File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Ofício Corregedoria.pdf");
+				IResourceStream resourceStream = new FileResourceStream(file);
 
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(
+				        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+				
+			}
+		};
+	}
+	
 	private Link<Remessa> linkConfirmacoesPendentes() {
 		return new Link<Remessa>("arquivosConfirmacoesPendetes") {
 
@@ -134,11 +161,17 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
-						IResourceStream resourceStream = new FileResourceStream(file);
-
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						try {
+							File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
+							IResourceStream resourceStream = new FileResourceStream(file);
+	
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						} catch (InfraException ex) {
+							getFeedbackPanel().error(ex.getMessage());
+						} catch (Exception e) {
+							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+						}
 					}
 				};
 			}

@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -28,6 +29,7 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -65,10 +67,41 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 		add(dataEnvio());
 		add(usuarioEnvio());
 		add(carregarListaTitulos());
+		add(botaoBloquearArquivo());
 		add(botaoGerarRelatorio());
 		add(downloadArquivoTXT(getRemessa()));
 	}
 	
+	private Component botaoBloquearArquivo() {
+		Link<Remessa> bloquearRemessa = new Link<Remessa>("bloquearRemessa") {
+			
+			@Override
+			public void onClick() {
+				try {
+					if (getRemessa().getDevolvidoPelaCRA().equals(true)) {
+						getFeedbackPanel().warn("Arquivo já bloqueado anteriormente !");
+					} else {
+						remessaMediator.alterarParaDevolvidoPelaCRA(getRemessa());
+						getFeedbackPanel().info("Arquivo bloqueado com sucesso !");
+					}
+				} catch (InfraException ex) {
+					getFeedbackPanel().error(ex.getMessage());
+				} catch (Exception e) {
+					getFeedbackPanel().error("Não foi possível bloquear o arquivo ! \n Entre em contato com a CRA ");
+				}
+				
+			}
+		};
+		
+		if (getRemessa().getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA) && 
+				getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			bloquearRemessa.setVisible(true);
+		} else {
+			bloquearRemessa.setVisible(false);
+		}
+		return bloquearRemessa;
+	}
+
 	private ListView<TituloRemessa> carregarListaTitulos() {
 		return new ListView<TituloRemessa>("listViewTituloArquivo", getTitulos()) {
 
@@ -84,6 +117,8 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 		        };
 		        linkArquivo.add(new Label("nomeRemessa", tituloLista.getRemessa().getArquivo().getNomeArquivo()));
 		        item.add(linkArquivo);
+		        
+		        item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
 		        
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
 				if (tituloLista.getConfirmacao() != null) {
@@ -166,11 +201,17 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 
 			@Override
 			public void onClick() {
-				File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
-				IResourceStream resourceStream = new FileResourceStream(file);
-
-				getRequestCycle().scheduleRequestHandlerAfterCurrent(
-				        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+				try {
+					File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
+					IResourceStream resourceStream = new FileResourceStream(file);
+					
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							new ResourceStreamRequestHandler(resourceStream, file.getName()));
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				} catch (Exception e) {
+					error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+				}
 			}
 		};
 	}

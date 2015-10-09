@@ -13,13 +13,21 @@ body {
  }
  
 #page-wrapper{
-	zoom: 0.95;
+	zoom: 0.95; 
 	width: 100%;
     background-color: #fdfdfd;
     margin: 0 auto;
     position: absolute;
     min-height: 83%;
+    
+    /*zoom: 0.5;*/
+    font-size-adjust: 0.45;
+	-ms-zoom: 1;
+	-ms- 
+	-webkit-zoom: 0.95;
+	/*-moz-transform:  scale(1, 0.9);*/
 }
+
 .navbar-default .navbar-nav>li>a{
 	color: #337AB7;
 }
@@ -164,7 +172,7 @@ legend{
 }
 
 .download-ico {
-	width: 25px;
+	width: 23px;
 }
 
 .titulo-top {

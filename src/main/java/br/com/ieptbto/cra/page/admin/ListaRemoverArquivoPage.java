@@ -29,7 +29,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @SuppressWarnings("serial")
-public class ListaArquivosRemoverPage extends BasePage<Arquivo> {
+public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 
 	@SpringBean
 	ArquivoMediator arquivoMediator;
@@ -40,7 +40,7 @@ public class ListaArquivosRemoverPage extends BasePage<Arquivo> {
 	private Arquivo arquivo;
 	private List<Arquivo> arquivos;
 
-	public ListaArquivosRemoverPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo) {
+	public ListaRemoverArquivoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo) {
 		this.arquivo = arquivo;
 		ArrayList<SituacaoArquivo> situacaoArquivos = new ArrayList<SituacaoArquivo>();
 		this.arquivos = administracaoMediator.buscarArquivosRemover(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, situacaoArquivos);
@@ -77,7 +77,7 @@ public class ListaArquivosRemoverPage extends BasePage<Arquivo> {
 					public void onClick() {
 						try {
 							administracaoMediator.removerArquivo(arquivo, getUser().getInstituicao()).getArquivo();
-							info("O arquivo "+ arquivo.getNomeArquivo() +" foi removido com sucesso !");
+							getFeedbackPanel().info("O arquivo "+ arquivo.getNomeArquivo() +" foi removido com sucesso !");
 						} catch (InfraException ex) {
 							error(ex.getMessage());
 						} catch (Exception e) {
@@ -85,7 +85,7 @@ public class ListaArquivosRemoverPage extends BasePage<Arquivo> {
 						}
 					}
 				};
-			}		
+			}
 		};
 	}
 

@@ -108,11 +108,17 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
-						IResourceStream resourceStream = new FileResourceStream(file);
-
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						try {
+							File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
+							IResourceStream resourceStream = new FileResourceStream(file);
+							
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(
+									new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						} catch (InfraException ex) {
+							getFeedbackPanel().error(ex.getMessage());
+						} catch (Exception e) {
+							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+						}
 					}
 				};
 			}

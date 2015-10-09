@@ -59,6 +59,8 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		        linkArquivo.add(new Label("nomeRemessa", tituloLista.getRemessa().getArquivo().getNomeArquivo()));
 		        item.add(linkArquivo);
 		        
+		        item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
+		        
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
 				if (tituloLista.getConfirmacao() != null) {
 					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getDataRecebimento())));

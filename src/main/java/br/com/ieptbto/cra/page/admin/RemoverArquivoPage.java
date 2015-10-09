@@ -81,7 +81,7 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 					if (comboMunicipio.getModelObject() != null){
 						municipio = comboMunicipio.getModelObject();
 					}
-					setResponsePage(new ListaArquivosRemoverPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo()));
+					setResponsePage(new ListaRemoverArquivoPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo()));
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
