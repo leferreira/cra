@@ -16,6 +16,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.bean.ArquivoOcorrenciaBean;
 import br.com.ieptbto.cra.component.label.DataUtil;
@@ -134,7 +135,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
     	add(numeroProtocoloCartorio());
     	add(dataProtocolo());
     	add(codigoCartorio());
-    	add(confirmacao());
+    	add(dataOcorrencia());
     	add(irregularidade());
     	add(codigoMunicipio());
     	add(pracaProtesto());
@@ -173,12 +174,16 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		return new Label("codigoCartorio", new Model<String>(getTituloRemessa().getRemessa().getInstituicaoDestino().getCodigoCartorio()));
 	}
 
-    private Label confirmacao() {
-    	String confirmacao = StringUtils.EMPTY;
+    private Label dataOcorrencia() {
+    	LocalDate dataOcorrencia = getTituloRemessa().getRemessa().getCabecalho().getDataMovimento();
+    	
     	if (getTituloRemessa().getConfirmacao() != null) {
-    		confirmacao = getTituloRemessa().getConfirmacao().getRemessa().getArquivo().getNomeArquivo();
+    		dataOcorrencia = getTituloRemessa().getConfirmacao().getDataOcorrencia();
     	}
-		return new Label("confirmacao", new Model<String>(confirmacao));
+    	if (getTituloRemessa().getRetorno() != null) {
+    		dataOcorrencia = getTituloRemessa().getRetorno().getDataOcorrencia();
+    	}
+		return new Label("dataOcorrencia", DataUtil.localDateToString(dataOcorrencia));
 	}
     
     private Label irregularidade() {

@@ -56,14 +56,15 @@ public class MonitorarTitulosInstituicaoPanel extends Panel {
 			@Override
 			public void onSubmit() {
 				TituloRemessa titulo = model.getObject();
+				Municipio municipio = null;
 
 				try {
 					if (dataEntradaCRA.getModelObject() != null)
 						titulo.setDataCadastro(DataUtil.stringToLocalDate(dataEntradaCRA.getModelObject()).toDate());
 					if (comboMunicipio.getDefaultModelObject() != null)
-						titulo.setPracaProtesto(comboMunicipio.getModelObject().getNomeMunicipio());
+						municipio = comboMunicipio.getModelObject();
 					
-					setResponsePage(new ListaTitulosPage(titulo));
+					setResponsePage(new ListaTitulosPage(titulo, municipio));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

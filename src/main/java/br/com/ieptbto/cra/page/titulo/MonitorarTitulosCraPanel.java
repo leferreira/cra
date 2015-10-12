@@ -59,6 +59,7 @@ public class MonitorarTitulosCraPanel extends Panel {
 			@Override
 			public void onSubmit() {
 				TituloRemessa titulo = model.getObject();
+				Municipio municipio = null;
 
 				try {
 					if (dataEntradaCRA.getModelObject() != null)
@@ -66,9 +67,9 @@ public class MonitorarTitulosCraPanel extends Panel {
 					if (comboPortador.getModelObject() != null) 
 						titulo.setCodigoPortador(comboPortador.getModelObject().getCodigoCompensacao());
 					if (comboMunicipio.getModelObject() != null)
-						titulo.setPracaProtesto(comboMunicipio.getModelObject().getNomeMunicipio());
+						municipio = comboMunicipio.getModelObject();
 					
-					setResponsePage(new ListaTitulosPage(titulo));
+					setResponsePage(new ListaTitulosPage(titulo, municipio));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

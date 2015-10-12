@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.page.titulo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
@@ -16,6 +17,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.TituloMediator;
@@ -36,14 +38,19 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 	TituloMediator tituloMediator;
 	
 	private TituloRemessa tituloRemessa;
+	private List<TituloRemessa> titulos;
+	private Municipio municipio;
 	
-	public ListaTitulosPage(TituloRemessa titulo) {
+	public ListaTitulosPage(TituloRemessa titulo, Municipio pracaProtesto) {
 		this.tituloRemessa=titulo;
+		this.municipio=pracaProtesto;
+		this.titulos = tituloMediator.buscarListaTitulos(titulo, pracaProtesto , getUser());
+
 		add(carregarListaTitulos());
 	}
 
 	private ListView<TituloRemessa> carregarListaTitulos() {
-		return new ListView<TituloRemessa>("listViewTitulos", tituloMediator.buscarListaTitulos(getTituloRemessa(), getUser())) {
+		return new ListView<TituloRemessa>("listViewTitulos", getTitulos()) {
 
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
@@ -109,6 +116,22 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 	@Override
 	protected IModel<TituloRemessa> getModel() {
 		return new CompoundPropertyModel<TituloRemessa>(tituloRemessa);
+	}
+
+	public List<TituloRemessa> getTitulos() {
+		return titulos;
+	}
+
+	public Municipio getMunicipio() {
+		return municipio;
+	}
+
+	public void setTitulos(List<TituloRemessa> titulos) {
+		this.titulos = titulos;
+	}
+
+	public void setMunicipio(Municipio municipio) {
+		this.municipio = municipio;
 	}
 
 }

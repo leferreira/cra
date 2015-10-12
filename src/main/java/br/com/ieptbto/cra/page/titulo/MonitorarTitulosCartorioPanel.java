@@ -13,6 +13,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -96,6 +97,7 @@ public class MonitorarTitulosCartorioPanel extends Panel {
 			@Override
 			public void onSubmit() {
 				TituloRemessa titulo = model.getObject();
+				Municipio pracaProtesto = null;
 
 				try {
 					if (dataEntradaCRA.getModelObject() != null)
@@ -103,7 +105,7 @@ public class MonitorarTitulosCartorioPanel extends Panel {
 					if (comboPortador.getModelObject() != null)
 						titulo.setCodigoPortador(comboPortador.getModelObject().getCodigoCompensacao());
 					
-					setResponsePage(new ListaTitulosPage(titulo));
+					setResponsePage(new ListaTitulosPage(titulo, pracaProtesto));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
