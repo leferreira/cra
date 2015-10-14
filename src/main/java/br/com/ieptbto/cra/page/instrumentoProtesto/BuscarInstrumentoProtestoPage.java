@@ -18,7 +18,7 @@ import br.com.ieptbto.cra.component.label.DateTextField;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.InstrumentoDeProtestoMediator;
+import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -37,7 +37,7 @@ public class BuscarInstrumentoProtestoPage extends BasePage<InstrumentoProtesto>
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	InstrumentoDeProtestoMediator instrumentoMediator;
+	InstrumentoProtestoMediator instrumentoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	

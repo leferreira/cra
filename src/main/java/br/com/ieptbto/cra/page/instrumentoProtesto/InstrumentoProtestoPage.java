@@ -1,20 +1,8 @@
 package br.com.ieptbto.cra.page.instrumentoProtesto;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
@@ -33,20 +21,18 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
+import br.com.ieptbto.cra.entidade.EtiquetaSLIP;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.InstrumentoDeProtestoMediator;
+import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
@@ -60,19 +46,20 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
-
-	private static final Logger logger = Logger.getLogger(InstrumentoProtestoPage.class);
 	
+	private static final Logger logger = Logger.getLogger(GerarSlipPage.class);
+
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	InstrumentoDeProtestoMediator instrumentoMediator;
+	InstrumentoProtestoMediator instrumentoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	
 	private InstrumentoProtesto instrumento;
 	private List<Retorno> retornos;
 	private List<EnvelopeSLIP> envelopes;
+	private List<EtiquetaSLIP> etiquetas;
 	private TextField<String> codigoInstrumento;
 	private TextField<String> protocoloCartorio;
 	private DropDownChoice<Municipio> codigoIbge;
@@ -81,11 +68,11 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 		this.instrumento = new InstrumentoProtesto();
 		this.retornos = null;
 		this.envelopes = null;
+		this.etiquetas = null; 
 		adicionarFormularioCodigo();
 		adicionarFormularioManual();
 		add(carregarListaSlips());
-		add(botaoGerarEtiquetas());
-		add(botaoGerarEnvelopes());
+		add(botaoSalvarInstrumentos());
 	}
 	
 	private void adicionarFormularioManual() {
@@ -114,6 +101,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					}
 				} catch (InfraException ex) {
 					error(ex.getMessage());
+				} catch (Exception e) {
+					error(e.getMessage());
 				}
 			}
 		};
@@ -187,33 +176,15 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 			}
 		};
 	}
-
-	private Link<InstrumentoProtesto> botaoGerarEtiquetas() {
-		return new Link<InstrumentoProtesto>("botaoSlip"){
+	
+	private Link<InstrumentoProtesto> botaoSalvarInstrumentos() {
+		return new Link<InstrumentoProtesto>("botaoSalvarInstrumentos"){
 			
 			@Override
 			public void onClick() {
-				SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
-
 				try {
-					InstrumentoDeProtestoMediator instrumento = instrumentoMediator.processarInstrumentos(getRetornos());
-					
-					if (instrumento.getEtiquetas().isEmpty()) {
-						throw new InfraException("Não foi possível gerar SLIPs. Não há entrada de títulos processados !");
-					}
-
-					getEnvelopes().addAll(instrumento.getEnvelopes());
-					HashMap<String, Object> parametros = new HashMap<String, Object>();
-					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(instrumento.getEtiquetas());
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEtiqueta.jrxml"));
-					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
-					
-					File pdf = File.createTempFile("report", ".pdf");
-					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_SLIP_" + dataPadrao.format(new Date()).toString()  + ".pdf"));
-				
+					instrumentoMediator.salvarInstrumentoProtesto(getRetornos());
+					getFeedbackPanel().info("Entrada dos instrumentos realizada com sucesso !");
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());
@@ -224,41 +195,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 			}
 		};
 	}
-	
-	private Link<InstrumentoProtesto> botaoGerarEnvelopes() {
-		return new Link<InstrumentoProtesto>("botaoEnvelope"){
-			
-			@Override
-			public void onClick() {
-				SimpleDateFormat dataPadrao= new SimpleDateFormat("dd_MM_yy");
 
-				try {
-					if (getEnvelopes().isEmpty()) {
-						throw new InfraException("Não foi possível gerar os envelopes. Não foram processados instrumentos !");
-					}
-
-					HashMap<String, Object> parametros = new HashMap<String, Object>();
-					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getEnvelopes());
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEnvelope.jrxml"));
-					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
-					
-					File pdf = File.createTempFile("report", ".pdf");
-					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_ENVELOPES_" + dataPadrao.format(new Date()).toString()  + ".pdf"));
-
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage(), ex);
-					error(ex.getMessage());
-				} catch (Exception ex) { 
-					error("Não foi possível gerar as etiquetas ! Entre em contato com a CRA !");
-					logger.error(ex.getMessage(), ex);
-				}
-			}
-		};
-	}
-	
 	private TextField<String> campoCodigoDeBarra() {
 		return codigoInstrumento = new TextField<String>("codigoInstrumento", new Model<String>());
 	}
@@ -300,6 +237,13 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 		this.envelopes = envelopes;
 	}
 	
+	public List<EtiquetaSLIP> getEtiquetas() {
+		if (etiquetas == null) {
+			etiquetas = new ArrayList<EtiquetaSLIP>();
+		}
+		return etiquetas;
+	}
+
 	@Override
 	protected IModel<InstrumentoProtesto> getModel() {
 		return new CompoundPropertyModel<InstrumentoProtesto>(instrumento);

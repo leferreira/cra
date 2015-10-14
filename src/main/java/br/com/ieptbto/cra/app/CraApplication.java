@@ -41,6 +41,7 @@ import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.instituicao.IncluirInstituicaoPage;
 import br.com.ieptbto.cra.page.instituicao.ListaInstituicaoPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.BuscarInstrumentoProtestoPage;
+import br.com.ieptbto.cra.page.instrumentoProtesto.GerarSlipPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.ImportarArquivoDeParaPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.InstrumentoProtestoPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.LiberarEnvelopePage;
@@ -193,6 +194,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		/** Slip */
 		mountPage("InstrumentoDeProtesto", InstrumentoProtestoPage.class);
+		mountPage("GerarSlip", GerarSlipPage.class);
 		mountPage("ImportarArquivoDePara", ImportarArquivoDeParaPage.class);
 		mountPage("BuscarInstrumentoProtesto", BuscarInstrumentoProtestoPage.class);
 		mountPage("LiberarEnvelopes", LiberarEnvelopePage.class);
