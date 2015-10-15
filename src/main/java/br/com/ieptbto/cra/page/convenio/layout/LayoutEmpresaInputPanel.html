@@ -1,0 +1,38 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+<div class="row">
+	<div class="col-md-12">  
+		  <div class="col-md-1"><label>Empresa:</label></div>   
+		  <div class="col-md-8 ">
+		  <select class="form-control input-sm"  wicket:id="filiado" ></select>
+		  </div>
+	</div>
+</div>
+<br/>
+<div class="row" wicket:id="divCampo">
+		<div class="col-md-12">
+			<div class="col-md-4"><label>Campo</label></div>
+			<div class="col-md-2"><label>Ordem</label></div>
+			<div class="col-md-2"><label>Posição Inicial</label></div>
+			<div class="col-md-2"><label>Posição Final</label></div>
+		</div>
+		<div class="col-md-12">
+			<div class="col-md-4">
+			    <select class="form-control input-sm" wicket:id="campo"></select>
+			</div>
+			<div class="col-md-2">
+			    <input class="form-control input-md" wicket:id="ordem">
+			</div>
+			<div class="col-md-2">
+			    <input class="form-control input-md" wicket:id="posicaoInicio">
+			</div>
+			<div class="col-md-2">
+			    <input class="form-control input-md" wicket:id="posicaoFim">
+			</div>
+			<div class="col-md-2">
+			    <button class="btn btn-primary"><i class="fa fa-plus fa-1x"></i></button> 
+			</div>
+		</div>
+</div>
+	
+<div class="row" wicket:id="divResultado"></div> 
+</wicket:panel>

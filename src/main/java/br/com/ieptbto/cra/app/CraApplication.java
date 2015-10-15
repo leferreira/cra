@@ -33,6 +33,7 @@ import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.page.convenio.RemessaConvenioPage;
+import br.com.ieptbto.cra.page.convenio.layout.IncluirLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.cra.BatimentoPage;
 import br.com.ieptbto.cra.page.cra.ConfirmacaoPage;
 import br.com.ieptbto.cra.page.cra.RetornoPage;
@@ -159,7 +160,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		mountPage("MunicipiosPage", ListaMunicipioPage.class);
 		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
-		
+
 		mountPage("FiliadosPage", ListaFiliadoPage.class);
 		mountPage("IncluirFiliado", IncluirFiliadoPage.class);
 
@@ -185,12 +186,13 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("RelatorioArquivosTitulos", RelatorioArquivosTitulosPage.class);
 		mountPage("RelatorioTitulos", RelatorioTitulosPage.class);
 		mountPage("RelatorioArquivosListaPage", RelatorioArquivosListaPage.class);
-		
+
 		/** CRA */
 		mountPage("Batimento", BatimentoPage.class);
 		mountPage("ConfirmacaoPage", ConfirmacaoPage.class);
 		mountPage("RetornoPage", RetornoPage.class);
 		mountPage("RemessasConvenio", RemessaConvenioPage.class);
+		mountPage("LayoutEmpresa", IncluirLayoutEmpresaPage.class);
 
 		/** Slip */
 		mountPage("InstrumentoDeProtesto", InstrumentoProtestoPage.class);
