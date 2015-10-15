@@ -26,7 +26,6 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPendentesPage;
@@ -104,18 +103,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		return new ExternalLink("acesseNossoSite", "http://www.ieptbto.com.br/");
 	}
 	
-	private Link<T> downloadOficioCorregedoria(){
-		return new Link<T>("donwloadOficio") {
-			@Override
-			public void onClick() {
-				File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Ofício Corregedoria.pdf");
-				IResourceStream resourceStream = new FileResourceStream(file);
-
-				getRequestCycle().scheduleRequestHandlerAfterCurrent(
-				        new ResourceStreamRequestHandler(resourceStream, file.getName()));
-				
-			}
-		};
+	private ExternalLink downloadOficioCorregedoria() {
+		return new ExternalLink("donwloadOficio", "https://www.dropbox.com/s/yhok3bo9w3g5hsu/Of%C3%ADcio%20Corregedoria.pdf?dl=0");
 	}
 	
 	private Link<Remessa> linkConfirmacoesPendentes() {
@@ -162,7 +151,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					@Override
 					public void onClick() {
 						try {
-							File file = remessaMediator.baixarRemessaTXT(getUser().getInstituicao(), remessa);
+							File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
 	
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
