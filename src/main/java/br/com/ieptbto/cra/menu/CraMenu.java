@@ -41,7 +41,7 @@ public class CraMenu extends Panel {
 		menuLateral.addItem("MonitorarTitulos", rolesPesquisar);
 
 		/** Menus Relatorios */
-//		menuLateral.addItem("RelatorioSintetico", rolesIncluir);
+		// menuLateral.addItem("RelatorioSintetico", rolesIncluir);
 		menuLateral.addItem("RelatorioArquivosTitulos", rolesIncluir);
 
 		/** Menus Admins */
@@ -56,6 +56,7 @@ public class CraMenu extends Panel {
 		menuLateral.addItem("TipoInstituicoesPage", rolesIncluir);
 		menuLateral.addItem("UsuariosPage", rolesIncluir);
 		menuLateral.addItem("FiliadosPage", rolesIncluir);
+		menuLateral.addItem("LayoutEmpresaPage", rolesIncluir);
 
 		/** Instrumento de Protesto */
 		menuLateral.addItem("InstrumentoDeProtesto", rolesIncluir);

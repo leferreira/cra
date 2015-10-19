@@ -29,10 +29,63 @@
 			    <input class="form-control input-md" wicket:id="posicaoFim">
 			</div>
 			<div class="col-md-2">
-			    <button class="btn btn-primary"><i class="fa fa-plus fa-1x"></i></button> 
+			    <input type="submit" class="btn btn-primary" wicket:id="add" value="Add" /><i class="fa fa-plus fa-1x"></i> 
 			</div>
 		</div>
 </div>
-	
-<div class="row" wicket:id="divResultado"></div> 
+<div class="row">&nbsp;</div>
+<fieldset>
+	<legend>Resultado</legend>
+	<div class="row" wicket:id="divResultado">
+		<div class="col-md-12">
+			<table id="table-layout"  class="table table-responsive table-striped table-hover dataTable no-footer">
+				<thead>
+					<tr>
+						<th>Campo</th>
+						<th>Ordem</th>
+						<th>Posição inicial</th>
+						<th>Posição Final</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr wicket:id="tabelaLayout">
+						<td wicket:id="campo"></td>
+						<td wicket:id="ordem"></td>
+						<td wicket:id="posicaoInicio"></td>
+						<td wicket:id="posicaoFim"></td>
+						<td class="col-center"><button wicket:id="remover"><span class="fa fa-trash-o"></span></button></td>
+					</tr>
+				</tbody>
+			</table> 
+		</div>
+	</div>
+</fieldset>
+<script>
+    $('#table-layout').dataTable( {
+        "language": {
+				"sEmptyTable": "Nenhum registro encontrado",
+				    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+				    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+				    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+				    "sInfoPostFix": "",
+				    "sInfoThousands": ".",
+				    "sLengthMenu": "_MENU_  Resultados por página",
+				    "sLoadingRecords": "Carregando...",
+				    "sProcessing": "Processando...",
+				    "sZeroRecords": "Nenhum registro encontrado",
+				    "sSearch": " Pesquisar ",
+				    "oPaginate": {
+				        "sNext": "Próximo",
+				        "sPrevious": "Anterior",
+				        "sFirst": "Primeiro",
+				        "sLast": "Último"
+				    },
+				    "oAria": {
+				        "sSortAscending": ": Ordenar colunas de forma ascendente",
+				        "sSortDescending": ": Ordenar colunas de forma descendente"
+				    }
+        }
+    } );
+</script>
 </wicket:panel>

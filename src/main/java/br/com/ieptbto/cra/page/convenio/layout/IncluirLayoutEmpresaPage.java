@@ -25,7 +25,8 @@ public class IncluirLayoutEmpresaPage extends BasePage<LayoutFiliado> {
 	private void setComponent() {
 		LayoutEmpresaForm form = new LayoutEmpresaForm("form", getModel());
 
-		form.add(new LayoutEmpresaInputPanel("layoutEmpresaInputPanel", getModel()));
+		LayoutEmpresaInputPanel inputPanel = new LayoutEmpresaInputPanel("layoutEmpresaInputPanel", getModel());
+		form.add(inputPanel);
 
 		add(form);
 
