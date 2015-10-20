@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -23,7 +22,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.LayoutFiliado;
-import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.enumeration.CampoLayout;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 
@@ -47,6 +45,8 @@ public class LayoutEmpresaInputPanel extends Panel {
 	private List<LayoutFiliado> listaLayoutFiliado;
 
 	private WebMarkupContainer divResultado;
+
+	private List<CampoLayout> campos;
 
 	public LayoutEmpresaInputPanel(String id, IModel<?> model) {
 		super(id, model);
@@ -73,12 +73,6 @@ public class LayoutEmpresaInputPanel extends Panel {
 
 	}
 
-	@Override
-	protected void onConfigure() {
-		super.onConfigure();
-		// divResultado.setVisible(!getCamposFiliado().isEmpty());
-	}
-
 	private Component getTabelaResultado() {
 		return new ListView<LayoutFiliado>("tabelaLayout", getCamposFiliado()) {
 
@@ -93,10 +87,11 @@ public class LayoutEmpresaInputPanel extends Panel {
 			}
 
 			private Component getButtonRemove(final LayoutFiliado layout) {
-				return new Link<Retorno>("remover") {
+				return new AjaxButton("remover") {
 					@Override
-					public void onClick() {
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						getCamposFiliado().remove(layout);
+						target.add(divResultado);
 					}
 				};
 			}
@@ -115,19 +110,48 @@ public class LayoutEmpresaInputPanel extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				layoutFiliado = new LayoutFiliado();
-				Integer posicaoFim = (Integer) campoPosicaoFim.getDefaultModelObject();
-				Integer posicaoInicio = (Integer) campoPosicaoInicio.getDefaultModelObject();
-				Integer ordem = (Integer) campoOrdem.getDefaultModelObject();
-				CampoLayout campo = comboCampos.getConvertedInput();
-				Filiado empresa = comboEmpresas.getConvertedInput();
+
+				if (verificarCampos(layoutFiliado)) {
+					warn("Todos os campos devem ser preenchidos");
+					target.add(this.getPage());
+					return;
+				}
+
+				for (LayoutFiliado campoFiliado : getCamposFiliado()) {
+					if (campoFiliado.getOrdem() == layoutFiliado.getOrdem()) {
+						warn("O campo ordem não pode ser repetido.");
+						target.add(this.getPage());
+						return;
+					}
+				}
+
+				comboCampos = getComboCampos();
+				// divResultado.add(comboCampos);
+
+				getCamposFiliado().add(layoutFiliado);
+				divResultado.setVisible(true);
+				target.add(divResultado);
+				target.add(this.getPage());
+			}
+
+			private boolean verificarCampos(LayoutFiliado layoutFiliado) {
+				final Integer posicaoFim = (Integer) campoPosicaoFim.getDefaultModelObject();
+				final Integer posicaoInicio = (Integer) campoPosicaoInicio.getDefaultModelObject();
+				final Integer ordem = (Integer) campoOrdem.getDefaultModelObject();
+				final CampoLayout campo = comboCampos.getConvertedInput();
+				final Filiado empresa = comboEmpresas.getConvertedInput();
+
+				if (posicaoFim == null || posicaoInicio == null || ordem == null || campo == null || empresa == null) {
+					return true;
+				}
+
 				layoutFiliado.setCampo(campo);
 				layoutFiliado.setFiliado(empresa);
 				layoutFiliado.setOrdem(ordem);
 				layoutFiliado.setPosicaoFim(posicaoFim);
 				layoutFiliado.setPosicaoInicio(posicaoInicio);
-				getCamposFiliado().add(layoutFiliado);
-				divResultado.setVisible(true);
-				target.add(divResultado);
+
+				return false;
 			}
 
 		};
@@ -144,7 +168,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 	private DropDownChoice<CampoLayout> getComboCampos() {
 		ChoiceRenderer<CampoLayout> renderer = new ChoiceRenderer<CampoLayout>("label");
 		if (comboCampos == null) {
-			comboCampos = new DropDownChoice<CampoLayout>("campo", Arrays.asList(CampoLayout.values()), renderer);
+			comboCampos = new DropDownChoice<CampoLayout>("campo", getCamposLayout(), renderer);
 			comboCampos.setLabel(new Model<String>("Campo"));
 			comboCampos.setOutputMarkupId(true);
 			comboCampos.setRequired(true);
@@ -152,19 +176,22 @@ public class LayoutEmpresaInputPanel extends Panel {
 		return comboCampos;
 	}
 
-	private TextField<Integer> getCampoPosicaoFim() {
-		if (campoPosicaoFim == null) {
-			campoPosicaoFim = new TextField<Integer>("posicaoFim");
-			campoPosicaoFim.setOutputMarkupId(true);
+	private List<CampoLayout> getCamposLayout() {
+		if (campos == null) {
+			campos = Arrays.asList(CampoLayout.values());
 		}
+		return campos;
+	}
+
+	private TextField<Integer> getCampoPosicaoFim() {
+		campoPosicaoFim = new TextField<Integer>("posicaoFim");
+		campoPosicaoFim.setOutputMarkupId(true);
 		return campoPosicaoFim;
 	}
 
 	private TextField<Integer> getCampoPosicaoInicio() {
-		if (campoPosicaoInicio == null) {
-			campoPosicaoInicio = new TextField<Integer>("posicaoInicio");
-			campoPosicaoInicio.setOutputMarkupId(true);
-		}
+		campoPosicaoInicio = new TextField<Integer>("posicaoInicio");
+		campoPosicaoInicio.setOutputMarkupId(true);
 		return campoPosicaoInicio;
 	}
 
