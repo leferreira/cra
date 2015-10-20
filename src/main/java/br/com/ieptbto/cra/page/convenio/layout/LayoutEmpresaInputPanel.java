@@ -92,6 +92,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						getCamposFiliado().remove(layout);
 						target.add(divResultado);
+
 					}
 				};
 			}
