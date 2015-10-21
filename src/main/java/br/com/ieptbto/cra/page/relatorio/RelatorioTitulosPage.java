@@ -51,19 +51,20 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 	private Instituicao instituicao;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
-	private TipoRelatorio tipoRelatorio;
+	private TipoRelatorio situacaoTitulosRelatorio;
 	private List<TituloRemessa> titulos;
 	
-	public RelatorioTitulosPage(Instituicao instituicao, TipoRelatorio situacaoTitulos, LocalDate dataInicio, LocalDate dataFim) {
+	public RelatorioTitulosPage(TipoRelatorio situacaoTitulosRelatorio, Instituicao instituicao, LocalDate dataInicio, LocalDate dataFim) {
 		this.instituicao = instituicao;
 		this.dataInicio =dataInicio;
 		this.dataFim = dataFim;
-		this.tipoRelatorio = situacaoTitulos;
-		setTitulos(relatorioMediator.buscarTitulosParaRelatorio(instituicao, situacaoTitulos, dataInicio, dataFim, getUser()));
-		addCampos();
+		this.setSituacaoTitulosRelatorio(situacaoTitulosRelatorio);
+		
+		setTitulos(relatorioMediator.buscarTitulosParaRelatorio(instituicao, situacaoTitulosRelatorio, dataInicio, dataFim, getUser()));
+		adicionarCampos();
 	}
 	
-	private void addCampos() {
+	private void adicionarCampos() {
 		add(carregarListaTitulos());
 		add(dataInicio());
 		add(dataFim());
@@ -119,7 +120,7 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 					}
 					
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getTitulos());
-					if (getTipoRelatorio().equals(TipoRelatorio.GERAL)) {
+					if (getSituacaoTitulosRelatorio().equals(TipoRelatorio.GERAL)) {
 						if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || 
 								getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CONVENIO)) {
 							JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioTitulos.jrxml"));
@@ -190,16 +191,16 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 		this.instituicao = instituicao;
 	}
 
+	public TipoRelatorio getSituacaoTitulosRelatorio() {
+		return situacaoTitulosRelatorio;
+	}
+	
+	public void setSituacaoTitulosRelatorio(TipoRelatorio situacaoTitulosRelatorio) {
+		this.situacaoTitulosRelatorio = situacaoTitulosRelatorio;
+	}
+
 	@Override
 	protected IModel<TituloRemessa> getModel() {
 		return new CompoundPropertyModel<TituloRemessa>(titulo);
-	}
-
-	public TipoRelatorio getTipoRelatorio() {
-		return tipoRelatorio;
-	}
-
-	public void setTipoRelatorio(TipoRelatorio tipoRelatorio) {
-		this.tipoRelatorio = tipoRelatorio;
 	}
 }

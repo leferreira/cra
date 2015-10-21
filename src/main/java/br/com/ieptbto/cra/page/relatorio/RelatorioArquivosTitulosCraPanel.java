@@ -12,7 +12,6 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -51,7 +50,7 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 	private Remessa remessa;
 	private Instituicao instituicao;
 	private List<Instituicao> listaInstituicoes;
-	private RadioChoice<TipoRelatorio> tipoRelatorio;
+	private DropDownChoice<TipoRelatorio> tipoRelatorio;
 	private DropDownChoice<Instituicao> comboInstituicao;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
@@ -63,6 +62,11 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 		this.remessa = new Remessa();
 		this.listaInstituicoes = new ArrayList<Instituicao>();
 		
+		carregarFormRelatorioArquivos();
+		carregarFormRelatorioTitulos();
+	}
+	
+	private void carregarFormRelatorioArquivos() {
 		Form<Arquivo> formArquivo = new Form<Arquivo>("formArquivo", new CompoundPropertyModel<Arquivo>(arquivo)){
 			
 			@Override
@@ -86,7 +90,16 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 		formArquivo.add(nomeArquivo());
 		formArquivo.add(new Button("submitFormArquivo"));
 		add(formArquivo);
-		
+	}
+	
+	private TextField<String> nomeArquivo() {
+		TextField<String> textField = new TextField<String>("nomeArquivo");
+		textField.setLabel(new Model<String>("Nome do Arquivo"));
+		textField.setRequired(true);
+		return textField;
+	}
+
+	private void carregarFormRelatorioTitulos() {
 		Form<Remessa> formTitulo = new Form<Remessa>("formTitulo", new CompoundPropertyModel<Remessa>(remessa)){
 			
 			@Override
@@ -106,7 +119,7 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
 					TipoRelatorio situacaoTitulos = tipoRelatorio.getModelObject();
-					setResponsePage(new RelatorioTitulosPage(getRemessa().getInstituicaoOrigem(), situacaoTitulos, dataInicio, dataFim));
+					setResponsePage(new RelatorioTitulosPage(situacaoTitulos, getRemessa().getInstituicaoOrigem(),dataInicio, dataFim));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -124,22 +137,7 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 		formTitulo.add(new Button("submitFormTitulo"));
 		add(formTitulo);
 	}
-	
-	private TextField<String> nomeArquivo() {
-		TextField<String> textField = new TextField<String>("nomeArquivo");
-		textField.setLabel(new Model<String>("Nome do Arquivo"));
-		textField.setRequired(true);
-		return textField;
-	}
-	
-//	private DropDownChoice<Instituicao> comboInstituicaoEnvio() {
-//		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-//		DropDownChoice<Instituicao> dropDown = new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.listarTodas(), renderer);
-//		dropDown.setLabel(new Model<String>("Instituição Envio do Arquivo"));
-//		dropDown.setRequired(true);
-//		return dropDown;
-//	}
-	
+
 	private TextField<LocalDate> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
 		dataEnvioInicio.setLabel(new Model<String>("Período de datas"));
@@ -154,9 +152,9 @@ public class RelatorioArquivosTitulosCraPanel extends Panel  {
 		return dataEnvioFinal;
 	}
 
-	private RadioChoice<TipoRelatorio> tipoRelatorio() {
+	private DropDownChoice<TipoRelatorio> tipoRelatorio() {
 		List<TipoRelatorio> choices = Arrays.asList(TipoRelatorio.values());
-		tipoRelatorio = new RadioChoice<TipoRelatorio>("tipoRelatorio", new Model<TipoRelatorio>(), choices); 
+		tipoRelatorio = new DropDownChoice<TipoRelatorio>("tipoRelatorio", new Model<TipoRelatorio>(), choices); 
 		tipoRelatorio.setLabel(new Model<String>("Tipo Relatório"));
 		tipoRelatorio.setRequired(true);
 		return tipoRelatorio;

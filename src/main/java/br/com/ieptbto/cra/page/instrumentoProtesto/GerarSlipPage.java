@@ -115,7 +115,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					
 					if (instrumento.getEtiquetas().isEmpty()) {
 						throw new InfraException("Não foi possível gerar SLIPs. Não há entrada de títulos processados !");
-					}
+					} 
 
 					getEnvelopes().addAll(instrumento.getEnvelopes());
 					getEtiquetas().addAll(instrumento.getEtiquetas());

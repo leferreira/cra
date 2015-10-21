@@ -107,7 +107,7 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 							} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
 								jasperPrint = relatorioMediator.relatorioConfirmacao(arquivo, getUser().getInstituicao());
 							} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
-								jasperPrint = relatorioMediator.relatorioRetorno(arquivo, getUser().getInstituicao());
+//								jasperPrint = relatorioMediator.relatorioRetorno(arquivo, getUser().getInstituicao()); 
 							}
 							
 							File pdf = File.createTempFile("report", ".pdf");

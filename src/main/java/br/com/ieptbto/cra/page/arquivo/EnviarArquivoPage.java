@@ -1,5 +1,13 @@
 package br.com.ieptbto.cra.page.arquivo;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -13,15 +21,20 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -40,7 +53,8 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
-
+	@SpringBean
+	RelatorioMediator relatorioMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 
@@ -84,6 +98,25 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 						}
 
 					}
+					
+					if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO) &&
+							getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+						try {
+							JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
+							JasperPrint jasperPrint = relatorioMediator.relatorioRetorno(jasperReport ,arquivoRetorno.getArquivo(), getUser().getInstituicao());
+							
+							File pdf = File.createTempFile("report", ".pdf");
+							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+							IResourceStream resourceStream = new FileResourceStream(pdf);
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + arquivoRetorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+						} catch (InfraException ex) { 
+							error(ex.getMessage());
+						} catch (Exception e) { 
+							error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+							e.printStackTrace();
+						}
+					}
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -101,8 +134,8 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		form.add(campoArquivo());
 		form.add(botaoEnviar());
 		add(form);
-	}
-
+	} 
+	
 	private FileUploadField campoArquivo() {
 		fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
 		fileUploadField.setRequired(true);
@@ -146,4 +179,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		this.cra = cra;
 	}
 
+	public void setArquivo(Arquivo arquivo) {
+		this.arquivo = arquivo;
+	}
 }

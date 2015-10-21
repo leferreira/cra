@@ -109,7 +109,7 @@ public class RelatorioArquivosTitulosInstituicaoPanel extends Panel  {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
 					TipoRelatorio situacaoTitulos = tipoRelatorio.getModelObject();
-					setResponsePage(new RelatorioTitulosPage(getRemessa().getInstituicaoOrigem(), situacaoTitulos, dataInicio, dataFim));
+					setResponsePage(new RelatorioTitulosPage(situacaoTitulos, getRemessa().getInstituicaoOrigem(), dataInicio, dataFim));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

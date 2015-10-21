@@ -4,9 +4,13 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -26,6 +30,7 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPendentesPage;
@@ -59,6 +64,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private void carregarHomePage() {
 		this.usuario = getUser();
 		this.arquivo = remessaMediator.confirmacoesPendentes(getUsuario().getInstituicao());
+		carregarComunicadoModal();
 		labelOrigemDestino(); 
 		labelQuantidadeConfirmacoes();
 		labelQuantidadeCancelamentos();
@@ -69,6 +75,42 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		add(linkCancelamentosPendentes());
 		add(listaConfirmacoesPendentes());
 		add(listaDesistenciaCancelamentoPendentes());
+	}
+	
+	private void carregarComunicadoModal() {
+		final ModalWindow modalComunicado = new ModalWindow("modalComunicado");
+		modalComunicado.setPageCreator(new ModalWindow.PageCreator() {
+            /***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+            public Page createPage() {
+                return new ComunicadoModal(HomePage.this.getPageReference(), modalComunicado);
+            }
+	    });
+		modalComunicado.setResizable(false);
+		modalComunicado.setAutoSize(false);
+		modalComunicado.setInitialWidth(75);
+		modalComunicado.setInitialHeight(560); 
+		modalComunicado.setMinimalWidth(75); 
+		modalComunicado.setMinimalHeight(560);
+        modalComunicado.setWidthUnit("%");
+        modalComunicado.setHeightUnit("px");
+        add(modalComunicado);
+		
+		AjaxLink<?> openModal = new AjaxLink<Void>("showModal"){
+            /***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+            public void onClick(AjaxRequestTarget target){
+            	modalComunicado.show(target);
+            }
+		};
+		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+			openModal.setMarkupId("showModal");
+		}
+		add(openModal);
 	}
 
 
@@ -103,8 +145,19 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		return new ExternalLink("acesseNossoSite", "http://www.ieptbto.com.br/");
 	}
 	
-	private ExternalLink downloadOficioCorregedoria() {
-		return new ExternalLink("donwloadOficio", "https://www.dropbox.com/s/yhok3bo9w3g5hsu/Of%C3%ADcio%20Corregedoria.pdf?dl=0");
+	private Link<T> downloadOficioCorregedoria(){
+		return new Link<T>("donwloadOficio") {
+			@Override
+			public void onClick() {
+				System.out.println(ConfiguracaoBase.DIRETORIO_BASE + "Ofício Corregedoria.pdf");
+				File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Ofício Corregedoria.pdf");
+				IResourceStream resourceStream = new FileResourceStream(file);
+	
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(
+				        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+				
+			}
+		};
 	}
 	
 	private Link<Remessa> linkConfirmacoesPendentes() {
