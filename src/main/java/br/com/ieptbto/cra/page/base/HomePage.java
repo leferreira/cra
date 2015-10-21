@@ -149,8 +149,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		return new Link<T>("donwloadOficio") {
 			@Override
 			public void onClick() {
-				System.out.println(ConfiguracaoBase.DIRETORIO_BASE + "Ofício Corregedoria.pdf");
-				File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Ofício Corregedoria.pdf");
+				File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Oficio_Corregedoria.pdf");
 				IResourceStream resourceStream = new FileResourceStream(file);
 	
 				getRequestCycle().scheduleRequestHandlerAfterCurrent(

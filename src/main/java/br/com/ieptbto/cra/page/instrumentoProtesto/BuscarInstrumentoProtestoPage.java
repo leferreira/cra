@@ -20,9 +20,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.component.label.DateTextField;
+import br.com.ieptbto.cra.entidade.EtiquetaSLIP;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
@@ -49,7 +49,7 @@ public class BuscarInstrumentoProtestoPage extends BasePage<InstrumentoProtesto>
 	MunicipioMediator municipioMediator;
 	
 	private InstrumentoProtesto instrumento;
-	private List<InstrumentoProtesto> instrumentos;
+	private List<EtiquetaSLIP> etiquetaSLIP;
 	private DateTextField dataEntrada;
 	private TextField<String> codigoInstrumento;
 	private TextField<String> protocoloCartorio;
@@ -66,31 +66,20 @@ public class BuscarInstrumentoProtestoPage extends BasePage<InstrumentoProtesto>
 
 			@Override
 			protected void onSubmit() {
+				String numeroProtocolo = null;
+				String inputMunicipio = null;
+				String codigoBarraMunicipio = null;
+				String protocolo = null;
+				
 				try { 
-					tratarMunicipioProtocolo();
+					numeroProtocolo = protocoloCartorio.getModelObject();
+					inputMunicipio = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
+
+					codigoBarraMunicipio = codigoInstrumento.getModelObject().substring(1, 8);
+					protocolo = codigoInstrumento.getModelObject().substring(8, 18);
+					
 				} catch (InfraException ex) {
 					error(ex.getMessage());
-				}
-			}
-
-			private void tratarMunicipioProtocolo() {
-				String numeroProtocolo = protocoloCartorio.getModelObject();
-				String codigoIBGE = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
-				Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(numeroProtocolo, codigoIBGE);
-				InstrumentoProtesto instrumento = instrumentoMediator.isTituloJaFoiGeradoInstrumento(tituloProtestado);
-				
-				if (tituloProtestado != null) {
-					if (instrumento == null) {
-//						if (!getRetornos().contains(tituloProtestado)) {
-//							getRetornos().add(tituloProtestado);
-//						} else {
-//							throw new InfraException("O título já existe na lista!");
-//						}
-					} else {
-						throw new InfraException("Este instrumento já foi processado anteriormente!");
-					}
-				} else {
-					throw new InfraException("O título não foi encontrado ou não foi protestado pelo cartório!");
 				}
 			}
 		};
@@ -102,12 +91,12 @@ public class BuscarInstrumentoProtestoPage extends BasePage<InstrumentoProtesto>
 	}
 
 
-	private ListView<InstrumentoProtesto> carregarListaSlips() {
-		return new ListView<InstrumentoProtesto>("instrumentos", getInstrumentos()) {
+	private ListView<EtiquetaSLIP> carregarListaSlips() {
+		return new ListView<EtiquetaSLIP>("instrumentos", getEtiquetas()) {
 
 			@Override
-			protected void populateItem(ListItem<InstrumentoProtesto> item) {
-				final InstrumentoProtesto instrumento = item.getModelObject();
+			protected void populateItem(ListItem<EtiquetaSLIP> item) {
+				final EtiquetaSLIP instrumento = item.getModelObject();
 			}
 		};
 	}
@@ -135,11 +124,11 @@ public class BuscarInstrumentoProtestoPage extends BasePage<InstrumentoProtesto>
 		return protocoloCartorio;
 	}
 	
-	private List<InstrumentoProtesto> getInstrumentos() {
-		if (instrumentos == null) {
-			instrumentos = new ArrayList<InstrumentoProtesto>();
+	private List<EtiquetaSLIP> getEtiquetas() {
+		if (etiquetaSLIP == null) {
+			etiquetaSLIP = new ArrayList<EtiquetaSLIP>();
 		}
-		return instrumentos;
+		return etiquetaSLIP;
 	}
 	
 	@Override

@@ -15,7 +15,7 @@
 							  <label class="col-md-4 control-label">CÓDIGO DE BARRA:</label>
 							  <div class="col-md-8">
 							    <div class="input-group">
-							      <input maxlength="18" class="form-control">
+							      <input maxlength="18" class="form-control" wicket:id="codigoInstrumento">
 							      <span class="input-group-addon"><span class="fa fa-barcode"></span></span>
 							    </div>
 							  </div>
@@ -23,7 +23,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label">MUNICÍPIO:</label>
 							  <div class="col-md-8">
-							    <select class="form-control"></select>
+							    <select wicket:id="codigoIbge" class="form-control"></select>
 							  </div>
 							</div>
 						</div>
@@ -40,7 +40,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label">PROTOCOLO:</label>
 							  <div class="col-md-8">
-							   	<input maxlength="10" class="form-control">
+							   	<input maxlength="10" class="form-control" wicket:id="protocoloCartorio">
 							   </div>
 							</div>
 						</div>
@@ -67,7 +67,8 @@
 								<th>BANCO</th>
 								<th class="col-center">ESPÉCIE</th>
 								<th class="col-right">VALOR TITULO</th>
-								<th style="width: 30px;"></th>
+								<th>ETIQUETA</th>
+								<th>ENVELOPE</th>
 							</tr>
 						</thead>
 						<tbody>
