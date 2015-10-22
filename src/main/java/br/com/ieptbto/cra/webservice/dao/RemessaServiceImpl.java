@@ -44,6 +44,12 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
+	public String buscarRemessa(String nomeArquivo, String login, String senha) {
+		init(login, senha);
+		return remessaService.buscarRemessa(nomeArquivo, getUsuario());
+	}
+
+	@Override
 	public String confirmacao(String nomeArquivo, String login, String senha) {
 		init(login, senha);
 		return confirmacaoService.processar(nomeArquivo, getUsuario());

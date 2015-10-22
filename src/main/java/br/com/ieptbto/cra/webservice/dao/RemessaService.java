@@ -18,6 +18,8 @@ import br.com.ieptbto.cra.conversor.ConversorArquivoVo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 
@@ -71,6 +73,47 @@ public class RemessaService extends CraWebService {
 			return setRespostaArquivoEmBranco(nomeArquivo);
 		}
 		return processar(nomeArquivo, usuario, converterStringArquivoVO(dados));
+	}
+
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @return
+	 */
+	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
+		RemessaVO remessa = null;
+
+		if (getUsuario() == null) {
+			return setResposta(arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
+		}
+
+		if (getNomeArquivo() == null || !getNomeArquivo().toUpperCase().startsWith(TipoArquivoEnum.REMESSA.getConstante())) {
+			return setResposta(arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
+		}
+
+		if (TipoInstituicaoCRA.CARTORIO.equals(getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao())) {
+			remessa = remessaMediator.buscarRemessaParaCartorio(getUsuario().getInstituicao(), getNomeArquivo());
+		}
+
+		if (remessa == null) {
+			return setResposta(arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
+		}
+
+		return gerarResposta(remessa, getNomeArquivo(), CONSTANTE_REMESSA_XML);
+	}
+
+	private String gerarResposta(RemessaVO remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {
+		StringBuffer string = new StringBuffer();
+		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
+		String cabecalho = "<remessa>";
+		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML).replace("</remessa>", "").replace(cabecalho, "");
+		string.append(msg);
+		string.append("</remessa>");
+		return xml + cabecalho + string.toString();
+
 	}
 
 	/**

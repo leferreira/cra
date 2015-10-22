@@ -36,6 +36,18 @@ public interface IRemessaWS {
 	 * @param senha
 	 * @return
 	 */
+	@WebMethod(operationName = "BuscarRemessa")
+	@GET
+	public String buscarRemessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha);
+
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param login
+	 * @param senha
+	 * @return
+	 */
 	@WebMethod(operationName = "Confirmacao")
 	@GET
 	public String confirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,

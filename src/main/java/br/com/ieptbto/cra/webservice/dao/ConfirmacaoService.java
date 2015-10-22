@@ -45,8 +45,6 @@ public class ConfirmacaoService extends CraWebService {
 
 		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao())) {
 			remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
-		} else if (TipoInstituicaoCRA.CARTORIO.equals(getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao())) {
-			arquivoVO = remessaMediator.buscarRemessaParaCartorio(getUsuario().getInstituicao(), getNomeArquivo());
 		}
 
 		if (getNomeArquivo() == null) {
