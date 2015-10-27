@@ -46,6 +46,20 @@ public interface IRemessaWS {
 	 * @param nomeArquivo
 	 * @param login
 	 * @param senha
+	 * @param dados
+	 * 
+	 * @return
+	 */
+	@WebMethod(operationName = "EnviarConfirmacao")
+	@GET
+	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
+
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param login
+	 * @param senha
 	 * @return
 	 */
 	@WebMethod(operationName = "Confirmacao")

@@ -44,6 +44,16 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
+	@WebMethod(operationName = "enviarConfirmacao")
+	@GET
+	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+		init(login, senha);
+
+		return confirmacaoService.processar(nomeArquivo, getUsuario(), dados);
+	}
+
+	@Override
 	public String buscarRemessa(String nomeArquivo, String login, String senha) {
 		init(login, senha);
 		return remessaService.buscarRemessa(nomeArquivo, getUsuario());
