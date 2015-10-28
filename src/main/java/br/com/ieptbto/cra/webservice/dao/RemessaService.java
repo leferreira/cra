@@ -107,13 +107,9 @@ public class RemessaService extends CraWebService {
 
 	private String gerarResposta(RemessaVO remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {
 		StringBuffer string = new StringBuffer();
-		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
-		String cabecalho = "<remessa>";
-		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML).replace("</remessa>", "").replace(cabecalho, "");
+		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
 		string.append(msg);
-		string.append("</remessa>");
-		return xml + cabecalho + string.toString();
-
+		return string.toString();
 	}
 
 	/**
