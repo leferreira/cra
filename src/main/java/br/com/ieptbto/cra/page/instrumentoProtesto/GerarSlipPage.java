@@ -9,13 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -43,6 +36,12 @@ import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.security.CraRoles;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  * @author Thasso Araújo
@@ -169,7 +168,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());
 				} catch (Exception ex) { 
-					error("Não foi possível gerar as etiquetas ! Entre em contato com a CRA !");
+					error("Não foi possível gerar os envelopes ! Entre em contato com a CRA !");
 					logger.error(ex.getMessage(), ex);
 				}
 			}
@@ -187,23 +186,23 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					if (getEtiquetas().isEmpty()) {
 						throw new InfraException("Não foi possível gerar a listagem. Não foram processados instrumentos !");
 					}
-
-					HashMap<String, Object> parametros = new HashMap<String, Object>();
-					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getEtiquetas());
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipListagem.jrxml"));
-					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 					
+					HashMap<String, Object> parametros = new HashMap<String, Object>();
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipListagem.jrxml"));
+					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getEtiquetas());
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_LISTAGEM_" + dataPadrao.format(new Date()).toString()  + ".pdf"));
+							new ResourceStreamRequestHandler(resourceStream, "CRA_LISTAGEM_" + dataPadrao.format(new Date()).toString()  + ".pdf"));
+
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());
 				} catch (Exception ex) { 
-					error("Não foi possível a listagem ! Entre em contato com a CRA !");
+					error("Não foi possível gerar a listagem ! Entre em contato com a CRA !");
 					logger.error(ex.getMessage(), ex);
 				}
 			}

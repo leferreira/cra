@@ -5,9 +5,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -31,6 +28,10 @@ import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.util.DataUtil;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * @author Thasso Araújo
@@ -107,7 +108,8 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 							} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
 								jasperPrint = relatorioMediator.relatorioConfirmacao(arquivo, getUser().getInstituicao());
 							} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
-//								jasperPrint = relatorioMediator.relatorioRetorno(arquivo, getUser().getInstituicao()); 
+								JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
+								jasperPrint = relatorioMediator.relatorioRetorno(jasperReport ,arquivo, getUser().getInstituicao()); 
 							}
 							
 							File pdf = File.createTempFile("report", ".pdf");

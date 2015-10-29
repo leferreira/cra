@@ -3,11 +3,6 @@ package br.com.ieptbto.cra.page.arquivo;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -32,12 +27,17 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.exception.TituloException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 import br.com.ieptbto.cra.security.CraRoles;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * @author Thasso Araújo
@@ -118,6 +118,13 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 						}
 					}
 
+				} catch (TituloException ex) {
+					logger.error(ex.getMessage());
+					for (Exception erro : ex.getErros()) {
+						warn(erro.getMessage());
+					}
+					ex.getErros().clear();
+					getFeedbackPanel().error(ex.getMessage()); 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					getFeedbackPanel().error(ex.getMessage());

@@ -17,11 +17,11 @@ public class ValidacaoErroException extends RuntimeException {
 	private TipoRegistro tipoRegistro;
 	private Titulo titulo;
 	private int linha;
-	private Erro erro;
+	private ErroArquivo erro;
 	private String mensagem;
 
 	public ValidacaoErroException(String arquivo, TipoArquivoEnum tipoArquivo, TipoRegistro tipoRegistro, Titulo titulo, int linha,
-	        Erro erro, String mensagem, Throwable cause) {
+	        ErroArquivo erro, String mensagem, Throwable cause) {
 		super(erro.getMensagemErro(), cause);
 		this.arquivo = arquivo;
 		this.tipoArquivo = tipoArquivo;
@@ -32,7 +32,7 @@ public class ValidacaoErroException extends RuntimeException {
 		this.mensagem = mensagem;
 	}
 
-	public ValidacaoErroException(Erro erro, Throwable cause) {
+	public ValidacaoErroException(ErroArquivo erro, Throwable cause) {
 		super(erro.getMensagemErro(), cause);
 		this.erro = erro;
 	}
@@ -42,13 +42,13 @@ public class ValidacaoErroException extends RuntimeException {
 		this.mensagem = mensagem;
 	}
 
-	public ValidacaoErroException(String arquivo, Erro erro, String complementoMsg) {
+	public ValidacaoErroException(String arquivo, ErroArquivo erro, String complementoMsg) {
 		super(erro.getMensagemErro() + " " + complementoMsg);
 		this.mensagem = erro.getMensagemErro() + " " + complementoMsg;
 		this.arquivo = arquivo;
 	}
 
-	public ValidacaoErroException(String arquivo, Erro erro, int linha) {
+	public ValidacaoErroException(String arquivo, ErroArquivo erro, int linha) {
 		super(erro.getMensagemErro());
 		this.mensagem = erro.getMensagemErro();
 		this.arquivo = arquivo;
@@ -61,7 +61,7 @@ public class ValidacaoErroException extends RuntimeException {
 		this.arquivo = arquivo;
 		this.mensagem = mensagem;
 	}
-
+	
 	public String getArquivo() {
 		return arquivo;
 	}
@@ -82,7 +82,7 @@ public class ValidacaoErroException extends RuntimeException {
 		return linha;
 	}
 
-	public Erro getErro() {
+	public ErroArquivo getErro() {
 		return erro;
 	}
 
@@ -110,7 +110,7 @@ public class ValidacaoErroException extends RuntimeException {
 		this.linha = linha;
 	}
 
-	public void setErro(Erro erro) {
+	public void setErro(ErroArquivo erro) {
 		this.erro = erro;
 	}
 

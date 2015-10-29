@@ -7,7 +7,7 @@ import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
  * @author Lefer
  *
  */
-public enum Erro {
+public enum ErroArquivo {
 
 	/** */
 	O_ARQUIVO_NAO_E_UM_TIPO_TXT_VALIDO("0002", "O arquivo não é um tipo TXT válido "), //
@@ -26,7 +26,7 @@ public enum Erro {
 	private String codigoErro;
 	private String mensagem;
 
-	private Erro(String codigoErro, String mensagem) {
+	private ErroArquivo(String codigoErro, String mensagem) {
 		this.codigoErro = codigoErro;
 		this.mensagem = mensagem;
 	}

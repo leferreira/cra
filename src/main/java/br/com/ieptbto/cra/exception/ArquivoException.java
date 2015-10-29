@@ -4,7 +4,7 @@ public class ArquivoException extends RuntimeException {
 
 	/** **/
 	private static final long serialVersionUID = 1L;
-	private final Erro erro;
+	private final ErroArquivo erro;
 	private final String campo;
 
 	/**
@@ -13,7 +13,7 @@ public class ArquivoException extends RuntimeException {
 	 * @param erro
 	 * @param campo
 	 */
-	public ArquivoException(Erro erro, String campo) {
+	public ArquivoException(ErroArquivo erro, String campo) {
 		super(erro.getMensagemErro());
 		this.erro = erro;
 		this.campo = campo;
@@ -24,7 +24,7 @@ public class ArquivoException extends RuntimeException {
 	 * 
 	 * @return erro
 	 */
-	public Erro getErro() {
+	public ErroArquivo getErro() {
 		return erro;
 	}
 

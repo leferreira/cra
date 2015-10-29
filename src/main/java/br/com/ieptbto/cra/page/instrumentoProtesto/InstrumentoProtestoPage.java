@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -89,7 +90,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					if (tituloProtestado != null) {
 						if (instrumento == null) {
 							if (!getRetornos().contains(tituloProtestado)) {
-								getRetornos().add(tituloProtestado);
+								getRetornos().add(0,tituloProtestado);
 							} else {
 								throw new InfraException("O título já existe na lista!");
 							}
@@ -99,6 +100,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					} else {
 						throw new InfraException("O título não foi encontrado ou não foi protestado pelo cartório!");
 					}
+					
+					protocoloCartorio.getModel().setObject(StringUtils.EMPTY);
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
@@ -126,7 +129,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					if (tituloProtestado != null) {
 						if (instrumento == null) {
 							if (!getRetornos().contains(tituloProtestado)) {
-								getRetornos().add(tituloProtestado);
+								getRetornos().add(0,tituloProtestado);
 							} else {
 								throw new InfraException("O título já existe na lista!");
 							}
@@ -136,6 +139,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					} else {
 						throw new InfraException("O título não foi encontrado ou não foi protestado pelo cartório!");
 					}
+					
+					codigoInstrumento.getModel().setObject(StringUtils.EMPTY);
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				}
@@ -152,6 +157,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 			@Override
 			protected void populateItem(ListItem<Retorno> item) {
 				final Retorno retorno = item.getModelObject();
+				item.add(new Label("ordem", item.getIndex()+1));
 				item.add(new Label("numeroTitulo", retorno.getTitulo().getNumeroTitulo()));
 				item.add(new Label("protocolo", retorno.getNumeroProtocoloCartorio()));
 				item.add(new Label("pracaProtesto", retorno.getTitulo().getPracaProtesto()));
@@ -182,8 +188,11 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 			
 			@Override
 			public void onClick() {
+				
 				try {
-					instrumentoMediator.salvarInstrumentoProtesto(getRetornos());
+					instrumentoMediator.salvarInstrumentoProtesto(getRetornos(), getUser());
+					
+					setRetornos(null);
 					getFeedbackPanel().info("Entrada dos instrumentos realizada com sucesso !");
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);

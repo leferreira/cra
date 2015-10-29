@@ -23,7 +23,6 @@ body {
     /*zoom: 0.5;*/
     font-size-adjust: 0.45;
 	-ms-zoom: 1;
-	-ms- 
 	-webkit-zoom: 0.95;
 	/*-moz-transform:  scale(1, 0.9);*/
 }
@@ -89,6 +88,10 @@ legend{
 .link {
 	color: #337AB7 !important;
 	font-weight: bold;
+}
+
+.dataTables_wrapper{
+	    zoom: 98%;
 }
 
 .historico {

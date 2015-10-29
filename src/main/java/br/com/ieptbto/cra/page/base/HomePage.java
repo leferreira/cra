@@ -4,13 +4,9 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -64,7 +60,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private void carregarHomePage() {
 		this.usuario = getUser();
 		this.arquivo = remessaMediator.confirmacoesPendentes(getUsuario().getInstituicao());
-		carregarComunicadoModal();
+//		carregarComunicadoModal();
 		labelOrigemDestino(); 
 		labelQuantidadeConfirmacoes();
 		labelQuantidadeCancelamentos();
@@ -77,41 +73,41 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		add(listaDesistenciaCancelamentoPendentes());
 	}
 	
-	private void carregarComunicadoModal() {
-		final ModalWindow modalComunicado = new ModalWindow("modalComunicado");
-		modalComunicado.setPageCreator(new ModalWindow.PageCreator() {
-            /***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-            public Page createPage() {
-                return new ComunicadoModal(HomePage.this.getPageReference(), modalComunicado);
-            }
-	    });
-		modalComunicado.setResizable(false);
-		modalComunicado.setAutoSize(false);
-		modalComunicado.setInitialWidth(75);
-		modalComunicado.setInitialHeight(560); 
-		modalComunicado.setMinimalWidth(75); 
-		modalComunicado.setMinimalHeight(560);
-        modalComunicado.setWidthUnit("%");
-        modalComunicado.setHeightUnit("px");
-        add(modalComunicado);
-		
-		AjaxLink<?> openModal = new AjaxLink<Void>("showModal"){
-            /***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-            public void onClick(AjaxRequestTarget target){
-            	modalComunicado.show(target);
-            }
-		};
-		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-			openModal.setMarkupId("showModal");
-		}
-		add(openModal);
-	}
+//	private void carregarComunicadoModal() {
+//		final ModalWindow modalComunicado = new ModalWindow("modalComunicado");
+//		modalComunicado.setPageCreator(new ModalWindow.PageCreator() {
+//            /***/
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//            public Page createPage() {
+//                return new ComunicadoModal(HomePage.this.getPageReference(), modalComunicado);
+//            }
+//	    });
+//		modalComunicado.setResizable(false);
+//		modalComunicado.setAutoSize(false);
+//		modalComunicado.setInitialWidth(75);
+//		modalComunicado.setInitialHeight(560); 
+//		modalComunicado.setMinimalWidth(75); 
+//		modalComunicado.setMinimalHeight(560);
+//        modalComunicado.setWidthUnit("%");
+//        modalComunicado.setHeightUnit("px");
+//        add(modalComunicado);
+//		
+//		AjaxLink<?> openModal = new AjaxLink<Void>("showModal"){
+//            /***/
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//            public void onClick(AjaxRequestTarget target){
+//            	modalComunicado.show(target);
+//            }
+//		};
+//		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+//			openModal.setMarkupId("showModal");
+//		}
+//		add(openModal);
+//	}
 
 
 	private void labelQuantidadeCancelamentos() {

@@ -43,7 +43,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label">NºPROTOCOLO:</label>  
 							  <div class="col-md-7">
-							  <input wicket:id="protocoloCartorio" maxlength="10" class="form-control input-md">
+							  <input wicket:id="protocoloCartorio" maxlength="10" class="form-control input-md" autofocus="autofocus">
 							  </div>
 							</div>
 						</div>
@@ -55,6 +55,7 @@
 	   			<table id="table" class="table table-striped table-hover">
 	           		<thead>
 						<tr>
+							<th class="col-center">#</th>
 							<th class="col-center">Nº TITULO</th>
 							<th class="col-center">PROTOCOLO</th>
 							<th>PRAÇA PROTESTO</th>
@@ -67,6 +68,7 @@
 					</thead>
 					<tbody>
 	                   <tr wicket:id="instrumentos">
+	                   <td class="col-center" wicket:id="ordem"></td>
 						<td class="col-center" wicket:id="numeroTitulo"></td>
 						<td class="col-center" wicket:id="protocolo"></td>
 						<td wicket:id="pracaProtesto"></td>
