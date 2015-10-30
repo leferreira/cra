@@ -32,6 +32,7 @@ import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.HistoricoOcorrenciaTitulo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
+import br.com.ieptbto.cra.entidade.LayoutFiliado;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.PedidoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
@@ -49,6 +50,7 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.TituloSemTaxaCRA;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
+import br.com.ieptbto.cra.hibernate.audit.CraCustomRevisionEntity;
 
 /**
  * 
@@ -99,7 +101,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(TituloFiliado.class);
 		classesHibernate.add(Avalista.class);
 		classesHibernate.add(HistoricoOcorrenciaTitulo.class);
-		// classesHibernate.add(CraCustomRevisionEntity.class);
+		classesHibernate.add(CraCustomRevisionEntity.class);
 		classesHibernate.add(RemessaDesistenciaProtesto.class);
 		classesHibernate.add(CabecalhoArquivo.class);
 		classesHibernate.add(CabecalhoCartorio.class);
@@ -107,7 +109,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(RodapeCartorio.class);
 		classesHibernate.add(DesistenciaProtesto.class);
 		classesHibernate.add(PedidoDesistenciaCancelamento.class);
-		
+		classesHibernate.add(LayoutFiliado.class);
 		classesHibernate.add(TituloSemTaxaCRA.class);
 
 	}

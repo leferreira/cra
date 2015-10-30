@@ -20,10 +20,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.Filiado;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.LayoutFiliado;
 import br.com.ieptbto.cra.enumeration.CampoLayout;
-import br.com.ieptbto.cra.mediator.FiliadoMediator;
+import br.com.ieptbto.cra.enumeration.TipoArquivoLayoutEmpresa;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 
 /**
  * 
@@ -34,19 +35,18 @@ import br.com.ieptbto.cra.mediator.FiliadoMediator;
 public class LayoutEmpresaInputPanel extends Panel {
 
 	@SpringBean
-	private FiliadoMediator filiadoMediator;
+	private InstituicaoMediator instituicaoMediator;
 
-	private DropDownChoice<Filiado> comboEmpresas;
+	private DropDownChoice<Instituicao> comboEmpresas;
 	private TextField<Integer> campoOrdem;
 	private TextField<Integer> campoPosicaoInicio;
 	private TextField<Integer> campoPosicaoFim;
 	private DropDownChoice<CampoLayout> comboCampos;
 	private LayoutFiliado layoutFiliado;
 	private List<LayoutFiliado> listaLayoutFiliado;
-
 	private WebMarkupContainer divResultado;
-
 	private List<CampoLayout> campos;
+	private DropDownChoice<TipoArquivoLayoutEmpresa> comboTipoArquivo;
 
 	public LayoutEmpresaInputPanel(String id, IModel<?> model) {
 		super(id, model);
@@ -56,6 +56,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 
 	private void addComponent() {
 		add(getComboEmpresas());
+		add(getComboTipoArquivoLayout());
 
 		WebMarkupContainer divCampo = getDivCampo();
 		add(divCampo);
@@ -71,6 +72,17 @@ public class LayoutEmpresaInputPanel extends Panel {
 		divResultado.setOutputMarkupId(true);
 		add(divResultado);
 
+	}
+
+	private Component getComboTipoArquivoLayout() {
+		ChoiceRenderer<TipoArquivoLayoutEmpresa> renderer = new ChoiceRenderer<TipoArquivoLayoutEmpresa>("label");
+		if (comboTipoArquivo == null) {
+			comboTipoArquivo = new DropDownChoice<TipoArquivoLayoutEmpresa>("tipoArquivo", getTipoArquivoLayoutEmpresa(), renderer);
+			comboTipoArquivo.setLabel(new Model<String>("Tipo Arquivo"));
+			comboTipoArquivo.setOutputMarkupId(true);
+			comboTipoArquivo.setRequired(true);
+		}
+		return comboTipoArquivo;
 	}
 
 	private Component getTabelaResultado() {
@@ -99,7 +111,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 		};
 	}
 
-	private List<LayoutFiliado> getCamposFiliado() {
+	public List<LayoutFiliado> getCamposFiliado() {
 		if (listaLayoutFiliado == null) {
 			listaLayoutFiliado = new ArrayList<LayoutFiliado>();
 		}
@@ -113,7 +125,6 @@ public class LayoutEmpresaInputPanel extends Panel {
 				layoutFiliado = new LayoutFiliado();
 
 				if (verificarCampos(layoutFiliado)) {
-					warn("Todos os campos devem ser preenchidos");
 					target.add(this.getPage());
 					return;
 				}
@@ -126,7 +137,6 @@ public class LayoutEmpresaInputPanel extends Panel {
 					}
 				}
 
-				comboCampos = getComboCampos();
 				// divResultado.add(comboCampos);
 
 				getCamposFiliado().add(layoutFiliado);
@@ -140,17 +150,38 @@ public class LayoutEmpresaInputPanel extends Panel {
 				final Integer posicaoInicio = (Integer) campoPosicaoInicio.getDefaultModelObject();
 				final Integer ordem = (Integer) campoOrdem.getDefaultModelObject();
 				final CampoLayout campo = comboCampos.getConvertedInput();
-				final Filiado empresa = comboEmpresas.getConvertedInput();
+				final Instituicao empresa = comboEmpresas.getConvertedInput();
+				final TipoArquivoLayoutEmpresa tipoArquivo = comboTipoArquivo.getConvertedInput();
 
-				if (posicaoFim == null || posicaoInicio == null || ordem == null || campo == null || empresa == null) {
+				if (posicaoFim == null || posicaoInicio == null || ordem == null || campo == null || empresa == null
+		                || tipoArquivo == null) {
+					warn("Todos os campos devem ser preenchidos");
 					return true;
 				}
 
+				int i = 1;
+				for (LayoutFiliado layout : getListaLayoutFiliado()) {
+
+					if (layout.getCampo().equals(getComboCampos().getDefaultModelObject())) {
+						warn("O campo " + layout.getCampo() + " já foi adicionado ao layout. Não deve haver campos repetidos no layout.");
+						return true;
+					}
+
+					if (layout.getOrdem() == i) {
+						i++;
+					} else {
+						warn("O campo " + layout.getCampo().getLabel() + " não está na ordem correta.\n"
+		                        + "Todos os campos devem ser inseridos na ordem do layout.");
+						return true;
+					}
+				}
+
 				layoutFiliado.setCampo(campo);
-				layoutFiliado.setFiliado(empresa);
+				layoutFiliado.setEmpresa(empresa);
 				layoutFiliado.setOrdem(ordem);
 				layoutFiliado.setPosicaoFim(posicaoFim);
 				layoutFiliado.setPosicaoInicio(posicaoInicio);
+				layoutFiliado.setTipoArquivo(tipoArquivo);
 
 				return false;
 			}
@@ -166,7 +197,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 		return divCampo;
 	}
 
-	private DropDownChoice<CampoLayout> getComboCampos() {
+	public DropDownChoice<CampoLayout> getComboCampos() {
 		ChoiceRenderer<CampoLayout> renderer = new ChoiceRenderer<CampoLayout>("label");
 		if (comboCampos == null) {
 			comboCampos = new DropDownChoice<CampoLayout>("campo", getCamposLayout(), renderer);
@@ -177,11 +208,15 @@ public class LayoutEmpresaInputPanel extends Panel {
 		return comboCampos;
 	}
 
-	private List<CampoLayout> getCamposLayout() {
+	public List<CampoLayout> getCamposLayout() {
 		if (campos == null) {
 			campos = Arrays.asList(CampoLayout.values());
 		}
 		return campos;
+	}
+
+	private List<TipoArquivoLayoutEmpresa> getTipoArquivoLayoutEmpresa() {
+		return Arrays.asList(TipoArquivoLayoutEmpresa.values());
 	}
 
 	private TextField<Integer> getCampoPosicaoFim() {
@@ -208,13 +243,22 @@ public class LayoutEmpresaInputPanel extends Panel {
 		return divCampo;
 	}
 
-	private DropDownChoice<Filiado> getComboEmpresas() {
-		ChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("razaoSocial");
-		comboEmpresas = new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarTodosFiliados(), renderer);
+	private DropDownChoice<Instituicao> getComboEmpresas() {
+		ChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("razaoSocial");
+		comboEmpresas = new DropDownChoice<Instituicao>("empresa", instituicaoMediator.getInstituicoesFinanceiras(), renderer);
 		comboEmpresas.setLabel(new Model<String>("Empresa"));
 		comboEmpresas.setOutputMarkupId(true);
 		comboEmpresas.setRequired(true);
 
 		return comboEmpresas;
 	}
+
+	public List<LayoutFiliado> getListaLayoutFiliado() {
+		return listaLayoutFiliado;
+	}
+
+	public void setListaLayoutFiliado(List<LayoutFiliado> listaLayoutFiliado) {
+		this.listaLayoutFiliado = listaLayoutFiliado;
+	}
+
 }
