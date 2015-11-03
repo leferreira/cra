@@ -17,12 +17,11 @@ public class BatimentoLabel extends BasePage<Batimento> {
 	private Batimento batimento;
 	
 	public BatimentoLabel() {
-		info("Batimento realizado com sucesso!");
+		info("Retornos confirmados com sucesso!");
 	}
 	
 	@Override
 	protected IModel<Batimento> getModel() {
-		// TODO Auto-generated method stub
 		return new CompoundPropertyModel<Batimento>(batimento);
 	}
 
