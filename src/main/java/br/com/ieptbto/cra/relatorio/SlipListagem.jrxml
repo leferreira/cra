@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
-<!-- 2015-10-28T15:55:27 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SlipListagem2" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1ff80ed7-b7e9-46ae-b4b8-a3d3b46d68ee">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="3.797498335832415"/>
+	<property name="ireport.x" value="60"/>
+	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -23,6 +24,10 @@
 	<field name="pracaProtesto" class="java.lang.String"/>
 	<field name="dataProtocolo" class="java.util.Date"/>
 	<field name="envelope.codigoCRA" class="java.lang.String"/>
+	<variable name="BANCO_ATUAL" class="java.lang.String">
+		<variableExpression><![CDATA[String.valueOf($V{BANCO_ATUAL}.toString().equals( $F{banco}.toString() ) ? $V{BANCO_ATUAL}.toString() : $F{banco}.toString())]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -113,15 +118,8 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="16" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-			<break>
-				<reportElement key="" x="0" y="0" width="802" height="1" uuid="befdab55-a230-401d-975f-2e634961a5ed">
-					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-					<printWhenExpression><![CDATA[$V{BANCO_ATUAL}.equals($F{banco}) ? false : true]]></printWhenExpression>
-				</reportElement>
-			</break>
 			<rectangle>
 				<reportElement x="0" y="0" width="802" height="15" isPrintInFirstWholeBand="true" forecolor="rgba(255, 255, 255, 0.0)" backcolor="#E8E8E8" uuid="e45e065b-44af-4423-bf6f-a47726d8ec25">
 					<property name="local_mesure_unitwidth" value="pixel"/>
@@ -184,6 +182,11 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numeroProtocoloCartorio}]]></textFieldExpression>
 			</textField>
+			<break>
+				<reportElement x="0" y="15" width="802" height="1" uuid="c983d2dd-7f26-438f-81f2-a63f4959054e">
+					<printWhenExpression><![CDATA[$V{BANCO_ATUAL}.equals( $F{banco} ) ? false : true ]]></printWhenExpression>
+				</reportElement>
+			</break>
 		</band>
 	</detail>
 </jasperReport>
