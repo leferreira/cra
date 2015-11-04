@@ -3,7 +3,7 @@
 	<div class="col-md-12">  
 		  <div class="col-md-1"><label>Empresa:</label></div>   
 		  <div class="col-md-5 ">
-		  		<select class="form-control input-sm"  wicket:id="filiado" ></select>
+		  		<select class="form-control input-sm"  wicket:id="empresa" ></select>
 		  </div>
 		  <div class="col-md-2 right">
 		  	<label class="pull-right">Tipo de Arquivo:</label> 
@@ -16,25 +16,29 @@
 <br/>
 <div class="row" wicket:id="divCampo">
 		<div class="col-md-12">
-			<div class="col-md-4"><label>Campo</label></div>
-			<div class="col-md-2"><label>Ordem</label></div>
-			<div class="col-md-2"><label>Posição Inicial</label></div>
-			<div class="col-md-2"><label>Posição Final</label></div>
+			<div class="col-md-4"><label>Descrição</label></div>
+			<div class="col-md-3"><label>Campo do Layout</label></div>
+			<div class="col-md-1"><label>Ordem</label></div>
+			<div class="col-md-1"><label>Posição Inicial</label></div>
+			<div class="col-md-1"><label>Posição Final</label></div>
 		</div>
 		<div class="col-md-12">
 			<div class="col-md-4">
+			    <input class="form-control input-md" wicket:id="descricaoCampo">
+			</div>
+			<div class="col-md-3">
 			    <select class="form-control input-sm" wicket:id="campo"></select>
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-1">
 			    <input class="form-control input-md" wicket:id="ordem">
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-1">
 			    <input class="form-control input-md" wicket:id="posicaoInicio">
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-1">
 			    <input class="form-control input-md" wicket:id="posicaoFim">
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-1">
 			    <button  class="btn btn-primary" wicket:id="add" ><span class="fa fa-plus-o"></span>add</button>
 			</div>
 		</div>
@@ -47,7 +51,8 @@
 			<table id="table-layout"  class="table table-responsive table-striped table-hover dataTable no-footer">
 				<thead>
 					<tr>
-						<th>Campo</th>
+						<th>Descrição</th>
+						<th>Campo do Layout</th>
 						<th>Ordem</th>
 						<th>Posição inicial</th>
 						<th>Posição Final</th>
@@ -56,6 +61,7 @@
 				</thead>
 				<tbody>
 					<tr wicket:id="tabelaLayout">
+						<td wicket:id="descricao"></td>
 						<td wicket:id="campo"></td>
 						<td wicket:id="ordem"></td>
 						<td wicket:id="posicaoInicio"></td>

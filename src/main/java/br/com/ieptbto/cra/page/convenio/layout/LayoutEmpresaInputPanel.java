@@ -48,6 +48,8 @@ public class LayoutEmpresaInputPanel extends Panel {
 	private List<CampoLayout> campos;
 	private DropDownChoice<TipoArquivoLayoutEmpresa> comboTipoArquivo;
 
+	private TextField<String> campoDescricao;
+
 	public LayoutEmpresaInputPanel(String id, IModel<?> model) {
 		super(id, model);
 		layoutFiliado = new LayoutFiliado();
@@ -61,6 +63,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 		WebMarkupContainer divCampo = getDivCampo();
 		add(divCampo);
 
+		divCampo.add(getDescricaoCampo());
 		divCampo.add(getCampoOrdem());
 		divCampo.add(getCampoPosicaoInicio());
 		divCampo.add(getCampoPosicaoFim());
@@ -72,6 +75,12 @@ public class LayoutEmpresaInputPanel extends Panel {
 		divResultado.setOutputMarkupId(true);
 		add(divResultado);
 
+	}
+
+	private Component getDescricaoCampo() {
+		campoDescricao = new TextField<String>("descricaoCampo");
+		campoDescricao.setOutputMarkupId(true);
+		return campoDescricao;
 	}
 
 	private Component getComboTipoArquivoLayout() {
@@ -91,6 +100,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 			@Override
 			protected void populateItem(ListItem<LayoutFiliado> item) {
 				final LayoutFiliado layout = item.getModelObject();
+				item.add(new Label("descricao", layout.getDescricaoCampo()));
 				item.add(new Label("campo", layout.getCampo().getLabel()));
 				item.add(new Label("ordem", layout.getOrdem()));
 				item.add(new Label("posicaoInicio", layout.getPosicaoInicio()));
@@ -146,6 +156,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 			}
 
 			private boolean verificarCampos(LayoutFiliado layoutFiliado) {
+				final String descricao = (String) campoDescricao.getDefaultModelObject();
 				final Integer posicaoFim = (Integer) campoPosicaoFim.getDefaultModelObject();
 				final Integer posicaoInicio = (Integer) campoPosicaoInicio.getDefaultModelObject();
 				final Integer ordem = (Integer) campoOrdem.getDefaultModelObject();
@@ -153,8 +164,8 @@ public class LayoutEmpresaInputPanel extends Panel {
 				final Instituicao empresa = comboEmpresas.getConvertedInput();
 				final TipoArquivoLayoutEmpresa tipoArquivo = comboTipoArquivo.getConvertedInput();
 
-				if (posicaoFim == null || posicaoInicio == null || ordem == null || campo == null || empresa == null
-		                || tipoArquivo == null) {
+				if (posicaoFim == null || posicaoInicio == null || ordem == null || campo == null || empresa == null || tipoArquivo == null
+		                || descricao == null) {
 					warn("Todos os campos devem ser preenchidos");
 					return true;
 				}
@@ -182,6 +193,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 				layoutFiliado.setPosicaoFim(posicaoFim);
 				layoutFiliado.setPosicaoInicio(posicaoInicio);
 				layoutFiliado.setTipoArquivo(tipoArquivo);
+				layoutFiliado.setDescricaoCampo(descricao);
 
 				return false;
 			}
