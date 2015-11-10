@@ -16,6 +16,7 @@ import java.util.List;
 import br.com.ieptbto.cra.entidade.AgenciaBancoDoBrasil;
 import br.com.ieptbto.cra.entidade.AgenciaBradesco;
 import br.com.ieptbto.cra.entidade.AgenciaCAF;
+import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Batimento;
@@ -111,6 +112,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(PedidoDesistenciaCancelamento.class);
 		classesHibernate.add(LayoutFiliado.class);
 		classesHibernate.add(TituloSemTaxaCRA.class);
+		classesHibernate.add(Anexo.class);
 
 	}
 

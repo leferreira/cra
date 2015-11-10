@@ -1,16 +1,12 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13.3px;
+    font-family: 'Hind', sans-serif;
+    font-size: 14px;
     background-color: #337AB7;
 }
 
 .navbar{
 	margin-bottom: 10px;
 }
- 
- .navbar-nav{
- 	font-size: 14px;
- }
  
 #page-wrapper{
 	zoom: 0.95; 
@@ -20,11 +16,13 @@ body {
     position: absolute;
     min-height: 83%;
     
-    /*zoom: 0.5;*/
     font-size-adjust: 0.45;
 	-ms-zoom: 1;
 	-webkit-zoom: 0.95;
-	/*-moz-transform:  scale(1, 0.9);*/
+}
+
+.navbar-nav {
+    font-size: 14.5px;
 }
 
 .navbar-default .navbar-nav>li>a{
@@ -80,18 +78,9 @@ body {
 .col-80{
 	width: 80%;
 }
-
-legend{
-	font-size: 16px;
-}
-
 .link {
 	color: #337AB7 !important;
 	font-weight: bold;
-}
-
-.dataTables_wrapper{
-	    zoom: 98%;
 }
 
 .historico {
@@ -114,11 +103,6 @@ legend{
 
 #table_paginate{
 	float: right !important;
-}
-
-.mensagem-feed{ 
-	font-size: 18px;
-	font-family: Lato;
 }
 
 .destaque {

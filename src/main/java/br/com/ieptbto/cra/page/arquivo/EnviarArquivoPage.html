@@ -18,6 +18,12 @@
 									<input wicket:id="file" type="file" class="filestyle" data-buttonText="Procurar">
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-lg-8 col-md-offset-2" style="text-align: left">
+									<label wicket:id="labelOutros">OUTROS:</label>
+									<input wicket:id="anexo" type="file" class="filestyle" data-buttonText="Procurar">
+								</div>
+							</div>
 							<br/>
 							<div class="row">
 								<div class="col-lg-8 col-md-offset-2">
@@ -32,6 +38,9 @@
 	<script>
 	$( document ).ready(function() {
 		$(":file").filestyle({buttonText: "Procurar"});
+	});	
+	$( document ).ready(function() {
+		$(":anexo").filestyle({buttonText: "Procurar"});
 	});	
 	</script>
 	</wicket:extend>

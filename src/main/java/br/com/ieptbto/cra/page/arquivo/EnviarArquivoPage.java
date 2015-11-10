@@ -22,6 +22,7 @@ import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
+import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
@@ -62,6 +63,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	private Instituicao cra;
 	private Form<Arquivo> form;
 	private FileUploadField fileUploadField;
+	private FileUploadField anexoUploadField;
 
 	public EnviarArquivoPage() {
 		arquivo = new Arquivo();
@@ -71,11 +73,17 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			/****/
 			private static final long serialVersionUID = 1L;
 
+			@SuppressWarnings("unused")
 			@Override
 			protected void onSubmit() {
 				final FileUpload uploadedFile = fileUploadField.getFileUpload();
+				final FileUpload anexoFile = anexoUploadField.getFileUpload();
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
-
+				
+				if (anexoUploadField.getFileUpload() != null) {
+					Anexo arquivoAnexo = new Anexo();
+				}
+				
 				try {
 					getFeedbackMessages().clear();
 					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUser());
@@ -139,6 +147,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		form.setMaxSize(Bytes.megabytes(10));
 
 		form.add(campoArquivo());
+		form.add(campoAnexo());
 		form.add(botaoEnviar());
 		add(form);
 	} 
@@ -148,6 +157,17 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		fileUploadField.setRequired(true);
 		fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
 		return fileUploadField;
+	}
+	
+	private FileUploadField campoAnexo() {
+		anexoUploadField = new FileUploadField("anexo", new ListModel<FileUpload>());
+		anexoUploadField.setLabel(new Model<String>("Outros Arquivos"));
+		anexoUploadField.setOutputMarkupId(true);
+		
+		if (!getUser().getInstituicao().isPermitidoAnexo()) {
+			anexoUploadField.setVisible(false);
+		}
+		return anexoUploadField;
 	}
 
 	private AjaxButton botaoEnviar() {
