@@ -101,6 +101,7 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		form.add(campoResponsavel());
 		form.add(campoAgenciaCentralizadora());
 		form.add(campoStatus());
+		form.add(campoEnvioAnexo());
 		form.add(comboMunicipios());
 		form.add(new Button("botaoSalvar"));
 		add(form);
@@ -178,6 +179,11 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 	private Component campoStatus() {
 		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
 		return new RadioChoice<String>("status", status);
+	}
+	
+	private Component campoEnvioAnexo() {
+		List<String> status = Arrays.asList(new String[] { "Sim", "Não" });
+		return new RadioChoice<String>("permitidoAnexos", status);
 	}
 
 	private DropDownChoice<TipoInstituicao> comboTipoInstituicao() {

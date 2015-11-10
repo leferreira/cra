@@ -173,7 +173,7 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 
 	private DropDownChoice<GrupoUsuario> comboGrupoDoUsuario() {
 		IChoiceRenderer<GrupoUsuario> renderer = new ChoiceRenderer<GrupoUsuario>("grupo");
-		DropDownChoice<GrupoUsuario> comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario",grupoUsuarioMediator.listaDeGrupos(), renderer);
+		DropDownChoice<GrupoUsuario> comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario", grupoUsuarioMediator.listaDeGrupos(), renderer);
 		comboGrupoUsuario.setLabel(new Model<String>("Grupo Usuário"));
 		comboGrupoUsuario.setRequired(true);
 		return comboGrupoUsuario;

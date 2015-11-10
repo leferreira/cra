@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -118,6 +119,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 							IResourceStream resourceStream = new FileResourceStream(pdf);
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
 							        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + arquivoRetorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+							
+							getFeedbackPanel().info("O arquivo " + arquivo.getNomeArquivo() + " com " + arquivoRetorno.getArquivo().getRemessas().size()
+							        + " Remessa(s), salvo com sucesso.");
 						} catch (InfraException ex) { 
 							error(ex.getMessage());
 						} catch (Exception e) { 
@@ -147,6 +151,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		form.setMaxSize(Bytes.megabytes(10));
 
 		form.add(campoArquivo());
+		form.add(labelOutrosArquivos());
 		form.add(campoAnexo());
 		form.add(botaoEnviar());
 		add(form);
@@ -168,6 +173,16 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			anexoUploadField.setVisible(false);
 		}
 		return anexoUploadField;
+	}
+	
+	private Label labelOutrosArquivos() {
+		Label label = new Label("labelOutros", "OUTROS ARQUIVOS:");
+		label.setOutputMarkupId(true);
+		
+		if (!getUser().getInstituicao().isPermitidoAnexo()) {
+			label.setVisible(false);
+		}
+		return label;
 	}
 
 	private AjaxButton botaoEnviar() {
