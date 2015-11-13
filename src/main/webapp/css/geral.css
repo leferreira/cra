@@ -34,7 +34,11 @@ body {
 }
 
 .fa-4x {
-    font-size: 4.6em;
+    font-size: 4.2em;
+}
+
+legend {
+    font-size: 15px !important;
 }
 
 .navbar-nav > li > .dropdown-menu{
@@ -112,7 +116,7 @@ body {
 }
 
 .icon-home {
-	font-size: 14px !important;
+	font-size: 15px !important;
 }
 
 #ui-datepicker-div{

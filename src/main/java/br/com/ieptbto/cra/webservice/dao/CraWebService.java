@@ -26,6 +26,7 @@ import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 public class CraWebService {
 
 	protected static final Logger logger = Logger.getLogger(CraWebService.class);
+	public static final String CONSTANTE_COMARCA_XML = "comarcas";
 	public static final String CONSTANTE_REMESSA_XML = "remessa";
 	public static final String CONSTANTE_CONFIRMACAO_XML = "confirmacao";
 	protected Usuario usuario;

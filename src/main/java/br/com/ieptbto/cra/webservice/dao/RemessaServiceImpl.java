@@ -23,15 +23,17 @@ import br.com.ieptbto.cra.mediator.UsuarioMediator;
 @Path("/RemessaService")
 public class RemessaServiceImpl implements IRemessaWS {
 
+	public static final Logger logger = Logger.getLogger(RemessaServiceImpl.class);
+
 	@Resource
 	private WebServiceContext wsctx;
-	public static final Logger logger = Logger.getLogger(RemessaServiceImpl.class);
 	private UsuarioMediator usuarioMediator;
 	private Usuario usuario;
 	private ClassPathXmlApplicationContext context;
 	private RemessaService remessaService;
 	private ConfirmacaoService confirmacaoService;
 	private DesistenciaProtestoService desistenciaProtestoService;
+	private ComarcasHomologadasService comarcasHomologadasService;
 
 	@Override
 	@WebMethod(operationName = "Remessa")
@@ -49,10 +51,9 @@ public class RemessaServiceImpl implements IRemessaWS {
 	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
 		init(login, senha);
-
 		return confirmacaoService.processar(nomeArquivo, getUsuario(), dados);
 	}
-
+	
 	@Override
 	public String buscarRemessa(String nomeArquivo, String login, String senha) {
 		init(login, senha);
@@ -91,7 +92,16 @@ public class RemessaServiceImpl implements IRemessaWS {
 		init(login, senha);
 		return null;
 	}
-
+	
+	@Override
+	@WebMethod(operationName = "ComarcasHomologadas")
+	@GET
+	public String comarcasHomologadas(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, 
+			@WebParam(name = "codapres") String codigoApresentante) {
+		init(login, senha);
+		return comarcasHomologadasService.verificarComarcasHomologadas(usuario, codigoApresentante);
+	}
+	
 	private void init(String login, String senha) {
 		if (context == null) {
 			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
@@ -99,6 +109,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 		remessaService = (RemessaService) context.getBean("remessaService");
 		confirmacaoService = (ConfirmacaoService) context.getBean("confirmacaoService");
 		desistenciaProtestoService = (DesistenciaProtestoService) context.getBean("desistenciaProtestoService");
+		comarcasHomologadasService = (ComarcasHomologadasService) context.getBean("comarcasHomologadasService");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 		setUsuario(login, senha);
 	}

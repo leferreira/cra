@@ -28,7 +28,12 @@ public class MensagemDeErro {
 		this.usuario = usuario;
 		this.erro = erro;
 	}
-
+	
+	public MensagemDeErro(String codigoApresentante, CodigoErro erro) {
+		this.erro = erro;
+		this.codigoCompensacao = codigoApresentante;
+	}
+	
 	public MensagemRetornoXml getMensagemErro() {
 		MensagemRetornoXml msgSucesso = new MensagemRetornoXml();
 		Descricao descricao = getDescricao();

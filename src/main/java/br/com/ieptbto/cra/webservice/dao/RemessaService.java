@@ -130,7 +130,13 @@ public class RemessaService extends CraWebService {
 			while (scanner.hasNext()) {
 				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
 				if (xmlRecebido.contains("<?xml version=")) {
-					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
+					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", StringUtils.EMPTY);
+				}
+				if (xmlRecebido.contains("<comarca CodMun")) {
+					xmlRecebido = xmlRecebido.replaceAll("<comarca CodMun=.[0-9]+..", StringUtils.EMPTY);
+				}
+				if (xmlRecebido.contains("</comarca>")) {
+					xmlRecebido = xmlRecebido.replaceAll("</comarca>", StringUtils.EMPTY);
 				}
 			}
 			scanner.close();

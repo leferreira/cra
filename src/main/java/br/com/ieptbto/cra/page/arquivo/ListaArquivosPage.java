@@ -6,11 +6,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -36,6 +33,10 @@ import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * @author Thasso Araújo
@@ -43,6 +44,8 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 @SuppressWarnings("serial")
 public class ListaArquivosPage extends BasePage<Arquivo> {
+	
+	protected static final Logger logger = Logger.getLogger(ListaArquivosPage.class);
 
 	@SpringBean
 	RemessaMediator remessaMediator;
@@ -68,6 +71,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				final Remessa remessa = item.getModelObject();
 				item.add(downloadArquivoTXT(remessa));
 				item.add(relatorioArquivo(remessa));
+				
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					@Override
@@ -83,17 +87,19 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 					item.add(new Label("instituicao", remessa.getInstituicaoOrigem().getNomeFantasia()));
 					item.add(new Label("envio", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
 					item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
+					item.add(downloadAnexos(remessa));
 				} else {
 					item.add(new Label("instituicao", remessa.getInstituicaoDestino().getNomeFantasia()));
 					item.add(new Label("envio", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 					item.add(new Label("destino", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
+					item.add(new Label("downloadAnexos", StringUtils.EMPTY));
 				}
 				
 				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(remessa.getArquivo().getHoraEnvio())));
 				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa().getLabel()));
 			}
-
+			
 			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
 				return new Link<Remessa>("downloadArquivo") {
 
@@ -112,6 +118,33 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 						}
 					}
 				};
+			}
+
+			private Link<Remessa> downloadAnexos(final Remessa remessa) {
+				final File file = remessaMediator.processarArquivosAnexos(getUser(), remessa);
+				
+				Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
+					@Override
+					public void onClick() {
+						
+						try { 
+							IResourceStream resourceStream = new FileResourceStream(file);
+							
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(
+									new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						} catch (InfraException ex) {
+							getFeedbackPanel().error(ex.getMessage());
+						} catch (Exception e) {
+							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+						}
+					}
+				};
+				
+				if (file == null) {
+					linkAnexos.setOutputMarkupId(false);
+					linkAnexos.setVisible(false);
+				}
+				return linkAnexos;
 			}
 			
 			private Link<Remessa> relatorioArquivo(final Remessa remessa) {
