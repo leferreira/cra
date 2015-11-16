@@ -37,6 +37,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 
 	@Override
 	@WebMethod(operationName = "Remessa")
+	
 	@GET
 	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
@@ -45,15 +46,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 		return remessaService.processar(nomeArquivo, getUsuario(), dados);
 	}
 
-	@Override
-	@WebMethod(operationName = "enviarConfirmacao")
-	@GET
-	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
-		init(login, senha);
-		return confirmacaoService.processar(nomeArquivo, getUsuario(), dados);
-	}
-	
+	@WebMethod(operationName = "BuscarRemessa")
 	@Override
 	public String buscarRemessa(String nomeArquivo, String login, String senha) {
 		init(login, senha);
@@ -61,17 +54,29 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
+	@WebMethod(operationName = "EnviarConfirmacao")
+	@GET
+	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+		init(login, senha);
+		return confirmacaoService.processar(nomeArquivo, getUsuario(), dados);
+	}
+
+	@WebMethod(operationName = "Confirmacao")
+	@Override
 	public String confirmacao(String nomeArquivo, String login, String senha) {
 		init(login, senha);
 		return confirmacaoService.processar(nomeArquivo, getUsuario());
 	}
 
+	@WebMethod(operationName = "Retorno")
 	@Override
 	public String retorno(String nomeArquivo, String login, String senha) {
 		init(login, senha);
 		return confirmacaoService.processar(nomeArquivo, getUsuario());
 	}
 
+	@WebMethod(operationName = "Cancelamento")
 	@Override
 	public String cancelamento(String nomeArquivo, String login, String senha, String dados) {
 		init(login, senha);
@@ -88,6 +93,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
+	@WebMethod(operationName = "AutorizacaoCancelamento")
 	public String autorizacaoCancelamento(String nomeArquivo, String login, String senha, String dados) {
 		init(login, senha);
 		return null;

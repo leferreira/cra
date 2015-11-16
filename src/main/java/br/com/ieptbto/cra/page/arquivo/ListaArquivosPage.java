@@ -21,6 +21,7 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
@@ -121,13 +122,14 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 			}
 
 			private Link<Remessa> downloadAnexos(final Remessa remessa) {
-				final File file = remessaMediator.processarArquivosAnexos(getUser(), remessa);
+				List<Anexo> anexos = remessaMediator.verificarAnexosRemessa(remessa);
 				
 				Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
 					@Override
 					public void onClick() {
 						
 						try { 
+							File file = remessaMediator.processarArquivosAnexos(getUser(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
 							
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
@@ -140,9 +142,11 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 					}
 				};
 				
-				if (file == null) {
-					linkAnexos.setOutputMarkupId(false);
-					linkAnexos.setVisible(false);
+				if (anexos != null) {
+					if (anexos.isEmpty()) {
+						linkAnexos.setOutputMarkupId(false);
+						linkAnexos.setVisible(false);
+					}
 				}
 				return linkAnexos;
 			}
