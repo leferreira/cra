@@ -1,12 +1,21 @@
 package br.com.ieptbto.cra.page.convenio.layout;
 
+import java.util.List;
+
+import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.LayoutFiliado;
+import br.com.ieptbto.cra.mediator.LayoutFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -21,15 +30,42 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaLayoutEmpresaPage extends BasePage<LayoutFiliado> {
 
+	@SpringBean
+	LayoutFiliadoMediator layoutFiliadoMediator;
 	private IModel<LayoutFiliado> layoutEmpresa;
+	private List<LayoutFiliado> listEmpresas;
 
 	public ListaLayoutEmpresaPage() {
+
 		carregarDados();
+		WebMarkupContainer divResultado = getDivResultado();
+		divResultado.add(getTabelaResultado());
+		add(divResultado);
 	}
 
 	private void carregarDados() {
-		// TODO Auto-generated method stub
+		listEmpresas = layoutFiliadoMediator.buscarEmpresasComLayout();
+	}
 
+	private WebMarkupContainer getDivResultado() {
+		WebMarkupContainer divCampo = new WebMarkupContainer("divResultado");
+		divCampo.setOutputMarkupId(true);
+		return divCampo;
+	}
+
+	private Component getTabelaResultado() {
+		return new ListView<LayoutFiliado>("tabelaLayout", getListEmpresas()) {
+			@Override
+			protected void populateItem(ListItem<LayoutFiliado> item) {
+				final LayoutFiliado layout = item.getModelObject();
+				item.add(new Label("empresa", layout.getEmpresa().getNomeFantasia()));
+				item.add(new Label("tipoArquivo", layout.getTipoArquivo().getLabel()));
+			}
+		};
+	}
+
+	public List<LayoutFiliado> getListEmpresas() {
+		return listEmpresas;
 	}
 
 	@Override

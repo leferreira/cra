@@ -34,6 +34,7 @@ import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.page.convenio.RemessaConvenioPage;
 import br.com.ieptbto.cra.page.convenio.layout.IncluirLayoutEmpresaPage;
+import br.com.ieptbto.cra.page.convenio.layout.ListaLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.cra.BatimentoPage;
 import br.com.ieptbto.cra.page.cra.ConfirmacaoPage;
 import br.com.ieptbto.cra.page.cra.RetornoPage;
@@ -140,7 +141,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	private void montaPaginas() {
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
-//		mountPage("CargaInicial", CargaInicialPage.class);
+		// mountPage("CargaInicial", CargaInicialPage.class);
 
 		/** Arquivo */
 		mountPage("UsuariosPage", ListaUsuarioPage.class);
@@ -193,6 +194,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("RetornoPage", RetornoPage.class);
 		mountPage("RemessasConvenio", RemessaConvenioPage.class);
 		mountPage("LayoutEmpresa", IncluirLayoutEmpresaPage.class);
+		mountPage("EmpresasLayout", ListaLayoutEmpresaPage.class);
 
 		/** Slip */
 		mountPage("InstrumentoDeProtesto", InstrumentoProtestoPage.class);

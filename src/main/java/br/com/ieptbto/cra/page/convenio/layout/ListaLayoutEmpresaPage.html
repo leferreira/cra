@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<div class="col-lg-12 col-md-6">
+			<div class="panel">
+				 <div class="panel-body">
+					<h4 class="titulo-top">EMPRESAS COM LAYOUTS 
+					<span class="pull-right">
+						<a href="LayoutEmpresa" class="link" style="font-size: 16px;"><span class="fa fa-plus"></span>&nbsp;Cadastrar Layout</a>
+					</span>
+					</h4>
+					<br style="clear: both;"/>
+						<div>
+							<fieldset>
+							<legend>Resultado</legend>
+							<div class="row" wicket:id="divResultado">
+								<div class="col-md-12">
+									<table id="table-layout"  class="table table-responsive table-striped table-hover dataTable no-footer">
+										<thead>
+											<tr>
+												<th>Empresa</th>
+												<th>Tipo Arquivo</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr wicket:id="tabelaLayout">
+												<td wicket:id="empresa"></td>
+												<td wicket:id="tipoArquivo"></td>
+												<td class="col-center"></td>
+											</tr>
+										</tbody>
+									</table> 
+								</div>
+							</div>
+						</fieldset>
+						</div>
+				 </div>
+			 </div>
+		 </div>
+	</wicket:extend>
+</body>
+</html>
