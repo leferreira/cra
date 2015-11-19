@@ -9,7 +9,7 @@ body {
 }
  
 #page-wrapper{
-	zoom: 0.95; 
+	zoom: 0.96; 
 	width: 100%;
     background-color: #fdfdfd;
     margin: 0 auto;
@@ -18,7 +18,7 @@ body {
     
     font-size-adjust: 0.45;
 	-ms-zoom: 1;
-	-webkit-zoom: 0.95;
+	-webkit-zoom: 0.96;
 }
 
 .navbar-nav {
@@ -120,7 +120,7 @@ legend {
 }
 
 #ui-datepicker-div{
-	zoom: 95%;
+	zoom: 96%;
 }
 
 .glyphicon-folder-open {

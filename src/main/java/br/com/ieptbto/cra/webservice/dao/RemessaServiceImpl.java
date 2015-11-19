@@ -9,10 +9,15 @@ import javax.ws.rs.Path;
 import javax.xml.ws.WebServiceContext;
 
 import org.apache.log4j.Logger;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
+import br.com.ieptbto.cra.webservice.service.ComarcasHomologadasService;
+import br.com.ieptbto.cra.webservice.service.ConfirmacaoService;
+import br.com.ieptbto.cra.webservice.service.DesistenciaProtestoService;
+import br.com.ieptbto.cra.webservice.service.RemessaService;
+import br.com.ieptbto.cra.webservice.service.RetornoService;
 
 /**
  * 
@@ -32,12 +37,12 @@ public class RemessaServiceImpl implements IRemessaWS {
 	private ClassPathXmlApplicationContext context;
 	private RemessaService remessaService;
 	private ConfirmacaoService confirmacaoService;
+	private RetornoService retornoService;
 	private DesistenciaProtestoService desistenciaProtestoService;
 	private ComarcasHomologadasService comarcasHomologadasService;
 
 	@Override
 	@WebMethod(operationName = "Remessa")
-	
 	@GET
 	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
@@ -69,11 +74,11 @@ public class RemessaServiceImpl implements IRemessaWS {
 		return confirmacaoService.processar(nomeArquivo, getUsuario());
 	}
 
-	@WebMethod(operationName = "Retorno")
 	@Override
+	@WebMethod(operationName = "Retorno")
 	public String retorno(String nomeArquivo, String login, String senha) {
 		init(login, senha);
-		return confirmacaoService.processar(nomeArquivo, getUsuario());
+		return retornoService.processar(nomeArquivo, getUsuario());
 	}
 
 	@WebMethod(operationName = "Cancelamento")

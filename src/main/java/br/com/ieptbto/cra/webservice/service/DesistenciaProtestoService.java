@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.dao;
+package br.com.ieptbto.cra.webservice.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
 import br.com.ieptbto.cra.webservice.VO.Mensagem;
-import br.com.ieptbto.cra.webservice.VO.MensagemRetornoXml;
+import br.com.ieptbto.cra.webservice.VO.MensagemXml;
 
 /**
  * 
@@ -42,11 +42,11 @@ public class DesistenciaProtestoService extends CraWebService {
 		setNomeArquivo(nomeArquivo);
 
 		if (getUsuario() == null) {
-			return setResposta(new ArquivoVO(), nomeArquivo, CONSTANTE_REMESSA_XML);
+			return setResposta(usuario.getInstituicao().getLayoutPadraoXML() ,new ArquivoVO(), nomeArquivo, CONSTANTE_REMESSA_XML);
 		}
 
 		if (dados == null || StringUtils.isEmpty(dados) || StringUtils.isBlank(dados)) {
-			return setRespostaArquivoEmBranco(nomeArquivo);
+			return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		}
 
 		arquivo = gerarArquivoDesistencia(arquivo, dados);
@@ -54,9 +54,9 @@ public class DesistenciaProtestoService extends CraWebService {
 		return gerarMensagem(gerarResposta(arquivo, getUsuario()), "relatorio");
 	}
 
-	private MensagemRetornoXml gerarResposta(Arquivo arquivo, Usuario usuario) {
+	private MensagemXml gerarResposta(Arquivo arquivo, Usuario usuario) {
 		List<Mensagem> mensagens = new ArrayList<Mensagem>();
-		MensagemRetornoXml mensagemRetorno = new MensagemRetornoXml();
+		MensagemXml mensagemRetorno = new MensagemXml();
 		Descricao desc = new Descricao();
 		Detalhamento detal = new Detalhamento();
 		detal.setMensagem(mensagens);

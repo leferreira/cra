@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.dao;
+package br.com.ieptbto.cra.webservice.service;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -22,7 +22,7 @@ import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
-import br.com.ieptbto.cra.webservice.VO.MensagemRetornoXml;
+import br.com.ieptbto.cra.webservice.VO.MensagemXml;
 
 /**
  * @author Thasso Araújo
@@ -46,7 +46,7 @@ public class ComarcasHomologadasService extends CraWebService {
 	}
 	
 	protected String getMensagemFalhaAutenticao() {
-		MensagemRetornoXml msgRetorno = new MensagemRetornoXml();
+		MensagemXml msgRetorno = new MensagemXml();
 		
 		msgRetorno.setDescricao(new Descricao());
 		msgRetorno.setDetalhamento(new Detalhamento());

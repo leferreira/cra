@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.dao;
+package br.com.ieptbto.cra.webservice.service;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -14,9 +14,11 @@ import org.apache.log4j.Logger;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
+import br.com.ieptbto.cra.webservice.dao.MensagemDeErro;
 
 /**
  * 
@@ -26,38 +28,55 @@ import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 public class CraWebService {
 
 	protected static final Logger logger = Logger.getLogger(CraWebService.class);
+	public static final String CONSTANTE_RELATORIO_XML = "relatorio";
 	public static final String CONSTANTE_COMARCA_XML = "comarcas";
 	public static final String CONSTANTE_REMESSA_XML = "remessa";
 	public static final String CONSTANTE_CONFIRMACAO_XML = "confirmacao";
+	public static final String CONSTANTE_RETORNO_XML = "retorno";
 	protected Usuario usuario;
 	protected String nomeArquivo;
 
-	protected String setResposta(ArquivoVO arquivo, String nomeArquivo, String nomeNode) {
+	protected String setResposta(LayoutPadraoXML layoutPadraoResposta ,ArquivoVO arquivo, String nomeArquivo, String nomeNode) {
 		if (getUsuario() == null) {
 			logger.error("Usuario inválido.");
-			return setRespostaUsuarioInvalido(nomeArquivo);
+			return setRespostaUsuarioInvalido(layoutPadraoResposta, nomeArquivo);
 		}
 		if (arquivo == null) {
 			logger.error("Remessa não encontrada.");
-			return setRespostaArquivoInexistente(nomeArquivo);
+			return setRespostaArquivoInexistente(layoutPadraoResposta, nomeArquivo);
 		}
-
+		
 		return gerarMensagem(arquivo, nomeNode);
 	}
 
-	protected String setRespostaArquivoEmBranco(String nomeArquivo) {
+	protected String setRespostaArquivoEmBranco(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
 		logger.error("dados enviados em branco");
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.DADOS_DE_ENVIO_INVALIDOS);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_REMESSA_XML);
+		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+		}
+		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
-	private String setRespostaUsuarioInvalido(String nomeArquivo) {
+	protected String setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
+		
+		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.USUARIO_INSTITUICAO_DIFERENTE_ARQUIVO);
+		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+		}
+		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+	}
+
+	private String setRespostaUsuarioInvalido(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), CodigoErro.FALHA_NA_AUTENTICACAO);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_REMESSA_XML);
+		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+		}
+		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 
 	}
 
-	private String setRespostaArquivoInexistente(String nomeArquivo) {
+	private String setRespostaArquivoInexistente(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
 		TipoArquivoEnum tipo = TipoArquivoEnum.getTipoArquivoEnum(nomeArquivo);
 		CodigoErro codigo = null;
 		if (TipoArquivoEnum.REMESSA.equals(tipo)) {
@@ -71,7 +90,10 @@ public class CraWebService {
 		}
 
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), codigo);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_REMESSA_XML);
+		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+		}
+		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
 	protected String gerarMensagem(Object mensagem, String nomeNo) {

@@ -3,13 +3,19 @@ package br.com.ieptbto.cra.webservice.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
+import br.com.ieptbto.cra.webservice.VO.ComarcaDetalhamentoSerpro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
 import br.com.ieptbto.cra.webservice.VO.Mensagem;
-import br.com.ieptbto.cra.webservice.VO.MensagemRetornoXml;
+import br.com.ieptbto.cra.webservice.VO.MensagemXml;
+import br.com.ieptbto.cra.webservice.VO.MensagemXmlSerpro;
 
 /**
  * 
@@ -34,8 +40,8 @@ public class MensagemDeErro {
 		this.codigoCompensacao = codigoApresentante;
 	}
 	
-	public MensagemRetornoXml getMensagemErro() {
-		MensagemRetornoXml msgSucesso = new MensagemRetornoXml();
+	public MensagemXml getMensagemErro() {
+		MensagemXml msgSucesso = new MensagemXml();
 		Descricao descricao = getDescricao();
 
 		msgSucesso.setDescricao(descricao);
@@ -54,6 +60,24 @@ public class MensagemDeErro {
 		msgSucesso.setCodigoFinal(getErro().getCodigo());
 		msgSucesso.setDescricaoFinal(getErro().getDescricao());
 
+		return msgSucesso;
+	}
+	
+	public MensagemXmlSerpro getMensagemErroSerpro() {
+		MensagemXmlSerpro msgSucesso = new MensagemXmlSerpro();
+		msgSucesso.setNomeArquivo(getNomeArquivo());
+		
+		List<ComarcaDetalhamentoSerpro> listaComarcas = new ArrayList<ComarcaDetalhamentoSerpro>();
+		ComarcaDetalhamentoSerpro comarcaDetalhamento = new ComarcaDetalhamentoSerpro();
+		comarcaDetalhamento.setCodigoMunicipio(StringUtils.EMPTY);
+		comarcaDetalhamento.setDataHora(DataUtil.localDateToStringddMMyyyy(new LocalDate()) + DataUtil.localTimeToStringMMmm(new LocalTime()));
+		comarcaDetalhamento.setRegistro(StringUtils.EMPTY);
+		comarcaDetalhamento.setCodigo(getErro().getCodigo());
+		comarcaDetalhamento.setOcorrencia(getErro().getDescricao());
+		comarcaDetalhamento.setTotalRegistros(0);
+		listaComarcas.add(comarcaDetalhamento);
+		
+		msgSucesso.setComarca(listaComarcas);
 		return msgSucesso;
 	}
 

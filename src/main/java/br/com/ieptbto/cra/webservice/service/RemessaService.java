@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.dao;
+package br.com.ieptbto.cra.webservice.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -18,6 +18,7 @@ import br.com.ieptbto.cra.conversor.ConversorArquivoVo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
+import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -40,28 +41,6 @@ public class RemessaService extends CraWebService {
 	/**
 	 * 
 	 * @param nomeArquivo
-	 * @param usuario2
-	 * @param arquivoRecebido
-	 * @return
-	 */
-	public String processar(String nomeArquivo, Usuario usuario, ArquivoVO arquivoRecebido) {
-		setUsuario(usuario);
-		setNomeArquivo(nomeArquivo);
-		setArquivoVO(arquivoRecebido);
-
-		if (getArquivoVO() == null || getUsuario() == null) {
-			ArquivoVO arquivo = new ArquivoVO();
-			return setResposta(arquivo, nomeArquivo, CONSTANTE_REMESSA_XML);
-		}
-
-		setRemessas(ConversorArquivoVo.converterParaRemessaVO(getArquivoVO()));
-
-		return gerarMensagem(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo), "relatorio");
-	}
-
-	/**
-	 * 
-	 * @param nomeArquivo
 	 * @param usuario
 	 * @param dados
 	 * @return
@@ -70,9 +49,42 @@ public class RemessaService extends CraWebService {
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 		if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
-			return setRespostaArquivoEmBranco(nomeArquivo);
+			return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		}
 		return processar(nomeArquivo, usuario, converterStringArquivoVO(dados));
+	}
+
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario2
+	 * @param arquivoRecebido
+	 * @return
+	 */
+	private String processar(String nomeArquivo, Usuario usuario, ArquivoVO arquivoRecebido) {
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
+		setArquivoVO(arquivoRecebido);
+		
+		if (getUsuario() == null){
+			return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+		}
+
+		if (getArquivoVO() == null) {
+			ArquivoVO arquivo = new ArquivoVO();
+			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_RELATORIO_XML);
+		}
+		
+		if (getNomeArquivo() != null) {
+			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
+				logger.error("Este usuário não pode enviar o arquivo desta instituição");
+				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
+		}
+		
+		setRemessas(ConversorArquivoVo.converterParaRemessaVO(getArquivoVO()));
+
+		return gerarMensagem(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo), CONSTANTE_RELATORIO_XML);
 	}
 
 	/**
@@ -87,11 +99,11 @@ public class RemessaService extends CraWebService {
 		RemessaVO remessa = null;
 
 		if (getUsuario() == null) {
-			return setResposta(arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
+			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
 		}
 
 		if (getNomeArquivo() == null || !getNomeArquivo().toUpperCase().startsWith(TipoArquivoEnum.REMESSA.getConstante())) {
-			return setResposta(arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
+			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
 		}
 
 		if (TipoInstituicaoCRA.CARTORIO.equals(getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao())) {
@@ -99,7 +111,7 @@ public class RemessaService extends CraWebService {
 		}
 
 		if (remessa == null) {
-			return setResposta(arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
+			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
 		}
 
 		return gerarResposta(remessa, getNomeArquivo(), CONSTANTE_REMESSA_XML);
