@@ -65,7 +65,7 @@ public class RetornoService extends CraWebService {
 	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta,List<RemessaVO> remessas, String nomeArquivo, String constanteRetornoXml) {
 		StringBuffer string = new StringBuffer();
 		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
-		String cabecalho = "<retorno xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
+		String cabecalho = "<retorno>";
 		
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 			string.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>");

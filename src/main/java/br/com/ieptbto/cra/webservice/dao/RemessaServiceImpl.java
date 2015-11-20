@@ -41,7 +41,6 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
-
 		init(login, senha);
 		return remessaService.processar(nomeArquivo, getUsuario(), dados);
 	}
