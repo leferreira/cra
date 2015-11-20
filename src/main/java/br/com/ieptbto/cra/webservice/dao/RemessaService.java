@@ -19,8 +19,6 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 
@@ -46,8 +44,19 @@ public class RemessaService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
+		ArquivoVO arquivo = new ArquivoVO();
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
+		
+		if (getUsuario() == null) {
+			return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivo, nomeArquivo, CONSTANTE_RELATORIO_XML);
+		}
+		if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_RELATORIO_XML);
+		}
+		if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
+			return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+		}
 		if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 			return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		}
@@ -66,62 +75,8 @@ public class RemessaService extends CraWebService {
 		setNomeArquivo(nomeArquivo);
 		setArquivoVO(arquivoRecebido);
 		
-		if (getUsuario() == null){
-			return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
-		}
-
-		if (getArquivoVO() == null) {
-			ArquivoVO arquivo = new ArquivoVO();
-			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_RELATORIO_XML);
-		}
-		
-		if (getNomeArquivo() != null) {
-			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
-				logger.error("Este usuário não pode enviar o arquivo desta instituição");
-				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
-			}
-		}
-		
 		setRemessas(ConversorArquivoVo.converterParaRemessaVO(getArquivoVO()));
-
 		return gerarMensagem(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo), CONSTANTE_RELATORIO_XML);
-	}
-
-	/**
-	 * 
-	 * @param nomeArquivo
-	 * @param usuario
-	 * @return
-	 */
-	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
-		setUsuario(usuario);
-		setNomeArquivo(nomeArquivo);
-		RemessaVO remessa = null;
-
-		if (getUsuario() == null) {
-			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
-		}
-
-		if (getNomeArquivo() == null || !getNomeArquivo().toUpperCase().startsWith(TipoArquivoEnum.REMESSA.getConstante())) {
-			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
-		}
-
-		if (TipoInstituicaoCRA.CARTORIO.equals(getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao())) {
-			remessa = remessaMediator.buscarRemessaParaCartorio(getUsuario().getInstituicao(), getNomeArquivo());
-		}
-
-		if (remessa == null) {
-			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_REMESSA_XML);
-		}
-
-		return gerarResposta(remessa, getNomeArquivo(), CONSTANTE_REMESSA_XML);
-	}
-
-	private String gerarResposta(RemessaVO remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {
-		StringBuffer string = new StringBuffer();
-		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
-		string.append(msg);
-		return string.toString();
 	}
 
 	/**
@@ -161,6 +116,27 @@ public class RemessaService extends CraWebService {
 			new InfraException(e.getMessage(), e.getCause());
 		}
 		return arquivo;
+	}
+	
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @return
+	 */
+	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
+		RemessaVO remessa = null;
+
+		return gerarResposta(remessa, getNomeArquivo(), CONSTANTE_REMESSA_XML);
+	}
+
+	private String gerarResposta(RemessaVO remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {
+		StringBuffer string = new StringBuffer();
+		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
+		string.append(msg);
+		return string.toString();
 	}
 
 	public String getArquivoRecebido() {

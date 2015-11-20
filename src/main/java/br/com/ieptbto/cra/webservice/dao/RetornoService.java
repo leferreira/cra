@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,14 +46,19 @@ public class RetornoService extends CraWebService {
 		setNomeArquivo(nomeArquivo);
 		
 		if (getUsuario() == null) {
-			return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RETORNO_XML);
+			return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 		}
-
-		if (getNomeArquivo() == null) {
-			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RETORNO_XML);
+		if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+		}
+		if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
+			return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		}
 
 		remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
+		if (remessas.isEmpty()) {
+			return setRespostaArquivoEmProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+		}
 		return gerarResposta(usuario.getInstituicao().getLayoutPadraoXML() ,remessas, getNomeArquivo(), CONSTANTE_RETORNO_XML);
 	}
 
@@ -99,10 +105,10 @@ public class RetornoService extends CraWebService {
 
 		} catch (JAXBException e) {
 			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
 		return null;
 	}

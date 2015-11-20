@@ -51,8 +51,8 @@ public class ComarcasHomologadasService extends CraWebService {
 		msgRetorno.setDescricao(new Descricao());
 		msgRetorno.setDetalhamento(new Detalhamento());
 		
-		msgRetorno.setCodigoFinal(CodigoErro.FALHA_NA_AUTENTICACAO.getCodigo());
-		msgRetorno.setDescricaoFinal(CodigoErro.FALHA_NA_AUTENTICACAO.getDescricao());
+		msgRetorno.setCodigoFinal(CodigoErro.SERPRO_FALHA_NA_AUTENTICACAO.getCodigo());
+		msgRetorno.setDescricaoFinal(CodigoErro.SERPRO_FALHA_NA_AUTENTICACAO.getDescricao());
 		return gerarMensagem(msgRetorno, CONSTANTE_COMARCA_XML);
 	}
 	
@@ -74,10 +74,10 @@ public class ComarcasHomologadasService extends CraWebService {
 
 		} catch (JAXBException e) {
 			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
 		return null;
 	}
