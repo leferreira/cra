@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.service;
+package br.com.ieptbto.cra.webservice.dao;
 
 import java.util.ArrayList;
 import java.util.List;

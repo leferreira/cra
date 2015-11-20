@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.service;
+package br.com.ieptbto.cra.webservice.dao;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -18,7 +18,6 @@ import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
-import br.com.ieptbto.cra.webservice.dao.MensagemDeErro;
 
 /**
  * 

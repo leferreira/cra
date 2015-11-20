@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.service;
+package br.com.ieptbto.cra.webservice.dao;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -21,14 +21,12 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.entidade.vo.RetornoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 
 /**
- * 
- * @author Lefer
+ * @author Thasso Araújo
  *
  */
 @Service
@@ -54,9 +52,7 @@ public class RetornoService extends CraWebService {
 			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RETORNO_XML);
 		}
 
-		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao())) {
-			remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
-		}
+		remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
 		return gerarResposta(usuario.getInstituicao().getLayoutPadraoXML() ,remessas, getNomeArquivo(), CONSTANTE_RETORNO_XML);
 	}
 
@@ -65,6 +61,9 @@ public class RetornoService extends CraWebService {
 		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
 		String cabecalho = "<retorno xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
 		
+		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+			string.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>");
+		}
 		for (RemessaVO remessaVO : remessas) {
 			if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 				string.append("<comarca CodMun=\""+ remessaVO.getCabecalho().getCodigoMunicipio() +"\">");

@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.webservice.service;
+package br.com.ieptbto.cra.webservice.dao;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,7 +28,6 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.ConfirmacaoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -63,9 +62,8 @@ public class ConfirmacaoService extends CraWebService {
 			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
 		}
 
-		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao())) {
-			remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
-		}
+		remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
+		
 		return gerarResposta(usuario.getInstituicao().getLayoutPadraoXML() ,remessas, getNomeArquivo(), CONSTANTE_CONFIRMACAO_XML);
 	}
 
@@ -120,7 +118,7 @@ public class ConfirmacaoService extends CraWebService {
 		return null;
 	}
 
-	public String processar(String nomeArquivo, Usuario usuario, String dados) {
+	public String enviarConfirmacao(String nomeArquivo, Usuario usuario, String dados) {
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 		

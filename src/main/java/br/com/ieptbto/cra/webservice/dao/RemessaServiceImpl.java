@@ -13,11 +13,6 @@ import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
-import br.com.ieptbto.cra.webservice.service.ComarcasHomologadasService;
-import br.com.ieptbto.cra.webservice.service.ConfirmacaoService;
-import br.com.ieptbto.cra.webservice.service.DesistenciaProtestoService;
-import br.com.ieptbto.cra.webservice.service.RemessaService;
-import br.com.ieptbto.cra.webservice.service.RetornoService;
 
 /**
  * 
@@ -64,7 +59,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
 		init(login, senha);
-		return confirmacaoService.processar(nomeArquivo, getUsuario(), dados);
+		return confirmacaoService.enviarConfirmacao(nomeArquivo, getUsuario(), dados);
 	}
 
 	@WebMethod(operationName = "Confirmacao")
@@ -119,6 +114,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 		}
 		remessaService = (RemessaService) context.getBean("remessaService");
 		confirmacaoService = (ConfirmacaoService) context.getBean("confirmacaoService");
+		retornoService = (RetornoService) context.getBean("retornoService");
 		desistenciaProtestoService = (DesistenciaProtestoService) context.getBean("desistenciaProtestoService");
 		comarcasHomologadasService = (ComarcasHomologadasService) context.getBean("comarcasHomologadasService");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
