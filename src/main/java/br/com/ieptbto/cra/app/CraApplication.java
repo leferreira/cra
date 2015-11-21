@@ -33,6 +33,7 @@ import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.page.convenio.RemessaConvenioPage;
+import br.com.ieptbto.cra.page.convenio.layout.EnviarArquivoEmpresaPage;
 import br.com.ieptbto.cra.page.convenio.layout.IncluirLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.convenio.layout.ListaLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.cra.BatimentoPage;
@@ -175,6 +176,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("TitulosArquivoInstituicao", TitulosArquivoInstituicaoPage.class);
 		mountPage("RemoverArquivo", RemoverArquivoPage.class);
 		mountPage("ListaArquivosRemover", ListaRemoverArquivoPage.class);
+		mountPage("EnviarArquivoEmpresa", EnviarArquivoEmpresaPage.class);
 
 		/** Titulos */
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);

@@ -57,6 +57,7 @@ public class CraMenu extends Panel {
 		menuLateral.addItem("UsuariosPage", rolesIncluir);
 		menuLateral.addItem("FiliadosPage", rolesIncluir);
 		menuLateral.addItem("EmpresasLayout", rolesIncluir);
+		menuLateral.addItem("EnviarArquivoEmpresa", rolesIncluir);
 
 		/** Instrumento de Protesto */
 		menuLateral.addItem("InstrumentoDeProtesto", rolesIncluir);

@@ -13,20 +13,20 @@ import br.com.ieptbto.cra.app.IWebApplication;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.login.TrocaSenhaPanel;
-import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
 
 /**
  * 
  * @author Leandro
  * 
- * @param <T extends AbstractEntidade<T>>
+ * @param <T
+ *            extends AbstractEntidade<T>>
  */
 public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWebPage<T> {
 
 	/****/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
+	protected static final Logger logger = Logger.getLogger(BasePage.class);
 	protected static final String WID_MENU = "menu";
 	private static final String SAUDACAO = "userGreeting";
 	private static final String URL_LOGOUT = "url_logout";
@@ -47,7 +47,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 		if (StringUtils.isNotBlank(getUser().getNome())) {
 			if (getUser().getNome().length() > 15) {
 				nome = getUser().getNome().substring(0, 15);
-			} else 
+			} else
 				nome = getUser().getNome();
 		}
 

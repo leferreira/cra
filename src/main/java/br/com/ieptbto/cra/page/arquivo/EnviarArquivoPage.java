@@ -3,7 +3,6 @@ package br.com.ieptbto.cra.page.arquivo;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.Action;
@@ -34,7 +33,6 @@ import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 import br.com.ieptbto.cra.security.CraRoles;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -51,7 +49,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 	/****/
 	private static final long serialVersionUID = 852632145;
-	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
 
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
@@ -80,11 +77,11 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				final FileUpload uploadedFile = fileUploadField.getFileUpload();
 				final FileUpload anexoFile = anexoUploadField.getFileUpload();
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
-				
+
 				if (anexoUploadField.getFileUpload() != null) {
 					Anexo arquivoAnexo = new Anexo();
 				}
-				
+
 				try {
 					getFeedbackMessages().clear();
 					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUser());
@@ -97,34 +94,36 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					if (arquivoRetorno.getArquivo() != null) {
 						if (!arquivoRetorno.getArquivo().getRemessas().isEmpty()) {
 							info("O arquivo " + arquivo.getNomeArquivo() + " com " + arquivoRetorno.getArquivo().getRemessas().size()
-							        + " Remessa(s), salvo com sucesso.");
+		                            + " Remessa(s), salvo com sucesso.");
 						} else if (arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto() != null
-						        && arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto() != null
-						        && !arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
+		                        && arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto() != null
+		                        && !arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
 							info("A desistência de protesto " + arquivo.getNomeArquivo() + " com "
-							        + arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto().size()
-							        + " desistencia(s), foi salvo com sucesso.");
+		                            + arquivoRetorno.getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto().size()
+		                            + " desistencia(s), foi salvo com sucesso.");
 						}
 
 					}
-					
-					if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO) &&
-							getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+
+					if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)
+		                    && getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 						try {
-							JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
-							JasperPrint jasperPrint = relatorioMediator.relatorioRetorno(jasperReport ,arquivoRetorno.getArquivo(), getUser().getInstituicao());
-							
+							JasperReport jasperReport = JasperCompileManager
+		                            .compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
+							JasperPrint jasperPrint = relatorioMediator.relatorioRetorno(jasperReport, arquivoRetorno.getArquivo(),
+		                            getUser().getInstituicao());
+
 							File pdf = File.createTempFile("report", ".pdf");
 							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 							IResourceStream resourceStream = new FileResourceStream(pdf);
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + arquivoRetorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
-							
-							getFeedbackPanel().info("O arquivo " + arquivo.getNomeArquivo() + " com " + arquivoRetorno.getArquivo().getRemessas().size()
-							        + " Remessa(s), salvo com sucesso.");
-						} catch (InfraException ex) { 
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+		                            "CRA_RELATORIO_" + arquivoRetorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+
+							getFeedbackPanel().info("O arquivo " + arquivo.getNomeArquivo() + " com "
+		                            + arquivoRetorno.getArquivo().getRemessas().size() + " Remessa(s), salvo com sucesso.");
+						} catch (InfraException ex) {
 							error(ex.getMessage());
-						} catch (Exception e) { 
+						} catch (Exception e) {
 							error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
 							e.printStackTrace();
 						}
@@ -136,7 +135,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 						warn(erro.getMessage());
 					}
 					ex.getErros().clear();
-					getFeedbackPanel().error(ex.getMessage()); 
+					getFeedbackPanel().error(ex.getMessage());
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					getFeedbackPanel().error(ex.getMessage());
@@ -155,30 +154,30 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		form.add(campoAnexo());
 		form.add(botaoEnviar());
 		add(form);
-	} 
-	
+	}
+
 	private FileUploadField campoArquivo() {
 		fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
 		fileUploadField.setRequired(true);
 		fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
 		return fileUploadField;
 	}
-	
+
 	private FileUploadField campoAnexo() {
 		anexoUploadField = new FileUploadField("anexo", new ListModel<FileUpload>());
 		anexoUploadField.setLabel(new Model<String>("Outros Arquivos"));
 		anexoUploadField.setOutputMarkupId(true);
-		
+
 		if (!getUser().getInstituicao().isPermitidoAnexo()) {
 			anexoUploadField.setVisible(false);
 		}
 		return anexoUploadField;
 	}
-	
+
 	private Label labelOutrosArquivos() {
 		Label label = new Label("labelOutros", "OUTROS ARQUIVOS:");
 		label.setOutputMarkupId(true);
-		
+
 		if (!getUser().getInstituicao().isPermitidoAnexo()) {
 			label.setVisible(false);
 		}
