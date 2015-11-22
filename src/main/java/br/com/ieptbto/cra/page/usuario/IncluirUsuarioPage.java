@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.usuario;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -172,8 +173,15 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 	}
 
 	private DropDownChoice<GrupoUsuario> comboGrupoDoUsuario() {
+		List<GrupoUsuario> grupoUsuarioPermitido = new ArrayList<GrupoUsuario>();
+		for (GrupoUsuario grupo : grupoUsuarioMediator.listaDeGrupos()){
+			if (grupo.getId() >= getUser().getGrupoUsuario().getId()){
+				grupoUsuarioPermitido.add(grupo);
+			}
+		}
+		
 		IChoiceRenderer<GrupoUsuario> renderer = new ChoiceRenderer<GrupoUsuario>("grupo");
-		DropDownChoice<GrupoUsuario> comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario", grupoUsuarioMediator.listaDeGrupos(), renderer);
+		DropDownChoice<GrupoUsuario> comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario", grupoUsuarioPermitido, renderer);
 		comboGrupoUsuario.setLabel(new Model<String>("Grupo Usuário"));
 		comboGrupoUsuario.setRequired(true);
 		return comboGrupoUsuario;
