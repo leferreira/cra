@@ -147,6 +147,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
     	add(cepSacadorVendedor());
     	add(cidadeSacadorVendedor());
     	add(enderecoSacadorVendedor());
+    	add(complementoRegistro());
     	add(nomeDevedor());
     	add(documentoDevedor());
     	add(ufDevedor());
@@ -195,6 +196,16 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 //    	}
 		return new Label("irregularidade", new Model<String>(irregularidade));
 	}
+    
+    private Label complementoRegistro(){
+    	String complementoRegistro = StringUtils.EMPTY;
+    	if (getTituloRemessa().getComplementoRegistro() != null) {
+    		if (getTituloRemessa().getComplementoRegistro().length() == 2){
+    			complementoRegistro = getTituloRemessa().getComplementoRegistro();
+    		}
+    	}
+    	return new Label("complementoRegistro", complementoRegistro);
+    }
     
     private Label codigoMunicipio() {
 		return new Label("codigoMunicipio", new Model<String>(getTituloRemessa().getRemessa().getCabecalho().getCodigoMunicipio()));
