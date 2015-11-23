@@ -15,6 +15,7 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.lang.Bytes;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -62,6 +63,8 @@ public class EnviarArquivoEmpresaPage extends BasePage<Arquivo> {
 		                        + " Remessa(s), foi salvo com sucesso.");
 					}
 
+				} catch (InfraException ex) {
+					error(ex.getMessage());
 				} catch (Exception ex) {
 					error("Não foi possível procesar o arquivo enviado. Por favor entre em contato com a CRA.");
 					logger.error(ex.getMessage());
