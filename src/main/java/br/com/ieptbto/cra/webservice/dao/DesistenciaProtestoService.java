@@ -4,27 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.PedidoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.exception.TituloException;
 import br.com.ieptbto.cra.exception.XmlCraException;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
 import br.com.ieptbto.cra.webservice.VO.Mensagem;
 import br.com.ieptbto.cra.webservice.VO.MensagemXml;
+import br.com.ieptbto.cra.webservice.VO.MensagemXmlDesistenciaCancelamentoSerpro;
+import br.com.ieptbto.cra.webservice.VO.TituloDetalhamentoSerpro;
 
 /**
- * 
- * @author Lefer
+ * @author Thasso Araújo
  *
  */
 @Service
@@ -36,22 +44,47 @@ public class DesistenciaProtestoService extends CraWebService {
 	private InstituicaoMediator instituicaoMediator;
 	private List<Exception> erros;
 
-	public String processar(String nomeArquivo, Usuario usuario, String dados) {
+	public String processar(LayoutPadraoXML layoutPadraoXML, String nomeArquivo, Usuario usuario, String dados) {
 		Arquivo arquivo = new Arquivo();
+		ArquivoVO arquivoVO = new ArquivoVO();
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 
-		if (getUsuario() == null) {
-			return setResposta(usuario.getInstituicao().getLayoutPadraoXML() ,new ArquivoVO(), nomeArquivo, CONSTANTE_REMESSA_XML);
+		try {
+			if (getUsuario() == null) {
+				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
+				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
+			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
+			
+			arquivo = gerarArquivoDesistencia(layoutPadraoXML, arquivo, dados);
+		} catch (TituloException ex) {
+			return gerarMensagemErroDesistenciaCancelamento(layoutPadraoXML , ex.getPedidosDesistenciaCancelamento());
+		} catch (InfraException ex) {
+			logger.error(ex.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
-
-		if (dados == null || StringUtils.isEmpty(dados) || StringUtils.isBlank(dados)) {
-			return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+		
+		if (layoutPadraoXML.equals(LayoutPadraoXML.SERPRO)) {
+			return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 		}
+		return gerarMensagem(gerarResposta(arquivo, getUsuario()), CONSTANTE_RELATORIO_XML);
+	}
 
-		arquivo = gerarArquivoDesistencia(arquivo, dados);
-
-		return gerarMensagem(gerarResposta(arquivo, getUsuario()), "relatorio");
+	private Arquivo gerarArquivoDesistencia(LayoutPadraoXML layoutPadraoXML, Arquivo arquivo, String dados) {
+		logger.info("Iniciar processador do arquivo de desistencia " + getNomeArquivo());
+		arquivo = desistenciaProtestoMediator.processarDesistencia(getNomeArquivo(), layoutPadraoXML , dados, getErros(), getUsuario());
+		
+		logger.info("Fim processador do arquivo de desistencia " + getNomeArquivo());
+		return arquivo;
 	}
 
 	private MensagemXml gerarResposta(Arquivo arquivo, Usuario usuario) {
@@ -94,18 +127,6 @@ public class DesistenciaProtestoService extends CraWebService {
 		return mensagemRetorno;
 	}
 
-	private Arquivo gerarArquivoDesistencia(Arquivo arquivo, String dados) {
-
-		logger.info("Iniciar processador do arquivo de desistencia " + getNomeArquivo());
-		arquivo = desistenciaProtestoMediator.processar(arquivo, dados, getErros(), getUsuario());
-		arquivo.setInstituicaoEnvio(getUsuario().getInstituicao());
-		arquivo.setNomeArquivo(getNomeArquivo());
-		arquivo.setUsuarioEnvio(getUsuario());
-		logger.info("Fim processador do arquivo de desistencia " + getNomeArquivo());
-		return arquivo;
-
-	}
-
 	private String getMunicipio(DesistenciaProtesto desistenciaProtesto) {
 		return desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio();
 	}
@@ -114,10 +135,66 @@ public class DesistenciaProtestoService extends CraWebService {
 		Instituicao instituicao = instituicaoMediator
 		        .getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio());
 		return instituicao.getNomeFantasia() + " (" + desistenciaProtesto.getDesistencias().size() + ") ";
+	}
 
+	private String gerarMensagemSerpro(Arquivo arquivo, String constanteRelatorioXml) {
+		MensagemXmlDesistenciaCancelamentoSerpro mensagemDesistencia = new MensagemXmlDesistenciaCancelamentoSerpro();
+		mensagemDesistencia.setNomeArquivo(arquivo.getNomeArquivo());
+		mensagemDesistencia.setTitulosDetalhamento(new ArrayList<TituloDetalhamentoSerpro>());
+		
+		for (DesistenciaProtesto dp : arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
+			for (PedidoDesistenciaCancelamento pedidoDesistencia : dp.getDesistencias()) {
+				TituloDetalhamentoSerpro titulo = new TituloDetalhamentoSerpro();
+				titulo.setDataHora(DataUtil.localDateToStringddMMyyyy(new LocalDate()) + DataUtil.localTimeToStringMMmm(new LocalTime()));
+				titulo.setCodigoCartorio(pedidoDesistencia.getDesistenciaProtesto().getCabecalhoCartorio().getCodigoCartorio());
+				titulo.setNumeroTitulo(pedidoDesistencia.getNumeroTitulo());
+				titulo.setNumeroProtocoloCartorio(pedidoDesistencia.getNumeroProtocolo());
+				titulo.setDataProtocolo(DataUtil.localDateToStringddMMyyyy(pedidoDesistencia.getDataProtocolagem()));
+				titulo.setCodigo(CodigoErro.SERPRO_SUCESSO_DESISTENCIA_CANCELAMENTO.getCodigo());
+				titulo.setOcorrencia(CodigoErro.SERPRO_SUCESSO_DESISTENCIA_CANCELAMENTO.getDescricao());
+				
+				mensagemDesistencia.getTitulosDetalhamento().add(titulo);
+			}
+		}
+		return gerarMensagem(mensagemDesistencia, constanteRelatorioXml);
+	}
+	
+	private String gerarMensagemErroDesistenciaCancelamento(LayoutPadraoXML layoutPadraoXML, List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento) {
+		if (layoutPadraoXML.equals(LayoutPadraoXML.SERPRO)) {
+			return gerarMensagemErroDesistenciaCancelamentoSerpro(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
+		}
+		return gerarMensagemErroDesistenciaCancelamento(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
+	}
+	
+	private String gerarMensagemErroDesistenciaCancelamento(List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String gerarMensagemErroDesistenciaCancelamentoSerpro(List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
+		MensagemXmlDesistenciaCancelamentoSerpro mensagemErroDesistencia = new MensagemXmlDesistenciaCancelamentoSerpro();
+		mensagemErroDesistencia.setNomeArquivo(getNomeArquivo());
+		mensagemErroDesistencia.setTitulosDetalhamento(new ArrayList<TituloDetalhamentoSerpro>());
+		
+		for (PedidoDesistenciaCancelamento pedidoDesistencia : pedidosDesistenciaCancelamento) {
+			TituloDetalhamentoSerpro titulo = new TituloDetalhamentoSerpro();
+			titulo.setDataHora(DataUtil.localDateToStringddMMyyyy(new LocalDate()) + DataUtil.localTimeToStringMMmm(new LocalTime()));
+			titulo.setCodigoCartorio(pedidoDesistencia.getDesistenciaProtesto().getCabecalhoCartorio().getCodigoCartorio());
+			titulo.setNumeroTitulo(pedidoDesistencia.getNumeroTitulo());
+			titulo.setNumeroProtocoloCartorio(pedidoDesistencia.getNumeroProtocolo());
+			titulo.setDataProtocolo(DataUtil.localDateToStringddMMyyyy(pedidoDesistencia.getDataProtocolagem()));
+			titulo.setCodigo(CodigoErro.SERPRO_NUMERO_PROTOCOLO_INVALIDO.getCodigo());
+			titulo.setOcorrencia(CodigoErro.SERPRO_NUMERO_PROTOCOLO_INVALIDO.getDescricao());
+			
+			mensagemErroDesistencia.getTitulosDetalhamento().add(titulo);
+		}
+		return gerarMensagem(mensagemErroDesistencia, constanteRelatorioXml);
 	}
 
 	public List<Exception> getErros() {
+		if (erros == null) {
+			erros = new ArrayList<Exception>();
+		}
 		return erros;
 	}
 
