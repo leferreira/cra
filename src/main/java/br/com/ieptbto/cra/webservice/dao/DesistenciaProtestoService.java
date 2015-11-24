@@ -197,8 +197,4 @@ public class DesistenciaProtestoService extends CraWebService {
 		}
 		return erros;
 	}
-
-	public void setErros(List<Exception> erros) {
-		this.erros = erros;
-	}
 }
