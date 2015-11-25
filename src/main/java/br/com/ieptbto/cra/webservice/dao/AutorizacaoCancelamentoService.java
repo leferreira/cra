@@ -20,7 +20,7 @@ import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.exception.TituloException;
 import br.com.ieptbto.cra.exception.XmlCraException;
-import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
+import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
@@ -36,15 +36,15 @@ import br.com.ieptbto.cra.webservice.VO.TituloDetalhamentoSerpro;
  *
  */
 @Service
-public class DesistenciaProtestoService extends CraWebService {
+public class AutorizacaoCancelamentoService extends CraWebService {
 
 	@Autowired
-	private DesistenciaProtestoMediator desistenciaProtestoMediator;
-	@Autowired
+	private AutorizacaoCancelamentoMediator autorizacaoCancelamentoMediator;
+	@Autowired 
 	private InstituicaoMediator instituicaoMediator;
 	private List<Exception> erros;
 
-	public String processar(String nomeArquivo, Usuario usuario, String dados) {
+	public String processar(String nomeArquivo, Usuario usuario, String dados) { 
 		Arquivo arquivo = new Arquivo();
 		ArquivoVO arquivoVO = new ArquivoVO();
 		setUsuario(usuario);
@@ -64,9 +64,9 @@ public class DesistenciaProtestoService extends CraWebService {
 				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 			}
 			
-			arquivo = gerarArquivoDesistencia(getUsuario().getInstituicao().getLayoutPadraoXML(), arquivo, dados);
+			arquivo = gerarArquivoAutorizacaoCancelamento(getUsuario().getInstituicao().getLayoutPadraoXML() , arquivo, dados);
 		} catch (TituloException ex) {
-			return gerarMensagemErroDesistenciaCancelamento(getUsuario().getInstituicao().getLayoutPadraoXML() , ex.getPedidosDesistenciaCancelamento());
+			return gerarMensagemErroAutorizacaoCancelamento(getUsuario().getInstituicao().getLayoutPadraoXML() , ex.getPedidosDesistenciaCancelamento());
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage());
 		} catch (Exception e) {
@@ -79,11 +79,12 @@ public class DesistenciaProtestoService extends CraWebService {
 		return gerarMensagem(gerarResposta(arquivo, getUsuario()), CONSTANTE_RELATORIO_XML);
 	}
 
-	private Arquivo gerarArquivoDesistencia(LayoutPadraoXML layoutPadraoXML, Arquivo arquivo, String dados) {
-		logger.info("Iniciar processador do arquivo de desistencia " + getNomeArquivo());
-		arquivo = desistenciaProtestoMediator.processarDesistencia(getNomeArquivo(), layoutPadraoXML , dados, getErros(), getUsuario());
+	private Arquivo gerarArquivoAutorizacaoCancelamento(LayoutPadraoXML layoutPadraoXML, Arquivo arquivo, String dados) {
 		
-		logger.info("Fim processador do arquivo de desistencia " + getNomeArquivo());
+		logger.info("Iniciar processador do arquivo de cancelamento " + getNomeArquivo());
+		arquivo = autorizacaoCancelamentoMediator.processarAutorizacaoCancelamento(getNomeArquivo(), layoutPadraoXML , dados, getErros(), getUsuario());
+		
+		logger.info("Fim processador do arquivo de cancelamento " + getNomeArquivo());
 		return arquivo;
 	}
 
@@ -96,8 +97,8 @@ public class DesistenciaProtestoService extends CraWebService {
 
 		mensagemRetorno.setDescricao(desc);
 		mensagemRetorno.setDetalhamento(detal);
-		mensagemRetorno.setCodigoFinal("0000");
-		mensagemRetorno.setDescricaoFinal("Arquivo processado com sucesso");
+		mensagemRetorno.setCodigoFinal(CodigoErro.CRA_SUCESSO.getCodigo());
+		mensagemRetorno.setDescricaoFinal(CodigoErro.CRA_SUCESSO.getDescricao());
 
 		desc.setDataEnvio(LocalDateTime.now().toString(DataUtil.PADRAO_FORMATACAO_DATAHORASEG));
 		desc.setTipoArquivo(Descricao.XML_UPLOAD_SUSTACAO);
@@ -123,7 +124,6 @@ public class DesistenciaProtestoService extends CraWebService {
 			        + exception.getErro().getDescricao());
 			mensagens.add(mensagem);
 		}
-
 		return mensagemRetorno;
 	}
 
@@ -159,19 +159,18 @@ public class DesistenciaProtestoService extends CraWebService {
 		return gerarMensagem(mensagemDesistencia, constanteRelatorioXml);
 	}
 	
-	private String gerarMensagemErroDesistenciaCancelamento(LayoutPadraoXML layoutPadraoXML, List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento) {
+	private String gerarMensagemErroAutorizacaoCancelamento(LayoutPadraoXML layoutPadraoXML, List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento) {
 		if (layoutPadraoXML.equals(LayoutPadraoXML.SERPRO)) {
-			return gerarMensagemErroDesistenciaCancelamentoSerpro(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
+			return gerarMensagemErroAutorizacaoCancelamentoSerpro(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
 		}
-		return gerarMensagemErroDesistenciaCancelamento(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
+		return gerarMensagemErroAutorizacaoCancelamento(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
 	}
 	
-	private String gerarMensagemErroDesistenciaCancelamento(List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
-		// TODO Auto-generated method stub
+	private String gerarMensagemErroAutorizacaoCancelamento(List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
 		return null;
 	}
 
-	private String gerarMensagemErroDesistenciaCancelamentoSerpro(List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
+	private String gerarMensagemErroAutorizacaoCancelamentoSerpro(List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
 		MensagemXmlDesistenciaCancelamentoSerpro mensagemErroDesistencia = new MensagemXmlDesistenciaCancelamentoSerpro();
 		mensagemErroDesistencia.setNomeArquivo(getNomeArquivo());
 		mensagemErroDesistencia.setTitulosDetalhamento(new ArrayList<TituloDetalhamentoSerpro>());

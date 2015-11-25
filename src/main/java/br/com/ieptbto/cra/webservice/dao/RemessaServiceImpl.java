@@ -34,6 +34,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	private ConfirmacaoService confirmacaoService;
 	private RetornoService retornoService;
 	private DesistenciaProtestoService desistenciaProtestoService;
+	private CancelamentoProtestoService cancelamentoProtestoService;
+	private AutorizacaoCancelamentoService autorizacaoCancelamentoService;
 	private ComarcasHomologadasService comarcasHomologadasService;
 
 	@Override
@@ -63,23 +65,29 @@ public class RemessaServiceImpl implements IRemessaWS {
 
 	@WebMethod(operationName = "Confirmacao")
 	@Override
-	public String confirmacao(String nomeArquivo, String login, String senha) {
+	@GET
+	public String confirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha) {
 		init(login, senha);
 		return confirmacaoService.processar(nomeArquivo, getUsuario());
 	}
 
 	@Override
 	@WebMethod(operationName = "Retorno")
-	public String retorno(String nomeArquivo, String login, String senha) {
+	@GET
+	public String retorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha) {
 		init(login, senha);
 		return retornoService.processar(nomeArquivo, getUsuario());
 	}
 
 	@WebMethod(operationName = "Cancelamento")
 	@Override
-	public String cancelamento(String nomeArquivo, String login, String senha, String dados) {
+	@GET
+	public String cancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
 		init(login, senha);
-		return null;
+		return cancelamentoProtestoService.processar(nomeArquivo, getUsuario(), dados);
 	}
 
 	@Override
@@ -88,14 +96,16 @@ public class RemessaServiceImpl implements IRemessaWS {
 	public String desistencia(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
 		init(login, senha);
-		return desistenciaProtestoService.processar(getUsuario().getInstituicao().getLayoutPadraoXML() ,nomeArquivo, getUsuario(), dados);
+		return desistenciaProtestoService.processar(nomeArquivo, getUsuario(), dados);
 	}
 
 	@Override
 	@WebMethod(operationName = "AutorizacaoCancelamento")
-	public String autorizacaoCancelamento(String nomeArquivo, String login, String senha, String dados) {
+	@GET
+	public String autorizacaoCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
 		init(login, senha);
-		return null;
+		return autorizacaoCancelamentoService.processar(nomeArquivo, getUsuario(), dados);
 	}
 	
 	@Override
@@ -115,6 +125,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 		confirmacaoService = (ConfirmacaoService) context.getBean("confirmacaoService");
 		retornoService = (RetornoService) context.getBean("retornoService");
 		desistenciaProtestoService = (DesistenciaProtestoService) context.getBean("desistenciaProtestoService");
+		cancelamentoProtestoService = (CancelamentoProtestoService) context.getBean("cancelamentoProtestoService");
+		autorizacaoCancelamentoService = (AutorizacaoCancelamentoService) context.getBean("autorizacaoCancelamentoService");
 		comarcasHomologadasService = (ComarcasHomologadasService) context.getBean("comarcasHomologadasService");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 		setUsuario(login, senha);
