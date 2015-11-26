@@ -1,12 +1,13 @@
+
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
 <div class="row">
 	<div class="col-md-12">  
-		  <div class="col-md-1"><label>Empresa:</label></div>   
+		  <div class="col-md-1"><label>EMPRESA:</label></div>   
 		  <div class="col-md-5 ">
 		  		<select class="form-control input-sm"  wicket:id="empresa" ></select>
 		  </div>
 		  <div class="col-md-2 right">
-		  	<label class="pull-right">Tipo de Arquivo:</label> 
+		  	<label class="pull-right">TIPO DE ARQUIVO:</label> 
 		  </div>
 		  <div class="col-md-3 ">
 		  		<select class="form-control input-sm"  wicket:id="tipoArquivo" ></select>
@@ -16,11 +17,11 @@
 <br/>
 <div class="row" wicket:id="divCampo">
 		<div class="col-md-12">
-			<div class="col-md-4"><label>Descrição</label></div>
-			<div class="col-md-3"><label>Campo do Layout</label></div>
-			<div class="col-md-1"><label>Ordem</label></div>
-			<div class="col-md-1"><label>Posição Inicial</label></div>
-			<div class="col-md-1"><label>Posição Final</label></div>
+			<div class="col-md-4"><label>DESCRIÇÃO</label></div>
+			<div class="col-md-3"><label>CAMPO DO LAYOUT</label></div>
+			<div class="col-md-1"><label>ORDEM</label></div>
+			<div class="col-md-1"><label>POS.INICIAL</label></div>
+			<div class="col-md-1"><label>POS.FINAL</label></div>
 		</div>
 		<div class="col-md-12">
 			<div class="col-md-4">
@@ -39,33 +40,33 @@
 			    <input class="form-control input-md" wicket:id="posicaoFim">
 			</div>
 			<div class="col-md-1">
-			    <button  class="btn btn-primary" wicket:id="add" ><span class="fa fa-plus-o"></span>add</button>
+			    <button  class="btn btn-primary" wicket:id="add" ><span class="fa fa-plus"></span>&nbsp;ADICIONAR</button>
 			</div>
 		</div>
 </div>
 <div class="row">&nbsp;</div>
 <fieldset>
-	<legend>Resultado</legend>
+	<legend>RESULTADO</legend>
 	<div class="row" wicket:id="divResultado">
 		<div class="col-md-12">
 			<table id="table-layout"  class="table table-responsive table-striped table-hover dataTable no-footer">
 				<thead>
 					<tr>
-						<th>Descrição</th>
-						<th>Campo do Layout</th>
-						<th>Ordem</th>
-						<th>Posição inicial</th>
-						<th>Posição Final</th>
-						<th></th>
+						<th>DESCRIÇÃO</th>
+						<th>CAMPO DO LAYOUT</th>
+						<th class="col-center">ORDEM</th>
+						<th class="col-center">POSIÇÃO INICIAL</th>
+						<th class="col-center">POSIÇÃO FINAL</th>
+						<th class="col-center">REMOVER</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr wicket:id="tabelaLayout">
 						<td wicket:id="descricao"></td>
 						<td wicket:id="campo"></td>
-						<td wicket:id="ordem"></td>
-						<td wicket:id="posicaoInicio"></td>
-						<td wicket:id="posicaoFim"></td>
+						<td class="col-center" wicket:id="ordem"></td>
+						<td class="col-center" wicket:id="posicaoInicio"></td>
+						<td class="col-center" wicket:id="posicaoFim"></td>
 						<td class="col-center"><button wicket:id="remover"><span class="fa fa-trash-o"></span></button></td>
 					</tr>
 				</tbody>
