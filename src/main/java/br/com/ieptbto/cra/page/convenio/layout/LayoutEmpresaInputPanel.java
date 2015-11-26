@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -153,6 +154,12 @@ public class LayoutEmpresaInputPanel extends Panel {
 				divResultado.setVisible(true);
 				target.add(divResultado);
 				target.add(this.getPage());
+				
+				campoDescricao.getModel().setObject(StringUtils.EMPTY);
+				campoPosicaoFim.getModel().setObject(null);
+				campoPosicaoInicio.getModel().setObject(null);
+				campoOrdem.getModel().setObject(null);
+				comboCampos.getModel().setObject(null);
 			}
 
 			private boolean verificarCampos(LayoutFiliado layoutFiliado) {
@@ -170,6 +177,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 					return true;
 				}
 
+				@SuppressWarnings("unused")
 				int i = 1;
 				for (LayoutFiliado layout : getListaLayoutFiliado()) {
 
