@@ -178,13 +178,15 @@ public class LayoutEmpresaInputPanel extends Panel {
 						return true;
 					}
 
-					if (layout.getOrdem() == i) {
-						i++;
-					} else {
-						warn("O campo " + layout.getCampo().getLabel() + " não está na ordem correta.\n"
-		                        + "Todos os campos devem ser inseridos na ordem do layout.");
-						return true;
-					}
+					// if (layout.getOrdem() == i) {
+		            // i++;
+		            // } else {
+		            // warn("O campo " + layout.getCampo().getLabel() + " não
+		            // está na ordem correta.\n"
+		            // + "Todos os campos devem ser inseridos na ordem do
+		            // layout.");
+		            // return true;
+		            // }
 				}
 
 				layoutFiliado.setCampo(campo);
