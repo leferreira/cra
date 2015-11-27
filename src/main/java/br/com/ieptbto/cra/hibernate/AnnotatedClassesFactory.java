@@ -18,11 +18,13 @@ import br.com.ieptbto.cra.entidade.AgenciaBradesco;
 import br.com.ieptbto.cra.entidade.AgenciaCAF;
 import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.CabecalhoArquivo;
 import br.com.ieptbto.cra.entidade.CabecalhoCartorio;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
+import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
@@ -34,9 +36,13 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.LayoutFiliado;
 import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.entidade.PedidoDesistenciaCancelamento;
+import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
+import br.com.ieptbto.cra.entidade.PedidoCancelamento;
+import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.RemessaAutorizacaoCancelamento;
+import br.com.ieptbto.cra.entidade.RemessaCancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.RemessaDesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.Rodape;
@@ -107,11 +113,16 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(RodapeArquivo.class);
 		classesHibernate.add(RodapeCartorio.class);
 		classesHibernate.add(DesistenciaProtesto.class);
-		classesHibernate.add(PedidoDesistenciaCancelamento.class);
+		classesHibernate.add(PedidoDesistencia.class);
 		classesHibernate.add(LayoutFiliado.class);
 		classesHibernate.add(TituloSemTaxaCRA.class);
 		classesHibernate.add(Anexo.class);
-
+		classesHibernate.add(RemessaCancelamentoProtesto.class);
+		classesHibernate.add(RemessaAutorizacaoCancelamento.class);
+		classesHibernate.add(CancelamentoProtesto.class);
+		classesHibernate.add(PedidoCancelamento.class);
+		classesHibernate.add(AutorizacaoCancelamento.class);
+		classesHibernate.add(PedidoAutorizacaoCancelamento.class);
 	}
 
 	/**

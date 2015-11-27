@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.PedidoDesistenciaCancelamento;
+import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
@@ -64,7 +64,7 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 			}
 			
-			arquivo = gerarArquivoAutorizacaoCancelamento(getUsuario().getInstituicao().getLayoutPadraoXML() , arquivo, dados);
+			arquivo = gerarArquivoAutorizacaoCancelamento(getUsuario().getInstituicao().getLayoutPadraoXML(), dados);
 		} catch (TituloException ex) {
 			return gerarMensagemErroAutorizacaoCancelamento(getUsuario().getInstituicao().getLayoutPadraoXML() , ex.getPedidosDesistenciaCancelamento());
 		} catch (InfraException ex) {
@@ -79,10 +79,9 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 		return gerarMensagem(gerarResposta(arquivo, getUsuario()), CONSTANTE_RELATORIO_XML);
 	}
 
-	private Arquivo gerarArquivoAutorizacaoCancelamento(LayoutPadraoXML layoutPadraoXML, Arquivo arquivo, String dados) {
-		
+	private Arquivo gerarArquivoAutorizacaoCancelamento(LayoutPadraoXML layoutPadraoXML, String dados) {
 		logger.info("Iniciar processador do arquivo de cancelamento " + getNomeArquivo());
-		arquivo = autorizacaoCancelamentoMediator.processarAutorizacaoCancelamento(getNomeArquivo(), layoutPadraoXML , dados, getErros(), getUsuario());
+		Arquivo arquivo = autorizacaoCancelamentoMediator.processarAutorizacaoCancelamento(getNomeArquivo(), layoutPadraoXML , dados, getErros(), getUsuario());
 		
 		logger.info("Fim processador do arquivo de cancelamento " + getNomeArquivo());
 		return arquivo;
@@ -143,7 +142,7 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 		mensagemDesistencia.setTitulosDetalhamento(new ArrayList<TituloDetalhamentoSerpro>());
 		
 		for (DesistenciaProtesto dp : arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
-			for (PedidoDesistenciaCancelamento pedidoDesistencia : dp.getDesistencias()) {
+			for (PedidoDesistencia pedidoDesistencia : dp.getDesistencias()) {
 				TituloDetalhamentoSerpro titulo = new TituloDetalhamentoSerpro();
 				titulo.setDataHora(DataUtil.localDateToStringddMMyyyy(new LocalDate()) + DataUtil.localTimeToStringMMmm(new LocalTime()));
 				titulo.setCodigoCartorio(pedidoDesistencia.getDesistenciaProtesto().getCabecalhoCartorio().getCodigoCartorio());
@@ -159,23 +158,23 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 		return gerarMensagem(mensagemDesistencia, constanteRelatorioXml);
 	}
 	
-	private String gerarMensagemErroAutorizacaoCancelamento(LayoutPadraoXML layoutPadraoXML, List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento) {
+	private String gerarMensagemErroAutorizacaoCancelamento(LayoutPadraoXML layoutPadraoXML, List<PedidoDesistencia> pedidosDesistenciaCancelamento) {
 		if (layoutPadraoXML.equals(LayoutPadraoXML.SERPRO)) {
 			return gerarMensagemErroAutorizacaoCancelamentoSerpro(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
 		}
 		return gerarMensagemErroAutorizacaoCancelamento(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
 	}
 	
-	private String gerarMensagemErroAutorizacaoCancelamento(List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
+	private String gerarMensagemErroAutorizacaoCancelamento(List<PedidoDesistencia> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
 		return null;
 	}
 
-	private String gerarMensagemErroAutorizacaoCancelamentoSerpro(List<PedidoDesistenciaCancelamento> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
+	private String gerarMensagemErroAutorizacaoCancelamentoSerpro(List<PedidoDesistencia> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
 		MensagemXmlDesistenciaCancelamentoSerpro mensagemErroDesistencia = new MensagemXmlDesistenciaCancelamentoSerpro();
 		mensagemErroDesistencia.setNomeArquivo(getNomeArquivo());
 		mensagemErroDesistencia.setTitulosDetalhamento(new ArrayList<TituloDetalhamentoSerpro>());
 		
-		for (PedidoDesistenciaCancelamento pedidoDesistencia : pedidosDesistenciaCancelamento) {
+		for (PedidoDesistencia pedidoDesistencia : pedidosDesistenciaCancelamento) {
 			TituloDetalhamentoSerpro titulo = new TituloDetalhamentoSerpro();
 			titulo.setDataHora(DataUtil.localDateToStringddMMyyyy(new LocalDate()) + DataUtil.localTimeToStringMMmm(new LocalTime()));
 			titulo.setCodigoCartorio(pedidoDesistencia.getDesistenciaProtesto().getCabecalhoCartorio().getCodigoCartorio());
