@@ -154,7 +154,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 				divResultado.setVisible(true);
 				target.add(divResultado);
 				target.add(this.getPage());
-				
+
 				campoDescricao.getModel().setObject(StringUtils.EMPTY);
 				campoPosicaoFim.getModel().setObject(null);
 				campoPosicaoInicio.getModel().setObject(null);
@@ -177,8 +177,6 @@ public class LayoutEmpresaInputPanel extends Panel {
 					return true;
 				}
 
-				@SuppressWarnings("unused")
-				int i = 1;
 				for (LayoutFiliado layout : getListaLayoutFiliado()) {
 
 					if (layout.getCampo().equals(getComboCampos().getDefaultModelObject())) {
@@ -186,15 +184,6 @@ public class LayoutEmpresaInputPanel extends Panel {
 						return true;
 					}
 
-					// if (layout.getOrdem() == i) {
-		            // i++;
-		            // } else {
-		            // warn("O campo " + layout.getCampo().getLabel() + " não
-		            // está na ordem correta.\n"
-		            // + "Todos os campos devem ser inseridos na ordem do
-		            // layout.");
-		            // return true;
-		            // }
 				}
 
 				layoutFiliado.setCampo(campo);
