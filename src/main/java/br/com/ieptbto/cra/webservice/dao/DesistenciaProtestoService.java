@@ -65,18 +65,19 @@ public class DesistenciaProtestoService extends CraWebService {
 			}
 			
 			arquivo = gerarArquivoDesistencia(getUsuario().getInstituicao().getLayoutPadraoXML(), arquivo, dados);
+			if (getUsuario().getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
+				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
+			}
+			return gerarMensagem(gerarResposta(arquivo, getUsuario()), CONSTANTE_RELATORIO_XML);
+			
 		} catch (TituloException ex) {
-			return gerarMensagemErroDesistenciaCancelamento(getUsuario().getInstituicao().getLayoutPadraoXML() , ex.getPedidosDesistenciaCancelamento());
+			return gerarMensagemErroDesistencia(getUsuario().getInstituicao().getLayoutPadraoXML() , ex.getPedidosDesistencia());
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		
-		if (getUsuario().getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
-			return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
-		}
-		return gerarMensagem(gerarResposta(arquivo, getUsuario()), CONSTANTE_RELATORIO_XML);
+		return null;
 	}
 
 	private Arquivo gerarArquivoDesistencia(LayoutPadraoXML layoutPadraoXML, Arquivo arquivo, String dados) {
@@ -159,7 +160,7 @@ public class DesistenciaProtestoService extends CraWebService {
 		return gerarMensagem(mensagemDesistencia, constanteRelatorioXml);
 	}
 	
-	private String gerarMensagemErroDesistenciaCancelamento(LayoutPadraoXML layoutPadraoXML, List<PedidoDesistencia> pedidosDesistenciaCancelamento) {
+	private String gerarMensagemErroDesistencia(LayoutPadraoXML layoutPadraoXML, List<PedidoDesistencia> pedidosDesistenciaCancelamento) {
 		if (layoutPadraoXML.equals(LayoutPadraoXML.SERPRO)) {
 			return gerarMensagemErroDesistenciaCancelamentoSerpro(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
 		}
