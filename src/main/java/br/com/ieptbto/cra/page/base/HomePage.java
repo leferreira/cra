@@ -257,7 +257,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarRemessaTXT(getUser(), desistenciaProtesto);
+						File file = remessaMediator.baixarDesistenciaTXT(getUser(), desistenciaProtesto);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(

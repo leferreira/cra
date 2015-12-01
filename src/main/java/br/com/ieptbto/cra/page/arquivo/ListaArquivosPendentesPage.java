@@ -192,7 +192,7 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarRemessaTXT(getUser(), desistenciaProtesto);
+						File file = remessaMediator.baixarDesistenciaTXT(getUser(), desistenciaProtesto);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
