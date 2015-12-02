@@ -39,7 +39,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	private ComarcasHomologadasService comarcasHomologadasService;
 
 	@Override
-	@WebMethod(operationName = "Remessa")
+	@WebMethod(operationName = "remessa")
 	@GET
 	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
@@ -47,7 +47,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 		return remessaService.processar(nomeArquivo, getUsuario(), dados);
 	}
 
-	@WebMethod(operationName = "BuscarRemessa")
+	@WebMethod(operationName = "buscarRemessa")
 	@Override
 	public String buscarRemessa(String nomeArquivo, String login, String senha) {
 		init(login, senha);
@@ -55,7 +55,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
-	@WebMethod(operationName = "EnviarConfirmacao")
+	@WebMethod(operationName = "enviarConfirmacao")
 	@GET
 	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
@@ -63,7 +63,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 		return confirmacaoService.enviarConfirmacao(nomeArquivo, getUsuario(), dados);
 	}
 
-	@WebMethod(operationName = "Confirmacao")
+	@WebMethod(operationName = "confirmacao")
 	@Override
 	@GET
 	public String confirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
@@ -73,7 +73,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
-	@WebMethod(operationName = "Retorno")
+	@WebMethod(operationName = "retorno")
 	@GET
 	public String retorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha) {
@@ -81,7 +81,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 		return retornoService.processar(nomeArquivo, getUsuario());
 	}
 
-	@WebMethod(operationName = "Cancelamento")
+	@WebMethod(operationName = "cancelamento")
 	@Override
 	@GET
 	public String cancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
@@ -91,7 +91,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
-	@WebMethod(operationName = "Desistencia")
+	@WebMethod(operationName = "desistencia")
 	@GET
 	public String desistencia(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
@@ -100,7 +100,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
-	@WebMethod(operationName = "AutorizacaoCancelamento")
+	@WebMethod(operationName = "autorizacaoCancelamento")
 	@GET
 	public String autorizacaoCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
@@ -109,7 +109,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 	
 	@Override
-	@WebMethod(operationName = "ComarcasHomologadas")
+	@WebMethod(operationName = "comarcasHomologadas")
 	@GET
 	public String comarcasHomologadas(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, 
 			@WebParam(name = "codapres") String codigoApresentante) {

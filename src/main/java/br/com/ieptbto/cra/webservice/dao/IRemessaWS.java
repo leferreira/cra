@@ -24,7 +24,7 @@ public interface IRemessaWS {
 	 * @param dados
 	 * @return
 	 */
-	@WebMethod(operationName = "Remessa")
+	@WebMethod(operationName = "remessa")
 	@GET
 	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
@@ -36,7 +36,7 @@ public interface IRemessaWS {
 	 * @param senha
 	 * @return
 	 */
-	@WebMethod(operationName = "BuscarRemessa")
+	@WebMethod(operationName = "buscarRemessa")
 	@GET
 	public String buscarRemessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha);
@@ -50,7 +50,7 @@ public interface IRemessaWS {
 	 * 
 	 * @return
 	 */
-	@WebMethod(operationName = "EnviarConfirmacao")
+	@WebMethod(operationName = "enviarConfirmacao")
 	@GET
 	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
@@ -62,7 +62,7 @@ public interface IRemessaWS {
 	 * @param senha
 	 * @return
 	 */
-	@WebMethod(operationName = "Confirmacao")
+	@WebMethod(operationName = "confirmacao")
 	@GET
 	public String confirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha);
@@ -74,7 +74,7 @@ public interface IRemessaWS {
 	 * @param senha
 	 * @return
 	 */
-	@WebMethod(operationName = "Retorno")
+	@WebMethod(operationName = "retorno")
 	@GET
 	public String retorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha);
@@ -87,7 +87,7 @@ public interface IRemessaWS {
 	 * @param dados
 	 * @return
 	 */
-	@WebMethod(operationName = "Cancelamento")
+	@WebMethod(operationName = "cancelamento")
 	@GET
 	public String cancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
@@ -100,7 +100,7 @@ public interface IRemessaWS {
 	 * @param dados
 	 * @return
 	 */
-	@WebMethod(operationName = "Desistencia")
+	@WebMethod(operationName = "desistencia")
 	@GET
 	public String desistencia(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
@@ -113,7 +113,7 @@ public interface IRemessaWS {
 	 * @param dados
 	 * @return
 	 */
-	@WebMethod(operationName = "AutorizacaoCancelamento")
+	@WebMethod(operationName = "autorizacaoCancelamento")
 	@GET
 	public String autorizacaoCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
@@ -126,7 +126,7 @@ public interface IRemessaWS {
 	 * @param codigo apresentante
 	 * @return
 	 */
-	@WebMethod(operationName = "ComarcasHomologadas")
+	@WebMethod(operationName = "comarcasHomologadas")
 	@GET
 	public String comarcasHomologadas(@WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "codapres") String codigoApresentante);

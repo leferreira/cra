@@ -6,11 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -24,6 +19,8 @@ import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
+import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
@@ -37,6 +34,10 @@ import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.util.DataUtil;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * @author Thasso Araújo
@@ -53,20 +54,30 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 	InstituicaoMediator instituicaoMediator;
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
-	private List<DesistenciaProtesto> desistenciasCancelamento;
+	private List<DesistenciaProtesto> desistenciasProtesto;
+	private List<CancelamentoProtesto> cancelamentoProtestos;
+	private List<AutorizacaoCancelamento> autorizacaoCancelamento;
 	
 	public ListaArquivosPendentesPage(Usuario user, List<Remessa> remessas) {
 		this.arquivo = new Arquivo();
 		this.remessas = remessas;
+		
 		add(carregarListaArquivos());
 		add(carregarListaArquivosDesistenciaProtesto());
+		add(carregarListaArquivosCancelamentoProtesto());
+		add(carregarListaAutorizacao());
 	}
 	
-	public ListaArquivosPendentesPage(List<DesistenciaProtesto> confirmacoesPendentesDesistenciaProtesto) {
+	public ListaArquivosPendentesPage(List<DesistenciaProtesto> confirmacoesPendentesDesistenciaProtesto, List<CancelamentoProtesto> list, List<AutorizacaoCancelamento> list2) {
 		this.arquivo = new Arquivo();
-		this.desistenciasCancelamento = confirmacoesPendentesDesistenciaProtesto;
+		this.desistenciasProtesto = confirmacoesPendentesDesistenciaProtesto;
+		this.cancelamentoProtestos = list;
+		this.autorizacaoCancelamento = list2;
+		
 		add(carregarListaArquivos());
 		add(carregarListaArquivosDesistenciaProtesto());
+		add(carregarListaArquivosCancelamentoProtesto());
+		add(carregarListaAutorizacao());
 	}
 
 	private ListView<Remessa> carregarListaArquivos() {
@@ -161,7 +172,7 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 	}
 
 	private ListView<DesistenciaProtesto> carregarListaArquivosDesistenciaProtesto() {
-		return new ListView<DesistenciaProtesto>("dataTableDesistencia", getDesistenciasCancelamento()) {
+		return new ListView<DesistenciaProtesto>("dataTableDesistencia", getDesistenciasProtesto()) {
 
 			@Override
 			protected void populateItem(ListItem<DesistenciaProtesto> item) {
@@ -213,6 +224,107 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 		};
 	}
 
+	
+	private ListView<CancelamentoProtesto> carregarListaArquivosCancelamentoProtesto() {
+		return new ListView<CancelamentoProtesto>("dataTableCancelamento", getCancelamentoProtestos()) {
+
+			@Override
+			protected void populateItem(ListItem<CancelamentoProtesto> item) {
+				final CancelamentoProtesto cancelamento = item.getModelObject();
+				item.add(downloadArquivoTXT(cancelamento));
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					@Override
+					public void onClick() {
+						// setResponsePage(new TitulosArquivoPage(remessa));
+					}
+				};
+				linkArquivo.add(new Label("nomeArquivo", cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+				item.add(linkArquivo);
+				item.add(new Label("dataEnvio", DataUtil.localDateToString(cancelamento.getRemessaCancelamentoProtesto().getCabecalho().getDataMovimento())));
+				item.add(new Label("instituicao", cancelamento.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("envio", cancelamento.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoRecebe().getNomeFantasia()));
+				item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(cancelamento.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
+				item.add(new Label("horaEnvio", DataUtil.localTimeToString(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getHoraEnvio())));
+				item.add(new Label("status", verificaDownload(cancelamento).getLabel().toUpperCase()).setMarkupId(verificaDownload(cancelamento).getLabel()));
+			}
+
+			private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto cancelamento) {
+				return new Link<Remessa>("downloadArquivo") {
+
+					@Override
+					public void onClick() {
+						File file = remessaMediator.baixarCancelamentoTXT(getUser(), cancelamento);
+						IResourceStream resourceStream = new FileResourceStream(file);
+
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+					}
+				};
+			}
+			
+			private StatusRemessa verificaDownload(CancelamentoProtesto cancelamento) {
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					return StatusRemessa.ENVIADO;
+				}
+				if (cancelamento.getDownload().equals(false)) {
+					return StatusRemessa.AGUARDANDO;
+				}
+				return StatusRemessa.RECEBIDO;
+			}
+		};
+	}
+	
+	private ListView<AutorizacaoCancelamento> carregarListaAutorizacao() {
+		return new ListView<AutorizacaoCancelamento>("dataTableAutorizacao", getAutorizacaoCancelamento()) {
+
+			@Override
+			protected void populateItem(ListItem<AutorizacaoCancelamento> item) {
+				final AutorizacaoCancelamento ac = item.getModelObject();
+				item.add(downloadArquivoTXT(ac));
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					@Override
+					public void onClick() {
+						// setResponsePage(new TitulosArquivoPage(remessa));
+					}
+				};
+				linkArquivo.add(new Label("nomeArquivo", ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+				item.add(linkArquivo);
+				item.add(new Label("dataEnvio", DataUtil.localDateToString(ac.getRemessaAutorizacaoCancelamento().getCabecalho().getDataMovimento())));
+				item.add(new Label("instituicao", ac.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("envio", ac.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoRecebe().getNomeFantasia()));
+				item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(ac.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
+				item.add(new Label("horaEnvio", DataUtil.localTimeToString(ac.getRemessaAutorizacaoCancelamento().getArquivo().getHoraEnvio())));
+				item.add(new Label("status", verificaDownload(ac).getLabel().toUpperCase()).setMarkupId(verificaDownload(ac).getLabel()));
+			}
+
+			private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento ac) {
+				return new Link<Remessa>("downloadArquivo") {
+
+					@Override
+					public void onClick() {
+						File file = remessaMediator.baixarAutorizacaoTXT(getUser(), ac);
+						IResourceStream resourceStream = new FileResourceStream(file);
+
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+					}
+				};
+			}
+			
+			private StatusRemessa verificaDownload(AutorizacaoCancelamento ac) {
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					return StatusRemessa.ENVIADO;
+				}
+				if (ac.getDownload().equals(false)) {
+					return StatusRemessa.AGUARDANDO;
+				}
+				return StatusRemessa.RECEBIDO;
+			}
+		};
+	}
+	
 	public List<Remessa> getRemessas() {
 		if (remessas == null) {
 			remessas = new ArrayList<Remessa>();
@@ -220,18 +332,27 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 		return remessas;
 	}
 
-	public List<DesistenciaProtesto> getDesistenciasCancelamento() {
-		if (desistenciasCancelamento == null) {
-			desistenciasCancelamento = new ArrayList<DesistenciaProtesto>();
+	public List<DesistenciaProtesto> getDesistenciasProtesto() {
+		if (desistenciasProtesto == null) {
+			desistenciasProtesto = new ArrayList<DesistenciaProtesto>();
 		}
-		return desistenciasCancelamento;
+		return desistenciasProtesto;
 	}
-
-	public void setDesistenciasCancelamento(
-			List<DesistenciaProtesto> desistenciasCancelamento) {
-		this.desistenciasCancelamento = desistenciasCancelamento;
+	
+	public List<AutorizacaoCancelamento> getAutorizacaoCancelamento() {
+		if (autorizacaoCancelamento == null) {
+			autorizacaoCancelamento = new ArrayList<AutorizacaoCancelamento>();
+		}
+		return autorizacaoCancelamento;
 	}
-
+	
+	public List<CancelamentoProtesto> getCancelamentoProtestos() {
+		if (cancelamentoProtestos == null) {
+			cancelamentoProtestos = new ArrayList<CancelamentoProtesto>();
+		}
+		return cancelamentoProtestos;
+	}
+	
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(arquivo);

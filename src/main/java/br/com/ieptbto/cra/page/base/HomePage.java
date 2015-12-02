@@ -21,6 +21,8 @@ import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
+import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
@@ -70,7 +72,9 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		add(linkConfirmacoesPendentes());
 		add(linkCancelamentosPendentes());
 		add(listaConfirmacoesPendentes());
-		add(listaDesistenciaCancelamentoPendentes());
+		add(listaDesistenciaPendentes());
+		add(listaCancelamentoPendentes());
+		add(listaAutorizacaoCancelamentoPendentes());
 	}
 	
 //	private void carregarComunicadoModal() {
@@ -112,8 +116,14 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	private void labelQuantidadeCancelamentos() {
 		int quantidade = 0;
-		if (getDesistenciaCancelamentoPendentes() != null) {
-			quantidade = getDesistenciaCancelamentoPendentes().size();
+		if (getDesistenciaPendentes() != null) {
+			quantidade = quantidade + getDesistenciaPendentes().size();
+		}
+		if (getCancelamentoPendentes() != null) {
+			quantidade = quantidade + getCancelamentoPendentes().size();
+		}
+		if (getAutorizacaoCancelamentoPendentes() != null) {
+			quantidade = quantidade + getAutorizacaoCancelamentoPendentes().size();
 		}
 		add(new Label("qtdCancelamentos", quantidade));
 	}
@@ -220,13 +230,56 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			
 			@Override
 			public void onClick() {
-				setResponsePage(new ListaArquivosPendentesPage(getDesistenciaCancelamentoPendentes()));
+				setResponsePage(new ListaArquivosPendentesPage(getDesistenciaPendentes(), getCancelamentoPendentes(), getAutorizacaoCancelamentoPendentes()));
 			}
 		};
 	}
+	
+	private ListView<CancelamentoProtesto> listaCancelamentoPendentes() {
+		return new ListView<CancelamentoProtesto>("listaCancelamentos", getCancelamentoPendentes()) {
 
-	private ListView<DesistenciaProtesto> listaDesistenciaCancelamentoPendentes() {
-		return new ListView<DesistenciaProtesto>("listDesistencias", getDesistenciaCancelamentoPendentes()) {
+			@Override
+			protected void populateItem(ListItem<CancelamentoProtesto> item) {
+				final CancelamentoProtesto remessa = item.getModelObject();
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					@Override
+					public void onClick() {
+					}
+				};
+				linkArquivo.add(new Label("desistencia", remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+				item.add(linkArquivo);
+				
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
+						getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+				} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+					String nomeFantasia = remessa.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
+					item.add(new Label("banco", nomeFantasia.toUpperCase()));
+				}
+				
+				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaCancelamentoProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
+				item.add(downloadArquivoTXT(remessa));
+			}
+			
+			private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto remessa) {
+				return new Link<Remessa>("downloadArquivo") {
+
+					@Override
+					public void onClick() {
+						File file = remessaMediator.baixarCancelamentoTXT(getUsuario(), remessa);
+						IResourceStream resourceStream = new FileResourceStream(file);
+
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+					}
+				};
+			}
+		};
+	}
+	
+	private ListView<DesistenciaProtesto> listaDesistenciaPendentes() {
+		return new ListView<DesistenciaProtesto>("listaDesistencias", getDesistenciaPendentes()) {
 
 			@Override
 			protected void populateItem(ListItem<DesistenciaProtesto> item) {
@@ -267,9 +320,60 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			}
 		};
 	}
+
+	private ListView<AutorizacaoCancelamento> listaAutorizacaoCancelamentoPendentes() {
+		return new ListView<AutorizacaoCancelamento>("listaAutorizacao", getAutorizacaoCancelamentoPendentes()) {
+
+			@Override
+			protected void populateItem(ListItem<AutorizacaoCancelamento> item) {
+				final AutorizacaoCancelamento remessa = item.getModelObject();
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					@Override
+					public void onClick() {
+					}
+				};
+				linkArquivo.add(new Label("desistencia", remessa.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+				item.add(linkArquivo);
+				
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
+						getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+				} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+					String nomeFantasia = remessa.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia();
+					item.add(new Label("banco", nomeFantasia.toUpperCase()));
+				}
+				
+				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio().toDate(), new Date())));
+				item.add(downloadArquivoTXT(remessa));
+			}
+			
+			private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento ac) {
+				return new Link<Remessa>("downloadArquivo") {
+
+					@Override
+					public void onClick() {
+						File file = remessaMediator.baixarAutorizacaoTXT(getUser(), ac);
+						IResourceStream resourceStream = new FileResourceStream(file);
+
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+					}
+				};
+			}
+		};
+	}
 	
-	private List<DesistenciaProtesto> getDesistenciaCancelamentoPendentes() {
+	private List<DesistenciaProtesto> getDesistenciaPendentes() {
 		return arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto();
+	}
+	
+	private List<CancelamentoProtesto> getCancelamentoPendentes() {
+		return arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto();
+	}
+	
+	private List<AutorizacaoCancelamento> getAutorizacaoCancelamentoPendentes() {
+		return arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento();
 	}
 	
 	private List<Remessa> getConfirmacoesPendentes() {
