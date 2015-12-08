@@ -33,11 +33,11 @@ public class MonitorarTitulosInstituicaoPanel extends Panel {
 	MunicipioMediator municipioMediator;
 	private TextField<String> dataEntradaCRA;
 	private DropDownChoice<Municipio> comboMunicipio;
-	private IModel<TituloRemessa> model;
+	private IModel<TituloRemessa> modelTituloRemessa;
 	
 	public MonitorarTitulosInstituicaoPanel(String id, IModel<TituloRemessa> model) {
 		super(id, model);
-		this.model = model;
+		this.modelTituloRemessa = model;
 		adicionarCampos();
 	}
 	
@@ -55,7 +55,7 @@ public class MonitorarTitulosInstituicaoPanel extends Panel {
 
 			@Override
 			public void onSubmit() {
-				TituloRemessa titulo = model.getObject();
+				TituloRemessa titulo = getModelTituloRemessa().getObject();
 				Municipio municipio = null;
 
 				try {
@@ -112,5 +112,9 @@ public class MonitorarTitulosInstituicaoPanel extends Panel {
 	
 	private TextField<String> numeroProtocoloCartorio() {
 		return new TextField<String>("numeroProtocoloCartorio");
+	}
+	
+	public IModel<TituloRemessa> getModelTituloRemessa() {
+		return modelTituloRemessa;
 	}
 }

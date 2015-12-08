@@ -48,9 +48,9 @@ import br.com.ieptbto.cra.util.PeriodoDataUtil;
 public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	MunicipioMediator municipioMediator;
+	private MunicipioMediator municipioMediator;
 	private Usuario usuario;
 	private Arquivo arquivo;
 
@@ -64,7 +64,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		this.arquivo = remessaMediator.confirmacoesPendentes(getUsuario().getInstituicao());
 //		carregarComunicadoModal();
 		labelOrigemDestino(); 
-		labelQuantidadeConfirmacoes();
+		labelQuantidadeRemessasPendentes();
 		labelQuantidadeCancelamentos();
 
 		add(linkAcesseNossoSiteIEPTB());
@@ -128,7 +128,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		add(new Label("qtdCancelamentos", quantidade));
 	}
 
-	private void labelQuantidadeConfirmacoes() {
+	private void labelQuantidadeRemessasPendentes() {
 		int quantidade = 0;
 		if (getConfirmacoesPendentes() != null) {
 			quantidade = getConfirmacoesPendentes().size();

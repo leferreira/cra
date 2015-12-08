@@ -51,7 +51,6 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 	@SpringBean
 	private UsuarioMediator usuarioMediator;
 	private Usuario usuario;
-	
 	private String senhaAtual;
 	
 	public IncluirUsuarioPage() {

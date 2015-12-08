@@ -21,13 +21,17 @@ public class MonitorarTitulosPage extends BasePage<TituloRemessa>{
 	private static final long serialVersionUID = 1L;
 	private TituloRemessa titulo;
 	private Instituicao instituicao;
-	private Form<TituloRemessa> form;
 
 	public MonitorarTitulosPage() {
 		this.titulo = new TituloRemessa();
 		this.instituicao = getUser().getInstituicao();
 		
-		form = new Form<TituloRemessa>("form", getModel());		
+		adicionarPanels();
+	}
+
+	private void adicionarPanels() {
+		Form<TituloRemessa> form = new Form<TituloRemessa>("form", getModel());	
+		
 		if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
 			form.add(new MonitorarTitulosCraPanel("titulosInputPanel", getModel()));
 		} else if (instituicao.getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){

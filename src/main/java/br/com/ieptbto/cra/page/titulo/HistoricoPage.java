@@ -35,11 +35,13 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
 public class HistoricoPage extends BasePage<TituloRemessa> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	@SpringBean
 	private TituloMediator tituloMediator;
 	private TituloRemessa tituloRemessa;
@@ -47,6 +49,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 	public HistoricoPage(TituloRemessa titulo){
 		this.tituloRemessa = tituloMediator.carregarDadosHistoricoTitulo(titulo);
+		
 		carregarCampos();
 		carregarArquivosOcorrencias();
 	}
@@ -77,18 +80,24 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			getArquivosOcorrencias().add(novaOcorrencia);
 		}
 		
-		add(listArquivoOcorrenciaBean());
+		add(listaArquivoOcorrenciaBean());
 	}
 
-	private ListView<ArquivoOcorrenciaBean> listArquivoOcorrenciaBean(){
+	private ListView<ArquivoOcorrenciaBean> listaArquivoOcorrenciaBean(){
 		return new ListView<ArquivoOcorrenciaBean>("divListaHistorico", getArquivosOcorrencias()) {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+			
 			@Override
 			protected void populateItem(ListItem<ArquivoOcorrenciaBean> item) {
 				final ArquivoOcorrenciaBean arquivoOcorrenciaBean = item.getModelObject();
 				
 				if (arquivoOcorrenciaBean.getRemessa() != null) {
 					Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
+						
+						/***/
+						private static final long serialVersionUID = 1L;
 						
 						@Override
 						public void onClick() {
@@ -103,6 +112,9 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 				if (arquivoOcorrenciaBean.getArquivoGerado() != null) {
 					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 						
+						/***/
+						private static final long serialVersionUID = 1L;
+						
 						@Override
 						public void onClick() {
 						}
@@ -114,6 +126,9 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 				
 				if (arquivoOcorrenciaBean.getDesistenciaProtesto() != null) {
 					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+						
+						/***/
+						private static final long serialVersionUID = 1L;
 						
 						@Override
 						public void onClick() {
