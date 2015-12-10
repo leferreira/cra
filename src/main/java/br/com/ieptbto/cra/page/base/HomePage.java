@@ -42,11 +42,13 @@ import br.com.ieptbto.cra.util.PeriodoDataUtil;
  *
  * @param <T>
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = CraRoles.USER)
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	@SpringBean
 	private RemessaMediator remessaMediator;
 	@SpringBean
@@ -58,10 +60,15 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		super();
 		carregarHomePage();
 	}
+	
+	public HomePage(PageParameters parameters) {
+		error(parameters.get("error"));
+		carregarHomePage();
+	}
 
 	private void carregarHomePage() {
 		this.usuario = getUser();
-		this.arquivo = remessaMediator.confirmacoesPendentes(getUsuario().getInstituicao());
+		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
 //		carregarComunicadoModal();
 		labelOrigemDestino(); 
 		labelQuantidadeRemessasPendentes();
@@ -69,7 +76,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 		add(linkAcesseNossoSiteIEPTB());
 		add(downloadOficioCorregedoria());
-		add(linkConfirmacoesPendentes());
+		add(linkConfirmacoesPendentes()); 
 		add(linkCancelamentosPendentes());
 		add(listaConfirmacoesPendentes());
 		add(listaDesistenciaPendentes());
@@ -153,6 +160,10 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	
 	private Link<T> downloadOficioCorregedoria(){
 		return new Link<T>("donwloadOficio") {
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick() {
 				File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Oficio_Corregedoria.pdf");
@@ -168,6 +179,9 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private Link<Remessa> linkConfirmacoesPendentes() {
 		return new Link<Remessa>("arquivosConfirmacoesPendetes") {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick() {
 				setResponsePage(new ListaArquivosPendentesPage(getUser(), getConfirmacoesPendentes()));
@@ -179,10 +193,16 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private ListView<Remessa> listaConfirmacoesPendentes() {
 		return new ListView<Remessa>("listConfirmacoes", getConfirmacoesPendentes()) {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -193,8 +213,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				item.add(linkArquivo);
 				
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-					String nomeFantasia = remessa.getInstituicaoOrigem().getNomeFantasia();
-					item.add(new Label("instituicao", nomeFantasia.toUpperCase()));
+					String instituicao = remessa.getInstituicaoOrigem().getNomeFantasia();
+					item.add(new Label("instituicao", instituicao.toUpperCase()));
 				} else {
 					item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				}
@@ -205,6 +225,9 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			
 			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
 				return new Link<Remessa>("downloadArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -228,6 +251,9 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private Link<DesistenciaProtesto> linkCancelamentosPendentes() {
 		return new Link<DesistenciaProtesto>("arquivosCancelamentosPendetes") {
 			
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick() {
 				setResponsePage(new ListaArquivosPendentesPage(getDesistenciaPendentes(), getCancelamentoPendentes(), getAutorizacaoCancelamentoPendentes()));
@@ -238,10 +264,16 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private ListView<CancelamentoProtesto> listaCancelamentoPendentes() {
 		return new ListView<CancelamentoProtesto>("listaCancelamentos", getCancelamentoPendentes()) {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<CancelamentoProtesto> item) {
 				final CancelamentoProtesto remessa = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -265,6 +297,9 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto remessa) {
 				return new Link<Remessa>("downloadArquivo") {
 
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
 						File file = remessaMediator.baixarCancelamentoTXT(getUsuario(), remessa);
@@ -281,10 +316,16 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private ListView<DesistenciaProtesto> listaDesistenciaPendentes() {
 		return new ListView<DesistenciaProtesto>("listaDesistencias", getDesistenciaPendentes()) {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<DesistenciaProtesto> item) {
 				final DesistenciaProtesto remessa = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -308,6 +349,9 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto desistenciaProtesto) {
 				return new Link<Remessa>("downloadArquivo") {
 
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
 						File file = remessaMediator.baixarDesistenciaTXT(getUser(), desistenciaProtesto);
@@ -324,10 +368,16 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private ListView<AutorizacaoCancelamento> listaAutorizacaoCancelamentoPendentes() {
 		return new ListView<AutorizacaoCancelamento>("listaAutorizacao", getAutorizacaoCancelamentoPendentes()) {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<AutorizacaoCancelamento> item) {
 				final AutorizacaoCancelamento remessa = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -350,6 +400,9 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			
 			private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento ac) {
 				return new Link<Remessa>("downloadArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -378,11 +431,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	
 	private List<Remessa> getConfirmacoesPendentes() {
 		return arquivo.getRemessas();
-	}
-
-	public HomePage(PageParameters parameters) {
-		error(parameters.get("error"));
-		carregarHomePage();
 	}
 
 	/**

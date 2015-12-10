@@ -51,10 +51,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
 	@SpringBean
-	RelatorioMediator relatorioMediator;
+	private RelatorioMediator relatorioMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-
+	private InstituicaoMediator instituicaoMediator;
 	private Arquivo arquivo;
 	private Instituicao cra;
 	private Form<Arquivo> form;

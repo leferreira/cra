@@ -85,12 +85,14 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
 				
 				if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
-					item.add(new Label("instituicao", remessa.getInstituicaoOrigem().getNomeFantasia()));
+					String instituicao = remessa.getInstituicaoOrigem().getNomeFantasia();
+					item.add(new Label("instituicao", instituicao));
 					item.add(new Label("envio", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
 					item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
 					item.add(downloadAnexos(remessa));
 				} else {
-					item.add(new Label("instituicao", remessa.getInstituicaoDestino().getNomeFantasia()));
+					String instituicao = remessa.getInstituicaoDestino().getNomeFantasia();
+					item.add(new Label("instituicao", instituicao));
 					item.add(new Label("envio", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 					item.add(new Label("destino", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
 					item.add(new Label("downloadAnexos", StringUtils.EMPTY));
