@@ -43,7 +43,6 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	@WebMethod(operationName = "centralNacionalProtesto")
 	@GET
 	public String centralNacionalProtesto(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 		
@@ -64,5 +63,4 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	public Usuario getUsuario() {
 		return usuario;
 	}
-
 }

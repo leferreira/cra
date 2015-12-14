@@ -25,9 +25,6 @@ import br.com.ieptbto.cra.entidade.CabecalhoArquivo;
 import br.com.ieptbto.cra.entidade.CabecalhoCartorio;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
-import br.com.ieptbto.cra.entidade.CnpOcorrencia;
-import br.com.ieptbto.cra.entidade.CnpTituloCra;
-import br.com.ieptbto.cra.entidade.CnpTituloManual;
 import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
@@ -128,9 +125,6 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(AutorizacaoCancelamento.class);
 		classesHibernate.add(PedidoAutorizacaoCancelamento.class);
 		classesHibernate.add(SolicitacaoDesistenciaCancelamentoConvenio.class);
-		classesHibernate.add(CnpTituloCra.class);
-		classesHibernate.add(CnpTituloManual.class);
-		classesHibernate.add(CnpOcorrencia.class);
 	}
 
 	/**
