@@ -20,6 +20,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
+import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
@@ -215,6 +216,10 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String instituicao = remessa.getInstituicaoOrigem().getNomeFantasia();
 					item.add(new Label("instituicao", instituicao.toUpperCase()));
+					item.add(downloadAnexos(remessa));
+				} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
+					item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+					item.add(downloadAnexos(remessa));
 				} else {
 					item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				}
@@ -244,6 +249,39 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						}
 					}
 				};
+			}
+			
+			private Link<Remessa> downloadAnexos(final Remessa remessa) {
+				List<Anexo> anexos = remessaMediator.verificarAnexosRemessa(remessa);
+				Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
+					
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						
+						try { 
+							File file = remessaMediator.processarArquivosAnexos(getUser(), remessa);
+							IResourceStream resourceStream = new FileResourceStream(file);
+							
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(
+									new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						} catch (InfraException ex) {
+							getFeedbackPanel().error(ex.getMessage());
+						} catch (Exception e) {
+							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+						}
+					}
+				};
+				
+				if (anexos != null) {
+					if (anexos.isEmpty()) {
+						linkAnexos.setOutputMarkupId(false);
+						linkAnexos.setVisible(false);
+					}
+				}
+				return linkAnexos;
 			}
 		};
 	}

@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -18,6 +19,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
@@ -103,10 +105,12 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 					item.add(new Label("instituicao", remessa.getInstituicaoOrigem().getNomeFantasia()));
 					item.add(new Label("envio", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
 					item.add(new Label("destino", remessa.getInstituicaoDestino().getNomeFantasia()));
+					item.add(downloadAnexos(remessa));
 				} else {
 					item.add(new Label("instituicao", remessa.getInstituicaoDestino().getNomeFantasia()));
 					item.add(new Label("envio", remessa.getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 					item.add(new Label("destino", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
+					item.add(new Label("downloadAnexos", StringUtils.EMPTY));
 				}
 				
 				item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
@@ -132,6 +136,36 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 						}
 					}
 				};
+			}
+			
+			private Link<Remessa> downloadAnexos(final Remessa remessa) {
+				List<Anexo> anexos = remessaMediator.verificarAnexosRemessa(remessa);
+				
+				Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
+					@Override
+					public void onClick() {
+						
+						try { 
+							File file = remessaMediator.processarArquivosAnexos(getUser(), remessa);
+							IResourceStream resourceStream = new FileResourceStream(file);
+							
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(
+									new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						} catch (InfraException ex) {
+							getFeedbackPanel().error(ex.getMessage());
+						} catch (Exception e) {
+							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+						}
+					}
+				};
+				
+				if (anexos != null) {
+					if (anexos.isEmpty()) {
+						linkAnexos.setOutputMarkupId(false);
+						linkAnexos.setVisible(false);
+					}
+				}
+				return linkAnexos;
 			}
 			
 			private Link<Remessa> relatorioArquivo(final Remessa remessa) {
