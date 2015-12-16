@@ -14,10 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
-import br.com.ieptbto.cra.conversor.ConversorArquivoVo;
+import br.com.ieptbto.cra.conversor.ConversorArquivoVO;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
-import br.com.ieptbto.cra.entidade.vo.RemessaVO;
+import br.com.ieptbto.cra.entidade.vo.RemessaCnp;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -33,7 +33,7 @@ public class RemessaService extends CraWebService {
 	@Autowired
 	private RemessaMediator remessaMediator;
 	private String arquivoRecebido;
-	private List<RemessaVO> remessas;
+	private List<RemessaCnp> remessas;
 	private ArquivoVO arquivoVO;
 
 	/**
@@ -75,7 +75,7 @@ public class RemessaService extends CraWebService {
 		setNomeArquivo(nomeArquivo);
 		setArquivoVO(arquivoRecebido);
 		
-		setRemessas(ConversorArquivoVo.converterParaRemessaVO(getArquivoVO()));
+		setRemessas(ConversorArquivoVO.converterParaRemessaVO(getArquivoVO()));
 		return gerarMensagem(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo), CONSTANTE_RELATORIO_XML);
 	}
 
@@ -127,12 +127,12 @@ public class RemessaService extends CraWebService {
 	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
-		RemessaVO remessa = null;
+		RemessaCnp remessa = null;
 
 		return gerarResposta(remessa, getNomeArquivo(), CONSTANTE_REMESSA_XML);
 	}
 
-	private String gerarResposta(RemessaVO remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {
+	private String gerarResposta(RemessaCnp remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {
 		StringBuffer string = new StringBuffer();
 		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
 		string.append(msg);
@@ -147,11 +147,11 @@ public class RemessaService extends CraWebService {
 		this.arquivoRecebido = arquivoRecebido;
 	}
 
-	public List<RemessaVO> getRemessas() {
+	public List<RemessaCnp> getRemessas() {
 		return remessas;
 	}
 
-	public void setRemessas(List<RemessaVO> remessas) {
+	public void setRemessas(List<RemessaCnp> remessas) {
 		this.remessas = remessas;
 	}
 

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoRetornoVO;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
-import br.com.ieptbto.cra.entidade.vo.RemessaVO;
+import br.com.ieptbto.cra.entidade.vo.RemessaCnp;
 import br.com.ieptbto.cra.entidade.vo.RetornoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -40,7 +40,7 @@ public class RetornoService extends CraWebService {
 	private RetornoVO retornoVO;
 
 	public String processar(String nomeArquivo, Usuario usuario) {
-		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
+		List<RemessaCnp> remessas = new ArrayList<RemessaCnp>();
 		ArquivoVO arquivoVO = null;
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
@@ -62,7 +62,7 @@ public class RetornoService extends CraWebService {
 		return gerarResposta(usuario.getInstituicao().getLayoutPadraoXML() ,remessas, getNomeArquivo(), CONSTANTE_RETORNO_XML);
 	}
 
-	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta,List<RemessaVO> remessas, String nomeArquivo, String constanteRetornoXml) {
+	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta,List<RemessaCnp> remessas, String nomeArquivo, String constanteRetornoXml) {
 		StringBuffer string = new StringBuffer();
 		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
 		String cabecalho = "<retorno>";
@@ -70,7 +70,7 @@ public class RetornoService extends CraWebService {
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 			string.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>");
 		}
-		for (RemessaVO remessaVO : remessas) {
+		for (RemessaCnp remessaVO : remessas) {
 			if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 				string.append("<comarca CodMun=\""+ remessaVO.getCabecalho().getCodigoMunicipio() +"\">");
 				String msg = gerarMensagem(remessaVO, CONSTANTE_RETORNO_XML).replace("</retorno>", "").replace(cabecalho, "");
