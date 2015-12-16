@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -222,6 +223,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					item.add(downloadAnexos(remessa));
 				} else {
 					item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+					item.add(new Label("downloadAnexos", StringUtils.EMPTY));
 				}
 				
 				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
