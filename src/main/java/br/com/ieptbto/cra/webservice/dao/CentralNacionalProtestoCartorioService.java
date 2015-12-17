@@ -47,8 +47,8 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (dados == null) { 
 				return dadosArquivoCnpEmBranco(usuario);		
 			}
-			if (new LocalTime().isAfter(getHoraInicioServico()) && new LocalTime().isBefore(getHoraFimServico())) { 
-				return servicoNaoDisponivelForaDoHorario(usuario);		
+			if (new LocalTime().isAfter(getHoraInicioServicoEnvio()) && new LocalTime().isBefore(getHoraFimServicoEnvio())) { 
+				return servicoNaoDisponivelForaDoHorarioEnvio(usuario);		
 			}
 			if (isInstituicaoEnviouArquivoCnpHoje(usuario.getInstituicao())) {
 				return arquivoCnpJaEnviadoHoje(usuario);

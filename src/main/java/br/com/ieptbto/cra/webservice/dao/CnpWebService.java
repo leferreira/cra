@@ -35,12 +35,31 @@ public class CnpWebService {
 
 	protected static final Logger logger = Logger.getLogger(CnpWebService.class);
 	public static final String CONSTANTE_RELATORIO_XML = "relatorio";
+	public static final String CONSTANTE_CNP_XML = "cnp";
 	public static final String TIPO_ARQUIVO_CNP= "CENTRAL NACIONAL DE PROTESTO";
+	public static final String HORA_INICIO_CONSULTA = "08:00";
+	public static final String HORA_FIM_CONSULTA = "12:00";
+	public static final String HORA_INICIO_ENVIO = "14:00";
+	public static final String HORA_FIM_ENVIO  = "17:00";
+	
 	protected Usuario usuario;
 	protected LocalTime horaInicioServico;
 	protected LocalTime horaFimServico;
 	
 	protected String usuarioInvalido() {
+		MensagemXml mensagemXml = new MensagemXml();
+		
+		Descricao descricao = new Descricao();
+		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
+		
+		mensagemXml.setDescricao(descricao);
+		mensagemXml.setCodigoFinal(CodigoErro.CRA_FALHA_NA_AUTENTICACAO.getCodigo());
+		mensagemXml.setDescricaoFinal(CodigoErro.CRA_FALHA_NA_AUTENTICACAO.getDescricao());
+		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
+	}
+	
+	protected String usuarioNaoPermitidoConsultaArquivoCNP() {
 		MensagemXml mensagemXml = new MensagemXml();
 		
 		Descricao descricao = new Descricao();
@@ -66,7 +85,7 @@ public class CnpWebService {
 		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String servicoNaoDisponivelForaDoHorario(Usuario usuario) {
+	protected String servicoNaoDisponivelForaDoHorarioEnvio(Usuario usuario) {
 		MensagemXml mensagemXml = new MensagemXml();
 		Descricao descricao = new Descricao();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
@@ -76,6 +95,32 @@ public class CnpWebService {
 		mensagemXml.setDescricao(descricao);
 		mensagemXml.setCodigoFinal(CodigoErro.CNP_ENVIO_FORA_DO_HORARIO_LIMITE_DO_SERVICO.getCodigo());
 		mensagemXml.setDescricaoFinal(CodigoErro.CNP_ENVIO_FORA_DO_HORARIO_LIMITE_DO_SERVICO.getDescricao());
+		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
+	}
+	
+	protected String servicoNaoDisponivelForaDoHorarioConsulta(Usuario usuario) {
+		MensagemXml mensagemXml = new MensagemXml();
+		Descricao descricao = new Descricao();
+		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
+		descricao.setUsuario(usuario.getLogin());
+		
+		mensagemXml.setDescricao(descricao);
+		mensagemXml.setCodigoFinal(CodigoErro.CNP_CONSULTA_FORA_DO_HORARIO_LIMITE_DO_SERVICO.getCodigo());
+		mensagemXml.setDescricaoFinal(CodigoErro.CNP_CONSULTA_FORA_DO_HORARIO_LIMITE_DO_SERVICO.getDescricao());
+		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
+	}
+	
+	protected String naoHaRemessasParaArquivoCnp(Usuario usuario) {
+		MensagemXml mensagemXml = new MensagemXml();
+		Descricao descricao = new Descricao();
+		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
+		descricao.setUsuario(usuario.getLogin());
+		
+		mensagemXml.setDescricao(descricao);
+		mensagemXml.setCodigoFinal(CodigoErro.CNP_NAO_HA_ARQUIVOS_DISPONIVEIS.getCodigo());
+		mensagemXml.setDescricaoFinal(CodigoErro.CNP_NAO_HA_ARQUIVOS_DISPONIVEIS.getDescricao());
 		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
 	}
 	
@@ -144,7 +189,6 @@ public class CnpWebService {
 		Descricao descricao = new Descricao();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
-		descricao.setUsuario(getUsuario().getLogin());
 		
 		mensagemXml.setDescricao(descricao);
 		mensagemXml.setCodigoFinal(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getCodigo());
@@ -160,11 +204,19 @@ public class CnpWebService {
 		return usuario;
 	}
 	
-	public LocalTime getHoraInicioServico() {
-		return new LocalTime("14:00");
+	public LocalTime getHoraInicioServicoEnvio() {
+		return new LocalTime(HORA_INICIO_ENVIO);
 	}
 	
-	public LocalTime getHoraFimServico() {
-		return new LocalTime("17:00");
+	public LocalTime getHoraFimServicoEnvio() {
+		return new LocalTime(HORA_FIM_ENVIO);
+	}
+	
+	public LocalTime getHoraInicioServicoConsulta() {
+		return new LocalTime(HORA_INICIO_CONSULTA);
+	}
+	
+	public LocalTime getHoraFimServicoConsulta() {
+		return new LocalTime(HORA_FIM_CONSULTA);
 	}
 }

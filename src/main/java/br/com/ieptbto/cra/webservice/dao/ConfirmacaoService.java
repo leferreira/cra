@@ -26,7 +26,7 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoConfirmacaoVO;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.ConfirmacaoVO;
-import br.com.ieptbto.cra.entidade.vo.RemessaCnp;
+import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
@@ -50,7 +50,7 @@ public class ConfirmacaoService extends CraWebService {
 	private ConfirmacaoVO confirmacaoVO;
 
 	public String processar(String nomeArquivo, Usuario usuario) {
-		List<RemessaCnp> remessas = new ArrayList<RemessaCnp>();
+		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 		ArquivoVO arquivoVO = null;
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
@@ -72,7 +72,7 @@ public class ConfirmacaoService extends CraWebService {
 		return gerarResposta(usuario.getInstituicao().getLayoutPadraoXML() ,remessas, getNomeArquivo(), CONSTANTE_CONFIRMACAO_XML);
 	}
 
-	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta,List<RemessaCnp> remessas, String nomeArquivo, String constanteConfirmacaoXml) {
+	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta,List<RemessaVO> remessas, String nomeArquivo, String constanteConfirmacaoXml) {
 		StringBuffer string = new StringBuffer();
 		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
 		String cabecalho = "<confirmacao>";
@@ -80,7 +80,7 @@ public class ConfirmacaoService extends CraWebService {
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 			string.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>");
 		}
-		for (RemessaCnp remessaVO : remessas) {
+		for (RemessaVO remessaVO : remessas) {
 			if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 				string.append("<comarca CodMun=\""+ remessaVO.getCabecalho().getCodigoMunicipio() +"\">");
 				String msg = gerarMensagem(remessaVO, CONSTANTE_CONFIRMACAO_XML).replace("</confirmacao>", "").replace(cabecalho, "");

@@ -29,6 +29,7 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	private UsuarioMediator usuarioMediator;
 	private Usuario usuario;
 	private CentralNacionalProtestoCartorioService cnpCartorioService;
+	private CentralNacionalProtestoService cnpNacionalService;
 	private ClassPathXmlApplicationContext context;
 	
 	@Override
@@ -43,7 +44,8 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	@WebMethod(operationName = "centralNacionalProtesto")
 	@GET
 	public String centralNacionalProtesto(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
-		return null;
+		init(login, senha);
+		return cnpNacionalService.processar(usuario);
 	}
 		
 	private void init(String login, String senha) {
@@ -52,6 +54,7 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 		}
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 		cnpCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("cnpCartorioService");
+		cnpNacionalService = (CentralNacionalProtestoService) context.getBean("cnpNacionalService");
 		setUsuario(login, senha); 
 	}
 
