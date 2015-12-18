@@ -37,10 +37,10 @@ public class CnpWebService {
 	public static final String CONSTANTE_RELATORIO_XML = "relatorio";
 	public static final String CONSTANTE_CNP_XML = "cnp";
 	public static final String TIPO_ARQUIVO_CNP= "CENTRAL NACIONAL DE PROTESTO";
-	public static final String HORA_INICIO_CONSULTA = "08:00";
-	public static final String HORA_FIM_CONSULTA = "12:00";
-	public static final String HORA_INICIO_ENVIO = "14:00";
-	public static final String HORA_FIM_ENVIO  = "17:00";
+	public static final String HORA_INICIO_CONSULTA = "07:59:59";
+	public static final String HORA_FIM_CONSULTA = "12:00:01";
+	public static final String HORA_INICIO_ENVIO = "13:59:59";
+	public static final String HORA_FIM_ENVIO  = "17:00:01";
 	
 	protected Usuario usuario;
 	protected LocalTime horaInicioServico;
@@ -67,8 +67,8 @@ public class CnpWebService {
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		
 		mensagemXml.setDescricao(descricao);
-		mensagemXml.setCodigoFinal(CodigoErro.CRA_FALHA_NA_AUTENTICACAO.getCodigo());
-		mensagemXml.setDescricaoFinal(CodigoErro.CRA_FALHA_NA_AUTENTICACAO.getDescricao());
+		mensagemXml.setCodigoFinal(CodigoErro.CNP_USUARIO_NAO_PERMITIDO_CONSULTA.getCodigo());
+		mensagemXml.setDescricaoFinal(CodigoErro.CNP_USUARIO_NAO_PERMITIDO_CONSULTA.getDescricao());
 		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
 	}
 	
@@ -149,6 +149,7 @@ public class CnpWebService {
 			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
 			marshaller.marshal(element, writer);
 			String msg = writer.toString();
+			msg = msg.replace(" xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			writer.close();
 			return msg;
 

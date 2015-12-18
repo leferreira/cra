@@ -30,7 +30,8 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 				return usuarioNaoPermitidoConsultaArquivoCNP();
 			}
-			if (new LocalTime().isAfter(getHoraInicioServicoConsulta()) && new LocalTime().isBefore(getHoraFimServicoConsulta())) { 
+			
+			if (!new LocalTime().isAfter(getHoraInicioServicoConsulta()) && !new LocalTime().isBefore(getHoraFimServicoConsulta())) { 
 				return servicoNaoDisponivelForaDoHorarioConsulta(usuario);		
 			}
 			
@@ -42,6 +43,6 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			logger.info(ex.getMessage(), ex.getCause());
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}
-		return gerarMensagem(new ArquivoCnpVO(),CONSTANTE_CNP_XML);
+		return gerarMensagem(arquivoCnp ,CONSTANTE_CNP_XML);
 	}
 }

@@ -9,7 +9,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
@@ -44,12 +43,12 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (getUsuario() == null) {
 				return usuarioInvalido();
 			}
-			if (dados == null) { 
+			if (StringUtils.isBlank(dados)) { 
 				return dadosArquivoCnpEmBranco(usuario);		
-			}
-			if (new LocalTime().isAfter(getHoraInicioServicoEnvio()) && new LocalTime().isBefore(getHoraFimServicoEnvio())) { 
-				return servicoNaoDisponivelForaDoHorarioEnvio(usuario);		
-			}
+			} 
+//			if (new LocalTime().isBefore(getHoraInicioServicoEnvio()) || new LocalTime().isAfter(getHoraFimServicoEnvio())) { 
+//				return servicoNaoDisponivelForaDoHorarioEnvio(usuario);		
+//			}
 			if (isInstituicaoEnviouArquivoCnpHoje(usuario.getInstituicao())) {
 				return arquivoCnpJaEnviadoHoje(usuario);
 			}
