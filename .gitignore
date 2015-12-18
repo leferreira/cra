@@ -18,3 +18,5 @@ hs_err_pid*
 /.gitignore
 /bin/
 /README.md
+/META-INF/
+/build.properties
