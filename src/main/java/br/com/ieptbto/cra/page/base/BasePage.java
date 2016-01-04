@@ -57,7 +57,6 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 		addLogout();
 		adicionarMenu();
 		adicionarTrocaSenha();
-
 	}
 
 	private void adicionarTrocaSenha() {
@@ -91,7 +90,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 		menu.setRenderBodyOnly(true);
 		add(menu);
 	}
-
+	
 	protected Component createMenu(String containerId) {
 		return getWicketApplication().createMenuSistema(this, containerId);
 	}

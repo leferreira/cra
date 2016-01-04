@@ -49,11 +49,11 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	protected static final Logger logger = Logger.getLogger(ListaArquivosPage.class);
 
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	RelatorioMediator relatorioMediator;
+	private RelatorioMediator relatorioMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
 
@@ -113,7 +113,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 							IResourceStream resourceStream = new FileResourceStream(file);
 							
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-									new ResourceStreamRequestHandler(resourceStream, file.getName()));
+									new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {

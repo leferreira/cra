@@ -71,6 +71,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private void carregarHomePage() {
 		this.usuario = getUser();
 		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
+		
 //		carregarComunicadoModal();
 		labelOrigemDestino(); 
 		labelQuantidadeRemessasPendentes();
@@ -243,7 +244,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 							IResourceStream resourceStream = new FileResourceStream(file);
 	
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+							        new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
@@ -268,7 +269,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 							IResourceStream resourceStream = new FileResourceStream(file);
 							
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-									new ResourceStreamRequestHandler(resourceStream, file.getName()));
+									new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
@@ -346,7 +347,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						        new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
 					}
 				};
 			}
@@ -398,7 +399,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						        new ResourceStreamRequestHandler(resourceStream, desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 					}
 				};
 			}
@@ -450,7 +451,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, file.getName()));
+						        new ResourceStreamRequestHandler(resourceStream, ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 					}
 				};
 			}
