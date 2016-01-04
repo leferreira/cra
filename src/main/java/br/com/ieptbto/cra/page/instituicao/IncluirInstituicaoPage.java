@@ -25,6 +25,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.enumeration.TipoCampo51;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -106,6 +107,7 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		form.add(campoEnvioAnexo());
 		form.add(comboMunicipios());
 		form.add(comboTipoCampo51());
+		form.add(comboTipoBatimento());
 		form.add(comboPadraoLayoutXML());
 		form.add(new Button("botaoSalvar"));
 		add(form);
@@ -203,6 +205,15 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		IChoiceRenderer<TipoCampo51> renderer = new ChoiceRenderer<TipoCampo51>("label");
 		DropDownChoice<TipoCampo51> combo = new DropDownChoice<TipoCampo51>("tipoCampo51", Arrays.asList(TipoCampo51.values()), renderer);
 		combo.setLabel(new Model<String>("Tipo de Informação Campo 51"));
+		combo.setOutputMarkupId(true);
+		combo.setRequired(true);
+		return combo;
+	}
+	
+	private RadioChoice<TipoBatimento> comboTipoBatimento() {
+		IChoiceRenderer<TipoBatimento> renderer = new ChoiceRenderer<TipoBatimento>("label");
+		RadioChoice<TipoBatimento> combo = new RadioChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()), renderer);
+		combo.setLabel(new Model<String>("Tipo Batimento"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
 		return combo;
