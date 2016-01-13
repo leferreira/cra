@@ -83,10 +83,13 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSubmit(){
+				List<Remessa> retornoLiberados = (List<Remessa>)grupo.getModelObject();
+				
 				try{
-					
-//					retornoMediator.liberarRetornoBatimentoInstituicao();
-					setResponsePage(new RetornoAguardandoPage("Os arquivos de retorno foram liberados para serem gerados ao banco!"));
+					retornoMediator.liberarRetornoBatimentoInstituicao(retornoLiberados);
+					setResponsePage(new RetornoAguardandoPage("Os arquivos de retorno foram"
+							+ " liberados para serem gerados ao banco!"));
+				
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
 					error(e.getMessage());

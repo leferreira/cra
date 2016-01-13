@@ -140,8 +140,8 @@ public class RetornoPage extends BasePage<Retorno> {
 				};
 				linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				item.add(removerConfirmado(retorno));
 				item.add(botaoGerarRelatorio(retorno));
+				item.add(removerConfirmado(retorno));
 			}
 			
 			private Link<Arquivo> removerConfirmado(final Remessa retorno) {
