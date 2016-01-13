@@ -31,15 +31,16 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	private CentralNacionalProtestoCartorioService centralNacionalProtestoCartorioService;
 	private CentralNacionalProtestoService centralNacionalProtestoService;
 	private ClassPathXmlApplicationContext context;
-	
+
 	@Override
 	@WebMethod(operationName = "cartorio")
 	@GET
-	public String cartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+	public String cartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
+	        @WebParam(name = "user_dados") String dados) {
 		init(login, senha);
 		return centralNacionalProtestoCartorioService.processar(usuario, dados);
 	}
-	
+
 	@Override
 	@WebMethod(operationName = "centralNacionalProtesto")
 	@GET
@@ -47,15 +48,16 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 		init(login, senha);
 		return centralNacionalProtestoService.processar(usuario);
 	}
-		
+
 	private void init(String login, String senha) {
 		if (context == null) {
 			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		}
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
-		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
+		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context
+		        .getBean("centralNacionalProtestoCartorioService");
 		centralNacionalProtestoService = (CentralNacionalProtestoService) context.getBean("centralNacionalProtestoService");
-		setUsuario(login, senha); 
+		setUsuario(login, senha);
 	}
 
 	private void setUsuario(String login, String senha) {
