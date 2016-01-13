@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.admin;
+package br.com.ieptbto.cra.page.administracao;
 
 import java.util.ArrayList;
 import java.util.List;

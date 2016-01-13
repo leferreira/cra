@@ -22,11 +22,8 @@
 	font-size: 13px;
 }
 </style>
-
 </head>
-
 <body style="background-color: #3d8cbe;">
-
 	<div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
@@ -37,15 +34,15 @@
                     <div class="panel-body">
                         <form role="form" wicket:id="loginForm">
                             <fieldset>
-                                <div class="form-group">
-                                	<input wicket:id="login" class="form-control" placeholder="Login" name="login" type="text"/>
+                                <div class="form-group input-group">
+                                    <input wicket:id="login" class="form-control" placeholder="Login" name="login" type="text">
+                                    <span class="input-group-addon"><span class="fa fa-user"></span></span>
                                 </div>
-                                <div class="form-group">
-                                    <input wicket:id="senha" class="form-control" placeholder="Senha" name="senha" type="password" value="">
+                                  <div class="form-group input-group">
+                                    <input wicket:id="senha" class="form-control" placeholder="Senha" name="senha" type="password">
+                                    <span class="input-group-addon"><span class="fa fa-lock"></span></span>
                                 </div>
-                                <br style="clear: both;"/>
-                                <div wicket:id="feedback"></div>
-                                <br style="clear: both;"/>
+                                <div wicket:id="feedback" style="margin-top: 15px; margin-bottom: 15px;"></div>
                                 <button type="submit" wicket:id="botaoSalvar"	class="btn btn-lg btn-primary btn-block">Entrar</button>
                             </fieldset>
                         </form>

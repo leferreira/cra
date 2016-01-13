@@ -60,8 +60,8 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	private FileUploadField fileUploadField;
 
 	public EnviarArquivoPage() {
-		arquivo = new Arquivo();
-		arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
+		this.arquivo = new Arquivo();
+		this.arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
 
 		form = new Form<Arquivo>("form", getModel()) {
 			/****/

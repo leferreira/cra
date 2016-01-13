@@ -11,7 +11,8 @@ import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Check;
+import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -45,35 +46,37 @@ import net.sf.jasperreports.engine.JasperReport;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class RetornoPage extends BasePage<Retorno> {
+public class RetornoAguardandoPage extends BasePage<Retorno> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(RetornoPage.class);
+	private static final Logger logger = Logger.getLogger(RetornoAguardandoPage.class);
 	
 	@SpringBean
 	private RetornoMediator retornoMediator;
 	@SpringBean
 	private RelatorioMediator relatorioMediator;
 	private Retorno retorno;
-	private List<Remessa> retornosPendentes;
+	private List<Remessa> retornosAguardandoLiberacao;
+	private ListView<Remessa> remessas;
 	
-	public RetornoPage(){
+	public RetornoAguardandoPage(){
 		this.retorno = new Retorno();
-		this.retornosPendentes = retornoMediator.buscarRetornosConfirmados();
+		this.retornosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao();
 
 		carregarGuiaRetorno();
 	}
 	
-	public RetornoPage(String message){
+	public RetornoAguardandoPage(String message){
 		this.retorno = new Retorno();
-		this.retornosPendentes = retornoMediator.buscarRetornosConfirmados();
+		this.retornosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao();
 
 		info(message);
 		carregarGuiaRetorno();
 	}
 	
 	private void carregarGuiaRetorno(){
+		final CheckGroup<Remessa> grupo = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
         Form<Retorno> formRetorno = new Form<Retorno>("form"){
 
         	/***/
@@ -81,12 +84,9 @@ public class RetornoPage extends BasePage<Retorno> {
 
 			protected void onSubmit(){
 				try{
-					if (getRetornosPendentes().isEmpty()){
-						throw new InfraException("Não há retornos pendentes para envio!");
-					} 
 					
-					retornoMediator.gerarRetornos(getUser(), getRetornosPendentes());
-					setResponsePage(new RetornoPage("Os arquivos de retorno foram gerados com sucesso!"));
+//					retornoMediator.liberarRetornoBatimentoInstituicao();
+					setResponsePage(new RetornoAguardandoPage("Os arquivos de retorno foram liberados para serem gerados ao banco!"));
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
 					error(e.getMessage());
@@ -97,13 +97,16 @@ public class RetornoPage extends BasePage<Retorno> {
             }
         };
         formRetorno.add(carregarListaRetornos());
-        formRetorno.add(new Button("botaoRetorno"));
-        add(formRetorno);
+        formRetorno.add(grupo);
+        
+        remessas.setReuseItems(true);
+		grupo.add(remessas);
+		add(formRetorno);
 	}
 	
 	
 	private ListView<Remessa> carregarListaRetornos(){
-		return new ListView<Remessa>("retornos", getRetornosPendentes()){
+		return remessas = new ListView<Remessa>("retornos", getRetornosAguardandoLiberacao()){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -140,6 +143,7 @@ public class RetornoPage extends BasePage<Retorno> {
 				};
 				linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
+				item.add(new Check<Remessa>("checkbox", item.getModel()));
 				item.add(removerConfirmado(retorno));
 				item.add(botaoGerarRelatorio(retorno));
 			}
@@ -155,7 +159,7 @@ public class RetornoPage extends BasePage<Retorno> {
 						
 						try {
 							retornoMediator.removerBatimento(retorno);
-							setResponsePage(new RetornoPage("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " 
+							setResponsePage(new RetornoAguardandoPage("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " 
 								+ retorno.getInstituicaoOrigem().getNomeFantasia() + " foi retornado ao batimento!"));
 							
 						}  catch (InfraException ex) {
@@ -198,11 +202,11 @@ public class RetornoPage extends BasePage<Retorno> {
 		};
 	}
 
-	public List<Remessa> getRetornosPendentes() {
-		if (retornosPendentes == null) {
-			retornosPendentes = new ArrayList<Remessa>();
+	public List<Remessa> getRetornosAguardandoLiberacao() {
+		if (retornosAguardandoLiberacao == null){
+			retornosAguardandoLiberacao = new ArrayList<Remessa>();
 		}
-		return retornosPendentes;
+		return retornosAguardandoLiberacao;
 	}
 
 	@Override

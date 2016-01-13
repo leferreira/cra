@@ -22,12 +22,14 @@ import br.com.ieptbto.cra.entidade.ArquivoCnp;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Batimento;
+import br.com.ieptbto.cra.entidade.BatimentoDeposito;
 import br.com.ieptbto.cra.entidade.CabecalhoArquivo;
 import br.com.ieptbto.cra.entidade.CabecalhoCartorio;
 import br.com.ieptbto.cra.entidade.CabecalhoCnp;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.Confirmacao;
+import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
 import br.com.ieptbto.cra.entidade.EtiquetaSLIP;
@@ -101,7 +103,6 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Remessa.class);
 		classesHibernate.add(StatusArquivo.class);
 		classesHibernate.add(Historico.class);
-		classesHibernate.add(Batimento.class);
 		classesHibernate.add(InstrumentoProtesto.class);
 		classesHibernate.add(EnvelopeSLIP.class);
 		classesHibernate.add(EtiquetaSLIP.class);
@@ -134,7 +135,12 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(RemessaCnp.class);
 		classesHibernate.add(CabecalhoCnp.class);
 		classesHibernate.add(TituloCnp.class);
-		classesHibernate.add(RodapeCnp.class);
+		classesHibernate.add(RodapeCnp.class); 
+
+		classesHibernate.add(Deposito.class);
+		classesHibernate.add(BatimentoDeposito.class);
+		classesHibernate.add(Batimento.class);
+		
 	}
 
 	/**

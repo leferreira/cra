@@ -21,8 +21,8 @@ import org.joda.time.DateTimeZone;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
-import br.com.ieptbto.cra.page.admin.ListaRemoverArquivoPage;
-import br.com.ieptbto.cra.page.admin.RemoverArquivoPage;
+import br.com.ieptbto.cra.page.administracao.ListaRemoverArquivoPage;
+import br.com.ieptbto.cra.page.administracao.RemoverArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.ArquivoCancelamentoDevolvidoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoCraInstituicaoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
@@ -38,6 +38,8 @@ import br.com.ieptbto.cra.page.convenio.layout.IncluirLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.convenio.layout.ListaLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.cra.BatimentoPage;
 import br.com.ieptbto.cra.page.cra.ConfirmacaoPage;
+import br.com.ieptbto.cra.page.cra.ImportarExtratoPage;
+import br.com.ieptbto.cra.page.cra.RetornoAguardandoPage;
 import br.com.ieptbto.cra.page.cra.RetornoPage;
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
@@ -144,7 +146,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("HomePage", HomePage.class);
 		// mountPage("CargaInicial", CargaInicialPage.class);
 
-		/** Arquivo */
+		/** Administracao */
 		mountPage("UsuariosPage", ListaUsuarioPage.class);
 		mountPage("IncluirUsuario", IncluirUsuarioPage.class);
 
@@ -192,6 +194,8 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		/** CRA */
 		mountPage("Batimento", BatimentoPage.class);
+		mountPage("ImportarExtrato", ImportarExtratoPage.class);
+		mountPage("RetornoAguardando", RetornoAguardandoPage.class);
 		mountPage("ConfirmacaoPage", ConfirmacaoPage.class);
 		mountPage("RetornoPage", RetornoPage.class);
 		mountPage("RemessasConvenio", RemessaConvenioPage.class);
@@ -219,8 +223,8 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	}
 
 	@Override
-	public Component createMenuSistema(AbstractWebPage<?> page, String containerId) {
-		return new CraMenu("menu");
+	public Component createMenuSistema(AbstractWebPage<?> page, String containerId, Usuario usuario) {
+		return new CraMenu("menu", usuario);
 	}
 
 	@Override

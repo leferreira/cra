@@ -47,7 +47,7 @@ public class EnviarArquivoEmpresaPage extends BasePage<Arquivo> {
 			protected void onSubmit() {
 				setFile(fileUploadField);
 				if (getFile().getFileUpload() == null) {
-					error("pelo menos um arquivo deve ser informado.");
+					error("Pelo menos um arquivo deve ser informado.");
 				}
 
 				try {

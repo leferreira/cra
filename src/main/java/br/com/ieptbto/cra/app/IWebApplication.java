@@ -19,6 +19,7 @@ package br.com.ieptbto.cra.app;
 
 import org.apache.wicket.Component;
 
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
 
 public interface IWebApplication {
@@ -39,7 +40,7 @@ public interface IWebApplication {
 	 *            o wicket id que devera ser usado na construcao do componente
 	 * @return o componente que representa o menu
 	 */
-	Component createMenuSistema(AbstractWebPage<?> page, String containerId);
+	Component createMenuSistema(AbstractWebPage<?> page, String containerId, Usuario usuario);
 
 	/**
 	 * Obtem o titulo do sistema para apresentar no cabecalho das paginas. Por

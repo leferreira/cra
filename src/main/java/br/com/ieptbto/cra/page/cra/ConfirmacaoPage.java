@@ -30,36 +30,50 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 
-@SuppressWarnings( "serial" )
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ConfirmacaoPage extends BasePage<Confirmacao> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(ConfirmacaoPage.class);
 	
 	@SpringBean
 	private ConfirmacaoMediator confirmacaoMediator;
 	private Confirmacao confirmacao;
-	private List<Remessa> confirmacoesParaEnvio;
+	private List<Remessa> confirmacoesPendentes;
 	
 	public ConfirmacaoPage(){
 		this.confirmacao = new Confirmacao();
+		this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
+		
+		carregarGuiaConfirmacao();
+	}
+	
+	public ConfirmacaoPage(String message){
+		this.confirmacao = new Confirmacao();
+		this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
+		
+		info(message);
 		carregarGuiaConfirmacao();
 	}
 	
 	private void carregarGuiaConfirmacao(){
-		setConfirmacoesParaEnvio(confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio());
 		Form<Confirmacao> formConfirmacao = new Form<Confirmacao>("formConfirmacao"){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+			
 			@Override
             protected void onSubmit(){
 				
 				try{
-					if (!getConfirmacoesParaEnvio().isEmpty())
-						confirmacaoMediator.gerarConfirmacoes(getUser(), getConfirmacoesParaEnvio());
-					else 
+					if (getConfirmacoesPendentes().isEmpty()) {
 						throw new InfraException("Não há confirmações pendentes para envio.");
+					}
+					confirmacaoMediator.gerarConfirmacoes(getUser(), getConfirmacoesPendentes());
 					
-					setResponsePage(new ConfirmacaoLabel());
+					setResponsePage(new ConfirmacaoPage(""));
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
 					error(e.getMessage());
@@ -76,9 +90,13 @@ public class ConfirmacaoPage extends BasePage<Confirmacao> {
 	
 	
 	private ListView<Remessa> carregarListaConfirmacao(){
-		return new ListView<Remessa>("confirmacao", getConfirmacoesParaEnvio()){
-				@Override
-	            protected void populateItem(ListItem<Remessa> item){
+		return new ListView<Remessa>("confirmacao", getConfirmacoesPendentes()){
+				
+			/***/
+			private static final long serialVersionUID = 1L;
+				
+			@Override
+	        protected void populateItem(ListItem<Remessa> item){
 					final Remessa retorno = item.getModelObject();
 					item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 					item.add(new Label("horaEnvio", DataUtil.localTimeToString(retorno.getArquivo().getHoraEnvio())));
@@ -86,6 +104,9 @@ public class ConfirmacaoPage extends BasePage<Confirmacao> {
 					item.add(new Label("instituicaoDestino.nomeFantasia", retorno.getInstituicaoDestino().getNomeFantasia()));
 					Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
 
+						/***/
+						private static final long serialVersionUID = 1L;
+						
 						public void onClick() {
 			            	setResponsePage(new TitulosArquivoPage(retorno));  
 			            }
@@ -96,12 +117,8 @@ public class ConfirmacaoPage extends BasePage<Confirmacao> {
         };
 	}
 	
-	public List<Remessa> getConfirmacoesParaEnvio() {
-		return confirmacoesParaEnvio;
-	}
-
-	public void setConfirmacoesParaEnvio(List<Remessa> confirmacoesParaEnvio) {
-		this.confirmacoesParaEnvio = confirmacoesParaEnvio;
+	public List<Remessa> getConfirmacoesPendentes() {
+		return confirmacoesPendentes;
 	}
 	
 	@Override

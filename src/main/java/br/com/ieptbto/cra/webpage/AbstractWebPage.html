@@ -2,55 +2,59 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:wicket="http://wicket.apache.org/">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CRA - Central de Remessa de Arquivos</title>
-
-<link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,400italic,600,600italic' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Hind:400,700|Source+Sans+Pro' rel='stylesheet' type='text/css'>
-
-<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-<link href="dist/css/sb-admin-2.css" rel="stylesheet">
-<link href="bower_components/morrisjs/morris.css" rel="stylesheet">
-<link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-<link href="css/jquery-ui.css" type="text/css" media="screen" rel="stylesheet" title="Stylesheet" />
-<link href="css/jquery-ui.theme.css" type="text/css" media="screen" rel="stylesheet" title="Stylesheet" />
-
-<link href="css/geral.css" rel="stylesheet">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>CRA - Central de Remessa de Arquivos</title>
+	
+	<link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,400italic,600,600italic' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Hind:400,700|Source+Sans+Pro' rel='stylesheet' type='text/css'>
+	
+	<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+	<link href="dist/css/sb-admin-2.css" rel="stylesheet">
+	<link href="bower_components/morrisjs/morris.css" rel="stylesheet">
+	<link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	
+	<link href="css/jquery-ui.css" type="text/css" media="screen" rel="stylesheet" title="Stylesheet" />
+	<link href="css/jquery-ui.theme.css" type="text/css" media="screen" rel="stylesheet" title="Stylesheet" />
+	
+	<link rel="stylesheet" href="chosen/chosen.min.css">
+	
+	<link href="css/geral.css" rel="stylesheet">
 </head>
 <body>
 	<wicket:child>
 			Aqui vai o conteúdo da página.
-	</wicket:child>
+	</wicket:child> 
 	
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script> 
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     
     <script src="js/formatador.js"></script>
 	<script src="js/jquery.min.js"></script>
-	<script src="js/jquery-ui.js"></script>
-	<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-  	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	
 	<script src="js/mascaras.js"></script>
 	<script src="js/jquery.maskedinput.js"></script>
+
 	<script src="js/jquery.dataTables.min.js"></script>
 	<script src="js/dataTables.bootstrap.min.js"></script>
 	<script src="js/tables.js"></script>
+  	
+  	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 	<script type="text/javascript">
-    $(document).ready(function() {
-         $(function() {
-            $( "#date" ).datepicker();
-          });
-         $(function() {
-             $( "#date1" ).datepicker();
-          });        
-	    jQuery(function($){
-	    	$('#showModal').click();
-	    });
-    } );
+	    $(document).ready(function() {
+	         $(function() {
+	            $( "#date" ).datepicker();
+	          });
+	         $(function() {
+	             $( "#date1" ).datepicker();
+	          });        
+		    jQuery(function($){
+		    	$('#showModal').click();
+		    });
+	    } );
+	    
     </script>
 </body>
 </html>

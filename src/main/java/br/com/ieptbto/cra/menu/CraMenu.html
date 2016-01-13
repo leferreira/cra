@@ -2,7 +2,7 @@
 <body>
 	<wicket:panel>
 		<div wicket:id="CraMenu">
-			<div wicket:id="menuLateral">
+			<div wicket:id="menuPadrao">
 			 <ul class="nav navbar-nav">
 		        <li class="active"><a href="HomePage" >In&iacute;cio <span class="sr-only"></span></a></li>
 		        <li>
@@ -26,6 +26,10 @@
 				 	<li><a href="RelatorioArquivosTitulos" wicket:id="RelatorioArquivosTitulos" class="font-menu">Anal&iacute;tico de T&iacute;tulos</a></li>
 				  </ul>
 		        </li>
+		      </ul>
+			</div>
+			<div wicket:id="menuAdministrador">
+			 <ul class="nav navbar-nav">
 		        <li class="dropdown">
 		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Instrumento de Protesto<span class="caret"></span></a>
 		          <ul class="dropdown-menu">
@@ -39,7 +43,9 @@
 		        <li class="dropdown">
 		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administra&ccedil;&atilde;o<span class="caret"></span></a>
 		          <ul class="dropdown-menu">
+				 	<li><a wicket:id="ImportarExtrato" href="ImportarExtrato" class="font-menu">Arquivo de Extrato</a></li>
 				 	<li><a wicket:id="Batimento" href="Batimento" class="font-menu">Batimento</a></li>
+				 	<li><a wicket:id="RetornoAguardando" href="RetornoAguardando" class="font-menu">Retornos Aguardando</a></li>
 					<li><a wicket:id="RemessasConvenio" href="RemessasConvenio" class="font-menu">Remessas Conv&ecirc;nios</a></li>
 					<li><a wicket:id="ConfirmacaoPage" href="ConfirmacaoPage" class="font-menu">Gerar Confirma&ccedil;&otilde;es</a></li>
 					<li><a wicket:id="RetornoPage" href="RetornoPage" class="font-menu">Gerar Retornos</a></li>
@@ -53,7 +59,7 @@
 					<li><a href="UsuariosPage" wicket:id="UsuariosPage" class="font-menu">Usu&aacute;rios</a></li>
 				  </ul>
 		        </li>
-		      </ul>
+			 </ul>
 			</div>
 		</div>
 	</wicket:panel>

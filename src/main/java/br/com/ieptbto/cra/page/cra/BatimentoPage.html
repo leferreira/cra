@@ -5,48 +5,99 @@
 </head>
 <body>
 	<wicket:extend>
-		<form wicket:id="form">
+	 	<form wicket:id="form">
 			<div class="col-lg-12 col-md-6">
 				<div class="panel">
 					 <div class="panel-body">
 						<h4 class="titulo-top">BATIMENTO
-						<span class="pull-right">
-							<button wicket:id="confirmarBotao" class="btn btn-primary"><span class="fa fa-check"></span> CONFIRMAR ARQUIVOS</button>
-						</span>
+							<span class="pull-right">
+								<button class="btn btn-primary" type="submit"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
+							</span>
 						</h4>
-						<br style="clear: both;"/>
-						<div wicket:id="group">
-	                  		<table id="table" class="table table-striped table-hover" style="font-size: 15px;">
-			                    <thead>
-									<tr>
-										<th class="col-center">DATA ENVIO</th>
-										<th class="col-center">HORA</th>
-										<th>CARTÓRIO</th>
-										<th class="col-center">ARQUIVO</th>
-										<th class="col-center">#</th>
-										<th class="col-right">VALOR PAGOS</th>
-										<th class="col-right">CUSTAS CARTÓRIO</th>
-										<th class="col-center" style="width: 100px;">RELATÓRIO</th>
-									</tr>
-								</thead>
-								<tbody>
-				                    <tr wicket:id="retornos" style="text-align: center;">
-										<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
-										<td class="col-center" wicket:id="horaEnvio" style="width: 65px;"></td>
-										<td class="pull-left" wicket:id="instituicaoOrigem.nomeFantasia"></td>
-				                        <td class="col-center"><a wicket:id="linkArquivo"><span class="link" wicket:id="arquivo.nomeArquivo"></span></a></td>
-				                        <td class="col-center"><input type="checkbox" wicket:id="checkbox"/></td>
-										<td class="col-right valor" wicket:id="valorPagos"></td>
-										<td class="col-right valor" wicket:id="valorCustas"></td>
-										<td class="col-center"><button type="button" wicket:id="gerarRelatorio" style="float: inherit;"><span class="col-center fa fa-print"></span></button></td>
-				                    </tr>
-			                    </tbody>
-			                </table>
-				        </div>
+						<br>
+						<div class="col-70">
+							<div wicket:id="group">
+		                       <table id="table-no-pagination" class="table table-striped table-hover table-responsive" style="font-size: 13px;">
+		                           <thead> 
+		                               <tr>
+		                                   <th class="col-center">DATA</th>
+		                                   <th >CARTÓRIO</th> 
+		                                   <th class="col-center">ARQUIVO</th>
+		                                   <th class="col-center"><input type="checkbox" name="selecctall" id="selecctall" > </th>
+		                                   <th class="col-right">VALOR</th>
+		                                   <th class="col-center">CÓD. DEPÓSITO</th> 
+		                               	   <th class="col-right">TOTAL</th>
+		                               </tr> 
+		                           </thead>
+		                           <tbody>
+		                               <tr wicket:id="retornos">
+		                                   <td class="col-center"><span wicket:id="arquivo.dataEnvio"></span></td>
+		                                   <td ><span wicket:id="instituicaoOrigem.nomeFantasia"></span></td>
+		                                   <td class="col-center link"><a wicket:id="linkArquivo"><span class="link" wicket:id="arquivo.nomeArquivo"></span></a></td>
+		                                   <td class="col-center" style="width: 45px !important;"><input wicket:id="checkbox" type="checkbox" class="checkbox col-center"></td>
+		                                   <td class="col-right valor"><span wicket:id="valorPagos"></span></td>
+		                                   <td class="col-center">
+			                                <div class="controls controls-row col-center"> 
+												<select wicket:id="depositos" class="chosen-select col-center"  style="width: 177px;"
+													multiple="multiple" data-placeholder="Escolha os Depósitos...">
+												</select>
+											</div>
+		                                   </td> 
+		                                   <td class="col-right valor"><span >R$ 0,00</span></td>
+		                               </tr>
+		                           </tbody>
+		                       </table>
+		                     </div>
+						</div> 
+						<div class="col-30">
+							<div class="well well-sm">
+								<fieldset>
+									<legend>EXTRATO</legend>
+									<div style="height: 420px; overflow-y: scroll;">
+				                         <table class="table table-striped table-hover" style="font-size: 13px;">
+				                             <thead>
+				                                 <tr>
+				                                     <th class="col-center">DATA</th>
+				                                     <th style="width: 187px;">LANÇAMENTO</th>
+				                                     <th class="col-right valor">VALOR</th>
+				                                 </tr>
+				                             </thead>
+				                             <tbody>
+				                             	<tr wicket:id="extrato">
+				                                     <td class="col-center valor"><span wicket:id="data"></span></td>
+				                                     <td><span wicket:id="lancamento"></span></td>
+				                                     <td class="col-right valor"><span wicket:id="valor"></span></td>
+				                                 </tr>
+			                                </tbody>
+				                         </table>
+		                     			</div>
+		                     	</fieldset>
+		                    </div>
+						</div>
 					 </div>
 				 </div>
- 			</div>
-	</form>
+			</div>
+	 	</form>
+	   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+	   	<script src="chosen/chosen.jquery.min.js"></script>
+	 	<script type="text/javascript">
+		   $(document).ready(function(){ 
+			    $("#selecctall").change(function(){
+			      $(".checkbox").prop('checked', $(this).prop("checked")); 
+			      });
+			});
+	   	</script>
+	    <script type="text/javascript">
+	    	var config = {
+   			  '.chosen-select'           : {},
+   			  '.chosen-select-deselect'  : {allow_single_deselect:true},
+   			  '.chosen-select-no-single' : {disable_search_threshold:10},
+   			  '.chosen-select-no-results': {no_results_text:'Nenhum depósito encontrado!'},
+   			}
+   			for (var selector in config) {
+   			  $(selector).chosen(config[selector]);
+   			}
+	    </script>
 	</wicket:extend>
 </body>
 </html>
