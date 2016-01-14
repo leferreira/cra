@@ -73,7 +73,7 @@ public class ConfirmacaoPage extends BasePage<Confirmacao> {
 					}
 					confirmacaoMediator.gerarConfirmacoes(getUser(), getConfirmacoesPendentes());
 					
-					setResponsePage(new ConfirmacaoPage(""));
+					setResponsePage(new ConfirmacaoPage("As confirmações foram geradas com sucesso!"));
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
 					error(e.getMessage());
