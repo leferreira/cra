@@ -41,11 +41,11 @@ import net.sf.jasperreports.engine.JasperReport;
 public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 
 	@SpringBean
-	ArquivoMediator arquivoMediator;
+	private ArquivoMediator arquivoMediator;
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	RelatorioMediator relatorioMediator;
+	private RelatorioMediator relatorioMediator;
 	private Arquivo arquivo;
 	private List<Arquivo> arquivos;
 

@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.instituicao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.wicket.authorization.Action;
@@ -14,6 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -72,6 +74,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 				item.add(new Label("tipoInstituicao", instituicaoLista.getTipoInstituicao().getTipoInstituicao().getLabel()));
 				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
 				item.add(new Label("email", instituicaoLista.getEmail()));
+				item.add(new LabelValorMonetario<BigDecimal>("valorConfirmacao", instituicaoLista.getValorConfirmacao()));
 				if (instituicaoLista.isSituacao()) {
 					item.add(new Label("situacao", "Sim"));
 				} else {

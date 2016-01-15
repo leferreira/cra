@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckGroup;
@@ -84,8 +85,8 @@ public class BatimentoPage extends BasePage<Remessa>{
 						}
 					}
 					retornoMediator.salvarBatimentos(arquivosRetornoSelecionados);
-
 					setResponsePage(new BatimentoPage("Batimento dos arquivos de retorno salvo com sucesso!"));
+					
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -106,7 +107,8 @@ public class BatimentoPage extends BasePage<Remessa>{
 	}
 
 	private ListView<Remessa> carregarArquivosRetorno(){
-		return remessas = new ListView<Remessa>("retornos", retornoMediator.buscarRetornosParaBatimento()){
+//		return remessas = new ListView<Remessa>("retornos", retornoMediator.buscarRetornosParaBatimento()){ 
+		return remessas = new ListView<Remessa>("retornos", new ArrayList<Remessa>()){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -154,7 +156,9 @@ public class BatimentoPage extends BasePage<Remessa>{
 			protected void populateItem(ListItem<Deposito> item) {
 				final Deposito deposito = item.getModelObject();
                 item.add(new Label("data", DataUtil.localDateToString(deposito.getData())));
-                item.add(new Label("lancamento", deposito.getLancamento().toUpperCase()));
+                Label lancamento = new Label("lancamento", deposito.getLancamento().toUpperCase());
+                lancamento.add(new AttributeModifier("title", deposito.getDescricao()));
+                item.add(lancamento);
                 item.add(new Label("valor", "R$ " + deposito.getValorCredito()));
 			}
 		};

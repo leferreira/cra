@@ -37,8 +37,11 @@ import br.com.ieptbto.cra.page.convenio.layout.EnviarArquivoEmpresaPage;
 import br.com.ieptbto.cra.page.convenio.layout.IncluirLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.convenio.layout.ListaLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.cra.BatimentoPage;
+import br.com.ieptbto.cra.page.cra.BuscarDepositoPage;
 import br.com.ieptbto.cra.page.cra.ConfirmacaoPage;
+import br.com.ieptbto.cra.page.cra.DepositoPage;
 import br.com.ieptbto.cra.page.cra.ImportarExtratoPage;
+import br.com.ieptbto.cra.page.cra.ListaDepositoPage;
 import br.com.ieptbto.cra.page.cra.RetornoAguardandoPage;
 import br.com.ieptbto.cra.page.cra.RetornoPage;
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
@@ -195,6 +198,9 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		/** CRA */
 		mountPage("Batimento", BatimentoPage.class);
 		mountPage("ImportarExtrato", ImportarExtratoPage.class);
+		mountPage("BuscarDepositos", BuscarDepositoPage.class);
+		mountPage("ListaDepositos", ListaDepositoPage.class);
+		mountPage("DepositoPage", DepositoPage.class);
 		mountPage("RetornoAguardando", RetornoAguardandoPage.class);
 		mountPage("ConfirmacaoPage", ConfirmacaoPage.class);
 		mountPage("RetornoPage", RetornoPage.class);

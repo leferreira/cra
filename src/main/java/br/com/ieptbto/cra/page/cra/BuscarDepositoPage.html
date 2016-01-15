@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+		<form wicket:id="form" class="form-horizontal">  
+			<div class="col-lg-12">
+				<div class="panel">
+					 <div class="panel-body">
+						<h4 class="titulo-top">BUSCAR DEPÓSITOS</h4>
+						<br style="clear: both;"/>
+						<div class="col-lg-10 col-md-offset-2">
+							<div class="form-group">
+							  <label class="col-md-2 control-label">DATA DO DEPÓSITO:</label>  
+							  <div class="col-md-2">
+							  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataInicial"  class="form-control input-md">
+							  </div>
+							  <div class="col-md-2">
+							  	<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" wicket:id="dataFinal" class="form-control input-md">
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label class="col-md-2 control-label">Nº DOCUMENTO:</label>  
+							  <div class="col-md-6">
+							  <input maxlength="13" wicket:id="numeroDocumento" class="form-control input-md">
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label class="col-md-2 control-label">VALOR:</label>  
+							  <div class="col-md-6">
+							  <input maxlength="13" wicket:id="valorCredito" class="form-control input-md">
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label class="col-md-2 control-label">SITUACAO:</label>
+							  <div class="col-md-6" style="text-align: left;">
+							    <label class="checkbox-inline inline" wicket:id="situacaoDeposito">
+							    </label>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label class="col-md-2 control-label"></label>
+							  <div class="col-md-6"> 
+							    <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
+							  </div>
+							</div>
+						</div>
+					 </div>
+				 </div>
+			</div>
+		</form>
+	</wicket:extend>
+</body>
+</html>

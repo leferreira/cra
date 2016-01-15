@@ -45,6 +45,7 @@ public class CraMenu extends Panel {
 		menuAdministrador.setVisible(verificaPermissao(usuario));
 		menuAdministrador.addItem("Batimento", rolesIncluir);
 		menuAdministrador.addItem("ImportarExtrato", rolesIncluir);
+		menuAdministrador.addItem("BuscarDepositos", rolesIncluir);
 		menuAdministrador.addItem("RetornoAguardando", rolesIncluir);
 		menuAdministrador.addItem("RemessasConvenio", rolesIncluir);
 		menuAdministrador.addItem("ConfirmacaoPage", rolesIncluir);
