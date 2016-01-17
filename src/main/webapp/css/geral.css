@@ -303,3 +303,7 @@ COMUNICADO MODAL
 div.wicket-modal div.w_content_3{
 	    border: 0px solid #FFFFFF;
 }
+
+.dt-bootstrap{
+    margin: 0px -10px;	
+}

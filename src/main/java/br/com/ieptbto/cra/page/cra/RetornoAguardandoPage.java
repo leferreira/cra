@@ -14,18 +14,23 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -57,27 +62,38 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 	@SpringBean
 	private RelatorioMediator relatorioMediator;
 	private Retorno retorno;
-	private List<Remessa> retornosAguardandoLiberacao;
+	private TextField<String> campoDataBatimento;
 	private ListView<Remessa> remessas;
 	
 	public RetornoAguardandoPage(){
 		this.retorno = new Retorno();
-		this.retornosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao();
 
+		formularioBuscarBatimento();
 		carregarGuiaRetorno();
 	}
 	
 	public RetornoAguardandoPage(String message){
 		this.retorno = new Retorno();
-		this.retornosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao();
 
 		info(message);
+		formularioBuscarBatimento();
 		carregarGuiaRetorno();
 	}
 	
+	private void formularioBuscarBatimento() {
+		Batimento batimento = new Batimento();
+		Form<Batimento> formBuscar = new Form<Batimento>("formBuscarRetorno", new Model<Batimento>(batimento));
+        formBuscar.add(campoDataBatimento());
+		add(formBuscar);
+	}
+
+	private TextField<String> campoDataBatimento() {
+		return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>());
+	}
+
 	private void carregarGuiaRetorno(){
 		final CheckGroup<Remessa> grupo = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
-        Form<Retorno> formRetorno = new Form<Retorno>("form"){
+        Form<Retorno> form = new Form<Retorno>("form"){
 
         	/***/
 			private static final long serialVersionUID = 1L;
@@ -87,6 +103,7 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 				
 				try{
 					retornoMediator.liberarRetornoBatimentoInstituicao(retornoLiberados);
+					campoDataBatimento.setModelObject(null);
 					setResponsePage(new RetornoAguardandoPage("Os arquivos de retorno foram"
 							+ " liberados para serem gerados ao banco!"));
 				
@@ -99,17 +116,17 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 				}
             }
         };
-        formRetorno.add(carregarListaRetornos());
-        formRetorno.add(grupo);
+        form.add(carregarListaRetornos());
+        form.add(grupo);
         
         remessas.setReuseItems(true);
 		grupo.add(remessas);
-		add(formRetorno);
+		add(form);
 	}
 	
 	
 	private ListView<Remessa> carregarListaRetornos(){
-		return remessas = new ListView<Remessa>("retornos", getRetornosAguardandoLiberacao()){
+		return remessas = new ListView<Remessa>("retornos", buscarRetornosAguardandoLiberacao()){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -118,6 +135,7 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 			protected void populateItem(ListItem<Remessa> item){
 				final Remessa retorno = item.getModelObject();
 				
+				item.add(new Label("dataBatimento", DataUtil.localDateToString(retorno.getBatimento().getDataBatimento())));
 				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(retorno.getArquivo().getHoraEnvio())));
 				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
@@ -204,12 +222,22 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 			}
 		};
 	}
+	
+	public IModel<List<Remessa>> buscarRetornosAguardandoLiberacao() {
+		return new LoadableDetachableModel<List<Remessa>>() {
+			/**/
+			private static final long serialVersionUID = 1L;
 
-	public List<Remessa> getRetornosAguardandoLiberacao() {
-		if (retornosAguardandoLiberacao == null){
-			retornosAguardandoLiberacao = new ArrayList<Remessa>();
-		}
-		return retornosAguardandoLiberacao;
+			@Override
+			protected List<Remessa> load() {
+				LocalDate dataBatimento = null;
+				
+				if (campoDataBatimento.getModelObject() != null) {
+					dataBatimento = DataUtil.stringToLocalDate(campoDataBatimento.getModelObject().toString());
+				}
+				return retornoMediator.buscarRetornosAguardandoLiberacao(dataBatimento);
+			}
+		};
 	}
 
 	@Override

@@ -95,8 +95,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 
 			@Override
 			protected List<Municipio> load() {
-				List<Municipio> list = municipioMediator.listarTodos();
-				return list;
+				return municipioMediator.listarTodos();
 			}
 		};
 	}
