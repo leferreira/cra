@@ -147,7 +147,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	private void montaPaginas() {
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
-		// mountPage("CargaInicial", CargaInicialPage.class);
+//		 mountPage("CargaInicial", CargaInicialPage.class);
 
 		/** Administracao */
 		mountPage("UsuariosPage", ListaUsuarioPage.class);

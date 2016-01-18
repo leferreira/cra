@@ -64,6 +64,7 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 	private Retorno retorno;
 	private TextField<String> campoDataBatimento;
 	private ListView<Remessa> remessas;
+	private List<Remessa> retornoBuscados;
 	
 	public RetornoAguardandoPage(){
 		this.retorno = new Retorno();
@@ -135,7 +136,7 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 			protected void populateItem(ListItem<Remessa> item){
 				final Remessa retorno = item.getModelObject();
 				
-				item.add(new Label("dataBatimento", DataUtil.localDateToString(retorno.getBatimento().getDataBatimento())));
+				item.add(new Label("dataBatimento", DataUtil.localDateToString(retorno.getBatimento().getData())));
 				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(retorno.getArquivo().getHoraEnvio())));
 				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
@@ -230,14 +231,22 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 
 			@Override
 			protected List<Remessa> load() {
-				LocalDate dataBatimento = null;
-				
-				if (campoDataBatimento.getModelObject() != null) {
-					dataBatimento = DataUtil.stringToLocalDate(campoDataBatimento.getModelObject().toString());
-				}
-				return retornoMediator.buscarRetornosAguardandoLiberacao(dataBatimento);
+				return getRetornoBuscados();
 			}
 		};
+	}
+	
+	public List<Remessa> getRetornoBuscados() {
+		if  (this.retornoBuscados == null) {
+			this.retornoBuscados = new ArrayList<Remessa>();
+		}
+		this.retornoBuscados.clear();
+
+		LocalDate dataBatimento = null;
+		if (campoDataBatimento.getModelObject() != null) {
+			dataBatimento = DataUtil.stringToLocalDate(campoDataBatimento.getModelObject().toString());
+		}
+		return retornoBuscados = retornoMediator.buscarRetornosAguardandoLiberacao(dataBatimento);
 	}
 
 	@Override
