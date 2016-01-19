@@ -45,11 +45,11 @@ import net.sf.jasperreports.engine.JasperReport;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class RetornoPage extends BasePage<Retorno> {
+public class GerarRetornoPage extends BasePage<Retorno> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(RetornoPage.class);
+	private static final Logger logger = Logger.getLogger(GerarRetornoPage.class);
 	
 	@SpringBean
 	private RetornoMediator retornoMediator;
@@ -58,14 +58,14 @@ public class RetornoPage extends BasePage<Retorno> {
 	private Retorno retorno;
 	private List<Remessa> retornosPendentes;
 	
-	public RetornoPage(){
+	public GerarRetornoPage(){
 		this.retorno = new Retorno();
 		this.retornosPendentes = retornoMediator.buscarRetornosConfirmados();
 
 		carregarGuiaRetorno();
 	}
 	
-	public RetornoPage(String message){
+	public GerarRetornoPage(String message){
 		this.retorno = new Retorno();
 		this.retornosPendentes = retornoMediator.buscarRetornosConfirmados();
 
@@ -86,7 +86,7 @@ public class RetornoPage extends BasePage<Retorno> {
 					} 
 					
 					retornoMediator.gerarRetornos(getUser(), getRetornosPendentes());
-					setResponsePage(new RetornoPage("Os arquivos de retorno foram gerados com sucesso!"));
+					setResponsePage(new GerarRetornoPage("Os arquivos de retorno foram gerados com sucesso!"));
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
 					error(e.getMessage());
@@ -155,7 +155,7 @@ public class RetornoPage extends BasePage<Retorno> {
 						
 						try {
 							retornoMediator.removerBatimento(retorno);
-							setResponsePage(new RetornoPage("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " 
+							setResponsePage(new GerarRetornoPage("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " 
 								+ retorno.getInstituicaoOrigem().getNomeFantasia() + " foi retornado ao batimento!"));
 							
 						}  catch (InfraException ex) {

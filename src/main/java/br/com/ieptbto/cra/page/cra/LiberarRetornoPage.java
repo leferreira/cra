@@ -51,11 +51,11 @@ import net.sf.jasperreports.engine.JasperReport;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class RetornoAguardandoPage extends BasePage<Retorno> {
+public class LiberarRetornoPage extends BasePage<Retorno> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(RetornoAguardandoPage.class);
+	private static final Logger logger = Logger.getLogger(LiberarRetornoPage.class);
 	
 	@SpringBean
 	private RetornoMediator retornoMediator;
@@ -64,16 +64,24 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 	private Retorno retorno;
 	private TextField<String> campoDataBatimento;
 	private ListView<Remessa> remessas;
-	private List<Remessa> retornoBuscados;
+	private LocalDate dataBatimento;
 	
-	public RetornoAguardandoPage(){
+	public LiberarRetornoPage(){
 		this.retorno = new Retorno();
 
 		formularioBuscarBatimento();
 		carregarGuiaRetorno();
 	}
 	
-	public RetornoAguardandoPage(String message){
+	public LiberarRetornoPage(LocalDate dataBatimento){
+		this.retorno = new Retorno();
+		this.dataBatimento = dataBatimento;
+
+		formularioBuscarBatimento();
+		carregarGuiaRetorno();
+	}
+	
+	public LiberarRetornoPage(String message){
 		this.retorno = new Retorno();
 
 		info(message);
@@ -83,7 +91,20 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 	
 	private void formularioBuscarBatimento() {
 		Batimento batimento = new Batimento();
-		Form<Batimento> formBuscar = new Form<Batimento>("formBuscarRetorno", new Model<Batimento>(batimento));
+		Form<Batimento> formBuscar = new Form<Batimento>("formBuscarRetorno", new Model<Batimento>(batimento)) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit() {
+				LocalDate dataBatimento = null;
+				if (campoDataBatimento.getModelObject() != null) {
+					dataBatimento = DataUtil.stringToLocalDate(campoDataBatimento.getModelObject().toString());
+				}
+				setResponsePage(new LiberarRetornoPage(dataBatimento));
+			}
+		};
         formBuscar.add(campoDataBatimento());
 		add(formBuscar);
 	}
@@ -105,7 +126,7 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 				try{
 					retornoMediator.liberarRetornoBatimentoInstituicao(retornoLiberados);
 					campoDataBatimento.setModelObject(null);
-					setResponsePage(new RetornoAguardandoPage("Os arquivos de retorno foram"
+					setResponsePage(new LiberarRetornoPage("Os arquivos de retorno foram"
 							+ " liberados para serem gerados ao banco!"));
 				
 				} catch (InfraException e) {
@@ -181,7 +202,7 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 						
 						try {
 							retornoMediator.removerBatimento(retorno);
-							setResponsePage(new RetornoAguardandoPage("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " 
+							setResponsePage(new LiberarRetornoPage("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " 
 								+ retorno.getInstituicaoOrigem().getNomeFantasia() + " foi retornado ao batimento!"));
 							
 						}  catch (InfraException ex) {
@@ -231,24 +252,11 @@ public class RetornoAguardandoPage extends BasePage<Retorno> {
 
 			@Override
 			protected List<Remessa> load() {
-				return getRetornoBuscados();
+				return retornoMediator.buscarRetornosAguardandoLiberacao(dataBatimento);
 			}
 		};
 	}
 	
-	public List<Remessa> getRetornoBuscados() {
-		if  (this.retornoBuscados == null) {
-			this.retornoBuscados = new ArrayList<Remessa>();
-		}
-		this.retornoBuscados.clear();
-
-		LocalDate dataBatimento = null;
-		if (campoDataBatimento.getModelObject() != null) {
-			dataBatimento = DataUtil.stringToLocalDate(campoDataBatimento.getModelObject().toString());
-		}
-		return retornoBuscados = retornoMediator.buscarRetornosAguardandoLiberacao(dataBatimento);
-	}
-
 	@Override
 	protected IModel<Retorno> getModel() {
 		return new CompoundPropertyModel<Retorno>(retorno);

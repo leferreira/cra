@@ -46,22 +46,25 @@ public class CraMenu extends Panel {
 		menuAdministrador.addItem("Batimento", rolesIncluir);
 		menuAdministrador.addItem("ImportarExtrato", rolesIncluir);
 		menuAdministrador.addItem("BuscarDepositos", rolesIncluir);
-		menuAdministrador.addItem("RetornoAguardando", rolesIncluir);
-		menuAdministrador.addItem("RemessasConvenio", rolesIncluir);
-		menuAdministrador.addItem("ConfirmacaoPage", rolesIncluir);
-		menuAdministrador.addItem("RetornoPage", rolesIncluir);
-		menuAdministrador.addItem("CartoriosPage", rolesIncluir);
-		menuAdministrador.addItem("InstituicoesPage", rolesIncluir);
-		menuAdministrador.addItem("MunicipiosPage", rolesIncluir);
-		menuAdministrador.addItem("TipoInstituicoesPage", rolesIncluir);
-		menuAdministrador.addItem("UsuariosPage", rolesIncluir);
-		menuAdministrador.addItem("FiliadosPage", rolesIncluir);
-		menuAdministrador.addItem("EmpresasLayout", rolesIncluir);
+		menuAdministrador.addItem("LiberarRetornos", rolesIncluir);
+		
+		menuAdministrador.addItem("GerarRemessasConvenio", rolesIncluir);
+		menuAdministrador.addItem("GerarConfirmacao", rolesIncluir);
+		menuAdministrador.addItem("GerarRetorno", rolesIncluir);
+		
+		menuAdministrador.addItem("Instituicoes", rolesIncluir);
+		menuAdministrador.addItem("CartoriosProtesto", rolesIncluir);
+		menuAdministrador.addItem("EmpresasFiliadas", rolesIncluir);
+		menuAdministrador.addItem("LayoutsPersonalizados", rolesIncluir);
+		menuAdministrador.addItem("Municipios", rolesIncluir);
+		menuAdministrador.addItem("TipoInstituicoes", rolesIncluir);
+		menuAdministrador.addItem("Usuarios", rolesIncluir);
+		
 		menuAdministrador.addItem("InstrumentoDeProtesto", rolesIncluir);
 		menuAdministrador.addItem("GerarSlip", rolesIncluir);
-		menuAdministrador.addItem("ImportarArquivoDePara", rolesIncluir);
 		menuAdministrador.addItem("BuscarInstrumentoProtesto", rolesIncluir);
 		menuAdministrador.addItem("LiberarEnvelopes", rolesIncluir);
+		menuAdministrador.addItem("ImportarArquivoDePara", rolesIncluir);
 	}
 
 	private boolean verificaPermissao(Usuario user) {

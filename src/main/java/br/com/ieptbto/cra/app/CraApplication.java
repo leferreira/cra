@@ -33,17 +33,14 @@ import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.page.convenio.RemessaConvenioPage;
-import br.com.ieptbto.cra.page.convenio.layout.EnviarArquivoEmpresaPage;
-import br.com.ieptbto.cra.page.convenio.layout.IncluirLayoutEmpresaPage;
-import br.com.ieptbto.cra.page.convenio.layout.ListaLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.cra.BatimentoPage;
 import br.com.ieptbto.cra.page.cra.BuscarDepositoPage;
-import br.com.ieptbto.cra.page.cra.ConfirmacaoPage;
 import br.com.ieptbto.cra.page.cra.DepositoPage;
+import br.com.ieptbto.cra.page.cra.GerarConfirmacaoPage;
+import br.com.ieptbto.cra.page.cra.GerarRetornoPage;
 import br.com.ieptbto.cra.page.cra.ImportarExtratoPage;
+import br.com.ieptbto.cra.page.cra.LiberarRetornoPage;
 import br.com.ieptbto.cra.page.cra.ListaDepositoPage;
-import br.com.ieptbto.cra.page.cra.RetornoAguardandoPage;
-import br.com.ieptbto.cra.page.cra.RetornoPage;
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.instituicao.IncluirInstituicaoPage;
@@ -53,6 +50,9 @@ import br.com.ieptbto.cra.page.instrumentoProtesto.GerarSlipPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.ImportarArquivoDeParaPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.InstrumentoProtestoPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.LiberarEnvelopePage;
+import br.com.ieptbto.cra.page.layoutPersonalizado.EnviarArquivoEmpresaPage;
+import br.com.ieptbto.cra.page.layoutPersonalizado.IncluirLayoutEmpresaPage;
+import br.com.ieptbto.cra.page.layoutPersonalizado.ListaLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.municipio.IncluirMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.ListaMunicipioPage;
@@ -150,30 +150,39 @@ public class CraApplication extends WebApplication implements ISecureApplication
 //		 mountPage("CargaInicial", CargaInicialPage.class);
 
 		/** Administracao */
-		mountPage("UsuariosPage", ListaUsuarioPage.class);
+		mountPage("Batimento", BatimentoPage.class);
+		mountPage("ImportarExtrato", ImportarExtratoPage.class);
+		mountPage("BuscarDepositos", BuscarDepositoPage.class);
+		mountPage("LiberarRetornos", LiberarRetornoPage.class); 
+		mountPage("ListaDepositos", ListaDepositoPage.class);
+		mountPage("Deposito", DepositoPage.class);
+
+		mountPage("GerarRemessasConvenio", RemessaConvenioPage.class);
+		mountPage("GerarConfirmacao", GerarConfirmacaoPage.class);
+		mountPage("GerarRetorno", GerarRetornoPage.class); 
+		
+		mountPage("Instituicoes", ListaInstituicaoPage.class);
+		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
+		mountPage("Cartorios", ListaCartorioPage.class);
+		mountPage("IncluirCartorio", IncluirCartorioPage.class);
+		mountPage("IncluirLayoutEmpresa", IncluirLayoutEmpresaPage.class);
+		mountPage("LayoutsPersonalizados", ListaLayoutEmpresaPage.class);
+		mountPage("Municipios", ListaMunicipioPage.class);
+		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
+		mountPage("TipoInstituicoes", ListaTipoInstituicaoPage.class);
+		mountPage("IncluirTipoInstituicao", IncluirTipoInstituicaoPage.class);
+		mountPage("TipoArquivo", ListaTipoArquivoPage.class);
+		mountPage("IncluirTipoArquivo", IncluirTipoArquivoPage.class);
+		mountPage("Usuarios", ListaUsuarioPage.class);
 		mountPage("IncluirUsuario", IncluirUsuarioPage.class);
 
-		mountPage("InstituicoesPage", ListaInstituicaoPage.class);
-		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
-
-		mountPage("CartoriosPage", ListaCartorioPage.class);
-		mountPage("IncluirCartorio", IncluirCartorioPage.class);
-
-		mountPage("TipoInstituicoesPage", ListaTipoInstituicaoPage.class);
-		mountPage("IncluirTipoInstituicao", IncluirTipoInstituicaoPage.class);
-
-		mountPage("TipoArquivoPage", ListaTipoArquivoPage.class);
-		mountPage("IncluirTipoArquivoPage", IncluirTipoArquivoPage.class);
-
-		mountPage("MunicipiosPage", ListaMunicipioPage.class);
-		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
-
-		mountPage("FiliadosPage", ListaFiliadoPage.class);
-		mountPage("IncluirFiliado", IncluirFiliadoPage.class);
+		mountPage("EmpresasFiliadas", ListaFiliadoPage.class);
+		mountPage("IncluirEmpresaFiliada", IncluirFiliadoPage.class);
 
 		/** Arquivo */
-		mountPage("EnviarArquivo", EnviarArquivoPage.class);
 		mountPage("BuscarArquivo", BuscarArquivoPage.class);
+		mountPage("EnviarArquivo", EnviarArquivoPage.class);
+		mountPage("EnviarArquivoEmpresa", EnviarArquivoEmpresaPage.class);
 		mountPage("BuscarArquivoInstituicao", BuscarArquivoCraInstituicaoPage.class);
 		mountPage("ListaArquivo", ListaArquivosPage.class);
 		mountPage("ArquivosCancelamentoDevolvidoPage", ArquivoCancelamentoDevolvidoPage.class);
@@ -181,39 +190,22 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("TitulosArquivoInstituicao", TitulosArquivoInstituicaoPage.class);
 		mountPage("RemoverArquivo", RemoverArquivoPage.class);
 		mountPage("ListaArquivosRemover", ListaRemoverArquivoPage.class);
-		mountPage("EnviarArquivoEmpresa", EnviarArquivoEmpresaPage.class);
-
-		/** Titulos */
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
 		mountPage("HistoricoDoTitulo", HistoricoPage.class);
 
 		/** Relatorios */
-		mountPage("RelatorioSintetico", RelatorioSinteticoPage.class);
-		// mountPage("RelatorioAnalitico", RelatorioAnaliticoPage.class);
 		mountPage("RelatorioArquivosTitulos", RelatorioArquivosTitulosPage.class);
+		mountPage("RelatorioSintetico", RelatorioSinteticoPage.class);
 		mountPage("RelatorioTitulos", RelatorioTitulosPage.class);
 		mountPage("RelatorioArquivosListaPage", RelatorioArquivosListaPage.class);
-
-		/** CRA */
-		mountPage("Batimento", BatimentoPage.class);
-		mountPage("ImportarExtrato", ImportarExtratoPage.class);
-		mountPage("BuscarDepositos", BuscarDepositoPage.class);
-		mountPage("ListaDepositos", ListaDepositoPage.class);
-		mountPage("DepositoPage", DepositoPage.class);
-		mountPage("RetornoAguardando", RetornoAguardandoPage.class);
-		mountPage("ConfirmacaoPage", ConfirmacaoPage.class);
-		mountPage("RetornoPage", RetornoPage.class);
-		mountPage("RemessasConvenio", RemessaConvenioPage.class);
-		mountPage("LayoutEmpresa", IncluirLayoutEmpresaPage.class);
-		mountPage("EmpresasLayout", ListaLayoutEmpresaPage.class);
 
 		/** Slip */
 		mountPage("InstrumentoDeProtesto", InstrumentoProtestoPage.class);
 		mountPage("GerarSlip", GerarSlipPage.class);
-		mountPage("ImportarArquivoDePara", ImportarArquivoDeParaPage.class);
 		mountPage("BuscarInstrumentoProtesto", BuscarInstrumentoProtestoPage.class);
 		mountPage("LiberarEnvelopes", LiberarEnvelopePage.class);
+		mountPage("ImportarArquivoDePara", ImportarArquivoDeParaPage.class);
 	}
 
 	/**

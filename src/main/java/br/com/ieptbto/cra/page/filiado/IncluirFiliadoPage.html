@@ -11,80 +11,80 @@
 					 <div class="panel-body">
 						<h4 class="titulo-top">CADASTRO DE EMPRESA ASSOCIADA
 						<span class="pull-right">
-							<a href="FiliadosPage" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
-						</span>
-						</h4>
+							<a href="EmpresasFiliadas" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+						</span> 
+						</h4> 
 						<br style="clear: both;"/>
 						<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-									  <label class="col-md-4 control-label">RAZÃO SOCIAL:</label>  
-									  <div class="col-md-6">
-									  <input wicket:id="razaoSocial" tabindex="1" autofocus="autofocus" maxlength="45" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md uppercase react">
-									    
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label">CPF/CNPJ:</label>  
-									  <div class="col-md-6">
-									  <input wicket:id="cnpjCpf" maxlength="18"  tabindex="2" onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
-								  			onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" class="form-control input-md">
-									    
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" >SITUAÇÃO:</label>
-									  <div class="col-md-6" style="text-align: left;"> 
-									    <label class="radio-inline inline" tabindex="3" wicket:id="situacao">
-									    </label>
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label">ENDEREÇO:</label>
-									  <div class="col-md-4">                     
-									    <textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
-									  </div>
-									</div>
+							<div class="col-md-6">
+								<div class="form-group">
+								  <label class="col-md-4 control-label">RAZÃO SOCIAL:</label>  
+								  <div class="col-md-6">
+								  <input wicket:id="razaoSocial" tabindex="1" autofocus="autofocus" maxlength="45" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md uppercase react">
+								    
+								  </div>
 								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-									  <label class="col-md-4 control-label">CONVÊNIO:</label>
-									  <div class="col-md-6">
-									    <select wicket:id="instituicaoConvenio" tabindex="5" class="form-control">
-									    </select>
-									  </div>
-									</div>
-									<!-- Select Basic -->
-									<div class="form-group">
-									  <label class="col-md-4 control-label">MUNICÍPIO:</label>
-									  <div class="col-md-6">
-									    <select wicket:id="municipio" tabindex="6" class="form-control">
-									    </select>
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label">CEP:</label>  
-									  <div class="col-md-6">
-									  <input id="cep" wicket:id="cep" tabindex="7" class="form-control input-md">
-									    
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="uf">UF:</label>  
-									  <div class="col-md-6">
-									 	<select wicket:id="uf" tabindex="8" class="form-control">
-									    </select>
-									    
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-2 control-label"></label>
-									  <div class="col-md-8">
-									    <button id="salvar" type="submit" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
-									  </div>
-									</div>
+								<div class="form-group">
+								  <label class="col-md-4 control-label">CPF/CNPJ:</label>  
+								  <div class="col-md-6">
+								  <input wicket:id="cnpjCpf" maxlength="18"  tabindex="2" onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+							  			onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" class="form-control input-md">
+								    
+								  </div>
 								</div>
-							</div>		
+								<div class="form-group">
+								  <label class="col-md-4 control-label" >SITUAÇÃO:</label>
+								  <div class="col-md-6" style="text-align: left;"> 
+								    <label class="radio-inline inline" tabindex="3" wicket:id="situacao">
+								    </label>
+								  </div>
+								</div>
+								<div class="form-group">
+								  <label class="col-md-4 control-label">ENDEREÇO:</label>
+								  <div class="col-md-4">                     
+								    <textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
+								  </div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+								  <label class="col-md-4 control-label">CONVÊNIO:</label>
+								  <div class="col-md-6">
+								    <select wicket:id="instituicaoConvenio" tabindex="5" class="form-control">
+								    </select>
+								  </div>
+								</div>
+								<!-- Select Basic -->
+								<div class="form-group">
+								  <label class="col-md-4 control-label">MUNICÍPIO:</label>
+								  <div class="col-md-6">
+								    <select wicket:id="municipio" tabindex="6" class="form-control">
+								    </select>
+								  </div>
+								</div>
+								<div class="form-group">
+								  <label class="col-md-4 control-label">CEP:</label>  
+								  <div class="col-md-6">
+								  <input id="cep" wicket:id="cep" tabindex="7" class="form-control input-md">
+								    
+								  </div>
+								</div>
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="uf">UF:</label>  
+								  <div class="col-md-6">
+								 	<select wicket:id="uf" tabindex="8" class="form-control">
+								    </select>
+								    
+								  </div>
+								</div>
+								<div class="form-group">
+								  <label class="col-md-2 control-label"></label>
+								  <div class="col-md-8">
+								    <button id="salvar" type="submit" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
+								  </div>
+								</div>
+							</div>
+						</div>		
 					 </div>
 				 </div>
 			 </div>

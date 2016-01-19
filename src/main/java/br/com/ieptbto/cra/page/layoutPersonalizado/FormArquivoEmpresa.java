@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.convenio.layout;
+package br.com.ieptbto.cra.page.layoutPersonalizado;
 
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;

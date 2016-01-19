@@ -32,25 +32,25 @@ import br.com.ieptbto.cra.util.DataUtil;
 
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class ConfirmacaoPage extends BasePage<Confirmacao> {
+public class GerarConfirmacaoPage extends BasePage<Confirmacao> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(ConfirmacaoPage.class);
+	private static final Logger logger = Logger.getLogger(GerarConfirmacaoPage.class);
 	
 	@SpringBean
 	private ConfirmacaoMediator confirmacaoMediator;
 	private Confirmacao confirmacao;
 	private List<Remessa> confirmacoesPendentes;
 	
-	public ConfirmacaoPage(){
+	public GerarConfirmacaoPage(){
 		this.confirmacao = new Confirmacao();
 		this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
 		
 		carregarGuiaConfirmacao();
 	}
 	
-	public ConfirmacaoPage(String message){
+	public GerarConfirmacaoPage(String message){
 		this.confirmacao = new Confirmacao();
 		this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
 		
@@ -73,7 +73,7 @@ public class ConfirmacaoPage extends BasePage<Confirmacao> {
 					}
 					confirmacaoMediator.gerarConfirmacoes(getUser(), getConfirmacoesPendentes());
 					
-					setResponsePage(new ConfirmacaoPage("As confirmações foram geradas com sucesso!"));
+					setResponsePage(new GerarConfirmacaoPage("As confirmações foram geradas com sucesso!"));
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
 					error(e.getMessage());
