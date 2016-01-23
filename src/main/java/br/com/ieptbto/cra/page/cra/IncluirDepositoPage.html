@@ -9,16 +9,25 @@
 			<div class="col-lg-12">
 				<div class="panel">
 					 <div class="panel-body">
-						<h4 class="titulo-top">BUSCAR DEPÓSITOS</h4>
+						<h4 class="titulo-top">DEPÓSITOS
+							<span class="pull-right">
+								<a class="link" type="button" style="font-size: 16px;" wicket:id="botaoVoltar">
+									<span class="fa fa-mail-reply"></span>&nbsp;VOLTAR
+								</a>
+							</span>
+						</h4>
 						<br style="clear: both;"/>
 						<div class="col-lg-10 col-md-offset-2">
+						   <div class="form-group">
+							  <label class="col-md-2 control-label">IMPORTADO NA CRA EM:</label>  
+							  <div class="col-md-6">
+							  	<input wicket:id="dataImportacao" class="form-control input-md" disabled="disabled">
+							  </div>
+							</div>
 							<div class="form-group">
 							  <label class="col-md-2 control-label">DATA DO DEPÓSITO:</label>  
-							  <div class="col-md-2">
-							  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataInicial"  class="form-control input-md">
-							  </div>
-							  <div class="col-md-2">
-							  	<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" wicket:id="dataFinal" class="form-control input-md">
+							  <div class="col-md-6">
+							  	<input wicket:id="data"  class="form-control input-md" disabled="disabled">
 							  </div>
 							</div>
 							<div class="form-group">
@@ -48,9 +57,15 @@
 							  </div>
 							</div>
 							<div class="form-group">
+							  <label class="col-md-2 control-label" for="endereco">DESCRIÇÃO:</label>
+							  <div class="col-md-6">                     
+							    <textarea class="form-control" maxlength="45" wicket:id="descricao"></textarea>
+							  </div>
+							</div>
+							<div class="form-group">
 							  <label class="col-md-2 control-label"></label>
 							  <div class="col-md-6"> 
-							    <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
+							    <button type="submit" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
 							  </div>
 							</div>
 						</div>

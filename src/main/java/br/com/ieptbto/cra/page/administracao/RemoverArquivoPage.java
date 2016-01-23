@@ -33,15 +33,17 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
 public class RemoverArquivoPage extends BasePage<Arquivo> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	MunicipioMediator municipioMediator;
+	private MunicipioMediator municipioMediator;
 	private Arquivo arquivo;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
@@ -52,6 +54,9 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 		this.arquivo = new Arquivo();
 		Form<Arquivo> form = new Form<Arquivo>("form", getModel()){
 			
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onSubmit() {
 				Arquivo arquivo = getModelObject();
@@ -66,7 +71,6 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 						}
 						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
 					} 
-					
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
 							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
@@ -77,10 +81,10 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 						}else
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					} 
-					
 					if (comboMunicipio.getModelObject() != null){
 						municipio = comboMunicipio.getModelObject();
 					}
+					
 					setResponsePage(new ListaRemoverArquivoPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo()));
 				} catch (InfraException ex) {
 					error(ex.getMessage());

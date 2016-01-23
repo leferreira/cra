@@ -48,7 +48,7 @@
 		                           </tbody>
 		                       </table>
 		                     </div>
-						</div> 
+						</div>   
 						<div class="col-30">
 							<div class="well well-sm">
 								<fieldset>
@@ -66,15 +66,18 @@
 			                             	<tr wicket:id="extrato">
 			                                     <td class="col-center valor"><span wicket:id="data"></span></td>
 			                                     <td>
-			                                     	<span wicket:id="lancamento"></span>
+			                                     	<span class="tooltips">
+														<span wicket:id="tooltip">[Tooltip]</span>
+				                                     	<label wicket:id="lancamento"></label>
+													</span>
 				                                 </td>
 			                                     <td class="col-right valor"><span wicket:id="valor"></span></td>
-			                                 </tr>
+			                                 </tr> 
 		                                </tbody>
-			                         </table>
-	                     			</div>
-		                     	</fieldset>
-		                    </div>
+			                         </table> 
+	                     			</div> 
+		                     	</fieldset>  
+		                    </div> 
 						</div>
 					 </div>
 				 </div>
@@ -88,9 +91,6 @@
 			      $(".checkbox").prop('checked', $(this).prop("checked")); 
 			      });
 			});
-		   $(function() {
-		    $( document ).tooltip();
-		  });
 	   	</script>
 	    <script type="text/javascript">
 	    	var config = {
@@ -102,7 +102,7 @@
    			for (var selector in config) {
    			  $(selector).chosen(config[selector]);
    			}
-	    </script>
+	    </script>  
 	</wicket:extend>
 </body>
 </html>

@@ -65,14 +65,6 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 		carregarGuiaRetorno();
 	}
 	
-	public GerarRetornoPage(String message){
-		this.retorno = new Retorno();
-		this.retornosPendentes = retornoMediator.buscarRetornosConfirmados();
-
-		info(message);
-		carregarGuiaRetorno();
-	}
-	
 	private void carregarGuiaRetorno(){
         Form<Retorno> formRetorno = new Form<Retorno>("form"){
 
@@ -86,7 +78,8 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 					} 
 					
 					retornoMediator.gerarRetornos(getUser(), getRetornosPendentes());
-					setResponsePage(new GerarRetornoPage("Os arquivos de retorno foram gerados com sucesso!"));
+					setResponsePage(new MensagemPage<Remessa>(GerarRetornoPage.class, "Gerar Retorno", "Os arquivos de retorno foram gerados com sucesso!"));
+				
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
 					error(e.getMessage());
@@ -155,7 +148,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 						
 						try {
 							retornoMediator.removerBatimento(retorno);
-							setResponsePage(new GerarRetornoPage("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " 
+							setResponsePage(new MensagemPage<Remessa>(GerarRetornoPage.class, "GERAR RETORNO", "O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " 
 								+ retorno.getInstituicaoOrigem().getNomeFantasia() + " foi retornado ao batimento!"));
 							
 						}  catch (InfraException ex) {

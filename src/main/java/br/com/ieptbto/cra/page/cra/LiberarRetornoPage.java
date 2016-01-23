@@ -7,20 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckGroup;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -31,9 +35,13 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Batimento;
+import br.com.ieptbto.cra.entidade.BatimentoDeposito;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
+import br.com.ieptbto.cra.enumeration.TipoDeposito;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -61,23 +69,40 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 	private RetornoMediator retornoMediator;
 	@SpringBean
 	private RelatorioMediator relatorioMediator;
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
 	private Retorno retorno;
-	private TextField<String> campoDataBatimento;
+	private List<Remessa> arquivosAguardandoLiberacao;
 	private ListView<Remessa> remessas;
+	private DropDownChoice<Instituicao> campoInstituicao;
+	private TextField<String> campoDataBatimento;
 	private LocalDate dataBatimento;
+	private Instituicao instituicao;
+	
+	private Label labelTotalArquivos;
+	private Label labelNaoSelecionados;
+	private Label labelValorNaoSelecionados;
+	private Label labelSelecionados;
+	private Label labelValorSelecionados;
+	private BigDecimal totalNaoSelecionados;
 	
 	public LiberarRetornoPage(){
 		this.retorno = new Retorno();
 
-		formularioBuscarBatimento();
+		adicionarFiltros();
+		carregarResumoArquivos();
 		carregarGuiaRetorno();
 	}
 	
-	public LiberarRetornoPage(LocalDate dataBatimento){
+	public LiberarRetornoPage(LocalDate dataBatimento, Instituicao instituicao){
 		this.retorno = new Retorno();
 		this.dataBatimento = dataBatimento;
+		this.instituicao = instituicao;
+		this.arquivosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao(instituicao ,dataBatimento);
+		this.totalNaoSelecionados = retornoMediator.buscarSomaValorTitulosPagosRemessas(instituicao, dataBatimento);
 
-		formularioBuscarBatimento();
+		adicionarFiltros();
+		carregarResumoArquivos();
 		carregarGuiaRetorno();
 	}
 	
@@ -85,32 +110,86 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		this.retorno = new Retorno();
 
 		info(message);
-		formularioBuscarBatimento();
+		adicionarFiltros();
+		carregarResumoArquivos();
 		carregarGuiaRetorno();
 	}
 	
-	private void formularioBuscarBatimento() {
-		Batimento batimento = new Batimento();
-		Form<Batimento> formBuscar = new Form<Batimento>("formBuscarRetorno", new Model<Batimento>(batimento)) {
+	private void adicionarFiltros() {
+		Form<Batimento> formFiltros = new Form<Batimento>("formFiltros"){
 
-			/***/
+		/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit() {
+			public void onSubmit() {
 				LocalDate dataBatimento = null;
-				if (campoDataBatimento.getModelObject() != null) {
+				Instituicao instituicao = null;
+				
+				try {
+					if (campoDataBatimento.getModelObject() == null) {
+						throw new InfraException("O campo 'Data Batimento' deve ser preenchido pois é obrigatório!");
+					}
+					if (campoInstituicao.getModelObject() == null) {
+						throw new InfraException("O campo 'Bancos e Convênios' deve ser preenchido pois é obrigatório!");
+					}
 					dataBatimento = DataUtil.stringToLocalDate(campoDataBatimento.getModelObject().toString());
+					instituicao = campoInstituicao.getModelObject();
+					setResponsePage(new LiberarRetornoPage(dataBatimento, instituicao));
+				
+				}  catch (InfraException ex) {
+					error(ex.getMessage());
+					System.out.println(ex.getMessage() + ex.getCause());
+				}  catch (Exception ex) {
+					error("Não foi possível buscar os arquivos para semre liberados!");
+					System.out.println(ex.getMessage() + ex.getCause());
 				}
-				setResponsePage(new LiberarRetornoPage(dataBatimento));
 			}
 		};
-        formBuscar.add(campoDataBatimento());
-		add(formBuscar);
+        formFiltros.add(campoInstituicao());
+        formFiltros.add(campoDataBatimento());	
+        add(formFiltros);
 	}
-
+	
+	private DropDownChoice<Instituicao> campoInstituicao() {
+		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
+		if (instituicao == null){
+			campoInstituicao = new DropDownChoice<Instituicao>("instituicaoEnvio", new Model<Instituicao>(),
+					instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
+		}
+		campoInstituicao = new DropDownChoice<Instituicao>("instituicaoEnvio", new Model<Instituicao>(instituicao),
+				instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
+		return campoInstituicao;
+	}
+	
 	private TextField<String> campoDataBatimento() {
+		if (dataBatimento != null) {
+			return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>(DataUtil.localDateToString(dataBatimento)));
+		}
 		return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>());
+	}
+	
+	private void carregarResumoArquivos() {
+		this.labelTotalArquivos = new Label("labelTotalArquivos", getArquivosAguardandoLiberacao().size());
+		this.labelNaoSelecionados = new Label("labelNaoSelecionados", getArquivosAguardandoLiberacao().size());
+		if (totalNaoSelecionados == null) {
+			this.labelValorNaoSelecionados = new LabelValorMonetario<BigDecimal>("labelValorNaoSelecionados", BigDecimal.ZERO);
+		} else {
+			this.labelValorNaoSelecionados = new LabelValorMonetario<BigDecimal>("labelValorNaoSelecionados", totalNaoSelecionados);
+		}
+		this.labelSelecionados = new Label("labelSelecionados", 0);
+		this.labelValorSelecionados = new LabelValorMonetario<BigDecimal>("labelValorSelecionados", new BigDecimal(0));
+		
+		labelNaoSelecionados.setOutputMarkupId(true);
+		labelValorNaoSelecionados.setOutputMarkupId(true);
+		labelSelecionados.setOutputMarkupId(true);
+		labelValorSelecionados.setOutputMarkupId(true);
+		
+		add(labelTotalArquivos);
+		add(labelNaoSelecionados);
+		add(labelValorNaoSelecionados);
+		add(labelSelecionados);
+		add(labelValorSelecionados);
 	}
 
 	private void carregarGuiaRetorno(){
@@ -124,9 +203,13 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 				List<Remessa> retornoLiberados = (List<Remessa>)grupo.getModelObject();
 				
 				try{
+					if (retornoLiberados.isEmpty()) {
+						throw new InfraException("Nenhum arquivo de retorno foi selecionado!");
+					}
+					
 					retornoMediator.liberarRetornoBatimentoInstituicao(retornoLiberados);
 					campoDataBatimento.setModelObject(null);
-					setResponsePage(new LiberarRetornoPage("Os arquivos de retorno foram"
+					setResponsePage(new MensagemPage<Batimento>(LiberarRetornoPage.class, "LIBERAR RETORNO", "Os arquivos de retorno foram"
 							+ " liberados para serem gerados ao banco!"));
 				
 				} catch (InfraException e) {
@@ -146,34 +229,27 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		add(form);
 	}
 	
-	
 	private ListView<Remessa> carregarListaRetornos(){
-		return remessas = new ListView<Remessa>("retornos", buscarRetornosAguardandoLiberacao()){
+		return remessas = new ListView<Remessa>("retornos", getArquivosAguardandoLiberacao()){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			protected void populateItem(ListItem<Remessa> item){
+			protected void populateItem(final ListItem<Remessa> item){
 				final Remessa retorno = item.getModelObject();
 				
 				item.add(new Label("dataBatimento", DataUtil.localDateToString(retorno.getBatimento().getData())));
 				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(retorno.getArquivo().getHoraEnvio())));
 				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
-				BigDecimal valorPagos = retornoMediator.buscarValorDeTitulosPagos(retorno);
+				final BigDecimal valorPagos = retornoMediator.buscarValorDeTitulosPagos(retorno);
 				if (valorPagos==null || valorPagos.equals(BigDecimal.ZERO)) {
 					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", BigDecimal.ZERO));
 				} else {
 					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", valorPagos));
 				}
 				
-				BigDecimal valorCustas = retornoMediator.buscarValorDeCustasCartorio(retorno);
-				if (valorCustas==null || valorCustas.equals(BigDecimal.ZERO)) {
-					item.add(new LabelValorMonetario<BigDecimal>("valorCustas", BigDecimal.ZERO));
-				} else {
-					item.add(new LabelValorMonetario<BigDecimal>("valorCustas", valorCustas));
-				}
 				Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
 					
 					/***/
@@ -186,9 +262,56 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 				};
 				linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				item.add(new Check<Remessa>("checkbox", item.getModel()));
+				
+				final Check<Remessa> check = new Check<Remessa>("checkbox", new Model<Remessa>());
+				check.setOutputMarkupId(true);
+				check.add(new AjaxEventBehavior("onchange"){
+					
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						int naoSelecionados = Integer.parseInt(labelNaoSelecionados.getDefaultModelObjectAsString());
+						BigDecimal valorNaoSelecionados = BigDecimal.class.cast(labelValorNaoSelecionados.getDefaultModelObject());
+						int selecionados = Integer.parseInt(labelSelecionados.getDefaultModelObjectAsString());
+						BigDecimal valorSelecionados = BigDecimal.class.cast(labelValorSelecionados.getDefaultModelObject());
+						
+						if (check.getModelObject() == null) {
+							BigDecimal resultadoValorNaoSelecionados = valorNaoSelecionados.subtract(valorPagos);
+							BigDecimal resultadoValorSelecionados = valorSelecionados.add(valorPagos);
+							labelNaoSelecionados.setDefaultModelObject(Integer.toString(naoSelecionados-1));
+							labelValorNaoSelecionados.setDefaultModelObject(resultadoValorNaoSelecionados);
+							labelSelecionados.setDefaultModelObject(Integer.toString(selecionados+1));
+							labelValorSelecionados.setDefaultModelObject(resultadoValorSelecionados);
+							check.setModelObject(item.getModelObject());
+						} else {
+							BigDecimal resultadoValorNaoSelecionados = valorNaoSelecionados.add(valorPagos);
+							BigDecimal resultadoValorSelecionados = valorSelecionados.subtract(valorPagos);
+							labelNaoSelecionados.setDefaultModelObject(Integer.toString(naoSelecionados+1));
+							labelValorNaoSelecionados.setDefaultModelObject(resultadoValorNaoSelecionados);
+							labelSelecionados.setDefaultModelObject(Integer.toString(selecionados-1));
+							labelValorSelecionados.setDefaultModelObject(resultadoValorSelecionados);
+							check.setModelObject(null);
+						}
+						
+						target.add(labelNaoSelecionados);
+						target.add(labelValorNaoSelecionados);
+						target.add(labelSelecionados);
+						target.add(labelValorSelecionados);
+					}
+				});
+				item.add(check);
 				item.add(removerConfirmado(retorno));
 				item.add(botaoGerarRelatorio(retorno));
+				
+				for (BatimentoDeposito batimentoDeposito : retorno.getBatimento().getDepositosBatimento()) {
+					if (batimentoDeposito.getDeposito().getTipoDeposito() != null) {
+						if (batimentoDeposito.getDeposito().getTipoDeposito().equals(TipoDeposito.DEPOSITO_CARTORIO_PARA_BANCO)) {
+							item.setMarkupId("retornoLiberado");
+						}
+					}
+				}
 			}
 			
 			private Link<Arquivo> removerConfirmado(final Remessa retorno) {
@@ -245,16 +368,11 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		};
 	}
 	
-	public IModel<List<Remessa>> buscarRetornosAguardandoLiberacao() {
-		return new LoadableDetachableModel<List<Remessa>>() {
-			/**/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected List<Remessa> load() {
-				return retornoMediator.buscarRetornosAguardandoLiberacao(dataBatimento);
-			}
-		};
+	public List<Remessa> getArquivosAguardandoLiberacao() {
+		if (arquivosAguardandoLiberacao == null) {
+			arquivosAguardandoLiberacao = new ArrayList<Remessa>();
+		}
+		return arquivosAguardandoLiberacao;
 	}
 	
 	@Override

@@ -37,11 +37,12 @@ import br.com.ieptbto.cra.util.EmailValidator;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class IncluirUsuarioPage extends BasePage<Usuario> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(IncluirUsuarioPage.class);
 	
 	@SpringBean
@@ -66,6 +67,10 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 
 	private void setFormulario() {
 		Form<Usuario> form = new Form<Usuario>("formUsuario", getModel()){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit() {
 				Usuario usuario = getModelObject();
@@ -97,7 +102,6 @@ public class IncluirUsuarioPage extends BasePage<Usuario> {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
 				}
-				
 			}
 		};
 		form.add(campoNome());

@@ -55,10 +55,9 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private static final Logger logger = Logger.getLogger(GerarSlipPage.class);
 	
 	@SpringBean
-	InstrumentoProtestoMediator instrumentoMediator;
+	private InstrumentoProtestoMediator instrumentoMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-
+	private InstituicaoMediator instituicaoMediator;
 	private InstrumentoProtesto instrumento;
 	private List<Retorno> retornos;
 	private List<InstrumentoProtesto> instrumentosProtesto;

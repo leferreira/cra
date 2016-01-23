@@ -72,8 +72,8 @@ public class GerarConfirmacaoPage extends BasePage<Confirmacao> {
 						throw new InfraException("Não há confirmações pendentes para envio.");
 					}
 					confirmacaoMediator.gerarConfirmacoes(getUser(), getConfirmacoesPendentes());
-					
-					setResponsePage(new GerarConfirmacaoPage("As confirmações foram geradas com sucesso!"));
+					setResponsePage(new MensagemPage<Confirmacao>(GerarConfirmacaoPage.class, "GERAR CONFIRMAÇÃO", "As confirmações foram geradas com sucesso!"));
+
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
 					error(e.getMessage());

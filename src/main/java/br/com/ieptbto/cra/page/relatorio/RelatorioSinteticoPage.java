@@ -34,7 +34,7 @@ public class RelatorioSinteticoPage extends BasePage<Remessa> {
 			form.add(new RelatorioSinteticoCartorioPanel("relatorioPanel", getModel(), getInstituicao()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 			form.add(new RelatorioSinteticoInstituicaoPanel("relatorioPanel", getModel(), getInstituicao()));
-		}
+		} 
 		add(form);
 	}
 

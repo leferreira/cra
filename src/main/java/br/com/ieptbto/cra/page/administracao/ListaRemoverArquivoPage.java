@@ -21,6 +21,7 @@ import br.com.ieptbto.cra.mediator.AdministracaoMediator;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.cra.MensagemPage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -28,33 +29,45 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+
 	@SpringBean
-	ArquivoMediator arquivoMediator;
+	private ArquivoMediator arquivoMediator;
 	@SpringBean
-	RelatorioMediator relatorioMediator;
+	private RelatorioMediator relatorioMediator;
 	@SpringBean
-	AdministracaoMediator administracaoMediator;
+	private AdministracaoMediator administracaoMediator;
 	private Arquivo arquivo;
 	private List<Arquivo> arquivos;
 
 	public ListaRemoverArquivoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo) {
 		this.arquivo = arquivo;
-		ArrayList<SituacaoArquivo> situacaoArquivos = new ArrayList<SituacaoArquivo>();
-		this.arquivos = administracaoMediator.buscarArquivosRemover(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, situacaoArquivos);
+		this.arquivos = administracaoMediator.buscarArquivosRemover(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, new ArrayList<SituacaoArquivo>());
+		
+		carregarListaArquivosRemover();
+	}
+
+	private void carregarListaArquivosRemover() {
 		add(carregarListaArquivos());
 	}
 
 	private ListView<Arquivo> carregarListaArquivos() {
 		return new ListView<Arquivo>("dataTableArquivo", getArquivos()) {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<Arquivo> item) {
 				final Arquivo arquivo = item.getModelObject();
 				item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -73,11 +86,16 @@ public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 			private Link<Arquivo> remover(final Arquivo arquivo) {
 				return new Link<Arquivo>("removerArquivo") {
 
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
+						
 						try {
 							administracaoMediator.removerArquivo(arquivo, getUser().getInstituicao()).getArquivo();
-							getFeedbackPanel().info("O arquivo "+ arquivo.getNomeArquivo() +" foi removido com sucesso !");
+							setResponsePage(new MensagemPage<Arquivo>(RemoverArquivoPage.class, "REMOVER ARQUIVO", "O arquivo "+ arquivo.getNomeArquivo() +" foi removido com sucesso !"));
+
 						} catch (InfraException ex) {
 							error(ex.getMessage());
 						} catch (Exception e) {
@@ -89,12 +107,12 @@ public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 		};
 	}
 
+	public List<Arquivo> getArquivos() {
+		return arquivos;
+	}
+
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(arquivo);
-	}
-
-	public List<Arquivo> getArquivos() {
-		return arquivos;
 	}
 }

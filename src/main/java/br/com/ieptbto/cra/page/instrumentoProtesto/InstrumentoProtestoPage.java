@@ -36,6 +36,7 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.cra.MensagemPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -43,20 +44,20 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	
+	/***/
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(GerarSlipPage.class);
 
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	InstrumentoProtestoMediator instrumentoMediator;
+	private InstrumentoProtestoMediator instrumentoMediator;
 	@SpringBean
-	MunicipioMediator municipioMediator;
-	
+	private MunicipioMediator municipioMediator;
 	private InstrumentoProtesto instrumento;
 	private List<Retorno> retornos;
 	private List<EnvelopeSLIP> envelopes;
@@ -70,6 +71,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 		this.retornos = null;
 		this.envelopes = null;
 		this.etiquetas = null; 
+		
 		adicionarFormularioCodigo();
 		adicionarFormularioManual();
 		add(carregarListaSlips());
@@ -79,8 +81,12 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	private void adicionarFormularioManual() {
 		Form<Retorno> formManual = new Form<Retorno>("formManual") {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onSubmit() {
+				
 				try { 
 					String numeroProtocolo = protocoloCartorio.getModelObject();
 					String codigoIBGE = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
@@ -118,6 +124,9 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	private void adicionarFormularioCodigo() {
 		Form<Retorno> formCodigo = new Form<Retorno>("formCodigo") {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onSubmit() {
 				try { 
@@ -154,6 +163,9 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	private ListView<Retorno> carregarListaSlips() {
 		return new ListView<Retorno>("instrumentos", getRetornos()) {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<Retorno> item) {
 				final Retorno retorno = item.getModelObject();
@@ -162,6 +174,9 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 				item.add(new Label("protocolo", retorno.getNumeroProtocoloCartorio()));
 				item.add(new Label("pracaProtesto", retorno.getTitulo().getPracaProtesto()));
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new HistoricoPage(retorno.getTitulo()));
@@ -174,6 +189,9 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
 				item.add(new Link<Retorno>("remover") {
 					
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
 						getRetornos().remove(retorno);
@@ -186,14 +204,18 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	private Link<InstrumentoProtesto> botaoSalvarInstrumentos() {
 		return new Link<InstrumentoProtesto>("botaoSalvarInstrumentos"){
 			
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick() {
 				
 				try {
 					instrumentoMediator.salvarInstrumentoProtesto(getRetornos(), getUser());
-					
 					setRetornos(null);
-					getFeedbackPanel().info("Entrada dos instrumentos realizada com sucesso !");
+					setResponsePage(new MensagemPage<InstrumentoProtesto>(InstrumentoProtestoPage.class, "ENTRADA DE INSTRUMENTO DE PROTESTO", 
+							"Entrada dos instrumentos realizada com sucesso!"));
+
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());

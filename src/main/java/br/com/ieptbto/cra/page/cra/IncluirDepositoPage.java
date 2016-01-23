@@ -13,19 +13,22 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.joda.time.LocalDate;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.enumeration.SituacaoDeposito;
 import br.com.ieptbto.cra.enumeration.TipoDeposito;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
@@ -33,17 +36,27 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class BuscarDepositoPage extends BasePage<Deposito>{
+public class IncluirDepositoPage extends BasePage<Deposito>{
 
 	/***/
 	private static final long serialVersionUID = 1L;
+	@SpringBean
+	private BatimentoMediator batimentoMediator;
 	private Deposito deposito;
-	private TextField<LocalDate> fieldDataInicio;
-	private TextField<LocalDate> fieldDataFinal;
+	private List<Deposito> depositos;
 	
-	public BuscarDepositoPage() {
-		this.deposito = new Deposito();
+	public IncluirDepositoPage(Deposito deposito, List<Deposito> depositos) {
+		this.deposito = deposito;
+		this.depositos = depositos;
 		
+		carregarFormulario();
+	}
+	
+	public IncluirDepositoPage(String message, Deposito deposito, List<Deposito> depositos) {
+		this.deposito = deposito;
+		this.depositos = depositos;
+		
+		info(message);
 		carregarFormulario();
 	}
 	
@@ -56,22 +69,11 @@ public class BuscarDepositoPage extends BasePage<Deposito>{
 			@Override
 			protected void onSubmit() {
 				Deposito deposito = getModelObject();
-				LocalDate dataInicio = null;
-				LocalDate dataFim = null;
-
+				
 				try {
-					if (fieldDataInicio.getDefaultModelObject() != null){
-						if (fieldDataFinal.getDefaultModelObject() != null){
-							dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
-							dataFim = DataUtil.stringToLocalDate(fieldDataFinal.getDefaultModelObject().toString());
-							if (!dataInicio.isBefore(dataFim))
-								if (!dataInicio.isEqual(dataFim))
-									throw new InfraException("A data de início deve ser antes da data fim.");
-						}else
-							throw new InfraException("As duas datas devem ser preenchidas.");
-					} 
-					
-					setResponsePage(new ListaDepositoPage(deposito, dataInicio, dataFim));
+					batimentoMediator.atualizarInformacoesDeposito(deposito);
+					setResponsePage(new IncluirDepositoPage("Informações do depósito foram atualizadas com sucesso!", getDeposito(), getDepositos()));
+
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -81,21 +83,34 @@ public class BuscarDepositoPage extends BasePage<Deposito>{
 				}
 			}
 		};
-		form.add(dataInicial());
-		form.add(dataFinal());
+		form.add(dataImportacao());
+		form.add(data());
 		form.add(numeroDocumento());
 		form.add(valor());
 		form.add(situacaoDeposito());
 		form.add(tipoDeposito());
+		form.add(descricao());
+		form.add(botaoVoltar());
 		add(form);
+	}
+
+	private Link<Deposito> botaoVoltar() {
+		return new Link<Deposito>("botaoVoltar"){
+
+			/***/
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void onClick() {
+				setResponsePage(new ListaDepositoPage(getDepositos()));
+			}
+		};
 	}
 
 	private RadioChoice<SituacaoDeposito> situacaoDeposito() {
 		IChoiceRenderer<SituacaoDeposito> renderer = new ChoiceRenderer<SituacaoDeposito>("label");
 		List<SituacaoDeposito> list = new ArrayList<SituacaoDeposito>(Arrays.asList(SituacaoDeposito.values()));
-		RadioChoice<SituacaoDeposito> comboSituacao = new RadioChoice<SituacaoDeposito>("situacaoDeposito", 
-				list , renderer);
-		
+		RadioChoice<SituacaoDeposito> comboSituacao = new RadioChoice<SituacaoDeposito>("situacaoDeposito", list , renderer);
 		return comboSituacao;
 	}
 	
@@ -107,25 +122,39 @@ public class BuscarDepositoPage extends BasePage<Deposito>{
 	}
 
 	private TextField<BigDecimal> valor() {
-		return new TextField<BigDecimal>("valorCredito");
+		TextField<BigDecimal> textField = new TextField<BigDecimal>("valorCredito"); 
+		textField.setEnabled(false);
+		return textField;
 	}
 
 	private TextField<String> numeroDocumento() {
-		return new TextField<String>("numeroDocumento");
+		TextField<String> textField = new TextField<String>("numeroDocumento"); 
+		textField.setEnabled(false);
+		return textField;
 	}
 
-	private TextField<LocalDate> dataFinal() {
-		fieldDataFinal = new TextField<LocalDate>("dataFinal", new Model<LocalDate>());
-		return fieldDataFinal;
+	private TextField<String> dataImportacao() {
+		return new TextField<String>("dataImportacao", new Model<String>(DataUtil.localDateToString(getDeposito().getData())));
 	}
 
-	private TextField<LocalDate> dataInicial() {
-		fieldDataInicio = new TextField<LocalDate>("dataInicial", new Model<LocalDate>());
-		fieldDataInicio.setLabel(new Model<String>("Período de Datas"));
-		fieldDataInicio.setRequired(true);
-		return fieldDataInicio;
+	private TextField<String> data() {
+		TextField<String> textField = new TextField<String>("data", new Model<String>(DataUtil.localDateToString(getDeposito().getData())));
+		return textField;
+	}
+	
+	private TextArea<String> descricao() {
+		TextArea<String> text = new TextArea<String>("descricao");
+		return text;
 	}
 
+	public Deposito getDeposito() {
+		return deposito;
+	}
+	
+	public List<Deposito> getDepositos() {
+		return depositos;
+	}
+	
 	@Override
 	protected IModel<Deposito> getModel() {
 		return new CompoundPropertyModel<Deposito>(deposito);

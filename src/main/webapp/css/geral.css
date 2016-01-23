@@ -49,6 +49,10 @@ legend {
 	color: #337AB7;
 }
 
+#retornoLiberado{
+	background-color: rgba(255, 235, 59, 0.74) !important;
+}
+
 .footer-cra{
 	text-align: center;
     margin-top: 1%;
@@ -219,6 +223,7 @@ legend {
     margin-top: 10px;
     margin-left: -40px;
    	font-size: 16px;
+   	margin-bottom: -5px;
 }
 
 .feedbackPanelWARNING {
@@ -306,4 +311,40 @@ div.wicket-modal div.w_content_3{
 
 .dt-bootstrap{
     margin: 0px -10px;	
+}
+
+/**/
+span.tooltips {
+  position: relative;
+  display: inline;
+}
+span.tooltips span {
+  position: absolute;
+  color: #FFFFFF; 
+  background: #000;
+  font-size: 15px; 
+  text-align: center; 
+  visibility: hidden;
+  border-radius: 6px;
+  min-width: 200px;  
+  padding: 5px 3px; 
+}
+span.tooltips span:after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -8px;
+  width: 0; height: 0;
+  border-bottom: 8px solid #000;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+}
+span:hover.tooltips span {
+  visibility: visible; 
+  opacity: 0.8;
+  top: 30px;
+  left: 50%;
+  margin-left: -76px;
+  z-index: 999;
 }

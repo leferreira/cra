@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.cra;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -15,6 +16,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Deposito;
+import br.com.ieptbto.cra.enumeration.TipoDeposito;
 import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -67,8 +69,15 @@ public class ListaDepositoPage extends BasePage<Deposito>{
                 item.add(new Label("lancamento", deposito.getLancamento().toUpperCase()));
                 item.add(new Label("numeroDocumento", deposito.getNumeroDocumento()));
                 item.add(new Label("valor", "R$ " + deposito.getValorCredito()));
+                
+                if (deposito.getTipoDeposito() == null) {
+                	item.add(new Label("tipoDeposito", StringUtils.EMPTY));
+                } else if (deposito.getTipoDeposito().equals(TipoDeposito.NAO_INFORMADO)) {
+                	item.add(new Label("tipoDeposito", StringUtils.EMPTY));
+                } else {
+                	item.add(new Label("tipoDeposito", deposito.getTipoDeposito().getLabel().toUpperCase()));
+                }
                 item.add(new Label("situacao", deposito.getSituacaoDeposito().getLabel()));
-                item.add(new Label("descricao", deposito.getDescricao()));
                 
                 Link<Deposito> editarDeposito = new Link<Deposito>("editarDeposito") {
 
@@ -77,7 +86,7 @@ public class ListaDepositoPage extends BasePage<Deposito>{
 
 					@Override
 					public void onClick() {
-						setResponsePage(new DepositoPage(deposito, getDepositos()));
+						setResponsePage(new IncluirDepositoPage(deposito, getDepositos()));
 					}
 				};
 				item.add(editarDeposito);

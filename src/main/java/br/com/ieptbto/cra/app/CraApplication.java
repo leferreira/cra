@@ -32,10 +32,10 @@ import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
-import br.com.ieptbto.cra.page.convenio.RemessaConvenioPage;
+import br.com.ieptbto.cra.page.convenio.GerarRemessaConvenioPage;
 import br.com.ieptbto.cra.page.cra.BatimentoPage;
 import br.com.ieptbto.cra.page.cra.BuscarDepositoPage;
-import br.com.ieptbto.cra.page.cra.DepositoPage;
+import br.com.ieptbto.cra.page.cra.IncluirDepositoPage;
 import br.com.ieptbto.cra.page.cra.GerarConfirmacaoPage;
 import br.com.ieptbto.cra.page.cra.GerarRetornoPage;
 import br.com.ieptbto.cra.page.cra.ImportarExtratoPage;
@@ -155,9 +155,9 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("BuscarDepositos", BuscarDepositoPage.class);
 		mountPage("LiberarRetornos", LiberarRetornoPage.class); 
 		mountPage("ListaDepositos", ListaDepositoPage.class);
-		mountPage("Deposito", DepositoPage.class);
+		mountPage("Deposito", IncluirDepositoPage.class);
 
-		mountPage("GerarRemessasConvenio", RemessaConvenioPage.class);
+		mountPage("GerarRemessasConvenio", GerarRemessaConvenioPage.class);
 		mountPage("GerarConfirmacao", GerarConfirmacaoPage.class);
 		mountPage("GerarRetorno", GerarRetornoPage.class); 
 		

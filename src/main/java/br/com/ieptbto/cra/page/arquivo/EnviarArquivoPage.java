@@ -3,6 +3,7 @@ package br.com.ieptbto.cra.page.arquivo;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.Action;
@@ -111,7 +112,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				} catch (TituloException ex) {
 					logger.error(ex.getMessage());
 					for (Exception erro : ex.getErros()) {
-						warn(erro.getMessage());
+						if (StringUtils.isNotBlank(ex.getMessage())) {
+							warn(erro.getMessage());
+						}
 					}
 					ex.getErros().clear();
 					getFeedbackPanel().error(ex.getMessage());
