@@ -14,6 +14,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -78,7 +79,9 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 	private TextField<String> campoDataBatimento;
 	private LocalDate dataBatimento;
 	private Instituicao instituicao;
+	private boolean dataComoDataLimite;
 	
+	private CheckBox checkDataLimite;
 	private Label labelTotalArquivos;
 	private Label labelNaoSelecionados;
 	private Label labelValorNaoSelecionados;
@@ -94,12 +97,13 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		carregarGuiaRetorno();
 	}
 	
-	public LiberarRetornoPage(LocalDate dataBatimento, Instituicao instituicao){
+	public LiberarRetornoPage(LocalDate dataBatimento, Instituicao instituicao, boolean dataComoDataLimite){
 		this.retorno = new Retorno();
 		this.dataBatimento = dataBatimento;
 		this.instituicao = instituicao;
-		this.arquivosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao(instituicao ,dataBatimento);
-		this.totalNaoSelecionados = retornoMediator.buscarSomaValorTitulosPagosRemessas(instituicao, dataBatimento);
+		this.dataComoDataLimite = dataComoDataLimite;
+		this.arquivosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao(instituicao ,dataBatimento, dataComoDataLimite);
+		this.totalNaoSelecionados = retornoMediator.buscarSomaValorTitulosPagosRemessas(instituicao, dataBatimento, dataComoDataLimite);
 
 		adicionarFiltros();
 		carregarResumoArquivos();
@@ -125,6 +129,7 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 			public void onSubmit() {
 				LocalDate dataBatimento = null;
 				Instituicao instituicao = null;
+				boolean dataComoDataLimite = false;
 				
 				try {
 					if (campoDataBatimento.getModelObject() == null) {
@@ -133,9 +138,12 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 					if (campoInstituicao.getModelObject() == null) {
 						throw new InfraException("O campo 'Bancos e Convênios' deve ser preenchido pois é obrigatório!");
 					}
+					if (checkDataLimite.getModelObject() != null) {
+						dataComoDataLimite = checkDataLimite.getModelObject();
+					}
 					dataBatimento = DataUtil.stringToLocalDate(campoDataBatimento.getModelObject().toString());
 					instituicao = campoInstituicao.getModelObject();
-					setResponsePage(new LiberarRetornoPage(dataBatimento, instituicao));
+					setResponsePage(new LiberarRetornoPage(dataBatimento, instituicao, dataComoDataLimite));
 				
 				}  catch (InfraException ex) {
 					error(ex.getMessage());
@@ -148,9 +156,19 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		};
         formFiltros.add(campoInstituicao());
         formFiltros.add(campoDataBatimento());	
+        formFiltros.add(checkUsarDataComoDataLimite());
         add(formFiltros);
 	}
 	
+	private CheckBox checkUsarDataComoDataLimite() {
+		if (dataComoDataLimite != false) {
+			checkDataLimite = new CheckBox("dataComoDataLimite", new Model<Boolean>(true));
+			checkDataLimite.setDefaultModelObject(true);
+			return checkDataLimite; 
+		} 
+		return checkDataLimite = new CheckBox("dataComoDataLimite", new Model<Boolean>());
+	}
+
 	private DropDownChoice<Instituicao> campoInstituicao() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
 		if (instituicao == null){

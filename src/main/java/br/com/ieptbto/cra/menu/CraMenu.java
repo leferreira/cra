@@ -4,6 +4,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.PermissaoUsuario;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
@@ -38,7 +39,21 @@ public class CraMenu extends Panel {
 		menuPadrao.addItem("EnviarArquivoEmpresa", rolesPesquisar);
 		menuPadrao.addItem("ArquivosCancelamentoDevolvidoPage", rolesPesquisar);
 		menuPadrao.addItem("MonitorarTitulos", rolesPesquisar);
-		menuPadrao.addItem("RelatorioArquivosTitulos", rolesPesquisar);
+		
+		/** Relatorio Padrão */
+		MenuItem menuRelatorioPadrao = menu.addItem("menuRelatorioPadrao", rolesPesquisar);
+		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			menuRelatorioPadrao.setVisible(false);
+		}
+		menuRelatorioPadrao.addItem("RelatorioArquivosTitulos", rolesPesquisar);
+		
+		/** Relatorio Cra*/
+		MenuItem menuRelatorioCra = menu.addItem("menuRelatorioCra", rolesPesquisar);
+		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			menuRelatorioCra.setVisible(true);
+		}
+		menuRelatorioCra.addItem("RelatorioArquivosTitulos", rolesPesquisar);
+//		menuRelatorioCra.addItem("RelatorioRetornoGerado", rolesPesquisar);
 		
 		/** Menus Administrador */
 		MenuItem menuAdministrador = menu.addItem("menuAdministrador", rolesIncluir);
