@@ -78,6 +78,7 @@ public class ListaDepositoPage extends BasePage<Deposito>{
                 	item.add(new Label("tipoDeposito", deposito.getTipoDeposito().getLabel().toUpperCase()));
                 }
                 item.add(new Label("situacao", deposito.getSituacaoDeposito().getLabel()));
+                item.add(new Label("descricao", deposito.getDescricao()));
                 
                 Link<Deposito> editarDeposito = new Link<Deposito>("editarDeposito") {
 

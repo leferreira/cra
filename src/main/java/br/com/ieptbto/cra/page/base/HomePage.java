@@ -27,13 +27,14 @@ import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPendentesPage;
+import br.com.ieptbto.cra.page.relatorio.arquivo.RelatorioArquivosPage;
+import br.com.ieptbto.cra.page.relatorio.arquivo.RelatorioInstituicoesCartoriosPage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
@@ -55,75 +56,84 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private RemessaMediator remessaMediator;
 	@SpringBean
 	private MunicipioMediator municipioMediator;
-	private Usuario usuario;
 	private Arquivo arquivo;
 
 	public HomePage() {
 		super();
+		this.arquivo = remessaMediator.arquivosPendentes(getUser().getInstituicao());
+		
 		carregarHomePage();
 	}
 	
 	public HomePage(PageParameters parameters) {
+		this.arquivo = remessaMediator.arquivosPendentes(getUser().getInstituicao());
+
 		error(parameters.get("error"));
 		carregarHomePage();
 	}
 
 	private void carregarHomePage() {
-		this.usuario = getUser();
-		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
-		
-//		carregarComunicadoModal();
+		linkAcessoRapidoGerarRelatorios();
 		labelOrigemDestino(); 
 		labelQuantidadeRemessasPendentes();
 		labelQuantidadeCancelamentos();
-
-		add(linkAcesseNossoSiteIEPTB());
-		add(downloadOficioCorregedoria());
-		add(linkConfirmacoesPendentes()); 
-		add(linkCancelamentosPendentes());
-		add(listaConfirmacoesPendentes());
-		add(listaDesistenciaPendentes());
-		add(listaCancelamentoPendentes());
-		add(listaAutorizacaoCancelamentoPendentes());
+		linkAcesseNossoSiteIEPTB();
+		downloadOficioCorregedoria();
+		linkConfirmacoesPendentes(); 
+		listaConfirmacoesPendentes();
+		linkCancelamentosPendentes();
+		listaDesistenciaPendentes();
+		listaCancelamentoPendentes();
+		listaAutorizacaoCancelamentoPendentes();
 	}
 	
-//	private void carregarComunicadoModal() {
-//		final ModalWindow modalComunicado = new ModalWindow("modalComunicado");
-//		modalComunicado.setPageCreator(new ModalWindow.PageCreator() {
-//            /***/
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//            public Page createPage() {
-//                return new ComunicadoModal(HomePage.this.getPageReference(), modalComunicado);
-//            }
-//	    });
-//		modalComunicado.setResizable(false);
-//		modalComunicado.setAutoSize(false);
-//		modalComunicado.setInitialWidth(75);
-//		modalComunicado.setInitialHeight(560); 
-//		modalComunicado.setMinimalWidth(75); 
-//		modalComunicado.setMinimalHeight(560);
-//        modalComunicado.setWidthUnit("%");
-//        modalComunicado.setHeightUnit("px");
-//        add(modalComunicado);
-//		
-//		AjaxLink<?> openModal = new AjaxLink<Void>("showModal"){
-//            /***/
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//            public void onClick(AjaxRequestTarget target){
-//            	modalComunicado.show(target);
-//            }
-//		};
-//		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-//			openModal.setMarkupId("showModal");
-//		}
-//		add(openModal);
-//	}
+	private void linkAcessoRapidoGerarRelatorios() {
+		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			add(new Link<Arquivo>("acessoRapidoRelatorios"){
 
+				/***/
+				private static final long serialVersionUID = 1L;
 
+				@Override
+				public void onClick() {
+					setResponsePage(new RelatorioArquivosPage());
+				}
+				
+			});
+		} else {
+			add(new Link<Arquivo>("acessoRapidoRelatorios"){
+
+				/***/
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick() {
+					setResponsePage(new RelatorioInstituicoesCartoriosPage());
+				}
+				
+			});
+		}
+	}
+
+	private void labelOrigemDestino() {
+		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
+				getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+			add(new Label("labelRemessas", "DESTINO"));
+			add(new Label("labelCancelamentos", "DESTINO"));
+		} else {
+			add(new Label("labelRemessas", "ORIGEM"));
+			add(new Label("labelCancelamentos", "ORIGEM"));
+		}
+	}
+	
+	private void labelQuantidadeRemessasPendentes() {
+		int quantidade = 0;
+		if (getConfirmacoesPendentes() != null) {
+			quantidade = getConfirmacoesPendentes().size();
+		}
+		add(new Label("qtdRemessas", quantidade));
+	}
+	
 	private void labelQuantidadeCancelamentos() {
 		int quantidade = 0;
 		if (getDesistenciaPendentes() != null) {
@@ -138,31 +148,12 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		add(new Label("qtdCancelamentos", quantidade));
 	}
 
-	private void labelQuantidadeRemessasPendentes() {
-		int quantidade = 0;
-		if (getConfirmacoesPendentes() != null) {
-			quantidade = getConfirmacoesPendentes().size();
-		}
-		add(new Label("qtdRemessas", quantidade));
-	}
-
-	private void labelOrigemDestino() {
-		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
-				getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-			add(new Label("labelRemessas", "DESTINO"));
-			add(new Label("labelCancelamentos", "DESTINO"));
-		} else {
-			add(new Label("labelRemessas", "ORIGEM"));
-			add(new Label("labelCancelamentos", "ORIGEM"));
-		}
+	private void linkAcesseNossoSiteIEPTB() {
+		add(new ExternalLink("acesseNossoSite", "http://www.ieptbto.com.br/"));
 	}
 	
-	private ExternalLink linkAcesseNossoSiteIEPTB() {
-		return new ExternalLink("acesseNossoSite", "http://www.ieptbto.com.br/");
-	}
-	
-	private Link<T> downloadOficioCorregedoria(){
-		return new Link<T>("donwloadOficio") {
+	private void downloadOficioCorregedoria(){
+		add(new Link<T>("donwloadOficio") {
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -176,11 +167,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				        new ResourceStreamRequestHandler(resourceStream, file.getName()));
 				
 			}
-		};
+		});
 	}
 	
-	private Link<Remessa> linkConfirmacoesPendentes() {
-		return new Link<Remessa>("arquivosConfirmacoesPendetes") {
+	private void linkConfirmacoesPendentes() {
+		add(new Link<Remessa>("arquivosConfirmacoesPendetes") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -189,12 +180,12 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			public void onClick() {
 				setResponsePage(new ListaArquivosPendentesPage(getUser(), getConfirmacoesPendentes()));
 			}
-		};
+		});
 	}
 	
 
-	private ListView<Remessa> listaConfirmacoesPendentes() {
-		return new ListView<Remessa>("listConfirmacoes", getConfirmacoesPendentes()) {
+	private void listaConfirmacoesPendentes() {
+		add(new ListView<Remessa>("listConfirmacoes", getConfirmacoesPendentes()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -286,11 +277,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				}
 				return linkAnexos;
 			}
-		};
+		});
 	}
 
-	private Link<DesistenciaProtesto> linkCancelamentosPendentes() {
-		return new Link<DesistenciaProtesto>("arquivosCancelamentosPendetes") {
+	private void linkCancelamentosPendentes() {
+		add(new Link<DesistenciaProtesto>("arquivosCancelamentosPendetes") {
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -299,11 +290,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			public void onClick() {
 				setResponsePage(new ListaArquivosPendentesPage(getDesistenciaPendentes(), getCancelamentoPendentes(), getAutorizacaoCancelamentoPendentes()));
 			}
-		};
+		});
 	}
 	
-	private ListView<CancelamentoProtesto> listaCancelamentoPendentes() {
-		return new ListView<CancelamentoProtesto>("listaCancelamentos", getCancelamentoPendentes()) {
+	private void listaCancelamentoPendentes() {
+		add(new ListView<CancelamentoProtesto>("listaCancelamentos", getCancelamentoPendentes()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -343,7 +334,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarCancelamentoTXT(getUsuario(), remessa);
+						File file = remessaMediator.baixarCancelamentoTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
@@ -351,11 +342,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					}
 				};
 			}
-		};
+		});
 	}
 	
-	private ListView<DesistenciaProtesto> listaDesistenciaPendentes() {
-		return new ListView<DesistenciaProtesto>("listaDesistencias", getDesistenciaPendentes()) {
+	private void listaDesistenciaPendentes() {
+		add(new ListView<DesistenciaProtesto>("listaDesistencias", getDesistenciaPendentes()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -403,11 +394,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					}
 				};
 			}
-		};
+		});
 	}
 
-	private ListView<AutorizacaoCancelamento> listaAutorizacaoCancelamentoPendentes() {
-		return new ListView<AutorizacaoCancelamento>("listaAutorizacao", getAutorizacaoCancelamentoPendentes()) {
+	private void listaAutorizacaoCancelamentoPendentes() {
+		add(new ListView<AutorizacaoCancelamento>("listaAutorizacao", getAutorizacaoCancelamentoPendentes()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -455,7 +446,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					}
 				};
 			}
-		};
+		});
 	}
 	
 	private List<DesistenciaProtesto> getDesistenciaPendentes() {
@@ -474,19 +465,15 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		return arquivo.getRemessas();
 	}
 
+	public Arquivo getArquivo() {
+		return arquivo;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public String getTitulo() {
 		return "CRA - Central de Remessa de Arquivos";
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public Arquivo getArquivo() {
-		return arquivo;
 	}
 
 	@Override

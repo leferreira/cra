@@ -68,6 +68,9 @@ public class GerarConfirmacaoPage extends BasePage<Confirmacao> {
             protected void onSubmit(){
 				
 				try{
+					if (confirmacaoMediator.verificarArquivoConfirmacaoGeradoCra().equals(true)) {
+						throw new InfraException("Não é possível gerar as confirmações novamente, arquivos já liberados hoje!");
+					}
 					if (getConfirmacoesPendentes().isEmpty()) {
 						throw new InfraException("Não há confirmações pendentes para envio.");
 					}

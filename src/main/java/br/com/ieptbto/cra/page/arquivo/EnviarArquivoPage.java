@@ -21,6 +21,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
@@ -72,6 +73,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			protected void onSubmit() {
 				final FileUpload uploadedFile = fileUploadField.getFileUpload();
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
+				arquivo.setDataRecebimento(new LocalDate().toDate());
 				getFeedbackMessages().clear();
 
 				try {

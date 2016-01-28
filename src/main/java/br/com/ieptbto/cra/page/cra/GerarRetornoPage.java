@@ -72,11 +72,14 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSubmit(){
+				
 				try{
+					if (retornoMediator.verificarArquivoRetornoGeradoCra().equals(true)) { 
+						throw new InfraException("Não é possível gerar os retornos novamente, arquivos já liberados hoje!");
+					}
 					if (getRetornosPendentes().isEmpty()){
 						throw new InfraException("Não há retornos pendentes para envio!");
 					} 
-					
 					retornoMediator.gerarRetornos(getUser(), getRetornosPendentes());
 					setResponsePage(new MensagemPage<Remessa>(GerarRetornoPage.class, "Gerar Retorno", "Os arquivos de retorno foram gerados com sucesso!"));
 				

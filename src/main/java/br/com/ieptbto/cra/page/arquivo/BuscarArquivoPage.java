@@ -30,10 +30,9 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 
 	public BuscarArquivoPage() {
 		this.arquivo = new Arquivo();
-		
 		this.instituicao = getUser().getInstituicao();
+
 		form = new Form<Arquivo>("form", getModel());
-		
 		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
 			form.add(new BuscarArquivoCraPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)){
@@ -43,15 +42,9 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 		}
 		add(form);
 	}
-
 	
 	public Instituicao getInstituicao() {
 		return instituicao;
-	}
-	
-	
-	public void setInstituicao(Instituicao instituicao) {
-		this.instituicao = instituicao;
 	}
 
 	@Override

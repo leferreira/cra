@@ -149,7 +149,7 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 					error(ex.getMessage());
 					System.out.println(ex.getMessage() + ex.getCause());
 				}  catch (Exception ex) {
-					error("Não foi possível buscar os arquivos para semre liberados!");
+					error("Não foi possível buscar os arquivos para serem liberados!");
 					System.out.println(ex.getMessage() + ex.getCause());
 				}
 			}

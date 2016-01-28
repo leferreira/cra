@@ -45,15 +45,17 @@ public class CraMenu extends Panel {
 		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 			menuRelatorioPadrao.setVisible(false);
 		}
-		menuRelatorioPadrao.addItem("RelatorioArquivosTitulos", rolesPesquisar);
+		menuRelatorioPadrao.addItem("RelatorioArquivosInstituicoesCartorios", rolesPesquisar);
 		
 		/** Relatorio Cra*/
 		MenuItem menuRelatorioCra = menu.addItem("menuRelatorioCra", rolesPesquisar);
 		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 			menuRelatorioCra.setVisible(true);
 		}
-		menuRelatorioCra.addItem("RelatorioArquivosTitulos", rolesPesquisar);
-//		menuRelatorioCra.addItem("RelatorioRetornoGerado", rolesPesquisar);
+		menuRelatorioCra.addItem("Relatorio", rolesIncluir);
+		menuRelatorioCra.addItem("RelatorioDesistenciaCancelamento", rolesIncluir);
+		menuRelatorioCra.addItem("RelatorioTaxaCra", rolesIncluir);
+		menuRelatorioCra.addItem("RelatorioTitulos", rolesIncluir);
 		
 		/** Menus Administrador */
 		MenuItem menuAdministrador = menu.addItem("menuAdministrador", rolesIncluir);
@@ -77,8 +79,8 @@ public class CraMenu extends Panel {
 		
 		menuAdministrador.addItem("InstrumentoDeProtesto", rolesIncluir);
 		menuAdministrador.addItem("GerarSlip", rolesIncluir);
-		menuAdministrador.addItem("BuscarInstrumentoProtesto", rolesIncluir);
-		menuAdministrador.addItem("LiberarEnvelopes", rolesIncluir);
+//		menuAdministrador.addItem("BuscarInstrumentoProtesto", rolesIncluir);
+//		menuAdministrador.addItem("LiberarEnvelopes", rolesIncluir);
 		menuAdministrador.addItem("ImportarArquivoDePara", rolesIncluir);
 	}
 
