@@ -210,9 +210,9 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		return combo;
 	}
 	
-	private RadioChoice<TipoBatimento> comboTipoBatimento() {
+	private DropDownChoice<TipoBatimento> comboTipoBatimento() {
 		IChoiceRenderer<TipoBatimento> renderer = new ChoiceRenderer<TipoBatimento>("label");
-		RadioChoice<TipoBatimento> combo = new RadioChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()), renderer);
+		DropDownChoice<TipoBatimento> combo = new DropDownChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()), renderer);
 		combo.setLabel(new Model<String>("Tipo Batimento"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);

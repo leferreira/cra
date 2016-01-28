@@ -24,6 +24,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
@@ -73,8 +74,10 @@ public class BatimentoPage extends BasePage<Remessa>{
 					}
 					for (Remessa retorno : arquivosRetornoSelecionados) {
 						if (retorno.getListaDepositos().isEmpty()) {
-							throw new InfraException("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " + retorno.getInstituicaoOrigem().getNomeFantasia()
-									+ " foi selecionado e não existe depósito vículado! Por favor, selecione novamente o depósito...");
+							if (!retorno.getInstituicaoDestino().getTipoBatimento().equals(TipoBatimento.LIBERACAO_SEM_IDENTIFICAÇÃO_DE_DEPOSITO)) {
+								throw new InfraException("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " + retorno.getInstituicaoOrigem().getNomeFantasia()
+										+ " foi selecionado e não existe depósito vículado! Por favor, selecione novamente o depósito...");
+							}
 						}
 					}
 					retornoMediator.salvarBatimentos(arquivosRetornoSelecionados);
