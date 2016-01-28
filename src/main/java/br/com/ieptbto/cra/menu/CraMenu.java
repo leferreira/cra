@@ -44,6 +44,8 @@ public class CraMenu extends Panel {
 		MenuItem menuRelatorioPadrao = menu.addItem("menuRelatorioPadrao", rolesPesquisar);
 		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 			menuRelatorioPadrao.setVisible(false);
+		} else {
+			menuRelatorioPadrao.setVisible(true);
 		}
 		menuRelatorioPadrao.addItem("RelatorioArquivosInstituicoesCartorios", rolesPesquisar);
 		
@@ -51,6 +53,8 @@ public class CraMenu extends Panel {
 		MenuItem menuRelatorioCra = menu.addItem("menuRelatorioCra", rolesPesquisar);
 		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 			menuRelatorioCra.setVisible(true);
+		} else {
+			menuRelatorioCra.setVisible(false);
 		}
 		menuRelatorioCra.addItem("Relatorio", rolesIncluir);
 		menuRelatorioCra.addItem("RelatorioDesistenciaCancelamento", rolesIncluir);
