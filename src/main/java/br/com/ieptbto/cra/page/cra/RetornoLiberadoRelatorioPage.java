@@ -32,11 +32,11 @@ import net.sf.jasperreports.engine.JasperReport;
  * @author Thasso Araújo
  *
  */
-public class RetornoLiberadoRelatorioPage extends BasePage<Retorno>{
+public class RetornoLiberadoRelatorioPage extends BasePage<Retorno> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	
+
 	@SpringBean
 	private RelatorioMediator relatorioMediator;
 	private Retorno retorno;
@@ -45,20 +45,20 @@ public class RetornoLiberadoRelatorioPage extends BasePage<Retorno>{
 		this.retorno = new Retorno();
 		carregarComponentes();
 	}
-	
+
 	private void carregarComponentes() {
 		info(getMensagem());
-//		add(linkDownloadRelatorioRetornoLiberado());
+		// add(linkDownloadRelatorioRetornoLiberado());
 	}
 
 	@SuppressWarnings("unused")
 	private Link<Retorno> linkDownloadRelatorioRetornoLiberado() {
-		return new Link<Retorno>("relatorioRetornoLiberado"){
+		return new Link<Retorno>("relatorioRetornoLiberado") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
- 
-			@Override 
+
+			@Override
 			public void onClick() {
 				Connection connection = null;
 				HashMap<String, Object> parametros = new HashMap<String, Object>();
@@ -70,22 +70,28 @@ public class RetornoLiberadoRelatorioPage extends BasePage<Retorno>{
 
 					parametros.put("LOGO", ImageIO.read(getClass().getResource("ieptb.gif")));
 					parametros.put("DATA_GERACAO", new java.util.Date());
-					
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioRetornoLiberado.jrxml"));
-					jasperPrint = JasperFillManager.fillReport(jasperReport ,parametros, connection);
-					
+
+					// byte[] relatorioPdf = new
+		            // RelatorioArquivoRetorno().gerarRelatorioConfirmacao(titulosNaoImportados,
+		            // "/relatorio/jasper/relConfirmacao.jrxml", arquivo);
+		            // JasperReport jasperReport =
+		            // JasperCompileManager.compileReport(getClass().getResourceAsStream(url));
+
+					JasperReport jasperReport = JasperCompileManager
+		                    .compileReport(getClass().getResourceAsStream("RelatorioRetornoLiberado.jrxml"));
+					jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, connection);
+
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_RETORNO_GERADO_" + 
-					DataUtil.localDateToString(new LocalDate()).replaceAll("/","_") + ".pdf"));
-				} catch (InfraException ex) { 
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+		                    "CRA_RELATORIO_RETORNO_GERADO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
+				} catch (InfraException ex) {
 					error(ex.getMessage());
-				} catch (Exception e) { 
+				} catch (Exception e) {
 					error("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
 					e.printStackTrace();
-				} 
+				}
 			}
 		};
 	}
