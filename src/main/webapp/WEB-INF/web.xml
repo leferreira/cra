@@ -56,6 +56,10 @@
 	</filter-mapping>
 	<servlet-mapping>
 		<servlet-name>webServices</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/RemessaService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>webServices</servlet-name>
+		<url-pattern>/CentralNacionalProtestoService</url-pattern>
 	</servlet-mapping>
 </web-app>
