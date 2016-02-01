@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubrelatorioRetornoLiberado2" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="50c581c6-7506-447f-adc5-081aea63c3e4">
+	<property name="ireport.zoom" value="2.1435888100000073"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ARQUIVO_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT arq.nome_arquivo, mun.nome_municipio, cab.numero_sequencial_remessa,
+	count (ret.id_retorno) AS quantidade_titulos,
+	sum (CASE WHEN ret.tipo_ocorrencia='1' THEN 1 ELSE 0 END) AS pagos,
+	sum (CASE WHEN ret.tipo_ocorrencia='2' THEN 1 ELSE 0 END) AS protestados,
+	sum (CASE WHEN ret.tipo_ocorrencia='3' THEN 1 ELSE 0 END) AS retirados,
+	sum (CASE WHEN ret.tipo_ocorrencia='4' THEN 1 ELSE 0 END) AS sustados,
+	sum (CASE WHEN ret.tipo_ocorrencia='5' THEN 1 ELSE 0 END) AS devolvidos,
+	sum (CASE WHEN ret.tipo_ocorrencia='1' THEN ret.valor_saldo_titulo ELSE 0 END) AS VALOR_PAGOS,
+	sum (CASE WHEN ret.tipo_ocorrencia='2' OR ret.tipo_ocorrencia='3' OR ret.tipo_ocorrencia='6' THEN ret.valor_custa_cartorio ELSE 0 END)
+		AS CUSTAS_CARTORIO,
+	sum (ret.valor_demais_despesas) AS DEMAIS_DESPESAS
+FROM tb_remessa AS rem
+INNER JOIN tb_retorno AS ret ON ret.remessa_id=rem.id_remessa
+INNER JOIN tb_cabecalho AS cab ON cab.id_cabecalho=rem.cabecalho_id
+INNER JOIN tb_arquivo AS arq_banco ON arq_banco.id_arquivo=rem.arquivo_gerado_banco_id
+INNER JOIN tb_arquivo AS arq ON arq.id_arquivo=rem.arquivo_id
+INNER JOIN tb_instituicao AS ins ON ins.id_instituicao=rem.instituicao_origem_id
+INNER JOIN tb_municipio AS mun ON mun.id_municipio=ins.municipio_id
+WHERE arq_banco.id_arquivo=$P{ARQUIVO_ID}
+group by arq.nome_arquivo, mun.nome_municipio, cab.numero_sequencial_remessa
+order by mun.nome_municipio asc]]>
+	</queryString>
+	<field name="nome_arquivo" class="java.lang.String"/>
+	<field name="nome_municipio" class="java.lang.String"/>
+	<field name="numero_sequencial_remessa" class="java.lang.Integer"/>
+	<field name="quantidade_titulos" class="java.lang.Long"/>
+	<field name="pagos" class="java.lang.Long"/>
+	<field name="protestados" class="java.lang.Long"/>
+	<field name="retirados" class="java.lang.Long"/>
+	<field name="sustados" class="java.lang.Long"/>
+	<field name="devolvidos" class="java.lang.Long"/>
+	<field name="valor_pagos" class="java.math.BigDecimal"/>
+	<field name="custas_cartorio" class="java.math.BigDecimal"/>
+	<field name="demais_despesas" class="java.math.BigDecimal"/>
+	<variable name="TOTAL_PAGOS" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor_pagos}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_DEMAIS_DESPESAS" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{demais_despesas}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_CUSTAS_CARTORIO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{custas_cartorio}]]></variableExpression>
+	</variable>
+	<group name="nome_municipio">
+		<groupExpression><![CDATA[$F{nome_municipio}]]></groupExpression>
+	</group>
+	<group name="nome_arquivo">
+		<groupExpression><![CDATA[$F{nome_arquivo}]]></groupExpression>
+	</group>
+	<group name="numero_sequencial_remessa">
+		<groupExpression><![CDATA[$F{numero_sequencial_remessa}]]></groupExpression>
+	</group>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-1" y="0" width="803" height="15" backcolor="#CCCCCC" uuid="3e6e7d6c-b15b-4d10-bf04-c6e8db0b5285">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="131" y="0" width="69" height="15" uuid="003b3221-00e3-45f8-95d6-a5d558a47b6a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ARQUIVO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="0" width="125" height="15" uuid="6900f256-026a-4a86-bdd5-724439b147b6"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MUNICÍPIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="64" height="15" uuid="e3d7e2b0-2339-474a-b850-01a9fccc322d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEQUENCIAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="535" y="0" width="85" height="15" uuid="22fc67b9-3fa7-444d-ae1b-fdc2a3044afb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALOR PAGOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="626" y="0" width="83" height="15" uuid="103de46f-ccfb-45d1-ae75-9673dc379cf8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUSTAS CARTÓRIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="713" y="0" width="88" height="15" uuid="edeed07b-7d7c-48f5-9169-98787f35ec1c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEMAIS DESPESAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="0" width="55" height="15" uuid="ba6c65df-a5a4-4b64-ad26-b48a86636833"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TÍTULOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="327" y="0" width="55" height="15" uuid="ec281e8e-36b0-47bd-a473-82ae2638a08e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PAGOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="387" y="0" width="66" height="15" uuid="eb28046f-6080-4e08-b1f0-82d4a5031836"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROTESTADOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="462" y="0" width="66" height="15" uuid="baf5bcce-7c14-4356-8aef-019652a8d03a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEVOLVIDOS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-1" y="0" width="803" height="15" isPrintInFirstWholeBand="true" forecolor="rgba(255, 255, 255, 0.0)" backcolor="#E8E8E8" uuid="3946fe21-7f0a-4e4b-b9b8-ffd06cfaf92d">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<printWhenExpression><![CDATA[new Boolean(($V{REPORT_COUNT}.intValue()%2==0))]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement x="131" y="0" width="69" height="15" uuid="59700c56-a76c-4adc-a2ed-8ba6064d037d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_arquivo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="5" y="0" width="125" height="15" uuid="ed8ee8b2-c1d7-42ec-a414-cc7483c8bfc2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_municipio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="64" height="15" uuid="bf09c718-adbc-4736-9f96-598cec8f8cb0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_sequencial_remessa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="535" y="0" width="85" height="15" uuid="894e01d4-955e-4490-8ba6-1b43ba4815f5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor_pagos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="626" y="0" width="83" height="15" uuid="1971be74-83a0-4dc1-b739-bcd96b41ee69"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{custas_cartorio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="713" y="0" width="88" height="15" uuid="a0cd5cc0-cd28-41ff-a0f1-c18775f7d94e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{demais_despesas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="268" y="0" width="55" height="15" uuid="2eb495f1-7d2d-43d5-baa4-df95533500bc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidade_titulos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="327" y="0" width="55" height="15" uuid="a08a8410-533f-4d60-bf9b-1190d4034dde"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pagos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="387" y="0" width="66" height="15" uuid="b9f16a54-ec17-443e-ac39-02725dccb46b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{protestados}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="462" y="0" width="66" height="15" uuid="4d57a050-7ba6-4863-8879-2821fe0b52a2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{devolvidos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="20">
+			<rectangle>
+				<reportElement x="0" y="0" width="803" height="20" backcolor="#B9D1EA" uuid="304af8e8-e77b-40fd-9100-6d5fc8dc7989">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="5" y="0" width="158" height="20" uuid="ca2c90f0-ae68-40cc-9592-0ee0e8d8730d"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="535" y="0" width="85" height="20" uuid="daed30eb-db2c-486f-bd48-162d594225ce"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_PAGOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="713" y="0" width="87" height="20" uuid="afc8cc81-f7b3-453f-950a-e2e0b266c427"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_DEMAIS_DESPESAS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="626" y="0" width="83" height="20" uuid="d84758ec-8a3d-4677-a8af-cab0d7e1bb66"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_CUSTAS_CARTORIO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

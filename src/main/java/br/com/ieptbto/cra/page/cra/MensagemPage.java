@@ -25,10 +25,14 @@ public class MensagemPage<T extends AbstractEntidade<T>> extends BasePage<T>{
 		this.nomeDaPagina = pageName;
 		this.mensagem = message;
 
-		info(message);
-		add(labelNomeDaPagina());
+		carregarComponentes();
 	}
 	
+	private void carregarComponentes() {
+		info(getMensagem());
+		add(labelNomeDaPagina());
+	}
+
 	private Label labelNomeDaPagina() {
 		return new Label("pageName", getNomeDaPagina().toUpperCase());
 	}
@@ -41,8 +45,8 @@ public class MensagemPage<T extends AbstractEntidade<T>> extends BasePage<T>{
 	}
 	
 	public String getNomeDaPagina() {
-		if (mensagem == null) {
-			mensagem = StringUtils.EMPTY;
+		if (nomeDaPagina == null) {
+			nomeDaPagina = StringUtils.EMPTY;
 		}
 		return nomeDaPagina;
 	}

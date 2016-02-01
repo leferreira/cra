@@ -109,6 +109,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	public Class<? extends Page> getLoginPage() {
 		return LoginPage.class;
 	}
+	
 
 	@Override
 	public Session newSession(Request request, Response response) {

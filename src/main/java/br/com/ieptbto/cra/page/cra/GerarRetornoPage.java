@@ -62,7 +62,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 		this.retorno = new Retorno();
 		this.retornosPendentes = retornoMediator.buscarRetornosConfirmados();
 
-		carregarGuiaRetorno();
+		carregarGuiaRetorno(); 
 	}
 	
 	private void carregarGuiaRetorno(){
@@ -81,7 +81,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 						throw new InfraException("Não há retornos pendentes para envio!");
 					} 
 					retornoMediator.gerarRetornos(getUser(), getRetornosPendentes());
-					setResponsePage(new MensagemPage<Remessa>(GerarRetornoPage.class, "Gerar Retorno", "Os arquivos de retorno foram gerados com sucesso!"));
+					setResponsePage(new RetornoLiberadoRelatorioPage());
 				
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
