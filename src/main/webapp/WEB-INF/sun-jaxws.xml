@@ -9,6 +9,6 @@
   <endpoint
       name="CentralNacionalProtestoService"
       implementation="br.com.ieptbto.cra.webservice.dao.CentralNacionalProtestoServiceImpl"
-      url-pattern="/CentralNacionalProtestoServiceImpl"/>
+      url-pattern="/CentralNacionalProtestoService"/>
       
 </endpoints>

@@ -56,6 +56,6 @@
 	</filter-mapping>
 	<servlet-mapping>
 		<servlet-name>webServices</servlet-name>
-		<url-pattern>/RemessaService</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 </web-app>
