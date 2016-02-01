@@ -7,6 +7,8 @@ import javax.ws.rs.GET;
 
 import org.springframework.stereotype.Repository;
 
+import br.com.ieptbto.cra.entidade.vo.ArquivoCnpVO;
+
 /**
  * @author Thasso Araújo
  *
@@ -23,7 +25,7 @@ public interface ICentralNacionalProtestoWS {
 	 */
 	@WebMethod(operationName = "cartorio")
 	@GET
-	public String cartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
+	public String cartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") ArquivoCnpVO dados);
 
 	/**
 	 * @param login

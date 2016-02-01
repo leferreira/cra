@@ -135,16 +135,13 @@ public class ConfirmacaoService extends CraWebService {
 		if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 			return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		}
-
 		setArquivoConfirmacaoVO(converterStringArquivoVO(dados));
 
 		if (getArquivoConfirmacaoVO() == null || getUsuario() == null) {
 			ArquivoVO arquivo = new ArquivoVO();
 			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
 		}
-
 		setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
-
 		return gerarMensagem(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo), CONSTANTE_CONFIRMACAO_XML);
 
 	}

@@ -37,8 +37,9 @@ public class RemessaServiceImpl implements IRemessaWS {
 	private CancelamentoProtestoService cancelamentoProtestoService;
 	private AutorizacaoCancelamentoService autorizacaoCancelamentoService;
 	private ComarcasHomologadasService comarcasHomologadasService;
+	private ArquivosPendentesCartorioService arquivosPendentesCartorioService;
 
-	@Override
+	@Override 
 	@WebMethod(operationName = "remessa")
 	@GET
 	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
@@ -117,6 +118,14 @@ public class RemessaServiceImpl implements IRemessaWS {
 		return comarcasHomologadasService.verificarComarcasHomologadas(usuario, codigoApresentante);
 	}
 	
+	@Override
+	@WebMethod(operationName = "arquivosPendentesCartorio")
+	@GET
+	public String arquivosPendentesCartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+		init(login, senha);
+		return arquivosPendentesCartorioService.buscarArquivosPendentesCartorio(usuario);
+	}
+	
 	private void init(String login, String senha) {
 		if (context == null) {
 			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
@@ -128,10 +137,11 @@ public class RemessaServiceImpl implements IRemessaWS {
 		cancelamentoProtestoService = (CancelamentoProtestoService) context.getBean("cancelamentoProtestoService");
 		autorizacaoCancelamentoService = (AutorizacaoCancelamentoService) context.getBean("autorizacaoCancelamentoService");
 		comarcasHomologadasService = (ComarcasHomologadasService) context.getBean("comarcasHomologadasService");
+		arquivosPendentesCartorioService = (ArquivosPendentesCartorioService) context.getBean("arquivosPendentesCartorioService");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 		setUsuario(login, senha);
 	}
-
+	
 	private void setUsuario(String login, String senha) {
 		logger.info("Inicio WebService pelo usuario= " + login);
 		this.usuario = usuarioMediator.autenticarWS(login, senha);
@@ -140,5 +150,4 @@ public class RemessaServiceImpl implements IRemessaWS {
 	public Usuario getUsuario() {
 		return usuario;
 	}
-
 }

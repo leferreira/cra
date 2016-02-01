@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @WebService
 public interface IRemessaWS {
-
+	
 	/**
 	 * 
 	 * @param nomeArquivo
@@ -29,6 +29,18 @@ public interface IRemessaWS {
 	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados);
 
+	/**
+	 * 
+	 * @param login
+	 * @param senha
+	 * @return
+	 */
+	@WebMethod(operationName = "arquivosPendentesCartorio")
+	@GET
+	public String arquivosPendentesCartorio(@WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha);
+	
+	
 	/**
 	 * 
 	 * @param nomeArquivo
