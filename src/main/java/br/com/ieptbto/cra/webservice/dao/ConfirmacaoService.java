@@ -143,7 +143,6 @@ public class ConfirmacaoService extends CraWebService {
 		}
 		setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
 		return gerarMensagem(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo), CONSTANTE_CONFIRMACAO_XML);
-
 	}
 
 	private ArquivoConfirmacaoVO converterStringArquivoVO(String dados) {

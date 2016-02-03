@@ -123,7 +123,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String arquivosPendentesCartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
 		init(login, senha);
-		return arquivosPendentesCartorioService.buscarArquivosPendentesCartorio(usuario);
+		return arquivosPendentesCartorioService.buscarArquivosPendentesCartorio(getUsuario());
 	}
 	
 	private void init(String login, String senha) {

@@ -102,7 +102,12 @@ public class MensagemDeErro {
 
 	public String getCodigoCompensacao() {
 		if (codigoCompensacao == null) {
-			codigoCompensacao = getNomeArquivo().substring(1, 4);
+			codigoCompensacao = StringUtils.EMPTY;
+			if (getNomeArquivo() != null) {
+				if (getNomeArquivo().length() > 5) {
+					codigoCompensacao = getNomeArquivo().substring(1, 4);				
+				}
+			}
 		}
 
 		return codigoCompensacao;

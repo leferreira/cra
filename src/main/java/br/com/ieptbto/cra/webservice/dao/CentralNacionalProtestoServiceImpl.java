@@ -29,6 +29,7 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	private WebServiceContext wsctx; 
 	private UsuarioMediator usuarioMediator;
 	private Usuario usuario;
+	@SuppressWarnings("unused")
 	private CentralNacionalProtestoCartorioService centralNacionalProtestoCartorioService;
 	private CentralNacionalProtestoService centralNacionalProtestoService;
 	private ClassPathXmlApplicationContext context;

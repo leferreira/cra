@@ -44,7 +44,6 @@
 		<property name="automaticTestTable"><value>${c3p0.automaticTestTable}</value></property>
 	</bean>
 	
-	
 	<bean class="br.com.ieptbto.cra.hibernate.AnnotatedClassesFactory" id="AnnotatedClassesFactory" factory-method="getClassesAnotadas"  />
 
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" destroy-method="destroy">
@@ -65,7 +64,6 @@
 		</property>
 	</bean>
 	
-
 	<!-- setup transaction manager  -->
 	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" >
 		<property name="sessionFactory" ref="sessionFactory" />
@@ -84,4 +82,8 @@
 	
 	<bean id="wicketApplication" class="br.com.ieptbto.cra.app.CraApplication"></bean>
 	
+<!-- 	<bean id="dataSourceReport" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+<!--     	<property name="jndiName"><value>jdbc/localhost/nova_cra</value></property> -->
+<!--     	<property name="resourceRef"><value>javax.sql.DataSource</value></property> -->
+<!-- 	</bean> -->
 </beans>

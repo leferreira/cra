@@ -110,15 +110,6 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		carregarGuiaRetorno();
 	}
 	
-	public LiberarRetornoPage(String message){
-		this.retorno = new Retorno();
-
-		info(message);
-		adicionarFiltros();
-		carregarResumoArquivos();
-		carregarGuiaRetorno();
-	}
-	
 	private void adicionarFiltros() {
 		Form<Batimento> formFiltros = new Form<Batimento>("formFiltros"){
 
@@ -343,8 +334,8 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 						
 						try {
 							retornoMediator.removerBatimento(retorno);
-							setResponsePage(new LiberarRetornoPage("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " 
-								+ retorno.getInstituicaoOrigem().getNomeFantasia() + " foi retornado ao batimento!"));
+							getArquivosAguardandoLiberacao().remove(retorno);
+							info("O arquivo foi removido com sucesso e voltou ao batimento!");
 							
 						}  catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());

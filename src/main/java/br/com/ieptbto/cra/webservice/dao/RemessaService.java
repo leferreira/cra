@@ -32,7 +32,7 @@ public class RemessaService extends CraWebService {
 
 	@Autowired
 	private RemessaMediator remessaMediator;
-	private String arquivoRecebido;
+	private String arquivoRecebido;	
 	private List<RemessaVO> remessas;
 	private ArquivoVO arquivoVO;
 
@@ -127,8 +127,10 @@ public class RemessaService extends CraWebService {
 	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
-		RemessaVO remessa = null;
-
+		RemessaVO remessa = remessaMediator.buscarRemessaParaCartorio(usuario.getInstituicao(), nomeArquivo);
+		if (remessa == null) {
+			return "Remessa não encontrada!";
+		}
 		return gerarResposta(remessa, getNomeArquivo(), CONSTANTE_REMESSA_XML);
 	}
 

@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.titulo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -79,7 +80,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			
 			getArquivosOcorrencias().add(novaOcorrencia);
 		}
-		
+		Collections.sort(getArquivosOcorrencias());
 		add(listaArquivoOcorrenciaBean());
 	}
 

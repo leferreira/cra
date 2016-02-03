@@ -19,6 +19,7 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -48,10 +49,9 @@ public class RetornoLiberadoRelatorioPage extends BasePage<Retorno> {
 
 	private void carregarComponentes() {
 		info(getMensagem());
-		// add(linkDownloadRelatorioRetornoLiberado());
+		 add(linkDownloadRelatorioRetornoLiberado());
 	}
 
-	@SuppressWarnings("unused")
 	private Link<Retorno> linkDownloadRelatorioRetornoLiberado() {
 		return new Link<Retorno>("relatorioRetornoLiberado") {
 
@@ -61,24 +61,19 @@ public class RetornoLiberadoRelatorioPage extends BasePage<Retorno> {
 			@Override
 			public void onClick() {
 				Connection connection = null;
-				HashMap<String, Object> parametros = new HashMap<String, Object>();
 				JasperPrint jasperPrint = null;
+				HashMap<String, Object> parametros = new HashMap<String, Object>();
 
 				try {
 					Class.forName("org.postgresql.Driver");
 					connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra", "postgres", "1234");
-
-					parametros.put("LOGO", ImageIO.read(getClass().getResource("ieptb.gif")));
-					parametros.put("DATA_GERACAO", new java.util.Date());
-
-					// byte[] relatorioPdf = new
-		            // RelatorioArquivoRetorno().gerarRelatorioConfirmacao(titulosNaoImportados,
-		            // "/relatorio/jasper/relConfirmacao.jrxml", arquivo);
-		            // JasperReport jasperReport =
-		            // JasperCompileManager.compileReport(getClass().getResourceAsStream(url));
-
-					JasperReport jasperReport = JasperCompileManager
-		                    .compileReport(getClass().getResourceAsStream("RelatorioRetornoLiberado.jrxml"));
+					
+					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
+					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
+					parametros.put("DATA_GERACAO", new LocalDate().toDate());
+					 
+					String urlJasper = "../../relatorio/RelatorioRetornoLiberado.jrxml";
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(urlJasper));
 					jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, connection);
 
 					File pdf = File.createTempFile("report", ".pdf");
