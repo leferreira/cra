@@ -55,14 +55,6 @@ public class RemessaServiceImpl implements IRemessaWS {
 		return remessaService.buscarRemessa(nomeArquivo, getUsuario());
 	}
 
-	@Override
-	@WebMethod(operationName = "enviarConfirmacao")
-	@GET
-	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
-		init(login, senha);
-		return confirmacaoService.enviarConfirmacao(nomeArquivo, getUsuario(), dados);
-	}
 
 	@WebMethod(operationName = "confirmacao")
 	@Override
@@ -74,12 +66,30 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
+	@WebMethod(operationName = "enviarConfirmacao")
+	@GET
+	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+		init(login, senha);
+		return confirmacaoService.enviarConfirmacao(nomeArquivo, getUsuario(), dados);
+	}
+
+	@Override
 	@WebMethod(operationName = "retorno")
 	@GET
 	public String retorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha) {
 		init(login, senha);
 		return retornoService.processar(nomeArquivo, getUsuario());
+	}
+	
+	@Override
+	@WebMethod(operationName = "enviarRetorno")
+	@GET
+	public String enviarRetorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+		init(login, senha);
+		return retornoService.enviarRetorno(nomeArquivo, getUsuario(), dados);
 	}
 
 	@WebMethod(operationName = "cancelamento")

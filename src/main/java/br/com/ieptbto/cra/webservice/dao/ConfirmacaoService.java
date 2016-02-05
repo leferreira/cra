@@ -49,6 +49,9 @@ public class ConfirmacaoService extends CraWebService {
 	private ArquivoConfirmacaoVO arquivoConfirmacaoVO;
 	private ConfirmacaoVO confirmacaoVO;
 
+	/**
+	 * MÉTODOS DE CONSULTA DE CONFIRMAÇÃO PELOS BANCOS/CONVÊNIOS
+	 * */
 	public String processar(String nomeArquivo, Usuario usuario) {
 		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 		ArquivoVO arquivoVO = null;
@@ -123,25 +126,35 @@ public class ConfirmacaoService extends CraWebService {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * MÉTODOS DE ENVIO DE CONFIRMAÇÃO PELO CARTÓRIO
+	 * */
 	public String enviarConfirmacao(String nomeArquivo, Usuario usuario, String dados) {
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 		
-		if (getUsuario() == null){
-			return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
-		}
+		try {
+			if (getUsuario() == null){
+				return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
+			setArquivoConfirmacaoVO(converterStringArquivoVO(dados));
+	
+			if (getArquivoConfirmacaoVO() == null || getUsuario() == null) {
+				ArquivoVO arquivo = new ArquivoVO();
+				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
+			}
+			setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
 		
-		if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
-			return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+		} catch (InfraException ex) {
+			logger.error(ex.getMessage());
+			return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
+		} catch (Exception e) {
+			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
-		setArquivoConfirmacaoVO(converterStringArquivoVO(dados));
-
-		if (getArquivoConfirmacaoVO() == null || getUsuario() == null) {
-			ArquivoVO arquivo = new ArquivoVO();
-			return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
-		}
-		setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
 		return gerarMensagem(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo), CONSTANTE_CONFIRMACAO_XML);
 	}
 

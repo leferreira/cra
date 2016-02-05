@@ -131,6 +131,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		getResourceSettings().setThrowExceptionOnMissingResource(false);
 		getApplicationSettings().setPageExpiredErrorPage(NotFoundPage.class);
 		getApplicationSettings().setAccessDeniedPage(NotFoundPage.class);
+		getApplicationSettings().setInternalErrorPage(NotFoundPage.class);
 
 		// customized auth strategy
 		getSecuritySettings().setAuthorizationStrategy(new UserRoleAuthorizationStrategy(new UserRolesAuthorizer()));

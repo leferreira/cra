@@ -28,11 +28,19 @@ public class MensagemDeErro {
 	private String codigoCompensacao;
 	private Usuario usuario;
 	private CodigoErro erro;
+	private String descricaoErro;
 
 	public MensagemDeErro(String nomeArquivo, Usuario usuario, CodigoErro erro) {
 		this.nomeArquivo = nomeArquivo;
 		this.usuario = usuario;
 		this.erro = erro;
+	}
+	
+	public MensagemDeErro(String nomeArquivo, Usuario usuario, String descricaoErro) {
+		this.nomeArquivo = nomeArquivo;
+		this.usuario = usuario;
+		this.erro = CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO;
+		this.descricaoErro = descricaoErro;
 	}
 	
 	public MensagemDeErro(String codigoApresentante, CodigoErro erro) {
@@ -41,10 +49,10 @@ public class MensagemDeErro {
 	}
 	
 	public MensagemXml getMensagemErro() {
-		MensagemXml msgSucesso = new MensagemXml();
+		MensagemXml mensagemXML = new MensagemXml();
 		Descricao descricao = getDescricao();
 
-		msgSucesso.setDescricao(descricao);
+		mensagemXML.setDescricao(descricao);
 
 		Detalhamento detalhamento = new Detalhamento();
 
@@ -52,15 +60,25 @@ public class MensagemDeErro {
 		Mensagem mensagem = new Mensagem();
 		mensagem.setCodigo(getErro().getCodigo());
 		mensagem.setDescricao(getErro().getDescricao());
+		if (getDescricaoErro() != null) {
+			if (StringUtils.isNotBlank(getDescricaoErro()) ) {
+				mensagem.setDescricao(getDescricaoErro());
+			}
+		}
 		listaMensagens.add(mensagem);
 
 		detalhamento.setMensagem(listaMensagens);
 
-		msgSucesso.setDetalhamento(detalhamento);
-		msgSucesso.setCodigoFinal(getErro().getCodigo());
-		msgSucesso.setDescricaoFinal(getErro().getDescricao());
+		mensagemXML.setDetalhamento(detalhamento);
+		mensagemXML.setCodigoFinal(getErro().getCodigo());
+		mensagemXML.setDescricaoFinal(getErro().getDescricao());
+		if (getDescricaoErro() != null) {
+			if (StringUtils.isNotBlank(getDescricaoErro()) ) {
+				mensagemXML.setDescricaoFinal(getDescricaoErro());
+			}
+		}
 
-		return msgSucesso;
+		return mensagemXML;
 	}
 	
 	public MensagemXmlSerpro getMensagemErroSerpro() {
@@ -109,7 +127,6 @@ public class MensagemDeErro {
 				}
 			}
 		}
-
 		return codigoCompensacao;
 	}
 
@@ -131,6 +148,10 @@ public class MensagemDeErro {
 
 	public void setErro(CodigoErro erro) {
 		this.erro = erro;
+	}
+	
+	public String getDescricaoErro() {
+		return descricaoErro;
 	}
 
 }

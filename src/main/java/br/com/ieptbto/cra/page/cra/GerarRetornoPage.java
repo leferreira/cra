@@ -88,7 +88,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 					error(e.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar o batimento! Entre em contato com a CRA.");
+					error("Não foi possível gerar os arquivos de retorno! Entre em contato com a CRA.");
 				}
             }
         };

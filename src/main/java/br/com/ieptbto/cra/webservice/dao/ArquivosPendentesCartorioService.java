@@ -14,6 +14,7 @@ import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
@@ -37,15 +38,20 @@ public class ArquivosPendentesCartorioService extends CraWebService{
 		this.usuario = usuario;
 		this.nomeArquivo= StringUtils.EMPTY;
 		
-		if (usuario == null) {
-			return setRespostaUsuarioInvalido();
-		}
-		Arquivo arquivo = remessaMediator.arquivosPendentes(usuario.getInstituicao());
-		if (arquivo.getRemessas().isEmpty() &&
-				arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty() &&
-				arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty() &&
-				arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
-			return gerarMensagemNaoHaArquivosPendentes();
+		Arquivo arquivo = null;
+		try {
+			if (usuario == null) {
+				return setRespostaUsuarioInvalido();
+			}
+			arquivo = remessaMediator.arquivosPendentes(usuario.getInstituicao());
+			if (arquivo.getRemessas().isEmpty() &&
+					arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty() &&
+					arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty() &&
+					arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
+				return gerarMensagemNaoHaArquivosPendentes();
+			}
+		} catch (Exception e) {
+			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivo), CONSTANTE_RELATORIO_XML);
 	}

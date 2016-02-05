@@ -39,6 +39,9 @@ public class RetornoService extends CraWebService {
 	private ArquivoRetornoVO arquivoRetornoVO;
 	private RetornoVO retornoVO;
 
+	/**
+	 * MÉTODOS DE CONSULTA DE CONFIRMAÇÃO PELOS BANCOS/CONVÊNIOS
+	 * */
 	public String processar(String nomeArquivo, Usuario usuario) {
 		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 		ArquivoVO arquivoVO = null;
@@ -111,6 +114,15 @@ public class RetornoService extends CraWebService {
 			logger.error(e.getMessage(), e.getCause());
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
+		return null;
+	}
+	
+
+	/**
+	 * MÉTODOS DE ENVIO DE RETORNO PELO CARTÓRIO
+	 * */
+	public String enviarRetorno(String nomeArquivo, Usuario usuario, String dados) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

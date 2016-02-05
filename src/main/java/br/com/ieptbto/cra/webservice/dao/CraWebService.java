@@ -40,20 +40,18 @@ public class CraWebService {
 
 	protected String setResposta(LayoutPadraoXML layoutPadraoResposta ,ArquivoVO arquivo, String nomeArquivo, String nomeNode) {
 		if (getUsuario() == null) {
-			logger.error("Usuario inválido.");
 			return setRespostaUsuarioInvalido(layoutPadraoResposta, nomeArquivo);
 		}
 		if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-			logger.error("Nome de arquivo inválido.");
 			return setRespostaNomeArquivoInvalido(layoutPadraoResposta, nomeArquivo);
 		}
-		
 		return gerarMensagem(arquivo, nomeNode);
 	}
-
+	
 	private String setRespostaUsuarioInvalido(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
+		logger.error("Dados do usuário inválidos. Falha na autenticação.");
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
-			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), CodigoErro.SERPRO_FALHA_NA_AUTENTICACAO);
+			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.SERPRO_FALHA_NA_AUTENTICACAO);
 			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
 		}
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), CodigoErro.CRA_FALHA_NA_AUTENTICACAO);
@@ -61,15 +59,29 @@ public class CraWebService {
 	}
 
 	private String setRespostaNomeArquivoInvalido(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
-		/**
-		 * Regras validar nome arquivo
-		 * */
+		logger.error("Nome do arquivo informado é inválido!");
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 			CodigoErro codigoErro = getCodigoErroNomeInvalidoSerpro(nomeArquivo);
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), codigoErro);
 			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
 		}
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.CRA_NOME_DO_ARQUIVO_INVALIDO);
+		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+	}
+	
+	protected String setRespostaPadrao(LayoutPadraoXML layoutPadraoResposta, String nomeArquivo, CodigoErro codigoErro) {
+		logger.error("Erro WS: " + codigoErro.getDescricao() );
+		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), codigoErro);
+			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+		}
+		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), codigoErro);
+		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+	}
+	
+	protected String setRespostaErrosServicosCartorios(LayoutPadraoXML layoutPadraoResposta, String nomeArquivo, String descricao) {
+		logger.error("Erro WS: " + descricao );
+		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), descricao);
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 	
@@ -105,33 +117,16 @@ public class CraWebService {
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 	
-	protected String gerarMensagem(Object mensagem, String nomeNo) {
-		Writer writer = new StringWriter();
-		JAXBContext context;
-		try {
-			context = JAXBContext.newInstance(mensagem.getClass());
-
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
-			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
-			marshaller.marshal(element, writer);
-			String msg = writer.toString();
-			msg = msg.replace(" xsi:type=\"mensagemXmlSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-			msg = msg.replace(" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-			writer.close();
-			return msg;
-
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+	protected String setRespostaErroInternoNoProcessamento(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
+		logger.error("Erro interno no processamento.");
+		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
+			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
 		}
-		return null;
+		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
+		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
-
+	
 	private CodigoErro getCodigoErroEmProcessamentoSerpro(String nomeArquivo) {
 		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(nomeArquivo);
 		
@@ -177,7 +172,37 @@ public class CraWebService {
 		return codigoErro;
 	}
 	
+	protected String gerarMensagem(Object mensagem, String nomeNo) {
+		Writer writer = new StringWriter();
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(mensagem.getClass());
+
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
+			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
+			marshaller.marshal(element, writer);
+			String msg = writer.toString();
+			msg = msg.replace(" xsi:type=\"mensagemXmlSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			writer.close();
+			return msg;
+
+		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		}
+		return null;
+	}
+	
 	public Usuario getUsuario() {
+		if (usuario == null) {
+			usuario = new Usuario();
+		}
 		return usuario;
 	}
 

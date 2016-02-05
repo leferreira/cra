@@ -1,8 +1,9 @@
 package br.com.ieptbto.cra.page.base;
 
-import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.model.IModel;
 
-public class NotFoundPage extends WebPage {
+@SuppressWarnings("rawtypes")
+public class NotFoundPage extends BasePage {
 	/**
 	 * 
 	 */
@@ -15,4 +16,9 @@ public class NotFoundPage extends WebPage {
 		return "CRA - Central de Remessa de Arquivos";
 	}
 
+	@Override
+	protected IModel getModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

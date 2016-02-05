@@ -30,7 +30,7 @@
 			<value>SYSTEM_PROPERTIES_MODE_OVERRIDE</value>
 		</property>
 	</bean>
-
+	
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
 		<property name="driverClass"><value>${jdbc.driver}</value></property>
 		<property name="jdbcUrl"><value>${jdbc.url}</value></property>
@@ -43,6 +43,11 @@
 		<property name="idleConnectionTestPeriod"><value>${c3p0.idleConnectionTestPeriod}</value></property>
 		<property name="automaticTestTable"><value>${c3p0.automaticTestTable}</value></property>
 	</bean>
+
+	<!-- CONNECT LOCALHOST TOMCAT -->
+<!-- 	<bean name="dataSource" id="basicDataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+<!-- 		<property name="jndiName" value="java:comp/env/jdbc/localhost/nova_cra"/> -->
+<!-- 	</bean> -->
 	
 	<bean class="br.com.ieptbto.cra.hibernate.AnnotatedClassesFactory" id="AnnotatedClassesFactory" factory-method="getClassesAnotadas"  />
 
@@ -82,8 +87,4 @@
 	
 	<bean id="wicketApplication" class="br.com.ieptbto.cra.app.CraApplication"></bean>
 	
-<!-- 	<bean id="dataSourceReport" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
-<!--     	<property name="jndiName"><value>jdbc/localhost/nova_cra</value></property> -->
-<!--     	<property name="resourceRef"><value>javax.sql.DataSource</value></property> -->
-<!-- 	</bean> -->
 </beans>

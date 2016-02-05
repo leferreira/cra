@@ -260,7 +260,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 							IResourceStream resourceStream = new FileResourceStream(file);
 							
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-									new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
+									new ResourceStreamRequestHandler(resourceStream, file.getName()));
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {

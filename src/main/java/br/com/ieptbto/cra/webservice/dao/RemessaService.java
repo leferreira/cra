@@ -21,6 +21,7 @@ import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 
 /**
  * 
@@ -37,12 +38,8 @@ public class RemessaService extends CraWebService {
 	private ArquivoVO arquivoVO;
 
 	/**
-	 * 
-	 * @param nomeArquivo
-	 * @param usuario
-	 * @param dados
-	 * @return
-	 */
+	 * MÉTODOS DE ENVIO DE REMESSAS PELOS BANCOS/CONVÊNIOS
+	 * */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		ArquivoVO arquivo = new ArquivoVO();
 		setUsuario(usuario);
@@ -60,17 +57,10 @@ public class RemessaService extends CraWebService {
 		if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 			return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		}
-		return processar(nomeArquivo, usuario, converterStringArquivoVO(dados));
+		return processarEnvioRemessa(nomeArquivo, usuario, converterStringArquivoVO(dados));
 	}
 
-	/**
-	 * 
-	 * @param nomeArquivo
-	 * @param usuario2
-	 * @param arquivoRecebido
-	 * @return
-	 */
-	private String processar(String nomeArquivo, Usuario usuario, ArquivoVO arquivoRecebido) {
+	private String processarEnvioRemessa(String nomeArquivo, Usuario usuario, ArquivoVO arquivoRecebido) {
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 		setArquivoVO(arquivoRecebido);
@@ -79,11 +69,6 @@ public class RemessaService extends CraWebService {
 		return gerarMensagem(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo), CONSTANTE_RELATORIO_XML);
 	}
 
-	/**
-	 * 
-	 * @param dados
-	 * @return
-	 */
 	private ArquivoVO converterStringArquivoVO(String dados) {
 		JAXBContext context;
 		ArquivoVO arquivo = null;
@@ -119,17 +104,20 @@ public class RemessaService extends CraWebService {
 	}
 	
 	/**
-	 * 
-	 * @param nomeArquivo
-	 * @param usuario
-	 * @return
-	 */
+	 * MÉTODOS DE CONSULTA DE REMESSAS PELOS CARTÓRIOS
+	 * */
 	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
-		RemessaVO remessa = remessaMediator.buscarRemessaParaCartorio(usuario.getInstituicao(), nomeArquivo);
-		if (remessa == null) {
-			return "Remessa não encontrada!";
+		RemessaVO remessa = null;
+		
+		try {
+			remessa = remessaMediator.buscarRemessaParaCartorio(usuario.getInstituicao(), nomeArquivo);
+			if (remessa == null) {
+				return setRespostaPadrao(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
+			}
+		} catch (Exception e) {
+			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return gerarResposta(remessa, getNomeArquivo(), CONSTANTE_REMESSA_XML);
 	}
