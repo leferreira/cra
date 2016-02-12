@@ -1,10 +1,11 @@
-package br.com.ieptbto.cra.page.relatorio.arquivo;
+package br.com.ieptbto.cra.page.relatorio;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -13,74 +14,66 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
-import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
+import br.com.ieptbto.cra.enumeration.TipoRelatorio;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.MunicipioMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  * @author Thasso Araújo
  *
  */
-public class RelatorioCartorioPanel extends Panel  {
-
+public class RelatorioArquivosPage extends BasePage<Remessa> {
+	
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(RelatorioCartorioPanel.class);
-	
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	private MunicipioMediator municipioMediator;
-	@SpringBean
-	private ArquivoMediator arquivoMediator;
-	
-	private Arquivo arquivo;
 	private Remessa remessa;
-	private Usuario usuario;
-	
 	private List<Instituicao> listaInstituicoes;
-	private RadioChoice<SituacaoTituloRelatorio> tipoRelatorio;
-	private DropDownChoice<Instituicao> comboPortador;
+	private RadioChoice<TipoArquivoEnum> radioTipoArquivo;
+	private RadioChoice<TipoRelatorio> radioTipoRelatorio;
+	private DropDownChoice<Instituicao> comboInstituicao;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
-	
-	public RelatorioCartorioPanel(String id, IModel<Arquivo> model, Usuario user) {
-		super(id, model);
-		this.remessa = new Remessa();
-		this.arquivo = model.getObject();
-		this.usuario = user;
 
-		carregarFormularioRelatorioArquivo();
-		carregarFormularioRelatorioTitulos();
+	public RelatorioArquivosPage() {
+		this.remessa = new Remessa();
+		
+		carregarFormularioArquivoCartorio();
 	}
 
-	private void carregarFormularioRelatorioTitulos() {
-		Form<Remessa> formTitulo = new Form<Remessa>("formTitulo", new CompoundPropertyModel<Remessa>(remessa)){
+	private void carregarFormularioArquivoCartorio() {
+		Form<Remessa> form = new Form<Remessa>("form"){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
-			
-			@SuppressWarnings("unused")
+
 			@Override
 			protected void onSubmit() {
+				TipoArquivoEnum tipoArquivo = radioTipoArquivo.getModelObject();
+				TipoRelatorio tipoRelatorio = radioTipoRelatorio.getModelObject();
+				Instituicao instituicao = comboInstituicao.getModelObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
-				
+
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null){
 						if (dataEnvioFinal.getDefaultModelObject() != null){
@@ -91,61 +84,31 @@ public class RelatorioCartorioPanel extends Panel  {
 									throw new InfraException("A data de início deve ser antes da data fim.");
 						}else
 							throw new InfraException("As duas datas devem ser preenchidas.");
-					}
-					SituacaoTituloRelatorio situacaoTitulos = tipoRelatorio.getModelObject();
+					} 
 					
+					JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioArquivos(tipoArquivo, tipoRelatorio, instituicao, dataInicio, dataFim);
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+		                    "CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
 				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
 					error(ex.getMessage());
 				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
+					error("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
+					e.printStackTrace();
 				}
 			}
 		};
-		formTitulo.add(dataEnvioInicio());
-		formTitulo.add(dataEnvioFinal());
-		formTitulo.add(tipoRelatorio());
-		formTitulo.add(tipoInstituicao());
-		formTitulo.add(comboPortadorCartorio());
-		add(formTitulo);
+		form.add(dataEnvioInicio());
+		form.add(dataEnvioFinal());
+		form.add(tipoRelatorio());
+		form.add(tipoArquivo());
+		form.add(tipoInstituicao());
+		form.add(instituicaoCartorio());
+		add(form);
 	}
 
-	private void carregarFormularioRelatorioArquivo() {
-		Form<Arquivo> formArquivo = new Form<Arquivo>("formArquivo", new CompoundPropertyModel<Arquivo>(arquivo)){
-			
-			/***/
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			protected void onSubmit() {
-				Arquivo arquivoBuscado = getModelObject();
-				
-				try {
-					if (arquivoBuscado.getNomeArquivo().length() < 12 && arquivoBuscado.getNomeArquivo().length() > 13) {
-						throw new InfraException("Por favor, informe o nome do arquivo corretamente !");
-					}
-					
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
-					error(ex.getMessage());
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
-				}
-			}
-		};
-		formArquivo.add(nomeArquivo());
-		add(formArquivo);
-	}
-
-	private TextField<String> nomeArquivo() {
-		TextField<String> textField = new TextField<String>("nomeArquivo");
-		textField.setLabel(new Model<String>("Nome do Arquivo"));
-		textField.setRequired(true);
-		return textField;
-	}
-	
 	private TextField<LocalDate> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
 		dataEnvioInicio.setLabel(new Model<String>("Período de datas"));
@@ -155,22 +118,34 @@ public class RelatorioCartorioPanel extends Panel  {
 	}
 	
 	private TextField<LocalDate> dataEnvioFinal() {
-		dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
+		dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>()); 
 		dataEnvioFinal.setMarkupId("date1");
 		return dataEnvioFinal;
 	}
+	
+	private RadioChoice<TipoArquivoEnum> tipoArquivo() {
+		List<TipoArquivoEnum> listaTipos = new ArrayList<TipoArquivoEnum>();
+		listaTipos.add(TipoArquivoEnum.REMESSA);
+		listaTipos.add(TipoArquivoEnum.CONFIRMACAO);
+		listaTipos.add(TipoArquivoEnum.RETORNO);
+		radioTipoArquivo = new RadioChoice<TipoArquivoEnum>("tipoArquivos",new Model<TipoArquivoEnum>(), listaTipos);
+		radioTipoArquivo.setLabel(new Model<String>("Tipo do Arquivo"));
+		radioTipoArquivo.setRequired(true);
+		return radioTipoArquivo;
+	}
 
-	private RadioChoice<SituacaoTituloRelatorio> tipoRelatorio() {
-		List<SituacaoTituloRelatorio> choices = Arrays.asList(SituacaoTituloRelatorio.values());
-		tipoRelatorio = new RadioChoice<SituacaoTituloRelatorio>("tipoRelatorio", new Model<SituacaoTituloRelatorio>(), choices); 
-		tipoRelatorio.setLabel(new Model<String>("Tipo Relatório"));
-		tipoRelatorio.setRequired(true);
-		return tipoRelatorio;
+	private RadioChoice<TipoRelatorio> tipoRelatorio() {
+		List<TipoRelatorio> choices = Arrays.asList(TipoRelatorio.values());
+		radioTipoRelatorio = new RadioChoice<TipoRelatorio>("tipoRelatorio", new Model<TipoRelatorio>(), choices); 
+		radioTipoRelatorio.setLabel(new Model<String>("Tipo Relatório"));
+		radioTipoRelatorio.setRequired(true);
+		return radioTipoRelatorio;
 	}
 	
 	private DropDownChoice<TipoInstituicaoCRA> tipoInstituicao() {
 		IChoiceRenderer<TipoInstituicaoCRA> renderer = new ChoiceRenderer<TipoInstituicaoCRA>("label");
 		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
+		choices.add(TipoInstituicaoCRA.CARTORIO);
 		choices.add(TipoInstituicaoCRA.CONVENIO);
 		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
 		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", new Model<TipoInstituicaoCRA>(), choices, renderer);
@@ -190,15 +165,19 @@ public class RelatorioCartorioPanel extends Panel  {
 					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
+					} else if (tipo.equals(TipoInstituicaoCRA.CARTORIO)) {
+						getListaInstituicoes().clear();
+						getListaInstituicoes().addAll(instituicaoMediator.getCartorios());
 					}
-					comboPortador.setEnabled(true);
-					comboPortador.setRequired(true);
+					
+					comboInstituicao.setEnabled(true);
+					comboInstituicao.setRequired(true);
 				} else {
-					comboPortador.setEnabled(false);
-					comboPortador.setRequired(false);
+					comboInstituicao.setEnabled(false);
+					comboInstituicao.setRequired(false);
 	            	getListaInstituicoes().clear();
 				}
-            	target.add(comboPortador);
+            	target.add(comboInstituicao);
             }
         });
 		tipoInstituicao.setLabel(new Model<String>("Tipo Instituição"));
@@ -206,31 +185,24 @@ public class RelatorioCartorioPanel extends Panel  {
 		return tipoInstituicao;
 	}
 	
-	private DropDownChoice<Instituicao> comboPortadorCartorio() {
+	private DropDownChoice<Instituicao> instituicaoCartorio() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		comboPortador = new DropDownChoice<Instituicao>("instituicaoOrigem", getListaInstituicoes() , renderer);
-		comboPortador.setLabel(new Model<String>("Portador"));
-		comboPortador.setOutputMarkupId(true);
-		comboPortador.setEnabled(false);
-		return comboPortador;
+		comboInstituicao = new DropDownChoice<Instituicao>("instituicaoOrigem", new Model<Instituicao>(),getListaInstituicoes() , renderer);
+		comboInstituicao.setLabel(new Model<String>("Portador"));
+		comboInstituicao.setOutputMarkupId(true);
+		comboInstituicao.setEnabled(false);
+		return comboInstituicao;
 	}
 	
-	public Arquivo getArquivo() {
-		return arquivo;
-	}
-
-	public Remessa getRemessa() {
-		return remessa;
-	}
-	
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
 	public List<Instituicao> getListaInstituicoes() {
 		if (listaInstituicoes == null) {
 			listaInstituicoes = new ArrayList<Instituicao>();
 		}
 		return listaInstituicoes;
+	}
+
+	@Override
+	protected IModel<Remessa> getModel() {
+		return new CompoundPropertyModel<Remessa>(remessa);
 	}
 }

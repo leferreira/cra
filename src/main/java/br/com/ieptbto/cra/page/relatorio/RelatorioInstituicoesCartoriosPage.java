@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.relatorio.arquivo;
+package br.com.ieptbto.cra.page.relatorio;
 
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;

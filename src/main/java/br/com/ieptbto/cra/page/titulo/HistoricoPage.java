@@ -107,7 +107,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 					};
 					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getRemessa().getArquivo().getNomeArquivo()));
 					item.add(linkArquivo);
-					item.add(new Label("acao", " enviado em "));
+					item.add(new Label("acao", " enviado para CRA-TO em "));
 				} 
 				
 				if (arquivoOcorrenciaBean.getArquivoGerado() != null) {
@@ -122,7 +122,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 					};
 					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getArquivoGerado()));
 					item.add(linkArquivo);
-					item.add(new Label("acao", " liberado em "));
+					item.add(new Label("acao", " liberado para a instituição em "));
 				}
 				
 				if (arquivoOcorrenciaBean.getDesistenciaProtesto() != null) {
@@ -137,7 +137,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 					};
 					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 					item.add(linkArquivo);
-					item.add(new Label("acao", " enviado em "));
+					item.add(new Label("acao", " enviado para CRA-TO em "));
 				}
 				
 				item.add(new Label("dataOcorrencia", arquivoOcorrenciaBean.getDataHora()));

@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.relatorio.titulo;
+package br.com.ieptbto.cra.page.relatorio;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,8 +11,6 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -25,7 +23,6 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -39,7 +36,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Thasso Araújo
  *
  */
-public class RelatorioTitulosPage extends BasePage<Arquivo> {
+public class RelatorioCustasCraPage extends BasePage<Arquivo> {
 	
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -48,11 +45,10 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 	private Arquivo arquivo;
 	private List<Instituicao> listaInstituicoes;
 	private DropDownChoice<Instituicao> comboInstituicao;
-	private RadioGroup<SituacaoTituloRelatorio> radioSituacaoTituloRelatorio;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 
-	public RelatorioTitulosPage() {
+	public RelatorioCustasCraPage() {
 		this.arquivo = new Arquivo();
 		
 		carregarFormulario();
@@ -66,10 +62,9 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 
 			@Override
 			protected void onSubmit() {
-				SituacaoTituloRelatorio situacaoTitulo = radioSituacaoTituloRelatorio.getModelObject();
-				Instituicao instituicao = comboInstituicao.getModelObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
+				Instituicao instituicao = null;
 				
 				try {
 					if (dataEnvioInicio.getDefaultModelObject() != null){
@@ -83,7 +78,7 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
 					
-					JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosPorSituacao(situacaoTitulo, instituicao, dataInicio, dataFim);
+					JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioCustasCRA(getUser(), instituicao, dataInicio, dataFim);
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
@@ -101,31 +96,9 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 		form.add(dataEnvioFinal());
 		form.add(tipoInstituicao());
 		form.add(instituicaoCartorio());
-		form.add(situcaoTituloRelatorio());
 		add(form);
 	}
 	
-	private RadioGroup<SituacaoTituloRelatorio> situcaoTituloRelatorio() {
-		radioSituacaoTituloRelatorio = new RadioGroup<SituacaoTituloRelatorio>("situacao", new Model<SituacaoTituloRelatorio>());
-		radioSituacaoTituloRelatorio.setLabel(new Model<String>("Situação dos Títulos"));
-		radioSituacaoTituloRelatorio.setRequired(true);
-		
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("todos", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.GERAL)));
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("semConfirmacao", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.SEM_CONFIRMACAO)));
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("comConfirmacao", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.COM_RETORNO)));
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("semRetorno", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.SEM_RETORNO)));
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("comRetorno", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.COM_RETORNO)));
-		 
-
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("pagos", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.PAGOS)));
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("protestados", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.PROTESTADOS)));
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("retiradosDevolvidos", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.RETIRADOS_DEVOLVIDOS)));
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("desistencia", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.DESISTÊNCIA_DE_PROTESTO)));
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("cancelamento", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.CANCELAMENTO_DE_PROTESTO)));
-		
-		return radioSituacaoTituloRelatorio;
-	}
-
 	private TextField<LocalDate> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
 		dataEnvioInicio.setLabel(new Model<String>("Período de datas"));

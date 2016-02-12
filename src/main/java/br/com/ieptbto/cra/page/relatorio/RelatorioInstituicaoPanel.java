@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.relatorio.arquivo;
+package br.com.ieptbto.cra.page.relatorio;
 
 import java.util.ArrayList;
 import java.util.Arrays;
