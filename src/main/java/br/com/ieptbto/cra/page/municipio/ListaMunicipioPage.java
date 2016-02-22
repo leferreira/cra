@@ -31,8 +31,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	MunicipioMediator municipioMediator;
-
+	private MunicipioMediator municipioMediator;
 	private Municipio municipio;
 
 	public ListaMunicipioPage() {
@@ -69,7 +68,6 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 			@Override
 			protected void populateItem(ListItem<Municipio> item) {
 				final Municipio municipioLista = item.getModelObject();
-				
 				Link<Municipio> linkAlterar = new Link<Municipio>("linkAlterar") {
 					/***/
 					private static final long serialVersionUID = 1L;
@@ -80,7 +78,6 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				};
 				linkAlterar.add(new Label("nomeMunicipio", municipioLista.getNomeMunicipio()));
 				item.add(linkAlterar);
-				
 				item.add(new Label("uf", municipioLista.getUf()));
 				item.add(new Label("codIBGE", municipioLista.getCodigoIBGE()));
 			}

@@ -31,6 +31,7 @@ import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 
 /**
@@ -96,7 +97,7 @@ public class ConfirmacaoService extends CraWebService {
 			}
 		}
 		string.append("</confirmacao>");
-		return xml + cabecalho + string.toString();
+		return XmlFormatterUtil.format(xml + cabecalho + string.toString());
 
 	}
 
@@ -150,9 +151,10 @@ public class ConfirmacaoService extends CraWebService {
 			setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
 		
 		} catch (InfraException ex) {
-			logger.error(ex.getMessage());
+			logger.info(ex.getCause());
 			return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
 		} catch (Exception e) {
+			logger.info(e.getCause());
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return gerarMensagem(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo), CONSTANTE_CONFIRMACAO_XML);
@@ -209,5 +211,4 @@ public class ConfirmacaoService extends CraWebService {
 	public void setArquivoConfirmacaoVO(ArquivoConfirmacaoVO arquivoConfirmacaoVO) {
 		this.arquivoConfirmacaoVO = arquivoConfirmacaoVO;
 	}
-
 }

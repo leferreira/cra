@@ -44,6 +44,7 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 
 	public GerarRemessaConvenioPage() {
 		this.titulo = new TituloFiliado();
+		this.listaTitulosConvenios = convenioMediator.buscarTitulosConvenios();
 		carrrgarPageRemessaConvenio();
 	}
 	
@@ -58,7 +59,6 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 				
 				try {
 					convenioMediator.gerarRemessas(getUser(), getListaTitulosConvenios());
-					setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
 					setResponsePage(new MensagemPage<TituloFiliado>(GerarRemessaConvenioPage.class, "REMESSAS CONVÊNIOS", "Os arquivos de remessa dos convênios foram gerados com sucesso!"));
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
@@ -67,7 +67,6 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 			}
 		};
 		add(form);
-		setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
 		add(carregarListaTitulos());
 	}
 
@@ -84,7 +83,6 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
 				item.add(new Label("convenio", tituloLista.getFiliado().getInstituicaoConvenio().getNomeFantasia()));
-				item.add(new Label("credor", tituloLista.getFiliado().getRazaoSocial()));
 				item.add(new Label("devedor", tituloLista.getNomeDevedor()));
 				item.add(new Label("dataEnvioCRA", DataUtil.localDateToString(tituloLista.getDataEnvioCRA())));
 				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
@@ -94,10 +92,6 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 
 	public List<TituloFiliado> getListaTitulosConvenios() {
 		return listaTitulosConvenios;
-	}
-
-	public void setListaTitulosConvenios(List<TituloFiliado> listaTitulosConvenios) {
-		this.listaTitulosConvenios = listaTitulosConvenios;
 	}
 
 	@Override

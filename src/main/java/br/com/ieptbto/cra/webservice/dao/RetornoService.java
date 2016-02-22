@@ -1,21 +1,27 @@
 package br.com.ieptbto.cra.webservice.dao;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.InputSource;
 
+import br.com.ieptbto.cra.conversor.ConversorArquivoVO;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoRetornoVO;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
@@ -24,6 +30,7 @@ import br.com.ieptbto.cra.entidade.vo.RetornoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 
 /**
@@ -35,6 +42,8 @@ public class RetornoService extends CraWebService {
 
 	@Autowired
 	private RemessaMediator remessaMediator;
+	@Autowired
+	private RetornoMediator retornoMediator;
 	private ArquivoVO arquivoVO;
 	private ArquivoRetornoVO arquivoRetornoVO;
 	private RetornoVO retornoVO;
@@ -122,8 +131,60 @@ public class RetornoService extends CraWebService {
 	 * MÉTODOS DE ENVIO DE RETORNO PELO CARTÓRIO
 	 * */
 	public String enviarRetorno(String nomeArquivo, Usuario usuario, String dados) {
-		// TODO Auto-generated method stub
-		return null;
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
+		
+		try {
+			if (getUsuario() == null){
+				return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
+			setArquivoRetornoVO(converterStringArquivoVO(dados));
+	
+			if (getArquivoRetornoVO() == null || getUsuario() == null) {
+				ArquivoVO arquivo = new ArquivoVO();
+				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
+			}
+			setRetornoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoRetornoVO()));
+		
+		} catch (InfraException ex) {
+			logger.info(ex.getMessage());
+			return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
+		}
+		return gerarMensagem(retornoMediator.processarXML(getRetornoVO(), getUsuario(), nomeArquivo), CONSTANTE_CONFIRMACAO_XML);
+	}
+	
+	private ArquivoRetornoVO converterStringArquivoVO(String dados) {
+		JAXBContext context;
+		ArquivoRetornoVO arquivo = null;
+
+		try {
+			context = JAXBContext.newInstance(ArquivoRetornoVO.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			String xmlRecebido = "";
+
+			Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
+			while (scanner.hasNext()) {
+				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
+				if (xmlRecebido.contains("<?xml version=")) {
+					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
+				}
+			}
+			scanner.close();
+
+			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
+			arquivo = (ArquivoRetornoVO) unmarshaller.unmarshal(new InputSource(xml));
+
+		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(e.getMessage(), e.getCause());
+		}
+		return arquivo;
 	}
 
 	public ArquivoVO getArquivoVO() {

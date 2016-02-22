@@ -5,7 +5,6 @@
 </head>
 <body>
 	<wicket:extend>
-		<form wicket:id="form" id="form" class="form-horizontal">
 			<div class="col-lg-12 col-md-6">
 				<div class="panel">
 					 <div class="panel-body">
@@ -15,7 +14,7 @@
 						</span> 
 						</h4> 
 						<br style="clear: both;"/>
-						<div class="row">
+						<form wicket:id="form" id="form" class="form-horizontal">
 							<div class="col-md-6">
 								<div class="form-group">
 								  <label class="col-md-4 control-label">RAZÃO SOCIAL:</label>  
@@ -33,28 +32,21 @@
 								  </div>
 								</div>
 								<div class="form-group">
-								  <label class="col-md-4 control-label" >SITUAÇÃO:</label>
-								  <div class="col-md-6" style="text-align: left;"> 
-								    <label class="radio-inline inline" tabindex="3" wicket:id="situacao">
-								    </label>
-								  </div>
-								</div>
-								<div class="form-group">
-								  <label class="col-md-4 control-label">ENDEREÇO:</label>
-								  <div class="col-md-4">                     
-								    <textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
-								  </div>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
 								  <label class="col-md-4 control-label">CONVÊNIO:</label>
 								  <div class="col-md-6">
 								    <select wicket:id="instituicaoConvenio" tabindex="5" class="form-control">
 								    </select>
 								  </div>
 								</div>
-								<!-- Select Basic -->
+								<div class="form-group"> 
+								  <label class="col-md-4 control-label" >SITUAÇÃO:</label>
+								  <div class="col-md-6" style="text-align: left;"> 
+								    <label class="radio-inline inline" tabindex="3" wicket:id="situacao">
+								    </label>
+								  </div>
+								</div>
+							</div>
+							<div class="col-md-6">
 								<div class="form-group">
 								  <label class="col-md-4 control-label">MUNICÍPIO:</label>
 								  <div class="col-md-6">
@@ -64,7 +56,7 @@
 								</div>
 								<div class="form-group">
 								  <label class="col-md-4 control-label">CEP:</label>  
-								  <div class="col-md-6">
+								  <div class="col-md-6">  
 								  <input id="cep" wicket:id="cep" tabindex="7" class="form-control input-md">
 								    
 								  </div>
@@ -74,7 +66,12 @@
 								  <div class="col-md-6">
 								 	<select wicket:id="uf" tabindex="8" class="form-control">
 								    </select>
-								    
+								  </div>
+								</div>
+								<div class="form-group">
+								  <label class="col-md-4 control-label">ENDEREÇO:</label>
+								  <div class="col-md-6">                     
+								    <textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control" rows="4" maxlength="45" wicket:id="endereco"></textarea>
 								  </div>
 								</div>
 								<div class="form-group">
@@ -84,11 +81,54 @@
 								  </div>
 								</div>
 							</div>
-						</div>		
+						</form>
+						<div class="col-md-12">		
+							<fieldset>
+							  	<legend class="legend">INFORMAÇÕES DE SETOR (Para lançamento e relatórios separados)</legend>
+								  	<div class="well well-sm">
+										<div class="col-md-12">
+			                          		<a href="#" class="link" data-toggle="modal" data-target="#myModal" style="float: right;">
+				                                <span class="fa fa-plus"></span>&nbsp;ADICIONAR SETOR
+				                            </a>
+				                                <br style="clear: both;">  
+				                          		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+				                                <div class="modal-dialog" style="width: 60%;">
+				                                    <div class="modal-content">
+						                           		<div wicket:id="setorPanel"></div>
+				                                    </div>
+				                                </div>
+				                            </div>
+		             						<br style="clear: both;"/>
+		             						<div class="table-responsive">
+				                                <table class="table table-striped">
+				                                    <thead>
+				                                       <tr>
+				                                       		<th class="col-center" style="width: 80px;">#</th>
+															<th>DESCRIÇÃO</th>
+															<th class="col-center" style="width: 40px;">ATIVO</th>
+															<th class="col-center" style="width: 150px;"></th>
+														</tr>
+				                                    </thead>  
+				                                    <tbody>
+				                                        <tr wicket:id="listaSetor" style="text-align: center;">
+				                                        	<td class="col-center" wicket:id="contador" style="font-weight: bold;"></td>
+									                    	<td class="col-left" wicket:id="descricao"></td>
+									                    	<td class="col-center" wicket:id="ativo"></td>
+									                    	<td class="col-center">
+									                    		<button type="button" wicket:id="alterar"><span class="fa fa-refresh"></span>&nbsp;Ativar/Desativar</button>
+									                    	</td>
+								                    	</tr>
+							                    	</tbody>
+				                               </table>
+		                     			 </div>
+				               	  	 </div> 
+				               	  	 <br style="clear: both;">	
+				                </div>
+				     		</fieldset>
+				     	</div>
 					 </div>
 				 </div>
 			 </div>
-		</form>
 	</wicket:extend>
 </body>
 </html>

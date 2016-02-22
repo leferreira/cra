@@ -54,6 +54,7 @@ import br.com.ieptbto.cra.entidade.Rodape;
 import br.com.ieptbto.cra.entidade.RodapeArquivo;
 import br.com.ieptbto.cra.entidade.RodapeCartorio;
 import br.com.ieptbto.cra.entidade.RodapeCnp;
+import br.com.ieptbto.cra.entidade.SetorFiliado;
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamentoConvenio;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
@@ -111,6 +112,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(AgenciaBradesco.class);
 		classesHibernate.add(UsuarioFiliado.class);
 		classesHibernate.add(Filiado.class);
+		classesHibernate.add(SetorFiliado.class);
 		classesHibernate.add(TituloFiliado.class);
 		classesHibernate.add(Avalista.class);
 		classesHibernate.add(CraCustomRevisionEntity.class);

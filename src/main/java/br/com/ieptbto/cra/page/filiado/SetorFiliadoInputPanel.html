@@ -1,0 +1,25 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">	
+<form class="form-horizontal" wicket:id="formSetorFiliado">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="myModalLabel">INCLUIR SETOR</h4>
+    </div>
+    <div class="modal-body">
+		<div class="col-lg-8 col-md-offset-1">
+			<div class="form-group">
+				<label class="col-md-4 control-label">DESCRI&Ccedil;&Atilde;O:</label>
+				<div class="col-md-8">
+					<input maxlength="45" type="text"
+						onkeyup="this.value = this.value.toUpperCase()"
+						class="form-control input-md" wicket:id="descricao">
+				</div>
+			</div>
+		</div>
+		<br style="clear: both;"/>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" wicket:id="adicionarSetor" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
+        <button type="button" style="margin-right: 5px;" class="btn btn-default" data-dismiss="modal">CANCELAR</button>
+    </div>
+</form>
+</wicket:panel> 
