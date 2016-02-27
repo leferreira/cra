@@ -75,13 +75,13 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				
 				try{
 					if (retornoMediator.verificarArquivoRetornoGeradoCra().equals(true)) { 
-						throw new InfraException("Não é possível gerar os retornos novamente, arquivos já liberados hoje!");
+						throw new InfraException("Não é possível gerar os retornos novamente, arquivos já liberados hoje !");
 					}
 					if (getRetornosPendentes().isEmpty()){
-						throw new InfraException("Não há retornos pendentes para envio!");
+						throw new InfraException("Não há retornos pendentes para envio !");
 					} 
 					retornoMediator.gerarRetornos(getUser(), getRetornosPendentes());
-					setResponsePage(new RetornoLiberadoRelatorioPage());
+					setResponsePage(new RelatorioRetornoPage("Os arquivos de retorno foram gerados com sucesso !", "GERAR RETORNO"));
 				
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);

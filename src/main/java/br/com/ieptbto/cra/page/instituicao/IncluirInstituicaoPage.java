@@ -24,6 +24,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
+import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.enumeration.TipoCampo51;
@@ -109,10 +110,19 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		form.add(comboTipoCampo51());
 		form.add(comboTipoBatimento());
 		form.add(comboPadraoLayoutXML());
+		form.add(campoPermitidoSetores());
 		form.add(new Button("botaoSalvar"));
 		add(form);
 	}
 	
+	private DropDownChoice<EnumerationSimNao> campoPermitidoSetores() {
+		IChoiceRenderer<EnumerationSimNao> renderer = new ChoiceRenderer<EnumerationSimNao>("label");
+		DropDownChoice<EnumerationSimNao> dropDown = new DropDownChoice<EnumerationSimNao>("permitidoSetoresConvenio", Arrays.asList(EnumerationSimNao.values()), renderer);
+		dropDown.setLabel(new Model<String>("Permitido Setores Convênios"));
+		dropDown.setRequired(true);
+		return dropDown;
+	}
+
 	private TextField<String> campoNomeFantasia() {
 		TextField<String> textField = new TextField<String>("nomeFantasia");
 		textField.setLabel(new Model<String>("Nome Fantasia"));

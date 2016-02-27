@@ -242,7 +242,7 @@ legend {
 
 .feedbackPanelWARNING {
 	color: #8A6D3B;
-	font-weight: bold;
+	    font-size: 18px;
 	background-color: #FCF8E3;
 	border-color: #FAEBCC;
 	padding: 15px;
@@ -254,7 +254,7 @@ legend {
 
 .feedbackPanelINFO {
 	color: #3c763d;
-	font-weight: bold;
+	    font-size: 18px;
 	background-color: #dff0d8;
 	border-color: #d6e9c6;
 	padding: 15px;
@@ -268,7 +268,7 @@ legend {
 	color: #a94442;
 	background-color: #f2dede;
 	border-color: #ebccd1;
-	font-weight: bold;
+	    font-size: 18px;
 	padding: 15px;
 	border: 1px solid transparent;
 	border-radius: 4px;

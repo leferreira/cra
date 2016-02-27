@@ -3,6 +3,8 @@ package br.com.ieptbto.cra.webservice.dao;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -13,12 +15,17 @@ import javax.xml.namespace.QName;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
+import br.com.ieptbto.cra.webservice.VO.Detalhamento;
+import br.com.ieptbto.cra.webservice.VO.Erro;
+import br.com.ieptbto.cra.webservice.VO.MensagemXml;
 
 /**
  * 
@@ -39,7 +46,7 @@ public class CraWebService {
 	protected String nomeArquivo;
 
 	protected String setResposta(LayoutPadraoXML layoutPadraoResposta ,ArquivoVO arquivo, String nomeArquivo, String nomeNode) {
-		if (getUsuario() == null) {
+		if (usuario == null) {
 			return setRespostaUsuarioInvalido(layoutPadraoResposta, nomeArquivo);
 		}
 		if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
@@ -49,7 +56,7 @@ public class CraWebService {
 	}
 	
 	private String setRespostaUsuarioInvalido(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
-		logger.error("Dados do usuário inválidos. Falha na autenticação.");
+		logger.error("Erro WS : Dados do usuário inválidos. Falha na autenticação.");
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.SERPRO_FALHA_NA_AUTENTICACAO);
 			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
@@ -59,7 +66,7 @@ public class CraWebService {
 	}
 
 	private String setRespostaNomeArquivoInvalido(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
-		logger.error("Nome do arquivo informado é inválido!");
+		logger.error("Erro WS : Nome do arquivo informado é inválido!");
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 			CodigoErro codigoErro = getCodigoErroNomeInvalidoSerpro(nomeArquivo);
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), codigoErro);
@@ -86,7 +93,7 @@ public class CraWebService {
 	}
 	
 	protected String setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
-		logger.error("Este usuário não pode enviar o arquivo desta instituição");
+		logger.error("Erro WS: Este usuário não pode enviar o arquivo desta instituição");
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.CRA_USUARIO_INSTITUICAO_DIFERENTE_ARQUIVO);
 			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
@@ -96,7 +103,7 @@ public class CraWebService {
 	}
 
 	protected String setRespostaArquivoEmBranco(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
-		logger.error("Dados do arquivo enviados em branco");
+		logger.error("Erro WS: Dados do arquivo enviados em branco");
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.SERPRO_ARQUIVO_INVALIDO_REMESSA_DESISTENCIA_CANCELAMENTO);
 			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
@@ -106,7 +113,7 @@ public class CraWebService {
 	}
 
 	protected String setRespostaArquivoEmProcessamento(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
-		logger.error("O arquivo ainda não foi gerado, ou ainda está em processamento.");
+		logger.error("Erro WS: O arquivo ainda não foi gerado, ou ainda está em processamento.");
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 			CodigoErro codigoErro = getCodigoErroEmProcessamentoSerpro(nomeArquivo);
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), codigoErro);
@@ -118,13 +125,33 @@ public class CraWebService {
 	}
 	
 	protected String setRespostaErroInternoNoProcessamento(LayoutPadraoXML layoutPadraoResposta ,String nomeArquivo) {
-		logger.error("Erro interno no processamento.");
+		logger.error("Erro WS: Erro interno no processamento.");
 		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
 			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
 		}
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+	}
+	
+	protected String setRespostaArquivoJaEnviadoAnteriormente(LayoutPadraoXML layoutPadraoResposta, String nomeArquivo, Arquivo arquivoJaEnviado) {
+		logger.error("Erro WS: Arquivo já enviado anteriormente.");
+		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
+			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+		}
+		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
+		MensagemXml mensagem = msg.getMensagemErro();
+		
+		Detalhamento detalhamento = new Detalhamento();
+		List<Erro> erros = new ArrayList<Erro>();
+		Erro erro = new Erro();
+		erro.setCodigo("2116");
+		erro.setDescricao("O arquivo " + nomeArquivo + " já foi enviado em " + DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()));
+		erros.add(erro);
+		detalhamento.setErro(erros);
+		mensagem.setDetalhamento(detalhamento);
+		return gerarMensagem(mensagem, CONSTANTE_RELATORIO_XML);
 	}
 	
 	private CodigoErro getCodigoErroEmProcessamentoSerpro(String nomeArquivo) {
@@ -186,6 +213,7 @@ public class CraWebService {
 			String msg = writer.toString();
 			msg = msg.replace(" xsi:type=\"mensagemXmlSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace(" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			writer.close();
 			return msg;
 

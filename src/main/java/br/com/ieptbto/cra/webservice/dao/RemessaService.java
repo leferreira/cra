@@ -39,7 +39,12 @@ public class RemessaService extends CraWebService {
 
 	/**
 	 * MÉTODOS DE ENVIO DE REMESSAS PELOS BANCOS/CONVÊNIOS
-	 * */
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @param dados
+	 * @return
+	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		ArquivoVO arquivo = new ArquivoVO();
 		setUsuario(usuario);
@@ -105,7 +110,11 @@ public class RemessaService extends CraWebService {
 	
 	/**
 	 * MÉTODOS DE CONSULTA DE REMESSAS PELOS CARTÓRIOS
-	 * */
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @return
+	 */
 	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);

@@ -102,7 +102,19 @@ public class MensagemDeErro {
 	private Descricao getDescricao() {
 		Descricao descricao = new Descricao();
 		descricao.setDataEnvio(DataUtil.getDataAtual() + " " + DataUtil.getHoraAtual());
-		descricao.setTipoArquivo("XML_UPLOAD_REMESSA");
+		if (nomeArquivo.contains("B")) {
+			descricao.setTipoArquivo("XML_UPLOAD_REMESSA");			
+		} else if (nomeArquivo.contains("C")) {
+			descricao.setTipoArquivo("XML_DOWNLOAD_CONFIRMACAO");		
+		} else if (nomeArquivo.contains("R")) {
+			descricao.setTipoArquivo("XML_DOWNLOAD_RETORNO");				
+		} else if (nomeArquivo.contains("DP")) {
+			descricao.setTipoArquivo("XML_UPLOAD_SUSTACAO");		
+		} else if (nomeArquivo.contains("CP")) {
+			descricao.setTipoArquivo("XML_UPLOAD_CANCELAMENTO");		
+		} else if (nomeArquivo.contains("AC")) {
+			descricao.setTipoArquivo("XML_UPLOAD_AUTORIZACAO");		
+		}
 		descricao.setNomeArquivo(nomeArquivo);
 		descricao.setDataMovimento(DataUtil.getDataAtual());
 		descricao.setPortador(getCodigoCompensacao());
@@ -122,8 +134,10 @@ public class MensagemDeErro {
 		if (codigoCompensacao == null) {
 			codigoCompensacao = StringUtils.EMPTY;
 			if (getNomeArquivo() != null) {
-				if (getNomeArquivo().length() > 5) {
+				if (getNomeArquivo().length() == 12) {
 					codigoCompensacao = getNomeArquivo().substring(1, 4);				
+				} else if (getNomeArquivo().length() == 13) {
+					codigoCompensacao = getNomeArquivo().substring(2, 5);
 				}
 			}
 		}

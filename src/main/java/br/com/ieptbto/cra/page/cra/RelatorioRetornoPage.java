@@ -8,6 +8,10 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -17,11 +21,13 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -33,27 +39,41 @@ import net.sf.jasperreports.engine.JasperReport;
  * @author Thasso Araújo
  *
  */
-public class RetornoLiberadoRelatorioPage extends BasePage<Retorno> {
+@AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
+public class RelatorioRetornoPage extends BasePage<Retorno> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	private RelatorioMediator relatorioMediator;
+	private Arquivo arquivo;
 	private Retorno retorno;
 
-	public RetornoLiberadoRelatorioPage() {
+	public RelatorioRetornoPage(String message, String pageName) {
 		this.retorno = new Retorno();
-		carregarComponentes();
+
+		info(message);
+		carregarComponentes(pageName);
+	}
+	
+	public RelatorioRetornoPage(String message, Arquivo arquivo, String pageName) {
+		this.retorno = new Retorno();
+		this.arquivo = arquivo;
+		
+		info(message);
+		carregarComponentes(pageName);
 	}
 
-	private void carregarComponentes() {
-		info(getMensagem());
-		 add(linkDownloadRelatorioRetornoLiberado());
+	private void carregarComponentes(String pageName) {
+		add(new Label("pageName", pageName));
+		add(linkRelatorioRetornoLiberado());			
+		add(linkDownloadRelatorioRetornoCartorio());
 	}
 
-	private Link<Retorno> linkDownloadRelatorioRetornoLiberado() {
-		return new Link<Retorno>("relatorioRetornoLiberado") {
+	private Link<Retorno> linkRelatorioRetornoLiberado() {
+		Link<Retorno> linkRelatorioRetornoLiberado = new Link<Retorno>("relatorioRetornoLiberado") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -81,7 +101,9 @@ public class RetornoLiberadoRelatorioPage extends BasePage<Retorno> {
 					IResourceStream resourceStream = new FileResourceStream(pdf);
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
 		                    "CRA_RELATORIO_RETORNO_GERADO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
+					
 				} catch (InfraException ex) {
+					ex.printStackTrace();
 					error(ex.getMessage());
 				} catch (Exception e) {
 					error("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
@@ -89,10 +111,50 @@ public class RetornoLiberadoRelatorioPage extends BasePage<Retorno> {
 				}
 			}
 		};
+		linkRelatorioRetornoLiberado.setOutputMarkupId(true);
+		if 	(getArquivo() != null) {	
+			linkRelatorioRetornoLiberado.setVisible(false);
+		}
+		return linkRelatorioRetornoLiberado;
 	}
+	
+	private Link<Arquivo> linkDownloadRelatorioRetornoCartorio() {
+		Link<Arquivo> linkDownloadRelatorioRetornoCartorio = new Link<Arquivo>("relatorioRetornoCartorio"){
+						
+			/***/
+			private static final long serialVersionUID = 1L;
 
-	public String getMensagem() {
-		return "Os arquivos de retorno foram gerados com sucesso!";
+			@Override
+			public void onClick() {
+				
+				try{
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
+					JasperPrint jasperPrint = relatorioMediator.relatorioRetorno(jasperReport, getArquivo(), getUser().getInstituicao());
+
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+                            "CRA_RELATORIO_" + getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+					
+				} catch (InfraException ex) { 
+					error(ex.getMessage());
+					ex.printStackTrace();
+				} catch (Exception e) { 
+					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+					e.printStackTrace();
+				}
+			}
+		};
+		linkDownloadRelatorioRetornoCartorio.setOutputMarkupId(true);
+		if 	(getArquivo() == null) {			
+			linkDownloadRelatorioRetornoCartorio.setVisible(false);
+		}
+		return linkDownloadRelatorioRetornoCartorio;
+	}
+	
+	public Arquivo getArquivo() {
+		return arquivo;
 	}
 
 	@Override

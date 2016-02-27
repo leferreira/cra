@@ -205,11 +205,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
     
     private Label irregularidade() {
     	String irregularidade = StringUtils.EMPTY;
-//    	if (getTituloRemessa().getConfirmacao() != null) {
-//    		if (getTituloRemessa().getConfirmacao().getCodigoIrregularidade() != null && 
-//    				getTituloRemessa().getConfirmacao().getCodigoIrregularidade() != "  ") {
-//    		}
-//    	}
 		return new Label("irregularidade", new Model<String>(irregularidade));
 	}
     

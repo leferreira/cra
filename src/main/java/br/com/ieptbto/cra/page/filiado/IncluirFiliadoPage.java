@@ -8,6 +8,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -28,6 +29,8 @@ import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
+import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -103,7 +106,6 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 					}
 					setResponsePage(new ListaFiliadoPage("Os dados do novo filiado foi salvo com sucesso !"));
 				} catch (InfraException ex) {
-					System.out.println(ex.getMessage());
 					error(ex.getMessage());
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
@@ -121,8 +123,14 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 		form.add(campoInstituicaoConvenio());
 		add(form);
 		
-		add(new SetorFiliadoInputPanel("setorPanel", getModel() ,getSetoresFiliado()));
-		add(listaSetoresFiliado());
+		WebMarkupContainer divSetoresFiliados = new WebMarkupContainer("divSetoresFiliados");
+		divSetoresFiliados.add(new SetorFiliadoInputPanel("setorPanel", getModel() ,getSetoresFiliado()));
+		divSetoresFiliados.add(listaSetoresFiliado());
+		if (getUser().getInstituicao().getPermitidoSetoresConvenio().equals(EnumerationSimNao.NAO)
+				&& getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			divSetoresFiliados.setVisible(false);
+		}
+		add(divSetoresFiliados);
 	}
 	
 	private DropDownChoice<String> campoUfCredor() {
@@ -180,7 +188,7 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
 		return new RadioChoice<String>("situacao", status).setRequired(true);
 	}
-	
+	 
 	private ListView<SetorFiliado> listaSetoresFiliado(){
 		return new ListView<SetorFiliado>("listaSetor", getSetoresFiliado()) {
 			

@@ -48,16 +48,18 @@ public class RemessaServiceImpl implements IRemessaWS {
 		return remessaService.processar(nomeArquivo, getUsuario(), dados);
 	}
 
-	@WebMethod(operationName = "buscarRemessa")
 	@Override
-	public String buscarRemessa(String nomeArquivo, String login, String senha) {
+	@WebMethod(operationName = "buscarRemessa")
+	@GET
+	public String buscarRemessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha) {
 		init(login, senha);
 		return remessaService.buscarRemessa(nomeArquivo, getUsuario());
 	}
 
 
-	@WebMethod(operationName = "confirmacao")
 	@Override
+	@WebMethod(operationName = "confirmacao")
 	@GET
 	public String confirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha) {
@@ -89,11 +91,20 @@ public class RemessaServiceImpl implements IRemessaWS {
 	public String enviarRetorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
 		init(login, senha);
-		return retornoService.enviarRetorno(nomeArquivo, getUsuario(), dados);
+		return retornoService.processar(nomeArquivo, getUsuario(), dados);
+	}
+	
+	@Override
+	@WebMethod(operationName = "buscarDesistenciaCancelamento")
+	@GET
+	public String buscarDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha) {
+		init(login, senha);
+		return desistenciaProtestoService.buscarDesistenciaCancelamento(nomeArquivo, getUsuario());
 	}
 
-	@WebMethod(operationName = "cancelamento")
 	@Override
+	@WebMethod(operationName = "cancelamento")
 	@GET
 	public String cancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 	        @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {

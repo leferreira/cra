@@ -110,6 +110,18 @@ public interface IRemessaWS {
 	 * @param nomeArquivo
 	 * @param login
 	 * @param senha
+	 * @return
+	 */
+	@WebMethod(operationName = "buscarDesistenciaCancelamento")
+	@GET
+	public String buscarDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+	        @WebParam(name = "user_pass") String senha);
+	
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param login
+	 * @param senha
 	 * @param dados
 	 * @return
 	 */

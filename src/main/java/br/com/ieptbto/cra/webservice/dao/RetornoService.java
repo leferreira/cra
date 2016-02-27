@@ -130,7 +130,7 @@ public class RetornoService extends CraWebService {
 	/**
 	 * MÉTODOS DE ENVIO DE RETORNO PELO CARTÓRIO
 	 * */
-	public String enviarRetorno(String nomeArquivo, Usuario usuario, String dados) {
+	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 		

@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.webservice.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,16 +17,19 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.vo.RemessaDesistenciaProtestoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.exception.DesistenciaException;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.exception.TituloException;
-import br.com.ieptbto.cra.exception.XmlCraException;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
+import br.com.ieptbto.cra.webservice.VO.Erro;
 import br.com.ieptbto.cra.webservice.VO.Mensagem;
 import br.com.ieptbto.cra.webservice.VO.MensagemXml;
 import br.com.ieptbto.cra.webservice.VO.MensagemXmlDesistenciaCancelamentoSerpro;
@@ -44,6 +48,14 @@ public class DesistenciaProtestoService extends CraWebService {
 	private InstituicaoMediator instituicaoMediator;
 	private List<Exception> erros;
 
+	/**
+	 *  MÉTODO DE RECEBIMENTO DE ARQUIVOS DE DESISTÊNCIA DAS INSTITUIÇÕES
+	 *  
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @param dados
+	 * @return
+	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		Arquivo arquivo = new Arquivo();
 		ArquivoVO arquivoVO = new ArquivoVO();
@@ -51,7 +63,7 @@ public class DesistenciaProtestoService extends CraWebService {
 		setNomeArquivo(nomeArquivo);
 
 		try {
-			if (getUsuario() == null) {
+			if (usuario == null) {
 				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
@@ -63,42 +75,48 @@ public class DesistenciaProtestoService extends CraWebService {
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 			}
+			Arquivo arquivoJaEnviado = desistenciaProtestoMediator.verificarDesistenciaJaEnviadaAnteriormente(nomeArquivo, usuario.getInstituicao()); 
+			if (arquivoJaEnviado != null) {
+				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo, arquivoJaEnviado);
+			}
 			
 			arquivo = gerarArquivoDesistencia(getUsuario().getInstituicao().getLayoutPadraoXML(), arquivo, dados);
 			if (getUsuario().getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 			}
-			return gerarMensagem(gerarResposta(arquivo, getUsuario()), CONSTANTE_RELATORIO_XML);
 			
-		} catch (TituloException ex) {
-			return gerarMensagemErroDesistencia(getUsuario().getInstituicao().getLayoutPadraoXML() , ex.getPedidosDesistencia());
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage());
+			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			e.printStackTrace();
+			logger.error(Arrays.toString(e.getStackTrace()));
+			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		}
-		return null;
+		return gerarMensagem(gerarResposta(arquivo, getUsuario()), CONSTANTE_RELATORIO_XML);
 	}
 
 	private Arquivo gerarArquivoDesistencia(LayoutPadraoXML layoutPadraoXML, Arquivo arquivo, String dados) {
-		logger.info("Iniciar processador do arquivo de desistencia " + getNomeArquivo());
+		logger.info("WS : Iniciar processador do arquivo de desistencia " + getNomeArquivo());
 		arquivo = desistenciaProtestoMediator.processarDesistencia(getNomeArquivo(), layoutPadraoXML , dados, getErros(), getUsuario());
 		
-		logger.info("Fim processador do arquivo de desistencia " + getNomeArquivo());
+		logger.info("WS : Fim processador do arquivo de desistencia " + getNomeArquivo());
 		return arquivo;
 	}
 
 	private MensagemXml gerarResposta(Arquivo arquivo, Usuario usuario) {
 		List<Mensagem> mensagens = new ArrayList<Mensagem>();
+		List<Erro> errosDesistencia = new ArrayList<Erro>();
 		MensagemXml mensagemRetorno = new MensagemXml();
 		Descricao desc = new Descricao();
 		Detalhamento detal = new Detalhamento();
 		detal.setMensagem(mensagens);
+		detal.setErro(errosDesistencia);
 
 		mensagemRetorno.setDescricao(desc);
 		mensagemRetorno.setDetalhamento(detal);
 		mensagemRetorno.setCodigoFinal("0000");
-		mensagemRetorno.setDescricaoFinal("Arquivo processado com sucesso");
+		mensagemRetorno.setDescricaoFinal("Arquivo processado com sucesso.");
 
 		desc.setDataEnvio(LocalDateTime.now().toString(DataUtil.PADRAO_FORMATACAO_DATAHORASEG));
 		desc.setTipoArquivo(Descricao.XML_UPLOAD_SUSTACAO);
@@ -116,15 +134,14 @@ public class DesistenciaProtestoService extends CraWebService {
 		}
 
 		for (Exception ex : getErros()) {
-			XmlCraException exception = XmlCraException.class.cast(ex);
-			Mensagem mensagem = new Mensagem();
-			mensagem.setCodigo(exception.getErro().getCodigo());
-			mensagem.setMunicipio(exception.getCodigoIbge());
-			mensagem.setDescricao("Município: " + exception.getCodigoIbge() + " - " + exception.getMunicipio() + " - "
-			        + exception.getErro().getDescricao());
-			mensagens.add(mensagem);
+			DesistenciaException exception = DesistenciaException.class.cast(ex);
+			Mensagem erro = new Mensagem();
+			erro.setDescricao(exception.getMessage());
+			erro.setMunicipio(exception.getMunicipio());
+			erro.setCodigo(exception.getCodigoErro());
+			mensagens.add(erro);
 		}
-
+		getErros().clear();
 		return mensagemRetorno;
 	}
 
@@ -133,9 +150,12 @@ public class DesistenciaProtestoService extends CraWebService {
 	}
 
 	private String formatarMensagemRetorno(DesistenciaProtesto desistenciaProtesto) {
-		Instituicao instituicao = instituicaoMediator
-		        .getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio());
-		return instituicao.getNomeFantasia() + " (" + desistenciaProtesto.getDesistencias().size() + ") ";
+		Instituicao instituicao = instituicaoMediator.getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio());
+		String titulos = "titulo";
+		if (desistenciaProtesto.getDesistencias().size() > 1) {
+			titulos = "titulos";
+		}
+		return instituicao.getNomeFantasia() + " (" + desistenciaProtesto.getDesistencias().size() + " " + titulos.toString() +").";
 	}
 
 	private String gerarMensagemSerpro(Arquivo arquivo, String constanteRelatorioXml) {
@@ -159,43 +179,53 @@ public class DesistenciaProtestoService extends CraWebService {
 		}
 		return gerarMensagem(mensagemDesistencia, constanteRelatorioXml);
 	}
-	
-	private String gerarMensagemErroDesistencia(LayoutPadraoXML layoutPadraoXML, List<PedidoDesistencia> pedidosDesistenciaCancelamento) {
-		if (layoutPadraoXML.equals(LayoutPadraoXML.SERPRO)) {
-			return gerarMensagemErroDesistenciaCancelamentoSerpro(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
-		}
-		return gerarMensagemErroDesistenciaCancelamento(pedidosDesistenciaCancelamento, CONSTANTE_RELATORIO_XML);
-	}
-	
-	private String gerarMensagemErroDesistenciaCancelamento(List<PedidoDesistencia> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private String gerarMensagemErroDesistenciaCancelamentoSerpro(List<PedidoDesistencia> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
-		MensagemXmlDesistenciaCancelamentoSerpro mensagemErroDesistencia = new MensagemXmlDesistenciaCancelamentoSerpro();
-		mensagemErroDesistencia.setNomeArquivo(getNomeArquivo());
-		mensagemErroDesistencia.setTitulosDetalhamento(new ArrayList<TituloDetalhamentoSerpro>());
-		
-		for (PedidoDesistencia pedidoDesistencia : pedidosDesistenciaCancelamento) {
-			TituloDetalhamentoSerpro titulo = new TituloDetalhamentoSerpro();
-			titulo.setDataHora(DataUtil.localDateToStringddMMyyyy(new LocalDate()) + DataUtil.localTimeToStringMMmm(new LocalTime()));
-			titulo.setCodigoCartorio(pedidoDesistencia.getDesistenciaProtesto().getCabecalhoCartorio().getCodigoCartorio());
-			titulo.setNumeroTitulo(pedidoDesistencia.getNumeroTitulo());
-			titulo.setNumeroProtocoloCartorio(pedidoDesistencia.getNumeroProtocolo());
-			titulo.setDataProtocolo(DataUtil.localDateToStringddMMyyyy(pedidoDesistencia.getDataProtocolagem()));
-			titulo.setCodigo(CodigoErro.SERPRO_NUMERO_PROTOCOLO_INVALIDO.getCodigo());
-			titulo.setOcorrencia(CodigoErro.SERPRO_NUMERO_PROTOCOLO_INVALIDO.getDescricao());
-			
-			mensagemErroDesistencia.getTitulosDetalhamento().add(titulo);
-		}
-		return gerarMensagem(mensagemErroDesistencia, constanteRelatorioXml);
-	}
 
 	public List<Exception> getErros() {
 		if (erros == null) {
 			erros = new ArrayList<Exception>();
 		}
 		return erros;
+	}
+
+	/**
+	 * MÉTODO DE CONSULTA DE DESISTÊNCIAS PELOS CARTÓRIOS 
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @return
+	 */
+	public String buscarDesistenciaCancelamento(String nomeArquivo, Usuario usuario) {
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
+		RemessaDesistenciaProtestoVO remessaVO = null;
+		
+		try {
+			remessaVO = desistenciaProtestoMediator.buscarDesistenciaCancelamentoCartorio(usuario.getInstituicao(), nomeArquivo);
+			if (remessaVO == null) {
+				return setRespostaPadrao(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
+		}
+		return gerarResposta(remessaVO, getNomeArquivo());
+	}
+	
+	private String gerarResposta(RemessaDesistenciaProtestoVO remessaVO, String nomeArquivo) {
+		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
+		
+		if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
+			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<sustacao>");
+			msg = msg.replace("</remessa>", "</sustacao>");
+		} else if (nomeArquivo.contains(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.getConstante())) {
+			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<cancelamento>");
+			msg = msg.replace("</remessa>", "</cancelamento>");
+		} else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
+			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<autoriza_cancelamento>");
+			msg = msg.replace("</remessa>", "</autoriza_cancelamento>");
+		}
+		msg = msg.replace("<registros>", "");
+		msg = msg.replace("</registros>", "");
+		return XmlFormatterUtil.format(msg);
 	}
 }
