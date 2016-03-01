@@ -23,6 +23,7 @@ import br.com.ieptbto.cra.bean.ArquivoOcorrenciaBean;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
@@ -84,10 +85,15 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			}
 		}
 		
-		if (getTituloRemessa().getPedidoDesistencia() != null) {
-			novaOcorrencia = new ArquivoOcorrenciaBean();
-			novaOcorrencia.parseToDesistenciaProtesto(getTituloRemessa().getPedidoDesistencia().getDesistenciaProtesto());
-			getArquivosOcorrencias().add(novaOcorrencia);
+		if  (titulo.getPedidosDesistencia() != null) {
+			if (!titulo.getPedidosDesistencia().isEmpty()) {
+				for (PedidoDesistencia pedido : titulo.getPedidosDesistencia()) {
+					
+					novaOcorrencia = new ArquivoOcorrenciaBean();
+					novaOcorrencia.parseToDesistenciaProtesto(pedido.getDesistenciaProtesto());
+					getArquivosOcorrencias().add(novaOcorrencia);
+				}  
+			}			
 		}
 		Collections.sort(getArquivosOcorrencias());
 		add(listaArquivoOcorrenciaBean());
