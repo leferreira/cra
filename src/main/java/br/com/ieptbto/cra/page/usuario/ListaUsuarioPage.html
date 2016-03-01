@@ -5,38 +5,36 @@
 </head>
 <body>
 	<wicket:extend>
-		<div class="panel">
-             <div class="panel-body">
-             	<h4 class="titulo-top">LISTA USUÁRIOS
-					<span class="pull-right">
-						<button wicket:id="botaoNovo" class="btn btn-primary"><span class="fa fa-plus"></span> NOVO USUÁRIO</button>
-					</span>
-				</h4>
-				<br style="clear: both;"/>
-				<table id="table" class="table table-responsive table-striped table-hover">
-					<thead>
-						<tr>
-							<th>NOME</th>	
-							<th>LOGIN</th>
-							<th>EMAIL</th>
-							<th>LOCAL</th>
-							<th class="col-center">ATIVO</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr wicket:id="listViewUsuario">
-							<td><a wicket:id="linkAlterar"><span class="link" wicket:id="nomeUsuario"></span></a></td>
-							<td wicket:id="loginUsuario"></td>
-							<td wicket:id="emailUsuario"></td>
-							<td wicket:id="instituicaoUsuario"></td>
-							<td class="col-center" wicket:id="status"></td>
-						</tr>
-					</tbody>
-				</table>
-             </div>
-             <div class="panel-footer"> 
-             </div>
-         </div>
+		<h4 class="titulo-top">
+			LISTA USUÁRIOS <span class="pull-right">
+				<button wicket:id="botaoNovo" class="btn btn-primary">
+					<span class="fa fa-plus"></span> NOVO USUÁRIO
+				</button>
+			</span>
+		</h4>
+		<br style="clear: both;" />
+		<table id="table"
+			class="table table-responsive table-striped table-hover">
+			<thead>
+				<tr>
+					<th>NOME</th>
+					<th>LOGIN</th>
+					<th>EMAIL</th>
+					<th>LOCAL</th>
+					<th class="col-center">ATIVO</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="listViewUsuario">
+					<td><a wicket:id="linkAlterar"><span class="link"
+							wicket:id="nomeUsuario"></span></a></td>
+					<td wicket:id="loginUsuario"></td>
+					<td wicket:id="emailUsuario"></td>
+					<td wicket:id="instituicaoUsuario"></td>
+					<td class="col-center" wicket:id="status"></td>
+				</tr>
+			</tbody>
+		</table>
 	</wicket:extend>
 </body>
 </html>

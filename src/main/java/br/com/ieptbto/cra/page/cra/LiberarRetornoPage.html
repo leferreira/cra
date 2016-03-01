@@ -5,120 +5,114 @@
 </head>
 <body>
 	<wicket:extend>
-		<div class="col-lg-12 col-md-6"> 
-			<div class="panel"> 
-				 <div class="panel-body">
-					<h4 class="titulo-top">LIBERAR RETORNOS</h4>
-					<br style="clear: both;"/>
-					<form wicket:id="formFiltros" class="form-horizontal">
-						<div class="col-md-5"> 
-							<div class="form-group"> 
-							  <label class="col-md-4 control-label" style="width: 176px; text-align: left;">BANCOS E CONV&Egrave;NIOS</label>
-							  <div class="col-md-8">
-							    <select wicket:id="instituicaoEnvio" class="form-control"></select>
-							  </div> 
-							</div>
-						</div>
-						<div class="col-md-7"> 
-							<div class="form-group">
-							  <label class="col-md-3 control-label">DATA BATIMENTO:</label>
-							  <div class="col-md-3">
-							  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataBatimento"  class="form-control input-md">
-							  </div>
-							  <div class="col-md-4">
-							  	<div class="col-md-1">
-								  <input wicket:id="dataComoDataLimite" type="checkbox" class="checkbox col-center" style="width: 17px;">
-							  	</div>
-						  	  	<label class="col-md-10" style="text-align: left; padding: 5px !important;">PENDENTES ATÉ A DATA</label>
-							  </div> 
-							  <div class="col-md-2">     
-							    <button type="submit" class="btn btn-primary pull-rigth" style="margin-bottom: 10px;"> 
-							    	<span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR
-							    </button>   
-							 </div>     
-							</div>
-						</div>  
-					</form>
-					<br style="clear: both;"/>
-                      <div class="panel-heading">
-                          <h4 class="panel-title">
-                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" 
-                            		aria-expanded="false" class="collapsed link">
-                            		<span style="font-size: 14px;"><span class="fa fa-bar-chart-o"></span> RESUMO ARQUIVOS LIBERADOS</span>
-                            	</a>
-                          </h4>
-                      </div>
-                      <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                          <div class="panel-body">
-							<table class="table table-striped table-hover table-responsive">
-								<thead>
-									<tr>
-										<th class="col-center">TOTAL DE ARQUIVOS</th>
-										<th class="col-center">NÃO SELECIONADOS</th>
-										<th class="col-center">VALOR NÃO SELECIONADOS</th>
-										<th class="col-center">SELECIONADOS</th>
-										<th class="col-center">VALOR SELECIONADOS</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td class="col-center valor" style="font-size: 16px; color: #337AB7;"><span wicket:id="labelTotalArquivos"></span></td>
-										<td class="col-center valor" style="color: #D9534F; font-size: 16px;"><span wicket:id="labelNaoSelecionados"></span></td>
-										<td class="col-center valor" style="color: #D9534F; font-size: 16px;"><span wicket:id="labelValorNaoSelecionados"></span></td>
-										<td class="col-center valor" style="color: #5CB85C; font-size: 16px;"><span wicket:id="labelSelecionados"></span></td>
-										<td class="col-center valor" style="color: #5CB85C; font-size: 16px;"><span wicket:id="labelValorSelecionados"></span></td>
-									</tr>
-								</tbody>
-							</table>
-                          </div>
-                      </div>
-					<form wicket:id="form" class="form-horizontal">
-						<button type="submit" class="btn btn-primary pull-right" style="margin-bottom: 10px;"><span class="fa fa-save"></span> LIBERAR RETORNOS</button>
-	                    <div class="col-lg-10"> 
-	                      <span>*As linhas em amarelo são arquivos cujo depósito foi feito diretamente ao banco!</span>
-	                    </div>
-						<div wicket:id="group">
-		                  <table id="table-no-pagination" class="table table-striped table-hover table-responsive">
-		                    <thead>
-								<tr>
-									<th class="col-center">#</th>
-									<th class="col-center">DATA BATIMENTO</th>
-									<th class="col-center">DATA ENVIO</th>
-									<th class="col-center" style="width: 90px;">HORA</th> 
-									<th>CARTÓRIO</th>
-									<th class="col-center">ARQUIVO</th>
-									<th class="col-right">VALOR PAGOS</th>
-									<th class="col-center" style="width: 100px;">REL.</th>
-									<th class="col-center" style="width: 90px;">CANCELAR</th>
-								</tr>
-							</thead>
-							<tbody>
-			                    <tr wicket:id="retornos" style="text-align: center;">
-			                        <td class="col-center" style="width: 45px !important;">
-			                        	<input wicket:id="checkbox" type="checkbox" class="checkbox col-center">
-			                        </td>
-			                   		<td class="col-center" wicket:id="dataBatimento"></td>
-									<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
-									<td class="col-center" wicket:id="horaEnvio"></td>
-									<td class="pull-left" wicket:id="instituicaoOrigem.nomeFantasia"></td>
-			                        <td class="col-center">
-			                        	<a wicket:id="linkArquivo">
-			                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
-			                        	</a>
-			                        </td>
-									<td class="col-right valor" wicket:id="valorPagos"></td>
-									<td class="col-center"><button type="button" wicket:id="gerarRelatorio" style="float: inherit;"><span class="col-center fa fa-print"></span></button></td>
-									<td class="col-center">
-										<button type="button" wicket:id="removerConfirmado" style="float: inherit;"><span class="fa fa-times"></span></button>
-									</td>
-			                    </tr>
-		                    </tbody>
-		                  </table>
-		                 </div>
-		 			</form>
-		 		</div>
-	 		</div>
-		</div>
+		<h4 class="titulo-top">LIBERAR RETORNOS</h4>
+		<br style="clear: both;"/>
+		<form wicket:id="formFiltros" class="form-horizontal">
+			<div class="col-md-5"> 
+				<div class="form-group"> 
+				  <label class="col-md-4 control-label" style="width: 176px; text-align: left;">BANCOS E CONV&Egrave;NIOS</label>
+				  <div class="col-md-8">
+				    <select wicket:id="instituicaoEnvio" class="form-control"></select>
+				  </div> 
+				</div>
+			</div>
+			<div class="col-md-7"> 
+				<div class="form-group">
+				  <label class="col-md-3 control-label">DATA BATIMENTO:</label>
+				  <div class="col-md-3">
+				  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataBatimento"  class="form-control input-md">
+				  </div>
+				  <div class="col-md-4">
+				  	<div class="col-md-1">
+					  <input wicket:id="dataComoDataLimite" type="checkbox" class="checkbox col-center" style="width: 17px;">
+				  	</div>
+			  	  	<label class="col-md-10" style="text-align: left; padding: 5px !important;">PENDENTES ATÉ A DATA</label>
+				  </div> 
+				  <div class="col-md-2">     
+				    <button type="submit" class="btn btn-primary pull-rigth" style="margin-bottom: 10px;"> 
+				    	<span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR
+				    </button>   
+				 </div>     
+				</div>
+			</div>  
+		</form>
+		<br style="clear: both;"/>
+                   <div class="panel-heading">
+                       <h4 class="panel-title">
+                           <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" 
+                         		aria-expanded="false" class="collapsed link">
+                         		<span style="font-size: 14px;"><span class="fa fa-bar-chart-o"></span> RESUMO ARQUIVOS LIBERADOS</span>
+                         	</a>
+                       </h4>
+                   </div>
+                   <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                       <div class="panel-body">
+				<table class="table table-striped table-hover table-responsive">
+					<thead>
+						<tr>
+							<th class="col-center">TOTAL DE ARQUIVOS</th>
+							<th class="col-center">NÃO SELECIONADOS</th>
+							<th class="col-center">VALOR NÃO SELECIONADOS</th>
+							<th class="col-center">SELECIONADOS</th>
+							<th class="col-center">VALOR SELECIONADOS</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="col-center valor" style="font-size: 16px; color: #337AB7;"><span wicket:id="labelTotalArquivos"></span></td>
+							<td class="col-center valor" style="color: #D9534F; font-size: 16px;"><span wicket:id="labelNaoSelecionados"></span></td>
+							<td class="col-center valor" style="color: #D9534F; font-size: 16px;"><span wicket:id="labelValorNaoSelecionados"></span></td>
+							<td class="col-center valor" style="color: #5CB85C; font-size: 16px;"><span wicket:id="labelSelecionados"></span></td>
+							<td class="col-center valor" style="color: #5CB85C; font-size: 16px;"><span wicket:id="labelValorSelecionados"></span></td>
+						</tr>
+					</tbody>
+				</table>
+                       </div>
+                   </div>
+		<form wicket:id="form" class="form-horizontal">
+			<button type="submit" class="btn btn-primary pull-right" style="margin-bottom: 10px;"><span class="fa fa-save"></span> LIBERAR RETORNOS</button>
+                  <div class="col-lg-10"> 
+                    <span>*As linhas em amarelo são arquivos cujo depósito foi feito diretamente ao banco!</span>
+                  </div>
+			<div wicket:id="group">
+                 <table id="table-no-pagination" class="table table-striped table-hover table-responsive">
+                   <thead>
+					<tr>
+						<th class="col-center">#</th>
+						<th class="col-center">DATA BATIMENTO</th>
+						<th class="col-center">DATA ENVIO</th>
+						<th class="col-center" style="width: 90px;">HORA</th> 
+						<th>CARTÓRIO</th>
+						<th class="col-center">ARQUIVO</th>
+						<th class="col-right">VALOR PAGOS</th>
+						<th class="col-center" style="width: 100px;">REL.</th>
+						<th class="col-center" style="width: 90px;">CANCELAR</th>
+					</tr>
+				</thead>
+				<tbody>
+                    <tr wicket:id="retornos" style="text-align: center;">
+                        <td class="col-center" style="width: 45px !important;">
+                        	<input wicket:id="checkbox" type="checkbox" class="checkbox col-center">
+                        </td>
+                   		<td class="col-center" wicket:id="dataBatimento"></td>
+						<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
+						<td class="col-center" wicket:id="horaEnvio"></td>
+						<td class="pull-left" wicket:id="instituicaoOrigem.nomeFantasia"></td>
+                        <td class="col-center">
+                        	<a wicket:id="linkArquivo">
+                        		<span class="link" wicket:id="arquivo.nomeArquivo"></span>
+                        	</a>
+                        </td>
+						<td class="col-right valor" wicket:id="valorPagos"></td>
+						<td class="col-center"><button type="button" wicket:id="gerarRelatorio" style="float: inherit;"><span class="col-center fa fa-print"></span></button></td>
+						<td class="col-center">
+							<button type="button" wicket:id="removerConfirmado" style="float: inherit;"><span class="fa fa-times"></span></button>
+						</td>
+                    </tr>
+                   </tbody>
+                 </table>
+                </div>
+			</form>
 	</wicket:extend>
 </body>
 </html>

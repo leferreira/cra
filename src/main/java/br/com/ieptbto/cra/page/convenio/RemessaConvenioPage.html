@@ -5,44 +5,38 @@
 </head>
 <body>
 	<wicket:extend>
-		<div class="col-lg-12 col-md-6">
-			<div class="panel">
-				 <div class="panel-body">
-					<form wicket:id="form">
-						<h4 class="titulo-top">REMESSAS CONVÊNIOS
-							<span class="pull-right">
-								<button type="submit" class="btn btn-primary"><span class="fa fa-check"></span> LIBERAR REMESSAS</button>
-							</span>
-						</h4>
-					</form>
-					<br style="clear: both;"/>
-					<table id="table" class="table table-responsive table-striped table-hover">
-						<thead>
-							<tr>
-								<th class="col-center">Nº TÍTULO</th>
-								<th>MUNCÍPIO</th>
-								<th>CONVÊNIO</th>
-								<th>CREDOR</th>
-								<th>DEVEDOR</th>
-								<th class="col-center">DATA ENVIO</th>
-								<th class="col-right valor">VALOR TÍTULO</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr wicket:id="listViewTitulos">
-								<td class="col-center" wicket:id="numeroTitulo"></td>
-								<td wicket:id="pracaProtesto"></td>
-								<td wicket:id="convenio"></td>
-								<td wicket:id="credor"></td>
-								<td wicket:id="devedor"></td>
-								<td class="col-center" wicket:id="dataEnvioCRA"></td>
-								<td class="col-right valor" wicket:id="valor"></td>
-							</tr>
-						</tbody>
-					</table>
-				 </div>
-			 </div>
-		 </div>
+		<form wicket:id="form">
+			<h4 class="titulo-top">REMESSAS CONVÊNIOS
+				<span class="pull-right">
+					<button type="submit" class="btn btn-primary"><span class="fa fa-check"></span> LIBERAR REMESSAS</button>
+				</span>
+			</h4>
+		</form>
+		<br style="clear: both;"/>
+		<table id="table" class="table table-responsive table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="col-center">Nº TÍTULO</th>
+					<th>MUNCÍPIO</th>
+					<th>CONVÊNIO</th>
+					<th>CREDOR</th>
+					<th>DEVEDOR</th>
+					<th class="col-center">DATA ENVIO</th>
+					<th class="col-right valor">VALOR TÍTULO</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="listViewTitulos">
+					<td class="col-center" wicket:id="numeroTitulo"></td>
+					<td wicket:id="pracaProtesto"></td>
+					<td wicket:id="convenio"></td>
+					<td wicket:id="credor"></td>
+					<td wicket:id="devedor"></td>
+					<td class="col-center" wicket:id="dataEnvioCRA"></td>
+					<td class="col-right valor" wicket:id="valor"></td>
+				</tr>
+			</tbody>
+		</table>
 	</wicket:extend>
 </body>
 </html>

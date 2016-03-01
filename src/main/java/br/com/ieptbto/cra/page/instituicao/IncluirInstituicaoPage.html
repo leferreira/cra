@@ -6,149 +6,143 @@
 <body>
 	<wicket:extend>	
 		<form wicket:id="form" id="formUsuario" class="form-horizontal">
-			<div class="col-lg-12 col-md-6">
-				<div class="panel">
-					 <div class="panel-body">
-						<h4 class="titulo-top">CADASTRO DE INSTITUIÇÃO
-						<span class="pull-right">
-							<a href="Instituicoes" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
-						</span>
-						</h4> 
-						<br style="clear: both;"/>
-						<div class="row">
-							<fieldset>
-								<div class="col-md-6"> 
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="nomeFantasia">NOME FANTASIA:</label>  
-									  <div class="col-md-6">
-									  <input autofocus="autofocus" maxlength="45" wicket:id="nomeFantasia" 
-									  	class="form-control input-md">
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="razaoSocial">RAZÃO SOCIAL:</label>  
-									  <div class="col-md-6">
-									  <input onkeyup="this.value = this.value.toUpperCase()" maxlength="45" wicket:id="razaoSocial" class="form-control input-md">
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="cnpj">CPF/CNPJ:</label>  
-									  <div class="col-md-6">
-									  <input wicket:id="cnpj" onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)" onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" 
-									  	class="form-control input-md" maxlength="18">		
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="codigoCompensacao">CÓDIGO COMPENSAÇÃO:</label>  
-									  <div class="col-md-6">
-									  <input wicket:id="codigoCompensacao" maxlength="3" class="form-control input-md">
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="agencia">AGÊNCIA CENTRALIZADORA:</label>  
-									  <div class="col-md-6">
-									  <input wicket:id="agenciaCentralizadora" maxlength="6" class="form-control input-md">
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="tipo">TIPO INSTITUIÇÃO:</label>
-									  <div class="col-md-6">
-									    <select wicket:id="tipoInstituicao" class="form-control">
-									    </select>
-								   		</div>
-									</div>
-								</div>
-								<div class="col-md-6"> 
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="situacao">SITUAÇÃO:</label>
-									  <div class="col-md-5" style="text-align: left;"> 
-									    <label class="radio-inline inline" wicket:id="status">
-									    </label>
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="email">EMAIL:</label>  
-									  <div class="col-md-6">
-									  <input type="text" wicket:id="email" maxlength="45" class="form-control input-md">
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="contato">TELEFONE:</label>  
-									  <div class="col-md-6">
-									  <input wicket:id="contato" class="form-control input-md">
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="responsavel">RESPONSÁVEL:</label>  
-									  <div class="col-md-6">
-									  <input wicket:id="responsavel" maxlength="20" class="form-control input-md">
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label">MUNICÍPIO:</label>
-									  <div class="col-md-6">
-									    <select wicket:id="municipio" class="form-control">
-									    </select>
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="endereco">ENDEREÇO:</label>
-									  <div class="col-md-6">                     
-									    <textarea class="form-control" maxlength="45" wicket:id="endereco"></textarea>
-									  </div>
-									</div>
-								</div>
-							</fieldset>
-							<fieldset>
-								<legend>CONFIGURAÇÕES DE USO</legend>
-								<div class="col-md-6"> 
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="confirmacao">VALOR CONFIRMAÇÃO:</label>  
-									  <div class="col-md-6">
-									  <input wicket:id="valorConfirmacao" onkeypress="FormataValor(this.id, 12, event);" maxlength="15" class="form-control input-md">
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="tipo">BATIMENTO:</label>
-									  <div class="col-md-6">
-	                                     <select wicket:id="tipoBatimento" class="form-control"></select>
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="situacao">LAYOUT TRANSMISSÃO XML:</label>
-									  <div class="col-md-5"> 
-									    <select wicket:id="layoutPadraoXML" class="form-control">
-									    </select>
-									  </div>
-									</div>
-								</div>
-								<div class="col-md-6"> 
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="situacao">TIPO DO CAMPO COMPLEMENTO REGISTRO:</label>
-									  <div class="col-md-5"> 
-									    <select wicket:id="tipoCampo51" class="form-control">
-									    </select>
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="situacao">PERMITIR SETORES<br>(PARA CONVÊNIOS):</label>
-									  <div class="col-md-5"> 
-									     <select wicket:id="permitidoSetoresConvenio" class="form-control">
-									    </select>
-									  </div>
-									</div>
-									<div class="form-group">
-									  <label class="col-md-4 control-label" for="salvar"></label>
-									  <div class="col-md-6">
-									    <button wicket:id="botaoSalvar" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
-									  </div> 
-									</div>
-								</div>
-							</fieldset>
+			<h4 class="titulo-top">CADASTRO DE INSTITUIÇÃO
+			<span class="pull-right">
+				<a href="Instituicoes" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+			</span>
+			</h4> 
+			<br style="clear: both;"/>
+			<div class="row">
+				<fieldset>
+					<div class="col-md-6"> 
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="nomeFantasia">NOME FANTASIA:</label>  
+						  <div class="col-md-6">
+						  <input autofocus="autofocus" maxlength="45" wicket:id="nomeFantasia" 
+						  	class="form-control input-md">
+						  </div>
 						</div>
-					 </div>
-				 </div>
-			 </div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="razaoSocial">RAZÃO SOCIAL:</label>  
+						  <div class="col-md-6">
+						  <input onkeyup="this.value = this.value.toUpperCase()" maxlength="45" wicket:id="razaoSocial" class="form-control input-md">
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="cnpj">CPF/CNPJ:</label>  
+						  <div class="col-md-6">
+						  <input wicket:id="cnpj" onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)" onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" 
+						  	class="form-control input-md" maxlength="18">		
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="codigoCompensacao">CÓDIGO COMPENSAÇÃO:</label>  
+						  <div class="col-md-6">
+						  <input wicket:id="codigoCompensacao" maxlength="3" class="form-control input-md">
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="agencia">AGÊNCIA CENTRALIZADORA:</label>  
+						  <div class="col-md-6">
+						  <input wicket:id="agenciaCentralizadora" maxlength="6" class="form-control input-md">
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="tipo">TIPO INSTITUIÇÃO:</label>
+						  <div class="col-md-6">
+						    <select wicket:id="tipoInstituicao" class="form-control">
+						    </select>
+					   		</div>
+						</div>
+					</div>
+					<div class="col-md-6"> 
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="situacao">SITUAÇÃO:</label>
+						  <div class="col-md-5" style="text-align: left;"> 
+						    <label class="radio-inline inline" wicket:id="status">
+						    </label>
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="email">EMAIL:</label>  
+						  <div class="col-md-6">
+						  <input type="text" wicket:id="email" maxlength="45" class="form-control input-md">
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="contato">TELEFONE:</label>  
+						  <div class="col-md-6">
+						  <input wicket:id="contato" class="form-control input-md">
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="responsavel">RESPONSÁVEL:</label>  
+						  <div class="col-md-6">
+						  <input wicket:id="responsavel" maxlength="20" class="form-control input-md">
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label">MUNICÍPIO:</label>
+						  <div class="col-md-6">
+						    <select wicket:id="municipio" class="form-control">
+						    </select>
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="endereco">ENDEREÇO:</label>
+						  <div class="col-md-6">                     
+						    <textarea class="form-control" maxlength="45" wicket:id="endereco"></textarea>
+						  </div>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>CONFIGURAÇÕES DE USO</legend>
+					<div class="col-md-6"> 
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="confirmacao">VALOR CONFIRMAÇÃO:</label>  
+						  <div class="col-md-6">
+						  <input wicket:id="valorConfirmacao" onkeypress="FormataValor(this.id, 12, event);" maxlength="15" class="form-control input-md">
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="tipo">BATIMENTO:</label>
+						  <div class="col-md-6">
+                                   <select wicket:id="tipoBatimento" class="form-control"></select>
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="situacao">LAYOUT TRANSMISSÃO XML:</label>
+						  <div class="col-md-5"> 
+						    <select wicket:id="layoutPadraoXML" class="form-control">
+						    </select>
+						  </div>
+						</div>
+					</div>
+					<div class="col-md-6"> 
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="situacao">TIPO DO CAMPO COMPLEMENTO REGISTRO:</label>
+						  <div class="col-md-5"> 
+						    <select wicket:id="tipoCampo51" class="form-control">
+						    </select>
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="situacao">PERMITIR SETORES<br>(PARA CONVÊNIOS):</label>
+						  <div class="col-md-5"> 
+						     <select wicket:id="permitidoSetoresConvenio" class="form-control">
+						    </select>
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="salvar"></label>
+						  <div class="col-md-6">
+						    <button wicket:id="botaoSalvar" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
+						  </div> 
+						</div>
+					</div>
+				</fieldset>
+			</div>
 		</form>
 	</wicket:extend>
 </body>

@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.page.cra;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
@@ -111,19 +109,6 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(retorno.getArquivo().getHoraEnvio())));
 				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
-				BigDecimal valorPagos = retornoMediator.buscarValorDeTitulosPagos(retorno);
-				if (valorPagos==null || valorPagos.equals(BigDecimal.ZERO)) {
-					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", BigDecimal.ZERO));
-				} else {
-					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", valorPagos));
-				}
-				
-				BigDecimal valorCustas = retornoMediator.buscarValorDeCustasCartorio(retorno);
-				if (valorCustas==null || valorCustas.equals(BigDecimal.ZERO)) {
-					item.add(new LabelValorMonetario<BigDecimal>("valorCustas", BigDecimal.ZERO));
-				} else {
-					item.add(new LabelValorMonetario<BigDecimal>("valorCustas", valorCustas));
-				}
 				Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
 					
 					/***/

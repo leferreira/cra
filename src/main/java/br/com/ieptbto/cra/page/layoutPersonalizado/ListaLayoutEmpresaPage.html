@@ -2,36 +2,30 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 	<wicket:extend>
-		<div class="col-lg-12 col-md-6">
-			<div class="panel">
-				 <div class="panel-body">
-					<h4 class="titulo-top">LAYOUTS PERSONALIZADOS EMPRESAS
-					<span class="pull-right">
-						<a href="IncluirLayoutEmpresa" class="btn btn-primary"><span class="fa fa-plus"></span> NOVO LAYOUT</a>
-					</span> 
-					</h4>
-					<br style="clear: both;"/>
-					<div wicket:id="divResultado">
-						<table id="table" class="table table-striped table-hover" style="font-size: 15px;">
-							<thead>
-								<tr>
-									<th>EMPRESA</th>
-									<th>TIPO ARQUIVO</th>
-									<th class="col-center">REMOVER</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr wicket:id="tabelaLayout">
-									<td wicket:id="empresa"></td>
-									<td wicket:id="tipoArquivo"></td>
-									<td class="col-center"></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				 </div>
-			 </div>
-		 </div>
+		<h4 class="titulo-top">LAYOUTS PERSONALIZADOS EMPRESAS
+		<span class="pull-right">
+			<a href="IncluirLayoutEmpresa" class="btn btn-primary"><span class="fa fa-plus"></span> NOVO LAYOUT</a>
+		</span> 
+		</h4>
+		<br style="clear: both;"/>
+		<div wicket:id="divResultado">
+			<table id="table" class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>EMPRESA</th>
+						<th>TIPO ARQUIVO</th>
+						<th class="col-center">REMOVER</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr wicket:id="tabelaLayout">
+						<td wicket:id="empresa"></td>
+						<td wicket:id="tipoArquivo"></td>
+						<td class="col-center"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</wicket:extend>
 </body>
 </html>
