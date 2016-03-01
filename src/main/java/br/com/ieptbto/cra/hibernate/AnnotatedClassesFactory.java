@@ -35,7 +35,6 @@ import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
 import br.com.ieptbto.cra.entidade.EtiquetaSLIP;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
-import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.LayoutFiliado;
@@ -103,7 +102,6 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Rodape.class);
 		classesHibernate.add(Remessa.class);
 		classesHibernate.add(StatusArquivo.class);
-		classesHibernate.add(Historico.class);
 		classesHibernate.add(InstrumentoProtesto.class);
 		classesHibernate.add(EnvelopeSLIP.class);
 		classesHibernate.add(EtiquetaSLIP.class);

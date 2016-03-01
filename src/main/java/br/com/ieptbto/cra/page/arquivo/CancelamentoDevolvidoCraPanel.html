@@ -1,46 +1,34 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
-<div class="col-lg-10 col-md-offset-2">
+<div class="col-lg-8 col-md-offset-2">
 	<div class="form-group">
-	  <label class="col-md-2 control-label">NOME DO ARQUIVO:</label>  
-	  <div class="col-md-6">
-	  <input maxlength="13" wicket:id="nomeArquivo" class="form-control input-md" autofocus="autofocus">
+	  <label>NOME DO ARQUIVO</label>  
+	  <input maxlength="13" wicket:id="nomeArquivo" class="form-control input-md">
+	</div>
+	<div class="form-group">
+	  <label>TIPO ARQUIVO</label><br>
+	  <label class="checkbox-inline inline" wicket:id="tipoArquivos"></label>
+	</div>
+	<div class="form-group">
+	  <label>PER&Iacute;ODO</label>  
+	  <div class="row">
+		<div class="col-xs-6">  
+	  		<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioInicio"  class="form-control input-md">
+	  	</div>
+	  	<div class="col-xs-6">
+	  		<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioFinal" class="form-control input-md">
+	  	</div>
 	  </div>
 	</div>
 	<div class="form-group">
-	  <label class="col-md-2 control-label">TIPO ARQUIVO:</label>
-	  <div class="col-md-6" style="text-align: left;">
-	    <label class="checkbox-inline inline" wicket:id="tipoArquivos">
-	    </label>
-	  </div>
+	  <label>BANCOS E CONV&Egrave;NIOS</label>
+	  <select wicket:id="instituicaoEnvio" class="form-control"></select>
 	</div>
 	<div class="form-group">
-	  <label class="col-md-2 control-label">PER&Iacute;ODO:</label>  
-	  <div class="col-md-2">
-	  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioInicio"  class="form-control input-md">
-	  </div>
-	  <div class="col-md-2">
-	  	<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioFinal" class="form-control input-md">
-	  </div>
+	  <label>PRA&Ccedil;A DE PROTESTO</label>
+	  <select wicket:id="municipio" class="form-control"></select>
 	</div>
 	<div class="form-group">
-	  <label class="col-md-2 control-label">BANCOS E CONV&Egrave;NIOS:</label>
-	  <div class="col-md-6">
-	    <select wicket:id="instituicaoEnvio" class="form-control">
-	    </select>
-	  </div>
-	</div>
-	<div class="form-group">
-	  <label class="col-md-2 control-label" >PRA&Ccedil;A DE PROTESTO:</label>
-	  <div class="col-md-6">
-	    <select wicket:id="municipio" class="form-control">
-	    </select>
-	  </div>
-	</div>
-	<div class="form-group">
-	  <label class="col-md-2 control-label"></label>
-	  <div class="col-md-6">
 	    <button wicket:id="botaoBuscar" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
-	  </div>
 	</div>
 </div>
 </wicket:panel>

@@ -72,6 +72,7 @@ import br.com.ieptbto.cra.page.titulo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.usuario.IncluirUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.ListaUsuarioPage;
+import br.com.ieptbto.cra.page.usuario.PerfilUsuarioPage;
 import br.com.ieptbto.cra.security.ISecureApplication;
 import br.com.ieptbto.cra.security.UserRoleAuthorizationStrategy;
 import br.com.ieptbto.cra.security.UserRolesAuthorizer;
@@ -178,6 +179,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("IncluirTipoArquivo", IncluirTipoArquivoPage.class);
 		mountPage("Usuarios", ListaUsuarioPage.class);
 		mountPage("IncluirUsuario", IncluirUsuarioPage.class);
+		mountPage("PerfilUsuario", PerfilUsuarioPage.class);
 		mountPage("EmpresasFiliadas", ListaFiliadoPage.class);
 		mountPage("IncluirEmpresaFiliada", IncluirFiliadoPage.class);
 

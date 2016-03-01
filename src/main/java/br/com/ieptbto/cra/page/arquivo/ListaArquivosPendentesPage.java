@@ -3,7 +3,6 @@ package br.com.ieptbto.cra.page.arquivo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -25,7 +24,6 @@ import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
@@ -45,24 +43,21 @@ import net.sf.jasperreports.engine.JasperReport;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	RelatorioMediator relatorioMediator;
+	private RelatorioMediator relatorioMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	private Arquivo arquivo;
-	private List<Remessa> remessas;
-	private List<DesistenciaProtesto> desistenciasProtesto;
-	private List<CancelamentoProtesto> cancelamentoProtestos;
-	private List<AutorizacaoCancelamento> autorizacaoCancelamento;
 	
-	public ListaArquivosPendentesPage(Usuario user, List<Remessa> remessas) {
-		this.arquivo = new Arquivo();
-		this.remessas = remessas;
+	public ListaArquivosPendentesPage(Arquivo arquivo) {
+		this.arquivo = arquivo;
 		
 		add(carregarListaArquivos());
 		add(carregarListaArquivosDesistenciaProtesto());
@@ -70,20 +65,11 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 		add(carregarListaAutorizacao());
 	}
 	
-	public ListaArquivosPendentesPage(List<DesistenciaProtesto> confirmacoesPendentesDesistenciaProtesto, List<CancelamentoProtesto> list, List<AutorizacaoCancelamento> list2) {
-		this.arquivo = new Arquivo();
-		this.desistenciasProtesto = confirmacoesPendentesDesistenciaProtesto;
-		this.cancelamentoProtestos = list;
-		this.autorizacaoCancelamento = list2;
-		
-		add(carregarListaArquivos());
-		add(carregarListaArquivosDesistenciaProtesto());
-		add(carregarListaArquivosCancelamentoProtesto());
-		add(carregarListaAutorizacao());
-	}
-
 	private ListView<Remessa> carregarListaArquivos() {
-		return new ListView<Remessa>("dataTableRemessa", getRemessas()) {
+		return new ListView<Remessa>("dataTableRemessa", getArquivo().getRemessas()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
@@ -91,6 +77,9 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 				item.add(downloadArquivoTXT(remessa));
 				item.add(relatorioArquivo(remessa));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -121,6 +110,9 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
 				return new Link<Remessa>("downloadArquivo") {
 
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
 						try {
@@ -140,8 +132,11 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 			
 			private Link<Remessa> downloadAnexos(final Remessa remessa) {
 				List<Anexo> anexos = remessaMediator.verificarAnexosRemessa(remessa);
-				
 				Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
+					
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
 						
@@ -170,6 +165,9 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 			
 			private Link<Remessa> relatorioArquivo(final Remessa remessa) {
 				return new Link<Remessa>("gerarRelatorio") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -206,7 +204,10 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 	}
 
 	private ListView<DesistenciaProtesto> carregarListaArquivosDesistenciaProtesto() {
-		return new ListView<DesistenciaProtesto>("dataTableDesistencia", getDesistenciasProtesto()) {
+		return new ListView<DesistenciaProtesto>("dataTableDesistencia", getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<DesistenciaProtesto> item) {
@@ -214,9 +215,11 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 				item.add(downloadArquivoTXT(desistenciaProtesto));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
-						// setResponsePage(new TitulosArquivoPage(remessa));
 					}
 				};
 				linkArquivo
@@ -234,6 +237,9 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
 			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto desistenciaProtesto) {
 				return new Link<Remessa>("downloadArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -260,7 +266,10 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
 	
 	private ListView<CancelamentoProtesto> carregarListaArquivosCancelamentoProtesto() {
-		return new ListView<CancelamentoProtesto>("dataTableCancelamento", getCancelamentoProtestos()) {
+		return new ListView<CancelamentoProtesto>("dataTableCancelamento", getArquivo().getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<CancelamentoProtesto> item) {
@@ -268,9 +277,11 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 				item.add(downloadArquivoTXT(cancelamento));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
-						// setResponsePage(new TitulosArquivoPage(remessa));
 					}
 				};
 				linkArquivo.add(new Label("nomeArquivo", cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
@@ -285,6 +296,9 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
 			private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto cancelamento) {
 				return new Link<Remessa>("downloadArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -310,7 +324,10 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 	}
 	
 	private ListView<AutorizacaoCancelamento> carregarListaAutorizacao() {
-		return new ListView<AutorizacaoCancelamento>("dataTableAutorizacao", getAutorizacaoCancelamento()) {
+		return new ListView<AutorizacaoCancelamento>("dataTableAutorizacao", getArquivo().getRemessaAutorizacao().getAutorizacaoCancelamento()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<AutorizacaoCancelamento> item) {
@@ -318,9 +335,11 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 				item.add(downloadArquivoTXT(ac));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
-						// setResponsePage(new TitulosArquivoPage(remessa));
 					}
 				};
 				linkArquivo.add(new Label("nomeArquivo", ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
@@ -335,6 +354,9 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
 			private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento ac) {
 				return new Link<Remessa>("downloadArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -359,32 +381,8 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 		};
 	}
 	
-	public List<Remessa> getRemessas() {
-		if (remessas == null) {
-			remessas = new ArrayList<Remessa>();
-		}
-		return remessas;
-	}
-
-	public List<DesistenciaProtesto> getDesistenciasProtesto() {
-		if (desistenciasProtesto == null) {
-			desistenciasProtesto = new ArrayList<DesistenciaProtesto>();
-		}
-		return desistenciasProtesto;
-	}
-	
-	public List<AutorizacaoCancelamento> getAutorizacaoCancelamento() {
-		if (autorizacaoCancelamento == null) {
-			autorizacaoCancelamento = new ArrayList<AutorizacaoCancelamento>();
-		}
-		return autorizacaoCancelamento;
-	}
-	
-	public List<CancelamentoProtesto> getCancelamentoProtestos() {
-		if (cancelamentoProtestos == null) {
-			cancelamentoProtestos = new ArrayList<CancelamentoProtesto>();
-		}
-		return cancelamentoProtestos;
+	public Arquivo getArquivo() {
+		return arquivo;
 	}
 	
 	@Override

@@ -47,11 +47,12 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(GerarSlipPage.class);
 	
 	@SpringBean
@@ -69,6 +70,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
 		this.envelopes = null;
 		this.etiquetas = null; 
+		
 		add(carregarListaSlips());
 		add(botaoGerarEtiquetas());
 		add(botaoGerarEnvelopes());
@@ -78,15 +80,21 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private ListView<InstrumentoProtesto> carregarListaSlips() {
 		return new ListView<InstrumentoProtesto>("instrumentos", getInstrumentosProtesto()) {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<InstrumentoProtesto> item) {
 				final InstrumentoProtesto instrumentoProtesto = item.getModelObject();
 				final Retorno retorno = instrumentoProtesto.getTituloRetorno();
 				
-				item.add(new Label("numeroTitulo", retorno.getTitulo().getNumeroTitulo()));
+				item.add(new Label("numeroTitulo", retorno.getTitulo().getNumeroTitulo())); 
 				item.add(new Label("protocolo", retorno.getNumeroProtocoloCartorio()));
 				item.add(new Label("pracaProtesto", retorno.getTitulo().getPracaProtesto()));
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new HistoricoPage(retorno.getTitulo()));
@@ -94,7 +102,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				};
 				linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));
 				item.add(linkHistorico);
-				item.add(new Label("portador", instituicaoMediator.getInstituicaoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
+				item.add(new Label("portador", instituicaoMediator.buscarBancoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
 			}
@@ -104,6 +112,9 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private Link<InstrumentoProtesto> botaoGerarEtiquetas() {
 		return new Link<InstrumentoProtesto>("botaoSlip"){
 			
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick() {
 				SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
@@ -143,6 +154,11 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private Link<InstrumentoProtesto> botaoGerarEnvelopes() {
 		return new Link<InstrumentoProtesto>("botaoEnvelope"){
 			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick() {
 				SimpleDateFormat dataPadrao= new SimpleDateFormat("dd_MM_yy");
@@ -177,6 +193,9 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private Link<InstrumentoProtesto> botaoGerarListagem() {
 		return new Link<InstrumentoProtesto>("botaoListagem"){
 			
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick() {
 				SimpleDateFormat dataPadrao= new SimpleDateFormat("dd_MM_yy");
@@ -222,10 +241,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 		return envelopes;
 	}
 
-	public void setEnvelopes(List<EnvelopeSLIP> envelopes) {
-		this.envelopes = envelopes;
-	}
-	
 	public List<EtiquetaSLIP> getEtiquetas() {
 		if (etiquetas == null) {
 			etiquetas = new ArrayList<EtiquetaSLIP>();

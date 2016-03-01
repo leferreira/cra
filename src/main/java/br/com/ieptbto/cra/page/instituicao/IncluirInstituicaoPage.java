@@ -105,7 +105,6 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		form.add(campoResponsavel());
 		form.add(campoAgenciaCentralizadora());
 		form.add(campoStatus());
-		form.add(campoEnvioAnexo());
 		form.add(comboMunicipios());
 		form.add(comboTipoCampo51());
 		form.add(comboTipoBatimento());
@@ -197,11 +196,6 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		return new RadioChoice<String>("status", status);
 	}
 	
-	private Component campoEnvioAnexo() {
-		List<String> status = Arrays.asList(new String[] { "Sim", "Não" });
-		return new RadioChoice<String>("permitidoAnexos", status);
-	}
-
 	private DropDownChoice<TipoInstituicao> comboTipoInstituicao() {
 		IChoiceRenderer<TipoInstituicao> renderer = new ChoiceRenderer<TipoInstituicao>("tipoInstituicao.label");
 		DropDownChoice<TipoInstituicao> combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao", tipoMediator.listaTipoInstituicao(), renderer);

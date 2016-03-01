@@ -23,10 +23,8 @@ import br.com.ieptbto.cra.bean.ArquivoOcorrenciaBean;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Historico;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -56,28 +54,39 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 	
 	private void carregarArquivosOcorrencias() {
-		List<Historico> historicoArquivos = getTituloRemessa().getHistoricos();
+		TituloRemessa titulo = getTituloRemessa();
+		ArquivoOcorrenciaBean novaOcorrencia = null;
 		
-		for (Historico historico : historicoArquivos) {
-			ArquivoOcorrenciaBean novaOcorrencia = new ArquivoOcorrenciaBean();
-			novaOcorrencia.parseToHistorico(historico);
-			
+		novaOcorrencia = new ArquivoOcorrenciaBean();
+		novaOcorrencia.parseToRemessa(titulo.getRemessa());
+		getArquivosOcorrencias().add(novaOcorrencia);
+		
+		if (titulo.getConfirmacao() != null) {
+			novaOcorrencia = new ArquivoOcorrenciaBean();
+			novaOcorrencia.parseToRemessa(titulo.getConfirmacao().getRemessa());
 			getArquivosOcorrencias().add(novaOcorrencia);
-			if (historico.getRemessa().getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO) ||
-					historico.getRemessa().getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
-				if (historico.getRemessa().getArquivoGeradoProBanco().getId() != historico.getRemessa().getArquivo().getId()) {
-					ArquivoOcorrenciaBean novaOcorrenciaArquivo = new ArquivoOcorrenciaBean();
-					novaOcorrenciaArquivo.parseToArquivoGerado(historico.getRemessa().getArquivoGeradoProBanco());
-					
-					getArquivosOcorrencias().add(novaOcorrenciaArquivo);
-				}
+			
+			if (titulo.getConfirmacao().getRemessa().getArquivo().getId() != titulo.getConfirmacao().getRemessa().getArquivoGeradoProBanco().getId()) {
+				novaOcorrencia = new ArquivoOcorrenciaBean();
+				novaOcorrencia.parseToArquivoGerado(titulo.getConfirmacao().getRemessa().getArquivoGeradoProBanco());
+				getArquivosOcorrencias().add(novaOcorrencia);
+			}
+		}
+		if (titulo.getRetorno() != null) {
+			novaOcorrencia = new ArquivoOcorrenciaBean();
+			novaOcorrencia.parseToRemessa(titulo.getRetorno().getRemessa());
+			getArquivosOcorrencias().add(novaOcorrencia);
+			
+			if (titulo.getRetorno().getRemessa().getArquivo().getId() != titulo.getRetorno().getRemessa().getArquivoGeradoProBanco().getId()) {
+				novaOcorrencia = new ArquivoOcorrenciaBean();
+				novaOcorrencia.parseToArquivoGerado(titulo.getRetorno().getRemessa().getArquivoGeradoProBanco());
+				getArquivosOcorrencias().add(novaOcorrencia);
 			}
 		}
 		
 		if (getTituloRemessa().getPedidoDesistencia() != null) {
-			ArquivoOcorrenciaBean novaOcorrencia = new ArquivoOcorrenciaBean();
+			novaOcorrencia = new ArquivoOcorrenciaBean();
 			novaOcorrencia.parseToDesistenciaProtesto(getTituloRemessa().getPedidoDesistencia().getDesistenciaProtesto());
-			
 			getArquivosOcorrencias().add(novaOcorrencia);
 		}
 		Collections.sort(getArquivosOcorrencias());

@@ -1,39 +1,30 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
-<div class="col-lg-10 col-md-offset-2">
+<div class="col-lg-8 col-md-offset-2">
 	<div class="form-group">
-	  <label class="col-md-2 control-label">NOME DO ARQUIVO:</label>  
-	  <div class="col-md-6">
-	  <input maxlength="13" wicket:id="nomeArquivo" class="form-control input-md">
-	  </div>
+	  <label>NOME DO ARQUIVO</label>  
+	  <input maxlength="13" wicket:id="nomeArquivo" class="form-control">
 	</div>
 	<div class="form-group">
-	  <label class="col-md-2 control-label">TIPO ARQUIVO:</label>
-	  <div class="col-md-6" style="text-align: left;">
-	    <label class="checkbox-inline inline" wicket:id="tipoArquivos">
-	    </label>
-	  </div>
+	  <label>TIPO ARQUIVO</label><br>
+	  <label class="checkbox-inline inline" wicket:id="tipoArquivos"></label>
 	</div>
 	<div class="form-group">
-	  <label class="col-md-2 control-label">SITUA&Ccedil;&Atilde;O:</label>
-	  <div class="col-md-6" style="text-align: left;">
-	    <label class="checkbox-inline inline" wicket:id="situacaoArquivos">
-	    </label>
-	  </div>
+	  <label>SITUA&Ccedil;&Atilde;O</label>
+	  <label class="checkbox-inline inline" wicket:id="situacaoArquivos"></label>
 	</div>
 	<div class="form-group">
-	  <label class="col-md-2 control-label">PER&Iacute;ODO:</label>  
-	  <div class="col-md-2">
-	  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioInicio"  class="form-control input-md">
-	  </div>
-	  <div class="col-md-2">
-	  	<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioFinal" class="form-control input-md">
-	  </div>
+	  <label>PER&Iacute;ODO</label>  
+	  	<div class="row">
+		  <div class="col-xs-6">  
+		  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioInicio"  class="form-control input-md">
+		  </div>
+		  <div class="col-xs-6">  
+		  	<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" wicket:id="dataEnvioFinal" class="form-control input-md">
+		  </div>
+		</div>
 	</div>
 	<div class="form-group">
-	  <label class="col-md-2 control-label"></label>
-	  <div class="col-md-6">
 	    <button wicket:id="botaoBuscar" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
-	  </div>
 	</div>
 </div>
 </wicket:panel>

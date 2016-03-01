@@ -1,88 +1,54 @@
 <head>
-<meta charset="UTF8">
-</head>
+<meta charset="UTF8"></head>
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
+	<div class="col-lg-8 col-md-offset-2">
 		<div class="col-md-6" style="text-align: left;">
-			<fieldset>
-				<legend>DADOS DO T&iacute;TULO</legend>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">NÚMERO DO TÍTULO:</label>  
-				  <div class="col-md-6">
-				  <input wicket:id="numeroTitulo" class="form-control input-md">
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-4 control-label" >NOSSO NÚMERO:</label>  
-				  <div class="col-md-6">
-				  <input wicket:id="nossoNumero" class="form-control input-md">
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">NÚMERO PROTOCOLO:</label>  
-				  <div class="col-md-6">
-				  <input wicket:id="numeroProtocoloCartorio" class="form-control input-md">
-				  </div>
-				</div>
-			</fieldset>
-		</div>
-		<div class="col-md-6" style="text-align: left;">
-			<fieldset>
-				<legend>MUNICÍPIO</legend>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">DATA ENTRADA CRA:</label>  
-				  <div class="col-md-6">
-				  <input id="date" name="data" type="text" wicket:id="dataOcorrencia" placeholder="__/__/____" class="form-control input-md">
-				    
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">MUNICÍPIO:</label>
-				  <div class="col-md-6">
-				    <select wicket:id="municipio" class="form-control">
-				    </select>
-				  </div>
-				</div>
-			</fieldset>
-		</div>
-		<br style="clear: both;"/>
-		<div class="col-md-6" style="text-align: left;">
-			<fieldset>
-				<legend>DADOS DO DEVEDOR</legend>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">NOME DEVEDOR:</label>  
-				  <div class="col-md-6">
-				  <input wicket:id="nomeDevedor" class="form-control input-md">
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">Nº IDENTIFICAÇÃO DEVEDOR:</label>  
-				  <div class="col-md-6">
-				  <input wicket:id="numeroIdentificacaoDevedor" class="form-control input-md">
-				  </div>
-				</div>
-			</fieldset>
-		</div>
-		<div class="col-md-6" style="text-align: left;">
-			<fieldset>
-				<legend>DADOS DO SACADOR<small>&nbsp;(CREDOR)&nbsp;</small></legend>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">NOME SACADOR:</label>  
-				  <div class="col-md-6">
-				  <input wicket:id="nomeSacadorVendedor" class="form-control input-md">
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">DOCUMENTO SACADOR:</label>  
-				  <div class="col-md-6">
-				  <input wicket:id="documentoSacador" class="form-control input-md">
-				  </div>
-				</div>
-			</fieldset>
 			<div class="form-group">
-			<label class="col-md-4 control-label"></label>
-			  <div class="col-md-6">
-			    <button wicket:id="botaoBuscar" id="buscar" name="buscar" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
-			  </div>
+			  <label>NÚMERO DO TÍTULO</label>  
+			  <input wicket:id="numeroTitulo" class="form-control " autofocus="autofocus">
+			</div>
+			<div class="form-group">
+			  <label>NOSSO NÚMERO</label>  
+			  <input wicket:id="nossoNumero" class="form-control ">
+			</div>
+			<div class="form-group">
+			  <label>NÚMERO PROTOCOLO</label>  
+			  <input wicket:id="numeroProtocoloCartorio" class="form-control ">
 			</div>
 		</div>
+		<div class="col-md-6" style="text-align: left;">
+			<div class="form-group">
+			  <label>DATA ENTRADA CRA:</label>  
+			  <input id="date" name="data" type="text" wicket:id="dataOcorrencia" placeholder="__/__/____" class="form-control ">
+			</div>
+			<div class="form-group">
+			  <label>MUNICÍPIO:</label>
+			  <select wicket:id="municipio" class="form-control"></select>
+			</div>
+		</div>
+		<br style="clear: both;">
+		<div class="col-md-6" style="text-align: left;">
+			<div class="form-group">
+			  <label>NOME DEVEDOR:</label>  
+			  <input wicket:id="nomeDevedor" class="form-control ">
+			</div>
+			<div class="form-group">
+			  <label>Nº IDENTIFICAÇÃO DEVEDOR:</label>  
+			  <input wicket:id="numeroIdentificacaoDevedor" class="form-control ">
+			</div>
+		</div>
+		<div class="col-md-6 " style="text-align: left;">
+			<div class="form-group">
+			  <label>NOME SACADOR<small>&nbsp;(CREDOR)&nbsp;</small></label>  
+			  <input wicket:id="nomeSacadorVendedor" class="form-control ">
+			</div>
+			<div class="form-group">
+			  <label>DOCUMENTO SACADOR<small>&nbsp;(CREDOR)&nbsp;</small></label>  
+			  <input wicket:id="documentoSacador" class="form-control ">
+			</div>
+			<div class="form-group">
+			    <button wicket:id="botaoBuscar" id="buscar" name="buscar" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
+			</div>
+		</div>
+	</div>
 </wicket:panel>

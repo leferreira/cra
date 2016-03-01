@@ -9,7 +9,6 @@ import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -29,12 +28,9 @@ import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosPendentesPage;
-import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosPage;
-import br.com.ieptbto.cra.page.relatorio.RelatorioInstituicoesCartoriosPage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
@@ -73,60 +69,17 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	}
 
 	private void carregarHomePage() {
-		linkAcessoRapidoGerarRelatorios();
-		labelOrigemDestino(); 
-		labelQuantidadeRemessasPendentes();
-		labelQuantidadeCancelamentos();
-		linkAcesseNossoSiteIEPTB();
-		downloadOficioCorregedoria();
-		linkConfirmacoesPendentes(); 
+		labelRemessasPendentes();
+		labelDesistenciasCancelamentosPendentes();
+		
+		linkArquivosPendentes(); 
 		listaConfirmacoesPendentes();
-		linkCancelamentosPendentes();
 		listaDesistenciaPendentes();
 		listaCancelamentoPendentes();
 		listaAutorizacaoCancelamentoPendentes();
-	}
+	} 
 	
-	private void linkAcessoRapidoGerarRelatorios() {
-		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
-			add(new Link<Arquivo>("acessoRapidoRelatorios"){
-
-				/***/
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClick() {
-					setResponsePage(new RelatorioArquivosPage());
-				}
-				
-			});
-		} else {
-			add(new Link<Arquivo>("acessoRapidoRelatorios"){
-
-				/***/
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClick() {
-					setResponsePage(new RelatorioInstituicoesCartoriosPage());
-				}
-				
-			});
-		}
-	}
-
-	private void labelOrigemDestino() {
-		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
-				getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-			add(new Label("labelRemessas", "DESTINO"));
-			add(new Label("labelCancelamentos", "DESTINO"));
-		} else {
-			add(new Label("labelRemessas", "ORIGEM"));
-			add(new Label("labelCancelamentos", "ORIGEM"));
-		}
-	}
-	
-	private void labelQuantidadeRemessasPendentes() {
+	private void labelRemessasPendentes() {
 		int quantidade = 0;
 		if (getConfirmacoesPendentes() != null) {
 			quantidade = getConfirmacoesPendentes().size();
@@ -134,7 +87,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		add(new Label("qtdRemessas", quantidade));
 	}
 	
-	private void labelQuantidadeCancelamentos() {
+	private void labelDesistenciasCancelamentosPendentes() {
 		int quantidade = 0;
 		if (getDesistenciaPendentes() != null) {
 			quantidade = quantidade + getDesistenciaPendentes().size();
@@ -147,38 +100,16 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		}
 		add(new Label("qtdCancelamentos", quantidade));
 	}
-
-	private void linkAcesseNossoSiteIEPTB() {
-		add(new ExternalLink("acesseNossoSite", "http://www.ieptbto.com.br/"));
-	}
 	
-	private void downloadOficioCorregedoria(){
-		add(new Link<T>("donwloadOficio") {
-			
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Oficio_Corregedoria.pdf");
-				IResourceStream resourceStream = new FileResourceStream(file);
-	
-				getRequestCycle().scheduleRequestHandlerAfterCurrent(
-				        new ResourceStreamRequestHandler(resourceStream, file.getName()));
-				
-			}
-		});
-	}
-	
-	private void linkConfirmacoesPendentes() {
-		add(new Link<Remessa>("arquivosConfirmacoesPendetes") {
+	private void linkArquivosPendentes() {
+		add(new Link<Remessa>("arquivosPendentes") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick() {
-				setResponsePage(new ListaArquivosPendentesPage(getUser(), getConfirmacoesPendentes()));
+				setResponsePage(new ListaArquivosPendentesPage(getArquivo()));
 			}
 		});
 	}
@@ -280,19 +211,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		});
 	}
 
-	private void linkCancelamentosPendentes() {
-		add(new Link<DesistenciaProtesto>("arquivosCancelamentosPendetes") {
-			
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				setResponsePage(new ListaArquivosPendentesPage(getDesistenciaPendentes(), getCancelamentoPendentes(), getAutorizacaoCancelamentoPendentes()));
-			}
-		});
-	}
-	
 	private void listaCancelamentoPendentes() {
 		add(new ListView<CancelamentoProtesto>("listaCancelamentos", getCancelamentoPendentes()) {
 
