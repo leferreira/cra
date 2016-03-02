@@ -195,9 +195,9 @@ public class DesistenciaProtestoService extends CraWebService {
 	 * @return
 	 */
 	public String buscarDesistenciaCancelamento(String nomeArquivo, Usuario usuario) {
+		RemessaDesistenciaProtestoVO remessaVO = null;
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
-		RemessaDesistenciaProtestoVO remessaVO = null;
 		
 		try {
 			remessaVO = desistenciaProtestoMediator.buscarDesistenciaCancelamentoCartorio(usuario.getInstituicao(), nomeArquivo);
