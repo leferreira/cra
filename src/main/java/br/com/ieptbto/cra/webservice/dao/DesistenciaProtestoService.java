@@ -49,7 +49,7 @@ public class DesistenciaProtestoService extends CraWebService {
 	private List<Exception> erros;
 
 	/**
-	 *  MÉTODO DE RECEBIMENTO DE ARQUIVOS DE DESISTÊNCIA DAS INSTITUIÇÕES
+	 *  RECEBIMENTO DE ARQUIVOS DE DESISTÊNCIA DAS INSTITUIÇÕES
 	 *  
 	 * @param nomeArquivo
 	 * @param usuario
@@ -188,7 +188,7 @@ public class DesistenciaProtestoService extends CraWebService {
 	}
 
 	/**
-	 * MÉTODO DE CONSULTA DE DESISTÊNCIAS PELOS CARTÓRIOS 
+	 * CONSULTA DE DESISTÊNCIAS PELOS CARTÓRIOS 
 	 * 
 	 * @param nomeArquivo
 	 * @param usuario

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
 import br.com.ieptbto.cra.conversor.ConversorArquivoVO;
+import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
@@ -38,7 +39,7 @@ public class RemessaService extends CraWebService {
 	private ArquivoVO arquivoVO;
 
 	/**
-	 * MÉTODOS DE ENVIO DE REMESSAS PELOS BANCOS/CONVÊNIOS
+	 * ENVIO DE REMESSAS PELOS BANCOS/CONVÊNIOS
 	 * 
 	 * @param nomeArquivo
 	 * @param usuario
@@ -109,26 +110,30 @@ public class RemessaService extends CraWebService {
 	}
 	
 	/**
-	 * MÉTODOS DE CONSULTA DE REMESSAS PELOS CARTÓRIOS
+	 * CONSULTA DE REMESSAS PELOS CARTÓRIOS
 	 * 
 	 * @param nomeArquivo
 	 * @param usuario
 	 * @return
 	 */
 	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
+		Remessa remessa = null;
+		RemessaVO remessaVO = null;
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
-		RemessaVO remessa = null;
 		
 		try {
-			remessa = remessaMediator.buscarRemessaParaCartorio(usuario.getInstituicao(), nomeArquivo);
-			if (remessa == null) {
+			remessaVO = remessaMediator.buscarRemessaParaCartorio(remessa, usuario.getInstituicao(), nomeArquivo);
+			if (remessaVO == null) {
 				return setRespostaPadrao(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 			}
+			
+			setMensagem(gerarResposta(remessaVO, getNomeArquivo(), CONSTANTE_REMESSA_XML)); 
 		} catch (Exception e) {
+			e.printStackTrace();
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
-		return gerarResposta(remessa, getNomeArquivo(), CONSTANTE_REMESSA_XML);
+		return getMensagem(); 
 	}
 
 	private String gerarResposta(RemessaVO remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {

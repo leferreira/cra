@@ -44,6 +44,7 @@ public class CraWebService {
 	public static final String CONSTANTE_CANCELAMENTO_XML = "cancelamento";
 	protected Usuario usuario;
 	protected String nomeArquivo;
+	protected String mensagem;
 
 	protected String setResposta(LayoutPadraoXML layoutPadraoResposta ,ArquivoVO arquivo, String nomeArquivo, String nomeNode) {
 		if (usuario == null) {
@@ -215,7 +216,7 @@ public class CraWebService {
 			msg = msg.replace(" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace(" xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			writer.close();
-			return msg;
+			setMensagem(msg);
 
 		} catch (JAXBException e) {
 			logger.error(e.getMessage(), e.getCause());
@@ -224,7 +225,7 @@ public class CraWebService {
 			logger.error(e.getMessage(), e.getCause());
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
-		return null;
+		return getMensagem();
 	}
 	
 	public Usuario getUsuario() {
@@ -236,6 +237,17 @@ public class CraWebService {
 
 	public String getNomeArquivo() {
 		return nomeArquivo;
+	}
+	
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
+	}
+	
+	public String getMensagem() {
+		if (mensagem == null) {
+			mensagem = StringUtils.EMPTY;
+		}
+		return mensagem;
 	}
 
 	public void setUsuario(Usuario usuario) {
