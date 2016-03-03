@@ -19,6 +19,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
+import br.com.ieptbto.cra.dao.InstituicaoDAO;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
@@ -47,20 +48,22 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	
+
 	@SpringBean
 	private RemessaMediator remessaMediator;
 	@SpringBean
 	private MunicipioMediator municipioMediator;
+	@SpringBean
+	private InstituicaoDAO instituicaoDAO;
 	private Arquivo arquivo;
 
 	public HomePage() {
 		super();
 		this.arquivo = remessaMediator.arquivosPendentes(getUser().getInstituicao());
-		
+
 		carregarHomePage();
 	}
-	
+
 	public HomePage(PageParameters parameters) {
 		this.arquivo = remessaMediator.arquivosPendentes(getUser().getInstituicao());
 
@@ -71,14 +74,14 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private void carregarHomePage() {
 		labelRemessasPendentes();
 		labelDesistenciasCancelamentosPendentes();
-		
-		linkArquivosPendentes(); 
+
+		linkArquivosPendentes();
 		listaConfirmacoesPendentes();
 		listaDesistenciaPendentes();
 		listaCancelamentoPendentes();
 		listaAutorizacaoCancelamentoPendentes();
-	} 
-	
+	}
+
 	private void labelRemessasPendentes() {
 		int quantidade = 0;
 		if (getConfirmacoesPendentes() != null) {
@@ -86,7 +89,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		}
 		add(new Label("qtdRemessas", quantidade));
 	}
-	
+
 	private void labelDesistenciasCancelamentosPendentes() {
 		int quantidade = 0;
 		if (getDesistenciaPendentes() != null) {
@@ -100,7 +103,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		}
 		add(new Label("qtdCancelamentos", quantidade));
 	}
-	
+
 	private void linkArquivosPendentes() {
 		add(new Link<Remessa>("arquivosPendentes") {
 
@@ -113,7 +116,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			}
 		});
 	}
-	
 
 	private void listaConfirmacoesPendentes() {
 		add(new ListView<Remessa>("listConfirmacoes", getConfirmacoesPendentes()) {
@@ -126,80 +128,83 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				final Remessa remessa = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-					/***/
-					private static final long serialVersionUID = 1L;
+			        /***/
+			        private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-						setResponsePage(new TitulosArquivoPage(remessa));
-					}
-				};
+			        @Override
+			        public void onClick() {
+				        setResponsePage(new TitulosArquivoPage(remessa));
+			        }
+		        };
 				linkArquivo.add(new Label("arquivo", remessa.getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				
+				getUser().setInstituicao(instituicaoDAO.buscarPorPK(getUser().getInstituicao()));
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String instituicao = remessa.getInstituicaoOrigem().getNomeFantasia();
 					item.add(new Label("instituicao", instituicao.toUpperCase()));
 					item.add(downloadAnexos(remessa));
-				} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)){
-					item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+				} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+					item.add(new Label("instituicao", municipioMediator
+		                    .buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 					item.add(downloadAnexos(remessa));
 				} else {
-					item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+					item.add(new Label("instituicao", municipioMediator
+		                    .buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 					item.add(new Label("downloadAnexos", StringUtils.EMPTY));
 				}
-				
-				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
+
+				item.add(
+		                new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
 				item.add(downloadArquivoTXT(remessa));
 			}
-			
+
 			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
 				return new Link<Remessa>("downloadArquivo") {
 
-					/***/
-					private static final long serialVersionUID = 1L;
+			        /***/
+			        private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-						try {
-							File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
-							IResourceStream resourceStream = new FileResourceStream(file);
-	
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							        new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
-						} catch (InfraException ex) {
-							getFeedbackPanel().error(ex.getMessage());
-						} catch (Exception e) {
-							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
-						}
-					}
-				};
+			        @Override
+			        public void onClick() {
+				        try {
+					        File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
+					        IResourceStream resourceStream = new FileResourceStream(file);
+
+					        getRequestCycle().scheduleRequestHandlerAfterCurrent(
+		                            new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
+				        } catch (InfraException ex) {
+					        getFeedbackPanel().error(ex.getMessage());
+				        } catch (Exception e) {
+					        getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+				        }
+			        }
+		        };
 			}
-			
+
 			private Link<Remessa> downloadAnexos(final Remessa remessa) {
 				List<Anexo> anexos = remessaMediator.verificarAnexosRemessa(remessa);
 				Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
-					
-					/***/
-					private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-						
-						try { 
-							File file = remessaMediator.processarArquivosAnexos(getUser(), remessa);
-							IResourceStream resourceStream = new FileResourceStream(file);
-							
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-									new ResourceStreamRequestHandler(resourceStream, file.getName()));
-						} catch (InfraException ex) {
-							getFeedbackPanel().error(ex.getMessage());
-						} catch (Exception e) {
-							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
-						}
-					}
-				};
-				
+			        /***/
+			        private static final long serialVersionUID = 1L;
+
+			        @Override
+			        public void onClick() {
+
+				        try {
+					        File file = remessaMediator.processarArquivosAnexos(getUser(), remessa);
+					        IResourceStream resourceStream = new FileResourceStream(file);
+
+					        getRequestCycle()
+		                            .scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
+				        } catch (InfraException ex) {
+					        getFeedbackPanel().error(ex.getMessage());
+				        } catch (Exception e) {
+					        getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+				        }
+			        }
+		        };
+
 				if (anexos != null) {
 					if (anexos.isEmpty()) {
 						linkAnexos.setOutputMarkupId(false);
@@ -222,47 +227,50 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				final CancelamentoProtesto remessa = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-					/***/
-					private static final long serialVersionUID = 1L;
+			        /***/
+			        private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-					}
-				};
+			        @Override
+			        public void onClick() {
+			        }
+		        };
 				linkArquivo.add(new Label("desistencia", remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				
-				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
-						getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) || getUser()
+		                .getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					item.add(new Label("banco",
+		                    municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio())
+		                            .getNomeMunicipio().toUpperCase()));
 				} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = remessa.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
-				
-				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaCancelamentoProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
+
+				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(
+		                remessa.getRemessaCancelamentoProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
 				item.add(downloadArquivoTXT(remessa));
 			}
-			
+
 			private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto remessa) {
 				return new Link<Remessa>("downloadArquivo") {
 
-					/***/
-					private static final long serialVersionUID = 1L;
+			        /***/
+			        private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-						File file = remessaMediator.baixarCancelamentoTXT(getUser(), remessa);
-						IResourceStream resourceStream = new FileResourceStream(file);
+			        @Override
+			        public void onClick() {
+				        File file = remessaMediator.baixarCancelamentoTXT(getUser(), remessa);
+				        IResourceStream resourceStream = new FileResourceStream(file);
 
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
-					}
-				};
+				        getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+		                        remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+			        }
+		        };
 			}
 		});
 	}
-	
+
 	private void listaDesistenciaPendentes() {
 		add(new ListView<DesistenciaProtesto>("listaDesistencias", getDesistenciaPendentes()) {
 
@@ -274,43 +282,46 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				final DesistenciaProtesto remessa = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-					/***/
-					private static final long serialVersionUID = 1L;
+			        /***/
+			        private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-					}
-				};
+			        @Override
+			        public void onClick() {
+			        }
+		        };
 				linkArquivo.add(new Label("desistencia", remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				
-				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
-						getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) || getUser()
+		                .getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					item.add(new Label("banco",
+		                    municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio())
+		                            .getNomeMunicipio().toUpperCase()));
 				} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = remessa.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
-				
-				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
+
+				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(
+		                remessa.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
 				item.add(downloadArquivoTXT(remessa));
 			}
-			
+
 			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto desistenciaProtesto) {
 				return new Link<Remessa>("downloadArquivo") {
 
-					/***/
-					private static final long serialVersionUID = 1L;
+			        /***/
+			        private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-						File file = remessaMediator.baixarDesistenciaTXT(getUser(), desistenciaProtesto);
-						IResourceStream resourceStream = new FileResourceStream(file);
+			        @Override
+			        public void onClick() {
+				        File file = remessaMediator.baixarDesistenciaTXT(getUser(), desistenciaProtesto);
+				        IResourceStream resourceStream = new FileResourceStream(file);
 
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
-					}
-				};
+				        getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+		                        desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+			        }
+		        };
 			}
 		});
 	}
@@ -326,59 +337,62 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				final AutorizacaoCancelamento remessa = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-					/***/
-					private static final long serialVersionUID = 1L;
+			        /***/
+			        private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-					}
-				};
+			        @Override
+			        public void onClick() {
+			        }
+		        };
 				linkArquivo.add(new Label("desistencia", remessa.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				
-				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) ||
-						getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) || getUser()
+		                .getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					item.add(new Label("banco",
+		                    municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio())
+		                            .getNomeMunicipio().toUpperCase()));
 				} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = remessa.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
-				
-				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio().toDate(), new Date())));
+
+				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(
+		                remessa.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio().toDate(), new Date())));
 				item.add(downloadArquivoTXT(remessa));
 			}
-			
+
 			private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento ac) {
 				return new Link<Remessa>("downloadArquivo") {
 
-					/***/
-					private static final long serialVersionUID = 1L;
+			        /***/
+			        private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-						File file = remessaMediator.baixarAutorizacaoTXT(getUser(), ac);
-						IResourceStream resourceStream = new FileResourceStream(file);
+			        @Override
+			        public void onClick() {
+				        File file = remessaMediator.baixarAutorizacaoTXT(getUser(), ac);
+				        IResourceStream resourceStream = new FileResourceStream(file);
 
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
-					}
-				};
+				        getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+		                        ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+			        }
+		        };
 			}
 		});
 	}
-	
+
 	private List<DesistenciaProtesto> getDesistenciaPendentes() {
 		return arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto();
 	}
-	
+
 	private List<CancelamentoProtesto> getCancelamentoPendentes() {
 		return arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto();
 	}
-	
+
 	private List<AutorizacaoCancelamento> getAutorizacaoCancelamentoPendentes() {
 		return arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento();
 	}
-	
+
 	private List<Remessa> getConfirmacoesPendentes() {
 		return arquivo.getRemessas();
 	}
@@ -386,7 +400,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	public Arquivo getArquivo() {
 		return arquivo;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

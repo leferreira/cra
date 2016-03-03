@@ -1,10 +1,12 @@
 package br.com.ieptbto.cra.menu;
 
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.PermissaoUsuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
@@ -14,16 +16,15 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 public class CraMenu extends Panel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	@SpringBean
+	UsuarioMediator usuarioMediator;
 	private Usuario usuario;
 
 	public CraMenu(String id, Usuario usuario) {
 		super(id);
 		Menu menu = new Menu("CraMenu");
-		this.usuario = usuario;
+		this.usuario = usuarioMediator.buscarUsuarioPorPK(usuario);
 		adicionarMenuLateral(menu);
 		add(menu);
 	}
@@ -39,7 +40,7 @@ public class CraMenu extends Panel {
 		menuPadrao.addItem("EnviarArquivoEmpresa", rolesPesquisar);
 		menuPadrao.addItem("ArquivosCancelamentoDevolvidoPage", rolesPesquisar);
 		menuPadrao.addItem("MonitorarTitulos", rolesPesquisar);
-		
+
 		/** Relatorio Padrão */
 		MenuItem menuRelatorioPadrao = menu.addItem("menuRelatorioPadrao", rolesPesquisar);
 		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
@@ -48,8 +49,8 @@ public class CraMenu extends Panel {
 			menuRelatorioPadrao.setVisible(true);
 		}
 		menuRelatorioPadrao.addItem("RelatorioArquivosInstituicoesCartorios", rolesPesquisar);
-		
-		/** Relatorio Cra*/
+
+		/** Relatorio Cra */
 		MenuItem menuRelatorioCra = menu.addItem("menuRelatorioCra", rolesPesquisar);
 		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 			menuRelatorioCra.setVisible(true);
@@ -59,8 +60,8 @@ public class CraMenu extends Panel {
 		menuRelatorioCra.addItem("Relatorio", rolesIncluir);
 		menuRelatorioCra.addItem("RelatorioCustasCra", rolesIncluir);
 		menuRelatorioCra.addItem("RelatorioTitulos", rolesIncluir);
-//		menuRelatorioCra.addItem("RelatorioBatimento", rolesIncluir);
-		
+		// menuRelatorioCra.addItem("RelatorioBatimento", rolesIncluir);
+
 		/** Menus Administrador */
 		MenuItem menuAdministrador = menu.addItem("menuAdministrador", rolesIncluir);
 		menuAdministrador.setVisible(verificaPermissao(usuario));
@@ -68,11 +69,11 @@ public class CraMenu extends Panel {
 		menuAdministrador.addItem("ImportarExtrato", rolesIncluir);
 		menuAdministrador.addItem("BuscarDepositos", rolesIncluir);
 		menuAdministrador.addItem("LiberarRetornos", rolesIncluir);
-		
+
 		menuAdministrador.addItem("GerarRemessasConvenio", rolesIncluir);
 		menuAdministrador.addItem("GerarConfirmacao", rolesIncluir);
 		menuAdministrador.addItem("GerarRetorno", rolesIncluir);
-		
+
 		menuAdministrador.addItem("Instituicoes", rolesIncluir);
 		menuAdministrador.addItem("CartoriosProtesto", rolesIncluir);
 		menuAdministrador.addItem("EmpresasFiliadas", rolesIncluir);
@@ -80,18 +81,18 @@ public class CraMenu extends Panel {
 		menuAdministrador.addItem("Municipios", rolesIncluir);
 		menuAdministrador.addItem("TipoInstituicoes", rolesIncluir);
 		menuAdministrador.addItem("Usuarios", rolesIncluir);
-		
+
 		menuAdministrador.addItem("InstrumentoDeProtesto", rolesIncluir);
 		menuAdministrador.addItem("GerarSlip", rolesIncluir);
-//		menuAdministrador.addItem("BuscarInstrumentoProtesto", rolesIncluir);
-//		menuAdministrador.addItem("LiberarEnvelopes", rolesIncluir);
+		// menuAdministrador.addItem("BuscarInstrumentoProtesto", rolesIncluir);
+		// menuAdministrador.addItem("LiberarEnvelopes", rolesIncluir);
 		menuAdministrador.addItem("ImportarArquivoDePara", rolesIncluir);
 	}
 
 	private boolean verificaPermissao(Usuario user) {
-		
-		if (user.getGrupoUsuario().getGrupo().equals(PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel()) ||
-				user.getGrupoUsuario().getGrupo().equals(PermissaoUsuario.ADMINISTRADOR.getLabel())) {
+
+		if (user.getGrupoUsuario().getGrupo().equals(PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel())
+		        || user.getGrupoUsuario().getGrupo().equals(PermissaoUsuario.ADMINISTRADOR.getLabel())) {
 			return true;
 		}
 		return false;
