@@ -15,6 +15,7 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.lang.Bytes;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -31,18 +32,20 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class EnviarArquivoEmpresaPage extends BasePage<Arquivo> {
 
+	private Usuario usuario;
 	private Arquivo arquivo;
 	private FileUploadField fileUploadField;
 	private FormArquivoEmpresa form;
 
 	public EnviarArquivoEmpresaPage() {
 		this.arquivo = new Arquivo();
+		this.usuario = getUser();
 		addComponentes();
 	}
 
 	private void addComponentes() {
 
-		form = new FormArquivoEmpresa("form", getModel(), getUser()) {
+		form = new FormArquivoEmpresa("form", getModel(), getUsuario()) {
 			@Override
 			protected void onSubmit() {
 				setFile(fileUploadField);
@@ -107,6 +110,10 @@ public class EnviarArquivoEmpresaPage extends BasePage<Arquivo> {
 			}
 
 		};
+	}
+	
+	public Usuario getUsuario() {
+		return usuario;
 	}
 
 	@Override

@@ -35,9 +35,9 @@ public class BuscarArquivoInstituicaoPanel extends Panel  {
 	private static final Logger logger = Logger.getLogger(BuscarArquivoInstituicaoPanel.class);
 	
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	MunicipioMediator municipioMediator;
+	private MunicipioMediator municipioMediator;
 	private IModel<Arquivo> model;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;

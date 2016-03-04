@@ -131,10 +131,8 @@ public class BatimentoPage extends BasePage<Remessa>{
 				} else {
 					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", valorPagos));
 				}
-				
 				ArrayList<Deposito> depositos = new ArrayList<Deposito>();
 				retorno.setListaDepositos(depositos);
-
 				item.add(new Check<Remessa>("checkbox", item.getModel()));
 				item.add(new ListMultipleChoice<Deposito>("depositos", new Model<ArrayList<Deposito>>(depositos), getDepositos()));
             }
@@ -152,9 +150,7 @@ public class BatimentoPage extends BasePage<Remessa>{
 				final Deposito deposito = item.getModelObject();
                 item.add(new Label("data", DataUtil.localDateToString(deposito.getData())));
                 item.add(new Label("lancamento", deposito.getLancamento().toUpperCase()));
-                
                 item.add(new Label("valor", "R$ " + deposito.getValorCredito()));
-
                 if (StringUtils.isBlank(deposito.getDescricao())) {
                 	item.add(new Label("tooltip", "").setVisible(false));
                 } else {

@@ -23,10 +23,17 @@ import br.com.ieptbto.cra.bean.ArquivoOcorrenciaBean;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
+import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -43,57 +50,73 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private static final long serialVersionUID = 1L;
 	
 	@SpringBean
+	private ArquivoMediator arquivoMediator;
+	@SpringBean
+	private RemessaMediator remessaMediator;
+	@SpringBean
 	private TituloMediator tituloMediator;
+	@SpringBean
+	private ConfirmacaoMediator confirmacaoMediator;
+	@SpringBean
+	private RetornoMediator retornoMediator;
+	@SpringBean
+	private DesistenciaProtestoMediator desistenciaMediator;
 	private TituloRemessa tituloRemessa;
 	private List<ArquivoOcorrenciaBean> arquivosOcorrencias;
 
 	public HistoricoPage(TituloRemessa titulo){
-		this.tituloRemessa = tituloMediator.carregarDadosHistoricoTitulo(titulo);
+		this.tituloRemessa = titulo;
 		
-		carregarCampos();
 		carregarArquivosOcorrencias();
+		carregarCampos();
 	}
 	
 	private void carregarArquivosOcorrencias() {
-		TituloRemessa titulo = getTituloRemessa();
+		TituloRemessa titulo = getTituloRemessa(); 
 		ArquivoOcorrenciaBean novaOcorrencia = null;
 		
 		novaOcorrencia = new ArquivoOcorrenciaBean();
+		if (titulo.getRemessa()!= null) {
+			Remessa remessa = remessaMediator.carregarRemessaPorId(titulo.getRemessa().getId());
+			titulo.setRemessa(remessa);
+		}
 		novaOcorrencia.parseToRemessa(titulo.getRemessa());
 		getArquivosOcorrencias().add(novaOcorrencia);
 		
 		if (titulo.getConfirmacao() != null) {
+			Confirmacao confirmacao = confirmacaoMediator.carregarTituloConfirmacaoPorId(titulo.getConfirmacao().getId()); 
+			getTituloRemessa().setConfirmacao(confirmacao);
 			novaOcorrencia = new ArquivoOcorrenciaBean();
-			novaOcorrencia.parseToRemessa(titulo.getConfirmacao().getRemessa());
+			novaOcorrencia.parseToRemessa(confirmacao.getRemessa());
 			getArquivosOcorrencias().add(novaOcorrencia);
 			
-			if (titulo.getConfirmacao().getRemessa().getArquivo().getId() != titulo.getConfirmacao().getRemessa().getArquivoGeradoProBanco().getId()) {
-				novaOcorrencia = new ArquivoOcorrenciaBean();
-				novaOcorrencia.parseToArquivoGerado(titulo.getConfirmacao().getRemessa().getArquivoGeradoProBanco());
+			if (confirmacao.getRemessa().getArquivo().getId() != confirmacao.getRemessa().getArquivoGeradoProBanco().getId()) {
+				novaOcorrencia = new ArquivoOcorrenciaBean(); 
+				novaOcorrencia.parseToArquivoGerado(confirmacao.getRemessa().getArquivoGeradoProBanco());
 				getArquivosOcorrencias().add(novaOcorrencia);
 			}
-		}
+		} 
 		if (titulo.getRetorno() != null) {
+			Retorno retorno = retornoMediator.carregarTituloRetornoPorId(titulo.getRetorno().getId());
+			getTituloRemessa().setRetorno(retorno);
 			novaOcorrencia = new ArquivoOcorrenciaBean();
-			novaOcorrencia.parseToRemessa(titulo.getRetorno().getRemessa());
+			novaOcorrencia.parseToRemessa(retorno.getRemessa());
 			getArquivosOcorrencias().add(novaOcorrencia);
 			
-			if (titulo.getRetorno().getRemessa().getArquivo().getId() != titulo.getRetorno().getRemessa().getArquivoGeradoProBanco().getId()) {
+			if (retorno.getRemessa().getArquivo().getId() != retorno.getRemessa().getArquivoGeradoProBanco().getId()) {
 				novaOcorrencia = new ArquivoOcorrenciaBean();
-				novaOcorrencia.parseToArquivoGerado(titulo.getRetorno().getRemessa().getArquivoGeradoProBanco());
+				novaOcorrencia.parseToArquivoGerado(retorno.getRemessa().getArquivoGeradoProBanco());
 				getArquivosOcorrencias().add(novaOcorrencia);
 			}
 		}
 		
 		if  (titulo.getPedidosDesistencia() != null) {
-			if (!titulo.getPedidosDesistencia().isEmpty()) {
-				for (PedidoDesistencia pedido : titulo.getPedidosDesistencia()) {
-					
-					novaOcorrencia = new ArquivoOcorrenciaBean();
-					novaOcorrencia.parseToDesistenciaProtesto(pedido.getDesistenciaProtesto());
-					getArquivosOcorrencias().add(novaOcorrencia);
-				}  
-			}			
+			List<PedidoDesistencia> pedidoDesistencias = desistenciaMediator.buscarPedidosDesistenciaProtestoPorTitulo(titulo);
+			for (PedidoDesistencia pedido : pedidoDesistencias) {
+				novaOcorrencia = new ArquivoOcorrenciaBean();
+				novaOcorrencia.parseToDesistenciaProtesto(pedido.getDesistenciaProtesto());
+				getArquivosOcorrencias().add(novaOcorrencia);
+			}  
 		}
 		Collections.sort(getArquivosOcorrencias());
 		add(listaArquivoOcorrenciaBean());
@@ -203,7 +226,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	private Label codigoCartorio() {
-		return new Label("codigoCartorio", new Model<String>(getTituloRemessa().getRemessa().getInstituicaoDestino().getCodigoCartorio()));
+		return new Label("codigoCartorio", new Model<String>(""));
 	}
 
     private Label dataOcorrencia() {

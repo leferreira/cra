@@ -11,7 +11,7 @@
 					<button class="btn btn-primary" type="submit"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
 				</span>
 			</h4>
-			<br>
+			<br> 
 			<div class="col-70">
 				<div wicket:id="group">
                       <table id="table-no-pagination" class="table table-striped table-hover table-responsive">
@@ -23,7 +23,6 @@
                                   <th class="col-center"><input type="checkbox" name="selecctall" id="selecctall" > </th>
                                   <th class="col-right">VALOR</th>
                                   <th class="col-center">CÓD. DEPÓSITO</th> 
-                              	   <th class="col-right">TOTAL</th>
                               </tr> 
                           </thead>   
                           <tbody>
@@ -34,13 +33,12 @@
                                   <td class="col-center" style="width: 45px !important;"><input wicket:id="checkbox" type="checkbox" class="checkbox col-center"></td>
                                   <td class="col-right valor"><span wicket:id="valorPagos"></span></td>
                                   <td class="col-center">
-                                <div class="controls controls-row col-center"> 
-									<select wicket:id="depositos" class="chosen-select col-center"  style="width: 177px;"
-										multiple="multiple" data-placeholder="Escolha os Depósitos...">
-									</select>
-								</div>
+	                                <div class="controls controls-row col-center"> 
+										<select wicket:id="depositos" class="chosen-select col-center"  style="width: 177px;"
+											multiple="multiple" data-placeholder="Escolha os Depósitos...">
+										</select>
+									</div>
                                   </td> 
-                                  <td class="col-right valor"><span >R$ 0,00</span></td>
                               </tr>
                           </tbody>
                       </table>
@@ -51,7 +49,7 @@
 					<fieldset>
 						<legend>EXTRATO</legend>
 						 <div style="height: 420px; overflow-y: scroll;">
-                         <table class="table table-striped table-hover">
+                         <table class="table table-striped table-hover" style="font-size: 11px;">
                              <thead>
                                  <tr>
                                      <th class="col-center">DATA</th>

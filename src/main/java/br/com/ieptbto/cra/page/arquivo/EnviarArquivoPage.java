@@ -17,6 +17,7 @@ import org.apache.wicket.util.lang.Bytes;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.DesistenciaException;
@@ -45,12 +46,14 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	private RelatorioMediator relatorioMediator;
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
+	private Usuario usuario;
 	private Arquivo arquivo;
 	private Form<Arquivo> form;
 	private FileUploadField fileUploadField;
 
 	public EnviarArquivoPage() {
 		this.arquivo = new Arquivo();
+		this.usuario = getUser();
 		this.arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
 
 		form = new Form<Arquivo>("form", getModel()) {
@@ -66,7 +69,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				getFeedbackMessages().clear();
 
 				try {
-					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUser());
+					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUsuario());
 					setArquivo(arquivoRetorno.getArquivo());
 
 					if (arquivo != null) {
@@ -134,6 +137,10 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				super.finalize();
 			}
 		};
+	}
+	
+	public Usuario getUsuario() {
+		return usuario;
 	}
 	
 	public Arquivo getArquivo() {

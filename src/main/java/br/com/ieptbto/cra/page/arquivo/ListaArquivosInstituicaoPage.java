@@ -85,7 +85,7 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
+						File file = arquivoMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(

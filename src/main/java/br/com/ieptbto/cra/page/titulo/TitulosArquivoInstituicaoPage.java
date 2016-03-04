@@ -5,10 +5,8 @@ import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
-
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -22,34 +20,44 @@ import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Confirmacao;
+import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Retorno;
+import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
+@SuppressWarnings( {"serial","rawtypes"} )
 public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 	@SpringBean
 	private TituloMediator tituloMediator;
 	@SpringBean
+	private ArquivoMediator arquivoMediator;
+	@SpringBean
 	private RemessaMediator remessaMediator;
 	@SpringBean
 	private RelatorioMediator relatorioMediator;
 	private Arquivo arquivo;
-	private List<TituloRemessa> titulos;
+	private List<Titulo> titulos;
 	
 	public TitulosArquivoInstituicaoPage(Arquivo arquivo) {
-		this.titulos = tituloMediator.buscarTitulosPorArquivo(arquivo , getUser().getInstituicao());
-		setArquivo(arquivo);
+		this.arquivo = arquivoMediator.carregarArquivoPorId(arquivo.getId());
+		this.titulos = tituloMediator.carregarTitulosGenerico(arquivo);
+		
 		carregarInformacoes();
 	}
 	
@@ -65,32 +73,113 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 		add(downloadArquivoTXT(getArquivo()));
 	}
 
-	private ListView<TituloRemessa> carregarListaTitulos() {
-		return new ListView<TituloRemessa>("listViewTituloArquivo", getTitulos()) {
+	private ListView<Titulo> carregarListaTitulos() {
+		return new ListView<Titulo>("listViewTituloArquivo", getTitulos()) {
 
 			@Override
-			protected void populateItem(ListItem<TituloRemessa> item) {
-				final TituloRemessa tituloLista = item.getModelObject();
-				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
-				if (tituloLista.getConfirmacao() != null) {
-					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
-				} else if (tituloLista.getRetorno() != null) {
-					item.add(new Label("protocolo", tituloLista.getRetorno().getNumeroProtocoloCartorio()));
-				} else { 
-					item.add(new Label("protocolo", StringUtils.EMPTY));
+			protected void populateItem(ListItem<Titulo> item) {
+				final Titulo titulo = item.getModelObject();
+				TituloRemessa tituloRemessa = null;
+
+				if (TituloRemessa.class.isInstance(titulo)) {
+					tituloRemessa = TituloRemessa.class.cast(titulo);
+				} else if (Confirmacao.class.isInstance(titulo)) {
+					tituloRemessa = Confirmacao.class.cast(titulo).getTitulo();
+				} else if (Retorno.class.isInstance(titulo)) {
+					tituloRemessa = Retorno.class.cast(titulo).getTitulo();
 				}
 				
-				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
+		        item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", titulo.getSaldoTitulo()));
+		        item.add(new Label("nossoNumero", titulo.getNossoNumero()));
+		        item.add(new Label("pracaProtesto", tituloRemessa.getPracaProtesto()));
+		        item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
+	        	if (tituloRemessa.getConfirmacao() == null) {
+	        		item.add(new Label("numeroTitulo", titulo.getNumeroTitulo()));
+	        		item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
+	        		item.add(new Label("protocolo", StringUtils.EMPTY));
+	        		item.add(new Label("dataSituacao", StringUtils.EMPTY));
+	        		
+	        	} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
+	        		item.add(new Label("numeroTitulo", titulo.getNumeroTitulo()));
+	        		item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
+	        		item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+	        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
+	        		
+	        	} else if (tituloRemessa.getRetorno() != null) {
+	        		item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+	        		item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
+	        		item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+	        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
+	        	}
+		        
+		        Link<Arquivo> linkArquivoRemessa = new Link<Arquivo>("linkArquivo") {
+		        	
+		        	/***/
+		        	private static final long serialVersionUID = 1L;
+		        	
+		        	public void onClick() {
+		        		TituloRemessa t = new TituloRemessa();
+						if (TituloRemessa.class.isInstance(titulo)) {
+							t = TituloRemessa.class.cast(titulo);
+						} else if (Confirmacao.class.isInstance(titulo)) {
+							t = Confirmacao.class.cast(titulo).getTitulo();
+						} else if (Retorno.class.isInstance(titulo)) {
+							t = Retorno.class.cast(titulo).getTitulo();							
+						}
+		        		setResponsePage(new TitulosArquivoPage(t.getRemessa()));  
+		        	}
+		        };
+		        linkArquivoRemessa.add(new Label("nomeRemessa", tituloRemessa.getRemessa().getArquivo().getNomeArquivo()));
+		        item.add(linkArquivoRemessa);
+		        
+				Link<T> linkHistorico = new Link<T>("linkHistorico") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					public void onClick() {
-						setResponsePage(new HistoricoPage(tituloLista));
+						TituloRemessa tituloHistorico = new TituloRemessa();
+						if (T.class.isInstance(titulo)) {
+							tituloHistorico = TituloRemessa.class.cast(titulo);
+						} else if (Confirmacao.class.isInstance(titulo)) {
+							tituloHistorico = Confirmacao.class.cast(titulo).getTitulo();
+						} else if (Retorno.class.isInstance(titulo)) {
+							tituloHistorico = Retorno.class.cast(titulo).getTitulo();							
+						}
+						setResponsePage(new HistoricoPage(tituloHistorico));
 		            }
 		        };
-		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
+		        if (tituloRemessa.getNomeDevedor().length() > 25) {
+		        	linkHistorico.add(new Label("nomeDevedor", tituloRemessa.getNomeDevedor().substring(0, 24)));
+		        }else {
+		        	linkHistorico.add(new Label("nomeDevedor", tituloRemessa.getNomeDevedor()));
+		        }
 		        item.add(linkHistorico);
-				item.add(new Label("praca", tituloLista.getPracaProtesto()));
-				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
-				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
+		        
+		        
+		        Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno") {
+		        	
+		        	/***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+						Remessa retorno = new Remessa();
+						if (TituloRemessa.class.isInstance(titulo)) {
+							retorno = TituloRemessa.class.cast(titulo).getRetorno().getRemessa();
+						} else if (Confirmacao.class.isInstance(titulo)) {
+							retorno = Confirmacao.class.cast(titulo).getTitulo().getRetorno().getRemessa();
+						} else if (Retorno.class.isInstance(titulo)) {
+							retorno = Retorno.class.cast(titulo).getTitulo().getRetorno().getRemessa();							
+						}
+		        		setResponsePage(new TitulosArquivoPage(retorno));  
+		        	}
+		        };
+		        if (tituloRemessa.getRetorno() != null){
+	        		linkRetorno.add(new Label("retorno", tituloRemessa.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
+		        } else {
+		        	linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
+		        }
+		        item.add(linkRetorno);
 			}
 		};
 	}
@@ -109,7 +198,6 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 					} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
 						jasperPrint = relatorioMediator.relatorioConfirmacao(arquivo, getUser().getInstituicao());
 					} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
-//						jasperPrint = relatorioMediator.relatorioRetorno(arquivo, getUser().getInstituicao());
 					}
 					
 					File pdf = File.createTempFile("report", ".pdf");
@@ -132,7 +220,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 			@Override
 			public void onClick() {
-				File file = remessaMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
+				File file = arquivoMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
 				IResourceStream resourceStream = new FileResourceStream(file);
 
 				getRequestCycle().scheduleRequestHandlerAfterCurrent(
@@ -173,7 +261,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 		this.arquivo = arquivo;
 	}
 	
-	private List<TituloRemessa> getTitulos() {
+	private List<Titulo> getTitulos() {
 		return titulos;
 	}
 

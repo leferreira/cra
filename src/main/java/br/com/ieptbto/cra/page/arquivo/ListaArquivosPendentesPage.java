@@ -28,6 +28,9 @@ import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
+import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -54,6 +57,12 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 	private RelatorioMediator relatorioMediator;
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	private DesistenciaProtestoMediator desistenciaProtestoMediator; 
+	@SpringBean
+	private CancelamentoProtestoMediator cancelamentoMediator;
+	@SpringBean
+	private AutorizacaoCancelamentoMediator autorizacaoMediator;
 	private Arquivo arquivo;
 	
 	public ListaArquivosPendentesPage(Arquivo arquivo) {
@@ -243,7 +252,7 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarDesistenciaTXT(getUser(), desistenciaProtesto);
+						File file = desistenciaProtestoMediator.baixarDesistenciaTXT(getUser(), desistenciaProtesto);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
@@ -302,7 +311,7 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarCancelamentoTXT(getUser(), cancelamento);
+						File file = cancelamentoMediator.baixarCancelamentoTXT(getUser(), cancelamento);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
@@ -360,7 +369,7 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarAutorizacaoTXT(getUser(), ac);
+						File file = autorizacaoMediator.baixarAutorizacaoTXT(getUser(), ac);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(

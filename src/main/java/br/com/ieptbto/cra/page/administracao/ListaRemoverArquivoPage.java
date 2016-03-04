@@ -14,14 +14,12 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.AdministracaoMediator;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.cra.MensagemPage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -45,7 +43,7 @@ public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 
 	public ListaRemoverArquivoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo) {
 		this.arquivo = arquivo;
-		this.arquivos = administracaoMediator.buscarArquivosRemover(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, new ArrayList<SituacaoArquivo>());
+		this.arquivos = new ArrayList<Arquivo>();
 		
 		carregarListaArquivosRemover();
 	}
@@ -93,8 +91,6 @@ public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 					public void onClick() {
 						
 						try {
-							administracaoMediator.removerArquivo(arquivo, getUser().getInstituicao()).getArquivo();
-							setResponsePage(new MensagemPage<Arquivo>(RemoverArquivoPage.class, "REMOVER ARQUIVO", "O arquivo "+ arquivo.getNomeArquivo() +" foi removido com sucesso !"));
 
 						} catch (InfraException ex) {
 							error(ex.getMessage());

@@ -62,13 +62,17 @@
 		<table id="table" class="table table-striped table-hover">
 			<thead>
 				<tr>
-					<th class="col-center">Nº TÍTULO</th>
-					<th class="col-center">NOSSO NÚMERO</th>
-					<th class="col-center">PROTOCOLO</th>
+					<th class="col-center">TÍTULO</th>
+					<th class="col-center">NOSSO N.</th>
+					<th class="col-center">PROTOC.</th>
+					<th>PRAÇA</th>
 					<th>DEVEDOR</th>
-					<th>PRAÇA PROTESTO</th>
-					<th class="col-right">VLR. TÍTULO</th>
-					<th></th>
+					<th class="col-right">VALOR</th>
+					<th class="col-center">REMESSA</th>
+					<th class="col-center">CONFIR.</th>
+					<th class="col-center">RETORNO</th>
+					<th class="col-center">DATA OC.</th>
+					<th class="col-center">SITUAÇÃO</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -76,10 +80,20 @@
 					<td class="col-center" wicket:id="numeroTitulo"></td>
 					<td class="col-center" wicket:id="nossoNumero"></td>
 					<td class="col-center" wicket:id="protocolo"></td>
-					<td><a href="#" target="_blank" wicket:id="linkHistorico"><span class="link" wicket:id="nomeDevedor"></span></a></td>
-					<td wicket:id="praca"></td>
+					<td wicket:id="pracaProtesto"></td>
+					<td>
+						<a href="#" target="_blank" wicket:id="linkHistorico">
+							<span class="link" style="font-weight: bold;" wicket:id="nomeDevedor"></span>
+						</a>
+					</td>
 					<td class="col-right valor" wicket:id="valorTitulo"></td>
-					<td class="col-center"><span class="info-titulo" wicket:id="situacaoTitulo"></span></td>
+					<td class="col-center" wicket:id="remessa"></td>
+					<td class="col-center" wicket:id="confirmacao"></td>
+					<td class="col-center" wicket:id="retorno"></td>
+					<td class="col-center" wicket:id="dataSituacao"></td>
+					<td class="col-center">
+						<span class="info-titulo" wicket:id="situacaoTitulo"></span>
+					</td>
 				</tr>
 			</tbody>
 		</table>

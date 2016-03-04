@@ -18,13 +18,14 @@ public class CraMenu extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	@SpringBean
-	UsuarioMediator usuarioMediator;
+	private UsuarioMediator usuarioMediator;
 	private Usuario usuario;
 
 	public CraMenu(String id, Usuario usuario) {
 		super(id);
-		Menu menu = new Menu("CraMenu");
 		this.usuario = usuarioMediator.buscarUsuarioPorPK(usuario);
+
+		Menu menu = new Menu("CraMenu");
 		adicionarMenuLateral(menu);
 		add(menu);
 	}
@@ -60,7 +61,6 @@ public class CraMenu extends Panel {
 		menuRelatorioCra.addItem("Relatorio", rolesIncluir);
 		menuRelatorioCra.addItem("RelatorioCustasCra", rolesIncluir);
 		menuRelatorioCra.addItem("RelatorioTitulos", rolesIncluir);
-		// menuRelatorioCra.addItem("RelatorioBatimento", rolesIncluir);
 
 		/** Menus Administrador */
 		MenuItem menuAdministrador = menu.addItem("menuAdministrador", rolesIncluir);
@@ -84,8 +84,6 @@ public class CraMenu extends Panel {
 
 		menuAdministrador.addItem("InstrumentoDeProtesto", rolesIncluir);
 		menuAdministrador.addItem("GerarSlip", rolesIncluir);
-		// menuAdministrador.addItem("BuscarInstrumentoProtesto", rolesIncluir);
-		// menuAdministrador.addItem("LiberarEnvelopes", rolesIncluir);
 		menuAdministrador.addItem("ImportarArquivoDePara", rolesIncluir);
 	}
 

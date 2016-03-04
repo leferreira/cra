@@ -23,6 +23,7 @@ import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.administracao.ListaRemoverArquivoPage;
 import br.com.ieptbto.cra.page.administracao.RemoverArquivoPage;
+import br.com.ieptbto.cra.page.administracao.SobreCraPage;
 import br.com.ieptbto.cra.page.arquivo.ArquivoCancelamentoDevolvidoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoCraInstituicaoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
@@ -151,6 +152,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	private void montaPaginas() {
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
+		mountPage("SobreCra", SobreCraPage.class);
 //		 mountPage("CargaInicial", CargaInicialPage.class);
 
 		/** Administracao */

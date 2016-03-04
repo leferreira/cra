@@ -72,9 +72,9 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 			protected void onSubmit(){
 				
 				try{
-					if (retornoMediator.verificarArquivoRetornoGeradoCra().equals(true)) { 
-						throw new InfraException("Não é possível gerar os retornos novamente, arquivos já liberados hoje !");
-					}
+//					if (retornoMediator.verificarArquivoRetornoGeradoCra().equals(true)) { 
+//						throw new InfraException("Não é possível gerar os retornos novamente, arquivos já liberados hoje !");
+//					}
 					if (getRetornosPendentes().isEmpty()){
 						throw new InfraException("Não há retornos pendentes para envio !");
 					} 

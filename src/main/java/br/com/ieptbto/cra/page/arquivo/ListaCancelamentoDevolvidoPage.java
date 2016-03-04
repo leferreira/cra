@@ -26,6 +26,9 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
+import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -38,9 +41,15 @@ import br.com.ieptbto.cra.page.base.BasePage;
 public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
+	@SpringBean
+	private DesistenciaProtestoMediator desistenciaProtestoMediator; 
+	@SpringBean
+	private CancelamentoProtestoMediator cancelamentoMediator;
+	@SpringBean
+	private AutorizacaoCancelamentoMediator autorizacaoMediator;
 	private Arquivo arquivo;
 	private List<ArquivoDesistenciaCancelamento> arquivosDesistenciasCancelamentos;
 	private List<DesistenciaProtesto> desistenciaProtesto;
@@ -92,7 +101,7 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarDesistenciaTXT(getUser(), remessa);
+						File file = desistenciaProtestoMediator.baixarDesistenciaTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
@@ -106,7 +115,7 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarCancelamentoTXT(getUser(), remessa);
+						File file = cancelamentoMediator.baixarCancelamentoTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
@@ -120,8 +129,8 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = remessaMediator.baixarAutorizacaoTXT(getUser(), remessa);
-						IResourceStream resourceStream = new FileResourceStream(file);
+						File file = autorizacaoMediator.baixarAutorizacaoTXT(getUser(), remessa);
+						IResourceStream resourceStream = new FileResourceStream(file); 
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(
 						        new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
