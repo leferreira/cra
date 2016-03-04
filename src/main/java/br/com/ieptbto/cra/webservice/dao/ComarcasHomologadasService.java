@@ -19,6 +19,7 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
+import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
@@ -96,6 +97,6 @@ public class ComarcasHomologadasService extends CraWebService {
 		}
 		
 		xml = xml.concat("</" + CONSTANTE_COMARCA_XML + ">");
-		return xml;
+		return XmlFormatterUtil.format(xml);
 	}
 }
