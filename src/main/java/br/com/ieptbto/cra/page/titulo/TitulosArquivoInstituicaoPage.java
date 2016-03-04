@@ -55,7 +55,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 	private List<Titulo> titulos;
 	
 	public TitulosArquivoInstituicaoPage(Arquivo arquivo) {
-		this.arquivo = arquivoMediator.carregarArquivoPorId(arquivo.getId());
+		this.arquivo = arquivoMediator.carregarArquivoPorId(arquivo);
 		this.titulos = tituloMediator.carregarTitulosGenerico(arquivo);
 		
 		carregarInformacoes();
