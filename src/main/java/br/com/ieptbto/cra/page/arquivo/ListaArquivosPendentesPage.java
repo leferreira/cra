@@ -68,7 +68,6 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 	public ListaArquivosPendentesPage(Arquivo arquivo) {
 		this.arquivo = arquivo;
 		getArquivo().setRemessas(remessaMediator.buscarRemssasPorArquivo(getArquivo()));
-
 		add(carregarListaArquivos());
 		add(carregarListaArquivosDesistenciaProtesto());
 		add(carregarListaArquivosCancelamentoProtesto());
@@ -177,7 +176,6 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 			private Link<Remessa> relatorioArquivo(final Remessa remessa) {
 				return new Link<Remessa>("gerarRelatorio") {
 
-			        /***/
 			        private static final long serialVersionUID = 1L;
 
 			        @Override
