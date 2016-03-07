@@ -28,184 +28,196 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings( {"serial"} )
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class BuscarInstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
-	private static final Logger logger = Logger.getLogger(BuscarInstrumentoProtestoPage.class);
-	
-	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	MunicipioMediator municipioMediator;
-	
-	private InstrumentoProtesto instrumento;
-	private DateTextField dataEntrada;
-	private TextField<String> codigoInstrumento;
-	private TextField<String> codigoEnvelope;
-	private TextField<String> protocoloCartorio;
-	private DropDownChoice<Municipio> codigoIbge;
+    /***/
+    private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(BuscarInstrumentoProtestoPage.class);
 
-	public BuscarInstrumentoProtestoPage() {
-		this.instrumento = new InstrumentoProtesto();
-		
-		add(adicionarFormularioCodigoBarra());
-		add(adicionarFormularioCodigoEnvelope());
-		add(adicionarFormularioMunicipioProtocolo());
-		add(adicionarFormularioDataEntrada());
-	}
-	
-	private Form<InstrumentoProtesto> adicionarFormularioCodigoBarra() {
-		Form<InstrumentoProtesto> form = new Form<InstrumentoProtesto>("form") {
+    @SpringBean
+    private InstituicaoMediator instituicaoMediator;
+    @SpringBean
+    private MunicipioMediator municipioMediator;
+    private InstrumentoProtesto instrumento;
+    private DateTextField dataEntrada;
+    private TextField<String> codigoInstrumento;
+    private TextField<String> codigoEnvelope;
+    private TextField<String> protocoloCartorio;
+    private DropDownChoice<Municipio> codigoIbge;
 
-			@Override
-			protected void onSubmit() {
-				String numeroProtocolo = null;
-				String codigoBarraMunicipio = null;
-				
-				try { 
-					if (codigoInstrumento.getModelObject() != null) {
-						codigoBarraMunicipio = codigoInstrumento.getModelObject().substring(1, 8);
-						numeroProtocolo = codigoInstrumento.getModelObject().substring(8, 18);
-					}
-					
-					setResponsePage(new ListaInstrumentoProtestoPage(null, codigoBarraMunicipio, numeroProtocolo, null));
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage(), ex);
-					error(ex.getMessage());
-				} catch (Exception ex) { 
-					error("Não foi possível buscar SLIP ! Entre em contato com a CRA !");
-					logger.error(ex.getMessage(), ex);
-				}
-			}
-		};
-		form.add(campoCodigoDeBarra());
-		return form;
-	}
-	
-	private Form<InstrumentoProtesto> adicionarFormularioCodigoEnvelope() {
-		Form<InstrumentoProtesto> form = new Form<InstrumentoProtesto>("formCodigoEnvelope") {
-			
-			@Override
-			protected void onSubmit() {
-				String envelope = null;
-				
-				try { 
-					if (codigoEnvelope.getModelObject() != null) {
-						envelope = codigoEnvelope.getModelObject();
-					}
-					
-					setResponsePage(new ListaInstrumentoProtestoPage(envelope, null, null, null));
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage(), ex);
-					error(ex.getMessage());
-				} catch (Exception ex) { 
-					error("Não foi possível buscar SLIP ! Entre em contato com a CRA !");
-					logger.error(ex.getMessage(), ex);
-				}
-			}
-		};
-		form.add(codigoEnvelope());
-		return form;
-	}
+    public BuscarInstrumentoProtestoPage() {
+	this.instrumento = new InstrumentoProtesto();
 
-	private Form<InstrumentoProtesto> adicionarFormularioMunicipioProtocolo() {
-		Form<InstrumentoProtesto> form = new Form<InstrumentoProtesto>("formMunicipioProtocolo") {
-			
-			@Override
-			protected void onSubmit() {
-				String numeroProtocolo = null;
-				String inputMunicipio = null;
-				
-				try { 
-					if (protocoloCartorio.getModelObject() != null) {
-						numeroProtocolo = protocoloCartorio.getModelObject();
-					}
-					
-					if (codigoIbge.getModelObject() != null) {
-						inputMunicipio = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
-					}
-					
-					setResponsePage(new ListaInstrumentoProtestoPage(null, inputMunicipio, numeroProtocolo, null));
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage(), ex);
-					error(ex.getMessage());
-				} catch (Exception ex) { 
-					error("Não foi possível buscar SLIP ! Entre em contato com a CRA !");
-					logger.error(ex.getMessage(), ex);
-				}
-			}
-		};
-		form.add(codigoIbgeCartorio());
-		form.add(numeroProtocoloCartorio());
-		return form;		
-	}
-	
-	private Form<InstrumentoProtesto> adicionarFormularioDataEntrada() {
-		Form<InstrumentoProtesto> form = new Form<InstrumentoProtesto>("formDataEntrada") {
-			
-			@Override
-			protected void onSubmit() {
-				LocalDate dataEntradaInstrumentos = null;
-				
-				try { 
-					if (codigoIbge.getModelObject() != null) {
-						dataEntradaInstrumentos = LocalDate.fromDateFields(dataEntrada.getModelObject());
-					}
-					
-					setResponsePage(new ListaInstrumentoProtestoPage(null, null, null, dataEntradaInstrumentos));
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage(), ex);
-					error(ex.getMessage());
-				} catch (Exception ex) { 
-					error("Não foi possível buscar SLIP ! Entre em contato com a CRA !");
-					logger.error(ex.getMessage(), ex);
-				}
-			}
-		};
-		form.add(campoDataEntrada());
-		return form;
-	}
-	
-	private DateTextField campoDataEntrada() {
-		dataEntrada = new DateTextField("date" ,"dd/MM/yyyy");
-		dataEntrada.setRequired(true);
-		dataEntrada.setLabel(new Model<String>("Data Entrada"));
-		return dataEntrada;
-	}
-	
-	private TextField<String> campoCodigoDeBarra() {
-		codigoInstrumento = new TextField<String>("codigoInstrumento", new Model<String>());
-		codigoInstrumento.setRequired(true);
-		codigoInstrumento.setLabel(new Model<String>("Código de Barra do Instrumento de Protesto"));
-		return codigoInstrumento;
-	}
-	
-	private TextField<String> codigoEnvelope() {
-		codigoEnvelope = new TextField<String>("codigoEnvelope", new Model<String>());
-		codigoEnvelope.setRequired(true);
-		codigoEnvelope.setLabel(new Model<String>("Código do Envelope"));
-		return codigoEnvelope;
-	}
+	add(adicionarFormularioCodigoBarra());
+	add(adicionarFormularioCodigoEnvelope());
+	add(adicionarFormularioMunicipioProtocolo());
+	add(adicionarFormularioDataEntrada());
+    }
 
-	private DropDownChoice<Municipio> codigoIbgeCartorio() {
-		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		codigoIbge = new DropDownChoice<Municipio>("codigoIbge", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
-		codigoIbge.setLabel(new Model<String>("Município"));
-		codigoIbge.setRequired(true);
-		return codigoIbge;
-	}
+    private Form<InstrumentoProtesto> adicionarFormularioCodigoBarra() {
+	Form<InstrumentoProtesto> form = new Form<InstrumentoProtesto>("form") {
 
-	private TextField<String> numeroProtocoloCartorio() {
-		protocoloCartorio = new TextField<String>("protocoloCartorio", new Model<String>());
-		protocoloCartorio.setRequired(true);
-		protocoloCartorio.setLabel(new Model<String>("Número de Protocolo"));
-		return protocoloCartorio;
-	}
-	
-	@Override
-	protected IModel<InstrumentoProtesto> getModel() {
-		return new CompoundPropertyModel<InstrumentoProtesto>(instrumento);
-	}
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @SuppressWarnings("unused")
+	    @Override
+	    protected void onSubmit() {
+		String numeroProtocolo = null;
+		String codigoBarraMunicipio = null;
+
+		try {
+		    if (codigoInstrumento.getModelObject() != null) {
+			codigoBarraMunicipio = codigoInstrumento.getModelObject().substring(1, 8);
+			numeroProtocolo = codigoInstrumento.getModelObject().substring(8, 18);
+		    }
+
+		} catch (InfraException ex) {
+		    logger.error(ex.getMessage(), ex);
+		    error(ex.getMessage());
+		} catch (Exception ex) {
+		    error("Não foi possível buscar SLIP ! Entre em contato com a CRA !");
+		    logger.error(ex.getMessage(), ex);
+		}
+	    }
+	};
+	form.add(campoCodigoDeBarra());
+	return form;
+    }
+
+    private Form<InstrumentoProtesto> adicionarFormularioCodigoEnvelope() {
+	Form<InstrumentoProtesto> form = new Form<InstrumentoProtesto>("formCodigoEnvelope") {
+
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @SuppressWarnings("unused")
+	    @Override
+	    protected void onSubmit() {
+		String envelope = null;
+
+		try {
+		    if (codigoEnvelope.getModelObject() != null) {
+			envelope = codigoEnvelope.getModelObject();
+		    }
+
+		} catch (InfraException ex) {
+		    logger.error(ex.getMessage(), ex);
+		    error(ex.getMessage());
+		} catch (Exception ex) {
+		    error("Não foi possível buscar SLIP ! Entre em contato com a CRA !");
+		    logger.error(ex.getMessage(), ex);
+		}
+	    }
+	};
+	form.add(codigoEnvelope());
+	return form;
+    }
+
+    private Form<InstrumentoProtesto> adicionarFormularioMunicipioProtocolo() {
+	Form<InstrumentoProtesto> form = new Form<InstrumentoProtesto>("formMunicipioProtocolo") {
+
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @SuppressWarnings("unused")
+	    @Override
+	    protected void onSubmit() {
+		String numeroProtocolo = null;
+		String inputMunicipio = null;
+
+		try {
+		    if (protocoloCartorio.getModelObject() != null) {
+			numeroProtocolo = protocoloCartorio.getModelObject();
+		    }
+
+		    if (codigoIbge.getModelObject() != null) {
+			inputMunicipio = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
+		    }
+
+		} catch (InfraException ex) {
+		    logger.error(ex.getMessage(), ex);
+		    error(ex.getMessage());
+		} catch (Exception ex) {
+		    error("Não foi possível buscar SLIP ! Entre em contato com a CRA !");
+		    logger.error(ex.getMessage(), ex);
+		}
+	    }
+	};
+	form.add(codigoIbgeCartorio());
+	form.add(numeroProtocoloCartorio());
+	return form;
+    }
+
+    private Form<InstrumentoProtesto> adicionarFormularioDataEntrada() {
+	Form<InstrumentoProtesto> form = new Form<InstrumentoProtesto>("formDataEntrada") {
+
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @SuppressWarnings("unused")
+	    @Override
+	    protected void onSubmit() {
+		LocalDate dataEntradaInstrumentos = null;
+
+		try {
+		    if (codigoIbge.getModelObject() != null) {
+			dataEntradaInstrumentos = LocalDate.fromDateFields(dataEntrada.getModelObject());
+		    }
+
+		} catch (InfraException ex) {
+		    logger.error(ex.getMessage(), ex);
+		    error(ex.getMessage());
+		} catch (Exception ex) {
+		    error("Não foi possível buscar SLIP ! Entre em contato com a CRA !");
+		    logger.error(ex.getMessage(), ex);
+		}
+	    }
+	};
+	form.add(campoDataEntrada());
+	return form;
+    }
+
+    private DateTextField campoDataEntrada() {
+	dataEntrada = new DateTextField("date", "dd/MM/yyyy");
+	dataEntrada.setRequired(true);
+	dataEntrada.setLabel(new Model<String>("Data Entrada"));
+	return dataEntrada;
+    }
+
+    private TextField<String> campoCodigoDeBarra() {
+	codigoInstrumento = new TextField<String>("codigoInstrumento", new Model<String>());
+	codigoInstrumento.setRequired(true);
+	codigoInstrumento.setLabel(new Model<String>("Código de Barra do Instrumento de Protesto"));
+	return codigoInstrumento;
+    }
+
+    private TextField<String> codigoEnvelope() {
+	codigoEnvelope = new TextField<String>("codigoEnvelope", new Model<String>());
+	codigoEnvelope.setRequired(true);
+	codigoEnvelope.setLabel(new Model<String>("Código do Envelope"));
+	return codigoEnvelope;
+    }
+
+    private DropDownChoice<Municipio> codigoIbgeCartorio() {
+	IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
+	codigoIbge = new DropDownChoice<Municipio>("codigoIbge", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
+	codigoIbge.setLabel(new Model<String>("Município"));
+	codigoIbge.setRequired(true);
+	return codigoIbge;
+    }
+
+    private TextField<String> numeroProtocoloCartorio() {
+	protocoloCartorio = new TextField<String>("protocoloCartorio", new Model<String>());
+	protocoloCartorio.setRequired(true);
+	protocoloCartorio.setLabel(new Model<String>("Número de Protocolo"));
+	return protocoloCartorio;
+    }
+
+    @Override
+    protected IModel<InstrumentoProtesto> getModel() {
+	return new CompoundPropertyModel<InstrumentoProtesto>(instrumento);
+    }
 }

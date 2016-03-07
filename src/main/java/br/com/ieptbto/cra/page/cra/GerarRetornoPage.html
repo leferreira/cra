@@ -22,6 +22,8 @@
 						<th class="col-center" style="width: 80px;">HORA</th>
 						<th>CARTÓRIO</th>
 						<th class="col-center">ARQUIVO</th>
+						<th class="col-right">VALOR PAGOS</th>
+						<th class="col-right">VALOR CUSTAS</th>
 						<th class="col-center" style="width: 100px;">RELATÓRIO</th>
 						<th class="col-center" style="width: 90px;">CANCELAR</th>
 					</tr>
@@ -31,16 +33,20 @@
 						<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
 						<td class="col-center" wicket:id="horaEnvio"></td>
 						<td class="pull-left" wicket:id="instituicaoOrigem.nomeFantasia"></td>
-						<td class="col-center"><a wicket:id="linkArquivo"> <span
-								class="link" wicket:id="arquivo.nomeArquivo"></span>
-						</a></td>
-						<td class="col-center"><button type="button"
-								wicket:id="gerarRelatorio" style="float: inherit;">
-								<span class="col-center fa fa-print"></span>
-							</button></td>
 						<td class="col-center">
-							<button type="button" wicket:id="removerConfirmado"
-								style="float: inherit;">
+							<a wicket:id="linkArquivo"> 
+								<span class="link" wicket:id="arquivo.nomeArquivo"></span>
+							</a>
+						</td>
+						<td class="col-right valor" wicket:id="valorPagos"></td>
+ 						<td class="col-right valor" wicket:id="valorCustas"></td>
+						<td class="col-center">
+							<button type="button" wicket:id="gerarRelatorio" style="float: inherit;">
+								<span class="col-center fa fa-print"></span>
+							</button>
+						</td>
+						<td class="col-center">
+							<button type="button" wicket:id="removerConfirmado" style="float: inherit;">
 								<span class="fa fa-edit"></span>
 							</button>
 						</td>

@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SlipListagem2" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1ff80ed7-b7e9-46ae-b4b8-a3d3b46d68ee">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SlipListagem2" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1ff80ed7-b7e9-46ae-b4b8-a3d3b46d68ee">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="3.797498335832415"/>
-	<property name="ireport.x" value="60"/>
+	<property name="ireport.zoom" value="2.593742460100003"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="CODIGO_PORTADOR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO" class="java.lang.Object"/>
+	<parameter name="TOTAL_ENVELOPES" class="java.lang.Long"/>
+	<parameter name="TOTAL_INSTRUMENTOS" class="java.lang.Long"/>
 	<queryString>
-		<![CDATA[]]>
+		<![CDATA[SELECT row_number() over ( order by et.banco, et.praca_protesto, et.numero_protocolo_cartorio ASC ) as linha, et.banco, et.agencia_destino, et.municipio_agencia_destino, env.codigo_cra, et.praca_protesto, et.numero_protocolo_cartorio, et.nosso_numero, et.nome_sacador_vendedor
+FROM tb_etiqueta_slip AS et
+INNER JOIN tb_envelope_slip AS env ON et.envelope_slip_id=env.id_envelope_slip
+INNER JOIN tb_instrumento_protesto AS ins ON et.instrumento_protesto_id=ins.id_instrumento_protesto
+INNER JOIN tb_retorno AS ret ON ret.id_retorno=ins.retorno_id
+WHERE ret.codigo_portador=$P{CODIGO_PORTADOR}
+AND ins.gerado=false
+ORDER BY et.banco, et.praca_protesto, et.numero_protocolo_cartorio ASC]]>
 	</queryString>
+	<field name="linha" class="java.lang.Long"/>
 	<field name="banco" class="java.lang.String"/>
-	<field name="agenciaDestino" class="java.lang.String"/>
-	<field name="municipioAgenciaDestino" class="java.lang.String"/>
-	<field name="ufAgenciaDestino" class="java.lang.String"/>
-	<field name="agenciaCodigoCedente" class="java.lang.String"/>
-	<field name="nomeCedenteFavorecido" class="java.lang.String"/>
-	<field name="nomeSacadorVendedor" class="java.lang.String"/>
-	<field name="documentoSacador" class="java.lang.String"/>
-	<field name="nossoNumero" class="java.lang.String"/>
-	<field name="numeroTitulo" class="java.lang.String"/>
-	<field name="dataVencimento" class="java.util.Date"/>
-	<field name="valorSaldoTitulo" class="java.math.BigDecimal"/>
-	<field name="numeroProtocoloCartorio" class="java.lang.String"/>
-	<field name="agenciaCentralizadora" class="java.lang.String"/>
-	<field name="pracaProtesto" class="java.lang.String"/>
-	<field name="dataProtocolo" class="java.util.Date"/>
-	<field name="envelope.codigoCRA" class="java.lang.String"/>
+	<field name="agencia_destino" class="java.lang.String"/>
+	<field name="municipio_agencia_destino" class="java.lang.String"/>
+	<field name="codigo_cra" class="java.lang.String"/>
+	<field name="praca_protesto" class="java.lang.String"/>
+	<field name="numero_protocolo_cartorio" class="java.lang.String"/>
+	<field name="nosso_numero" class="java.lang.String"/>
+	<field name="nome_sacador_vendedor" class="java.lang.String"/>
 	<variable name="BANCO_ATUAL" class="java.lang.String">
 		<variableExpression><![CDATA[String.valueOf($V{BANCO_ATUAL}.toString().equals( $F{banco}.toString() ) ? $V{BANCO_ATUAL}.toString() : $F{banco}.toString())]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
@@ -31,11 +36,44 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
+	<title>
+		<band height="59">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="378" y="29" width="423" height="30" uuid="95bbb891-57c9-4b9d-9275-72ddcf6fe80f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="378" height="59" uuid="4d17ebb3-f09d-4ec4-ae41-427f84f8f8a9"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="378" y="0" width="424" height="30" uuid="fb20d6a1-b666-4041-a993-9d4e6972c775"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LISTAGEM DE INSTRUMENTOS DE PROTESTO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="15">
+			<textField isBlankWhenNull="true">
+				<reportElement key="" x="2" y="1" width="376" height="14" uuid="0a1f3783-5701-4630-a526-4bd30fa9a580"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{banco}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
 	<columnHeader>
-		<band height="36" splitType="Stretch">
+		<band height="15" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<rectangle>
-				<reportElement x="0" y="20" width="802" height="15" backcolor="#E8E8E8" uuid="60f09076-fdaa-4378-bf81-7dfca1f3a3ac">
+				<reportElement x="0" y="0" width="802" height="15" backcolor="#CCCCCC" uuid="60f09076-fdaa-4378-bf81-7dfca1f3a3ac">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="local_mesure_unitheight" value="pixel"/>
@@ -45,28 +83,21 @@
 				</reportElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="2" y="20" width="158" height="14" uuid="c88e9383-a83c-4c15-a4ef-4cf92fb265a2"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[BANCO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="160" y="20" width="76" height="14" uuid="8a954ac8-3aef-4742-9519-254e7b9a2c3e"/>
+				<reportElement x="34" y="0" width="70" height="14" uuid="8a954ac8-3aef-4742-9519-254e7b9a2c3e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[AGÊNCIA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="236" y="20" width="146" height="14" uuid="c72faeba-7ea4-41ee-b628-2b4301c4d43c"/>
+				<reportElement x="104" y="0" width="120" height="14" uuid="c72faeba-7ea4-41ee-b628-2b4301c4d43c"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MUNICÍPIO AG.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="710" y="20" width="92" height="14" uuid="606d2879-a857-41a1-a3e1-a1265b19e5d5">
+				<reportElement x="710" y="0" width="92" height="14" uuid="606d2879-a857-41a1-a3e1-a1265b19e5d5">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
@@ -75,53 +106,47 @@
 				<text><![CDATA[NOSSO Nº]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="503" y="20" width="116" height="14" uuid="88e30e9e-c621-4748-b25c-faaf43a285b1"/>
+				<reportElement x="339" y="0" width="130" height="14" uuid="88e30e9e-c621-4748-b25c-faaf43a285b1"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PRAÇA PROTESTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="382" y="20" width="120" height="14" uuid="0ba9b9bc-4c8f-45ea-88f3-746d76b97666"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[CÓD. ENVELOPE]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="619" y="20" width="90" height="14" uuid="e8eba982-04aa-4f9c-95aa-f209c72c8f61"/>
+				<reportElement x="619" y="0" width="90" height="14" uuid="e8eba982-04aa-4f9c-95aa-f209c72c8f61"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PROTOCOLO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="378" height="20" uuid="7169c4f9-9713-4158-8cf9-0d35e9ed2d7d">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+				<reportElement x="224" y="1" width="115" height="14" uuid="0ba9b9bc-4c8f-45ea-88f3-746d76b97666"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[CRA-TO  - INSTRUMENTOS DE PROTESTO]]></text>
+				<text><![CDATA[CÓD. ENVELOPE]]></text>
 			</staticText>
-			<textField pattern="d/M/y">
-				<reportElement x="382" y="0" width="420" height="20" uuid="ed0d55b2-ab34-4623-b303-e457ec80833f">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+			<staticText>
+				<reportElement x="469" y="0" width="150" height="14" uuid="278f5bc6-39d0-4efe-ab4e-ad00af274190"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[SACADOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="0" width="33" height="14" uuid="07232f62-408e-4515-95b1-6643fe1421eb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="16" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<rectangle>
-				<reportElement x="0" y="0" width="802" height="15" isPrintInFirstWholeBand="true" forecolor="rgba(255, 255, 255, 0.0)" backcolor="#E8E8E8" uuid="e45e065b-44af-4423-bf6f-a47726d8ec25">
+				<reportElement x="0" y="2" width="802" height="14" isPrintInFirstWholeBand="true" forecolor="rgba(255, 255, 255, 0.0)" backcolor="#E8E8E8" uuid="e45e065b-44af-4423-bf6f-a47726d8ec25">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="local_mesure_unitheight" value="pixel"/>
@@ -131,62 +156,89 @@
 					<printWhenExpression><![CDATA[new Boolean(($V{REPORT_COUNT}.intValue()%2==0))]]></printWhenExpression>
 				</reportElement>
 			</rectangle>
-			<textField isBlankWhenNull="true">
-				<reportElement key="" x="2" y="0" width="158" height="14" uuid="0a1f3783-5701-4630-a526-4bd30fa9a580"/>
+			<textField>
+				<reportElement x="34" y="0" width="70" height="16" uuid="a65c5325-262a-489d-ad5c-4a33fc1cdca2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{agencia_destino}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="104" y="0" width="120" height="16" uuid="7395c59a-7a5d-43ad-91f6-407c275cefa8"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8"/>
+					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{banco}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{municipio_agencia_destino}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="160" y="0" width="76" height="15" uuid="ba05b09d-0a33-42b2-9c7b-05d68fe36edb">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{agenciaDestino}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="236" y="0" width="146" height="15" uuid="cf10aa5e-e560-4dd9-825b-435d75e72500"/>
+			<textField>
+				<reportElement x="339" y="1" width="130" height="15" uuid="4aec003e-06ce-4988-8dc4-28610f5c3903"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8"/>
+					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{municipioAgenciaDestino}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{praca_protesto}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="710" y="0" width="92" height="15" uuid="84b04459-6a86-4644-9af1-abc9ff5c956b"/>
+			<textField>
+				<reportElement x="619" y="1" width="90" height="15" uuid="7d3a3e49-bc61-4992-a375-f4962310f394"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8"/>
+					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{nossoNumero}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{numero_protocolo_cartorio}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="503" y="0" width="116" height="15" uuid="d7227bb9-e22b-4b9b-9aee-aaed3634d4ce"/>
+			<textField>
+				<reportElement x="710" y="1" width="92" height="15" uuid="cb4d470e-b120-47a6-aa70-63ed7adf5c05"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nosso_numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="224" y="1" width="115" height="15" uuid="b58a9d19-1985-491a-b890-285c17930146"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigo_cra}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="469" y="1" width="150" height="15" uuid="1baebdbe-5907-42ce-b6ec-f888d05592be"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8"/>
+					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{pracaProtesto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nome_sacador_vendedor}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="382" y="0" width="120" height="15" uuid="7dd56f7b-6922-4fc6-b4c3-84510903feb6"/>
+			<textField>
+				<reportElement x="1" y="1" width="34" height="15" uuid="0603b054-5f71-4162-8be9-ce04667d2c23"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8"/>
+					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{envelope.codigoCRA}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{linha}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="619" y="0" width="90" height="15" uuid="d7d66476-e3d8-4a8c-8f97-92c885e8a859"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{numeroProtocoloCartorio}]]></textFieldExpression>
-			</textField>
-			<break>
-				<reportElement x="0" y="15" width="802" height="1" uuid="c983d2dd-7f26-438f-81f2-a63f4959054e">
-					<printWhenExpression><![CDATA[$V{BANCO_ATUAL}.equals( $F{banco} ) ? false : true ]]></printWhenExpression>
-				</reportElement>
-			</break>
 		</band>
 	</detail>
+	<lastPageFooter>
+		<band height="20">
+			<rectangle>
+				<reportElement x="1" y="0" width="803" height="20" backcolor="#B9D1EA" uuid="629e0057-b8f8-44fe-92a6-c78766e982c3">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement x="2" y="0" width="376" height="20" uuid="ad94d06c-b3a2-4bcc-9478-7fa150b6e674"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL DE ENVELOPES: " + $P{TOTAL_ENVELOPES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="378" y="0" width="376" height="20" uuid="6a9dd50d-060d-45ce-808d-6be77293779f"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL DE INSTRUMENTOS: " + $P{TOTAL_INSTRUMENTOS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
 </jasperReport>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="1000" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<property name="ireport.zoom" value="1.4641000000000015"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO" class="java.lang.Object" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT ret.codigo_portador, count (ins.id_instrumento_protesto) AS total_instrumentos, count (DISTINCT env.id_envelope_slip) as total_envelopes
+FROM tb_etiqueta_slip AS et
+INNER JOIN tb_envelope_slip AS env ON et.envelope_slip_id=env.id_envelope_slip
+INNER JOIN tb_instrumento_protesto AS ins ON et.instrumento_protesto_id=ins.id_instrumento_protesto
+INNER JOIN tb_retorno AS ret ON ins.retorno_id=ret.id_retorno
+WHERE ins.gerado=false
+GROUP BY ret.codigo_portador;]]>
+	</queryString>
+	<field name="codigo_portador" class="java.lang.String"/>
+	<field name="total_instrumentos" class="java.lang.Long"/>
+	<field name="total_envelopes" class="java.lang.Long"/>
+	<detail>
+		<band height="491" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<break>
+				<reportElement x="0" y="39" width="802" height="1" uuid="3d808137-cfae-4d94-b744-14f981cfa6cb"/>
+			</break>
+			<subreport>
+				<reportElement x="0" y="0" width="802" height="40" uuid="151a1b89-ec65-4031-83f1-d729e0301891"/>
+				<subreportParameter name="CODIGO_PORTADOR">
+					<subreportParameterExpression><![CDATA[$F{codigo_portador}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LOGO">
+					<subreportParameterExpression><![CDATA[$P{LOGO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TOTAL_ENVELOPES">
+					<subreportParameterExpression><![CDATA[$F{total_envelopes}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TOTAL_INSTRUMENTOS">
+					<subreportParameterExpression><![CDATA[$F{total_instrumentos}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "SlipListagem.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

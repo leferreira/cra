@@ -51,7 +51,6 @@ import br.com.ieptbto.cra.page.instrumentoProtesto.BuscarInstrumentoProtestoPage
 import br.com.ieptbto.cra.page.instrumentoProtesto.GerarSlipPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.ImportarArquivoDeParaPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.InstrumentoProtestoPage;
-import br.com.ieptbto.cra.page.instrumentoProtesto.LiberarEnvelopePage;
 import br.com.ieptbto.cra.page.layoutPersonalizado.EnviarArquivoEmpresaPage;
 import br.com.ieptbto.cra.page.layoutPersonalizado.IncluirLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.layoutPersonalizado.ListaLayoutEmpresaPage;
@@ -87,163 +86,160 @@ import br.com.ieptbto.cra.webpage.AbstractWebPage;
  */
 public class CraApplication extends WebApplication implements ISecureApplication, IWebApplication {
 
-	public CraApplication() {
+    public CraApplication() {
+    }
+
+    @Override
+    public void init() {
+	super.init();
+	initSpring();
+	initConfig();
+	initAtributoDeDatas();
+	montaPaginas();
+
+    }
+
+    // start page
+    @Override
+    public Class<? extends Page> getHomePage() {
+	return HomePage.class;
+    }
+
+    // page for auth
+    @Override
+    public Class<? extends Page> getLoginPage() {
+	return LoginPage.class;
+    }
+
+    @Override
+    public Session newSession(Request request, Response response) {
+	return new UserSession<Usuario>(request, new UsuarioAnonimo());
+    }
+
+    protected void initSpring() {
+	getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+    }
+
+    private void initConfig() {
+	getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
+
+	getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+
+	getRequestCycleSettings().setTimeout(Duration.minutes(10));
+
+	// don't throw exceptions for missing translations
+	getResourceSettings().setThrowExceptionOnMissingResource(false);
+	getApplicationSettings().setPageExpiredErrorPage(NotFoundPage.class);
+	getApplicationSettings().setAccessDeniedPage(NotFoundPage.class);
+	getApplicationSettings().setInternalErrorPage(NotFoundPage.class);
+
+	// customized auth strategy
+	getSecuritySettings().setAuthorizationStrategy(new UserRoleAuthorizationStrategy(new UserRolesAuthorizer()));
+
+	// make markup friendly as in deployment-mode
+	getMarkupSettings().setStripWicketTags(true);
+
+	if (isDevelopmentMode()) {
+	    // enable ajax debug etc.
+	    getDebugSettings().setDevelopmentUtilitiesEnabled(true);
+	    getDebugSettings().setAjaxDebugModeEnabled(true);
+	    System.out.println(RuntimeConfigurationType.DEVELOPMENT);
 	}
+    }
 
-	@Override
-	public void init() {
-		super.init();
-		initSpring();
-		initConfig();
-		initAtributoDeDatas();
-		montaPaginas();
+    private void montaPaginas() {
+	mountPage("LoginPage", LoginPage.class);
+	mountPage("HomePage", HomePage.class);
+	mountPage("SobreCra", SobreCraPage.class);
 
-	}
+	/** Administracao */
+	mountPage("Batimento", BatimentoPage.class);
+	mountPage("ImportarExtrato", ImportarExtratoPage.class);
+	mountPage("BuscarDepositos", BuscarDepositoPage.class);
+	mountPage("LiberarRetornos", LiberarRetornoPage.class);
+	mountPage("ListaDepositos", ListaDepositoPage.class);
+	mountPage("Deposito", IncluirDepositoPage.class);
 
-	// start page
-	@Override
-	public Class<? extends Page> getHomePage() {
-		return HomePage.class;
-	}
+	mountPage("GerarRemessasConvenio", GerarRemessaConvenioPage.class);
+	mountPage("GerarConfirmacao", GerarConfirmacaoPage.class);
+	mountPage("GerarRetorno", GerarRetornoPage.class);
 
-	// page for auth
-	@Override
-	public Class<? extends Page> getLoginPage() {
-		return LoginPage.class;
-	}
-	
+	mountPage("Instituicoes", ListaInstituicaoPage.class);
+	mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
+	mountPage("Cartorios", ListaCartorioPage.class);
+	mountPage("IncluirCartorio", IncluirCartorioPage.class);
+	mountPage("IncluirLayoutEmpresa", IncluirLayoutEmpresaPage.class);
+	mountPage("LayoutsPersonalizados", ListaLayoutEmpresaPage.class);
+	mountPage("Municipios", ListaMunicipioPage.class);
+	mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
+	mountPage("TipoInstituicoes", ListaTipoInstituicaoPage.class);
+	mountPage("IncluirTipoInstituicao", IncluirTipoInstituicaoPage.class);
+	mountPage("TipoArquivo", ListaTipoArquivoPage.class);
+	mountPage("IncluirTipoArquivo", IncluirTipoArquivoPage.class);
+	mountPage("Usuarios", ListaUsuarioPage.class);
+	mountPage("IncluirUsuario", IncluirUsuarioPage.class);
+	mountPage("PerfilUsuario", PerfilUsuarioPage.class);
+	mountPage("EmpresasFiliadas", ListaFiliadoPage.class);
+	mountPage("IncluirEmpresaFiliada", IncluirFiliadoPage.class);
 
-	@Override
-	public Session newSession(Request request, Response response) {
-		return new UserSession<Usuario>(request, new UsuarioAnonimo());
-	}
+	/** Arquivo */
+	mountPage("BuscarArquivo", BuscarArquivoPage.class);
+	mountPage("EnviarArquivo", EnviarArquivoPage.class);
+	mountPage("EnviarArquivoEmpresa", EnviarArquivoEmpresaPage.class);
+	mountPage("BuscarArquivoInstituicao", BuscarArquivoCraInstituicaoPage.class);
+	mountPage("ListaArquivo", ListaArquivosPage.class);
+	mountPage("ArquivosCancelamentoDevolvidoPage", ArquivoCancelamentoDevolvidoPage.class);
+	mountPage("TitulosArquivo", TitulosArquivoPage.class);
+	mountPage("TitulosArquivoInstituicao", TitulosArquivoInstituicaoPage.class);
+	mountPage("RemoverArquivo", RemoverArquivoPage.class);
+	mountPage("ListaArquivosRemover", ListaRemoverArquivoPage.class);
+	mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
+	mountPage("ListaTitulos", ListaTitulosPage.class);
+	mountPage("HistoricoDoTitulo", HistoricoPage.class);
 
-	protected void initSpring() {
-		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
-	}
+	/** Relatorios Padrão */
+	mountPage("RelatorioArquivosInstituicoesCartorios", RelatorioInstituicoesCartoriosPage.class);
 
-	private void initConfig() {
-		getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
+	/** Relatorios CRA */
+	mountPage("Relatorio", RelatorioArquivosPage.class);
+	mountPage("RelatorioCustasCra", RelatorioCustasCraPage.class);
+	mountPage("RelatorioTitulos", RelatorioTitulosPage.class);
+	mountPage("RelatorioRetorno", RelatorioRetornoPage.class);
 
-		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+	/** Slip */
+	mountPage("InstrumentoDeProtesto", InstrumentoProtestoPage.class);
+	mountPage("GerarSlip", GerarSlipPage.class);
+	mountPage("BuscarInstrumentoProtesto", BuscarInstrumentoProtestoPage.class);
+	mountPage("ImportarArquivoDePara", ImportarArquivoDeParaPage.class);
+    }
 
-		getRequestCycleSettings().setTimeout(Duration.minutes(10));
+    /**
+     * Configura as data para a aplicação.
+     */
+    private void initAtributoDeDatas() {
+	Locale.setDefault(DataUtil.LOCALE);
+	DateTimeZone.setDefault(DataUtil.ZONE);
+    }
 
-		// don't throw exceptions for missing translations
-		getResourceSettings().setThrowExceptionOnMissingResource(false);
-		getApplicationSettings().setPageExpiredErrorPage(NotFoundPage.class);
-		getApplicationSettings().setAccessDeniedPage(NotFoundPage.class);
-		getApplicationSettings().setInternalErrorPage(NotFoundPage.class);
+    public boolean isDevelopmentMode() {
+	return (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT);
+    }
 
-		// customized auth strategy
-		getSecuritySettings().setAuthorizationStrategy(new UserRoleAuthorizationStrategy(new UserRolesAuthorizer()));
+    @Override
+    public Component createMenuSistema(AbstractWebPage<?> page, String containerId, Usuario usuario) {
+	return new CraMenu("menu", usuario);
+    }
 
-		// make markup friendly as in deployment-mode
-		getMarkupSettings().setStripWicketTags(true);
+    @Override
+    public String getTituloSistema(AbstractWebPage<?> page) {
+	return "CRA - Central de Remessa de Arquivos";
+    }
 
-		if (isDevelopmentMode()) {
-			// enable ajax debug etc.
-			getDebugSettings().setDevelopmentUtilitiesEnabled(true);
-			getDebugSettings().setAjaxDebugModeEnabled(true);
-			System.out.println(RuntimeConfigurationType.DEVELOPMENT);
-		}
-	}
-
-	private void montaPaginas() {
-		mountPage("LoginPage", LoginPage.class);
-		mountPage("HomePage", HomePage.class);
-		mountPage("SobreCra", SobreCraPage.class);
-//		 mountPage("CargaInicial", CargaInicialPage.class);
-
-		/** Administracao */
-		mountPage("Batimento", BatimentoPage.class);
-		mountPage("ImportarExtrato", ImportarExtratoPage.class);
-		mountPage("BuscarDepositos", BuscarDepositoPage.class);
-		mountPage("LiberarRetornos", LiberarRetornoPage.class); 
-		mountPage("ListaDepositos", ListaDepositoPage.class);
-		mountPage("Deposito", IncluirDepositoPage.class);
-
-		mountPage("GerarRemessasConvenio", GerarRemessaConvenioPage.class);
-		mountPage("GerarConfirmacao", GerarConfirmacaoPage.class);
-		mountPage("GerarRetorno", GerarRetornoPage.class); 
-		
-		mountPage("Instituicoes", ListaInstituicaoPage.class);
-		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
-		mountPage("Cartorios", ListaCartorioPage.class);
-		mountPage("IncluirCartorio", IncluirCartorioPage.class);
-		mountPage("IncluirLayoutEmpresa", IncluirLayoutEmpresaPage.class);
-		mountPage("LayoutsPersonalizados", ListaLayoutEmpresaPage.class);
-		mountPage("Municipios", ListaMunicipioPage.class);
-		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
-		mountPage("TipoInstituicoes", ListaTipoInstituicaoPage.class);
-		mountPage("IncluirTipoInstituicao", IncluirTipoInstituicaoPage.class);
-		mountPage("TipoArquivo", ListaTipoArquivoPage.class);
-		mountPage("IncluirTipoArquivo", IncluirTipoArquivoPage.class);
-		mountPage("Usuarios", ListaUsuarioPage.class);
-		mountPage("IncluirUsuario", IncluirUsuarioPage.class);
-		mountPage("PerfilUsuario", PerfilUsuarioPage.class);
-		mountPage("EmpresasFiliadas", ListaFiliadoPage.class);
-		mountPage("IncluirEmpresaFiliada", IncluirFiliadoPage.class);
-
-		/** Arquivo */
-		mountPage("BuscarArquivo", BuscarArquivoPage.class);
-		mountPage("EnviarArquivo", EnviarArquivoPage.class);
-		mountPage("EnviarArquivoEmpresa", EnviarArquivoEmpresaPage.class);
-		mountPage("BuscarArquivoInstituicao", BuscarArquivoCraInstituicaoPage.class);
-		mountPage("ListaArquivo", ListaArquivosPage.class);
-		mountPage("ArquivosCancelamentoDevolvidoPage", ArquivoCancelamentoDevolvidoPage.class);
-		mountPage("TitulosArquivo", TitulosArquivoPage.class);
-		mountPage("TitulosArquivoInstituicao", TitulosArquivoInstituicaoPage.class);
-		mountPage("RemoverArquivo", RemoverArquivoPage.class);
-		mountPage("ListaArquivosRemover", ListaRemoverArquivoPage.class);
-		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
-		mountPage("ListaTitulos", ListaTitulosPage.class);
-		mountPage("HistoricoDoTitulo", HistoricoPage.class);
-
-		/** Relatorios Padrão */
-		mountPage("RelatorioArquivosInstituicoesCartorios", RelatorioInstituicoesCartoriosPage.class);
-		
-		/** Relatorios CRA */
-		mountPage("Relatorio", RelatorioArquivosPage.class);
-		mountPage("RelatorioCustasCra", RelatorioCustasCraPage.class);
-		mountPage("RelatorioTitulos", RelatorioTitulosPage.class);
-		mountPage("RelatorioRetorno", RelatorioRetornoPage.class); 
-	
-		/** Slip */
-		mountPage("InstrumentoDeProtesto", InstrumentoProtestoPage.class);
-		mountPage("GerarSlip", GerarSlipPage.class);
-		mountPage("BuscarInstrumentoProtesto", BuscarInstrumentoProtestoPage.class);
-		mountPage("LiberarEnvelopes", LiberarEnvelopePage.class);
-		mountPage("ImportarArquivoDePara", ImportarArquivoDeParaPage.class); 
-	}
-
-	/**
-	 * Configura as data para a aplicação.
-	 */
-	private void initAtributoDeDatas() {
-		Locale.setDefault(DataUtil.LOCALE);
-		DateTimeZone.setDefault(DataUtil.ZONE);
-	}
-
-	public boolean isDevelopmentMode() {
-		return (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT);
-	}
-
-	@Override
-	public Component createMenuSistema(AbstractWebPage<?> page, String containerId, Usuario usuario) {
-		return new CraMenu("menu", usuario);
-	}
-
-	@Override
-	public String getTituloSistema(AbstractWebPage<?> page) {
-		return "CRA - Central de Remessa de Arquivos";
-	}
-
-	/**
-	 * Metodo utilitario para obter a aplicacao corrente.
-	 */
-	public static CraApplication get() {
-		return (CraApplication) Application.get();
-	}
+    /**
+     * Metodo utilitario para obter a aplicacao corrente.
+     */
+    public static CraApplication get() {
+	return (CraApplication) Application.get();
+    }
 
 }

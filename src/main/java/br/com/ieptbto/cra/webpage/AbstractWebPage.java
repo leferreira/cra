@@ -33,7 +33,7 @@ public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends Web
 	 */
 	public AbstractWebPage() {
 		super();
-		adicionarComponentes();
+		carregarComponentes();
 	}
 
 	/**
@@ -45,7 +45,7 @@ public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends Web
 	 */
 	public AbstractWebPage(IModel<?> model) {
 		super(model);
-		adicionarComponentes();
+		carregarComponentes();
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends Web
 		super.onInitialize();
 	}
 
-	protected void adicionarComponentes() {
+	protected void carregarComponentes() {
 	}
 
 	@SuppressWarnings("unchecked")

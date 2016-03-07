@@ -17,7 +17,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="235">
+		<band height="251">
 			<rectangle>
 				<reportElement x="0" y="0" width="555" height="233" uuid="b0592fd2-a76f-481e-b31d-ee15a002ba6c"/>
 			</rectangle>
@@ -78,4 +78,13 @@
 			</textField>
 		</band>
 	</detail>
+	<pageFooter>
+		<band height="16">
+			<textField>
+				<reportElement x="455" y="0" width="100" height="16" uuid="7a09e7ac-e8ad-466f-9b77-76d158b69b4b"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
 </jasperReport>

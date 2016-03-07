@@ -49,8 +49,12 @@ public class RetornoService extends CraWebService {
 	private RetornoVO retornoVO;
 
 	/**
-	 * MÉTODOS DE CONSULTA DE CONFIRMAÇÃO PELOS BANCOS/CONVÊNIOS
-	 * */
+	 * CONSULTA DE CONFIRMAÇÃO PELOS BANCOS/CONVÊNIOS
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @return
+	 */
 	public String processar(String nomeArquivo, Usuario usuario) {
 		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 		ArquivoVO arquivoVO = null;
@@ -91,7 +95,6 @@ public class RetornoService extends CraWebService {
 			} else {
 				String msg = gerarMensagem(remessaVO, CONSTANTE_RETORNO_XML).replace("</retorno>", "").replace(cabecalho, "");
 				string.append(msg);
-					
 			}
 		}
 		string.append("</retorno>");
@@ -128,8 +131,13 @@ public class RetornoService extends CraWebService {
 	
 
 	/**
-	 * MÉTODOS DE ENVIO DE RETORNO PELO CARTÓRIO
-	 * */
+	 * ENVIO DE RETORNO PELO CARTÓRIO
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @param dados
+	 * @return
+	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
