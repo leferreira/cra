@@ -24,7 +24,6 @@ import br.com.ieptbto.cra.exception.DesistenciaException;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.cra.RelatorioRetornoPage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -42,8 +41,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
     @SpringBean
     private ArquivoMediator arquivoMediator;
-    @SpringBean
-    private RelatorioMediator relatorioMediator;
     @SpringBean
     private InstituicaoMediator instituicaoMediator;
     private Usuario usuario;

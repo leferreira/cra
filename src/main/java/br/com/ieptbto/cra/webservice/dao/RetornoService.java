@@ -49,7 +49,7 @@ public class RetornoService extends CraWebService {
     private RetornoVO retornoVO;
 
     /**
-     * CONSULTA DE CONFIRMAÇÃO PELOS BANCOS/CONVÊNIOS
+     * Consulta de Retorno pelos bancos/convênios
      * 
      * @param nomeArquivo
      * @param usuario
@@ -130,7 +130,7 @@ public class RetornoService extends CraWebService {
     }
 
     /**
-     * ENVIO DE RETORNO PELO CARTÓRIO
+     * Envio de retorno pelo cartório
      * 
      * @param nomeArquivo
      * @param usuario

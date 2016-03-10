@@ -28,16 +28,14 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
+import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * @author Thasso Araújo
@@ -53,8 +51,6 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 
     @SpringBean
     private RetornoMediator retornoMediator;
-    @SpringBean
-    private RelatorioMediator relatorioMediator;
     private Retorno retorno;
     private List<Remessa> retornosPendentes;
 
@@ -150,7 +146,10 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 
 			try {
 			    retornoMediator.removerBatimento(retorno);
-			    setResponsePage(new MensagemPage<Remessa>(GerarRetornoPage.class, "GERAR RETORNO", "O arquivo " + retorno.getArquivo().getNomeArquivo() + " do " + retorno.getInstituicaoOrigem().getNomeFantasia() + " foi retornado ao batimento!"));
+			    setResponsePage(new MensagemPage<Remessa>(GerarRetornoPage.class, "GERAR RETORNO", "O arquivo "
+				    + retorno.getArquivo().getNomeArquivo() + " do "
+				    + retorno.getInstituicaoOrigem().getNomeFantasia()
+				    + " foi retornado ao batimento!"));
 
 			} catch (InfraException ex) {
 			    getFeedbackPanel().error(ex.getMessage());
@@ -171,14 +170,14 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 
 		    @Override
 		    public void onClick() {
-			try {
-			    JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
-			    JasperPrint jasperPrint = relatorioMediator.relatorioRetorno(jasperReport, retorno, getUser().getInstituicao());
 
+			try {
+			    JasperPrint jasperPrint = new RelatorioUtil().relatorioArquivoCartorio(retorno);
 			    File pdf = File.createTempFile("report", ".pdf");
 			    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 			    IResourceStream resourceStream = new FileResourceStream(pdf);
-			    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + retorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+			    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
+				    + retorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 			} catch (InfraException ex) {
 			    error(ex.getMessage());
 			} catch (Exception e) {

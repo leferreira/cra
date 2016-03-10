@@ -24,82 +24,85 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaMunicipioPage extends BasePage<Municipio> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
+    /***/
+    private static final long serialVersionUID = 1L;
 
-	@SpringBean
-	private MunicipioMediator municipioMediator;
-	private Municipio municipio;
+    @SpringBean
+    private MunicipioMediator municipioMediator;
+    private Municipio municipio;
 
-	public ListaMunicipioPage() {
-		super();
-		this.municipio = new Municipio();
-		carregarListaMunicipioPage();
-	}
+    public ListaMunicipioPage() {
+	super();
+	this.municipio = new Municipio();
+	carregarListaMunicipioPage();
+    }
 
-	public ListaMunicipioPage(String mensagem) {
-		super();
-		this.municipio = new Municipio();
-		info(mensagem);
-		carregarListaMunicipioPage();
-	}
-	
-	private void carregarListaMunicipioPage() {
-		add(new Link<Municipio>("botaoNovo") {
-			/***/
-			private static final long serialVersionUID = 1L;
-			
-			public void onClick() {
-				setResponsePage(new IncluirMunicipioPage());
-			}
-		});
-		add(carregarListaMunicipio());
-	}
+    public ListaMunicipioPage(String mensagem) {
+	super();
+	this.municipio = new Municipio();
+	info(mensagem);
+	carregarListaMunicipioPage();
+    }
 
+    private void carregarListaMunicipioPage() {
+	add(new Link<Municipio>("botaoNovo") {
 
-	private ListView<Municipio> carregarListaMunicipio(){
-		ListView<Municipio> listView = new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {
-			/***/
-			private static final long serialVersionUID = 1L;
+	    /***/
+	    private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void populateItem(ListItem<Municipio> item) {
-				final Municipio municipioLista = item.getModelObject();
-				Link<Municipio> linkAlterar = new Link<Municipio>("linkAlterar") {
-					/***/
-					private static final long serialVersionUID = 1L;
-					
-					public void onClick() {
-						setResponsePage(new IncluirMunicipioPage(municipioLista));
-					}
-				};
-				linkAlterar.add(new Label("nomeMunicipio", municipioLista.getNomeMunicipio()));
-				item.add(linkAlterar);
-				item.add(new Label("uf", municipioLista.getUf()));
-				item.add(new Label("codIBGE", municipioLista.getCodigoIBGE()));
-			}
+	    public void onClick() {
+		setResponsePage(new IncluirMunicipioPage());
+	    }
+	});
+	add(carregarListaMunicipio());
+    }
+
+    private ListView<Municipio> carregarListaMunicipio() {
+	ListView<Municipio> listView = new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {
+
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @Override
+	    protected void populateItem(ListItem<Municipio> item) {
+		final Municipio municipioLista = item.getModelObject();
+		Link<Municipio> linkAlterar = new Link<Municipio>("linkAlterar") {
+
+		    /***/
+		    private static final long serialVersionUID = 1L;
+
+		    public void onClick() {
+			setResponsePage(new IncluirMunicipioPage(municipioLista));
+		    }
 		};
-		return listView;
-	}
+		linkAlterar.add(new Label("nomeMunicipio", municipioLista.getNomeMunicipio()));
+		item.add(linkAlterar);
+		item.add(new Label("uf", municipioLista.getUf()));
+		item.add(new Label("codIBGE", municipioLista.getCodigoIBGE()));
+	    }
+	};
+	return listView;
+    }
 
-	public IModel<List<Municipio>> buscarMunicipios() {
-		return new LoadableDetachableModel<List<Municipio>>() {
-			/**/
-			private static final long serialVersionUID = 1L;
+    public IModel<List<Municipio>> buscarMunicipios() {
+	return new LoadableDetachableModel<List<Municipio>>() {
 
-			@Override
-			protected List<Municipio> load() {
-				return municipioMediator.listarTodos();
-			}
-		};
-	}
+	    /**/
+	    private static final long serialVersionUID = 1L;
 
-	@Override
-	protected IModel<Municipio> getModel() {
-		return new CompoundPropertyModel<Municipio>(municipio);
-	}
+	    @Override
+	    protected List<Municipio> load() {
+		return municipioMediator.listarTodos();
+	    }
+	};
+    }
+
+    @Override
+    protected IModel<Municipio> getModel() {
+	return new CompoundPropertyModel<Municipio>(municipio);
+    }
 
 }

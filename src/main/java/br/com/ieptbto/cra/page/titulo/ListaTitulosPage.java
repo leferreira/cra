@@ -31,107 +31,107 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 @SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
-	@SpringBean
-	TituloMediator tituloMediator;
-	
-	private TituloRemessa tituloRemessa;
-	private List<TituloRemessa> titulos;
-	private Municipio municipio;
-	
-	public ListaTitulosPage(TituloRemessa titulo, Municipio pracaProtesto) {
-		this.tituloRemessa=titulo;
-		this.municipio=pracaProtesto;
-		this.titulos = tituloMediator.buscarListaTitulos(titulo, pracaProtesto , getUser());
+    @SpringBean
+    TituloMediator tituloMediator;
 
-		add(carregarListaTitulos());
-	}
+    private TituloRemessa tituloRemessa;
+    private List<TituloRemessa> titulos;
+    private Municipio municipio;
 
-	private ListView<TituloRemessa> carregarListaTitulos() {
-		return new ListView<TituloRemessa>("listViewTitulos", getTitulos()) {
+    public ListaTitulosPage(TituloRemessa titulo, Municipio pracaProtesto) {
+	this.tituloRemessa = titulo;
+	this.municipio = pracaProtesto;
+	this.titulos = tituloMediator.buscarListaTitulos(titulo, pracaProtesto, getUser());
 
-			@Override
-			protected void populateItem(ListItem<TituloRemessa> item) {
-				final TituloRemessa tituloLista = item.getModelObject();
-				
-				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+	add(carregarListaTitulos());
+    }
 
-					public void onClick() {
-		            	setResponsePage(new TitulosArquivoPage(tituloLista.getRemessa()));  
-		            }
-		        };
-		        linkArquivo.add(new Label("nomeRemessa", tituloLista.getRemessa().getArquivo().getNomeArquivo()));
-		        item.add(linkArquivo);
-		        
-		        item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
-		        
-				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
-				if (tituloLista.getConfirmacao() != null) {
-					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getDataRecebimento())));
-					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
-				} else { 
-					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
-					item.add(new Label("protocolo", StringUtils.EMPTY));
-				}
-				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
-				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
+    private ListView<TituloRemessa> carregarListaTitulos() {
+	return new ListView<TituloRemessa>("listViewTitulos", getTitulos()) {
 
-					public void onClick() {
-						setResponsePage(new HistoricoPage(tituloLista));
-		            }
-		        };
-		        if (tituloLista.getNomeDevedor().length() > 25) {
-		        	linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor().substring(0, 24)));
-		        }else {
-		        	linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
-		        }
-		        item.add(linkHistorico);
-		        Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno") {
-		        	
-		        	public void onClick() {
-		        		setResponsePage(new TitulosArquivoPage(tituloLista.getRetorno().getRemessa()));  
-		        	}
-		        };
-		        if (tituloLista.getRetorno() != null){
-	        		linkRetorno.add(new Label("retorno", tituloLista.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
-	        		item.add(linkRetorno);
-	        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getRetorno().getDataOcorrencia())));
-		        } else {
-		        	linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
-	        		item.add(linkRetorno);
-		        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getDataOcorrencia())));
-		        }
-				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
-			}
+	    @Override
+	    protected void populateItem(ListItem<TituloRemessa> item) {
+		final TituloRemessa tituloLista = item.getModelObject();
+
+		item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
+		Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+		    public void onClick() {
+			setResponsePage(new TitulosArquivoPage(tituloLista.getRemessa()));
+		    }
 		};
-	}
-	
-	public TituloRemessa getTituloRemessa() {
-		return tituloRemessa;
-	}
+		linkArquivo.add(new Label("nomeRemessa", tituloLista.getRemessa().getArquivo().getNomeArquivo()));
+		item.add(linkArquivo);
 
-	@Override
-	protected IModel<TituloRemessa> getModel() {
-		return new CompoundPropertyModel<TituloRemessa>(tituloRemessa);
-	}
+		item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
 
-	public List<TituloRemessa> getTitulos() {
-		return titulos;
-	}
+		item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
+		if (tituloLista.getConfirmacao() != null) {
+		    item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getDataRecebimento())));
+		    item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
+		} else {
+		    item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
+		    item.add(new Label("protocolo", StringUtils.EMPTY));
+		}
+		item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
+		Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 
-	public Municipio getMunicipio() {
-		return municipio;
-	}
+		    public void onClick() {
+			setResponsePage(new HistoricoPage(tituloLista));
+		    }
+		};
+		if (tituloLista.getNomeDevedor().length() > 25) {
+		    linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor().substring(0, 24)));
+		} else {
+		    linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
+		}
+		item.add(linkHistorico);
+		Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno") {
 
-	public void setTitulos(List<TituloRemessa> titulos) {
-		this.titulos = titulos;
-	}
+		    public void onClick() {
+			setResponsePage(new TitulosArquivoPage(tituloLista.getRetorno().getRemessa()));
+		    }
+		};
+		if (tituloLista.getRetorno() != null) {
+		    linkRetorno.add(new Label("retorno", tituloLista.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
+		    item.add(linkRetorno);
+		    item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getRetorno().getDataOcorrencia())));
+		} else {
+		    linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
+		    item.add(linkRetorno);
+		    item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getDataOcorrencia())));
+		}
+		item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
+	    }
+	};
+    }
 
-	public void setMunicipio(Municipio municipio) {
-		this.municipio = municipio;
-	}
+    public TituloRemessa getTituloRemessa() {
+	return tituloRemessa;
+    }
+
+    @Override
+    protected IModel<TituloRemessa> getModel() {
+	return new CompoundPropertyModel<TituloRemessa>(tituloRemessa);
+    }
+
+    public List<TituloRemessa> getTitulos() {
+	return titulos;
+    }
+
+    public Municipio getMunicipio() {
+	return municipio;
+    }
+
+    public void setTitulos(List<TituloRemessa> titulos) {
+	this.titulos = titulos;
+    }
+
+    public void setMunicipio(Municipio municipio) {
+	this.municipio = municipio;
+    }
 
 }

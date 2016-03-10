@@ -4,12 +4,12 @@
 	<div class="col-lg-8 col-md-offset-2">
 		<div class="col-md-6" style="text-align: left;">
 			<div class="form-group">
-			  <label>NÚMERO DO TÍTULO</label>  
-			  <input wicket:id="numeroTitulo" class="form-control " autofocus="autofocus">
+			  <label>NOSSO NÚMERO</label>  
+			  <input wicket:id="nossoNumero" class="form-control " autofocus="autofocus">
 			</div>
 			<div class="form-group">
-			  <label>NOSSO NÚMERO</label>  
-			  <input wicket:id="nossoNumero" class="form-control ">
+			  <label>NÚMERO DO TÍTULO</label>  
+			  <input wicket:id="numeroTitulo" class="form-control ">
 			</div>
 			<div class="form-group">
 			  <label>NÚMERO PROTOCOLO</label>  
@@ -28,24 +28,30 @@
 		</div>
 		<br style="clear: both;">
 		<div class="col-md-6" style="text-align: left;">
-			<div class="form-group">
-			  <label>NOME DEVEDOR:</label>  
-			  <input wicket:id="nomeDevedor" class="form-control ">
-			</div>
-			<div class="form-group">
-			  <label>Nº IDENTIFICAÇÃO DEVEDOR:</label>  
-			  <input wicket:id="numeroIdentificacaoDevedor" class="form-control ">
-			</div>
+			<fieldset>
+				<legend>DADOS DO DEVEDOR</legend>
+				<div class="form-group">
+				  <label>NOME DEVEDOR</label>  
+				  <input wicket:id="nomeDevedor" class="form-control ">
+				</div>
+				<div class="form-group">
+				  <label>Nº IDENTIFICAÇÃO <small>(DOCUMENTO)</small></label>   
+				  <input wicket:id="numeroIdentificacaoDevedor" class="form-control ">
+				</div>
+			</fieldset>
 		</div>
 		<div class="col-md-6 " style="text-align: left;">
-			<div class="form-group">
-			  <label>NOME SACADOR<small>&nbsp;(CREDOR)&nbsp;</small></label>  
-			  <input wicket:id="nomeSacadorVendedor" class="form-control ">
-			</div>
-			<div class="form-group">
-			  <label>DOCUMENTO SACADOR<small>&nbsp;(CREDOR)&nbsp;</small></label>  
-			  <input wicket:id="documentoSacador" class="form-control ">
-			</div>
+			<fieldset>
+				<legend>DADOS DO SACADOR <small>(CREDOR)</small></legend>
+				<div class="form-group">
+				  <label>NOME SACADOR<small>&nbsp;(CREDOR)&nbsp;</small></label>  
+				  <input wicket:id="nomeSacadorVendedor" class="form-control ">
+				</div>
+				<div class="form-group">
+				  <label>DOCUMENTO SACADOR<small>&nbsp;(CREDOR)&nbsp;</small></label>  
+				  <input wicket:id="documentoSacador" class="form-control ">
+				</div>
+			</fieldset>
 			<div class="form-group">
 			    <button wicket:id="botaoBuscar" id="buscar" name="buscar" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
 			</div>

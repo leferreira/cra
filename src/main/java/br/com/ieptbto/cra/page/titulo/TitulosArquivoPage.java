@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -28,28 +31,27 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.relatorio.RelatorioUtil;
+import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * @author Thasso Araújo
  *
  */
 @SuppressWarnings("rawtypes")
+@AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class TitulosArquivoPage extends BasePage<Remessa> {
 
     /***/
     private static final long serialVersionUID = 1L;
 
-    @SpringBean
-    private RelatorioMediator relatorioMediator;
     @SpringBean
     private RemessaMediator remessaMediator;
     @SpringBean
@@ -58,7 +60,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
     private List<Titulo> titulos;
 
     public TitulosArquivoPage(Remessa remessa) {
-	this.remessa = remessaMediator.carregarRemessaPorId(remessa.getId());
+	this.remessa = remessaMediator.carregarRemessaPorId(remessa);
 	this.titulos = tituloMediator.carregarTitulosGenerico(remessa);
 	carregarInformacoes();
     }
@@ -238,21 +240,9 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 
 	    @Override
 	    public void onClick() {
-		TipoArquivoEnum tipoArquivo = remessa.getArquivo().getTipoArquivo().getTipoArquivo();
-		JasperPrint jasperPrint = null;
 
 		try {
-		    if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
-			JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRemessa.jrxml"));
-			jasperPrint = relatorioMediator.relatorioRemessa(jasperReport, remessa, getUser().getInstituicao());
-		    } else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
-			JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioConfirmação.jrxml"));
-			jasperPrint = relatorioMediator.relatorioConfirmacao(jasperReport, remessa, getUser().getInstituicao());
-		    } else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
-			JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
-			jasperPrint = relatorioMediator.relatorioRetorno(jasperReport, remessa, getUser().getInstituicao());
-		    }
-
+		    JasperPrint jasperPrint = new RelatorioUtil().relatorioArquivoCartorio(getRemessa());
 		    File pdf = File.createTempFile("report", ".pdf");
 		    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 		    IResourceStream resourceStream = new FileResourceStream(pdf);

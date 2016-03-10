@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
@@ -31,77 +32,76 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
 public class RemessaConvenioPage extends BasePage<TituloFiliado> {
 
-	private static final Logger logger = Logger.getLogger(RemessaConvenioPage.class);
+    private static final Logger logger = Logger.getLogger(RemessaConvenioPage.class);
 
-	private TituloFiliado titulo;
-	private List<TituloFiliado> listaTitulosConvenios;
+    @SpringBean
+    private ConvenioMediator convenioMediator;
+    @SpringBean
+    private TituloFiliadoMediator tituloFiliadoMediator;
+    private TituloFiliado titulo;
+    private List<TituloFiliado> listaTitulosConvenios;
 
-	@SpringBean
-	ConvenioMediator convenioMediator;
-	@SpringBean
-	TituloFiliadoMediator tituloFiliadoMediator;
+    public RemessaConvenioPage() {
+	this.titulo = new TituloFiliado();
+	carrrgarPageRemessaConvenio();
+    }
 
-	public RemessaConvenioPage() {
-		this.titulo = new TituloFiliado();
-		carrrgarPageRemessaConvenio();
-	}
-	
-	public RemessaConvenioPage(String mensagem) {
-		this.titulo = new TituloFiliado();
-		info(mensagem);
-		carrrgarPageRemessaConvenio();
-	}
-	
-	private void carrrgarPageRemessaConvenio() {
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
-			
-			@Override
-			protected void onSubmit() {
-				
-				try {
-					convenioMediator.gerarRemessas(getUser(), getListaTitulosConvenios());
-					setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
-					setResponsePage(new RemessaConvenioPage("Remessas processados e encaminhadas com sucesso na CRA !"));
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
-				}
-			}
-		};
-		add(form);
-		setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
-		add(carregarListaTitulos());
-	}
+    public RemessaConvenioPage(String mensagem) {
+	this.titulo = new TituloFiliado();
+	info(mensagem);
+	carrrgarPageRemessaConvenio();
+    }
 
-	private ListView<TituloFiliado> carregarListaTitulos() {
-		return new ListView<TituloFiliado>("listViewTitulos", getListaTitulosConvenios()) {
+    private void carrrgarPageRemessaConvenio() {
+	Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
 
-			@Override
-			protected void populateItem(ListItem<TituloFiliado> item) {
-				final TituloFiliado tituloLista = item.getModelObject();
+	    @Override
+	    protected void onSubmit() {
 
-				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
-				item.add(new Label("convenio", tituloLista.getFiliado().getInstituicaoConvenio().getNomeFantasia()));
-				item.add(new Label("credor", tituloLista.getFiliado().getRazaoSocial()));
-				item.add(new Label("devedor", tituloLista.getNomeDevedor()));
-				item.add(new Label("dataEnvioCRA", DataUtil.localDateToString(tituloLista.getDataEnvioCRA())));
-				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
-			}
-		};
-	}
+		try {
+		    convenioMediator.gerarRemessas(getUser(), getListaTitulosConvenios());
+		    setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
+		    setResponsePage(new RemessaConvenioPage("Remessas processados e encaminhadas com sucesso na CRA !"));
+		} catch (Exception e) {
+		    logger.error(e.getMessage(), e);
+		    error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
+		}
+	    }
+	};
+	add(form);
+	setListaTitulosConvenios(convenioMediator.buscarTitulosConvenios());
+	add(carregarListaTitulos());
+    }
 
-	@Override
-	protected IModel<TituloFiliado> getModel() {
-		return new CompoundPropertyModel<TituloFiliado>(titulo);
-	}
+    private ListView<TituloFiliado> carregarListaTitulos() {
+	return new ListView<TituloFiliado>("listViewTitulos", getListaTitulosConvenios()) {
 
-	public List<TituloFiliado> getListaTitulosConvenios() {
-		return listaTitulosConvenios;
-	}
+	    @Override
+	    protected void populateItem(ListItem<TituloFiliado> item) {
+		final TituloFiliado tituloLista = item.getModelObject();
 
-	public void setListaTitulosConvenios(List<TituloFiliado> listaTitulosConvenios) {
-		this.listaTitulosConvenios = listaTitulosConvenios;
-	}
+		item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
+		item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
+		item.add(new Label("convenio", tituloLista.getFiliado().getInstituicaoConvenio().getNomeFantasia()));
+		item.add(new Label("credor", tituloLista.getFiliado().getRazaoSocial()));
+		item.add(new Label("devedor", tituloLista.getNomeDevedor()));
+		item.add(new Label("dataEnvioCRA", DataUtil.localDateToString(new LocalDate(tituloLista.getDataEnvioCRA()))));
+		item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
+	    }
+	};
+    }
+
+    @Override
+    protected IModel<TituloFiliado> getModel() {
+	return new CompoundPropertyModel<TituloFiliado>(titulo);
+    }
+
+    public List<TituloFiliado> getListaTitulosConvenios() {
+	return listaTitulosConvenios;
+    }
+
+    public void setListaTitulosConvenios(List<TituloFiliado> listaTitulosConvenios) {
+	this.listaTitulosConvenios = listaTitulosConvenios;
+    }
 
 }

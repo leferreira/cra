@@ -25,49 +25,50 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
 public class IncluirLayoutEmpresaPage extends BasePage<LayoutFiliado> {
 
-	@SpringBean
-	private LayoutFiliadoMediator layoutFiliadoMediator;
-	private LayoutFiliado layoutEmpresa;
-	private LayoutEmpresaInputPanel inputPanel;
+    @SpringBean
+    private LayoutFiliadoMediator layoutFiliadoMediator;
+    private LayoutFiliado layoutEmpresa;
+    private LayoutEmpresaInputPanel inputPanel;
 
-	public IncluirLayoutEmpresaPage() {
-		setComponent();
-	}
+    public IncluirLayoutEmpresaPage() {
+	setComponent();
+    }
 
-	public IncluirLayoutEmpresaPage(String string) {
-		info(string);
-		setComponent();
-	}
+    public IncluirLayoutEmpresaPage(String string) {
+	info(string);
+	setComponent();
+    }
 
-	private void setComponent() {
-		layoutEmpresa = new LayoutFiliado();
-		inputPanel = new LayoutEmpresaInputPanel("layoutEmpresaInputPanel", getModel());
-		LayoutEmpresaForm form = new LayoutEmpresaForm("form", getModel(), inputPanel);
-		form.add(inputPanel);
-		form.add(new Button("submit") {
-			@Override
-			public void onSubmit() {
-				getModel();
-				List<LayoutFiliado> listaCampos = inputPanel.getListaLayoutFiliado();
+    private void setComponent() {
+	layoutEmpresa = new LayoutFiliado();
+	inputPanel = new LayoutEmpresaInputPanel("layoutEmpresaInputPanel", getModel());
+	LayoutEmpresaForm form = new LayoutEmpresaForm("form", getModel(), inputPanel);
+	form.add(inputPanel);
+	form.add(new Button("submit") {
 
-				try {
-					layoutFiliadoMediator.salvar(listaCampos);
-					info("Layout inserido com sucesso!.");
-					setResponsePage(new IncluirLayoutEmpresaPage("Layout inserido com sucesso!."));
+	    @Override
+	    public void onSubmit() {
+		getModel();
+		List<LayoutFiliado> listaCampos = inputPanel.getListaLayoutFiliado();
 
-				} catch (Exception ex) {
-					error("Não foi possível Inserir o layout.");
-				}
-			}
-		});
+		try {
+		    layoutFiliadoMediator.salvar(listaCampos);
+		    info("Layout inserido com sucesso!.");
+		    setResponsePage(new IncluirLayoutEmpresaPage("Layout inserido com sucesso!."));
 
-		add(form);
+		} catch (Exception ex) {
+		    error("Não foi possível Inserir o layout.");
+		}
+	    }
+	});
 
-	}
+	add(form);
 
-	@Override
-	protected IModel<LayoutFiliado> getModel() {
-		return new CompoundPropertyModel<LayoutFiliado>(layoutEmpresa);
-	}
+    }
+
+    @Override
+    protected IModel<LayoutFiliado> getModel() {
+	return new CompoundPropertyModel<LayoutFiliado>(layoutEmpresa);
+    }
 
 }

@@ -71,7 +71,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 	novaOcorrencia = new ArquivoOcorrenciaBean();
 	if (titulo.getRemessa() != null) {
-	    Remessa remessa = remessaMediator.carregarRemessaPorId(titulo.getRemessa().getId());
+	    Remessa remessa = remessaMediator.carregarRemessaPorId(titulo.getRemessa());
 	    titulo.setRemessa(remessa);
 	}
 	novaOcorrencia.parseToRemessa(titulo.getRemessa());

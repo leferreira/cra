@@ -16,17 +16,17 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
-import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -45,9 +45,6 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 
     /***/
     private static final long serialVersionUID = 1L;
-
-    @SpringBean
-    private RelatorioMediator relatorioMediator;
     private Arquivo arquivo;
     private Retorno retorno;
 
@@ -127,11 +124,13 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 
 	    @Override
 	    public void onClick() {
+		Remessa retorno = null;
+		for (Remessa r : getArquivo().getRemessas()) {
+		    retorno = r;
+		}
 
 		try {
-		    JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
-		    JasperPrint jasperPrint = relatorioMediator.relatorioRetorno(jasperReport, getArquivo(), getUser().getInstituicao());
-
+		    JasperPrint jasperPrint = new RelatorioUtil().relatorioArquivoCartorio(retorno);
 		    File pdf = File.createTempFile("report", ".pdf");
 		    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 		    IResourceStream resourceStream = new FileResourceStream(pdf);

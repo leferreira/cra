@@ -35,241 +35,244 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 @SuppressWarnings("serial")
 public class LayoutEmpresaInputPanel extends Panel {
 
-	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+    @SpringBean
+    private InstituicaoMediator instituicaoMediator;
 
-	private DropDownChoice<Instituicao> comboEmpresas;
-	private TextField<Integer> campoOrdem;
-	private TextField<Integer> campoPosicaoInicio;
-	private TextField<Integer> campoPosicaoFim;
-	private DropDownChoice<CampoLayout> comboCampos;
-	private LayoutFiliado layoutFiliado;
-	private List<LayoutFiliado> listaLayoutFiliado;
-	private WebMarkupContainer divResultado;
-	private List<CampoLayout> campos;
-	private DropDownChoice<TipoArquivoLayoutEmpresa> comboTipoArquivo;
+    private DropDownChoice<Instituicao> comboEmpresas;
+    private TextField<Integer> campoOrdem;
+    private TextField<Integer> campoPosicaoInicio;
+    private TextField<Integer> campoPosicaoFim;
+    private DropDownChoice<CampoLayout> comboCampos;
+    private LayoutFiliado layoutFiliado;
+    private List<LayoutFiliado> listaLayoutFiliado;
+    private WebMarkupContainer divResultado;
+    private List<CampoLayout> campos;
+    private DropDownChoice<TipoArquivoLayoutEmpresa> comboTipoArquivo;
 
-	private TextField<String> campoDescricao;
+    private TextField<String> campoDescricao;
 
-	public LayoutEmpresaInputPanel(String id, IModel<?> model) {
-		super(id, model);
+    public LayoutEmpresaInputPanel(String id, IModel<?> model) {
+	super(id, model);
+	layoutFiliado = new LayoutFiliado();
+	addComponent();
+    }
+
+    private void addComponent() {
+	add(getComboEmpresas());
+	add(getComboTipoArquivoLayout());
+
+	WebMarkupContainer divCampo = getDivCampo();
+	add(divCampo);
+
+	divCampo.add(getDescricaoCampo());
+	divCampo.add(getCampoOrdem());
+	divCampo.add(getCampoPosicaoInicio());
+	divCampo.add(getCampoPosicaoFim());
+	divCampo.add(getComboCampos());
+	divCampo.add(getButaoAdd());
+
+	divResultado = getDivResultado();
+	divResultado.add(getTabelaResultado());
+	divResultado.setOutputMarkupId(true);
+	add(divResultado);
+
+    }
+
+    private Component getDescricaoCampo() {
+	campoDescricao = new TextField<String>("descricaoCampo");
+	campoDescricao.setOutputMarkupId(true);
+	return campoDescricao;
+    }
+
+    private Component getComboTipoArquivoLayout() {
+	ChoiceRenderer<TipoArquivoLayoutEmpresa> renderer = new ChoiceRenderer<TipoArquivoLayoutEmpresa>("label");
+	if (comboTipoArquivo == null) {
+	    comboTipoArquivo = new DropDownChoice<TipoArquivoLayoutEmpresa>("tipoArquivo", getTipoArquivoLayoutEmpresa(), renderer);
+	    comboTipoArquivo.setLabel(new Model<String>("Tipo Arquivo"));
+	    comboTipoArquivo.setOutputMarkupId(true);
+	    comboTipoArquivo.setRequired(true);
+	}
+	return comboTipoArquivo;
+    }
+
+    private Component getTabelaResultado() {
+	return new ListView<LayoutFiliado>("tabelaLayout", getCamposFiliado()) {
+
+	    @Override
+	    protected void populateItem(ListItem<LayoutFiliado> item) {
+		final LayoutFiliado layout = item.getModelObject();
+		item.add(new Label("descricao", layout.getDescricaoCampo()));
+		item.add(new Label("campo", layout.getCampo().getLabel()));
+		item.add(new Label("ordem", layout.getOrdem()));
+		item.add(new Label("posicaoInicio", layout.getPosicaoInicio()));
+		item.add(new Label("posicaoFim", layout.getPosicaoFim()));
+		item.add(getButtonRemove(layout));
+	    }
+
+	    private Component getButtonRemove(final LayoutFiliado layout) {
+		return new AjaxButton("remover") {
+
+		    @Override
+		    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			getCamposFiliado().remove(layout);
+			target.add(divResultado);
+
+		    }
+		};
+	    }
+	};
+    }
+
+    public List<LayoutFiliado> getCamposFiliado() {
+	if (listaLayoutFiliado == null) {
+	    listaLayoutFiliado = new ArrayList<LayoutFiliado>();
+	}
+	return listaLayoutFiliado;
+    }
+
+    private AjaxButton getButaoAdd() {
+	AjaxButton button = new AjaxButton("add") {
+
+	    @Override
+	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 		layoutFiliado = new LayoutFiliado();
-		addComponent();
-	}
 
-	private void addComponent() {
-		add(getComboEmpresas());
-		add(getComboTipoArquivoLayout());
-
-		WebMarkupContainer divCampo = getDivCampo();
-		add(divCampo);
-
-		divCampo.add(getDescricaoCampo());
-		divCampo.add(getCampoOrdem());
-		divCampo.add(getCampoPosicaoInicio());
-		divCampo.add(getCampoPosicaoFim());
-		divCampo.add(getComboCampos());
-		divCampo.add(getButaoAdd());
-
-		divResultado = getDivResultado();
-		divResultado.add(getTabelaResultado());
-		divResultado.setOutputMarkupId(true);
-		add(divResultado);
-
-	}
-
-	private Component getDescricaoCampo() {
-		campoDescricao = new TextField<String>("descricaoCampo");
-		campoDescricao.setOutputMarkupId(true);
-		return campoDescricao;
-	}
-
-	private Component getComboTipoArquivoLayout() {
-		ChoiceRenderer<TipoArquivoLayoutEmpresa> renderer = new ChoiceRenderer<TipoArquivoLayoutEmpresa>("label");
-		if (comboTipoArquivo == null) {
-			comboTipoArquivo = new DropDownChoice<TipoArquivoLayoutEmpresa>("tipoArquivo", getTipoArquivoLayoutEmpresa(), renderer);
-			comboTipoArquivo.setLabel(new Model<String>("Tipo Arquivo"));
-			comboTipoArquivo.setOutputMarkupId(true);
-			comboTipoArquivo.setRequired(true);
+		if (verificarCampos(layoutFiliado)) {
+		    target.add(this.getPage());
+		    return;
 		}
-		return comboTipoArquivo;
-	}
 
-	private Component getTabelaResultado() {
-		return new ListView<LayoutFiliado>("tabelaLayout", getCamposFiliado()) {
-
-			@Override
-			protected void populateItem(ListItem<LayoutFiliado> item) {
-				final LayoutFiliado layout = item.getModelObject();
-				item.add(new Label("descricao", layout.getDescricaoCampo()));
-				item.add(new Label("campo", layout.getCampo().getLabel()));
-				item.add(new Label("ordem", layout.getOrdem()));
-				item.add(new Label("posicaoInicio", layout.getPosicaoInicio()));
-				item.add(new Label("posicaoFim", layout.getPosicaoFim()));
-				item.add(getButtonRemove(layout));
-			}
-
-			private Component getButtonRemove(final LayoutFiliado layout) {
-				return new AjaxButton("remover") {
-					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-						getCamposFiliado().remove(layout);
-						target.add(divResultado);
-
-					}
-				};
-			}
-		};
-	}
-
-	public List<LayoutFiliado> getCamposFiliado() {
-		if (listaLayoutFiliado == null) {
-			listaLayoutFiliado = new ArrayList<LayoutFiliado>();
+		for (LayoutFiliado campoFiliado : getCamposFiliado()) {
+		    if (campoFiliado.getOrdem() == layoutFiliado.getOrdem()) {
+			warn("O campo ordem não pode ser repetido.");
+			target.add(this.getPage());
+			return;
+		    }
 		}
-		return listaLayoutFiliado;
-	}
 
-	private AjaxButton getButaoAdd() {
-		AjaxButton button = new AjaxButton("add") {
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				layoutFiliado = new LayoutFiliado();
+		// divResultado.add(comboCampos);
 
-				if (verificarCampos(layoutFiliado)) {
-					target.add(this.getPage());
-					return;
-				}
+		getCamposFiliado().add(layoutFiliado);
+		divResultado.setVisible(true);
+		target.add(divResultado);
+		target.add(this.getPage());
 
-				for (LayoutFiliado campoFiliado : getCamposFiliado()) {
-					if (campoFiliado.getOrdem() == layoutFiliado.getOrdem()) {
-						warn("O campo ordem não pode ser repetido.");
-						target.add(this.getPage());
-						return;
-					}
-				}
+		campoDescricao.getModel().setObject(StringUtils.EMPTY);
+		campoPosicaoFim.getModel().setObject(null);
+		campoPosicaoInicio.getModel().setObject(null);
+		campoOrdem.getModel().setObject(null);
+		comboCampos.getModel().setObject(null);
+	    }
 
-				// divResultado.add(comboCampos);
+	    private boolean verificarCampos(LayoutFiliado layoutFiliado) {
+		final String descricao = (String) campoDescricao.getDefaultModelObject();
+		final Integer posicaoFim = (Integer) campoPosicaoFim.getDefaultModelObject();
+		final Integer posicaoInicio = (Integer) campoPosicaoInicio.getDefaultModelObject();
+		final Integer ordem = (Integer) campoOrdem.getDefaultModelObject();
+		final CampoLayout campo = comboCampos.getConvertedInput();
+		final Instituicao empresa = comboEmpresas.getConvertedInput();
+		final TipoArquivoLayoutEmpresa tipoArquivo = comboTipoArquivo.getConvertedInput();
 
-				getCamposFiliado().add(layoutFiliado);
-				divResultado.setVisible(true);
-				target.add(divResultado);
-				target.add(this.getPage());
-
-				campoDescricao.getModel().setObject(StringUtils.EMPTY);
-				campoPosicaoFim.getModel().setObject(null);
-				campoPosicaoInicio.getModel().setObject(null);
-				campoOrdem.getModel().setObject(null);
-				comboCampos.getModel().setObject(null);
-			}
-
-			private boolean verificarCampos(LayoutFiliado layoutFiliado) {
-				final String descricao = (String) campoDescricao.getDefaultModelObject();
-				final Integer posicaoFim = (Integer) campoPosicaoFim.getDefaultModelObject();
-				final Integer posicaoInicio = (Integer) campoPosicaoInicio.getDefaultModelObject();
-				final Integer ordem = (Integer) campoOrdem.getDefaultModelObject();
-				final CampoLayout campo = comboCampos.getConvertedInput();
-				final Instituicao empresa = comboEmpresas.getConvertedInput();
-				final TipoArquivoLayoutEmpresa tipoArquivo = comboTipoArquivo.getConvertedInput();
-
-				if (posicaoFim == null || posicaoInicio == null || ordem == null || campo == null || empresa == null || tipoArquivo == null
-		                || descricao == null) {
-					warn("Todos os campos devem ser preenchidos");
-					return true;
-				}
-
-				for (LayoutFiliado layout : getListaLayoutFiliado()) {
-
-					if (layout.getCampo().equals(getComboCampos().getDefaultModelObject())) {
-						warn("O campo " + layout.getCampo() + " já foi adicionado ao layout. Não deve haver campos repetidos no layout.");
-						return true;
-					}
-
-				}
-
-				layoutFiliado.setCampo(campo);
-				layoutFiliado.setEmpresa(empresa);
-				layoutFiliado.setOrdem(ordem);
-				layoutFiliado.setPosicaoFim(posicaoFim);
-				layoutFiliado.setPosicaoInicio(posicaoInicio);
-				layoutFiliado.setTipoArquivo(tipoArquivo);
-				layoutFiliado.setDescricaoCampo(descricao);
-
-				return false;
-			}
-
-		};
-
-		return button;
-	}
-
-	private WebMarkupContainer getDivResultado() {
-		WebMarkupContainer divCampo = new WebMarkupContainer("divResultado");
-		divCampo.setOutputMarkupId(true);
-		return divCampo;
-	}
-
-	public DropDownChoice<CampoLayout> getComboCampos() {
-		ChoiceRenderer<CampoLayout> renderer = new ChoiceRenderer<CampoLayout>("label");
-		if (comboCampos == null) {
-			comboCampos = new DropDownChoice<CampoLayout>("campo", getCamposLayout(), renderer);
-			comboCampos.setLabel(new Model<String>("Campo"));
-			comboCampos.setOutputMarkupId(true);
-			comboCampos.setRequired(true);
+		if (posicaoFim == null || posicaoInicio == null || ordem == null || campo == null || empresa == null
+			|| tipoArquivo == null || descricao == null) {
+		    warn("Todos os campos devem ser preenchidos");
+		    return true;
 		}
-		return comboCampos;
-	}
 
-	public List<CampoLayout> getCamposLayout() {
-		if (campos == null) {
-			campos = Arrays.asList(CampoLayout.values());
+		for (LayoutFiliado layout : getListaLayoutFiliado()) {
+
+		    if (layout.getCampo().equals(getComboCampos().getDefaultModelObject())) {
+			warn("O campo " + layout.getCampo()
+				+ " já foi adicionado ao layout. Não deve haver campos repetidos no layout.");
+			return true;
+		    }
+
 		}
-		return campos;
-	}
 
-	private List<TipoArquivoLayoutEmpresa> getTipoArquivoLayoutEmpresa() {
-		return Arrays.asList(TipoArquivoLayoutEmpresa.values());
-	}
+		layoutFiliado.setCampo(campo);
+		layoutFiliado.setEmpresa(empresa);
+		layoutFiliado.setOrdem(ordem);
+		layoutFiliado.setPosicaoFim(posicaoFim);
+		layoutFiliado.setPosicaoInicio(posicaoInicio);
+		layoutFiliado.setTipoArquivo(tipoArquivo);
+		layoutFiliado.setDescricaoCampo(descricao);
 
-	private TextField<Integer> getCampoPosicaoFim() {
-		campoPosicaoFim = new TextField<Integer>("posicaoFim");
-		campoPosicaoFim.setOutputMarkupId(true);
-		return campoPosicaoFim;
-	}
+		return false;
+	    }
 
-	private TextField<Integer> getCampoPosicaoInicio() {
-		campoPosicaoInicio = new TextField<Integer>("posicaoInicio");
-		campoPosicaoInicio.setOutputMarkupId(true);
-		return campoPosicaoInicio;
-	}
+	};
 
-	private TextField<Integer> getCampoOrdem() {
-		campoOrdem = new TextField<Integer>("ordem");
-		campoOrdem.setOutputMarkupId(true);
-		return campoOrdem;
-	}
+	return button;
+    }
 
-	private WebMarkupContainer getDivCampo() {
-		WebMarkupContainer divCampo = new WebMarkupContainer("divCampo");
-		divCampo.setOutputMarkupId(true);
-		return divCampo;
-	}
+    private WebMarkupContainer getDivResultado() {
+	WebMarkupContainer divCampo = new WebMarkupContainer("divResultado");
+	divCampo.setOutputMarkupId(true);
+	return divCampo;
+    }
 
-	private DropDownChoice<Instituicao> getComboEmpresas() {
-		ChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("razaoSocial");
-		comboEmpresas = new DropDownChoice<Instituicao>("empresa", instituicaoMediator.getInstituicoesFinanceiras(), renderer);
-		comboEmpresas.setLabel(new Model<String>("Empresa"));
-		comboEmpresas.setOutputMarkupId(true);
-		comboEmpresas.setRequired(true);
-
-		return comboEmpresas;
+    public DropDownChoice<CampoLayout> getComboCampos() {
+	ChoiceRenderer<CampoLayout> renderer = new ChoiceRenderer<CampoLayout>("label");
+	if (comboCampos == null) {
+	    comboCampos = new DropDownChoice<CampoLayout>("campo", getCamposLayout(), renderer);
+	    comboCampos.setLabel(new Model<String>("Campo"));
+	    comboCampos.setOutputMarkupId(true);
+	    comboCampos.setRequired(true);
 	}
+	return comboCampos;
+    }
 
-	public List<LayoutFiliado> getListaLayoutFiliado() {
-		return listaLayoutFiliado;
+    public List<CampoLayout> getCamposLayout() {
+	if (campos == null) {
+	    campos = Arrays.asList(CampoLayout.values());
 	}
+	return campos;
+    }
 
-	public void setListaLayoutFiliado(List<LayoutFiliado> listaLayoutFiliado) {
-		this.listaLayoutFiliado = listaLayoutFiliado;
-	}
+    private List<TipoArquivoLayoutEmpresa> getTipoArquivoLayoutEmpresa() {
+	return Arrays.asList(TipoArquivoLayoutEmpresa.values());
+    }
+
+    private TextField<Integer> getCampoPosicaoFim() {
+	campoPosicaoFim = new TextField<Integer>("posicaoFim");
+	campoPosicaoFim.setOutputMarkupId(true);
+	return campoPosicaoFim;
+    }
+
+    private TextField<Integer> getCampoPosicaoInicio() {
+	campoPosicaoInicio = new TextField<Integer>("posicaoInicio");
+	campoPosicaoInicio.setOutputMarkupId(true);
+	return campoPosicaoInicio;
+    }
+
+    private TextField<Integer> getCampoOrdem() {
+	campoOrdem = new TextField<Integer>("ordem");
+	campoOrdem.setOutputMarkupId(true);
+	return campoOrdem;
+    }
+
+    private WebMarkupContainer getDivCampo() {
+	WebMarkupContainer divCampo = new WebMarkupContainer("divCampo");
+	divCampo.setOutputMarkupId(true);
+	return divCampo;
+    }
+
+    private DropDownChoice<Instituicao> getComboEmpresas() {
+	ChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("razaoSocial");
+	comboEmpresas = new DropDownChoice<Instituicao>("empresa", instituicaoMediator.getInstituicoesFinanceiras(), renderer);
+	comboEmpresas.setLabel(new Model<String>("Empresa"));
+	comboEmpresas.setOutputMarkupId(true);
+	comboEmpresas.setRequired(true);
+
+	return comboEmpresas;
+    }
+
+    public List<LayoutFiliado> getListaLayoutFiliado() {
+	return listaLayoutFiliado;
+    }
+
+    public void setListaLayoutFiliado(List<LayoutFiliado> listaLayoutFiliado) {
+	this.listaLayoutFiliado = listaLayoutFiliado;
+    }
 
 }

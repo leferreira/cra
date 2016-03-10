@@ -15,33 +15,34 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
-public class IncluirMunicipioPage extends BasePage<Municipio>{
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
+public class IncluirMunicipioPage extends BasePage<Municipio> {
 
-	private static final long serialVersionUID = 1L;
-	
-	private Municipio municipio;
-	private MunicipioForm form;
+    private static final long serialVersionUID = 1L;
 
-	public IncluirMunicipioPage() {
-		municipio = new Municipio();
-		setFormulario();
-	}
-	
-	public IncluirMunicipioPage(Municipio municipio) {
-		this.municipio = municipio;;
-		setFormulario();
-	}
-	
-	private void setFormulario() {
-		form = new MunicipioForm("form", getModel());
-		form.add(new MunicipioInputPanel("municipioInputPanel", getModel()));
-		add(form);
-	}
-	
-	@Override
-	protected IModel<Municipio> getModel() {
-		return new CompoundPropertyModel<Municipio>(municipio);
-	}
+    private Municipio municipio;
+    private MunicipioForm form;
+
+    public IncluirMunicipioPage() {
+	municipio = new Municipio();
+	setFormulario();
+    }
+
+    public IncluirMunicipioPage(Municipio municipio) {
+	this.municipio = municipio;
+	;
+	setFormulario();
+    }
+
+    private void setFormulario() {
+	form = new MunicipioForm("form", getModel());
+	form.add(new MunicipioInputPanel("municipioInputPanel", getModel()));
+	add(form);
+    }
+
+    @Override
+    protected IModel<Municipio> getModel() {
+	return new CompoundPropertyModel<Municipio>(municipio);
+    }
 
 }

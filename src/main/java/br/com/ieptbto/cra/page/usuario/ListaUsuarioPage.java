@@ -19,85 +19,83 @@ import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-
 /**
  * @author Thasso Araújo
  *
  */
 @SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaUsuarioPage extends BasePage<Usuario> {
 
-	private Usuario usuario;
+    private Usuario usuario;
 
-	@SpringBean
-	UsuarioMediator usuarioMediator;
+    @SpringBean
+    UsuarioMediator usuarioMediator;
 
-	public ListaUsuarioPage() {
-		super();
-		carregarPage();
-	} 
-	
-	public ListaUsuarioPage(String mensagem) {
-		info(mensagem);
-		carregarPage();
-	}
+    public ListaUsuarioPage() {
+	super();
+	carregarPage();
+    }
 
-	private void carregarPage(){
-		this.usuario = new Usuario();
-		add(new Link<Usuario>("botaoNovo") {
-			
-			public void onClick() {
-				setResponsePage(new IncluirUsuarioPage());
-			}
-		});
-		add(carregarListaUsuario());
-	}
-	
-	@SuppressWarnings("rawtypes")
-	private ListView<Usuario> carregarListaUsuario(){
-		return new ListView<Usuario>("listViewUsuario", buscarUsuarios()) {
+    public ListaUsuarioPage(String mensagem) {
+	info(mensagem);
+	carregarPage();
+    }
 
-			@Override
-			protected void populateItem(ListItem<Usuario> item) {
-				final Usuario usuarioLista = item.getModelObject();
-				
-				Link linkAlterar = new Link<Usuario>("linkAlterar") {
+    private void carregarPage() {
+	this.usuario = new Usuario();
+	add(new Link<Usuario>("botaoNovo") {
 
-					public void onClick() {
-						setResponsePage(new IncluirUsuarioPage(usuarioLista));
-		            }
-		        };
-		        linkAlterar.add(new Label("nomeUsuario", usuarioLista.getNome()));
-		        item.add(linkAlterar);
-		        
-		        item.add(new Label("loginUsuario", usuarioLista.getLogin()));
-				item.add(new Label("emailUsuario", usuarioLista.getEmail()));
-				item.add(new Label("instituicaoUsuario", usuarioLista
-						.getInstituicao().getNomeFantasia()));
-				if (usuarioLista.isStatus()){
-					item.add(new Label("status", "Sim"));
-				}else{
-					item.add(new Label("status","Não" ));
-				}
-			}
+	    public void onClick() {
+		setResponsePage(new IncluirUsuarioPage());
+	    }
+	});
+	add(carregarListaUsuario());
+    }
+
+    @SuppressWarnings("rawtypes")
+    private ListView<Usuario> carregarListaUsuario() {
+	return new ListView<Usuario>("listViewUsuario", buscarUsuarios()) {
+
+	    @Override
+	    protected void populateItem(ListItem<Usuario> item) {
+		final Usuario usuarioLista = item.getModelObject();
+
+		Link linkAlterar = new Link<Usuario>("linkAlterar") {
+
+		    public void onClick() {
+			setResponsePage(new IncluirUsuarioPage(usuarioLista));
+		    }
 		};
-	}
+		linkAlterar.add(new Label("nomeUsuario", usuarioLista.getNome()));
+		item.add(linkAlterar);
 
-	public IModel<List<Usuario>> buscarUsuarios() {
-		return new LoadableDetachableModel<List<Usuario>>() {
+		item.add(new Label("loginUsuario", usuarioLista.getLogin()));
+		item.add(new Label("emailUsuario", usuarioLista.getEmail()));
+		item.add(new Label("instituicaoUsuario", usuarioLista.getInstituicao().getNomeFantasia()));
+		if (usuarioLista.isStatus()) {
+		    item.add(new Label("status", "Sim"));
+		} else {
+		    item.add(new Label("status", "Não"));
+		}
+	    }
+	};
+    }
 
-			@Override
-			protected List<Usuario> load() {
-				List<Usuario> list = usuarioMediator.listarTodos();
-				return list;
-			}
-		};
-	}
-	
-	@Override
-	protected IModel<Usuario> getModel() {
-		return new CompoundPropertyModel<Usuario>(usuario);
-	}
+    public IModel<List<Usuario>> buscarUsuarios() {
+	return new LoadableDetachableModel<List<Usuario>>() {
+
+	    @Override
+	    protected List<Usuario> load() {
+		List<Usuario> list = usuarioMediator.listarTodos();
+		return list;
+	    }
+	};
+    }
+
+    @Override
+    protected IModel<Usuario> getModel() {
+	return new CompoundPropertyModel<Usuario>(usuario);
+    }
 }

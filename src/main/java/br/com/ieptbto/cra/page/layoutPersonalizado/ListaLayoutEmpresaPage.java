@@ -30,47 +30,48 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaLayoutEmpresaPage extends BasePage<LayoutFiliado> {
 
-	@SpringBean
-	LayoutFiliadoMediator layoutFiliadoMediator;
-	private IModel<LayoutFiliado> layoutEmpresa;
-	private List<LayoutFiliado> listEmpresas;
+    @SpringBean
+    LayoutFiliadoMediator layoutFiliadoMediator;
+    private IModel<LayoutFiliado> layoutEmpresa;
+    private List<LayoutFiliado> listEmpresas;
 
-	public ListaLayoutEmpresaPage() {
+    public ListaLayoutEmpresaPage() {
 
-		carregarDados();
-		WebMarkupContainer divResultado = getDivResultado();
-		divResultado.add(getTabelaResultado());
-		add(divResultado);
-	}
+	carregarDados();
+	WebMarkupContainer divResultado = getDivResultado();
+	divResultado.add(getTabelaResultado());
+	add(divResultado);
+    }
 
-	private void carregarDados() {
-		listEmpresas = layoutFiliadoMediator.buscarEmpresasComLayout();
-	}
+    private void carregarDados() {
+	listEmpresas = layoutFiliadoMediator.buscarEmpresasComLayout();
+    }
 
-	private WebMarkupContainer getDivResultado() {
-		WebMarkupContainer divCampo = new WebMarkupContainer("divResultado");
-		divCampo.setOutputMarkupId(true);
-		return divCampo;
-	}
+    private WebMarkupContainer getDivResultado() {
+	WebMarkupContainer divCampo = new WebMarkupContainer("divResultado");
+	divCampo.setOutputMarkupId(true);
+	return divCampo;
+    }
 
-	private Component getTabelaResultado() {
-		return new ListView<LayoutFiliado>("tabelaLayout", getListEmpresas()) {
-			@Override
-			protected void populateItem(ListItem<LayoutFiliado> item) {
-				final LayoutFiliado layout = item.getModelObject();
-				item.add(new Label("empresa", layout.getEmpresa().getNomeFantasia()));
-				item.add(new Label("tipoArquivo", layout.getTipoArquivo().getLabel()));
-			}
-		};
-	}
+    private Component getTabelaResultado() {
+	return new ListView<LayoutFiliado>("tabelaLayout", getListEmpresas()) {
 
-	public List<LayoutFiliado> getListEmpresas() {
-		return listEmpresas;
-	}
+	    @Override
+	    protected void populateItem(ListItem<LayoutFiliado> item) {
+		final LayoutFiliado layout = item.getModelObject();
+		item.add(new Label("empresa", layout.getEmpresa().getNomeFantasia()));
+		item.add(new Label("tipoArquivo", layout.getTipoArquivo().getLabel()));
+	    }
+	};
+    }
 
-	@Override
-	protected IModel<LayoutFiliado> getModel() {
-		return new CompoundPropertyModel<LayoutFiliado>(layoutEmpresa);
-	}
+    public List<LayoutFiliado> getListEmpresas() {
+	return listEmpresas;
+    }
+
+    @Override
+    protected IModel<LayoutFiliado> getModel() {
+	return new CompoundPropertyModel<LayoutFiliado>(layoutEmpresa);
+    }
 
 }
