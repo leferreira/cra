@@ -3,7 +3,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
 	<property name="ireport.zoom" value="6.1159090448414775"/>
 	<property name="ireport.x" value="4053"/>
-	<property name="ireport.y" value="603"/>
+	<property name="ireport.y" value="693"/>
 	<parameter name="NOME_ARQUIVO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -13,7 +13,6 @@
 	<parameter name="ID_REMESSA" class="java.lang.Long"/>
 	<parameter name="INSTITUICAO_ENVIO" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.lang.Object"/>
-	<parameter name="TOTAL_VALOR_CUSTAS" class="java.math.BigDecimal"/>
 	<queryString>
 		<![CDATA[select row_number() over ( order by tit.nome_devedor ) as linha,
 	tit.nosso_numero,
@@ -82,6 +81,9 @@ ORDER BY tit.nome_devedor ASC]]>
 	</variable>
 	<variable name="TOTAL_DEMAIS_DESPESAS" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor_custa_cartorio}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_CUSTAS" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{ocorrencia} == 2 || $F{ocorrencia} == 3 || $F{ocorrencia} == 6 ? $F{valor_custa_cartorio} : 0]]></variableExpression>
 	</variable>
 	<background>
 		<band/>
@@ -348,7 +350,7 @@ ORDER BY tit.nome_devedor ASC]]>
 				<text><![CDATA[SUSTADOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="722" y="0" width="80" height="15" uuid="eb49a9ad-7614-4f85-b3e1-737fc57e1838"/>
+				<reportElement x="717" y="0" width="86" height="15" uuid="eb49a9ad-7614-4f85-b3e1-737fc57e1838"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true" isStrikeThrough="false"/>
 				</textElement>
@@ -410,15 +412,8 @@ ORDER BY tit.nome_devedor ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{DEVOLVIDOS}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-				<reportElement x="637" y="15" width="80" height="15" uuid="4849c567-53e4-4b71-b40a-4eebcec19332"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{ocorrencia} == 2 || $F{ocorrencia} == 3 || $F{ocorrencia} == 6 ? $F{valor_custa_cartorio} : 0]]></textFieldExpression>
-			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="555" y="15" width="79" height="15" uuid="c909ba8f-b94d-4f6f-b535-ed5e826d5ea3"/>
+				<reportElement x="555" y="15" width="82" height="15" uuid="c909ba8f-b94d-4f6f-b535-ed5e826d5ea3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
@@ -438,6 +433,13 @@ ORDER BY tit.nome_devedor ASC]]>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="637" y="15" width="80" height="15" uuid="36dc8eab-78e4-471e-9b0a-8c9eb8ff7aea"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_CUSTAS}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>
