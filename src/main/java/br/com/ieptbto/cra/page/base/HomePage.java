@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -85,10 +86,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     }
 
     private void carregarHomePage() {
+	carregarCentralDeAcoes();
+	carregarInformacoes();
 
-	labelRemessasPendentes();
-	labelDesistenciasCancelamentosPendentes();
-
+	labelQtdRemessasPendentes();
+	labelQtdDesistenciasCancelamentosPendentes();
 	linkArquivosPendentes();
 	listaConfirmacoesPendentes();
 	listaDesistenciaPendentes();
@@ -96,7 +98,29 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	listaAutorizacaoCancelamentoPendentes();
     }
 
-    private void labelRemessasPendentes() {
+    private void carregarCentralDeAcoes() {
+	WebMarkupContainer divCentralDeAcoes = new WebMarkupContainer("centralDeAcoes");
+	divCentralDeAcoes.setOutputMarkupId(true);
+	divCentralDeAcoes.setVisible(false);
+
+	if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+	    divCentralDeAcoes.setVisible(true);
+	}
+	add(divCentralDeAcoes);
+    }
+
+    private void carregarInformacoes() {
+	WebMarkupContainer divInformacoes = new WebMarkupContainer("informacoes");
+	divInformacoes.setOutputMarkupId(true);
+	divInformacoes.setVisible(false);
+
+	if (!getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+	    divInformacoes.setVisible(true);
+	}
+	add(divInformacoes);
+    }
+
+    private void labelQtdRemessasPendentes() {
 
 	int quantidade = 0;
 	if (getConfirmacoesPendentes() != null) {
@@ -105,7 +129,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	add(new Label("qtdRemessas", quantidade));
     }
 
-    private void labelDesistenciasCancelamentosPendentes() {
+    private void labelQtdDesistenciasCancelamentosPendentes() {
 
 	int quantidade = 0;
 	if (getDesistenciaPendentes() != null) {

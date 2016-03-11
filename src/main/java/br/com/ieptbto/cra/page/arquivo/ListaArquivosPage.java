@@ -39,9 +39,10 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 public class ListaArquivosPage extends BasePage<Arquivo> {
 
+    /***/
+    private static final long serialVersionUID = 1L;
     protected static final Logger logger = Logger.getLogger(ListaArquivosPage.class);
 
     @SpringBean
@@ -60,6 +61,9 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
     private ListView<Remessa> carregarListaArquivos() {
 	return new ListView<Remessa>("dataTableRemessa", getRemessas()) {
 
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
 	    @Override
 	    protected void populateItem(ListItem<Remessa> item) {
 		final Remessa remessa = item.getModelObject();
@@ -67,6 +71,9 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 		item.add(relatorioArquivo(remessa));
 
 		Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+		    /***/
+		    private static final long serialVersionUID = 1L;
 
 		    @Override
 		    public void onClick() {
@@ -97,6 +104,9 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	    private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
 		return new Link<Remessa>("downloadArquivo") {
 
+		    /***/
+		    private static final long serialVersionUID = 1L;
+
 		    @Override
 		    public void onClick() {
 			try {
@@ -117,6 +127,9 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 		List<Anexo> anexos = remessaMediator.verificarAnexosRemessa(remessa);
 
 		Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
+
+		    /***/
+		    private static final long serialVersionUID = 1L;
 
 		    @Override
 		    public void onClick() {
@@ -145,6 +158,9 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 
 	    private Link<Remessa> relatorioArquivo(final Remessa remessa) {
 		return new Link<Remessa>("gerarRelatorio") {
+
+		    /***/
+		    private static final long serialVersionUID = 1L;
 
 		    @Override
 		    public void onClick() {
