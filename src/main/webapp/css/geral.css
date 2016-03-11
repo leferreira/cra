@@ -315,7 +315,7 @@ legend {
 	width: 100%;
 }
 
-.ocorrencia-erro{
+#ocorrencia-erro{
 	background: #B33B3B none repeat scroll 0% 0%;
 	color: #FFF;
 	font-weight: bold;
@@ -323,7 +323,7 @@ legend {
 	font-size: 10px;
 }
 
-.ocorrencia-sucesso{
+#ocorrencia-sucesso{
 	color: #FFF;
 	background: #209515 none repeat scroll 0% 0%;
 	font-weight: bold;

@@ -43,7 +43,7 @@ import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.PedidoCancelamento;
 import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
-import br.com.ieptbto.cra.entidade.RegistroAcao;
+import br.com.ieptbto.cra.entidade.LogAcao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.RemessaAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.RemessaCancelamentoProtesto;
@@ -88,7 +88,7 @@ public class AnnotatedClassesFactory {
      * Metodo responsavel por mapear classes Hibernate.
      */
     private static void adicionarClassesHibernate() {
-	classesHibernate.add(RegistroAcao.class);
+	classesHibernate.add(LogAcao.class);
 	classesHibernate.add(Usuario.class);
 	classesHibernate.add(GrupoUsuario.class);
 	classesHibernate.add(Instituicao.class);

@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.page.base;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
+import br.com.ieptbto.cra.entidade.LogAcao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
@@ -105,6 +107,19 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 	    divCentralDeAcoes.setVisible(true);
+	    divCentralDeAcoes.add(new ListView<LogAcao>("acoes", new ArrayList<LogAcao>()) {
+
+		/***/
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void populateItem(ListItem<LogAcao> item) {
+		    LogAcao acao = item.getModelObject();
+		    item.add(new Label("acao", acao.getAcao()));
+		    item.add(new Label("tipoAcao", acao.getTipoAcao().getLabel().toUpperCase()).setMarkupId(acao.getTipoAcao().getIdHtml()));
+		    item.add(new Label("descricao", acao.getDescricao()));
+		}
+	    });
 	}
 	add(divCentralDeAcoes);
     }
@@ -121,7 +136,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     }
 
     private void labelQtdRemessasPendentes() {
-
 	int quantidade = 0;
 	if (getConfirmacoesPendentes() != null) {
 	    quantidade = getConfirmacoesPendentes().size();
@@ -130,7 +144,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     }
 
     private void labelQtdDesistenciasCancelamentosPendentes() {
-
 	int quantidade = 0;
 	if (getDesistenciaPendentes() != null) {
 	    quantidade = quantidade + getDesistenciaPendentes().size();
@@ -145,7 +158,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     }
 
     private void linkArquivosPendentes() {
-
 	add(new Link<Remessa>("arquivosPendentes") {
 
 	    /***/
@@ -159,7 +171,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     }
 
     private void listaConfirmacoesPendentes() {
-
 	add(new ListView<Remessa>("listConfirmacoes", getConfirmacoesPendentes()) {
 
 	    /***/
@@ -198,7 +209,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	    }
 
 	    private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
-
 		return new Link<Remessa>("downloadArquivo") {
 
 		    /***/
@@ -222,7 +232,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	    }
 
 	    private Link<Remessa> downloadAnexos(final Remessa remessa) {
-
 		List<Anexo> anexos = remessaMediator.verificarAnexosRemessa(remessa);
 		Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
 
@@ -257,7 +266,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     }
 
     private void listaCancelamentoPendentes() {
-
 	add(new ListView<CancelamentoProtesto>("listaCancelamentos", getCancelamentoPendentes()) {
 
 	    /***/
@@ -293,7 +301,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	    }
 
 	    private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto remessa) {
-
 		return new Link<Remessa>("downloadArquivo") {
 
 		    /***/
@@ -313,7 +320,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     }
 
     private void listaDesistenciaPendentes() {
-
 	add(new ListView<DesistenciaProtesto>("listaDesistencias", getDesistenciaPendentes()) {
 
 	    /***/
@@ -349,7 +355,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	    }
 
 	    private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto desistenciaProtesto) {
-
 		return new Link<Remessa>("downloadArquivo") {
 
 		    /***/
@@ -369,7 +374,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     }
 
     private void listaAutorizacaoCancelamentoPendentes() {
-
 	add(new ListView<AutorizacaoCancelamento>("listaAutorizacao", getAutorizacaoCancelamentoPendentes()) {
 
 	    /***/
@@ -405,7 +409,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	    }
 
 	    private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento ac) {
-
 		return new Link<Remessa>("downloadArquivo") {
 
 		    /***/
@@ -425,32 +428,26 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     }
 
     private List<DesistenciaProtesto> getDesistenciaPendentes() {
-
 	return arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto();
     }
 
     private List<CancelamentoProtesto> getCancelamentoPendentes() {
-
 	return arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto();
     }
 
     private List<AutorizacaoCancelamento> getAutorizacaoCancelamentoPendentes() {
-
 	return arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento();
     }
 
     private List<Remessa> getConfirmacoesPendentes() {
-
 	return arquivo.getRemessas();
     }
 
     public Arquivo getArquivo() {
-
 	return arquivo;
     }
 
     public Usuario getUsuario() {
-
 	return usuario;
     }
 
@@ -458,13 +455,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
      * {@inheritDoc}
      */
     public String getTitulo() {
-
 	return "CRA - Central de Remessa de Arquivos";
     }
 
     @Override
     protected IModel<T> getModel() {
-
 	return null;
     }
 }
