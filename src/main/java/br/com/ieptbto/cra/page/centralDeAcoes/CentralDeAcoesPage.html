@@ -6,7 +6,97 @@
 <body>
 	<wicket:extend>
 	<h4 class="titulo-top">CENTRAL DE AÇÕES</h4>
-	<br style="clear: both;"/>
+  	<div class="row">
+  		<div class="col-md-4">
+		   <label>PER&Iacute;ODO</label>
+	  		<div class="form-group">
+	  			<div class="row">
+				  <div class="col-xs-6">  
+				  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" class="form-control">
+				  </div>
+				  <div class="col-xs-6">
+				  	<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" class="form-control">
+				  </div>
+				</div>
+			</div>
+  		</div>
+  		<div class="col-md-3">
+		  	<label>TIPO INSTITUI&Ccedil;&Otilde;ES</label>
+	  		<div class="form-group">
+			    <select class="form-control"></select>
+		 	</div>
+  		</div>
+  		<div class="col-md-4">
+  			<label>BANCOS/CONV&Ecirc;NIOS/CART&Oacute;RIOS</label>
+  			<div class="form-group">
+			    <select class="form-control"></select>
+			</div>
+  		</div>
+  		<div class="col-md-1">
+  			<br style="clear: both;">
+  			<button class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
+  		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-4">
+	                <label>AÇÕES POR PÁGINA</label>
+	                <div class="form-group">
+	                	<div class="row">
+		                	<div class="col-xs-6"> 
+								<select class="form-control">
+			                       <option>10</option>
+			                       <option>25</option>
+			                       <option>50</option>
+			                       <option>100</option>
+			                   </select>
+			                </div>
+			              </div>
+	                 </div>
+            	</div>
+            	<div class="col-md-6"> 
+            		<label>ATUALIZAR</label>
+	                <div class="form-group">
+            			<button type="button" class="btn btn-default"><span class="fa fa-refresh"></span></button>
+            		</div>
+            	</div>
+             </div>
+		</div>
+		<div class="col-md-6">
+			<div class="pull-right">
+				<label>FILTRAR OCORRÊNCIAS</label>
+				<div class="form-group">
+					<div class="btn-group">
+						<button type="button" class="btn btn-success btn-filter">SUCESSO</button>
+						<button type="button" class="btn btn-warning btn-filter">ALERTA</button>
+						<button type="button" class="btn btn-danger btn-filter">ERRO</button>
+						<button type="button" class="btn btn-default btn-filter">TODOS</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="table-container">
+		<table class="table table-filter">
+			<tbody>
+				<tr>
+					<td>
+						<div class="media">
+							<div class="media-body">
+								<span class="media-meta pull-right">Febrero 13, 2016</span>
+								<h4 class="title">
+									<a href="#" class="pull-left link">Ut enim ad minim veniam, quis nostrud exercitation...</a><br>
+									Cartório de Palmas<span class="pull-right" id="ocorrencia-sucesso">SUCESSO</span>
+								</h4>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	</wicket:extend>
 </body>
 </html>

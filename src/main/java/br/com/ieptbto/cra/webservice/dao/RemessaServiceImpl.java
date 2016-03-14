@@ -36,7 +36,7 @@ public class RemessaServiceImpl implements IRemessaWS {
     private DesistenciaProtestoService desistenciaProtestoService;
     private CancelamentoProtestoService cancelamentoProtestoService;
     private AutorizacaoCancelamentoService autorizacaoCancelamentoService;
-    private ComarcasHomologadasService comarcasHomologadasService;
+    private UsuariosComarcasHomologadasService usuariosComarcasHomologadasService;
     private ArquivosPendentesCartorioService arquivosPendentesCartorioService;
 
     @Override
@@ -124,7 +124,7 @@ public class RemessaServiceImpl implements IRemessaWS {
     @GET
     public String comarcasHomologadas(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, @WebParam(name = "codapres") String codigoApresentante) {
 	init(login, senha);
-	return comarcasHomologadasService.verificarComarcasHomologadas(usuario, codigoApresentante);
+	return usuariosComarcasHomologadasService.verificarComarcasHomologadas(usuario, codigoApresentante);
     }
 
     @Override
@@ -133,6 +133,14 @@ public class RemessaServiceImpl implements IRemessaWS {
     public String arquivosPendentesCartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
 	init(login, senha);
 	return arquivosPendentesCartorioService.buscarArquivosPendentesCartorio(getUsuario());
+    }
+
+    @Override
+    @WebMethod(operationName = "verificarAcessoUsuario")
+    @GET
+    public String verificarAcessoUsuario(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+	init(login, senha);
+	return usuariosComarcasHomologadasService.verificarAcessoUsuario(getUsuario());
     }
 
     private void init(String login, String senha) {
@@ -145,7 +153,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	desistenciaProtestoService = (DesistenciaProtestoService) context.getBean("desistenciaProtestoService");
 	cancelamentoProtestoService = (CancelamentoProtestoService) context.getBean("cancelamentoProtestoService");
 	autorizacaoCancelamentoService = (AutorizacaoCancelamentoService) context.getBean("autorizacaoCancelamentoService");
-	comarcasHomologadasService = (ComarcasHomologadasService) context.getBean("comarcasHomologadasService");
+	usuariosComarcasHomologadasService = (UsuariosComarcasHomologadasService) context.getBean("usuariosComarcasHomologadasService");
 	arquivosPendentesCartorioService = (ArquivosPendentesCartorioService) context.getBean("arquivosPendentesCartorioService");
 	usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 	setUsuario(login, senha);

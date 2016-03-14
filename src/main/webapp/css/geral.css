@@ -320,7 +320,7 @@ legend {
 	color: #FFF;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10px;
+	font-size: 12px;
 }
 
 #ocorrencia-sucesso{
@@ -328,7 +328,15 @@ legend {
 	background: #209515 none repeat scroll 0% 0%;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10px;
+	font-size: 12px;
+}
+
+#ocorrencia-alerta{
+	color: #FFF;
+	background: #f0ad4e none repeat scroll 0% 0%;
+	font-weight: bold;
+	padding: 3px;
+	font-size: 12px; 
 }
 
 /*

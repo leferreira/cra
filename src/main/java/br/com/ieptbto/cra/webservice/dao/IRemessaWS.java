@@ -155,4 +155,14 @@ public interface IRemessaWS {
     @WebMethod(operationName = "comarcasHomologadas")
     @GET
     public String comarcasHomologadas(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, @WebParam(name = "codapres") String codigoApresentante);
+
+    /**
+     * 
+     * @param login
+     * @param senha
+     * @return
+     */
+    @WebMethod(operationName = "verificarAcessoUsuario")
+    @GET
+    public String verificarAcessoUsuario(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
 }
