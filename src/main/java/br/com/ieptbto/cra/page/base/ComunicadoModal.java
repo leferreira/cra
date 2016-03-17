@@ -17,26 +17,26 @@ import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings( {"serial","unused"} )
+@SuppressWarnings({ "serial", "unused" })
 public class ComunicadoModal extends WebPage {
-	
-	private ModalWindow modalWindow;
-	private PageReference modalWindowPage;
-	
-	@SpringBean
-	UsuarioFiliadoMediator usuarioFiliadoMediator;
-	
-	public ComunicadoModal(final PageReference modalWindowPage, final ModalWindow window) {
-        this.modalWindowPage = modalWindowPage;
-        this.modalWindow = window;
 
-        carregarIFramePDF();
+    private ModalWindow modalWindow;
+    private PageReference modalWindowPage;
+
+    @SpringBean
+    UsuarioFiliadoMediator usuarioFiliadoMediator;
+
+    public ComunicadoModal(final PageReference modalWindowPage, final ModalWindow window) {
+	this.modalWindowPage = modalWindowPage;
+	this.modalWindow = window;
+
+	carregarIFramePDF();
     }
 
-	private void carregarIFramePDF() {
-		File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Comunicado Greve 2015 - Of.pdf");
-		IResourceStream resourceStream = new FileResourceStream(file);
-		DocumentInlineFrame iFramePDF = new DocumentInlineFrame("pdf", resourceStream);
-		add(iFramePDF);
-	}
+    private void carregarIFramePDF() {
+	File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Decisao_Oficio.pdf");
+	IResourceStream resourceStream = new FileResourceStream(file);
+	DocumentInlineFrame iFramePDF = new DocumentInlineFrame("pdf", resourceStream);
+	add(iFramePDF);
+    }
 }

@@ -106,6 +106,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 		item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 		item.add(new Label("horaEnvio", DataUtil.localTimeToString(retorno.getArquivo().getHoraEnvio())));
 		item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
+		item.add(new Label("sequencialCabecalho", retorno.getCabecalho().getNumeroSequencialRemessa()));
 		Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
 
 		    /***/

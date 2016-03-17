@@ -2,7 +2,7 @@ package br.com.ieptbto.cra.page.arquivo;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -17,7 +17,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
@@ -37,6 +36,7 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.util.PeriodoDataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -109,7 +109,7 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 		    item.add(new Label("destino", "CRA"));
 		    item.add(new Label("downloadAnexos", StringUtils.EMPTY));
 		}
-		item.add(new LabelValorMonetario<BigDecimal>("valor", remessa.getRodape().getSomatorioValorRemessa()));
+		item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
 		item.add(new Label("horaEnvio", DataUtil.localTimeToString(remessa.getArquivo().getHoraEnvio())));
 		item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa().getLabel()));
 	    }
@@ -224,6 +224,7 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 		item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
 		item.add(new Label("horaEnvio", DataUtil.localTimeToString(desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio())));
 		item.add(new Label("status", verificaDownload(desistenciaProtesto).getLabel().toUpperCase()).setMarkupId(verificaDownload(desistenciaProtesto).getLabel()));
+		item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
 	    }
 
 	    private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto desistenciaProtesto) {
@@ -281,6 +282,7 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 		item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(cancelamento.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
 		item.add(new Label("horaEnvio", DataUtil.localTimeToString(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getHoraEnvio())));
 		item.add(new Label("status", verificaDownload(cancelamento).getLabel().toUpperCase()).setMarkupId(verificaDownload(cancelamento).getLabel()));
+		item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
 	    }
 
 	    private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto cancelamento) {
@@ -293,7 +295,6 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 		    public void onClick() {
 			File file = cancelamentoMediator.baixarCancelamentoTXT(getUser(), cancelamento);
 			IResourceStream resourceStream = new FileResourceStream(file);
-
 			getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
 		    }
 		};
@@ -338,6 +339,8 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 		item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(ac.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
 		item.add(new Label("horaEnvio", DataUtil.localTimeToString(ac.getRemessaAutorizacaoCancelamento().getArquivo().getHoraEnvio())));
 		item.add(new Label("status", verificaDownload(ac).getLabel().toUpperCase()).setMarkupId(verificaDownload(ac).getLabel()));
+		item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(ac.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio().toDate(), new Date())));
+
 	    }
 
 	    private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento ac) {

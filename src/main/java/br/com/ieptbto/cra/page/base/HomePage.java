@@ -34,6 +34,7 @@ import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
@@ -88,7 +89,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     }
 
     private void carregarHomePage() {
-	carregarCentralDeAcoes();
+	// carregarCentralDeAcoes();
 	carregarInformacoes();
 
 	labelQtdRemessasPendentes();
@@ -100,6 +101,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	listaAutorizacaoCancelamentoPendentes();
     }
 
+    @SuppressWarnings("unused")
     private void carregarCentralDeAcoes() {
 	WebMarkupContainer divCentralDeAcoes = new WebMarkupContainer("centralDeAcoes");
 	divCentralDeAcoes.setOutputMarkupId(true);
@@ -116,7 +118,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		protected void populateItem(ListItem<LogAcao> item) {
 		    LogAcao acao = item.getModelObject();
 		    item.add(new Label("acao", acao.getAcao()));
-		    item.add(new Label("tipoAcao", acao.getTipoAcao().getLabel().toUpperCase()).setMarkupId(acao.getTipoAcao().getIdHtml()));
+		    item.add(new Label("tipoAcao", acao.getTipoLog().getLabel().toUpperCase()).setMarkupId(acao.getTipoLog().getIdHtml()));
 		    item.add(new Label("descricao", acao.getDescricao()));
 		}
 	    });
@@ -124,14 +126,36 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	add(divCentralDeAcoes);
     }
 
+    @SuppressWarnings("rawtypes")
     private void carregarInformacoes() {
 	WebMarkupContainer divInformacoes = new WebMarkupContainer("informacoes");
 	divInformacoes.setOutputMarkupId(true);
-	divInformacoes.setVisible(false);
+	divInformacoes.setVisible(true);
+	divInformacoes.add(new Link("downloadOficio") {
 
-	if (!getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
-	    divInformacoes.setVisible(true);
-	}
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @Override
+	    public void onClick() {
+
+		try {
+		    File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Decisao_Oficio.pdf");
+		    IResourceStream resourceStream = new FileResourceStream(file);
+
+		    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
+		} catch (InfraException ex) {
+		    getFeedbackPanel().error(ex.getMessage());
+		} catch (Exception e) {
+		    getFeedbackPanel().error("Não foi possível baixar o ofício ! \n Entre em contato com a CRA ");
+		}
+	    }
+	});
+	// if
+	// (!getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA))
+	// {
+	// divInformacoes.setVisible(true);
+	// }
 	add(divInformacoes);
     }
 
@@ -178,7 +202,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	    @Override
 	    protected void populateItem(ListItem<Remessa> item) {
-
 		final Remessa remessa = item.getModelObject();
 		Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
@@ -194,14 +217,21 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		linkArquivo.add(new Label("arquivo", remessa.getArquivo().getNomeArquivo()));
 		item.add(linkArquivo);
 		if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-		    String instituicao = remessa.getInstituicaoOrigem().getNomeFantasia();
-		    item.add(new Label("instituicao", instituicao.toUpperCase()));
+		    item.add(new Label("instituicao", remessa.getInstituicaoOrigem().getNomeFantasia().toUpperCase()));
 		    item.add(downloadAnexos(remessa));
 		} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
-		    item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+		    String municipio = remessa.getInstituicaoDestino().getMunicipio().getNomeMunicipio();
+		    if (municipio.length() > 20) {
+			municipio = municipio.substring(0, 19);
+		    }
+		    item.add(new Label("instituicao", municipio.toUpperCase()));
 		    item.add(downloadAnexos(remessa));
 		} else {
-		    item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+		    String municipio = remessa.getInstituicaoDestino().getMunicipio().getNomeMunicipio();
+		    if (municipio.length() > 20) {
+			municipio = municipio.substring(0, 19);
+		    }
+		    item.add(new Label("instituicao", municipio.toUpperCase()));
 		    item.add(new Label("downloadAnexos", StringUtils.EMPTY));
 		}
 		item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));

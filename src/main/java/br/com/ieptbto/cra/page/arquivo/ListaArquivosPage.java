@@ -70,6 +70,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 		item.add(downloadArquivoTXT(remessa));
 		item.add(relatorioArquivo(remessa));
 
+		item.add(new Label("sequencialCabecalho", remessa.getCabecalho().getNumeroSequencialRemessa()));
 		Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 		    /***/

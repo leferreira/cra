@@ -25,7 +25,7 @@
 					<th class="col-center">HORA</th>
 					<th>ENVIADO POR</th>
 					<th>DESTINO</th>
-					<th class="col-right">VALOR</th>
+					<th>ATRASO</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -52,7 +52,12 @@
 					<td class="col-center" wicket:id="horaEnvio"></td>
 					<td wicket:id="envio"></td>
 					<td wicket:id="destino"></td>
-					<td class="col-right valor" wicket:id="valor"></td>
+					<td>
+						<small class="text-muted"> 
+				        	<span class="glyphicon glyphicon-time"></span>&nbsp;
+				        	<span wicket:id="pendente">[quantidade de dias]</span><span>&nbsp;DIA(S)</span>
+				        </small>
+				    </td>
 					<td class="col-center"><span wicket:id="status"></span></td>
 				</tr>
 				<tr wicket:id="dataTableAutorizacao">
@@ -71,7 +76,12 @@
 					<td class="col-center" wicket:id="horaEnvio"></td>
 					<td wicket:id="envio"></td>
 					<td wicket:id="destino"></td>
-					<td class="col-right valor"></td>
+					<td>
+						<small class="text-muted"> 
+				        	<span class="glyphicon glyphicon-time"></span>&nbsp;
+				        	<span wicket:id="dias">[quantidade de dias]</span><span>&nbsp;DIA(S)</span>
+				        </small>
+				    </td>
 					<td class="col-center"><span wicket:id="status"></span></td>
 				</tr>
 				<tr wicket:id="dataTableCancelamento">
@@ -90,7 +100,12 @@
 					<td class="col-center" wicket:id="horaEnvio"></td>
 					<td wicket:id="envio"></td>
 					<td wicket:id="destino"></td>
-					<td class="col-right valor"></td>
+					<td>
+						<small class="text-muted"> 
+				        	<span class="glyphicon glyphicon-time"></span>&nbsp;
+				        	<span wicket:id="dias">[quantidade de dias]</span><span>&nbsp;DIA(S)</span>
+				        </small>
+				    </td>
 					<td class="col-center"><span wicket:id="status"></span></td>
 				</tr>
 				<tr wicket:id="dataTableDesistencia">
@@ -109,7 +124,12 @@
 					<td class="col-center" wicket:id="horaEnvio"></td>
 					<td wicket:id="envio"></td>
 					<td wicket:id="destino"></td>
-					<td class="col-right valor"></td>
+					<td>
+						<small class="text-muted">
+				        	<span class="glyphicon glyphicon-time"></span>&nbsp;
+				        	<span wicket:id="dias">[quantidade de dias]</span><span>&nbsp;DIA(S)</span>
+				        </small>
+				    </td>
 					<td class="col-center"><span wicket:id="status"></span></td>
 				</tr>
 			</tbody>

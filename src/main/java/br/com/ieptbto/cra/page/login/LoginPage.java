@@ -19,39 +19,40 @@ import br.com.ieptbto.cra.webpage.AbstractWebPage;
  */
 public class LoginPage extends AbstractWebPage<Usuario> {
 
-	private Usuario usuario;
-	private FeedbackPanel feedBackPanel;
+    private Usuario usuario;
+    private FeedbackPanel feedBackPanel;
 
-	public LoginPage() {
-		inicializarObjetos();
-		adicionarCampos();
-	}
+    public LoginPage() {
+	inicializarObjetos();
+	adicionarCampos();
+    }
 
-	private void inicializarObjetos() {
-		usuario = new Usuario();
-	}
+    private void inicializarObjetos() {
+	usuario = new Usuario();
+    }
 
-	private void adicionarCampos() {
-		feedBackPanel = new FeedbackPanel(WID_FEEDBACK);
-		feedBackPanel.setOutputMarkupId(true);
+    private void adicionarCampos() {
+	getApplication().getMarkupSettings().getMarkupFactory().getMarkupCache().clear();
+	feedBackPanel = new FeedbackPanel(WID_FEEDBACK);
+	feedBackPanel.setOutputMarkupId(true);
 
-		LoginForm loginForm = new LoginForm("loginForm", getModel());
-		loginForm.add(campoUsuario());
-		loginForm.add(campoSenha());
-		loginForm.add(new Button("botaoSalvar"));
-		loginForm.add(feedBackPanel);
-		add(loginForm);
-	}
+	LoginForm loginForm = new LoginForm("loginForm", getModel());
+	loginForm.add(campoUsuario());
+	loginForm.add(campoSenha());
+	loginForm.add(new Button("botaoSalvar"));
+	loginForm.add(feedBackPanel);
+	add(loginForm);
+    }
 
-	private PasswordTextField campoSenha() {
-		return new PasswordTextField("senha");
-	}
+    private PasswordTextField campoSenha() {
+	return new PasswordTextField("senha");
+    }
 
-	private TextField<String> campoUsuario() {
-		return new RequiredTextField<String>("login");
-	}
+    private TextField<String> campoUsuario() {
+	return new RequiredTextField<String>("login");
+    }
 
-	protected IModel<Usuario> getModel() {
-		return new CompoundPropertyModel<Usuario>(usuario);
-	}
+    protected IModel<Usuario> getModel() {
+	return new CompoundPropertyModel<Usuario>(usuario);
+    }
 }

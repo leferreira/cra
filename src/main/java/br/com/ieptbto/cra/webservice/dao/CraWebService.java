@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -16,10 +17,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.LogAcao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.TipoLog;
+import br.com.ieptbto.cra.enumeration.TipoLogAcao;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
@@ -45,6 +49,27 @@ public class CraWebService {
     protected Usuario usuario;
     protected String nomeArquivo;
     protected String mensagem;
+
+    protected LogAcao gerarRegistroLogAcao(TipoLogAcao acao, String descricao, TipoLog tipoLog) {
+	LogAcao logAcao = new LogAcao();
+	logAcao.setAcao(acao);
+	logAcao.setDescricao(descricao);
+	logAcao.setTipoLog(tipoLog);
+	logAcao.setData(new Date());
+	logAcao.setUsuario(getUsuario());
+	return logAcao;
+    }
+
+    protected LogAcao gerarRegistroLogExcecao(TipoLogAcao acao, String descricao, Exception ex) {
+	LogAcao logAcao = new LogAcao();
+	logAcao.setAcao(acao);
+	logAcao.setDescricao(descricao);
+	logAcao.setTipoLog(TipoLog.OCORRECIA_ERRO);
+	logAcao.setExcecao(ex);
+	logAcao.setData(new Date());
+	logAcao.setUsuario(getUsuario());
+	return logAcao;
+    }
 
     protected String setResposta(LayoutPadraoXML layoutPadraoResposta, ArquivoVO arquivo, String nomeArquivo, String nomeNode) {
 	if (usuario == null) {

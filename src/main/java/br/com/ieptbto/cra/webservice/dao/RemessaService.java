@@ -39,7 +39,7 @@ public class RemessaService extends CraWebService {
     private ArquivoVO arquivoVO;
 
     /**
-     * ENVIO DE REMESSAS PELOS BANCOS/CONVÊNIOS
+     * Envio de remessas pelos bancos/convênios
      * 
      * @param nomeArquivo
      * @param usuario
@@ -47,31 +47,29 @@ public class RemessaService extends CraWebService {
      * @return
      */
     public String processar(String nomeArquivo, Usuario usuario, String dados) {
-	ArquivoVO arquivo = new ArquivoVO();
+	ArquivoVO arquivoVO = new ArquivoVO();
 	setUsuario(usuario);
 	setNomeArquivo(nomeArquivo);
 
-	if (getUsuario() == null) {
-	    return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivo, nomeArquivo, CONSTANTE_RELATORIO_XML);
-	}
-	if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-	    return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_RELATORIO_XML);
-	}
-	if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
-	    return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
-	}
-	if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
-	    return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
-	}
-	return processarEnvioRemessa(nomeArquivo, usuario, converterStringArquivoVO(dados));
-    }
+	try {
+	    if (getUsuario() == null) {
+		return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+	    }
+	    if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+		return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+	    }
+	    if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
+		return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+	    }
+	    if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+		return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+	    }
 
-    private String processarEnvioRemessa(String nomeArquivo, Usuario usuario, ArquivoVO arquivoRecebido) {
-	setUsuario(usuario);
-	setNomeArquivo(nomeArquivo);
-	setArquivoVO(arquivoRecebido);
-
-	setRemessas(ConversorArquivoVO.converterParaRemessaVO(getArquivoVO()));
+	    setRemessas(ConversorArquivoVO.converterParaRemessaVO(converterStringArquivoVO(dados)));
+	} catch (Exception ex) {
+	    logger.error(ex.getMessage(), ex.getCause());
+	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
+	}
 	return gerarMensagem(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo), CONSTANTE_RELATORIO_XML);
     }
 
@@ -110,7 +108,7 @@ public class RemessaService extends CraWebService {
     }
 
     /**
-     * CONSULTA DE REMESSAS PELOS CARTÓRIOS
+     * Consulta de remessas pelos cartórios
      * 
      * @param nomeArquivo
      * @param usuario
@@ -130,7 +128,7 @@ public class RemessaService extends CraWebService {
 
 	    setMensagem(gerarResposta(remessaVO, getNomeArquivo(), CONSTANTE_REMESSA_XML));
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    logger.error(e.getMessage(), e.getCause());
 	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 	}
 	return getMensagem();

@@ -51,7 +51,11 @@ public class ConfirmacaoService extends CraWebService {
     private ConfirmacaoVO confirmacaoVO;
 
     /**
-     * MÉTODOS DE CONSULTA DE CONFIRMAÇÃO PELOS BANCOS/CONVÊNIOS
+     * Métodos de consulta de confirmação pelos bancos/convênios
+     * 
+     * @param nomeArquivo
+     * @param usuario
+     * @return
      */
     public String processar(String nomeArquivo, Usuario usuario) {
 	List<RemessaVO> remessas = new ArrayList<RemessaVO>();
@@ -129,7 +133,12 @@ public class ConfirmacaoService extends CraWebService {
     }
 
     /**
-     * MÉTODOS DE ENVIO DE CONFIRMAÇÃO PELO CARTÓRIO
+     * Métodos de envio de confirmação pelo cartório
+     * 
+     * @param nomeArquivo
+     * @param usuario
+     * @param dados
+     * @return
      */
     public String enviarConfirmacao(String nomeArquivo, Usuario usuario, String dados) {
 	setUsuario(usuario);
@@ -151,10 +160,10 @@ public class ConfirmacaoService extends CraWebService {
 	    setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
 
 	} catch (InfraException ex) {
-	    logger.info(ex.getCause());
+	    logger.info(ex.getMessage(), ex.getCause());
 	    return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
 	} catch (Exception e) {
-	    logger.info(e.getCause());
+	    logger.info(e.getMessage(), e.getCause());
 	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 	}
 	return gerarMensagem(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo), CONSTANTE_CONFIRMACAO_XML);
