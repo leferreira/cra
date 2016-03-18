@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
@@ -111,6 +112,10 @@ public class UsuariosComarcasHomologadasService extends CraWebService {
 	    return XmlFormatterUtil.format(xml);
 	}
 	xml = xml.concat("<usuario credenciaisCorretas=\"true\"/>");
+	if (usuario != null) {
+	    loggerCra.alert(usuario, TipoAcaoLog.VERIFICACAO_CREDENCIAIS_ACESSO, "Acesso à CRA via WebServices liberado com sucesso para o usuário "
+		    + usuario.getNome() + ".");
+	}
 	return XmlFormatterUtil.format(xml);
     }
 }

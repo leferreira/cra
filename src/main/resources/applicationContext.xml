@@ -20,7 +20,8 @@
 	http://www.springframework.org/schema/util/spring-util-3.0.xsd"> 
 	
 	<context:component-scan base-package="br.com.ieptbto.cra.dao, br.com.ieptbto.cra.mediator, br.com.ieptbto.cra.processador,  
-	br.com.ieptbto.cra.conversor, br.com.ieptbto.cra.validacao, br.com.ieptbto.cra.webservice.dao,br.com.ieptbto.cra.conversor.arquivo, br.com.ieptbto.cra.slip.regra" />
+	br.com.ieptbto.cra.conversor, br.com.ieptbto.cra.validacao, br.com.ieptbto.cra.webservice.dao,br.com.ieptbto.cra.conversor.arquivo, br.com.ieptbto.cra.slip.regra, 
+	br.com.ieptbto.cra.logger" />
 	
 	<bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">

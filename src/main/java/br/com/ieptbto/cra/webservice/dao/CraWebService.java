@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -15,16 +14,15 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.LogAcao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.enumeration.TipoLog;
-import br.com.ieptbto.cra.enumeration.TipoLogAcao;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.logger.LoggerCra;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
@@ -46,30 +44,13 @@ public class CraWebService {
     public static final String CONSTANTE_RETORNO_XML = "retorno";
     public static final String CONSTANTE_DESISTENCIA_XML = "desistencia";
     public static final String CONSTANTE_CANCELAMENTO_XML = "cancelamento";
+
+    @Autowired
+    protected LoggerCra loggerCra;
     protected Usuario usuario;
     protected String nomeArquivo;
     protected String mensagem;
-
-    protected LogAcao gerarRegistroLogAcao(TipoLogAcao acao, String descricao, TipoLog tipoLog) {
-	LogAcao logAcao = new LogAcao();
-	logAcao.setAcao(acao);
-	logAcao.setDescricao(descricao);
-	logAcao.setTipoLog(tipoLog);
-	logAcao.setData(new Date());
-	logAcao.setUsuario(getUsuario());
-	return logAcao;
-    }
-
-    protected LogAcao gerarRegistroLogExcecao(TipoLogAcao acao, String descricao, Exception ex) {
-	LogAcao logAcao = new LogAcao();
-	logAcao.setAcao(acao);
-	logAcao.setDescricao(descricao);
-	logAcao.setTipoLog(TipoLog.OCORRECIA_ERRO);
-	logAcao.setExcecao(ex);
-	logAcao.setData(new Date());
-	logAcao.setUsuario(getUsuario());
-	return logAcao;
-    }
+    protected MensagemXml mensagemXml;
 
     protected String setResposta(LayoutPadraoXML layoutPadraoResposta, ArquivoVO arquivo, String nomeArquivo, String nomeNode) {
 	if (usuario == null) {
@@ -272,6 +253,17 @@ public class CraWebService {
 	    mensagem = StringUtils.EMPTY;
 	}
 	return mensagem;
+    }
+
+    public void setMensagemXml(MensagemXml mensagemXml) {
+	this.mensagemXml = mensagemXml;
+    }
+
+    public MensagemXml getMensagemXml() {
+	if (mensagemXml == null) {
+	    mensagemXml = new MensagemXml();
+	}
+	return mensagemXml;
     }
 
     public void setUsuario(Usuario usuario) {

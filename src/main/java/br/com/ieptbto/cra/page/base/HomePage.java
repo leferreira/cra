@@ -27,7 +27,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
-import br.com.ieptbto.cra.entidade.LogAcao;
+import br.com.ieptbto.cra.entidade.LogCra;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
@@ -109,14 +109,14 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 	    divCentralDeAcoes.setVisible(true);
-	    divCentralDeAcoes.add(new ListView<LogAcao>("acoes", new ArrayList<LogAcao>()) {
+	    divCentralDeAcoes.add(new ListView<LogCra>("acoes", new ArrayList<LogCra>()) {
 
 		/***/
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void populateItem(ListItem<LogAcao> item) {
-		    LogAcao acao = item.getModelObject();
+		protected void populateItem(ListItem<LogCra> item) {
+		    LogCra acao = item.getModelObject();
 		    item.add(new Label("acao", acao.getAcao()));
 		    item.add(new Label("tipoAcao", acao.getTipoLog().getLabel().toUpperCase()).setMarkupId(acao.getTipoLog().getIdHtml()));
 		    item.add(new Label("descricao", acao.getDescricao()));

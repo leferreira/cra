@@ -32,7 +32,6 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
-import br.com.ieptbto.cra.webservice.VO.MensagemXml;
 
 /**
  * @author Thasso Araújo
@@ -141,7 +140,6 @@ public class RetornoService extends CraWebService {
     public String processar(String nomeArquivo, Usuario usuario, String dados) {
 	setUsuario(usuario);
 	setNomeArquivo(nomeArquivo);
-	MensagemXml mensagemEnvio = null;
 
 	try {
 	    if (getUsuario() == null) {
@@ -158,7 +156,7 @@ public class RetornoService extends CraWebService {
 	    }
 	    setRetornoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoRetornoVO()));
 
-	    mensagemEnvio = retornoMediator.processarXML(getRetornoVO(), getUsuario(), nomeArquivo);
+	    setMensagemXml(retornoMediator.processarXML(getRetornoVO(), getUsuario(), nomeArquivo));
 	} catch (InfraException ex) {
 	    logger.info(ex.getMessage());
 	    return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
@@ -166,7 +164,7 @@ public class RetornoService extends CraWebService {
 	    ex.printStackTrace();
 	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 	}
-	return gerarMensagem(mensagemEnvio, CONSTANTE_CONFIRMACAO_XML);
+	return gerarMensagem(getMensagemXml(), CONSTANTE_CONFIRMACAO_XML);
     }
 
     private ArquivoRetornoVO converterStringArquivoVO(String dados) {

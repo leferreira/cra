@@ -159,6 +159,7 @@ public class ConfirmacaoService extends CraWebService {
 	    }
 	    setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
 
+	    setMensagemXml(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo));
 	} catch (InfraException ex) {
 	    logger.info(ex.getMessage(), ex.getCause());
 	    return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
@@ -166,7 +167,7 @@ public class ConfirmacaoService extends CraWebService {
 	    logger.info(e.getMessage(), e.getCause());
 	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 	}
-	return gerarMensagem(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo), CONSTANTE_CONFIRMACAO_XML);
+	return gerarMensagem(getMensagemXml(), CONSTANTE_CONFIRMACAO_XML);
     }
 
     private ArquivoConfirmacaoVO converterStringArquivoVO(String dados) {
