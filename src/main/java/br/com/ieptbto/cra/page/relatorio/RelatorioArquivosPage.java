@@ -62,7 +62,6 @@ public class RelatorioArquivosPage extends BasePage<Remessa> {
 
     public RelatorioArquivosPage() {
 	this.remessa = new Remessa();
-
 	carregarFormularioArquivoCartorio();
     }
 

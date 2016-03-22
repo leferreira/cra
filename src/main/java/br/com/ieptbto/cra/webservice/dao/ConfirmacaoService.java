@@ -28,6 +28,7 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.ConfirmacaoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -59,6 +60,7 @@ public class ConfirmacaoService extends CraWebService {
      */
     public String processar(String nomeArquivo, Usuario usuario) {
 	List<RemessaVO> remessas = new ArrayList<RemessaVO>();
+	setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_CONFIRMACAO);
 	ArquivoVO arquivoVO = null;
 	setUsuario(usuario);
 	setNomeArquivo(nomeArquivo);
@@ -141,6 +143,7 @@ public class ConfirmacaoService extends CraWebService {
      * @return
      */
     public String enviarConfirmacao(String nomeArquivo, Usuario usuario, String dados) {
+	setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_CONFIRMACAO);
 	setUsuario(usuario);
 	setNomeArquivo(nomeArquivo);
 

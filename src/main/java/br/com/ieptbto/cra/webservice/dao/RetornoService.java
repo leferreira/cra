@@ -28,6 +28,7 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.entidade.vo.RetornoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
@@ -56,6 +57,7 @@ public class RetornoService extends CraWebService {
      * @return
      */
     public String processar(String nomeArquivo, Usuario usuario) {
+	setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_RETORNO);
 	List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 	ArquivoVO arquivoVO = null;
 	setUsuario(usuario);
@@ -138,6 +140,7 @@ public class RetornoService extends CraWebService {
      * @return
      */
     public String processar(String nomeArquivo, Usuario usuario, String dados) {
+	setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_RETORNO);
 	setUsuario(usuario);
 	setNomeArquivo(nomeArquivo);
 
@@ -155,7 +158,6 @@ public class RetornoService extends CraWebService {
 		return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
 	    }
 	    setRetornoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoRetornoVO()));
-
 	    setMensagemXml(retornoMediator.processarXML(getRetornoVO(), getUsuario(), nomeArquivo));
 	} catch (InfraException ex) {
 	    logger.info(ex.getMessage());

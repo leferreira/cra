@@ -74,7 +74,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		}
 		item.add(new Label("municipio", municipio.toUpperCase()));
 		if (tituloLista.getConfirmacao() != null) {
-		    item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getDataRecebimento())));
+		    item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 		    item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
 		} else {
 		    item.add(new Label("dataConfirmacao", StringUtils.EMPTY));

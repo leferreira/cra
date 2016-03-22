@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
-	<property name="ireport.zoom" value="6.1159090448414775"/>
-	<property name="ireport.x" value="4053"/>
-	<property name="ireport.y" value="693"/>
+	<property name="ireport.zoom" value="4.594972986357234"/>
+	<property name="ireport.x" value="2554"/>
+	<property name="ireport.y" value="288"/>
 	<parameter name="NOME_ARQUIVO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -22,6 +22,7 @@
 	ret.numero_protocolo_cartorio,
 	tit.valor_saldo_titulo,
 	ret.valor_custa_cartorio,
+	ret.valor_demais_despesas,
 	CASE WHEN ret.tipo_ocorrencia='1' THEN 'PAGO'
 		WHEN ret.tipo_ocorrencia='2' THEN 'PROTESTADO'
 		WHEN ret.tipo_ocorrencia='3' THEN 'RETIRADO'
@@ -53,6 +54,7 @@ ORDER BY tit.nome_devedor ASC]]>
 	<field name="numero_protocolo_cartorio" class="java.lang.String"/>
 	<field name="valor_saldo_titulo" class="java.math.BigDecimal"/>
 	<field name="valor_custa_cartorio" class="java.math.BigDecimal"/>
+	<field name="valor_demais_despesas" class="java.math.BigDecimal"/>
 	<field name="tipo_ocorrencia" class="java.lang.String"/>
 	<field name="ocorrencia" class="java.lang.Integer"/>
 	<variable name="PAGOS" class="java.lang.Long" calculation="Count">
@@ -80,7 +82,7 @@ ORDER BY tit.nome_devedor ASC]]>
 		<variableExpression><![CDATA[$F{ocorrencia} == 1 ? $F{valor_saldo_titulo} : null]]></variableExpression>
 	</variable>
 	<variable name="TOTAL_DEMAIS_DESPESAS" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{valor_custa_cartorio}]]></variableExpression>
+		<variableExpression><![CDATA[$F{valor_demais_despesas}]]></variableExpression>
 	</variable>
 	<variable name="TOTAL_CUSTAS" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{ocorrencia} == 2 || $F{ocorrencia} == 3 || $F{ocorrencia} == 6 ? $F{valor_custa_cartorio} : 0]]></variableExpression>

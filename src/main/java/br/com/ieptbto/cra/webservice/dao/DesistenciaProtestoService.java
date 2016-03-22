@@ -19,6 +19,7 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaDesistenciaProtestoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.DesistenciaException;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -49,7 +50,7 @@ public class DesistenciaProtestoService extends CraWebService {
     private List<Exception> erros;
 
     /**
-     * RECEBIMENTO DE ARQUIVOS DE DESISTÊNCIA DAS INSTITUIÇÕES
+     * Recebimento de arquivos de desistência das instituições
      * 
      * @param nomeArquivo
      * @param usuario
@@ -57,6 +58,7 @@ public class DesistenciaProtestoService extends CraWebService {
      * @return
      */
     public String processar(String nomeArquivo, Usuario usuario, String dados) {
+	setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_DESISTENCIA_PROTESTO);
 	Arquivo arquivo = new Arquivo();
 	ArquivoVO arquivoVO = new ArquivoVO();
 	setUsuario(usuario);
@@ -190,7 +192,7 @@ public class DesistenciaProtestoService extends CraWebService {
     }
 
     /**
-     * CONSULTA DE DESISTÊNCIAS PELOS CARTÓRIOS
+     * Consulta de desistências, cancelamentos e ac pelos cartórios
      * 
      * @param nomeArquivo
      * @param usuario
@@ -202,6 +204,14 @@ public class DesistenciaProtestoService extends CraWebService {
 	setNomeArquivo(nomeArquivo);
 
 	try {
+	    if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
+		setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO);
+	    } else if (nomeArquivo.contains(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.getConstante())) {
+		setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO);
+	    } else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
+		setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO);
+	    }
+
 	    remessaVO = desistenciaProtestoMediator.buscarDesistenciaCancelamentoCartorio(usuario.getInstituicao(), nomeArquivo);
 	    if (remessaVO == null) {
 		return setRespostaPadrao(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);

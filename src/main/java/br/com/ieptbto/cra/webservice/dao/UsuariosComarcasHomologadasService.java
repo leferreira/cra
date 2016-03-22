@@ -113,7 +113,7 @@ public class UsuariosComarcasHomologadasService extends CraWebService {
 	}
 	xml = xml.concat("<usuario credenciaisCorretas=\"true\"/>");
 	if (usuario != null) {
-	    loggerCra.alert(usuario, TipoAcaoLog.VERIFICACAO_CREDENCIAIS_ACESSO, "Acesso à CRA via WebServices liberado com sucesso para o usuário "
+	    loggerCra.alert(usuario, TipoAcaoLog.VERIFICACAO_CREDENCIAIS_ACESSO_SUCESSO, "Acesso à CRA via WebServices liberado com sucesso para o usuário "
 		    + usuario.getNome() + ".");
 	}
 	return XmlFormatterUtil.format(xml);

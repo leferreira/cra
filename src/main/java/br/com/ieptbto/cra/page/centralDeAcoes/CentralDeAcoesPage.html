@@ -7,36 +7,38 @@
 	<wicket:extend>
 	<h4 class="titulo-top">CENTRAL DE AÇÕES</h4>
   	<div class="row">
-  		<div class="col-md-4">
-		   <label>PER&Iacute;ODO</label>
-	  		<div class="form-group">
-	  			<div class="row">
-				  <div class="col-xs-6">  
-				  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" class="form-control">
-				  </div>
-				  <div class="col-xs-6">
-				  	<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" class="form-control">
-				  </div>
+  		<form wicket:id="form">
+	  		<div class="col-md-4">
+			   <label>PER&Iacute;ODO</label>
+		  		<div class="form-group">
+		  			<div class="row">
+					  <div class="col-xs-6">  
+					  	<input wicket:id="dataEnvioInicio" id="date" name="date" maxlength="10" placeholder="__/__/____" class="form-control">
+					  </div>
+					  <div class="col-xs-6">
+					  	<input wicket:id="dataEnvioFinal" id="date1" name="date1" maxlength="10" placeholder="__/__/____" class="form-control">
+					  </div>
+					</div>
 				</div>
-			</div>
-  		</div>
-  		<div class="col-md-3">
-		  	<label>TIPO INSTITUI&Ccedil;&Otilde;ES</label>
-	  		<div class="form-group">
-			    <select class="form-control"></select>
-		 	</div>
-  		</div>
-  		<div class="col-md-4">
-  			<label>BANCOS/CONV&Ecirc;NIOS/CART&Oacute;RIOS</label>
-  			<div class="form-group">
-			    <select class="form-control"></select>
-			</div>
-  		</div>
-  		<div class="col-md-1">
-  			<br style="clear: both;">
-  			<button class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
-  		</div>
-	</div>
+	  		</div>
+	  		<div class="col-md-3">
+			  	<label>TIPO INSTITUI&Ccedil;&Otilde;ES</label>
+		  		<div class="form-group">
+				    <select wicket:id="tipoInstituicao" class="form-control"></select>
+			 	</div>
+	  		</div>
+	  		<div class="col-md-4">
+	  			<label>BANCOS/CONV&Ecirc;NIOS/CART&Oacute;RIOS</label>
+	  			<div class="form-group">
+				    <select class="form-control" wicket:id="instituicaoOrigem"></select>
+				</div>
+	  		</div>
+	  		<div class="col-md-1">
+	  			<br style="clear: both;">
+	  			<button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
+	  		</div>
+	  	</form>
+	</div> 
 	<div class="row">
 		<div class="col-md-6">
 			<div class="row">
@@ -45,21 +47,10 @@
 	                <div class="form-group">
 	                	<div class="row">
 		                	<div class="col-xs-6"> 
-								<select class="form-control">
-			                       <option>10</option>
-			                       <option>25</option>
-			                       <option>50</option>
-			                       <option>100</option>
-			                   </select>
+								<select class="form-control" wicket:id="quantidadeOcorrencias"></select>
 			                </div>
 			              </div>
 	                 </div>
-            	</div>
-            	<div class="col-md-6"> 
-            		<label>ATUALIZAR</label>
-	                <div class="form-group">
-            			<button type="button" class="btn btn-default"><span class="fa fa-refresh"></span></button>
-            		</div>
             	</div>
              </div>
 		</div>
@@ -68,10 +59,10 @@
 				<label>FILTRAR OCORRÊNCIAS</label>
 				<div class="form-group">
 					<div class="btn-group">
-						<button type="button" class="btn btn-success btn-filter">SUCESSO</button>
-						<button type="button" class="btn btn-warning btn-filter">ALERTA</button>
-						<button type="button" class="btn btn-danger btn-filter">ERRO</button>
-						<button type="button" class="btn btn-default btn-filter">TODOS</button>
+						<button type="button" wicket:id="buttonLogSucess" class="btn btn-success btn-filter">SUCESSO</button>
+						<button type="button" wicket:id="buttonLogAlert" class="btn btn-warning btn-filter">ALERTA</button>
+						<button type="button" wicket:id="buttonLogError" class="btn btn-danger btn-filter">ERRO</button>
+						<button type="button" wicket:id="buttonLogAll" class="btn btn-default btn-filter">TODOS</button>
 					</div>
 				</div>
 			</div>
@@ -80,28 +71,41 @@
 	
 	<div class="table-container">
 		<table class="table table-filter table-striped table-bordered table-hover">
-			<thead>
-				<tr>
-					<th>REGISTROS DE AÇÕES E OCORRÊNCIAS<span class="pull-right">DATA DO PROCESSAMENTO</span></th>
-				</tr>
-			</thead>
 			<tbody>
-				<tr>
+				<tr wicket:id="listaAcoes">
 					<td>
 						<div class="media">
 							<div class="media-body">
-								<span class="media-meta pull-right">Febrero 13, 2016</span>
-								<h4 class="title lista-log-acao">
-									<a href="#" class="pull-left link">Ut enim ad minim veniam, quis nostrud exercitation...</a><br>
-									Cartório de Palmas<span class="pull-right" id="ocorrencia-sucesso">SUCESSO</span>
-								</h4>
+								<div class="row">
+									<div class="col-md-12">
+										<span class="pull-left" wicket:id="instituicao"></span>
+										<span class="pull-right text-muted"><span class="fa fa-calendar"></span>&nbsp;<span wicket:id="data"></span>&nbsp;ás&nbsp;<span wicket:id="hora"></span></span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<a href="#" class="pull-left link"><span wicket:id="tipoacao"></span></a>
+										<span class="pull-right"><span wicket:id="tipoLog"></span></span>
+									</div>	
+								</div>
+								<p wicket:id="descricao"></p>
 							</div>
 						</div>
 					</td>
 				</tr>
 			</tbody>
 		</table>
+		<div class="row">
+			<div class="col-md-12">
+				<span class="pull-right" wicket:id="pager"></span>
+			</div>
+		</div>
+		<br style="clear:both;">
 	</div>
+	<script>
+		$(".prev").text("Anterior");
+		$(".next").text("Próximo");
+	</script>
 	</wicket:extend>
 </body>
 </html>

@@ -150,7 +150,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 
 		} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
 		    item.add(new Label("numeroTitulo", titulo.getNumeroTitulo()));
-		    item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
+		    item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 		    item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 		    item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
 
