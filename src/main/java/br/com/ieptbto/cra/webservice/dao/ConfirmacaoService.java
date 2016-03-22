@@ -65,21 +65,32 @@ public class ConfirmacaoService extends CraWebService {
 	setUsuario(usuario);
 	setNomeArquivo(nomeArquivo);
 
-	if (getUsuario() == null) {
-	    return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
-	}
-	if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-	    return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
-	}
-	if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
-	    return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
-	}
+	try {
+	    if (getUsuario().getId() == 0) {
+		return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+	    }
+	    if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+		return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+	    }
+	    if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
+		return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+	    }
 
-	remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
-	if (remessas.isEmpty()) {
-	    return setRespostaArquivoEmProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+	    remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
+	    if (remessas.isEmpty()) {
+		return setRespostaArquivoEmProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+	    }
+
+	    setMensagem(gerarResposta(usuario.getInstituicao().getLayoutPadraoXML(), remessas, getNomeArquivo(), CONSTANTE_CONFIRMACAO_XML));
+	    loggerCra.sucess(getUsuario(), getTipoAcaoLog(), "Arquivo de Confirmação " + nomeArquivo
+		    + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
+	} catch (Exception e) {
+	    logger.error(e.getMessage(), e.getCause());
+	    loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo de Confirmação "
+		    + nomeArquivo + " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".", e);
+	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 	}
-	return gerarResposta(usuario.getInstituicao().getLayoutPadraoXML(), remessas, getNomeArquivo(), CONSTANTE_CONFIRMACAO_XML);
+	return getMensagem();
     }
 
     private String gerarResposta(LayoutPadraoXML layoutPadraoResposta, List<RemessaVO> remessas, String nomeArquivo, String constanteConfirmacaoXml) {
@@ -148,7 +159,7 @@ public class ConfirmacaoService extends CraWebService {
 	setNomeArquivo(nomeArquivo);
 
 	try {
-	    if (getUsuario() == null) {
+	    if (getUsuario().getId() == 0) {
 		return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
 	    }
 	    if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
@@ -161,13 +172,16 @@ public class ConfirmacaoService extends CraWebService {
 		return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
 	    }
 	    setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
-
 	    setMensagemXml(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo));
+	    loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Confirmação " + nomeArquivo + ", enviado por "
+		    + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 	} catch (InfraException ex) {
 	    logger.info(ex.getMessage(), ex.getCause());
+	    loggerCra.error(getUsuario(), getTipoAcaoLog(), ex.getMessage());
 	    return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
 	} catch (Exception e) {
 	    logger.info(e.getMessage(), e.getCause());
+	    loggerCra.error(getUsuario(), getTipoAcaoLog(), e.getMessage(), e);
 	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 	}
 	return gerarMensagem(getMensagemXml(), CONSTANTE_CONFIRMACAO_XML);
@@ -196,7 +210,7 @@ public class ConfirmacaoService extends CraWebService {
 
 	} catch (JAXBException e) {
 	    logger.error(e.getMessage(), e.getCause());
-	    new InfraException(e.getMessage(), e.getCause());
+	    throw new InfraException("Erro ao ler o arquivo recebido. " + e.getMessage());
 	}
 	return arquivo;
     }

@@ -132,6 +132,8 @@ public class CraWebService {
 
     protected String setRespostaArquivoEmProcessamento(LayoutPadraoXML layoutPadraoResposta, String nomeArquivo) {
 	logger.error("Erro WS: O arquivo ainda não foi gerado, ou ainda está em processamento.");
+	loggerCra.alert(getUsuario(), getTipoAcaoLog(), "O arquivo " + nomeArquivo
+		+ " não foi gerado, ou ainda está em processamento.");
 	if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 	    CodigoErro codigoErro = getCodigoErroEmProcessamentoSerpro(nomeArquivo);
 	    MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), codigoErro);
