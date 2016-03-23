@@ -6,9 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -71,9 +75,19 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
     private InstituicaoMediator instituicaoMediator;
     private Arquivo arquivo;
     private Usuario usuario;
+    private boolean primeiroAcesso = false;
 
     public HomePage() {
 	super();
+	this.usuario = getUser();
+	this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
+
+	carregarHomePage();
+    }
+
+    public HomePage(boolean primeiroAcesso) {
+	super();
+	this.primeiroAcesso = primeiroAcesso;
 	this.usuario = getUser();
 	this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
 
@@ -90,6 +104,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
     private void carregarHomePage() {
 	// carregarCentralDeAcoes();
+	comunicadoModal();
 	carregarInformacoes();
 
 	labelQtdRemessasPendentes();
@@ -99,6 +114,44 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	listaDesistenciaPendentes();
 	listaCancelamentoPendentes();
 	listaAutorizacaoCancelamentoPendentes();
+    }
+
+    private void comunicadoModal() {
+	final ModalWindow comunicadoModal = new ModalWindow("modalContrato");
+	comunicadoModal.setPageCreator(new ModalWindow.PageCreator() {
+
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @Override
+	    public Page createPage() {
+		return new ComunicadoModal(HomePage.this.getPageReference(), comunicadoModal);
+	    }
+	});
+	comunicadoModal.setResizable(false);
+	comunicadoModal.setAutoSize(false);
+	comunicadoModal.setInitialWidth(100);
+	comunicadoModal.setInitialHeight(50);
+	comunicadoModal.setMinimalWidth(80);
+	comunicadoModal.setMinimalHeight(30);
+	comunicadoModal.setWidthUnit("em");
+	comunicadoModal.setHeightUnit("em");
+	add(comunicadoModal);
+
+	AjaxLink<?> openModal = new AjaxLink<Void>("showModal") {
+
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @Override
+	    public void onClick(AjaxRequestTarget target) {
+		comunicadoModal.show(target);
+	    }
+	};
+	if (primeiroAcesso) {
+	    openModal.setMarkupId("showModal");
+	}
+	add(openModal);
     }
 
     @SuppressWarnings("unused")
