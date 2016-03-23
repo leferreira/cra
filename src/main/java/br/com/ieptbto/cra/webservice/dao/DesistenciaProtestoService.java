@@ -65,7 +65,7 @@ public class DesistenciaProtestoService extends CraWebService {
 	setNomeArquivo(nomeArquivo);
 
 	try {
-	    if (usuario == null) {
+	    if (usuario.getId() == 0) {
 		return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 	    }
 	    if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
@@ -86,16 +86,21 @@ public class DesistenciaProtestoService extends CraWebService {
 	    if (getUsuario().getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 		return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 	    }
-
+	    setMensagemXml(gerarResposta(arquivo, getUsuario()));
+	    loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Desistência de Protesto " + nomeArquivo
+		    + ", enviado por " + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 	} catch (InfraException ex) {
 	    logger.error(ex.getMessage());
+	    loggerCra.error(getUsuario(), getTipoAcaoLog(), ex.getMessage());
 	    return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    logger.error(Arrays.toString(e.getStackTrace()));
+	    loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno no processamento do arquivo de Desistência de Protesto "
+		    + nomeArquivo + "." + e.getMessage(), e);
 	    return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 	}
-	return gerarMensagem(gerarResposta(arquivo, getUsuario()), CONSTANTE_RELATORIO_XML);
+	return gerarMensagem(getMensagemXml(), CONSTANTE_RELATORIO_XML);
     }
 
     private Arquivo gerarArquivoDesistencia(LayoutPadraoXML layoutPadraoXML, Arquivo arquivo, String dados) {
@@ -142,6 +147,8 @@ public class DesistenciaProtestoService extends CraWebService {
 	    erro.setMunicipio(exception.getMunicipio());
 	    erro.setCodigo(exception.getCodigoErro());
 	    mensagens.add(erro);
+	    loggerCra.alert(getUsuario(), getTipoAcaoLog(), "Comarca Rejeitada: " + exception.getMunicipio() + " - "
+		    + exception.getMessage());
 	}
 	getErros().clear();
 	return mensagemRetorno;
@@ -216,11 +223,16 @@ public class DesistenciaProtestoService extends CraWebService {
 	    if (remessaVO == null) {
 		return setRespostaPadrao(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 	    }
+	    setMensagem(gerarResposta(remessaVO, getNomeArquivo()));
+	    loggerCra.sucess(usuario, getTipoAcaoLog(), "Arquivo " + nomeArquivo + ", recebido com sucesso por "
+		    + usuario.getInstituicao().getNomeFantasia() + ".");
 	} catch (Exception e) {
 	    e.printStackTrace();
+	    loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo " + nomeArquivo + "."
+		    + e.getMessage(), e);
 	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 	}
-	return gerarResposta(remessaVO, getNomeArquivo());
+	return getMensagem();
     }
 
     private String gerarResposta(RemessaDesistenciaProtestoVO remessaVO, String nomeArquivo) {

@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.webservice.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -76,16 +77,24 @@ public class CancelamentoProtestoService extends CraWebService {
 	    if (getUsuario().getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 		return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 	    }
-	    return gerarMensagem(gerarResposta(arquivo, getUsuario()), CONSTANTE_RELATORIO_XML);
+	    setMensagemXml(gerarResposta(arquivo, getUsuario()));
+	    loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Cancelamento de Protesto " + nomeArquivo
+		    + ", enviado por " + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 
 	} catch (CancelamentoException ex) {
 	    return gerarMensagemErroCancelamento(getUsuario().getInstituicao().getLayoutPadraoXML(), ex.getPedidosCancelamento());
 	} catch (InfraException ex) {
 	    logger.error(ex.getMessage());
+	    loggerCra.error(getUsuario(), getTipoAcaoLog(), ex.getMessage());
+	    return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 	} catch (Exception e) {
-	    logger.error(e.getMessage(), e);
+	    e.printStackTrace();
+	    logger.error(Arrays.toString(e.getStackTrace()));
+	    loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno no processamento do arquivo de Cancelamento de Protesto "
+		    + nomeArquivo + "." + e.getMessage(), e);
+	    return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 	}
-	return null;
+	return gerarMensagem(getMensagemXml(), CONSTANTE_RELATORIO_XML);
     }
 
     private Arquivo gerarArquivoCancelamento(LayoutPadraoXML layoutPadraoXML, Arquivo arquivo, String dados) {
@@ -128,6 +137,8 @@ public class CancelamentoProtestoService extends CraWebService {
 	    mensagem.setDescricao("Município: " + exception.getCodigoIbge() + " - " + exception.getMunicipio() + " - "
 		    + exception.getErro().getDescricao());
 	    mensagens.add(mensagem);
+	    loggerCra.alert(getUsuario(), getTipoAcaoLog(), "Comarca Rejeitada: " + exception.getMunicipio() + " - "
+		    + exception.getMessage());
 	}
 	return mensagemRetorno;
     }

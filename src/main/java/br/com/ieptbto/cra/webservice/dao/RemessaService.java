@@ -69,11 +69,11 @@ public class RemessaService extends CraWebService {
 
 	    setRemessas(ConversorArquivoVO.converterParaRemessaVO(converterStringArquivoVO(dados)));
 	    setObjectMensagemXml(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo));
-	    loggerCra.sucess(usuario, TipoAcaoLog.ENVIO_ARQUIVO_REMESSA, "O arquivo de Remessa " + nomeArquivo
-		    + ", enviado por " + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
+	    loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
+		    + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 	} catch (Exception ex) {
 	    logger.error(ex.getMessage(), ex.getCause());
-	    loggerCra.error(getUsuario(), TipoAcaoLog.ENVIO_ARQUIVO_REMESSA, "Erro interno no processamento do arquivo de Remessa "
+	    loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno no processamento do arquivo de Remessa "
 		    + nomeArquivo + ".", ex);
 	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 	}

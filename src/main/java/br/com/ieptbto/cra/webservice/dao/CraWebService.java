@@ -156,6 +156,8 @@ public class CraWebService {
 
     protected String setRespostaArquivoJaEnviadoAnteriormente(LayoutPadraoXML layoutPadraoResposta, String nomeArquivo, Arquivo arquivoJaEnviado) {
 	logger.error("Erro WS: Arquivo já enviado anteriormente.");
+	loggerCra.alert(getUsuario(), getTipoAcaoLog(), "Arquivo " + nomeArquivo + " já enviado anteriormente em "
+		+ DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()) + ".");
 	if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
 	    MensagemDeErro msg = new MensagemDeErro(nomeArquivo, getUsuario(), CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
 	    return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
