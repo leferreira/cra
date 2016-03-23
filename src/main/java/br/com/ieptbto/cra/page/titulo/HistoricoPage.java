@@ -28,6 +28,7 @@ import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
@@ -194,7 +195,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	add(cepSacadorVendedor());
 	add(cidadeSacadorVendedor());
 	add(enderecoSacadorVendedor());
-	add(complementoRegistro());
 	add(nomeDevedor());
 	add(documentoDevedor());
 	add(ufDevedor());
@@ -219,7 +219,14 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
     }
 
     private Label codigoCartorio() {
-	return new Label("codigoCartorio", new Model<String>(""));
+	Integer codigoCartorio = 0;
+	if (getTituloRemessa().getConfirmacao() != null) {
+	    codigoCartorio = getTituloRemessa().getConfirmacao().getCodigoCartorio();
+	}
+	if (getTituloRemessa().getRetorno() != null) {
+	    codigoCartorio = getTituloRemessa().getRetorno().getCodigoCartorio();
+	}
+	return new Label("codigoCartorio", new Model<String>(codigoCartorio.toString()));
     }
 
     private Label dataOcorrencia() {
@@ -235,18 +242,21 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
     }
 
     private Label irregularidade() {
+	CodigoIrregularidade codigoIrregularidade = null;
 	String irregularidade = StringUtils.EMPTY;
-	return new Label("irregularidade", new Model<String>(irregularidade));
-    }
-
-    private Label complementoRegistro() {
-	String complementoRegistro = StringUtils.EMPTY;
-	if (getTituloRemessa().getComplementoRegistro() != null) {
-	    if (getTituloRemessa().getComplementoRegistro().length() == 2) {
-		complementoRegistro = getTituloRemessa().getComplementoRegistro();
+	if (getTituloRemessa().getConfirmacao() != null) {
+	    irregularidade = getTituloRemessa().getConfirmacao().getCodigoIrregularidade();
+	}
+	if (getTituloRemessa().getRetorno() != null) {
+	    if (getTituloRemessa().getRetorno().getTipoOcorrencia().equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
+		irregularidade = getTituloRemessa().getRetorno().getCodigoIrregularidade();
 	    }
 	}
-	return new Label("complementoRegistro", complementoRegistro);
+	codigoIrregularidade = CodigoIrregularidade.getIrregularidade(irregularidade);
+	if (codigoIrregularidade == null) {
+	    return new Label("irregularidade", new Model<String>("00"));
+	}
+	return new Label("irregularidade", new Model<String>(codigoIrregularidade.getMotivo().toUpperCase()));
     }
 
     private Label codigoMunicipio() {

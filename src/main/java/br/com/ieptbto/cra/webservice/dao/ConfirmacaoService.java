@@ -119,6 +119,7 @@ public class ConfirmacaoService extends CraWebService {
     }
 
     protected String gerarMensagem(Object mensagem, String nomeNo) {
+	String msg = null;
 	Writer writer = new StringWriter();
 	JAXBContext context;
 	try {
@@ -130,19 +131,18 @@ public class ConfirmacaoService extends CraWebService {
 	    marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
 	    JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
 	    marshaller.marshal(element, writer);
-	    String msg = writer.toString();
+	    msg = writer.toString();
 	    msg = msg.replace("<confirmacao xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
 	    writer.close();
-	    return msg;
 
 	} catch (JAXBException e) {
 	    logger.error(e.getMessage(), e.getCause());
-	    new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+	    throw new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e.getCause());
-	    new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+	    throw new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 	}
-	return null;
+	return msg;
     }
 
     /**
