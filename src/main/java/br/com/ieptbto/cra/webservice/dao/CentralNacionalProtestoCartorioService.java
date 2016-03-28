@@ -30,7 +30,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 
 	@Autowired
 	private CentralNacionalProtestoMediator centralNacionalProtestoMediator;
-	
+
 	/**
 	 * @param usuario
 	 * @param dados
@@ -39,35 +39,32 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 	public String processar(Usuario usuario, String dados) {
 		ArquivoCnp arquivoCnp = new ArquivoCnp();
 		setUsuario(usuario);
-		
+
 		try {
 			if (getUsuario() == null) {
 				return usuarioInvalido();
 			}
-			if (StringUtils.isBlank(dados)) { 
-				return dadosArquivoCnpEmBranco(usuario);		
-			} 
-			if (new LocalTime().isBefore(getHoraInicioServicoEnvio()) || new LocalTime().isAfter(getHoraFimServicoEnvio())) { 
-				return servicoNaoDisponivelForaDoHorarioEnvio(usuario);		
+			if (StringUtils.isBlank(dados)) {
+				return dadosArquivoCnpEmBranco(usuario);
+			}
+			if (new LocalTime().isBefore(getHoraInicioServicoEnvio()) || new LocalTime().isAfter(getHoraFimServicoEnvio())) {
+				return servicoNaoDisponivelForaDoHorarioEnvio(usuario);
 			}
 			if (isInstituicaoEnviouArquivoCnpHoje(usuario.getInstituicao())) {
 				return arquivoCnpJaEnviadoHoje(usuario);
 			}
-			arquivoCnp = gerarArquivoCnpCartorio(converterStringArquivoCnpVO(dados));
+			logger.info("Iniciar procesaamento arquivo cnp do cartório");
+			arquivoCnp = centralNacionalProtestoMediator.processarArquivoCartorio(getUsuario(), converterStringArquivoCnpVO(dados));
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			logger.info(ex.getMessage(), ex.getCause());
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}
 		return gerarMensagem(gerarMensagemSucesso(arquivoCnp), CONSTANTE_RELATORIO_XML);
 	}
 
-	private ArquivoCnp gerarArquivoCnpCartorio(ArquivoCnpVO dados) {
-		logger.info("Iniciar procesaamento arquivo cnp do cartório");
-		return centralNacionalProtestoMediator.processarArquivoCartorio(getUsuario() ,dados);
-	}
-
 	/**
-	 * Converter a String dados para ArquivoCnpVO 
+	 * Converter a String dados para ArquivoCnpVO
 	 * 
 	 * @param dados
 	 * @return
@@ -95,11 +92,11 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 
 		} catch (JAXBException e) {
 			logger.error(e.getMessage(), e.getCause());
-			new InfraException(e.getMessage(), e.getCause());
+			throw new InfraException(e.getMessage(), e.getCause());
 		}
 		return arquivoCnp;
 	}
-	
+
 	private boolean isInstituicaoEnviouArquivoCnpHoje(Instituicao instituicao) {
 		return centralNacionalProtestoMediator.isInstituicaoEnviouArquivoCnpHoje(instituicao);
 	}
