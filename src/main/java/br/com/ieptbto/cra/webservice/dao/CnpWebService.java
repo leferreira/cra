@@ -14,12 +14,14 @@ import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.ArquivoCnp;
 import br.com.ieptbto.cra.entidade.RemessaCnp;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.logger.LoggerCra;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
@@ -38,9 +40,13 @@ public class CnpWebService {
 	public static final String TIPO_ARQUIVO_CNP = "CENTRAL NACIONAL DE PROTESTO";
 	public static final String HORA_INICIO_CONSULTA = "07:59:59";
 	public static final String HORA_FIM_CONSULTA = "12:00:01";
-	public static final String HORA_INICIO_ENVIO = "13:59:59";
-	public static final String HORA_FIM_ENVIO = "17:00:01";
+	// public static final String HORA_INICIO_ENVIO = "13:59:59";
+	// public static final String HORA_FIM_ENVIO = "17:00:01";
+	public static final String HORA_INICIO_ENVIO = "00:00:01";
+	public static final String HORA_FIM_ENVIO = "23:59:59";
 
+	@Autowired
+	protected LoggerCra loggerCra;
 	protected Usuario usuario;
 	protected LocalTime horaInicioServico;
 	protected LocalTime horaFimServico;
@@ -148,6 +154,7 @@ public class CnpWebService {
 			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
 			marshaller.marshal(element, writer);
 			String msg = writer.toString();
+			msg = msg.replace("xsi:type=\"arquivoCnpVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace(" xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			writer.close();
 			return msg;
