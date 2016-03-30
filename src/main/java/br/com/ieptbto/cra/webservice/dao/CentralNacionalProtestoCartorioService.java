@@ -18,6 +18,7 @@ import br.com.ieptbto.cra.entidade.ArquivoCnp;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoCnpVO;
+import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
 
@@ -55,9 +56,13 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			}
 			logger.info("Iniciar procesaamento arquivo cnp do cartório");
 			arquivoCnp = centralNacionalProtestoMediator.processarArquivoCartorio(getUsuario(), converterStringArquivoCnpVO(dados));
+			loggerCra.sucess(getUsuario(), TipoAcaoLog.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, "Arquivo da CNP enviado por "
+					+ getUsuario().getInstituicao().getNomeFantasia() + " processado com sucesso!");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.info(ex.getMessage(), ex.getCause());
+			loggerCra.error(getUsuario(), TipoAcaoLog.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, "Erro no processamento do arquivo da CNP de "
+					+ getUsuario().getInstituicao().getNomeFantasia() + "!");
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}
 		return gerarMensagem(gerarMensagemSucesso(arquivoCnp), CONSTANTE_RELATORIO_XML);

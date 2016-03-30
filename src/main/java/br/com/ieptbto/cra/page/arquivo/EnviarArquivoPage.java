@@ -36,124 +36,122 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class EnviarArquivoPage extends BasePage<Arquivo> {
 
-    /****/
-    private static final long serialVersionUID = 852632145;
+	/****/
+	private static final long serialVersionUID = 852632145;
 
-    @SpringBean
-    private ArquivoMediator arquivoMediator;
-    @SpringBean
-    private InstituicaoMediator instituicaoMediator;
-    private Usuario usuario;
-    private Arquivo arquivo;
-    private Form<Arquivo> form;
-    private FileUploadField fileUploadField;
+	@SpringBean
+	private ArquivoMediator arquivoMediator;
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
+	private Usuario usuario;
+	private Arquivo arquivo;
+	private Form<Arquivo> form;
+	private FileUploadField fileUploadField;
 
-    public EnviarArquivoPage() {
-	this.arquivo = new Arquivo();
-	this.usuario = getUser();
-	this.arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
+	public EnviarArquivoPage() {
+		this.arquivo = new Arquivo();
+		this.usuario = getUser();
+		this.arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
 
-	form = new Form<Arquivo>("form", getModel()) {
+		form = new Form<Arquivo>("form", getModel()) {
 
-	    /****/
-	    private static final long serialVersionUID = 1L;
+			/****/
+			private static final long serialVersionUID = 1L;
 
-	    @Override
-	    protected void onSubmit() {
-		final FileUpload uploadedFile = fileUploadField.getFileUpload();
-		arquivo.setNomeArquivo(uploadedFile.getClientFileName());
-		arquivo.setDataRecebimento(new LocalDate().toDate());
-		getFeedbackMessages().clear();
+			@Override
+			protected void onSubmit() {
+				final FileUpload uploadedFile = fileUploadField.getFileUpload();
+				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
+				arquivo.setDataRecebimento(new LocalDate().toDate());
+				getFeedbackMessages().clear();
 
-		try {
-		    ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUsuario());
-		    setArquivo(arquivoRetorno.getArquivo());
+				try {
+					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUsuario());
+					setArquivo(arquivoRetorno.getArquivo());
 
-		    if (arquivo != null) {
-			if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
-			    info("O arquivo de Remessa " + arquivo.getNomeArquivo()
-				    + " enviado, foi processado com sucesso !");
-			} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
-			    info("O arquivo de Confirmação " + arquivo.getNomeArquivo()
-				    + " enviado, foi processado com sucesso !");
-			} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
-			    setResponsePage(new RelatorioRetornoPage("O arquivo de Retorno " + arquivo.getNomeArquivo()
-				    + " enviado, foi processado com sucesso !", getArquivo(), "ENVIAR ARQUIVO"));
-			} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
-			    info("O arquivo de Desistência de Protesto " + arquivo.getNomeArquivo()
-				    + " enviado, foi processado com sucesso !");
+					if (arquivo != null) {
+						if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
+							info("O arquivo de Remessa " + arquivo.getNomeArquivo() + " enviado, foi processado com sucesso !");
+						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
+							info("O arquivo de Confirmação " + arquivo.getNomeArquivo() + " enviado, foi processado com sucesso !");
+						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+							setResponsePage(new RelatorioRetornoPage("O arquivo de Retorno " + arquivo.getNomeArquivo()
+									+ " enviado, foi processado com sucesso !", getArquivo(), "ENVIAR ARQUIVO"));
+						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
+							info("O arquivo de Desistência de Protesto " + arquivo.getNomeArquivo()
+									+ " enviado, foi processado com sucesso !");
+						}
+					}
+					for (Exception exception : arquivoRetorno.getErros()) {
+						if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
+							warn(DesistenciaException.class.cast(exception).toString());
+						} else {
+							warn(exception.getMessage());
+						}
+					}
+					arquivoRetorno.getErros().clear();
+
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					getFeedbackPanel().error(ex.getMessage());
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
+				}
 			}
-		    }
-		    for (Exception exception : arquivoRetorno.getErros()) {
-			if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
-			    warn(DesistenciaException.class.cast(exception).toString());
-			} else {
-			    warn(exception.getMessage());
+		};
+		form.setMultiPart(true);
+		form.setMaxSize(Bytes.megabytes(10));
+
+		form.add(campoArquivo());
+		form.add(botaoEnviar());
+		add(form);
+	}
+
+	private FileUploadField campoArquivo() {
+		fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
+		fileUploadField.setRequired(true);
+		fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
+		return fileUploadField;
+	}
+
+	private AjaxButton botaoEnviar() {
+		return new AjaxButton("enviarArquivo") {
+
+			/****/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				target.add(getFeedbackPanel());
 			}
-		    }
-		    arquivoRetorno.getErros().clear();
 
-		} catch (InfraException ex) {
-		    logger.error(ex.getMessage());
-		    getFeedbackPanel().error(ex.getMessage());
-		} catch (Exception e) {
-		    logger.error(e.getMessage(), e);
-		    error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
-		}
-	    }
-	};
-	form.setMultiPart(true);
-	form.setMaxSize(Bytes.megabytes(10));
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				target.add(getFeedbackPanel());
+			}
 
-	form.add(campoArquivo());
-	form.add(botaoEnviar());
-	add(form);
-    }
+			@Override
+			protected void finalize() throws Throwable {
+				super.finalize();
+			}
+		};
+	}
 
-    private FileUploadField campoArquivo() {
-	fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
-	fileUploadField.setRequired(true);
-	fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
-	return fileUploadField;
-    }
+	public Usuario getUsuario() {
+		return usuario;
+	}
 
-    private AjaxButton botaoEnviar() {
-	return new AjaxButton("enviarArquivo") {
+	public Arquivo getArquivo() {
+		return arquivo;
+	}
 
-	    /****/
-	    private static final long serialVersionUID = 1L;
+	public void setArquivo(Arquivo arquivo) {
+		this.arquivo = arquivo;
+	}
 
-	    @Override
-	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-		target.add(getFeedbackPanel());
-	    }
-
-	    @Override
-	    protected void onError(AjaxRequestTarget target, Form<?> form) {
-		target.add(getFeedbackPanel());
-	    }
-
-	    @Override
-	    protected void finalize() throws Throwable {
-		super.finalize();
-	    }
-	};
-    }
-
-    public Usuario getUsuario() {
-	return usuario;
-    }
-
-    public Arquivo getArquivo() {
-	return arquivo;
-    }
-
-    public void setArquivo(Arquivo arquivo) {
-	this.arquivo = arquivo;
-    }
-
-    @Override
-    protected IModel<Arquivo> getModel() {
-	return new CompoundPropertyModel<Arquivo>(arquivo);
-    }
+	@Override
+	protected IModel<Arquivo> getModel() {
+		return new CompoundPropertyModel<Arquivo>(arquivo);
+	}
 }
