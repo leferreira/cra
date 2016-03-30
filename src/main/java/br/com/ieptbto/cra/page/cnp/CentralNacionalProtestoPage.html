@@ -18,69 +18,70 @@
 </head>
 <body style="background-color: #f8f8f8 !important;">
 	<br style="clear: both;">
-	<div class="container"> 
-		<span wicket:id="feedback">Mensagens de erros e etc</span>
+	<div class="container" style="width: 85% !important;"> 
+		<img src="img/ieptb.gif" alt="" style="max-width: 65%;"> 
 		<br style="clear: both;">
 	    <h4 class="titulo-top">CONSULTA DE PROTESTOS</h4>
-		<form wicket:id="form">
-		    <div class="panel-body">
-		    	<div class="col-lg-10 col-md-offset-2">
-					<div class="col-md-7">
-						01480225000155
+		<span wicket:id="feedback">Mensagens de erros e etc</span>
+		<div class="row">
+	    	<div class="col-lg-10 col-md-offset-2">
+				<form wicket:id="form"> 
+					<div class="col-md-7">  
 						<div class="form-group">
 						  <label>CPF/CNPJ</label>  
 					  	  <input maxlength="18" wicket:id="documentoDevedor" class="form-control input-md" placeholder="Documento do Devedor"
 					  	  	onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)" onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)">
 						</div>
 					</div>
-					<div class="col-md-7">
-						<div class="form-group">
-							<img wicket:id="image"/> 
-							<button type="button" class="btn btn-lg" wicket:id="changeLink" style="background-color: #fff; border-color: #ddd;"><i class="fa fa-refresh"></i></button>
-						</div>
-						<div class="form-group">
-							<input placeholder="Digite o texto exibido na imagem" maxlength="6" wicket:id="text" class="form-control input-md"/>
-						</div>
-					</div>
+	<!-- 					<div class="col-md-7"> -->
+	<!-- 						<div class="form-group"> -->
+	<!-- 							<img wicket:id="image"/>  -->
+	<!-- 							<button type="button" class="btn btn-lg" wicket:id="changeLink" style="background-color: #fff; border-color: #ddd;"><i class="fa fa-refresh"></i></button> -->
+	<!-- 						</div> -->
+	<!-- 						<div class="form-group"> -->
+	<!-- 							<input placeholder="Digite o texto exibido na imagem" maxlength="6" wicket:id="text" class="form-control input-md"/> -->
+	<!-- 						</div> -->
+	<!-- 					</div> -->
 					<div class="col-md-7">
 						<div class="form-group"> 
 						    <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;CONSULTAR</button>
 						</div>
 					</div>
-					<br style="clear: both;"/>
-				</div>
-		    </div>
-		</form>
-		<span wicket:id="certidao" style="font-size: 14px; font-weight: bold;"></span><br>
-		<hr>
+				</form> 
+			</div>
+		</div>
 		<div class="row">
-			<div class="row" wicket:id="resultado">
-				<span wicket:id="labelNaoHaProtestos"></span>
-				<div class="table-container">
-					<table class="table table-filter table-striped table-bordered table-hover">
+			<div class="col-md-12"> 
+				<br style="clear: both;">
+				<span wicket:id="certidao" style="font-size: 14px; font-weight: bold;"></span>
+			    <div wicket:id="resultado"> 
+					<p wicket:id="labelNaoHaProtestos" style="text-align: center; color: red; font-size: 16px; font-weight: bold;"></p>
+					<p wicket:id="prazo" style="text-align: center; color: red; font-size: 16px; font-weight: bold;"></p>
+					<p style="text-align: center; font-size: 16px; font-weight: bold;">ÚLTIMA ATUALIZAÇÃO:&nbsp;<span wicket:id="atualizacao"></span></p>
+					<table class="table table-filter table-striped table-bordered table-hover">  
+						<thead> 
+                              <tr>
+                                  <th class="col-center">INFORMAÇÕES DE PROTESTOS</th>
+                              </tr>
+                        </thead>  
 						<tbody>
 							<tr wicket:id="resultados">
-								<td wicket:id="nomeDevedor"></td>
-							</tr>
-						</tbody>
+								<td><p wicket:id="protesto" style="text-align: center; font-size: 16px; font-weight: bold; color: red;"></p></td>
+							</tr>  
+						</tbody> 
 					</table>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<span class="pull-right" wicket:id="pager"></span>
-					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<footer class="footer" style="background-color: #337AB7; bottom: 0; position: absolute; width: 100%;"> 
-      <div class="container"> 
+      <div class="container" style="width: 85% !important;">    
       	<p class="text-muted text-footer">
 			Copyright Â© 2015.Todos os Direitos Reservados.<br>
 			Desenvolvido por <a target="_blink" href="http://www.ieptbto.com.br/" style="font-weight: bold; color: #f8f8f8"> IEPTB-TO</a>. 
 		</p>
       </div>
-    </footer> 
+    </footer>   
 	
 	<script src="bower_components/jquery/dist/jquery.min.js"></script> 
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>  

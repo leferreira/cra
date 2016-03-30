@@ -4,23 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.TituloProtestoBean;
+import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.TituloCnp;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
@@ -35,15 +31,13 @@ public class CentralNacionalProtestoPage extends WebPage {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	@SpringBean
 	CentralNacionalProtestoMediator cnpMediator;
-	private TituloCnp tituloCnp;
-	private List<TituloProtestoBean> titulosProtesto;
 
-	private String randomText;
+	private TituloCnp tituloCnp;
+	private List<String> titulosProtesto;
 	private TextField<String> textFieldDocumentoDevedor;
-	private CaptchaImageResource captchaImageResource;
-	private TextField<String> textFieldCaptchaText;
 	private boolean visibilidadeDivResultado;
 
 	public CentralNacionalProtestoPage() {
@@ -52,7 +46,7 @@ public class CentralNacionalProtestoPage extends WebPage {
 		carregar();
 	}
 
-	public CentralNacionalProtestoPage(TituloCnp titulo, List<TituloProtestoBean> titulosProtesto) {
+	public CentralNacionalProtestoPage(TituloCnp titulo, List<String> titulosProtesto) {
 		this.tituloCnp = titulo;
 		this.titulosProtesto = titulosProtesto;
 		this.visibilidadeDivResultado = true;
@@ -81,24 +75,22 @@ public class CentralNacionalProtestoPage extends WebPage {
 			@Override
 			protected void onSubmit() {
 				String documentoDevedor = StringUtils.EMPTY;
-				String captchaText = StringUtils.EMPTY;
 
 				try {
 					if (textFieldDocumentoDevedor.getModelObject() != null) {
 						documentoDevedor = textFieldDocumentoDevedor.getModelObject();
 					}
-					if (textFieldCaptchaText.getModelObject() != null) {
-						captchaText = textFieldCaptchaText.getModelObject();
+					if (documentoDevedor.contains(".")) {
+						documentoDevedor = documentoDevedor.replace(".", "");
+					}
+					if (documentoDevedor.contains("/")) {
+						documentoDevedor = documentoDevedor.replace("/", "");
+					}
+					if (documentoDevedor.contains("-")) {
+						documentoDevedor = documentoDevedor.replace("-", "");
 					}
 
-					System.out.println(captchaText);
-					System.out.println(randomText);
-					if (!randomText.equalsIgnoreCase(captchaText)) {
-						throw new InfraException("Texto de Verificação Incorreto. Por favor digite novamente!");
-					} else {
-						setResponsePage(new CentralNacionalProtestoPage(tituloCnp, cnpMediator.consultarProtestos(documentoDevedor)));
-					}
-					captchaImageResource.invalidate();
+					setResponsePage(new CentralNacionalProtestoPage(tituloCnp, cnpMediator.consultarProtestos(documentoDevedor)));
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
@@ -108,46 +100,7 @@ public class CentralNacionalProtestoPage extends WebPage {
 
 		};
 		form.add(campoDocumentoDevedor());
-
-		captchaImageResource = new CaptchaImageResource() {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected byte[] render() {
-				randomText = CaptchaGenerate.randomString(6, 6);
-				getChallengeIdModel().setObject(randomText);
-				return super.render();
-			}
-		};
-
-		final Image captchaImage = new Image("image", captchaImageResource);
-		captchaImage.setOutputMarkupId(true);
-		form.add(captchaImage);
-
-		AjaxLink<Void> changeCaptchaLink = new AjaxLink<Void>("changeLink") {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				captchaImageResource.invalidate();
-				target.add(captchaImage);
-			}
-		};
-		form.add(changeCaptchaLink);
-
-		form.add(captchTextField());
 		add(form);
-	}
-
-	private TextField<String> captchTextField() {
-		textFieldCaptchaText = new TextField<String>("text", new Model<String>());
-		textFieldCaptchaText.setRequired(true);
-		textFieldCaptchaText.setLabel(new Model<String>("Texto de Verificação"));
-		return textFieldCaptchaText;
 	}
 
 	private TextField<String> campoDocumentoDevedor() {
@@ -164,43 +117,50 @@ public class CentralNacionalProtestoPage extends WebPage {
 		Label labelNaoHaProtestos = new Label("labelNaoHaProtestos", "Não constam protestos por falta de pagamento nos tabelionatos de protestos do Tocantins!".toUpperCase());
 		labelNaoHaProtestos.setOutputMarkupId(true);
 		labelNaoHaProtestos.setVisible(false);
+		divResultadoConsulta.add(labelNaoHaProtestos);
 
-		PageableListView<TituloProtestoBean> pageableListView = new PageableListView<TituloProtestoBean>("resultados", getTitulosProtesto(), 5) {
+		ListView<String> pageableListView = new ListView<String>("resultados", getTitulosProtesto()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<TituloProtestoBean> item) {
-				TituloProtestoBean tituloProtesto = item.getModelObject();
-				item.add(new Label("nomeDevedor", tituloProtesto.getNomeDevedor()));
+			protected void populateItem(ListItem<String> item) {
+				String tituloProtesto = item.getModelObject();
+				item.add(new Label("protesto", "TABELIONATO DE PROTESTO DE TÍTULOS DE " + tituloProtesto + "."));
 			}
 		};
 		pageableListView.setOutputMarkupId(true);
 		pageableListView.setVisible(false);
-		divResultadoConsulta.add(new PagingNavigator("pager", pageableListView));
 		divResultadoConsulta.add(pageableListView);
+
+		Label labelMensagemDevedor = new Label("prazo", "OBS: O prazo para exclusão do registro de protesto da base é de 5 dias após o cancelamento do protesto no cartório".toUpperCase());
+		labelMensagemDevedor.setOutputMarkupId(true);
+		labelMensagemDevedor.setVisible(false);
+		divResultadoConsulta.add(labelMensagemDevedor);
+
+		Label atualizacao = new Label("atualizacao", DataUtil.localDateToString(new LocalDate().minusDays(1)));
+		divResultadoConsulta.add(atualizacao);
 
 		if (titulosProtesto != null) {
 			if (getTitulosProtesto().isEmpty()) {
 				labelNaoHaProtestos.setVisible(true);
 			} else {
+				labelMensagemDevedor.setVisible(true);
 				pageableListView.setVisible(true);
 			}
 		}
 		divResultadoConsulta.setVisible(visibilidadeDivResultado);
-		divResultadoConsulta.add(labelNaoHaProtestos);
 		add(divResultadoConsulta);
 	}
 
 	private void labelNaoValidoComoCertidao() {
-		Label labelCertidao = new Label("certidao", "As informações a seguir referem-se apenas a pesquisa, não tendo validade como certidão!".toUpperCase());
-		add(labelCertidao);
+		add(new Label("certidao", "*As informações a seguir referem-se apenas a pesquisa, não tendo validade como certidão!".toUpperCase()));
 	}
 
-	public List<TituloProtestoBean> getTitulosProtesto() {
+	public List<String> getTitulosProtesto() {
 		if (titulosProtesto == null) {
-			titulosProtesto = new ArrayList<TituloProtestoBean>();
+			titulosProtesto = new ArrayList<String>();
 		}
 		return titulosProtesto;
 	}
