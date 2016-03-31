@@ -114,7 +114,7 @@ public class CentralNacionalProtestoPage extends WebPage {
 		WebMarkupContainer divResultadoConsulta = new WebMarkupContainer("resultado");
 		divResultadoConsulta.setOutputMarkupId(true);
 
-		Label labelNaoHaProtestos = new Label("labelNaoHaProtestos", "Não constam protestos por falta de pagamento nos tabelionatos de protestos do Tocantins!".toUpperCase());
+		Label labelNaoHaProtestos = new Label("labelNaoHaProtestos", "Não constam protestos, por falta de pagamento, para este CPF/CNPJ nos tabelionatos do estado do Tocantins!".toUpperCase());
 		labelNaoHaProtestos.setOutputMarkupId(true);
 		labelNaoHaProtestos.setVisible(false);
 		divResultadoConsulta.add(labelNaoHaProtestos);
@@ -126,8 +126,8 @@ public class CentralNacionalProtestoPage extends WebPage {
 
 			@Override
 			protected void populateItem(ListItem<String> item) {
-				String tituloProtesto = item.getModelObject();
-				item.add(new Label("protesto", "TABELIONATO DE PROTESTO DE TÍTULOS DE " + tituloProtesto + "."));
+				String municipioGuarai = item.getModelObject();
+				item.add(new Label("protesto", "CONSTA(M) PROTESTO(S) NO TABELIONATO DE PROTESTO DE TÍTULOS DE " + municipioGuarai + "."));
 			}
 		};
 		pageableListView.setOutputMarkupId(true);

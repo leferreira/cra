@@ -9,13 +9,11 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
 import br.com.ieptbto.cra.entidade.ArquivoCnp;
-import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoCnpVO;
 import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
@@ -48,12 +46,14 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (StringUtils.isBlank(dados)) {
 				return dadosArquivoCnpEmBranco(usuario);
 			}
-			if (new LocalTime().isBefore(getHoraInicioServicoEnvio()) || new LocalTime().isAfter(getHoraFimServicoEnvio())) {
-				return servicoNaoDisponivelForaDoHorarioEnvio(usuario);
-			}
-			if (isInstituicaoEnviouArquivoCnpHoje(usuario.getInstituicao())) {
-				return arquivoCnpJaEnviadoHoje(usuario);
-			}
+			// if (new LocalTime().isBefore(getHoraInicioServicoEnvio()) || new
+			// LocalTime().isAfter(getHoraFimServicoEnvio())) {
+			// return servicoNaoDisponivelForaDoHorarioEnvio(usuario);
+			// }
+			// if (isInstituicaoEnviouArquivoCnpHoje(usuario.getInstituicao()))
+			// {
+			// return arquivoCnpJaEnviadoHoje(usuario);
+			// }
 			logger.info("Iniciar procesaamento arquivo cnp do cartório");
 			arquivoCnp = centralNacionalProtestoMediator.processarArquivoCartorio(getUsuario(), converterStringArquivoCnpVO(dados));
 			loggerCra.sucess(getUsuario(), TipoAcaoLog.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, "Arquivo da CNP enviado por "
@@ -88,6 +88,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
 				if (xmlRecebido.contains("<?xml version=")) {
 					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", StringUtils.EMPTY);
+					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", StringUtils.EMPTY);
 				}
 			}
 			scanner.close();
@@ -102,7 +103,9 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 		return arquivoCnp;
 	}
 
-	private boolean isInstituicaoEnviouArquivoCnpHoje(Instituicao instituicao) {
-		return centralNacionalProtestoMediator.isInstituicaoEnviouArquivoCnpHoje(instituicao);
-	}
+	// private boolean isInstituicaoEnviouArquivoCnpHoje(Instituicao
+	// instituicao) {
+	// return
+	// centralNacionalProtestoMediator.isInstituicaoEnviouArquivoCnpHoje(instituicao);
+	// }
 }

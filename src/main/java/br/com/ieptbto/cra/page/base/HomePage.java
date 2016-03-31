@@ -308,6 +308,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
+							e.printStackTrace();
 							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
 						}
 					}
@@ -332,6 +333,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
+							e.printStackTrace();
 							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
 						}
 					}
