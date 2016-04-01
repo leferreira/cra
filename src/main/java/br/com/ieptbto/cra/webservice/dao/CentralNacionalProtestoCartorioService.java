@@ -127,16 +127,21 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 
 		StringBuffer xml = new StringBuffer();
 		xml.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\" ?>");
-		xml.append("<protesto>");
-		for (Instituicao instituicao : cartorios) {
-			xml.append("	<cartorio>");
-			xml.append("		<municipio>" + instituicao.getMunicipio().getNomeMunicipio() + "</municipio>");
-			xml.append("		<telefone>" + instituicao.getTelefone() + "</telefone>");
-			xml.append("		<endereco>" + instituicao.getEndereco() + "</endereco>");
-			xml.append("	</cartorio>");
+		if (!cartorios.isEmpty()) {
+			xml.append("<protesto>");
+			for (Instituicao instituicao : cartorios) {
+				xml.append("	<cartorio>");
+				xml.append("		<municipio>" + instituicao.getMunicipio().getNomeMunicipio() + "</municipio>");
+				xml.append("		<telefone>" + instituicao.getTelefone() + "</telefone>");
+				xml.append("		<endereco>" + instituicao.getEndereco() + "</endereco>");
+				xml.append("	</cartorio>");
+			}
+			xml.append("</protesto>");
+		} else {
+			xml.append("<protesto>");
+			xml.append("<mensagem>NÃO CONSTAM PROTESTOS, POR FALTA DE PAGAMENTO, PARA ESTE CPF/CNPJ NOS TABELIONATOS DO ESTADO DO TOCANTINS!</mensagem>");
+			xml.append("</protesto>");
 		}
-		xml.append("</protesto>");
-
 		return XmlFormatterUtil.format(xml.toString());
 	}
 }
