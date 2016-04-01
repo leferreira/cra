@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.webservice.dao;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.xml.bind.JAXBContext;
@@ -14,11 +15,13 @@ import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
 import br.com.ieptbto.cra.entidade.ArquivoCnp;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoCnpVO;
 import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
+import br.com.ieptbto.cra.util.XmlFormatterUtil;
 
 /**
  * @author Thasso Araújo
@@ -108,4 +111,32 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 	// return
 	// centralNacionalProtestoMediator.isInstituicaoEnviouArquivoCnpHoje(instituicao);
 	// }
+
+	public String consultarProtesto(String documentoDevedor) {
+
+		if (documentoDevedor.contains(".")) {
+			documentoDevedor = documentoDevedor.replace(".", "");
+		}
+		if (documentoDevedor.contains("/")) {
+			documentoDevedor = documentoDevedor.replace("/", "");
+		}
+		if (documentoDevedor.contains("-")) {
+			documentoDevedor = documentoDevedor.replace("-", "");
+		}
+		List<Instituicao> cartorios = centralNacionalProtestoMediator.consultarProtestosWs(documentoDevedor);
+
+		StringBuffer xml = new StringBuffer();
+		xml.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\" ?>");
+		xml.append("<protesto>");
+		for (Instituicao instituicao : cartorios) {
+			xml.append("	<cartorio>");
+			xml.append("		<municipio>" + instituicao.getMunicipio().getNomeMunicipio() + "</municipio>");
+			xml.append("		<telefone>" + instituicao.getTelefone() + "</telefone>");
+			xml.append("		<endereco>" + instituicao.getEndereco() + "</endereco>");
+			xml.append("	</cartorio>");
+		}
+		xml.append("</protesto>");
+
+		return XmlFormatterUtil.format(xml.toString());
+	}
 }

@@ -19,21 +19,21 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class SobreCraPage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
+	/***/
+	private static final long serialVersionUID = 1L;
 
-    public SobreCraPage() {
-	carregarInformacoesVersao();
-    }
+	public SobreCraPage() {
+		carregarInformacoesVersao();
+	}
 
-    private void carregarInformacoesVersao() {
-	add(new Label("versao", ""));
-	add(new Label("dataVersao", "17/03/2016"));
-    }
+	private void carregarInformacoesVersao() {
+		add(new Label("versao", ""));
+		add(new Label("dataVersao", "31/03/2016"));
+	}
 
-    @Override
-    protected IModel<T> getModel() {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	@Override
+	protected IModel<T> getModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

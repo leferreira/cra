@@ -49,6 +49,18 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 		return centralNacionalProtestoService.processar(usuario);
 	}
 
+	@Override
+	@WebMethod(operationName = "centralNacionalProtesto")
+	@GET
+	public String consultaProtesto(@WebParam(name = "documentoDevedor") String documentoDevedor) {
+		if (context == null) {
+			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		}
+
+		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
+		return centralNacionalProtestoCartorioService.consultarProtesto(documentoDevedor);
+	}
+
 	private void init(String login, String senha) {
 		if (context == null) {
 			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");

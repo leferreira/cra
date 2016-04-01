@@ -35,4 +35,12 @@ public interface ICentralNacionalProtestoWS {
 	@GET
 	public String centralNacionalProtesto(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
 
+	/**
+	 * @param documentoDevedor
+	 * @return
+	 */
+	@WebMethod(operationName = "consultaProtesto")
+	@GET
+	public String consultaProtesto(@WebParam(name = "documentoDevedor") String documentoDevedor);
+
 }
