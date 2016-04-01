@@ -287,7 +287,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					item.add(new Label("instituicao", municipio.toUpperCase()));
 					item.add(new Label("downloadAnexos", StringUtils.EMPTY));
 				}
-				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
+				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getArquivo().getDataRecebimento(), new Date())));
 				item.add(downloadArquivoTXT(remessa));
 			}
 
