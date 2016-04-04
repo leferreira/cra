@@ -58,259 +58,258 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(GerarSlipPage.class);
+	/***/
+	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(GerarSlipPage.class);
 
-    @SpringBean
-    private InstrumentoProtestoMediator instrumentoMediator;
-    @SpringBean
-    private InstituicaoMediator instituicaoMediator;
-    @SpringBean
-    private TituloMediator tituloMediator;
-    private InstrumentoProtesto instrumento;
-    private List<Retorno> retornos;
-    private List<InstrumentoProtesto> instrumentosProtesto;
-    private List<EnvelopeSLIP> envelopes;
-    private List<EtiquetaSLIP> etiquetas;
+	@SpringBean
+	private InstrumentoProtestoMediator instrumentoMediator;
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	private TituloMediator tituloMediator;
+	private InstrumentoProtesto instrumento;
+	private List<Retorno> retornos;
+	private List<InstrumentoProtesto> instrumentosProtesto;
+	private List<EnvelopeSLIP> envelopes;
+	private List<EtiquetaSLIP> etiquetas;
 
-    public GerarSlipPage() {
-	this.instrumento = new InstrumentoProtesto();
-	this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
-	this.envelopes = null;
-	this.etiquetas = null;
+	public GerarSlipPage() {
+		this.instrumento = new InstrumentoProtesto();
+		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
+		this.envelopes = null;
+		this.etiquetas = null;
 
-	carregar();
-    }
+		carregar();
+	}
 
-    public GerarSlipPage(String message) {
-	this.instrumento = new InstrumentoProtesto();
-	this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
-	this.envelopes = null;
-	this.etiquetas = null;
+	public GerarSlipPage(String message) {
+		this.instrumento = new InstrumentoProtesto();
+		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
+		this.envelopes = null;
+		this.etiquetas = null;
 
-	info(message);
-	carregar();
-    }
+		info(message);
+		carregar();
+	}
 
-    private void carregar() {
-	add(carregarListaSlips());
-	add(botaoGerarEtiquetas());
-	add(botaoGerarEnvelopes());
-	add(botaoGerarListagem());
-	add(botaoConfirmarGeracaoSlips());
-    }
+	private void carregar() {
+		add(carregarListaSlips());
+		add(botaoGerarEtiquetas());
+		add(botaoGerarEnvelopes());
+		add(botaoGerarListagem());
+		add(botaoConfirmarGeracaoSlips());
+	}
 
-    private ListView<InstrumentoProtesto> carregarListaSlips() {
-	return new ListView<InstrumentoProtesto>("instrumentos", getInstrumentosProtesto()) {
+	private ListView<InstrumentoProtesto> carregarListaSlips() {
+		return new ListView<InstrumentoProtesto>("instrumentos", getInstrumentosProtesto()) {
 
-	    /***/
-	    private static final long serialVersionUID = 1L;
+			/***/
+			private static final long serialVersionUID = 1L;
 
-	    @Override
-	    protected void populateItem(ListItem<InstrumentoProtesto> item) {
-		final InstrumentoProtesto instrumentoProtesto = item.getModelObject();
-		final Retorno retorno = instrumentoProtesto.getTituloRetorno();
+			@Override
+			protected void populateItem(ListItem<InstrumentoProtesto> item) {
+				final InstrumentoProtesto instrumentoProtesto = item.getModelObject();
+				final Retorno retorno = instrumentoProtesto.getTituloRetorno();
 
-		item.add(new Label("numeroTitulo", retorno.getTitulo().getNumeroTitulo()));
-		item.add(new Label("protocolo", retorno.getNumeroProtocoloCartorio()));
-		item.add(new Label("pracaProtesto", retorno.getTitulo().getPracaProtesto()));
-		Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
+				item.add(new Label("numeroTitulo", retorno.getTitulo().getNumeroTitulo()));
+				item.add(new Label("protocolo", retorno.getNumeroProtocoloCartorio()));
+				item.add(new Label("pracaProtesto", retorno.getTitulo().getPracaProtesto()));
+				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 
-		    /***/
-		    private static final long serialVersionUID = 1L;
+					/***/
+					private static final long serialVersionUID = 1L;
 
-		    public void onClick() {
-			TituloRemessa tituloRemessa = tituloMediator.carregarTituloRemessaPorId(retorno.getTitulo());
-			setResponsePage(new HistoricoPage(tituloRemessa));
-		    }
+					public void onClick() {
+						TituloRemessa tituloRemessa = tituloMediator.carregarTituloRemessaPorId(retorno.getTitulo());
+						setResponsePage(new HistoricoPage(tituloRemessa));
+					}
+				};
+				linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));
+				item.add(linkHistorico);
+				item.add(new Label("portador", instituicaoMediator.buscarBancoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
+				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
+				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
+			}
 		};
-		linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));
-		item.add(linkHistorico);
-		item.add(new Label("portador", instituicaoMediator.buscarBancoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
-		item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
-		item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
-	    }
-	};
-    }
-
-    private Link<InstrumentoProtesto> botaoGerarEtiquetas() {
-	return new Link<InstrumentoProtesto>("botaoSlip") {
-
-	    /***/
-	    private static final long serialVersionUID = 1L;
-
-	    @Override
-	    public void onClick() {
-		SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
-
-		try {
-		    InstrumentoProtestoMediator instrumento = instrumentoMediator.processarInstrumentos(getInstrumentosProtesto(), getRetornos());
-
-		    if (instrumento.getEtiquetas().isEmpty()) {
-			throw new InfraException("Não foi possível gerar SLIPs. Não há entrada de títulos processados !");
-		    }
-
-		    getEnvelopes().addAll(instrumento.getEnvelopes());
-		    getEtiquetas().addAll(instrumento.getEtiquetas());
-
-		    HashMap<String, Object> parametros = new HashMap<String, Object>();
-		    JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(instrumento.getEtiquetas());
-		    JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEtiqueta.jrxml"));
-		    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
-
-		    File pdf = File.createTempFile("report", ".pdf");
-		    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-		    IResourceStream resourceStream = new FileResourceStream(pdf);
-		    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_SLIP_"
-			    + dataPadrao.format(new Date()).toString() + ".pdf"));
-
-		} catch (InfraException ex) {
-		    logger.error(ex.getMessage(), ex);
-		    error(ex.getMessage());
-		} catch (Exception ex) {
-		    ex.printStackTrace();
-		    error("Não foi possível gerar as etiquetas ! Entre em contato com a CRA !");
-		    logger.error(ex.getMessage(), ex);
-		}
-	    }
-	};
-    }
-
-    private Link<InstrumentoProtesto> botaoGerarEnvelopes() {
-	return new Link<InstrumentoProtesto>("botaoEnvelope") {
-
-	    /***/
-	    private static final long serialVersionUID = 1L;
-
-	    @Override
-	    public void onClick() {
-		SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
-
-		try {
-		    if (getEnvelopes().isEmpty()) {
-			throw new InfraException("Não foi possível gerar os envelopes. Não foram processados instrumentos !");
-		    }
-
-		    HashMap<String, Object> parametros = new HashMap<String, Object>();
-		    JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getEnvelopes());
-		    JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEnvelope.jrxml"));
-		    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
-
-		    File pdf = File.createTempFile("report", ".pdf");
-		    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-		    IResourceStream resourceStream = new FileResourceStream(pdf);
-		    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_ENVELOPES_"
-			    + dataPadrao.format(new Date()).toString() + ".pdf"));
-
-		} catch (InfraException ex) {
-		    logger.error(ex.getMessage(), ex);
-		    error(ex.getMessage());
-		} catch (Exception ex) {
-		    error("Não foi possível gerar os envelopes ! Entre em contato com a CRA !");
-		    logger.error(ex.getMessage(), ex);
-		}
-	    }
-	};
-    }
-
-    private Link<InstrumentoProtesto> botaoGerarListagem() {
-	return new Link<InstrumentoProtesto>("botaoListagem") {
-
-	    /***/
-	    private static final long serialVersionUID = 1L;
-
-	    @Override
-	    public void onClick() {
-		HashMap<String, Object> parametros = new HashMap<String, Object>();
-		SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
-		Connection connection = null;
-		JasperPrint jasperPrint = null;
-
-		try {
-		    Class.forName("org.postgresql.Driver");
-		    connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
-
-		    parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
-		    parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH
-			    + "ieptb.gif")));
-		    parametros.put("DATA_GERACAO", new LocalDate().toDate());
-
-		    String urlJasper = "../../relatorio/ListagemInstrumentosBancos.jrxml";
-		    JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(urlJasper));
-		    jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, connection);
-
-		    File pdf = File.createTempFile("report", ".pdf");
-		    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-		    IResourceStream resourceStream = new FileResourceStream(pdf);
-		    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_LISTAGEM_"
-			    + dataPadrao.format(new Date()).toString() + ".pdf"));
-
-		} catch (InfraException ex) {
-		    logger.error(ex.getMessage(), ex);
-		    error(ex.getMessage());
-		} catch (Exception ex) {
-		    error("Não foi possível gerar a listagem ! Entre em contato com a CRA !");
-		    logger.error(ex.getMessage(), ex);
-		}
-	    }
-	};
-    }
-
-    private Link<InstrumentoProtesto> botaoConfirmarGeracaoSlips() {
-	return new Link<InstrumentoProtesto>("botaoConfirmar") {
-
-	    /***/
-	    private static final long serialVersionUID = 1L;
-
-	    @Override
-	    public void onClick() {
-
-		try {
-		    instrumentoMediator.alterarInstrumentosParaGerado(getInstrumentosProtesto());
-
-		    setResponsePage(new GerarSlipPage("As SLIPS e os envelopes foram processados com sucesso !"));
-		} catch (InfraException ex) {
-		    logger.error(ex.getMessage(), ex);
-		    error(ex.getMessage());
-		} catch (Exception ex) {
-		    error("Não foi possível gerar a listagem ! Entre em contato com a CRA !");
-		    logger.error(ex.getMessage(), ex);
-		}
-	    }
-	};
-    }
-
-    public List<InstrumentoProtesto> getInstrumentosProtesto() {
-	if (instrumentosProtesto == null) {
-	    instrumentosProtesto = new ArrayList<InstrumentoProtesto>();
 	}
-	return instrumentosProtesto;
-    }
 
-    public List<EnvelopeSLIP> getEnvelopes() {
-	if (envelopes == null) {
-	    envelopes = new ArrayList<EnvelopeSLIP>();
+	private Link<InstrumentoProtesto> botaoGerarEtiquetas() {
+		return new Link<InstrumentoProtesto>("botaoSlip") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
+
+				try {
+					InstrumentoProtestoMediator instrumento = instrumentoMediator.processarInstrumentos(getInstrumentosProtesto(), getRetornos());
+
+					if (instrumento.getEtiquetas().isEmpty()) {
+						throw new InfraException("Não foi possível gerar SLIPs. Não há entrada de títulos processados !");
+					}
+
+					getEnvelopes().addAll(instrumento.getEnvelopes());
+					getEtiquetas().addAll(instrumento.getEtiquetas());
+
+					HashMap<String, Object> parametros = new HashMap<String, Object>();
+					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(instrumento.getEtiquetas());
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEtiqueta.jrxml"));
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_SLIP_"
+							+ dataPadrao.format(new Date()).toString() + ".pdf"));
+
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage(), ex);
+					error(ex.getMessage());
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					error("Não foi possível gerar as etiquetas ! Entre em contato com a CRA !");
+					logger.error(ex.getMessage(), ex);
+				}
+			}
+		};
 	}
-	return envelopes;
-    }
 
-    public List<EtiquetaSLIP> getEtiquetas() {
-	if (etiquetas == null) {
-	    etiquetas = new ArrayList<EtiquetaSLIP>();
+	private Link<InstrumentoProtesto> botaoGerarEnvelopes() {
+		return new Link<InstrumentoProtesto>("botaoEnvelope") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
+
+				try {
+					if (getEnvelopes().isEmpty()) {
+						throw new InfraException("Não foi possível gerar os envelopes. Não foram processados instrumentos !");
+					}
+
+					HashMap<String, Object> parametros = new HashMap<String, Object>();
+					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getEnvelopes());
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEnvelope.jrxml"));
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_ENVELOPES_"
+							+ dataPadrao.format(new Date()).toString() + ".pdf"));
+
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage(), ex);
+					error(ex.getMessage());
+				} catch (Exception ex) {
+					error("Não foi possível gerar os envelopes ! Entre em contato com a CRA !");
+					logger.error(ex.getMessage(), ex);
+				}
+			}
+		};
 	}
-	return etiquetas;
-    }
 
-    public List<Retorno> getRetornos() {
-	if (retornos == null) {
-	    retornos = new ArrayList<Retorno>();
+	private Link<InstrumentoProtesto> botaoGerarListagem() {
+		return new Link<InstrumentoProtesto>("botaoListagem") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				HashMap<String, Object> parametros = new HashMap<String, Object>();
+				SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
+				Connection connection = null;
+				JasperPrint jasperPrint = null;
+
+				try {
+					Class.forName("org.postgresql.Driver");
+					connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
+
+					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
+					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
+					parametros.put("DATA_GERACAO", new LocalDate().toDate());
+
+					String urlJasper = "../../relatorio/ListagemInstrumentosBancos.jrxml";
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(urlJasper));
+					jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, connection);
+
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_LISTAGEM_"
+							+ dataPadrao.format(new Date()).toString() + ".pdf"));
+
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage(), ex);
+					error(ex.getMessage());
+				} catch (Exception ex) {
+					error("Não foi possível gerar a listagem ! Entre em contato com a CRA !");
+					logger.error(ex.getMessage(), ex);
+				}
+			}
+		};
 	}
-	return retornos;
-    }
 
-    @Override
-    protected IModel<InstrumentoProtesto> getModel() {
-	return new CompoundPropertyModel<InstrumentoProtesto>(instrumento);
-    }
+	private Link<InstrumentoProtesto> botaoConfirmarGeracaoSlips() {
+		return new Link<InstrumentoProtesto>("botaoConfirmar") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+
+				try {
+					instrumentoMediator.alterarInstrumentosParaGerado(getInstrumentosProtesto());
+
+					setResponsePage(new GerarSlipPage("As SLIPS e os envelopes foram processados com sucesso !"));
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage(), ex);
+					error(ex.getMessage());
+				} catch (Exception ex) {
+					error("Não foi possível gerar a listagem ! Entre em contato com a CRA !");
+					logger.error(ex.getMessage(), ex);
+				}
+			}
+		};
+	}
+
+	public List<InstrumentoProtesto> getInstrumentosProtesto() {
+		if (instrumentosProtesto == null) {
+			instrumentosProtesto = new ArrayList<InstrumentoProtesto>();
+		}
+		return instrumentosProtesto;
+	}
+
+	public List<EnvelopeSLIP> getEnvelopes() {
+		if (envelopes == null) {
+			envelopes = new ArrayList<EnvelopeSLIP>();
+		}
+		return envelopes;
+	}
+
+	public List<EtiquetaSLIP> getEtiquetas() {
+		if (etiquetas == null) {
+			etiquetas = new ArrayList<EtiquetaSLIP>();
+		}
+		return etiquetas;
+	}
+
+	public List<Retorno> getRetornos() {
+		if (retornos == null) {
+			retornos = new ArrayList<Retorno>();
+		}
+		return retornos;
+	}
+
+	@Override
+	protected IModel<InstrumentoProtesto> getModel() {
+		return new CompoundPropertyModel<InstrumentoProtesto>(instrumento);
+	}
 }

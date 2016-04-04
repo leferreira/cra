@@ -126,7 +126,6 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 		List<Instituicao> cartorios = centralNacionalProtestoMediator.consultarProtestosWs(documentoDevedor);
 
 		StringBuffer xml = new StringBuffer();
-		xml.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\" ?>");
 		if (!cartorios.isEmpty()) {
 			xml.append("<protesto>");
 			for (Instituicao instituicao : cartorios) {
@@ -138,8 +137,9 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			}
 			xml.append("</protesto>");
 		} else {
+			String mensagem = "N√O CONSTAM PROTESTOS, POR FALTA DE PAGAMENTO, PARA ESTE CPF/CNPJ NOS TABELIONATOS DO ESTADO DO TOCANTINS!";
 			xml.append("<protesto>");
-			xml.append("<mensagem>N√ÉO CONSTAM PROTESTOS, POR FALTA DE PAGAMENTO, PARA ESTE CPF/CNPJ NOS TABELIONATOS DO ESTADO DO TOCANTINS!</mensagem>");
+			xml.append("	<mensagem>" + mensagem + "</mensagem>");
 			xml.append("</protesto>");
 		}
 		return XmlFormatterUtil.format(xml.toString());
