@@ -43,122 +43,121 @@ import net.sf.jasperreports.engine.JasperReport;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class RelatorioRetornoPage extends BasePage<Retorno> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
-    private Arquivo arquivo;
-    private Retorno retorno;
+	/***/
+	private static final long serialVersionUID = 1L;
+	private Arquivo arquivo;
+	private Retorno retorno;
 
-    public RelatorioRetornoPage(String message, String pageName) {
-	this.retorno = new Retorno();
+	public RelatorioRetornoPage(String message, String pageName) {
+		this.retorno = new Retorno();
 
-	info(message);
-	carregarComponentes(pageName);
-    }
-
-    public RelatorioRetornoPage(String message, Arquivo arquivo, String pageName) {
-	this.retorno = new Retorno();
-	this.arquivo = arquivo;
-
-	info(message);
-	carregarComponentes(pageName);
-    }
-
-    private void carregarComponentes(String pageName) {
-	add(new Label("pageName", pageName));
-	add(linkRelatorioRetornoLiberado());
-	add(linkDownloadRelatorioRetornoCartorio());
-    }
-
-    private Link<Retorno> linkRelatorioRetornoLiberado() {
-	Link<Retorno> linkRelatorioRetornoLiberado = new Link<Retorno>("relatorioRetornoLiberado") {
-
-	    /***/
-	    private static final long serialVersionUID = 1L;
-
-	    @Override
-	    public void onClick() {
-		Connection connection = null;
-		JasperPrint jasperPrint = null;
-		HashMap<String, Object> parametros = new HashMap<String, Object>();
-
-		try {
-		    Class.forName("org.postgresql.Driver");
-		    connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
-
-		    parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
-		    parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH
-			    + "ieptb.gif")));
-		    parametros.put("DATA_GERACAO", new LocalDate().toDate());
-
-		    String urlJasper = "../../relatorio/RelatorioRetornoLiberado.jrxml";
-		    JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(urlJasper));
-		    jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, connection);
-
-		    File pdf = File.createTempFile("report", ".pdf");
-		    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-		    IResourceStream resourceStream = new FileResourceStream(pdf);
-		    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_RETORNO_GERADO_"
-			    + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
-
-		} catch (InfraException ex) {
-		    ex.printStackTrace();
-		    error(ex.getMessage());
-		} catch (Exception e) {
-		    error("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
-		    e.printStackTrace();
-		}
-	    }
-	};
-	linkRelatorioRetornoLiberado.setOutputMarkupId(true);
-	if (getArquivo() != null) {
-	    linkRelatorioRetornoLiberado.setVisible(false);
+		info(message);
+		carregarComponentes(pageName);
 	}
-	return linkRelatorioRetornoLiberado;
-    }
 
-    private Link<Arquivo> linkDownloadRelatorioRetornoCartorio() {
-	Link<Arquivo> linkDownloadRelatorioRetornoCartorio = new Link<Arquivo>("relatorioRetornoCartorio") {
+	public RelatorioRetornoPage(String message, Arquivo arquivo, String pageName) {
+		this.retorno = new Retorno();
+		this.arquivo = arquivo;
 
-	    /***/
-	    private static final long serialVersionUID = 1L;
-
-	    @Override
-	    public void onClick() {
-		Remessa retorno = null;
-		for (Remessa r : getArquivo().getRemessas()) {
-		    retorno = r;
-		}
-
-		try {
-		    JasperPrint jasperPrint = new RelatorioUtil().relatorioArquivoCartorio(retorno);
-		    File pdf = File.createTempFile("report", ".pdf");
-		    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-		    IResourceStream resourceStream = new FileResourceStream(pdf);
-		    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
-			    + getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
-
-		} catch (InfraException ex) {
-		    error(ex.getMessage());
-		    ex.printStackTrace();
-		} catch (Exception e) {
-		    error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
-		    e.printStackTrace();
-		}
-	    }
-	};
-	linkDownloadRelatorioRetornoCartorio.setOutputMarkupId(true);
-	if (getArquivo() == null) {
-	    linkDownloadRelatorioRetornoCartorio.setVisible(false);
+		info(message);
+		carregarComponentes(pageName);
 	}
-	return linkDownloadRelatorioRetornoCartorio;
-    }
 
-    public Arquivo getArquivo() {
-	return arquivo;
-    }
+	private void carregarComponentes(String pageName) {
+		add(new Label("pageName", pageName));
+		add(linkRelatorioRetornoLiberado());
+		add(linkDownloadRelatorioRetornoCartorio());
+	}
 
-    @Override
-    protected IModel<Retorno> getModel() {
-	return new CompoundPropertyModel<Retorno>(retorno);
-    }
+	private Link<Retorno> linkRelatorioRetornoLiberado() {
+		Link<Retorno> linkRelatorioRetornoLiberado = new Link<Retorno>("relatorioRetornoLiberado") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				Connection connection = null;
+				JasperPrint jasperPrint = null;
+				HashMap<String, Object> parametros = new HashMap<String, Object>();
+
+				try {
+					Class.forName("org.postgresql.Driver");
+					connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
+
+					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
+					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
+					parametros.put("DATA_GERACAO", new LocalDate().toDate());
+
+					String urlJasper = "../../relatorio/RelatorioRetornoLiberado.jrxml";
+					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(urlJasper));
+					jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, connection);
+
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_RETORNO_GERADO_"
+							+ DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
+
+				} catch (InfraException ex) {
+					ex.printStackTrace();
+					error(ex.getMessage());
+				} catch (Exception e) {
+					error("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
+					e.printStackTrace();
+				}
+			}
+		};
+		linkRelatorioRetornoLiberado.setOutputMarkupId(true);
+		if (getArquivo() != null) {
+			linkRelatorioRetornoLiberado.setVisible(false);
+		}
+		return linkRelatorioRetornoLiberado;
+	}
+
+	private Link<Arquivo> linkDownloadRelatorioRetornoCartorio() {
+		Link<Arquivo> linkDownloadRelatorioRetornoCartorio = new Link<Arquivo>("relatorioRetornoCartorio") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				Remessa retorno = null;
+				for (Remessa r : getArquivo().getRemessas()) {
+					retorno = r;
+				}
+
+				try {
+					JasperPrint jasperPrint = new RelatorioUtil().relatorioArquivoCartorio(retorno);
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
+							+ getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+					ex.printStackTrace();
+				} catch (Exception e) {
+					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+					e.printStackTrace();
+				}
+			}
+		};
+		linkDownloadRelatorioRetornoCartorio.setOutputMarkupId(true);
+		if (getArquivo() == null) {
+			linkDownloadRelatorioRetornoCartorio.setVisible(false);
+		}
+		return linkDownloadRelatorioRetornoCartorio;
+	}
+
+	public Arquivo getArquivo() {
+		return arquivo;
+	}
+
+	@Override
+	protected IModel<Retorno> getModel() {
+		return new CompoundPropertyModel<Retorno>(retorno);
+	}
 }

@@ -44,135 +44,135 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class BatimentoPage extends BasePage<Remessa> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(BatimentoPage.class);
+	/***/
+	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(BatimentoPage.class);
 
-    @SpringBean
-    private BatimentoMediator batimentoMediator;
-    @SpringBean
-    private RetornoMediator retornoMediator;
-    private Remessa batimento;
-    private List<Deposito> depositos;
-    private ListView<Remessa> remessas;
+	@SpringBean
+	private BatimentoMediator batimentoMediator;
+	@SpringBean
+	private RetornoMediator retornoMediator;
+	private Remessa batimento;
+	private List<Deposito> depositos;
+	private ListView<Remessa> remessas;
 
-    public BatimentoPage() {
-	this.batimento = new Remessa();
-	this.depositos = batimentoMediator.buscarDepositosExtrato();
+	public BatimentoPage() {
+		this.batimento = new Remessa();
+		this.depositos = batimentoMediator.buscarDepositosExtrato();
 
-	carregarBatimentoPage();
-    }
+		carregarBatimentoPage();
+	}
 
-    private void carregarBatimentoPage() {
-	final CheckGroup<Remessa> grupo = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
-	Form<Remessa> form = new Form<Remessa>("form") {
+	private void carregarBatimentoPage() {
+		final CheckGroup<Remessa> grupo = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
+		Form<Remessa> form = new Form<Remessa>("form") {
 
-	    /***/
-	    private static final long serialVersionUID = 1L;
+			/***/
+			private static final long serialVersionUID = 1L;
 
-	    @Override
-	    protected void onSubmit() {
-		List<Remessa> arquivosRetornoSelecionados = (List<Remessa>) grupo.getModelObject();
+			@Override
+			protected void onSubmit() {
+				List<Remessa> arquivosRetornoSelecionados = (List<Remessa>) grupo.getModelObject();
 
-		try {
-		    if (arquivosRetornoSelecionados.isEmpty() || arquivosRetornoSelecionados.size() == 0) {
-			throw new InfraException("Ao menos um retorno deve ser selecionado!");
-		    }
-		    for (Remessa retorno : arquivosRetornoSelecionados) {
-			if (retorno.getListaDepositos().isEmpty()) {
-			    if (!retorno.getInstituicaoDestino().getTipoBatimento().equals(TipoBatimento.LIBERACAO_SEM_IDENTIFICAÇÃO_DE_DEPOSITO)) {
-				throw new InfraException("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do "
-					+ retorno.getInstituicaoOrigem().getNomeFantasia()
-					+ " foi selecionado e não existe depósito vículado! Por favor, selecione novamente o depósito...");
-			    }
+				try {
+					if (arquivosRetornoSelecionados.isEmpty() || arquivosRetornoSelecionados.size() == 0) {
+						throw new InfraException("Ao menos um retorno deve ser selecionado!");
+					}
+					for (Remessa retorno : arquivosRetornoSelecionados) {
+						if (retorno.getListaDepositos().isEmpty()) {
+							if (!retorno.getInstituicaoDestino().getTipoBatimento().equals(TipoBatimento.LIBERACAO_SEM_IDENTIFICAÇÃO_DE_DEPOSITO)) {
+								throw new InfraException("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do "
+										+ retorno.getInstituicaoOrigem().getNomeFantasia()
+										+ " foi selecionado e não existe depósito vículado! Por favor, selecione novamente o depósito...");
+							}
+						}
+					}
+					retornoMediator.salvarBatimentos(arquivosRetornoSelecionados);
+					setResponsePage(new MensagemPage<Batimento>(BatimentoPage.class, "BATIMENTO", "Batimento dos arquivos de retorno salvo com sucesso!"));
+
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					error(ex.getMessage());
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					error("Não foi possível realizar o batimento! Entre em contato com a CRA.");
+				}
 			}
-		    }
-		    retornoMediator.salvarBatimentos(arquivosRetornoSelecionados);
-		    setResponsePage(new MensagemPage<Batimento>(BatimentoPage.class, "BATIMENTO", "Batimento dos arquivos de retorno salvo com sucesso!"));
-
-		} catch (InfraException ex) {
-		    logger.error(ex.getMessage());
-		    error(ex.getMessage());
-		} catch (Exception e) {
-		    logger.error(e.getMessage(), e);
-		    error("Não foi possível realizar o batimento! Entre em contato com a CRA.");
-		}
-	    }
-	};
-
-	form.add(grupo);
-	form.add(carregarArquivosRetorno());
-	form.add(carregarExtrato());
-
-	remessas.setReuseItems(true);
-	grupo.add(remessas);
-	add(form);
-    }
-
-    private ListView<Remessa> carregarArquivosRetorno() {
-	return remessas = new ListView<Remessa>("retornos", retornoMediator.buscarRetornosParaBatimento()) {
-
-	    /***/
-	    private static final long serialVersionUID = 1L;
-
-	    @Override
-	    protected void populateItem(ListItem<Remessa> item) {
-		final Remessa retorno = item.getModelObject();
-		item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
-		item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
-		Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
-
-		    /***/
-		    private static final long serialVersionUID = 1L;
-
-		    @Override
-		    public void onClick() {
-			setResponsePage(new TitulosArquivoPage(retorno));
-		    }
 		};
-		linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
-		item.add(linkArquivo);
-		BigDecimal valorPagos = retornoMediator.buscarValorDeTitulosPagos(retorno);
-		if (valorPagos == null || valorPagos.equals(BigDecimal.ZERO)) {
-		    item.add(new LabelValorMonetario<BigDecimal>("valorPagos", BigDecimal.ZERO));
-		} else {
-		    item.add(new LabelValorMonetario<BigDecimal>("valorPagos", valorPagos));
-		}
-		ArrayList<Deposito> depositos = new ArrayList<Deposito>();
-		retorno.setListaDepositos(depositos);
-		item.add(new Check<Remessa>("checkbox", item.getModel()));
-		item.add(new ListMultipleChoice<Deposito>("depositos", new Model<ArrayList<Deposito>>(depositos), getDepositos()));
-	    }
-	};
-    }
 
-    private ListView<Deposito> carregarExtrato() {
-	return new ListView<Deposito>("extrato", getDepositos()) {
+		form.add(grupo);
+		form.add(carregarArquivosRetorno());
+		form.add(carregarExtrato());
 
-	    /***/
-	    private static final long serialVersionUID = 1L;
+		remessas.setReuseItems(true);
+		grupo.add(remessas);
+		add(form);
+	}
 
-	    @Override
-	    protected void populateItem(ListItem<Deposito> item) {
-		final Deposito deposito = item.getModelObject();
-		item.add(new Label("data", DataUtil.localDateToString(deposito.getData())));
-		item.add(new Label("lancamento", deposito.getLancamento().toUpperCase()));
-		item.add(new Label("valor", "R$ " + deposito.getValorCredito()));
-		if (StringUtils.isBlank(deposito.getDescricao())) {
-		    item.add(new Label("tooltip", "").setVisible(false));
-		} else {
-		    item.add(new Label("tooltip", deposito.getDescricao()));
-		}
-	    }
-	};
-    }
+	private ListView<Remessa> carregarArquivosRetorno() {
+		return remessas = new ListView<Remessa>("retornos", retornoMediator.buscarRetornosParaBatimento()) {
 
-    public List<Deposito> getDepositos() {
-	return depositos;
-    }
+			/***/
+			private static final long serialVersionUID = 1L;
 
-    @Override
-    protected IModel<Remessa> getModel() {
-	return new CompoundPropertyModel<Remessa>(batimento);
-    }
+			@Override
+			protected void populateItem(ListItem<Remessa> item) {
+				final Remessa retorno = item.getModelObject();
+				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
+				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
+				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						setResponsePage(new TitulosArquivoPage(retorno));
+					}
+				};
+				linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
+				item.add(linkArquivo);
+				BigDecimal valorPagos = retornoMediator.buscarValorDeTitulosPagos(retorno);
+				if (valorPagos == null || valorPagos.equals(BigDecimal.ZERO)) {
+					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", BigDecimal.ZERO));
+				} else {
+					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", valorPagos));
+				}
+				ArrayList<Deposito> depositos = new ArrayList<Deposito>();
+				retorno.setListaDepositos(depositos);
+				item.add(new Check<Remessa>("checkbox", item.getModel()));
+				item.add(new ListMultipleChoice<Deposito>("depositos", new Model<ArrayList<Deposito>>(depositos), getDepositos()));
+			}
+		};
+	}
+
+	private ListView<Deposito> carregarExtrato() {
+		return new ListView<Deposito>("extrato", getDepositos()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<Deposito> item) {
+				final Deposito deposito = item.getModelObject();
+				item.add(new Label("data", DataUtil.localDateToString(deposito.getData())));
+				item.add(new Label("lancamento", deposito.getLancamento().toUpperCase()));
+				item.add(new Label("valor", "R$ " + deposito.getValorCredito()));
+				if (StringUtils.isBlank(deposito.getDescricao())) {
+					item.add(new Label("tooltip", "").setVisible(false));
+				} else {
+					item.add(new Label("tooltip", deposito.getDescricao()));
+				}
+			}
+		};
+	}
+
+	public List<Deposito> getDepositos() {
+		return depositos;
+	}
+
+	@Override
+	protected IModel<Remessa> getModel() {
+		return new CompoundPropertyModel<Remessa>(batimento);
+	}
 }
