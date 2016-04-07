@@ -28,74 +28,78 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaUsuarioPage extends BasePage<Usuario> {
 
-    private Usuario usuario;
+	private Usuario usuario;
 
-    @SpringBean
-    UsuarioMediator usuarioMediator;
+	@SpringBean
+	UsuarioMediator usuarioMediator;
 
-    public ListaUsuarioPage() {
-	super();
-	carregarPage();
-    }
+	public ListaUsuarioPage() {
+		this.usuario = new Usuario();
+		adicionarComponentes();
+	}
 
-    public ListaUsuarioPage(String mensagem) {
-	info(mensagem);
-	carregarPage();
-    }
+	public ListaUsuarioPage(String mensagem) {
+		this.usuario = new Usuario();
+		info(mensagem);
+		adicionarComponentes();
+	}
 
-    private void carregarPage() {
-	this.usuario = new Usuario();
-	add(new Link<Usuario>("botaoNovo") {
+	@Override
+	protected void adicionarComponentes() {
+		botaoNovoUsuario();
+		listaUsuario();
+	}
 
-	    public void onClick() {
-		setResponsePage(new IncluirUsuarioPage());
-	    }
-	});
-	add(carregarListaUsuario());
-    }
+	private void botaoNovoUsuario() {
+		add(new Link<Usuario>("botaoNovo") {
 
-    @SuppressWarnings("rawtypes")
-    private ListView<Usuario> carregarListaUsuario() {
-	return new ListView<Usuario>("listViewUsuario", buscarUsuarios()) {
+			public void onClick() {
+				setResponsePage(new IncluirUsuarioPage());
+			}
+		});
+	}
 
-	    @Override
-	    protected void populateItem(ListItem<Usuario> item) {
-		final Usuario usuarioLista = item.getModelObject();
+	private void listaUsuario() {
+		add(new ListView<Usuario>("listViewUsuario", buscarUsuarios()) {
 
-		Link linkAlterar = new Link<Usuario>("linkAlterar") {
+			@Override
+			protected void populateItem(ListItem<Usuario> item) {
+				final Usuario usuarioLista = item.getModelObject();
 
-		    public void onClick() {
-			setResponsePage(new IncluirUsuarioPage(usuarioLista));
-		    }
+				Link<Void> linkAlterar = new Link<Void>("linkAlterar") {
+
+					public void onClick() {
+						setResponsePage(new IncluirUsuarioPage(usuarioLista));
+					}
+				};
+				linkAlterar.add(new Label("nomeUsuario", usuarioLista.getNome()));
+				item.add(linkAlterar);
+
+				item.add(new Label("loginUsuario", usuarioLista.getLogin()));
+				item.add(new Label("emailUsuario", usuarioLista.getEmail()));
+				item.add(new Label("instituicaoUsuario", usuarioLista.getInstituicao().getNomeFantasia()));
+				if (usuarioLista.isStatus()) {
+					item.add(new Label("status", "Sim"));
+				} else {
+					item.add(new Label("status", "Não"));
+				}
+			}
+		});
+	}
+
+	public IModel<List<Usuario>> buscarUsuarios() {
+		return new LoadableDetachableModel<List<Usuario>>() {
+
+			@Override
+			protected List<Usuario> load() {
+				List<Usuario> list = usuarioMediator.listarTodos();
+				return list;
+			}
 		};
-		linkAlterar.add(new Label("nomeUsuario", usuarioLista.getNome()));
-		item.add(linkAlterar);
+	}
 
-		item.add(new Label("loginUsuario", usuarioLista.getLogin()));
-		item.add(new Label("emailUsuario", usuarioLista.getEmail()));
-		item.add(new Label("instituicaoUsuario", usuarioLista.getInstituicao().getNomeFantasia()));
-		if (usuarioLista.isStatus()) {
-		    item.add(new Label("status", "Sim"));
-		} else {
-		    item.add(new Label("status", "Não"));
-		}
-	    }
-	};
-    }
-
-    public IModel<List<Usuario>> buscarUsuarios() {
-	return new LoadableDetachableModel<List<Usuario>>() {
-
-	    @Override
-	    protected List<Usuario> load() {
-		List<Usuario> list = usuarioMediator.listarTodos();
-		return list;
-	    }
-	};
-    }
-
-    @Override
-    protected IModel<Usuario> getModel() {
-	return new CompoundPropertyModel<Usuario>(usuario);
-    }
+	@Override
+	protected IModel<Usuario> getModel() {
+		return new CompoundPropertyModel<Usuario>(usuario);
+	}
 }

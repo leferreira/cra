@@ -2,8 +2,6 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 	<body>
 		<wicket:extend>
-		<div wicket:id="modalContrato" class="modal-content"></div>  
-		<a style="display: none;" wicket:id="showModal">[BOTÃO SHOW MODAL]</a>
 		<h4 class="titulo-top">ACESSO RÁPIDO</h4>
 		<div class="row">
 			<div class="col-lg-3  col-md-6">
@@ -92,42 +90,29 @@
   	            </div>
 		</div> 
 		<div class="row">
-<!-- 			<div class="col-md-4" wicket:id="centralDeAcoes">    -->  
-<!-- 				  <h4 class="titulo-top">CENTRAL DE A&Ccedil;&Otilde;ES   -->
-<!-- 					  <a href="CentralDeAcoes" target="_blank" class="pull-right" style="font-size: 15px; margin: 5px auto; font-weight: bold;">VER MAIS&nbsp;<i class="fa fa-arrow-circle-right"></i></a> -->
-<!-- 				  </h4> -->
-<!--                   <div class="list-group"> -->
-<!--                   	<div wicket:id="acoes"> -->
-<!--                       <a href="#" class="list-group-item"> -->
-<!--                           <h4 class="list-group-item-heading"><span wicket:id="acao"></span><span class="pull-right"><span wicket:id="tipoAcao"></span></span></h4> -->
-<!--                           <p class="list-group-item-text"><span wicket:id="descricao"></span></p> -->
-<!--                       </a> -->
-<!--                   	</div> -->
-<!--                   </div> -->
-<!--               </div> -->
-              <div class="col-md-4" wicket:id="informacoes">  
-				  <h4 class="titulo-top">INFORMA&Ccedil;&Otilde;ES</h4>
-                  <div class="list-group">
-                      <div class="list-group-item">  
-                          <h4 class="list-group-item-heading">OFÍCIO CORREGEDORIA: <br>CANCELAMENTOS E DEVOLUÇÕES<span class="pull-right"><span class="fa fa-info-circle"></span></span></h4>
-                          <p class="list-group-item-text"><a wicket:id="downloadOficio" class="link">Clique para fazer o download...</a></p>
-                      </div> 
-                      <div class="list-group-item">
-                          <h4 class="list-group-item-heading">ACESSE IEPTB-TO<span class="pull-right"><span class="fa fa-desktop"></span></span></h4>
-                          <p class="list-group-item-text">Acesse o site do Instituto de Estudos de Protesto de Títulos do Brasil - Seção Tocantins.
-                          <a href="http://www.ieptbto.com.br/" class="link" target="_blank">Clique aqui...</a>  
-                          </p>   
-                      </div>
-                      <div class="list-group-item">
-                          <h4 class="list-group-item-heading">FALE CONOSCO<span class="pull-right"><span class="fa fa-phone"></span></span></h4>
-                          <p class="list-group-item-text">Fone: (63) 3212-0900</p>
-                      </div>
-                      <div class="list-group-item">  
-                          <h4 class="list-group-item-heading">BEM-VINDO(A) À CRA-TO<span class="pull-right"><span class="fa fa-wechat"></span></span></h4>
-                          <p class="list-group-item-text">Central de Remessa de Arquivos do Tocantins: <a href="SobreCra" target="_blank" class="link">Saiba mais...</a></p>
-                      </div> 
-                  </div>
-              </div>
+             <div class="col-md-4" wicket:id="informacoes">  
+			  <h4 class="titulo-top">INFORMA&Ccedil;&Otilde;ES</h4>
+                 <div class="list-group">
+                     <div class="list-group-item">  
+                         <h4 class="list-group-item-heading">OFÍCIO CORREGEDORIA: <br>CANCELAMENTOS E DEVOLUÇÕES<span class="pull-right"><span class="fa fa-info-circle"></span></span></h4>
+                         <p class="list-group-item-text"><a wicket:id="downloadOficio" class="link">Clique para fazer o download...</a></p>
+                     </div> 
+                     <div class="list-group-item">
+                         <h4 class="list-group-item-heading">ACESSE IEPTB-TO<span class="pull-right"><span class="fa fa-desktop"></span></span></h4>
+                         <p class="list-group-item-text">Acesse o site do Instituto de Estudos de Protesto de Títulos do Brasil - Seção Tocantins.
+                         <a href="http://www.ieptbto.com.br/" class="link" target="_blank">Clique aqui...</a>  
+                         </p>   
+                     </div>
+                     <div class="list-group-item">
+                         <h4 class="list-group-item-heading">FALE CONOSCO<span class="pull-right"><span class="fa fa-phone"></span></span></h4>
+                         <p class="list-group-item-text">Fone: (63) 3212-0900</p>
+                     </div>
+                     <div class="list-group-item">  
+                         <h4 class="list-group-item-heading">BEM-VINDO(A) À CRA-TO<span class="pull-right"><span class="fa fa-wechat"></span></span></h4>
+                         <p class="list-group-item-text">Central de Remessa de Arquivos do Tocantins: <a href="SobreCra" target="_blank" class="link">Saiba mais...</a></p>
+                     </div> 
+                 </div>
+             </div>
              <div class="col-md-8">
 				<h4 class="titulo-top">ARQUIVOS PENDENTES
 					<a href="#" class="pull-right" target="_blank" wicket:id="arquivosPendentes" style="font-size: 15px; margin: 5px auto; font-weight: bold;">VER MAIS&nbsp;<i class="fa fa-arrow-circle-right"></i></a>
@@ -242,13 +227,6 @@
                   </div>
             	</div>
 			</div>
-			<script type="text/javascript">
-			    $(document).ready(function() {
-				    jQuery(function($){
-				    	$('#showModal').click();
-				    });
-			    } );
-   			</script>
 		</wicket:extend>
 	</body>
 </html>

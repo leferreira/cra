@@ -34,98 +34,103 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class GerarConfirmacaoPage extends BasePage<Confirmacao> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(GerarConfirmacaoPage.class);
+	/***/
+	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(GerarConfirmacaoPage.class);
 
-    @SpringBean
-    private ConfirmacaoMediator confirmacaoMediator;
-    private Confirmacao confirmacao;
-    private List<Remessa> confirmacoesPendentes;
+	@SpringBean
+	ConfirmacaoMediator confirmacaoMediator;
 
-    public GerarConfirmacaoPage() {
-	this.confirmacao = new Confirmacao();
-	this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
+	private Confirmacao confirmacao;
+	private List<Remessa> confirmacoesPendentes;
 
-	carregarGuiaConfirmacao();
-    }
+	public GerarConfirmacaoPage() {
+		this.confirmacao = new Confirmacao();
+		this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
+		adicionarComponentes();
+	}
 
-    public GerarConfirmacaoPage(String message) {
-	this.confirmacao = new Confirmacao();
-	this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
+	public GerarConfirmacaoPage(String message) {
+		this.confirmacao = new Confirmacao();
+		this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
+		info(message);
+		adicionarComponentes();
+	}
 
-	info(message);
-	carregarGuiaConfirmacao();
-    }
+	@Override
+	protected void adicionarComponentes() {
+		formGerarConfirmacao();
 
-    private void carregarGuiaConfirmacao() {
-	Form<Confirmacao> formConfirmacao = new Form<Confirmacao>("formConfirmacao") {
+	}
 
-	    /***/
-	    private static final long serialVersionUID = 1L;
+	private void formGerarConfirmacao() {
+		Form<Confirmacao> formConfirmacao = new Form<Confirmacao>("formConfirmacao") {
 
-	    @Override
-	    protected void onSubmit() {
+			/***/
+			private static final long serialVersionUID = 1L;
 
-		try {
-		    if (confirmacaoMediator.verificarArquivoConfirmacaoGeradoCra().equals(true)) {
-			throw new InfraException("Não é possível gerar as confirmações novamente, arquivos já liberados hoje!");
-		    }
-		    if (getConfirmacoesPendentes().isEmpty()) {
-			throw new InfraException("Não há confirmações pendentes para envio.");
-		    }
-		    confirmacaoMediator.gerarConfirmacoes(getUser(), getConfirmacoesPendentes());
-		    setResponsePage(new MensagemPage<Confirmacao>(GerarConfirmacaoPage.class, "GERAR CONFIRMAÇÃO", "Os arquivos de confirmações foram gerados com sucesso !"));
+			@Override
+			protected void onSubmit() {
 
-		} catch (InfraException e) {
-		    logger.error(e.getMessage(), e);
-		    error(e.getMessage());
-		} catch (Exception e) {
-		    logger.error(e.getMessage(), e);
-		    error("Não foi possível gerar a confirmação! Entre em contato com a CRA.");
-		}
-	    }
-	};
-	formConfirmacao.add(carregarListaConfirmacao());
-	formConfirmacao.add(new Button("botaoConfirmacao"));
-	add(formConfirmacao);
-    }
+				try {
+					if (confirmacaoMediator.verificarArquivoConfirmacaoGeradoCra().equals(true)) {
+						throw new InfraException("Não é possível gerar as confirmações novamente, arquivos já liberados hoje!");
+					}
+					if (getConfirmacoesPendentes().isEmpty()) {
+						throw new InfraException("Não há confirmações pendentes para envio.");
+					}
+					confirmacaoMediator.gerarConfirmacoes(getUser(), getConfirmacoesPendentes());
+					setResponsePage(new MensagemPage<Confirmacao>(GerarConfirmacaoPage.class, "GERAR CONFIRMAÇÃO", "Os arquivos de confirmações foram gerados com sucesso !"));
 
-    private ListView<Remessa> carregarListaConfirmacao() {
-	return new ListView<Remessa>("confirmacao", getConfirmacoesPendentes()) {
-
-	    /***/
-	    private static final long serialVersionUID = 1L;
-
-	    @Override
-	    protected void populateItem(ListItem<Remessa> item) {
-		final Remessa retorno = item.getModelObject();
-		item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
-		item.add(new Label("horaEnvio", DataUtil.localTimeToString(retorno.getArquivo().getHoraEnvio())));
-		item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
-		item.add(new Label("instituicaoDestino.nomeFantasia", retorno.getInstituicaoDestino().getNomeFantasia()));
-		item.add(new Label("sequencialCabecalho", retorno.getCabecalho().getNumeroSequencialRemessa()));
-		Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
-
-		    /***/
-		    private static final long serialVersionUID = 1L;
-
-		    public void onClick() {
-			setResponsePage(new TitulosArquivoPage(retorno));
-		    }
+				} catch (InfraException e) {
+					logger.error(e.getMessage(), e);
+					error(e.getMessage());
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					error("Não foi possível gerar a confirmação! Entre em contato com a CRA.");
+				}
+			}
 		};
-		linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
-		item.add(linkArquivo);
-	    }
-	};
-    }
+		formConfirmacao.add(carregarListaConfirmacao());
+		formConfirmacao.add(new Button("botaoConfirmacao"));
+		add(formConfirmacao);
+	}
 
-    public List<Remessa> getConfirmacoesPendentes() {
-	return confirmacoesPendentes;
-    }
+	private ListView<Remessa> carregarListaConfirmacao() {
+		return new ListView<Remessa>("confirmacao", getConfirmacoesPendentes()) {
 
-    @Override
-    protected IModel<Confirmacao> getModel() {
-	return new CompoundPropertyModel<Confirmacao>(confirmacao);
-    }
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<Remessa> item) {
+				final Remessa retorno = item.getModelObject();
+				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
+				item.add(new Label("horaEnvio", DataUtil.localTimeToString(retorno.getArquivo().getHoraEnvio())));
+				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
+				item.add(new Label("instituicaoDestino.nomeFantasia", retorno.getInstituicaoDestino().getNomeFantasia()));
+				item.add(new Label("sequencialCabecalho", retorno.getCabecalho().getNumeroSequencialRemessa()));
+				Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+						setResponsePage(new TitulosArquivoPage(retorno));
+					}
+				};
+				linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
+				item.add(linkArquivo);
+			}
+		};
+	}
+
+	public List<Remessa> getConfirmacoesPendentes() {
+		return confirmacoesPendentes;
+	}
+
+	@Override
+	protected IModel<Confirmacao> getModel() {
+		return new CompoundPropertyModel<Confirmacao>(confirmacao);
+	}
 }

@@ -31,23 +31,29 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
+
 	private Municipio municipio;
 
 	public ListaMunicipioPage() {
-		super();
 		this.municipio = new Municipio();
-		carregarListaMunicipioPage();
+		adicionarComponentes();
 	}
 
 	public ListaMunicipioPage(String mensagem) {
-		super();
 		this.municipio = new Municipio();
 		info(mensagem);
-		carregarListaMunicipioPage();
+		adicionarComponentes();
 	}
 
-	private void carregarListaMunicipioPage() {
+	@Override
+	protected void adicionarComponentes() {
+		botaoNovoMunicipio();
+		listaMunicipio();
+
+	}
+
+	private void botaoNovoMunicipio() {
 		add(new Link<Municipio>("botaoNovo") {
 
 			/***/
@@ -57,11 +63,10 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				setResponsePage(new IncluirMunicipioPage());
 			}
 		});
-		add(carregarListaMunicipio());
 	}
 
-	private ListView<Municipio> carregarListaMunicipio() {
-		ListView<Municipio> listView = new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {
+	private void listaMunicipio() {
+		add(new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -85,8 +90,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				item.add(new Label("inicioCep", municipioLista.getFaixaInicialCep()));
 				item.add(new Label("finalCep", municipioLista.getFaixaFinalCep()));
 			}
-		};
-		return listView;
+		});
 	}
 
 	public IModel<List<Municipio>> buscarMunicipios() {

@@ -22,7 +22,6 @@ import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-
 /**
  * @author Thasso Araújo
  *
@@ -33,20 +32,26 @@ public class ImportarExtratoPage extends BasePage<Batimento> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	
+
 	@SpringBean
 	private BatimentoMediator batimentoMediator;
 	private Batimento batimento;
 	private FileUploadField fileUploadField;
-	
+
 	public ImportarExtratoPage() {
 		this.batimento = new Batimento();
-		carregarFormulario();
+		adicionarComponentes();
 	}
 
-	private void carregarFormulario() {
-		Form<Batimento> form = new Form<Batimento>("form", getModel()){
-			
+	@Override
+	protected void adicionarComponentes() {
+		formularioImportarExtrato();
+
+	}
+
+	private void formularioImportarExtrato() {
+		Form<Batimento> form = new Form<Batimento>("form", getModel()) {
+
 			/***/
 			private static final long serialVersionUID = -2389638754033178010L;
 
@@ -59,7 +64,7 @@ public class ImportarExtratoPage extends BasePage<Batimento> {
 						throw new InfraException("Extensão do arquivo não permitida! Verifique se o arquivo tem extensão .CSV ...");
 					}
 					batimentoMediator.processarExtrato(getUser(), uploadedFile);
-					
+
 					info("Arquivo de Extrato importado com Sucesso !");
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -76,7 +81,7 @@ public class ImportarExtratoPage extends BasePage<Batimento> {
 		form.add(campoArquivo());
 		add(form);
 	}
-	
+
 	private FileUploadField campoArquivo() {
 		fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
 		fileUploadField.setRequired(true);

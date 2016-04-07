@@ -34,40 +34,46 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class DepositoPage extends BasePage<Deposito>{
+public class DepositoPage extends BasePage<Deposito> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
+
 	@SpringBean
-	private BatimentoMediator batimentoMediator;
+	BatimentoMediator batimentoMediator;
+
 	private Deposito deposito;
 	private List<Deposito> depositos;
-	
+
 	public DepositoPage(Deposito deposito, List<Deposito> depositos) {
 		this.deposito = deposito;
 		this.depositos = depositos;
-		
-		carregarFormulario();
+		adicionarComponentes();
 	}
-	
+
 	public DepositoPage(String message, Deposito deposito, List<Deposito> depositos) {
 		this.deposito = deposito;
 		this.depositos = depositos;
-		
+
 		info(message);
+		adicionarComponentes();
+	}
+
+	@Override
+	protected void adicionarComponentes() {
 		carregarFormulario();
 	}
-	
+
 	private void carregarFormulario() {
-		Form<Deposito> form = new Form<Deposito>("form", getModel()){
-			
+		Form<Deposito> form = new Form<Deposito>("form", getModel()) {
+
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
 				Deposito deposito = getModelObject();
-				
+
 				try {
 					batimentoMediator.atualizarInformacoesDeposito(deposito);
 					setResponsePage(new DepositoPage("Informações do depósito foram atualizadas com sucesso!", getDeposito(), getDepositos()));
@@ -92,11 +98,11 @@ public class DepositoPage extends BasePage<Deposito>{
 	}
 
 	private Link<Deposito> botaoVoltar() {
-		return new Link<Deposito>("botaoVoltar"){
+		return new Link<Deposito>("botaoVoltar") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public void onClick() {
 				setResponsePage(new ListaDepositoPage(getDepositos()));
@@ -107,19 +113,18 @@ public class DepositoPage extends BasePage<Deposito>{
 	private RadioChoice<SituacaoDeposito> situacaoDeposito() {
 		IChoiceRenderer<SituacaoDeposito> renderer = new ChoiceRenderer<SituacaoDeposito>("label");
 		List<SituacaoDeposito> list = new ArrayList<SituacaoDeposito>(Arrays.asList(SituacaoDeposito.values()));
-		RadioChoice<SituacaoDeposito> comboSituacao = new RadioChoice<SituacaoDeposito>("situacaoDeposito", 
-				list , renderer);
+		RadioChoice<SituacaoDeposito> comboSituacao = new RadioChoice<SituacaoDeposito>("situacaoDeposito", list, renderer);
 		return comboSituacao;
 	}
 
 	private TextField<BigDecimal> valor() {
-		TextField<BigDecimal> textField = new TextField<BigDecimal>("valorCredito"); 
+		TextField<BigDecimal> textField = new TextField<BigDecimal>("valorCredito");
 		textField.setEnabled(false);
 		return textField;
 	}
 
 	private TextField<String> numeroDocumento() {
-		TextField<String> textField = new TextField<String>("numeroDocumento"); 
+		TextField<String> textField = new TextField<String>("numeroDocumento");
 		textField.setEnabled(false);
 		return textField;
 	}
@@ -132,7 +137,7 @@ public class DepositoPage extends BasePage<Deposito>{
 		TextField<String> textField = new TextField<String>("data", new Model<String>(DataUtil.localDateToString(getDeposito().getData())));
 		return textField;
 	}
-	
+
 	private TextArea<String> descricao() {
 		TextArea<String> text = new TextArea<String>("descricao");
 		return text;
@@ -141,11 +146,11 @@ public class DepositoPage extends BasePage<Deposito>{
 	public Deposito getDeposito() {
 		return deposito;
 	}
-	
+
 	public List<Deposito> getDepositos() {
 		return depositos;
 	}
-	
+
 	@Override
 	protected IModel<Deposito> getModel() {
 		return new CompoundPropertyModel<Deposito>(deposito);

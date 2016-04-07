@@ -40,50 +40,62 @@ import br.com.ieptbto.cra.util.EmailValidator;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger logger = Logger.getLogger(IncluirInstituicaoPage.class);
-	
+
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
 	@SpringBean
-	private TipoInstituicaoMediator tipoMediator;
+	TipoInstituicaoMediator tipoMediator;
+
 	private Instituicao instituicao;
 
 	public IncluirInstituicaoPage() {
-		instituicao = new Instituicao();
-		setForm();
+		this.instituicao = new Instituicao();
+		adicionarComponentes();
 	}
 
 	public IncluirInstituicaoPage(Instituicao instituicao) {
 		this.instituicao = instituicao;
-		setForm();
+		adicionarComponentes();
 	}
 
-	public void setForm() {
-		Form<Instituicao> form = new Form<Instituicao>("form", getModel()){
-			
+	@Override
+	protected void adicionarComponentes() {
+		formularioInstituicao();
+
+	}
+
+	public void formularioInstituicao() {
+		Form<Instituicao> form = new Form<Instituicao>("form", getModel()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit() {
 				Instituicao instituicao = getModelObject();
-				
+
 				try {
 					if (getModelObject().getId() != 0) {
 						instituicaoMediator.alterar(instituicao);
 						setResponsePage(new ListaInstituicaoPage("Os dados da instituição foram salvos com sucesso !"));
-					}else{
+					} else {
 						if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
 							instituicaoMediator.salvar(instituicao);
 							setResponsePage(new ListaInstituicaoPage("Os dados da instituição foram salvos com sucesso !"));
 						} else {
 							error("Instituição não criada, pois já existe!");
 						}
-					}	
+					}
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -113,7 +125,7 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		form.add(new Button("botaoSalvar"));
 		add(form);
 	}
-	
+
 	private DropDownChoice<EnumerationSimNao> campoPermitidoSetores() {
 		IChoiceRenderer<EnumerationSimNao> renderer = new ChoiceRenderer<EnumerationSimNao>("label");
 		DropDownChoice<EnumerationSimNao> dropDown = new DropDownChoice<EnumerationSimNao>("permitidoSetoresConvenio", Arrays.asList(EnumerationSimNao.values()), renderer);
@@ -195,7 +207,7 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
 		return new RadioChoice<String>("status", status);
 	}
-	
+
 	private DropDownChoice<TipoInstituicao> comboTipoInstituicao() {
 		IChoiceRenderer<TipoInstituicao> renderer = new ChoiceRenderer<TipoInstituicao>("tipoInstituicao.label");
 		DropDownChoice<TipoInstituicao> combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao", tipoMediator.listaTipoInstituicao(), renderer);
@@ -204,7 +216,7 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		combo.setRequired(true);
 		return combo;
 	}
-	
+
 	private DropDownChoice<TipoCampo51> comboTipoCampo51() {
 		IChoiceRenderer<TipoCampo51> renderer = new ChoiceRenderer<TipoCampo51>("label");
 		DropDownChoice<TipoCampo51> combo = new DropDownChoice<TipoCampo51>("tipoCampo51", Arrays.asList(TipoCampo51.values()), renderer);
@@ -213,7 +225,7 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		combo.setRequired(true);
 		return combo;
 	}
-	
+
 	private DropDownChoice<TipoBatimento> comboTipoBatimento() {
 		IChoiceRenderer<TipoBatimento> renderer = new ChoiceRenderer<TipoBatimento>("label");
 		DropDownChoice<TipoBatimento> combo = new DropDownChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()), renderer);
@@ -222,7 +234,7 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		combo.setRequired(true);
 		return combo;
 	}
-	
+
 	private DropDownChoice<LayoutPadraoXML> comboPadraoLayoutXML() {
 		IChoiceRenderer<LayoutPadraoXML> renderer = new ChoiceRenderer<LayoutPadraoXML>("label");
 		DropDownChoice<LayoutPadraoXML> combo = new DropDownChoice<LayoutPadraoXML>("layoutPadraoXML", Arrays.asList(LayoutPadraoXML.values()), renderer);
@@ -231,7 +243,7 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 		combo.setRequired(true);
 		return combo;
 	}
-	
+
 	private Component comboMunicipios() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
 		DropDownChoice<Municipio> combo = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);

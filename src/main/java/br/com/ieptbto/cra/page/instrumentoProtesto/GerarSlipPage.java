@@ -63,11 +63,12 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private static final Logger logger = Logger.getLogger(GerarSlipPage.class);
 
 	@SpringBean
-	private InstrumentoProtestoMediator instrumentoMediator;
+	InstrumentoProtestoMediator instrumentoMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private TituloMediator tituloMediator;
+	TituloMediator tituloMediator;
+
 	private InstrumentoProtesto instrumento;
 	private List<Retorno> retornos;
 	private List<InstrumentoProtesto> instrumentosProtesto;
@@ -79,8 +80,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
 		this.envelopes = null;
 		this.etiquetas = null;
-
-		carregar();
+		adicionarComponentes();
 	}
 
 	public GerarSlipPage(String message) {
@@ -88,21 +88,22 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
 		this.envelopes = null;
 		this.etiquetas = null;
-
 		info(message);
-		carregar();
+		adicionarComponentes();
 	}
 
-	private void carregar() {
-		add(carregarListaSlips());
-		add(botaoGerarEtiquetas());
-		add(botaoGerarEnvelopes());
-		add(botaoGerarListagem());
-		add(botaoConfirmarGeracaoSlips());
+	@Override
+	protected void adicionarComponentes() {
+		carregarListaSlips();
+		botaoGerarEtiquetas();
+		botaoGerarEnvelopes();
+		botaoGerarListagem();
+		botaoConfirmarGeracaoSlips();
+
 	}
 
-	private ListView<InstrumentoProtesto> carregarListaSlips() {
-		return new ListView<InstrumentoProtesto>("instrumentos", getInstrumentosProtesto()) {
+	private void carregarListaSlips() {
+		add(new ListView<InstrumentoProtesto>("instrumentos", getInstrumentosProtesto()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -131,11 +132,11 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
 			}
-		};
+		});
 	}
 
-	private Link<InstrumentoProtesto> botaoGerarEtiquetas() {
-		return new Link<InstrumentoProtesto>("botaoSlip") {
+	private void botaoGerarEtiquetas() {
+		add(new Link<InstrumentoProtesto>("botaoSlip") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -150,7 +151,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					if (instrumento.getEtiquetas().isEmpty()) {
 						throw new InfraException("Não foi possível gerar SLIPs. Não há entrada de títulos processados !");
 					}
-
 					getEnvelopes().addAll(instrumento.getEnvelopes());
 					getEtiquetas().addAll(instrumento.getEtiquetas());
 
@@ -174,11 +174,11 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					logger.error(ex.getMessage(), ex);
 				}
 			}
-		};
+		});
 	}
 
-	private Link<InstrumentoProtesto> botaoGerarEnvelopes() {
-		return new Link<InstrumentoProtesto>("botaoEnvelope") {
+	private void botaoGerarEnvelopes() {
+		add(new Link<InstrumentoProtesto>("botaoEnvelope") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -211,11 +211,11 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					logger.error(ex.getMessage(), ex);
 				}
 			}
-		};
+		});
 	}
 
-	private Link<InstrumentoProtesto> botaoGerarListagem() {
-		return new Link<InstrumentoProtesto>("botaoListagem") {
+	private void botaoGerarListagem() {
+		add(new Link<InstrumentoProtesto>("botaoListagem") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -253,11 +253,11 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					logger.error(ex.getMessage(), ex);
 				}
 			}
-		};
+		});
 	}
 
-	private Link<InstrumentoProtesto> botaoConfirmarGeracaoSlips() {
-		return new Link<InstrumentoProtesto>("botaoConfirmar") {
+	private void botaoConfirmarGeracaoSlips() {
+		add(new Link<InstrumentoProtesto>("botaoConfirmar") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -277,7 +277,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					logger.error(ex.getMessage(), ex);
 				}
 			}
-		};
+		});
 	}
 
 	public List<InstrumentoProtesto> getInstrumentosProtesto() {

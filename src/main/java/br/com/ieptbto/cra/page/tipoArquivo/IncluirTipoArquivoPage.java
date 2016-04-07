@@ -23,39 +23,51 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
-public class IncluirTipoArquivoPage extends BasePage<TipoArquivo>{
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
+public class IncluirTipoArquivoPage extends BasePage<TipoArquivo> {
 
 	@SpringBean
 	TipoArquivoMediator tipoArquivoMediator;
-	
+
 	/***/
 	private static final long serialVersionUID = 1L;
 	private TipoArquivo tipoArquivo;
-	
+
 	private TextField<String> fieldHoraInicio;
 	private TextField<String> fieldHorafim;
 
 	public IncluirTipoArquivoPage(TipoArquivo tipoArquivo) {
-		setTipoArquivo(tipoArquivo);
-		Form<?> form = new Form<TipoArquivo>("form"){
+		this.tipoArquivo = tipoArquivo;
+		adicionarComponentes();
+	}
+
+	@Override
+	protected void adicionarComponentes() {
+		formularioTipoArquivo();
+	}
+
+	private void formularioTipoArquivo() {
+		Form<?> form = new Form<TipoArquivo>("form") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onSubmit() {
-				
+
 				try {
-					if (fieldHoraInicio.getDefaultModelObject() !=null)
+					if (fieldHoraInicio.getDefaultModelObject() != null)
 						getTipoArquivo().setHoraEnvioInicio(new LocalTime(fieldHoraInicio.getDefaultModelObject()));
-					if (fieldHorafim.getDefaultModelObject() !=null)
+					if (fieldHorafim.getDefaultModelObject() != null)
 						getTipoArquivo().setHoraEnvioFim(new LocalTime(fieldHorafim.getDefaultModelObject()));
-					
+
 					tipoArquivoMediator.alterarTipoArquivo(getTipoArquivo());
-					setResponsePage(new ListaTipoArquivoPage("O Tipo Arquivo [ "+ getTipoArquivo().getTipoArquivo().getLabel() +" ] foi alterado com sucesso !"));
+					setResponsePage(new ListaTipoArquivoPage("O Tipo Arquivo [ " + getTipoArquivo().getTipoArquivo().getLabel()
+							+ " ] foi alterado com sucesso !"));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
-					error("Não foi possível criar o novo Tipo Arquivo ["+ getTipoArquivo().getTipoArquivo() +"] ! Entre em contato com a CRA !");
+					error("Não foi possível criar o novo Tipo Arquivo [" + getTipoArquivo().getTipoArquivo()
+							+ "] ! Entre em contato com a CRA !");
 				}
 			}
 		};
@@ -64,8 +76,9 @@ public class IncluirTipoArquivoPage extends BasePage<TipoArquivo>{
 		form.add(campoHoraEnvioInicio());
 		form.add(campoHoraEnvioFim());
 		add(form);
+
 	}
-	
+
 	private TextField<String> campoHoraEnvioFim() {
 		DateTimeFormatter outputFormat = new DateTimeFormatterBuilder().appendPattern("HH:mm:ss").toFormatter();
 		if (getTipoArquivo().getHoraEnvioFim() != null) {
@@ -82,18 +95,18 @@ public class IncluirTipoArquivoPage extends BasePage<TipoArquivo>{
 		return fieldHoraInicio = new TextField<String>("dataEnvioInicio", new Model<String>());
 	}
 
-	private TextField<String> campoTipoArquivo(){
+	private TextField<String> campoTipoArquivo() {
 		TextField<String> text = new TextField<String>("tipoArquivo.label", new Model<String>(getTipoArquivo().getTipoArquivo().getLabel()));
 		text.setEnabled(false);
 		return text;
 	}
-	
-	private TextField<String> campoConstante(){
+
+	private TextField<String> campoConstante() {
 		TextField<String> text = new TextField<String>("tipoArquivo.constante", new Model<String>(getTipoArquivo().getTipoArquivo().getConstante()));
 		text.setEnabled(false);
 		return text;
 	}
-	
+
 	@Override
 	protected IModel<TipoArquivo> getModel() {
 		return new CompoundPropertyModel<TipoArquivo>(tipoArquivo);

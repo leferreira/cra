@@ -46,9 +46,10 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	protected static final Logger logger = Logger.getLogger(ListaArquivosPage.class);
 
 	@SpringBean
-	private RemessaMediator remessaMediator;
+	RemessaMediator remessaMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
+
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
 
@@ -56,11 +57,16 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 			ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<StatusRemessa> situacoes) {
 		this.arquivo = arquivo;
 		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio, dataInicio, dataFim, tiposArquivo, getUser(), situacoes);
-		add(carregarListaArquivos());
+		adicionarComponentes();
 	}
 
-	private ListView<Remessa> carregarListaArquivos() {
-		return new ListView<Remessa>("dataTableRemessa", getRemessas()) {
+	@Override
+	protected void adicionarComponentes() {
+		listaArquivos();
+	}
+
+	private void listaArquivos() {
+		add(new ListView<Remessa>("dataTableRemessa", getRemessas()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -184,7 +190,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 					}
 				};
 			}
-		};
+		});
 	}
 
 	public List<Remessa> getRemessas() {

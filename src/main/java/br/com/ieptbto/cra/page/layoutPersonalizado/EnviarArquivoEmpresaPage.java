@@ -32,96 +32,96 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class EnviarArquivoEmpresaPage extends BasePage<Arquivo> {
 
-    private Usuario usuario;
-    private Arquivo arquivo;
-    private FileUploadField fileUploadField;
-    private FormArquivoEmpresa form;
+	private Usuario usuario;
+	private Arquivo arquivo;
+	private FileUploadField fileUploadField;
+	private FormArquivoEmpresa form;
 
-    public EnviarArquivoEmpresaPage() {
-	this.arquivo = new Arquivo();
-	this.usuario = getUser();
-	addComponentes();
-    }
+	public EnviarArquivoEmpresaPage() {
+		this.arquivo = new Arquivo();
+		this.usuario = getUser();
+		adicionarComponentes();
+	}
 
-    private void addComponentes() {
+	@Override
+	protected void adicionarComponentes() {
 
-	form = new FormArquivoEmpresa("form", getModel(), getUsuario()) {
+		form = new FormArquivoEmpresa("form", getModel(), getUsuario()) {
 
-	    @Override
-	    protected void onSubmit() {
-		setFile(fileUploadField);
-		if (getFile().getFileUpload() == null) {
-		    error("Pelo menos um arquivo deve ser informado.");
-		}
+			@Override
+			protected void onSubmit() {
+				setFile(fileUploadField);
+				if (getFile().getFileUpload() == null) {
+					error("Pelo menos um arquivo deve ser informado.");
+				}
 
-		try {
-		    ArquivoFiliadoMediator arquivoRetorno = arquivoFiliadoMediator.salvarArquivo(getFile(), getUsuario());
+				try {
+					ArquivoFiliadoMediator arquivoRetorno = arquivoFiliadoMediator.salvarArquivo(getFile(), getUsuario());
 
-		    for (Exception exception : arquivoRetorno.getErros()) {
-			warn(exception.getMessage());
-		    }
-		    arquivoRetorno.getErros().clear();
+					for (Exception exception : arquivoRetorno.getErros()) {
+						warn(exception.getMessage());
+					}
+					arquivoRetorno.getErros().clear();
 
-		    if (arquivoRetorno.getArquivo() != null) {
-			info("O arquivo " + fileUploadField.getInputName() + " com "
-				+ arquivoRetorno.getArquivo().getRemessas().size()
-				+ " Remessa(s), foi salvo com sucesso.");
-		    }
+					if (arquivoRetorno.getArquivo() != null) {
+						info("O arquivo " + fileUploadField.getInputName() + " com " + arquivoRetorno.getArquivo().getRemessas().size()
+								+ " Remessa(s), foi salvo com sucesso.");
+					}
 
-		} catch (InfraException ex) {
-		    error(ex.getMessage());
-		} catch (Exception ex) {
-		    error("Não foi possível procesar o arquivo enviado. Por favor entre em contato com a CRA.");
-		    logger.error(ex.getMessage());
-		}
-	    }
-	};
-	form.setMultiPart(true);
-	form.setMaxSize(Bytes.megabytes(10));
-	form.add(botaoEnviar());
-	form.add(campoArquivo());
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				} catch (Exception ex) {
+					error("Não foi possível procesar o arquivo enviado. Por favor entre em contato com a CRA.");
+					logger.error(ex.getMessage());
+				}
+			}
+		};
+		form.setMultiPart(true);
+		form.setMaxSize(Bytes.megabytes(10));
+		form.add(botaoEnviar());
+		form.add(campoArquivo());
 
-	add(form);
-    }
+		add(form);
+	}
 
-    private FileUploadField campoArquivo() {
-	fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
-	fileUploadField.setRequired(true);
-	fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
-	return fileUploadField;
-    }
+	private FileUploadField campoArquivo() {
+		fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
+		fileUploadField.setRequired(true);
+		fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
+		return fileUploadField;
+	}
 
-    private AjaxButton botaoEnviar() {
-	return new AjaxButton("enviarArquivo") {
+	private AjaxButton botaoEnviar() {
+		return new AjaxButton("enviarArquivo") {
 
-	    /****/
-	    private static final long serialVersionUID = 1L;
+			/****/
+			private static final long serialVersionUID = 1L;
 
-	    @Override
-	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-		target.add(getFeedbackPanel());
-	    }
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				target.add(getFeedbackPanel());
+			}
 
-	    @Override
-	    protected void onError(AjaxRequestTarget target, Form<?> form) {
-		target.add(getFeedbackPanel());
-	    }
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				target.add(getFeedbackPanel());
+			}
 
-	    @Override
-	    protected void finalize() throws Throwable {
-		super.finalize();
-	    }
+			@Override
+			protected void finalize() throws Throwable {
+				super.finalize();
+			}
 
-	};
-    }
+		};
+	}
 
-    public Usuario getUsuario() {
-	return usuario;
-    }
+	public Usuario getUsuario() {
+		return usuario;
+	}
 
-    @Override
-    protected IModel<Arquivo> getModel() {
-	return new CompoundPropertyModel<Arquivo>(arquivo);
-    }
+	@Override
+	protected IModel<Arquivo> getModel() {
+		return new CompoundPropertyModel<Arquivo>(arquivo);
+	}
 
 }

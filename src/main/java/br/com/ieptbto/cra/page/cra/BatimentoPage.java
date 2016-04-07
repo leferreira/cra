@@ -49,9 +49,10 @@ public class BatimentoPage extends BasePage<Remessa> {
 	private static final Logger logger = Logger.getLogger(BatimentoPage.class);
 
 	@SpringBean
-	private BatimentoMediator batimentoMediator;
+	BatimentoMediator batimentoMediator;
 	@SpringBean
-	private RetornoMediator retornoMediator;
+	RetornoMediator retornoMediator;
+
 	private Remessa batimento;
 	private List<Deposito> depositos;
 	private ListView<Remessa> remessas;
@@ -60,10 +61,16 @@ public class BatimentoPage extends BasePage<Remessa> {
 		this.batimento = new Remessa();
 		this.depositos = batimentoMediator.buscarDepositosExtrato();
 
-		carregarBatimentoPage();
+		adicionarComponentes();
 	}
 
-	private void carregarBatimentoPage() {
+	@Override
+	protected void adicionarComponentes() {
+		carregarFormularioBatimento();
+
+	}
+
+	private void carregarFormularioBatimento() {
 		final CheckGroup<Remessa> grupo = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
 		Form<Remessa> form = new Form<Remessa>("form") {
 

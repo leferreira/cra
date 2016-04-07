@@ -33,23 +33,30 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class BuscarDepositoPage extends BasePage<Deposito>{
+public class BuscarDepositoPage extends BasePage<Deposito> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
+
 	private Deposito deposito;
+
 	private TextField<LocalDate> fieldDataInicio;
 	private TextField<LocalDate> fieldDataFinal;
-	
+
 	public BuscarDepositoPage() {
 		this.deposito = new Deposito();
-		
-		carregarFormulario();
+		adicionarComponentes();
 	}
-	
-	private void carregarFormulario() {
-		Form<Deposito> form = new Form<Deposito>("form", getModel()){
-			
+
+	@Override
+	protected void adicionarComponentes() {
+		formularioBuscarDepositos();
+
+	}
+
+	private void formularioBuscarDepositos() {
+		Form<Deposito> form = new Form<Deposito>("form", getModel()) {
+
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -60,17 +67,17 @@ public class BuscarDepositoPage extends BasePage<Deposito>{
 				LocalDate dataFim = null;
 
 				try {
-					if (fieldDataInicio.getDefaultModelObject() != null){
-						if (fieldDataFinal.getDefaultModelObject() != null){
+					if (fieldDataInicio.getDefaultModelObject() != null) {
+						if (fieldDataFinal.getDefaultModelObject() != null) {
 							dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
 							dataFim = DataUtil.stringToLocalDate(fieldDataFinal.getDefaultModelObject().toString());
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
 									throw new InfraException("A data de início deve ser antes da data fim.");
-						}else
+						} else
 							throw new InfraException("As duas datas devem ser preenchidas.");
-					} 
-					
+					}
+
 					setResponsePage(new ListaDepositoPage(deposito, dataInicio, dataFim));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -93,16 +100,15 @@ public class BuscarDepositoPage extends BasePage<Deposito>{
 	private RadioChoice<SituacaoDeposito> situacaoDeposito() {
 		IChoiceRenderer<SituacaoDeposito> renderer = new ChoiceRenderer<SituacaoDeposito>("label");
 		List<SituacaoDeposito> list = new ArrayList<SituacaoDeposito>(Arrays.asList(SituacaoDeposito.values()));
-		RadioChoice<SituacaoDeposito> comboSituacao = new RadioChoice<SituacaoDeposito>("situacaoDeposito", 
-				list , renderer);
-		
+		RadioChoice<SituacaoDeposito> comboSituacao = new RadioChoice<SituacaoDeposito>("situacaoDeposito", list, renderer);
+
 		return comboSituacao;
 	}
-	
+
 	private DropDownChoice<TipoDeposito> tipoDeposito() {
 		IChoiceRenderer<TipoDeposito> renderer = new ChoiceRenderer<TipoDeposito>("label");
 		List<TipoDeposito> list = new ArrayList<TipoDeposito>(Arrays.asList(TipoDeposito.values()));
-		DropDownChoice<TipoDeposito> comboTipoDeposito = new DropDownChoice<TipoDeposito>("tipoDeposito", list , renderer);
+		DropDownChoice<TipoDeposito> comboTipoDeposito = new DropDownChoice<TipoDeposito>("tipoDeposito", list, renderer);
 		return comboTipoDeposito;
 	}
 

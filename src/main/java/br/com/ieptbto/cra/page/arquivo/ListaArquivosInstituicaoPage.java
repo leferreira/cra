@@ -35,13 +35,16 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+
 	@SpringBean
-	private ArquivoMediator arquivoMediator;
+	ArquivoMediator arquivoMediator;
 	@SpringBean
-	private RemessaMediator remessaMediator;
+	RemessaMediator remessaMediator;
+
 	private Arquivo arquivo;
 	private List<Arquivo> arquivos;
 
@@ -49,17 +52,28 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 			ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<SituacaoArquivo> situacoes) {
 		this.arquivo = arquivo;
 		this.arquivos = arquivoMediator.buscarArquivosAvancado(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, situacoes);
-		add(carregarListaArquivos());
+		adicionarComponentes();
 	}
 
-	private ListView<Arquivo> carregarListaArquivos() {
-		return new ListView<Arquivo>("dataTableArquivo", getArquivos()) {
+	@Override
+	protected void adicionarComponentes() {
+		listaArquivos();
+	}
+
+	private void listaArquivos() {
+		add(new ListView<Arquivo>("dataTableArquivo", getArquivos()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Arquivo> item) {
 				final Arquivo arquivo = item.getModelObject();
 				item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -80,6 +94,9 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 			private Link<Arquivo> downloadArquivoTXT(final Arquivo arquivo) {
 				return new Link<Arquivo>("downloadArquivo") {
 
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
 						File file = arquivoMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
@@ -92,6 +109,9 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 
 			private Link<Arquivo> relatorioArquivo(final Arquivo arquivo) {
 				return new Link<Arquivo>("gerarRelatorio") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -112,7 +132,7 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 					}
 				};
 			}
-		};
+		});
 	}
 
 	public List<Arquivo> getArquivos() {

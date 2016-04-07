@@ -17,8 +17,13 @@ public class NotFoundPage extends BasePage {
 	}
 
 	@Override
-	protected IModel getModel() {
+	protected void adicionarComponentes() {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected IModel getModel() {
 		return null;
 	}
 }

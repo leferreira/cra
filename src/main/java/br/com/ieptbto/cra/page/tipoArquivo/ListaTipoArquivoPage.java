@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.tipoArquivo;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -12,7 +13,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
-import org.apache.commons.lang.StringUtils;
 
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
@@ -24,7 +24,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaTipoArquivoPage extends BasePage<TipoArquivo> {
 
 	/***/
@@ -34,19 +34,25 @@ public class ListaTipoArquivoPage extends BasePage<TipoArquivo> {
 	TipoArquivoMediator tipoArquivoMediator;
 
 	private TipoArquivo tipoArquivo;
-	
+
 	public ListaTipoArquivoPage() {
 		this.tipoArquivo = new TipoArquivo();
 		add(carregarListaTipos());
 	}
-	
+
 	public ListaTipoArquivoPage(String mensagem) {
 		this.tipoArquivo = new TipoArquivo();
 		info(mensagem);
 		add(carregarListaTipos());
 	}
 
-	private ListView<TipoArquivo> carregarListaTipos(){
+	@Override
+	protected void adicionarComponentes() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private ListView<TipoArquivo> carregarListaTipos() {
 		return new ListView<TipoArquivo>("listViewTipos", tipoArquivoMediator.getTiposArquivos()) {
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -55,9 +61,9 @@ public class ListaTipoArquivoPage extends BasePage<TipoArquivo> {
 			protected void populateItem(ListItem<TipoArquivo> item) {
 				final TipoArquivo tipoLista = item.getModelObject();
 				DateTimeFormatter outputFormat = new DateTimeFormatterBuilder().appendPattern("HH:mm:ss").toFormatter();
-				
+
 				@SuppressWarnings("rawtypes")
-				Link linkTipoArquivo = new Link("linkAlterar"){
+				Link linkTipoArquivo = new Link("linkAlterar") {
 					/**/
 					private static final long serialVersionUID = 1L;
 
@@ -69,12 +75,12 @@ public class ListaTipoArquivoPage extends BasePage<TipoArquivo> {
 				linkTipoArquivo.add(new Label("tipoArquivo", tipoLista.getTipoArquivo().getLabel()));
 				item.add(linkTipoArquivo);
 				item.add(new Label("constante", tipoLista.getTipoArquivo().getConstante()));
-				if (tipoLista.getHoraEnvioInicio()!= null) {
+				if (tipoLista.getHoraEnvioInicio() != null) {
 					item.add(new Label("horaInicio", tipoLista.getHoraEnvioInicio().toString(outputFormat)));
 				} else {
 					item.add(new Label("horaInicio", StringUtils.EMPTY));
 				}
-				if (tipoLista.getHoraEnvioFim()!= null) {
+				if (tipoLista.getHoraEnvioFim() != null) {
 					item.add(new Label("horaFim", tipoLista.getHoraEnvioFim().toString(outputFormat)));
 				} else {
 					item.add(new Label("horaFim", StringUtils.EMPTY));

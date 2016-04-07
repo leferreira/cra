@@ -24,14 +24,19 @@ public class IncluirMunicipioPage extends BasePage<Municipio> {
 	private MunicipioForm form;
 
 	public IncluirMunicipioPage() {
-		municipio = new Municipio();
-		setFormulario();
+		this.municipio = new Municipio();
+		adicionarComponentes();
 	}
 
 	public IncluirMunicipioPage(Municipio municipio) {
 		this.municipio = municipio;
-		;
+		adicionarComponentes();
+	}
+
+	@Override
+	protected void adicionarComponentes() {
 		setFormulario();
+
 	}
 
 	private void setFormulario() {

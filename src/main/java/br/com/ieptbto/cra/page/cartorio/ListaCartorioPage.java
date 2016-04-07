@@ -23,78 +23,93 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaCartorioPage extends BasePage<Instituicao> {
 
-    @SpringBean
-    private InstituicaoMediator instituicaoMediator;
-    private Instituicao cartorio;
+	/***/
+	private static final long serialVersionUID = 1L;
 
-    public ListaCartorioPage(String mensagem) {
-	info(mensagem);
-	carregarListaMunicipioPage();
-    }
+	@SpringBean
+	InstituicaoMediator instituicaoMediator;
 
-    public ListaCartorioPage() {
-	carregarListaMunicipioPage();
-    }
+	private Instituicao cartorio;
 
-    private void carregarListaMunicipioPage() {
-	this.cartorio = new Instituicao();
-	add(new Link<Instituicao>("botaoNovo") {
+	public ListaCartorioPage(String mensagem) {
+		info(mensagem);
+		adicionarComponentes();
+	}
 
-	    public void onClick() {
-		setResponsePage(new IncluirCartorioPage());
-	    }
-	});
-	add(carregarListaCartorios());
-    }
+	@Override
+	protected void adicionarComponentes() {
+		listaMunicipioPage();
 
-    private ListView<Instituicao> carregarListaCartorios() {
-	return new ListView<Instituicao>("listViewCartorio", listInstituicoes()) {
+	}
 
-	    @Override
-	    protected void populateItem(ListItem<Instituicao> item) {
-		final Instituicao instituicaoLista = item.getModelObject();
+	private void listaMunicipioPage() {
+		this.cartorio = new Instituicao();
+		add(new Link<Instituicao>("botaoNovo") {
 
-		Link<Instituicao> linkAlterar = new Link<Instituicao>("linkAlterar") {
+			/***/
+			private static final long serialVersionUID = 1L;
 
-		    public void onClick() {
-			setResponsePage(new IncluirCartorioPage(instituicaoLista));
-		    }
+			public void onClick() {
+				setResponsePage(new IncluirCartorioPage());
+			}
+		});
+		add(carregarListaCartorios());
+	}
+
+	private ListView<Instituicao> carregarListaCartorios() {
+		return new ListView<Instituicao>("listViewCartorio", listInstituicoes()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<Instituicao> item) {
+				final Instituicao instituicaoLista = item.getModelObject();
+
+				Link<Instituicao> linkAlterar = new Link<Instituicao>("linkAlterar") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+						setResponsePage(new IncluirCartorioPage(instituicaoLista));
+					}
+				};
+				linkAlterar.add(new Label("nomeFantasia", instituicaoLista.getNomeFantasia()));
+				item.add(linkAlterar);
+
+				item.add(new Label("municipio", instituicaoLista.getMunicipio().getNomeMunicipio()));
+				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
+				item.add(new Label("contato", instituicaoLista.getContato()));
+				item.add(new Label("codigoCartorio", instituicaoLista.getCodigoCartorio()));
+
+				if (instituicaoLista.isSituacao() == true)
+					item.add(new Label("situacao", "Sim"));
+				if (instituicaoLista.isSituacao() == false)
+					item.add(new Label("situacao", "Não"));
+			}
 		};
-		linkAlterar.add(new Label("nomeFantasia", instituicaoLista.getNomeFantasia()));
-		item.add(linkAlterar);
+	}
 
-		item.add(new Label("municipio", instituicaoLista.getMunicipio().getNomeMunicipio()));
-		item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
-		item.add(new Label("contato", instituicaoLista.getContato()));
-		item.add(new Label("codigoCartorio", instituicaoLista.getCodigoCartorio()));
-		if (instituicaoLista.isSituacao())
-		    item.add(new Label("situacao", "Sim"));
-		else
-		    item.add(new Label("situacao", "Não"));
-	    }
-	};
-    }
+	public IModel<List<Instituicao>> listInstituicoes() {
+		return new LoadableDetachableModel<List<Instituicao>>() {
 
-    public IModel<List<Instituicao>> listInstituicoes() {
-	return new LoadableDetachableModel<List<Instituicao>>() {
+			/***/
+			private static final long serialVersionUID = 1L;
 
-	    /***/
-	    private static final long serialVersionUID = 1L;
+			@Override
+			protected List<Instituicao> load() {
+				return instituicaoMediator.getCartorios();
+			}
+		};
+	}
 
-	    @Override
-	    protected List<Instituicao> load() {
-		return instituicaoMediator.getCartorios();
-	    }
-	};
-    }
-
-    @Override
-    protected IModel<Instituicao> getModel() {
-	return new CompoundPropertyModel<Instituicao>(cartorio);
-    }
+	@Override
+	protected IModel<Instituicao> getModel() {
+		return new CompoundPropertyModel<Instituicao>(cartorio);
+	}
 }

@@ -1,18 +1,13 @@
 package br.com.ieptbto.cra.page.base;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -31,7 +26,6 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
-import br.com.ieptbto.cra.entidade.LogCra;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
@@ -62,36 +56,27 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private RemessaMediator remessaMediator;
+	RemessaMediator remessaMediator;
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
 	@SpringBean
-	private DesistenciaProtestoMediator desistenciaMediator;
+	DesistenciaProtestoMediator desistenciaMediator;
 	@SpringBean
-	private CancelamentoProtestoMediator cancelamentoMediator;
+	CancelamentoProtestoMediator cancelamentoMediator;
 	@SpringBean
-	private AutorizacaoCancelamentoMediator autorizacaoMediator;
+	AutorizacaoCancelamentoMediator autorizacaoMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
+
 	private Arquivo arquivo;
 	private Usuario usuario;
-	private boolean primeiroAcesso = false;
 
 	public HomePage() {
 		super();
 		this.usuario = getUser();
 		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
 
-		carregarHomePage();
-	}
-
-	public HomePage(boolean primeiroAcesso) {
-		super();
-		this.primeiroAcesso = primeiroAcesso;
-		this.usuario = getUser();
-		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
-
-		carregarHomePage();
+		adicionarComponentes();
 	}
 
 	public HomePage(PageParameters parameters) {
@@ -99,14 +84,12 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
 
 		error(parameters.get("error"));
-		carregarHomePage();
+		adicionarComponentes();
 	}
 
-	private void carregarHomePage() {
-		// carregarCentralDeAcoes();
-		comunicadoModal();
-		carregarInformacoes();
-
+	@Override
+	protected void adicionarComponentes() {
+		divInformacoes();
 		labelQtdRemessasPendentes();
 		labelQtdDesistenciasCancelamentosPendentes();
 		linkArquivosPendentes();
@@ -116,75 +99,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		listaAutorizacaoCancelamentoPendentes();
 	}
 
-	private void comunicadoModal() {
-		final ModalWindow comunicadoModal = new ModalWindow("modalContrato");
-		comunicadoModal.setPageCreator(new ModalWindow.PageCreator() {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Page createPage() {
-				return new ComunicadoModal(HomePage.this.getPageReference(), comunicadoModal);
-			}
-		});
-		comunicadoModal.setResizable(false);
-		comunicadoModal.setAutoSize(false);
-		comunicadoModal.setInitialWidth(100);
-		comunicadoModal.setInitialHeight(50);
-		comunicadoModal.setMinimalWidth(80);
-		comunicadoModal.setMinimalHeight(30);
-		comunicadoModal.setWidthUnit("em");
-		comunicadoModal.setHeightUnit("em");
-		add(comunicadoModal);
-
-		AjaxLink<?> openModal = new AjaxLink<Void>("showModal") {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				comunicadoModal.show(target);
-			}
-		};
-		if (primeiroAcesso) {
-			openModal.setMarkupId("showModal");
-		}
-		add(openModal);
-	}
-
-	@SuppressWarnings("unused")
-	private void carregarCentralDeAcoes() {
-		WebMarkupContainer divCentralDeAcoes = new WebMarkupContainer("centralDeAcoes");
-		divCentralDeAcoes.setOutputMarkupId(true);
-		divCentralDeAcoes.setVisible(false);
-
-		if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
-			divCentralDeAcoes.setVisible(true);
-			divCentralDeAcoes.add(new ListView<LogCra>("acoes", new ArrayList<LogCra>()) {
-
-				/***/
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void populateItem(ListItem<LogCra> item) {
-					LogCra acao = item.getModelObject();
-					item.add(new Label("acao", acao.getAcao()));
-					item.add(new Label("tipoAcao", acao.getTipoLog().getLabel().toUpperCase()).setMarkupId(acao.getTipoLog().getIdHtml()));
-					item.add(new Label("descricao", acao.getDescricao()));
-				}
-			});
-		}
-		add(divCentralDeAcoes);
-	}
-
-	@SuppressWarnings("rawtypes")
-	private void carregarInformacoes() {
+	private void divInformacoes() {
 		WebMarkupContainer divInformacoes = new WebMarkupContainer("informacoes");
 		divInformacoes.setOutputMarkupId(true);
 		divInformacoes.setVisible(true);
-		divInformacoes.add(new Link("downloadOficio") {
+		divInformacoes.add(new Link<T>("downloadOficio") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -204,11 +123,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				}
 			}
 		});
-		// if
-		// (!getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA))
-		// {
-		// divInformacoes.setVisible(true);
-		// }
 		add(divInformacoes);
 	}
 

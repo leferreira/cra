@@ -36,40 +36,45 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class IncluirDepositoPage extends BasePage<Deposito>{
+public class IncluirDepositoPage extends BasePage<Deposito> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
+
 	@SpringBean
-	private BatimentoMediator batimentoMediator;
+	BatimentoMediator batimentoMediator;
+
 	private Deposito deposito;
 	private List<Deposito> depositos;
-	
+
 	public IncluirDepositoPage(Deposito deposito, List<Deposito> depositos) {
 		this.deposito = deposito;
 		this.depositos = depositos;
-		
-		carregarFormulario();
+		adicionarComponentes();
 	}
-	
+
 	public IncluirDepositoPage(String message, Deposito deposito, List<Deposito> depositos) {
 		this.deposito = deposito;
 		this.depositos = depositos;
-		
 		info(message);
+		adicionarComponentes();
+	}
+
+	@Override
+	protected void adicionarComponentes() {
 		carregarFormulario();
 	}
-	
+
 	private void carregarFormulario() {
-		Form<Deposito> form = new Form<Deposito>("form", getModel()){
-			
+		Form<Deposito> form = new Form<Deposito>("form", getModel()) {
+
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
 				Deposito deposito = getModelObject();
-				
+
 				try {
 					batimentoMediator.atualizarInformacoesDeposito(deposito);
 					setResponsePage(new IncluirDepositoPage("Informações do depósito foram atualizadas com sucesso!", getDeposito(), getDepositos()));
@@ -90,45 +95,41 @@ public class IncluirDepositoPage extends BasePage<Deposito>{
 		form.add(situacaoDeposito());
 		form.add(tipoDeposito());
 		form.add(descricao());
-		form.add(botaoVoltar());
-		add(form);
-	}
-
-	private Link<Deposito> botaoVoltar() {
-		return new Link<Deposito>("botaoVoltar"){
+		form.add(new Link<Deposito>("botaoVoltar") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public void onClick() {
 				setResponsePage(new ListaDepositoPage(getDepositos()));
 			}
-		};
+		});
+		add(form);
 	}
 
 	private RadioChoice<SituacaoDeposito> situacaoDeposito() {
 		IChoiceRenderer<SituacaoDeposito> renderer = new ChoiceRenderer<SituacaoDeposito>("label");
 		List<SituacaoDeposito> list = new ArrayList<SituacaoDeposito>(Arrays.asList(SituacaoDeposito.values()));
-		RadioChoice<SituacaoDeposito> comboSituacao = new RadioChoice<SituacaoDeposito>("situacaoDeposito", list , renderer);
+		RadioChoice<SituacaoDeposito> comboSituacao = new RadioChoice<SituacaoDeposito>("situacaoDeposito", list, renderer);
 		return comboSituacao;
 	}
-	
+
 	private DropDownChoice<TipoDeposito> tipoDeposito() {
 		IChoiceRenderer<TipoDeposito> renderer = new ChoiceRenderer<TipoDeposito>("label");
 		List<TipoDeposito> list = new ArrayList<TipoDeposito>(Arrays.asList(TipoDeposito.values()));
-		DropDownChoice<TipoDeposito> comboTipoDeposito = new DropDownChoice<TipoDeposito>("tipoDeposito", list , renderer);
+		DropDownChoice<TipoDeposito> comboTipoDeposito = new DropDownChoice<TipoDeposito>("tipoDeposito", list, renderer);
 		return comboTipoDeposito;
 	}
 
 	private TextField<BigDecimal> valor() {
-		TextField<BigDecimal> textField = new TextField<BigDecimal>("valorCredito"); 
+		TextField<BigDecimal> textField = new TextField<BigDecimal>("valorCredito");
 		textField.setEnabled(false);
 		return textField;
 	}
 
 	private TextField<String> numeroDocumento() {
-		TextField<String> textField = new TextField<String>("numeroDocumento"); 
+		TextField<String> textField = new TextField<String>("numeroDocumento");
 		textField.setEnabled(false);
 		return textField;
 	}
@@ -141,7 +142,7 @@ public class IncluirDepositoPage extends BasePage<Deposito>{
 		TextField<String> textField = new TextField<String>("data", new Model<String>(DataUtil.localDateToString(getDeposito().getData())));
 		return textField;
 	}
-	
+
 	private TextArea<String> descricao() {
 		TextArea<String> text = new TextArea<String>("descricao");
 		return text;
@@ -150,11 +151,11 @@ public class IncluirDepositoPage extends BasePage<Deposito>{
 	public Deposito getDeposito() {
 		return deposito;
 	}
-	
+
 	public List<Deposito> getDepositos() {
 		return depositos;
 	}
-	
+
 	@Override
 	protected IModel<Deposito> getModel() {
 		return new CompoundPropertyModel<Deposito>(deposito);

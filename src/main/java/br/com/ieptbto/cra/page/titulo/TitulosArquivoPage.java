@@ -53,19 +53,21 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private RemessaMediator remessaMediator;
+	RemessaMediator remessaMediator;
 	@SpringBean
-	private TituloMediator tituloMediator;
+	TituloMediator tituloMediator;
+
 	private Remessa remessa;
 	private List<Titulo> titulos;
 
 	public TitulosArquivoPage(Remessa remessa) {
 		this.remessa = remessaMediator.carregarRemessaPorId(remessa);
 		this.titulos = tituloMediator.carregarTitulosGenerico(remessa);
-		carregarInformacoes();
+		adicionarComponentes();
 	}
 
-	private void carregarInformacoes() {
+	@Override
+	protected void adicionarComponentes() {
 		add(nomeArquivo());
 		add(tipoArquivo());
 		add(instituicaoEnvio());

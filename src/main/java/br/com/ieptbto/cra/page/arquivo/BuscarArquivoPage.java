@@ -21,34 +21,46 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class BuscarArquivoPage extends BasePage<Arquivo> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
+	/***/
+	private static final long serialVersionUID = 1L;
 
-    private Arquivo arquivo;
-    private Form<Arquivo> form;
-    private Instituicao instituicao;
+	private Arquivo arquivo;
+	private Form<Arquivo> form;
+	private Instituicao instituicao;
 
-    public BuscarArquivoPage() {
-	this.arquivo = new Arquivo();
-	this.instituicao = getUser().getInstituicao();
-	this.form = new Form<Arquivo>("form", getModel());
-
-	if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
-	    form.add(new BuscarArquivoCraPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
-	} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-	    form.add(new BuscarArquivoCartorioPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
-	} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-	    form.add(new BuscarArquivoInstituicaoPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
+	public BuscarArquivoPage() {
+		this.arquivo = new Arquivo();
+		this.instituicao = getUser().getInstituicao();
+		adicionarComponentes();
 	}
-	add(form);
-    }
 
-    public Instituicao getInstituicao() {
-	return instituicao;
-    }
+	@Override
+	protected void adicionarComponentes() {
+		formularioBuscarArquivo();
+		panelBuscarArquivo();
+	}
 
-    @Override
-    protected IModel<Arquivo> getModel() {
-	return new CompoundPropertyModel<Arquivo>(arquivo);
-    }
+	private void formularioBuscarArquivo() {
+		this.form = new Form<Arquivo>("form", getModel());
+	}
+
+	private void panelBuscarArquivo() {
+		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			form.add(new BuscarArquivoCraPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
+		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+			form.add(new BuscarArquivoCartorioPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
+		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+			form.add(new BuscarArquivoInstituicaoPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));
+		}
+		add(form);
+	}
+
+	public Instituicao getInstituicao() {
+		return instituicao;
+	}
+
+	@Override
+	protected IModel<Arquivo> getModel() {
+		return new CompoundPropertyModel<Arquivo>(arquivo);
+	}
 }

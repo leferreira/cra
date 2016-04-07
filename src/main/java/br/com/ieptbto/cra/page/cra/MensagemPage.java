@@ -14,52 +14,53 @@ import br.com.ieptbto.cra.page.base.HomePage;
  */
 public class MensagemPage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
+	/***/
+	private static final long serialVersionUID = 1L;
 
-    private Class<?> classe;
-    private String nomeDaPagina;
-    private String mensagem;
+	private Class<?> clazz;
+	private String nomeDaPagina;
+	private String mensagem;
 
-    public MensagemPage(Class<?> classe, String pageName, String message) {
-	this.nomeDaPagina = pageName;
-	this.mensagem = message;
+	public MensagemPage(Class<?> classe, String pageName, String message) {
+		this.nomeDaPagina = pageName;
+		this.mensagem = message;
 
-	carregar();
-    }
-
-    private void carregar() {
-	info(getMensagem());
-	add(labelNomeDaPagina());
-    }
-
-    private Label labelNomeDaPagina() {
-	return new Label("pageName", getNomeDaPagina().toUpperCase());
-    }
-
-    public Class<?> getClasse() {
-	if (classe == null) {
-	    classe = HomePage.class;
+		info(getMensagem());
+		adicionarComponentes();
 	}
-	return classe;
-    }
 
-    public String getNomeDaPagina() {
-	if (nomeDaPagina == null) {
-	    nomeDaPagina = StringUtils.EMPTY;
+	@Override
+	protected void adicionarComponentes() {
+		labelNomeDaPagina();
 	}
-	return nomeDaPagina;
-    }
 
-    public String getMensagem() {
-	if (mensagem == null) {
-	    mensagem = StringUtils.EMPTY;
+	private void labelNomeDaPagina() {
+		add(new Label("pageName", getNomeDaPagina().toUpperCase()));
 	}
-	return mensagem;
-    }
 
-    @Override
-    protected IModel<T> getModel() {
-	return null;
-    }
+	public Class<?> getClazz() {
+		if (clazz == null) {
+			clazz = HomePage.class;
+		}
+		return clazz;
+	}
+
+	public String getNomeDaPagina() {
+		if (nomeDaPagina == null) {
+			nomeDaPagina = StringUtils.EMPTY;
+		}
+		return nomeDaPagina;
+	}
+
+	public String getMensagem() {
+		if (mensagem == null) {
+			mensagem = StringUtils.EMPTY;
+		}
+		return mensagem;
+	}
+
+	@Override
+	protected IModel<T> getModel() {
+		return null;
+	}
 }

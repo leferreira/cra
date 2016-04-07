@@ -45,14 +45,17 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
+
 	private Arquivo arquivo;
 	private Retorno retorno;
+	private String pageName;
 
 	public RelatorioRetornoPage(String message, String pageName) {
 		this.retorno = new Retorno();
+		this.pageName = pageName;
 
 		info(message);
-		carregarComponentes(pageName);
+		adicionarComponentes();
 	}
 
 	public RelatorioRetornoPage(String message, Arquivo arquivo, String pageName) {
@@ -60,16 +63,21 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 		this.arquivo = arquivo;
 
 		info(message);
-		carregarComponentes(pageName);
+		adicionarComponentes();
 	}
 
-	private void carregarComponentes(String pageName) {
+	@Override
+	protected void adicionarComponentes() {
+		labelNomeDaPagina();
+		linkRelatorioRetornoLiberado();
+		linkDownloadRelatorioRetornoCartorio();
+	}
+
+	private void labelNomeDaPagina() {
 		add(new Label("pageName", pageName));
-		add(linkRelatorioRetornoLiberado());
-		add(linkDownloadRelatorioRetornoCartorio());
 	}
 
-	private Link<Retorno> linkRelatorioRetornoLiberado() {
+	private void linkRelatorioRetornoLiberado() {
 		Link<Retorno> linkRelatorioRetornoLiberado = new Link<Retorno>("relatorioRetornoLiberado") {
 
 			/***/
@@ -112,10 +120,10 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 		if (getArquivo() != null) {
 			linkRelatorioRetornoLiberado.setVisible(false);
 		}
-		return linkRelatorioRetornoLiberado;
+		add(linkRelatorioRetornoLiberado);
 	}
 
-	private Link<Arquivo> linkDownloadRelatorioRetornoCartorio() {
+	private void linkDownloadRelatorioRetornoCartorio() {
 		Link<Arquivo> linkDownloadRelatorioRetornoCartorio = new Link<Arquivo>("relatorioRetornoCartorio") {
 
 			/***/
@@ -149,7 +157,7 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 		if (getArquivo() == null) {
 			linkDownloadRelatorioRetornoCartorio.setVisible(false);
 		}
-		return linkDownloadRelatorioRetornoCartorio;
+		add(linkDownloadRelatorioRetornoCartorio);
 	}
 
 	public Arquivo getArquivo() {

@@ -30,10 +30,21 @@ public class ArquivoCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 
 	public ArquivoCancelamentoDevolvidoPage() {
 		this.arquivo = new Arquivo();
-
 		this.instituicao = getUser().getInstituicao();
-		form = new Form<Arquivo>("form", getModel());
+		adicionarComponentes();
+	}
 
+	@Override
+	protected void adicionarComponentes() {
+		formularioDevulucaoCancelamento();
+		panelDevulucaoCancelamento();
+	}
+
+	private void formularioDevulucaoCancelamento() {
+		form = new Form<Arquivo>("form", getModel());
+	}
+
+	private void panelDevulucaoCancelamento() {
 		if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 			form.add(new CancelamentoDevolvidoCraPanel("cancelamentoDevolvidoInputPanel", getModel(), getInstituicao()));
 		} else if (getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {

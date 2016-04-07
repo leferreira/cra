@@ -62,20 +62,20 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	}
 
 	private void adicionarLinkProfileUser() {
-		add(new Link<Usuario>("configuracoesUsuario"){
-			
+		add(new Link<Usuario>("configuracoesUsuario") {
+
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick() {
-				setResponsePage(new PerfilUsuarioPage(getUser())); 
+				setResponsePage(new PerfilUsuarioPage(getUser()));
 			}
 		});
 	}
 
 	private void adicionarTrocaSenha() {
-		//add(new TrocaSenhaPanel("trocaSenhaPanel", getUser()));
+		// add(new TrocaSenhaPanel("trocaSenhaPanel", getUser()));
 	}
 
 	private void addLogout() {
@@ -105,7 +105,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 		menu.setRenderBodyOnly(true);
 		add(menu);
 	}
-	
+
 	protected Component createMenu(String containerId) {
 		return getWicketApplication().createMenuSistema(this, containerId, getUser());
 	}
@@ -120,6 +120,8 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	public String getTitulo() {
 		return "CRA - Central de Remessa de Arquivos";
 	}
+
+	protected abstract void adicionarComponentes();
 
 	protected abstract IModel<T> getModel();
 

@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -26,38 +29,57 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
-public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo>  {
+@AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
+public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BuscarArquivoCraInstituicaoPage.class);
-	
+
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
+
 	private Arquivo arquivo;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
-	private ArrayList<TipoArquivoEnum> tiposArquivo = new ArrayList<TipoArquivoEnum>();
-	private ArrayList<SituacaoArquivo> situacaoArquivo = new ArrayList<SituacaoArquivo>();;
-	
+	private ArrayList<TipoArquivoEnum> tiposArquivo;
+	private ArrayList<SituacaoArquivo> situacaoArquivo;
+
 	public BuscarArquivoCraInstituicaoPage() {
 		this.arquivo = new Arquivo();
-		Form<Arquivo> form =  new Form<Arquivo>("form", getModel()){
-			
+		this.tiposArquivo = new ArrayList<TipoArquivoEnum>();
+		this.situacaoArquivo = new ArrayList<SituacaoArquivo>();
+		adicionarComponentes();
+	}
+
+	@Override
+	protected void adicionarComponentes() {
+		formularioBuscarArquivo();
+	}
+
+	private void formularioBuscarArquivo() {
+		Form<Arquivo> form = new Form<Arquivo>("form", getModel()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit() {
 				Arquivo arquivoBuscado = getModelObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 				Municipio municipio = null;
-				
+
 				try {
 					if (arquivoBuscado.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
 						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
@@ -66,18 +88,18 @@ public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo>  {
 							throw new InfraException("Por favor, informe ao menos 4 caracteres!");
 						}
 					}
-					
-					if (dataEnvioInicio.getDefaultModelObject() != null){
-						if (dataEnvioFinal.getDefaultModelObject() != null){
+
+					if (dataEnvioInicio.getDefaultModelObject() != null) {
+						if (dataEnvioFinal.getDefaultModelObject() != null) {
 							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
 							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
 									throw new InfraException("A data de início deve ser antes da data fim.");
-						}else
+						} else
 							throw new InfraException("As duas datas devem ser preenchidas.");
-					} 
-					
+					}
+
 					setResponsePage(new ListaArquivosInstituicaoPage(arquivoBuscado, municipio, dataInicio, dataFim, getTiposArquivo(), getSituacaoArquivo()));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -96,37 +118,37 @@ public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo>  {
 		form.add(comboPortador());
 		add(form);
 	}
-	
+
 	private TextField<String> nomeArquivo() {
 		return new TextField<String>("nomeArquivo");
 	}
-	
+
 	private CheckBoxMultipleChoice<TipoArquivoEnum> comboTipoArquivos() {
 		List<TipoArquivoEnum> listaTipos = new ArrayList<TipoArquivoEnum>();
 		listaTipos.add(TipoArquivoEnum.REMESSA);
 		listaTipos.add(TipoArquivoEnum.CONFIRMACAO);
 		listaTipos.add(TipoArquivoEnum.RETORNO);
-		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
+		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos", new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
 		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
 	}
-	
+
 	private CheckBoxMultipleChoice<SituacaoArquivo> comboSituacaoArquivos() {
 		List<SituacaoArquivo> listaSituacao = Arrays.asList(SituacaoArquivo.values());
-		CheckBoxMultipleChoice<SituacaoArquivo> situacao = new CheckBoxMultipleChoice<SituacaoArquivo>("situacaoArquivos",new Model<ArrayList<SituacaoArquivo>>(situacaoArquivo), listaSituacao);
+		CheckBoxMultipleChoice<SituacaoArquivo> situacao = new CheckBoxMultipleChoice<SituacaoArquivo>("situacaoArquivos", new Model<ArrayList<SituacaoArquivo>>(situacaoArquivo), listaSituacao);
 		situacao.setLabel(new Model<String>("Situacao do Arquivo"));
 		return situacao;
 	}
-	
+
 	private TextField<LocalDate> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
 		return dataEnvioInicio;
 	}
-	
+
 	private TextField<LocalDate> dataEnvioFinal() {
 		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
 	}
-	
+
 	private DropDownChoice<Instituicao> comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
 		DropDownChoice<Instituicao> comboPortador = new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
@@ -140,11 +162,11 @@ public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo>  {
 	public ArrayList<SituacaoArquivo> getSituacaoArquivo() {
 		return situacaoArquivo;
 	}
-	
+
 	public Arquivo getArquivo() {
 		return arquivo;
 	}
-	
+
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(arquivo);

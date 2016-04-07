@@ -30,33 +30,40 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaInstituicaoPage extends BasePage<Instituicao> {
 
-	private Instituicao instituicao;
-
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 
+	private Instituicao instituicao;
+
 	public ListaInstituicaoPage() {
-		carregarListaInstituicaoPage();
+		instituicao = new Instituicao();
+		adicionarComponentes();
 	}
 
 	public ListaInstituicaoPage(String mensagem) {
+		instituicao = new Instituicao();
 		info(mensagem);
-		carregarListaInstituicaoPage();
+		adicionarComponentes();
 	}
 
-	private void carregarListaInstituicaoPage() {
-		instituicao = new Instituicao();
+	@Override
+	protected void adicionarComponentes() {
+		botaoNovaInstituicao();
+		listaInstituicoes();
+
+	}
+
+	private void botaoNovaInstituicao() {
 		add(new Link<Instituicao>("botaoNovo") {
-			
+
 			public void onClick() {
 				setResponsePage(new IncluirInstituicaoPage());
 			}
 		});
-		add(carregarListaInstituicao());
 	}
 
-	private ListView<Instituicao> carregarListaInstituicao() {
-		return new ListView<Instituicao>("listViewInstituicao", listarInstituicoes()) {
+	private void listaInstituicoes() {
+		add(new ListView<Instituicao>("listViewInstituicao", listarInstituicoes()) {
 
 			@Override
 			protected void populateItem(ListItem<Instituicao> item) {
@@ -81,7 +88,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 					item.add(new Label("situacao", "Não"));
 				}
 			}
-		};
+		});
 	}
 
 	public IModel<List<Instituicao>> listarInstituicoes() {

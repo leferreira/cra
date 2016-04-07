@@ -50,9 +50,12 @@ public class RelatorioArquivosPage extends BasePage<Remessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
+
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
+
 	private Remessa remessa;
+
 	private List<Instituicao> listaInstituicoes;
 	private RadioChoice<TipoArquivoEnum> radioTipoArquivo;
 	private RadioChoice<TipoRelatorio> radioTipoRelatorio;
@@ -63,6 +66,12 @@ public class RelatorioArquivosPage extends BasePage<Remessa> {
 	public RelatorioArquivosPage() {
 		this.remessa = new Remessa();
 		carregarFormularioArquivoCartorio();
+	}
+
+	@Override
+	protected void adicionarComponentes() {
+		// TODO Auto-generated method stub
+
 	}
 
 	private void carregarFormularioArquivoCartorio() {

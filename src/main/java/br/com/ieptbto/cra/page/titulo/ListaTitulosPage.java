@@ -50,6 +50,12 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		add(carregarListaTitulos());
 	}
 
+	@Override
+	protected void adicionarComponentes() {
+		// TODO Auto-generated method stub
+
+	}
+
 	private ListView<TituloRemessa> carregarListaTitulos() {
 		return new ListView<TituloRemessa>("listViewTitulos", getTitulos()) {
 

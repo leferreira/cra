@@ -52,7 +52,9 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
+
 	private Arquivo arquivo;
+
 	private List<Instituicao> listaInstituicoes;
 	private DropDownChoice<Instituicao> comboInstituicao;
 	private RadioGroup<SituacaoTituloRelatorio> radioSituacaoTituloRelatorio;
@@ -61,8 +63,13 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 
 	public RelatorioTitulosPage() {
 		this.arquivo = new Arquivo();
+		adicionarComponentes();
+	}
 
+	@Override
+	protected void adicionarComponentes() {
 		carregarFormulario();
+
 	}
 
 	private void carregarFormulario() {

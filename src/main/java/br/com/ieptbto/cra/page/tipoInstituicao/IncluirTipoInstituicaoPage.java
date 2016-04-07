@@ -29,30 +29,36 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class IncluirTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
 
-	private TipoInstituicao tipoInstituicao;
-	private Instituicao instituicao;
-	private ArrayList<TipoArquivo> tipoArquivoSelects = new ArrayList<TipoArquivo>();
-	
 	@SpringBean
 	TipoArquivoMediator tipoArquivoMediator;
 	@SpringBean
 	TipoInstituicaoMediator tipoInstituicaoMediator;
 
+	private TipoInstituicao tipoInstituicao;
+	private Instituicao instituicao;
+	private ArrayList<TipoArquivo> tipoArquivoSelects = new ArrayList<TipoArquivo>();
+
 	public IncluirTipoInstituicaoPage() {
-		tipoInstituicao = new TipoInstituicao();
-		setInstituicao(getUser().getInstituicao());
-		setForm();
+		this.tipoInstituicao = new TipoInstituicao();
+		this.instituicao = getUser().getInstituicao();
+		adicionarComponentes();
 	}
 
 	public IncluirTipoInstituicaoPage(TipoInstituicao tipoInstituicao) {
 		this.tipoInstituicao = tipoInstituicao;
-		setInstituicao(getUser().getInstituicao());
+		this.instituicao = getUser().getInstituicao();
+		adicionarComponentes();
+	}
+
+	@Override
+	protected void adicionarComponentes() {
 		setForm();
 	}
 
@@ -63,21 +69,21 @@ public class IncluirTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
 			@Override
 			protected void onSubmit() {
-				
+
 				try {
 					TipoInstituicao tipoInstituicao = getModelObject();
-				
+
 					List<PermissaoEnvio> permissoes = new ArrayList<PermissaoEnvio>();
 					for (TipoArquivo tipoArquivo : tipoArquivoSelects) {
 						PermissaoEnvio permissaoEnvio = new PermissaoEnvio();
 						permissaoEnvio.setTipoArquivo(tipoArquivo);
 						permissaoEnvio.setTipoInstituicao(tipoInstituicao);
-						
+
 						permissoes.add(permissaoEnvio);
 					}
 					tipoInstituicaoMediator.alterarPermissoesTipoInstituicao(tipoInstituicao, permissoes);
 					setResponsePage(new ListaTipoInstituicaoPage("As permissões foram alteradas com sucesso !"));
-				} catch (Exception ex){
+				} catch (Exception ex) {
 					System.out.println(ex.getMessage());
 					error("Não foi possível alterar as permissões do tipo instituicao ! Entre em contato com a CRA !");
 				}
@@ -97,11 +103,11 @@ public class IncluirTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Component comboTipoArquivos() {
 		List<TipoArquivo> listaTipos = new ArrayList<TipoArquivo>();
-		for (TipoArquivoEnum tipoArquivo : TipoArquivoEnum.values()){
+		for (TipoArquivoEnum tipoArquivo : TipoArquivoEnum.values()) {
 			TipoArquivo tipo = tipoArquivoMediator.buscarTipoPorNome(tipoArquivo);
 			listaTipos.add(tipo);
 		}
-		return new CheckBoxMultipleChoice<TipoArquivo>("arquivosEnvioPermitido", new Model(tipoArquivoSelects) , listaTipos);
+		return new CheckBoxMultipleChoice<TipoArquivo>("arquivosEnvioPermitido", new Model(tipoArquivoSelects), listaTipos);
 	}
 
 	@Override

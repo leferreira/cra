@@ -45,13 +45,14 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
+
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private LoggerMediator loggerMediator;
+	LoggerMediator loggerMediator;
+
 	private LogCra logCra;
 	private List<Instituicao> listaInstituicoes;
-
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private Instituicao instituicao;
@@ -72,8 +73,7 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 		this.dataFim = new LocalDate();
 		this.tipoLog = null;
 		this.instituicao = null;
-
-		carregarCentralDeAcoes();
+		adicionarComponentes();
 	}
 
 	public CentralDeAcoesPage(LocalDate dataInicio, LocalDate dataFim, Instituicao instituicao, Integer itemsPerPage, TipoLog tipolog) {
@@ -83,11 +83,11 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 		this.dataFim = dataFim;
 		this.tipoLog = tipolog;
 		this.instituicao = instituicao;
-
-		carregarCentralDeAcoes();
+		adicionarComponentes();
 	}
 
-	private void carregarCentralDeAcoes() {
+	@Override
+	protected void adicionarComponentes() {
 		formularioConsultaAcoes();
 		listaLogAcoes();
 		filtroSucessoErroAlertaTodos();

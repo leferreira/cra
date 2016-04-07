@@ -40,9 +40,10 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	private static final long serialVersionUID = 852632145;
 
 	@SpringBean
-	private ArquivoMediator arquivoMediator;
+	ArquivoMediator arquivoMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
+
 	private Usuario usuario;
 	private Arquivo arquivo;
 	private Form<Arquivo> form;
@@ -52,7 +53,15 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		this.arquivo = new Arquivo();
 		this.usuario = getUser();
 		this.arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
+		adicionarComponentes();
+	}
 
+	@Override
+	protected void adicionarComponentes() {
+		formularioEnvioArquivo();
+	}
+
+	private void formularioEnvioArquivo() {
 		form = new Form<Arquivo>("form", getModel()) {
 
 			/****/

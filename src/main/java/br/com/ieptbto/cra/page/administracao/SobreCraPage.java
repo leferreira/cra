@@ -23,17 +23,18 @@ public class SobreCraPage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private static final long serialVersionUID = 1L;
 
 	public SobreCraPage() {
-		carregarInformacoesVersao();
+		adicionarComponentes();
 	}
 
-	private void carregarInformacoesVersao() {
+	@Override
+	protected void adicionarComponentes() {
 		add(new Label("versao", ""));
 		add(new Label("dataVersao", "31/03/2016"));
+
 	}
 
 	@Override
 	protected IModel<T> getModel() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

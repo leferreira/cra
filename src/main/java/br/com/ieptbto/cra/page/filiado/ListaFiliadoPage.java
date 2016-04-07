@@ -20,68 +20,86 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings({ "rawtypes", "serial" })
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaFiliadoPage extends BasePage<Filiado> {
 
-    private Filiado filiado;
+	/***/
+	private static final long serialVersionUID = 1L;
 
-    @SpringBean
-    FiliadoMediator filiadoMediator;
+	@SpringBean
+	FiliadoMediator filiadoMediator;
 
-    public ListaFiliadoPage() {
-	carregarListaFiliadoPage();
-    }
+	private Filiado filiado;
 
-    public ListaFiliadoPage(String mensagem) {
-	carregarListaFiliadoPage();
-	info(mensagem);
-    }
+	public ListaFiliadoPage() {
+		this.filiado = new Filiado();
+		adicionarComponentes();
+	}
 
-    private void carregarListaFiliadoPage() {
-	this.filiado = new Filiado();
-	add(new Link("botaoNovo") {
+	public ListaFiliadoPage(String mensagem) {
+		this.filiado = new Filiado();
+		info(mensagem);
+		adicionarComponentes();
+	}
 
-	    public void onClick() {
-		setResponsePage(new IncluirFiliadoPage());
-	    }
-	});
-	add(carregarListaFiliados());
-    }
+	@Override
+	protected void adicionarComponentes() {
+		botaoNovoFiliado();
+		listaFiliados();
 
-    private ListView<Filiado> carregarListaFiliados() {
-	return new ListView<Filiado>("listViewFiliado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao())) {
+	}
 
-	    @Override
-	    protected void populateItem(ListItem<Filiado> item) {
-		final Filiado filiado = item.getModelObject();
+	private void botaoNovoFiliado() {
+		add(new Link<Void>("botaoNovo") {
 
-		Link linkAlterar = new Link("linkAlterar") {
+			/***/
+			private static final long serialVersionUID = 1L;
 
-		    public void onClick() {
-			setResponsePage(new IncluirFiliadoPage(filiado));
-		    }
-		};
-		linkAlterar.add(new Label("nome", filiado.getRazaoSocial()));
-		item.add(linkAlterar);
+			public void onClick() {
+				setResponsePage(new IncluirFiliadoPage());
+			}
+		});
+	}
 
-		item.add(new Label("instituicao", filiado.getInstituicaoConvenio().getNomeFantasia()));
-		item.add(new Label("cidade", filiado.getMunicipio().getNomeMunicipio()));
-		item.add(new Label("uf", filiado.getUf()));
-		item.add(new Label("ativo", verificarSituacao(filiado.isAtivo())));
-	    }
-	};
-    }
+	private void listaFiliados() {
+		add(new ListView<Filiado>("listViewFiliado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao())) {
 
-    private String verificarSituacao(Boolean ativo) {
-	if (ativo.equals(true))
-	    return "Sim";
-	return "Não";
-    }
+			/***/
+			private static final long serialVersionUID = 1L;
 
-    @Override
-    protected IModel<Filiado> getModel() {
-	return new CompoundPropertyModel<Filiado>(filiado);
-    }
+			@Override
+			protected void populateItem(ListItem<Filiado> item) {
+				final Filiado filiado = item.getModelObject();
+
+				Link<Void> linkAlterar = new Link<Void>("linkAlterar") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+						setResponsePage(new IncluirFiliadoPage(filiado));
+					}
+				};
+				linkAlterar.add(new Label("nome", filiado.getRazaoSocial()));
+				item.add(linkAlterar);
+
+				item.add(new Label("instituicao", filiado.getInstituicaoConvenio().getNomeFantasia()));
+				item.add(new Label("cidade", filiado.getMunicipio().getNomeMunicipio()));
+				item.add(new Label("uf", filiado.getUf()));
+				item.add(new Label("ativo", verificarSituacao(filiado.isAtivo())));
+			}
+		});
+	}
+
+	private String verificarSituacao(Boolean ativo) {
+		if (ativo.equals(true))
+			return "Sim";
+		return "Não";
+	}
+
+	@Override
+	protected IModel<Filiado> getModel() {
+		return new CompoundPropertyModel<Filiado>(filiado);
+	}
 }

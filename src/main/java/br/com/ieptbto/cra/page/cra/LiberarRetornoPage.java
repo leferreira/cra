@@ -65,32 +65,30 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 	private static final Logger logger = Logger.getLogger(LiberarRetornoPage.class);
 
 	@SpringBean
-	private RetornoMediator retornoMediator;
+	RetornoMediator retornoMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
+
 	private Retorno retorno;
+	private boolean dataComoDataLimite;
+	private BigDecimal totalNaoSelecionados;
+
 	private List<Remessa> arquivosAguardandoLiberacao;
 	private ListView<Remessa> remessas;
 	private DropDownChoice<Instituicao> campoInstituicao;
 	private TextField<String> campoDataBatimento;
 	private LocalDate dataBatimento;
 	private Instituicao instituicao;
-	private boolean dataComoDataLimite;
-
 	private CheckBox checkDataLimite;
 	private Label labelTotalArquivos;
 	private Label labelNaoSelecionados;
 	private Label labelValorNaoSelecionados;
 	private Label labelSelecionados;
 	private Label labelValorSelecionados;
-	private BigDecimal totalNaoSelecionados;
 
 	public LiberarRetornoPage() {
 		this.retorno = new Retorno();
-
-		adicionarFiltros();
-		carregarResumoArquivos();
-		carregarGuiaRetorno();
+		adicionarComponentes();
 	}
 
 	public LiberarRetornoPage(LocalDate dataBatimento, Instituicao instituicao, boolean dataComoDataLimite) {
@@ -100,13 +98,17 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		this.dataComoDataLimite = dataComoDataLimite;
 		this.arquivosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao(instituicao, dataBatimento, dataComoDataLimite);
 		this.totalNaoSelecionados = retornoMediator.buscarSomaValorTitulosPagosRemessas(instituicao, dataBatimento, dataComoDataLimite);
-
-		adicionarFiltros();
-		carregarResumoArquivos();
-		carregarGuiaRetorno();
+		adicionarComponentes();
 	}
 
-	private void adicionarFiltros() {
+	@Override
+	protected void adicionarComponentes() {
+		formBatimentoLiberacao();
+		divResumoArquivos();
+		listaRetornoLiberacao();
+	}
+
+	private void formBatimentoLiberacao() {
 		Form<Batimento> formFiltros = new Form<Batimento>("formFiltros") {
 
 			/***/
@@ -172,7 +174,7 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>());
 	}
 
-	private void carregarResumoArquivos() {
+	private void divResumoArquivos() {
 		this.labelTotalArquivos = new Label("labelTotalArquivos", getArquivosAguardandoLiberacao().size());
 		this.labelNaoSelecionados = new Label("labelNaoSelecionados", getArquivosAguardandoLiberacao().size());
 		if (totalNaoSelecionados == null) {
@@ -195,7 +197,7 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		add(labelValorSelecionados);
 	}
 
-	private void carregarGuiaRetorno() {
+	private void listaRetornoLiberacao() {
 		final CheckGroup<Remessa> grupo = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
 		Form<Retorno> form = new Form<Retorno>("form") {
 
@@ -226,7 +228,6 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		};
 		form.add(carregarListaRetornos());
 		form.add(grupo);
-
 		remessas.setReuseItems(true);
 		grupo.add(remessas);
 		add(form);

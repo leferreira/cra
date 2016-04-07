@@ -18,30 +18,35 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class IncluirCartorioPage extends BasePage<Instituicao> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
+	/***/
+	private static final long serialVersionUID = 1L;
 
-    private Instituicao cartorio;
-    private CartorioForm form;
+	private Instituicao cartorio;
+	private CartorioForm form;
 
-    public IncluirCartorioPage() {
-	this.cartorio = new Instituicao();
-	setForm();
-    }
+	public IncluirCartorioPage() {
+		this.cartorio = new Instituicao();
+		adicionarComponentes();
+	}
 
-    public IncluirCartorioPage(Instituicao cartorio) {
-	this.cartorio = cartorio;
-	setForm();
-    }
+	public IncluirCartorioPage(Instituicao cartorio) {
+		this.cartorio = cartorio;
+		adicionarComponentes();
+	}
 
-    public void setForm() {
-	form = new CartorioForm("form", getModel());
-	form.add(new CartorioInputPanel("cartorioInputPanel", getModel()));
-	add(form);
-    }
+	@Override
+	protected void adicionarComponentes() {
+		formCartorio();
+	}
 
-    @Override
-    protected IModel<Instituicao> getModel() {
-	return new CompoundPropertyModel<Instituicao>(cartorio);
-    }
+	private void formCartorio() {
+		form = new CartorioForm("form", getModel());
+		form.add(new CartorioInputPanel("cartorioInputPanel", getModel()));
+		add(form);
+	}
+
+	@Override
+	protected IModel<Instituicao> getModel() {
+		return new CompoundPropertyModel<Instituicao>(cartorio);
+	}
 }

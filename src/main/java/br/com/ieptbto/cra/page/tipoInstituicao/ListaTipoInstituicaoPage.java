@@ -25,7 +25,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
 	/***/
@@ -38,18 +38,24 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
 	public ListaTipoInstituicaoPage() {
 		this.tipoInstituicao = new TipoInstituicao();
-		add(carregarListaTipos());
+		adicionarComponentes();
 	}
 
 	public ListaTipoInstituicaoPage(String mensagem) {
-		info(mensagem);
 		this.tipoInstituicao = new TipoInstituicao();
-		add(carregarListaTipos());
+		info(mensagem);
+		adicionarComponentes();
 	}
 
-	
-	private ListView<TipoInstituicao> carregarListaTipos(){
-		return new ListView<TipoInstituicao>("listViewTipos", tipoInstituicaoMediator.listarTipos()) {
+	@Override
+	protected void adicionarComponentes() {
+		carregarListaTipos();
+
+	}
+
+	private void carregarListaTipos() {
+		add(new ListView<TipoInstituicao>("listViewTipos", tipoInstituicaoMediator.listarTipos()) {
+
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -57,20 +63,20 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 			protected void populateItem(ListItem<TipoInstituicao> item) {
 				String todasPermissoes = "";
 				final TipoInstituicao tipoLista = item.getModelObject();
-				
+
 				Link<TipoInstituicao> linkAlterar = new Link<TipoInstituicao>("linkAlterar") {
-		            /***/
+					/***/
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new IncluirTipoInstituicaoPage(tipoLista));
-		            }
-		        };
-		        linkAlterar.add(new Label("tipoInstituicao", tipoLista.getTipoInstituicao().getLabel()));
-		        item.add(linkAlterar);
-		        
+					}
+				};
+				linkAlterar.add(new Label("tipoInstituicao", tipoLista.getTipoInstituicao().getLabel()));
+				item.add(linkAlterar);
+
 				List<PermissaoEnvio> permissoes = tipoInstituicaoMediator.permissoesPorTipoInstituicao(tipoLista);
-				
+
 				if (!permissoes.isEmpty()) {
 					for (PermissaoEnvio p : permissoes) {
 						todasPermissoes += p.getTipoArquivo().getTipoArquivo().getConstante() + " ";
@@ -81,7 +87,7 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 				}
 				todasPermissoes = "";
 			}
-		};
+		});
 	}
 
 	@Override

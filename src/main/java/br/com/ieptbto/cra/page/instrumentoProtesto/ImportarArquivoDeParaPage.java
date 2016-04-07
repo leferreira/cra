@@ -30,80 +30,89 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
 public class ImportarArquivoDeParaPage extends BasePage<AgenciaCAF> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(ImportarArquivoDeParaPage.class);
+	/***/
+	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(ImportarArquivoDeParaPage.class);
 
-    @SpringBean
-    ArquivoDeParaMediator arquivoDeParaMediator;
+	@SpringBean
+	ArquivoDeParaMediator arquivoDeParaMediator;
 
-    private AgenciaCAF arquivoCAF;
-    private FileUploadField fileUploadField;
+	private AgenciaCAF arquivoCAF;
+	private FileUploadField fileUploadField;
 
-    public ImportarArquivoDeParaPage() {
-	arquivoCAF = new AgenciaCAF();
-	Form<AgenciaCAF> form = new Form<AgenciaCAF>("form", getModel()) {
+	public ImportarArquivoDeParaPage() {
+		this.arquivoCAF = new AgenciaCAF();
+		adicionarComponentes();
+	}
 
-	    /****/
-	    private static final long serialVersionUID = 1L;
+	@Override
+	protected void adicionarComponentes() {
+		formularioEnvioDePara();
+	}
 
-	    @Override
-	    protected void onSubmit() {
-		final FileUpload uploadedFile = fileUploadField.getFileUpload();
+	private void formularioEnvioDePara() {
+		Form<AgenciaCAF> form = new Form<AgenciaCAF>("form", getModel()) {
 
-		try {
-		    arquivoDeParaMediator.processarArquivo(uploadedFile);
-		    info("Arquivo " + uploadedFile.getClientFileName() + " foi importado com sucesso na CRA !");
-		} catch (InfraException ex) {
-		    logger.error(ex.getMessage());
-		    error(ex.getMessage());
-		} catch (Exception e) {
-		    logger.error(e.getMessage(), e);
-		    error("Não foi possível importar o arquivo De/Para ! \n Entre em contato com a CRA ");
-		}
-	    }
-	};
-	form.setMaxSize(Bytes.megabytes(10));
+			/****/
+			private static final long serialVersionUID = 1L;
 
-	form.add(campoArquivo());
-	form.add(botaoEnviar());
-	add(form);
-    }
+			@Override
+			protected void onSubmit() {
+				final FileUpload uploadedFile = fileUploadField.getFileUpload();
 
-    private FileUploadField campoArquivo() {
-	fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
-	fileUploadField.setRequired(true);
-	fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
-	return fileUploadField;
-    }
+				try {
+					arquivoDeParaMediator.processarArquivo(uploadedFile);
+					info("Arquivo " + uploadedFile.getClientFileName() + " foi importado com sucesso na CRA !");
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					error(ex.getMessage());
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					error("Não foi possível importar o arquivo De/Para ! \n Entre em contato com a CRA ");
+				}
+			}
+		};
+		form.setMaxSize(Bytes.megabytes(10));
 
-    private AjaxButton botaoEnviar() {
-	return new AjaxButton("enviarArquivo") {
+		form.add(campoArquivo());
+		form.add(botaoEnviar());
+		add(form);
+	}
 
-	    /****/
-	    private static final long serialVersionUID = 1L;
+	private FileUploadField campoArquivo() {
+		fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
+		fileUploadField.setRequired(true);
+		fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
+		return fileUploadField;
+	}
 
-	    @Override
-	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-		target.add(getFeedbackPanel());
-	    }
+	private AjaxButton botaoEnviar() {
+		return new AjaxButton("enviarArquivo") {
 
-	    @Override
-	    protected void onError(AjaxRequestTarget target, Form<?> form) {
-		target.add(getFeedbackPanel());
-	    }
+			/****/
+			private static final long serialVersionUID = 1L;
 
-	    @Override
-	    protected void finalize() throws Throwable {
-		super.finalize();
-	    }
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				target.add(getFeedbackPanel());
+			}
 
-	};
-    }
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				target.add(getFeedbackPanel());
+			}
 
-    @Override
-    protected IModel<AgenciaCAF> getModel() {
-	return new CompoundPropertyModel<AgenciaCAF>(arquivoCAF);
-    }
+			@Override
+			protected void finalize() throws Throwable {
+				super.finalize();
+			}
+
+		};
+	}
+
+	@Override
+	protected IModel<AgenciaCAF> getModel() {
+		return new CompoundPropertyModel<AgenciaCAF>(arquivoCAF);
+	}
 
 }

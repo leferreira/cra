@@ -37,41 +37,54 @@ import br.com.ieptbto.cra.page.base.BasePage;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private RemessaMediator remessaMediator;
+	RemessaMediator remessaMediator;
 	@SpringBean
-	private DesistenciaProtestoMediator desistenciaProtestoMediator; 
+	DesistenciaProtestoMediator desistenciaProtestoMediator;
 	@SpringBean
-	private CancelamentoProtestoMediator cancelamentoMediator;
+	CancelamentoProtestoMediator cancelamentoMediator;
 	@SpringBean
-	private AutorizacaoCancelamentoMediator autorizacaoMediator;
+	AutorizacaoCancelamentoMediator autorizacaoMediator;
+
 	private Arquivo arquivo;
 	private List<ArquivoDesistenciaCancelamento> arquivosDesistenciasCancelamentos;
 	private List<DesistenciaProtesto> desistenciaProtesto;
 	private List<CancelamentoProtesto> cancelamentoProtestos;
 	private List<AutorizacaoCancelamento> autorizacaoCancelamentos;
 
-	public ListaCancelamentoDevolvidoPage(Arquivo arquivo, ArrayList<TipoArquivoEnum> tiposArquivo, Municipio municipio ,LocalDate dataInicio, LocalDate dataFim) {
+	public ListaCancelamentoDevolvidoPage(Arquivo arquivo, ArrayList<TipoArquivoEnum> tiposArquivo, Municipio municipio,
+			LocalDate dataInicio, LocalDate dataFim) {
+		this.arquivo = arquivo;
 		this.desistenciaProtesto = remessaMediator.buscarDesistenciaProtesto(arquivo, arquivo.getInstituicaoEnvio(), municipio, dataInicio, dataFim, tiposArquivo, getUser());
 		this.cancelamentoProtestos = remessaMediator.buscarCancelamentoProtesto(arquivo, arquivo.getInstituicaoEnvio(), municipio, dataInicio, dataFim, tiposArquivo, getUser());
 		this.autorizacaoCancelamentos = remessaMediator.buscarAutorizacaoCancelamento(arquivo, arquivo.getInstituicaoEnvio(), municipio, dataInicio, dataFim, tiposArquivo, getUser());
-		
+
 		converterDesistenciasCancelamentos();
-		add(carregarListaArquivos());
+		adicionarComponentes();
 	}
 
-	private ListView<ArquivoDesistenciaCancelamento> carregarListaArquivos() {
-		return new ListView<ArquivoDesistenciaCancelamento>("dataTableRemessa", getArquivosDesistenciasCancelamentos()) {
+	@Override
+	protected void adicionarComponentes() {
+		listaArquivosDevolucaoCancelamento();
+	}
+
+	private void listaArquivosDevolucaoCancelamento() {
+		add(new ListView<ArquivoDesistenciaCancelamento>("dataTableRemessa", getArquivosDesistenciasCancelamentos()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<ArquivoDesistenciaCancelamento> item) {
 				final ArquivoDesistenciaCancelamento arquivoDesistenciaCancelamento = item.getModelObject();
-				
+
 				if (arquivoDesistenciaCancelamento.getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
 					item.add(downloadArquivoTXT(arquivoDesistenciaCancelamento.getDesistenciaProtesto()));
 				} else if (arquivoDesistenciaCancelamento.getTipoArquivo().equals(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO)) {
@@ -79,8 +92,11 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 				} else if (arquivoDesistenciaCancelamento.getTipoArquivo().equals(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO)) {
 					item.add(downloadArquivoTXT(arquivoDesistenciaCancelamento.getAutorizacaoCancelamento()));
 				}
-				
+
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
@@ -99,45 +115,51 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto remessa) {
 				return new Link<Remessa>("downloadArquivo") {
 
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
 						File file = desistenciaProtestoMediator.baixarDesistenciaTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 					}
-				}; 
+				};
 			}
-			
+
 			private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto remessa) {
 				return new Link<Remessa>("downloadArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
 						File file = cancelamentoMediator.baixarCancelamentoTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
 					}
 				};
 			}
-			
+
 			private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento remessa) {
 				return new Link<Remessa>("downloadArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
 						File file = autorizacaoMediator.baixarAutorizacaoTXT(getUser(), remessa);
-						IResourceStream resourceStream = new FileResourceStream(file); 
+						IResourceStream resourceStream = new FileResourceStream(file);
 
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 					}
 				};
 			}
-			
+
 			private StatusRemessa verificaDownload(Boolean download) {
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 					return StatusRemessa.ENVIADO;
@@ -147,31 +169,27 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 				}
 				return StatusRemessa.RECEBIDO;
 			}
-		};
+		});
 	}
-	
+
 	private void converterDesistenciasCancelamentos() {
-		
 		if (!getDesistenciaProtesto().isEmpty()) {
-			
 			for (DesistenciaProtesto desistenciaProtesto : getDesistenciaProtesto()) {
 				ArquivoDesistenciaCancelamento arquivo = new ArquivoDesistenciaCancelamento();
 				arquivo.parseDesistenciaProtesto(desistenciaProtesto);
 				getArquivosDesistenciasCancelamentos().add(arquivo);
 			}
-		} 
-		
+		}
+
 		if (!getCancelamentoProtestos().isEmpty()) {
-			
 			for (CancelamentoProtesto cancelamento : getCancelamentoProtestos()) {
 				ArquivoDesistenciaCancelamento arquivo = new ArquivoDesistenciaCancelamento();
 				arquivo.parseCancelamentoProtesto(cancelamento);
 				getArquivosDesistenciasCancelamentos().add(arquivo);
 			}
-		} 
-		
+		}
+
 		if (!getAutorizacaoCancelamentos().isEmpty()) {
-			
 			for (AutorizacaoCancelamento ac : getAutorizacaoCancelamentos()) {
 				ArquivoDesistenciaCancelamento arquivo = new ArquivoDesistenciaCancelamento();
 				arquivo.parseAutorizacaoCancelamento(ac);
@@ -200,14 +218,14 @@ public class ListaCancelamentoDevolvidoPage extends BasePage<Arquivo> {
 		}
 		return autorizacaoCancelamentos;
 	}
-	
+
 	public List<ArquivoDesistenciaCancelamento> getArquivosDesistenciasCancelamentos() {
 		if (arquivosDesistenciasCancelamentos == null) {
 			arquivosDesistenciasCancelamentos = new ArrayList<ArquivoDesistenciaCancelamento>();
 		}
 		return arquivosDesistenciasCancelamentos;
 	}
-	
+
 	@Override
 	protected IModel<Arquivo> getModel() {
 		return new CompoundPropertyModel<Arquivo>(arquivo);
