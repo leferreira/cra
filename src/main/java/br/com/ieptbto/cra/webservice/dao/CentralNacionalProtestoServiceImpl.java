@@ -13,6 +13,7 @@ import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
+import br.com.ieptbto.cra.util.XmlFormatterUtil;
 
 /**
  * @author Thasso Araújo
@@ -36,7 +37,7 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	@WebMethod(operationName = "cartorio")
 	@GET
 	public String cartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
-			@WebParam(name = "user_dados") String dados) {
+	        @WebParam(name = "user_dados") String dados) {
 		init(login, senha);
 		return centralNacionalProtestoCartorioService.processar(usuario, dados);
 	}
@@ -50,14 +51,27 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	}
 
 	@Override
-	@WebMethod(operationName = "centralNacionalProtesto")
+	@WebMethod(operationName = "consultaProtesto")
 	@GET
 	public String consultaProtesto(@WebParam(name = "documentoDevedor") String documentoDevedor) {
+		if (documentoDevedor == null) {
+			StringBuffer xml = new StringBuffer();
+			xml.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\" ?>");
+			xml.append("<protesto>");
+			xml.append("<mensagem>CPF/CNPJ não informado</mensagem>");
+			xml.append("</protesto>");
+			return XmlFormatterUtil.format(xml.toString());
+		}
+
 		if (context == null) {
 			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		}
 
-		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
+		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context
+		        .getBean("centralNacionalProtestoCartorioService");
+
+		logger.info("O CPF/CNPJ " + documentoDevedor + " foi consultado na Central Nacional de Protesto. ");
+
 		return centralNacionalProtestoCartorioService.consultarProtesto(documentoDevedor);
 	}
 
@@ -66,7 +80,8 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		}
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
-		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
+		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context
+		        .getBean("centralNacionalProtestoCartorioService");
 		centralNacionalProtestoService = (CentralNacionalProtestoService) context.getBean("centralNacionalProtestoService");
 		setUsuario(login, senha);
 	}
