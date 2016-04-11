@@ -29,7 +29,7 @@ public class SobreCraPage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	@Override
 	protected void adicionarComponentes() {
 		add(new Label("versao", ""));
-		add(new Label("dataVersao", "31/03/2016"));
+		add(new Label("dataVersao", "07/04/2016"));
 
 	}
 

@@ -100,7 +100,7 @@ public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo> {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
 
-					setResponsePage(new ListaArquivosInstituicaoPage(arquivoBuscado, municipio, dataInicio, dataFim, getTiposArquivo(), getSituacaoArquivo()));
+					setResponsePage(new ListaArquivoInstituicaoPage(arquivoBuscado, municipio, dataInicio, dataFim, getTiposArquivo(), getSituacaoArquivo()));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

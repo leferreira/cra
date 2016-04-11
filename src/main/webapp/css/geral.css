@@ -4,10 +4,14 @@ body {
 	background-color: #337ab7;
 }
 
+.clear{
+	clear: both;
+}
+
 .container-layout {
 	width: 100%;
     margin-top: 50px; 
-    background-color: #F8F8F8;
+    background-color: #fff;
     border-top: 10px solid #337AB7;
 }
 

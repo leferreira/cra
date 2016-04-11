@@ -34,6 +34,7 @@ import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -85,7 +86,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		getArquivosOcorrencias().add(novaOcorrencia);
 
 		if (titulo.getConfirmacao() != null) {
-			Confirmacao confirmacao = tituloMediator.carregarTituloConfirmacaoPorId(titulo.getConfirmacao());
+			Confirmacao confirmacao = tituloMediator.carregarTituloConfirmacao(titulo.getConfirmacao());
 			getTituloRemessa().setConfirmacao(confirmacao);
 			novaOcorrencia = new ArquivoOcorrenciaBean();
 			novaOcorrencia.parseToRemessa(confirmacao.getRemessa());
@@ -98,7 +99,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			}
 		}
 		if (titulo.getRetorno() != null) {
-			Retorno retorno = tituloMediator.carregarTituloRetornoPorId(titulo.getRetorno());
+			Retorno retorno = tituloMediator.carregarTituloRetorno(titulo.getRetorno());
 			getTituloRemessa().setRetorno(retorno);
 			novaOcorrencia = new ArquivoOcorrenciaBean();
 			novaOcorrencia.parseToRemessa(retorno.getRemessa());
@@ -340,12 +341,14 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	public Label valorTitulo() {
-		Label textField = new Label("valorTitulo", new Model<String>("R$ " + getTituloRemessa().getValorTitulo().toString()));
+		Label textField = new Label("valorTitulo", new Model<String>("R$ "
+				+ getTituloRemessa().getValorTitulo().toString()));
 		return textField;
 	}
 
 	public Label saldoTitulo() {
-		Label textField = new Label("saldoTitulo", new Model<String>("R$ " + getTituloRemessa().getSaldoTitulo().toString()));
+		Label textField = new Label("saldoTitulo", new Model<String>("R$ "
+				+ getTituloRemessa().getSaldoTitulo().toString()));
 		return textField;
 	}
 

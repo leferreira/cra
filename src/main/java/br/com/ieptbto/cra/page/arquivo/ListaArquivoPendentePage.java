@@ -33,7 +33,6 @@ import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
@@ -44,7 +43,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Thasso Araújo
  *
  */
-public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
+public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -62,7 +61,7 @@ public class ListaArquivosPendentesPage extends BasePage<Arquivo> {
 
 	private Arquivo arquivo;
 
-	public ListaArquivosPendentesPage(Arquivo arquivo) {
+	public ListaArquivoPendentePage(Arquivo arquivo) {
 		this.arquivo = arquivo;
 		adicionarComponentes();
 	}

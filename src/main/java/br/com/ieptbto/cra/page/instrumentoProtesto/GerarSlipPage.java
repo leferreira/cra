@@ -122,7 +122,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
-						TituloRemessa tituloRemessa = tituloMediator.carregarTituloRemessaPorId(retorno.getTitulo());
+						TituloRemessa tituloRemessa = tituloMediator.carregarTituloRemessa(retorno.getTitulo());
 						setResponsePage(new HistoricoPage(tituloRemessa));
 					}
 				};
@@ -232,7 +232,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
 
 					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
-					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
+					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH
+							+ "ieptb.gif")));
 					parametros.put("DATA_GERACAO", new LocalDate().toDate());
 
 					String urlJasper = "../../relatorio/ListagemInstrumentosBancos.jrxml";

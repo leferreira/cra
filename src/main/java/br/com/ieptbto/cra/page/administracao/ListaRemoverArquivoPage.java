@@ -18,8 +18,8 @@ import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.AdministracaoMediator;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**

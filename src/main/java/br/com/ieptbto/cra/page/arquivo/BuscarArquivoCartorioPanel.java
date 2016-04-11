@@ -87,7 +87,7 @@ public class BuscarArquivoCartorioPanel extends Panel  {
 						}else
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
-					setResponsePage(new ListaArquivosPage(arquivo, null, dataInicio, dataFim, getTiposArquivo(), getSituacaoRemessa()));
+					setResponsePage(new ListaArquivoPage(arquivo, null, dataInicio, dataFim, getTiposArquivo(), getSituacaoRemessa()));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

@@ -31,8 +31,8 @@ import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 

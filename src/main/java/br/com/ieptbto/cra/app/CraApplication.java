@@ -24,11 +24,13 @@ import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.administracao.ListaRemoverArquivoPage;
 import br.com.ieptbto.cra.page.administracao.RemoverArquivoPage;
 import br.com.ieptbto.cra.page.administracao.SobreCraPage;
-import br.com.ieptbto.cra.page.arquivo.ArquivoCancelamentoDevolvidoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoCraInstituicaoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
-import br.com.ieptbto.cra.page.arquivo.ListaArquivosPage;
+import br.com.ieptbto.cra.page.arquivo.ListaArquivoInstituicaoPage;
+import br.com.ieptbto.cra.page.arquivo.ListaArquivoPage;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
@@ -45,6 +47,11 @@ import br.com.ieptbto.cra.page.cra.IncluirDepositoPage;
 import br.com.ieptbto.cra.page.cra.LiberarRetornoPage;
 import br.com.ieptbto.cra.page.cra.ListaDepositoPage;
 import br.com.ieptbto.cra.page.cra.RelatorioRetornoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.BuscarDesistenciaCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.ListaDesistenciaCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.instituicao.IncluirInstituicaoPage;
@@ -70,8 +77,6 @@ import br.com.ieptbto.cra.page.tipoInstituicao.ListaTipoInstituicaoPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.page.titulo.ListaTitulosPage;
 import br.com.ieptbto.cra.page.titulo.MonitorarTitulosPage;
-import br.com.ieptbto.cra.page.titulo.TitulosArquivoInstituicaoPage;
-import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.usuario.IncluirUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.ListaUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.PerfilUsuarioPage;
@@ -187,16 +192,26 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("IncluirEmpresaFiliada", IncluirFiliadoPage.class);
 
 		/** Arquivo */
-		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 		mountPage("EnviarArquivo", EnviarArquivoPage.class);
 		mountPage("EnviarArquivoEmpresa", EnviarArquivoEmpresaPage.class);
+
+		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 		mountPage("BuscarArquivoInstituicao", BuscarArquivoCraInstituicaoPage.class);
-		mountPage("ListaArquivo", ListaArquivosPage.class);
-		mountPage("ArquivosCancelamentoDevolvidoPage", ArquivoCancelamentoDevolvidoPage.class);
+		mountPage("ListaArquivo", ListaArquivoPage.class);
 		mountPage("TitulosArquivo", TitulosArquivoPage.class);
+
+		mountPage("ListaArquivoInstituicao", ListaArquivoInstituicaoPage.class);
 		mountPage("TitulosArquivoInstituicao", TitulosArquivoInstituicaoPage.class);
+
+		mountPage("BuscarDesistenciaCancelamento", BuscarDesistenciaCancelamentoPage.class);
+		mountPage("ListaDesistenciaCancelamento", ListaDesistenciaCancelamentoPage.class);
+		mountPage("TitulosDesistencia", TitulosDesistenciaPage.class);
+		mountPage("TitulosCancelamento", TitulosCancelamentoPage.class);
+		mountPage("TitulosAutorizacaoCancelamento", TitulosAutorizacaoCancelamentoPage.class);
+
 		mountPage("RemoverArquivo", RemoverArquivoPage.class);
 		mountPage("ListaArquivosRemover", ListaRemoverArquivoPage.class);
+
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
 		mountPage("HistoricoDoTitulo", HistoricoPage.class);

@@ -37,8 +37,11 @@ import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.page.arquivo.ListaArquivosPendentesPage;
-import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
+import br.com.ieptbto.cra.page.arquivo.ListaArquivoPendentePage;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
 
@@ -156,7 +159,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 			@Override
 			public void onClick() {
-				setResponsePage(new ListaArquivosPendentesPage(getArquivo()));
+				setResponsePage(new ListaArquivoPendentePage(getArquivo()));
 			}
 		});
 	}
@@ -272,8 +275,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 			@Override
 			protected void populateItem(ListItem<CancelamentoProtesto> item) {
-
-				final CancelamentoProtesto remessa = item.getModelObject();
+				final CancelamentoProtesto cancelamento = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					/***/
@@ -281,22 +283,20 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-
+						setResponsePage(new TitulosCancelamentoPage(cancelamento));
 					}
 				};
-				linkArquivo.add(new Label("desistencia", remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+				linkArquivo.add(new Label("desistencia", cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-
 				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)
 						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(cancelamento.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-					String nomeFantasia = remessa.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
+					String nomeFantasia = cancelamento.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
-
-				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaCancelamentoProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
-				item.add(downloadArquivoTXT(remessa));
+				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
+				item.add(downloadArquivoTXT(cancelamento));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto remessa) {
@@ -307,7 +307,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-
 						File file = cancelamentoMediator.baixarCancelamentoTXT(getUsuario(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
@@ -326,8 +325,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 			@Override
 			protected void populateItem(ListItem<DesistenciaProtesto> item) {
-
-				final DesistenciaProtesto remessa = item.getModelObject();
+				final DesistenciaProtesto dp = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					/***/
@@ -335,22 +333,20 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-
+						setResponsePage(new TitulosDesistenciaPage(dp));
 					}
 				};
-				linkArquivo.add(new Label("desistencia", remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+				linkArquivo.add(new Label("desistencia", dp.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-
 				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)
 						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(dp.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-					String nomeFantasia = remessa.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
+					String nomeFantasia = dp.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
-
-				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
-				item.add(downloadArquivoTXT(remessa));
+				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(dp.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
+				item.add(downloadArquivoTXT(dp));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto desistenciaProtesto) {
@@ -361,10 +357,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-
 						File file = desistenciaMediator.baixarDesistenciaTXT(getUsuario(), desistenciaProtesto);
 						IResourceStream resourceStream = new FileResourceStream(file);
-
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 					}
 				};
@@ -380,8 +374,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 			@Override
 			protected void populateItem(ListItem<AutorizacaoCancelamento> item) {
-
-				final AutorizacaoCancelamento remessa = item.getModelObject();
+				final AutorizacaoCancelamento ac = item.getModelObject();
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					/***/
@@ -389,22 +382,20 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-
+						setResponsePage(new TitulosAutorizacaoCancelamentoPage(ac));
 					}
 				};
-				linkArquivo.add(new Label("desistencia", remessa.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+				linkArquivo.add(new Label("desistencia", ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-
 				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)
 						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(ac.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-					String nomeFantasia = remessa.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia();
+					String nomeFantasia = ac.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
-
-				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio().toDate(), new Date())));
-				item.add(downloadArquivoTXT(remessa));
+				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(ac.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio().toDate(), new Date())));
+				item.add(downloadArquivoTXT(ac));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento ac) {
@@ -415,10 +406,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-
 						File file = autorizacaoMediator.baixarAutorizacaoTXT(getUsuario(), ac);
 						IResourceStream resourceStream = new FileResourceStream(file);
-
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 					}
 				};

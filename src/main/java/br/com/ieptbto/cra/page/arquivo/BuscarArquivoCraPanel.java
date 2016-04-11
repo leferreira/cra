@@ -96,7 +96,7 @@ public class BuscarArquivoCraPanel extends Panel {
 					if (comboMunicipio.getDefaultModelObject() != null) {
 						municipio = Municipio.class.cast(comboMunicipio.getDefaultModelObject());
 					}
-					setResponsePage(new ListaArquivosPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo(), getSituacaoRemessa()));
+					setResponsePage(new ListaArquivoPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo(), getSituacaoRemessa()));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

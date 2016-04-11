@@ -25,7 +25,6 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -35,7 +34,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Thasso Araújo
  *
  */
-public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
+public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -48,7 +47,7 @@ public class ListaArquivosInstituicaoPage extends BasePage<Arquivo> {
 	private Arquivo arquivo;
 	private List<Arquivo> arquivos;
 
-	public ListaArquivosInstituicaoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim,
+	public ListaArquivoInstituicaoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim,
 			ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<SituacaoArquivo> situacoes) {
 		this.arquivo = arquivo;
 		this.arquivos = arquivoMediator.buscarArquivosAvancado(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, situacoes);

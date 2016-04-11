@@ -29,7 +29,6 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.TitulosArquivoPage;
 import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -39,11 +38,11 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Thasso Araújo
  *
  */
-public class ListaArquivosPage extends BasePage<Arquivo> {
+public class ListaArquivoPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	protected static final Logger logger = Logger.getLogger(ListaArquivosPage.class);
+	protected static final Logger logger = Logger.getLogger(ListaArquivoPage.class);
 
 	@SpringBean
 	RemessaMediator remessaMediator;
@@ -53,7 +52,7 @@ public class ListaArquivosPage extends BasePage<Arquivo> {
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
 
-	public ListaArquivosPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim,
+	public ListaArquivoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim,
 			ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<StatusRemessa> situacoes) {
 		this.arquivo = arquivo;
 		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio, dataInicio, dataFim, tiposArquivo, getUser(), situacoes);
