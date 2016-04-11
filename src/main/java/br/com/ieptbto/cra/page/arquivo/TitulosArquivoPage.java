@@ -216,7 +216,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 
 				try {
 					if (remessa.getDevolvidoPelaCRA().equals(true)) {
-						warn("Arquivo já bloqueado anteriormente !");
+						warn("Arquivo já bloqueado anteriormente!");
 					} else {
 						remessaMediator.alterarParaDevolvidoPelaCRA(remessa);
 						getRemessa().setDevolvidoPelaCRA(true);
