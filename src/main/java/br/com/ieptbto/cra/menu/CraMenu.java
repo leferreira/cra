@@ -4,6 +4,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.PermissaoUsuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
@@ -37,8 +38,21 @@ public class CraMenu extends Panel {
 		/** Menus Padrão */
 		MenuItem menuPadrao = menu.addItem("menuPadrao", rolesPesquisar);
 		menuPadrao.addItem("BuscarArquivo", rolesPesquisar);
-		menuPadrao.addItem("EnviarArquivo", rolesPesquisar);
-		menuPadrao.addItem("EnviarArquivoEmpresa", rolesPesquisar);
+
+		MenuItem itemArquivoEmpresa = new MenuItem("EnviarArquivoEmpresa");
+		itemArquivoEmpresa.authorize(rolesPesquisar);
+		itemArquivoEmpresa.setVisible(false);
+		MenuItem itemArquivo = new MenuItem("EnviarArquivo");
+		itemArquivo.authorize(rolesPesquisar);
+		itemArquivo.setVisible(false);
+		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.LAYOUT_PERSONALIZADO_CONVENIOS)) {
+			itemArquivoEmpresa.setVisible(true);
+		} else {
+			itemArquivo.setVisible(true);
+		}
+		menuPadrao.add(itemArquivo);
+		menuPadrao.add(itemArquivoEmpresa);
+
 		menuPadrao.addItem("BuscarDesistenciaCancelamento", rolesPesquisar);
 		menuPadrao.addItem("MonitorarTitulos", rolesPesquisar);
 
