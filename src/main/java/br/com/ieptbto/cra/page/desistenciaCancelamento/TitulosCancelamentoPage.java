@@ -195,7 +195,7 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 		});
 	}
 
-	public IModel<List<PedidoCancelamento>> carregarPedidosCancelamento() {
+	private IModel<List<PedidoCancelamento>> carregarPedidosCancelamento() {
 		return new LoadableDetachableModel<List<PedidoCancelamento>>() {
 
 			/**/

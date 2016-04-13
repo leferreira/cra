@@ -50,19 +50,19 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private ArquivoMediator arquivoMediator;
+	ArquivoMediator arquivoMediator;
 	@SpringBean
-	private RemessaMediator remessaMediator;
+	RemessaMediator remessaMediator;
 	@SpringBean
-	private TituloMediator tituloMediator;
+	TituloMediator tituloMediator;
 	@SpringBean
-	private DesistenciaProtestoMediator desistenciaMediator;
+	DesistenciaProtestoMediator desistenciaMediator;
+
 	private TituloRemessa tituloRemessa;
 	private List<ArquivoOcorrenciaBean> arquivosOcorrencias;
 
 	public HistoricoPage(TituloRemessa titulo) {
 		this.tituloRemessa = titulo;
-
 		carregarArquivosOcorrencias();
 		carregarCampos();
 	}
@@ -147,7 +147,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 					};
 					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getRemessa().getArquivo().getNomeArquivo()));
 					item.add(linkArquivo);
-					item.add(new Label("acao", " enviado para CRA-TO em "));
+					item.add(new Label("acao", " enviado para CRA em "));
 				}
 
 				if (arquivoOcorrenciaBean.getArquivoGerado() != null) {
@@ -162,7 +162,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 					};
 					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getArquivoGerado()));
 					item.add(linkArquivo);
-					item.add(new Label("acao", " liberado para a instituição em "));
+					item.add(new Label("acao", " liberado para instituição em "));
 				}
 
 				if (arquivoOcorrenciaBean.getDesistenciaProtesto() != null) {
@@ -177,7 +177,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 					};
 					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 					item.add(linkArquivo);
-					item.add(new Label("acao", " enviado para CRA-TO em "));
+					item.add(new Label("acao", " enviado para CRA em "));
 				}
 
 				item.add(new Label("dataOcorrencia", arquivoOcorrenciaBean.getDataHora()));

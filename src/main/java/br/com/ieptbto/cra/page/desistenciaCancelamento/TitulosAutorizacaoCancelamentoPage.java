@@ -196,7 +196,7 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 		});
 	}
 
-	public IModel<List<PedidoAutorizacaoCancelamento>> carregarPedidosAutorizacaoCancelamento() {
+	private IModel<List<PedidoAutorizacaoCancelamento>> carregarPedidosAutorizacaoCancelamento() {
 		return new LoadableDetachableModel<List<PedidoAutorizacaoCancelamento>>() {
 
 			/**/

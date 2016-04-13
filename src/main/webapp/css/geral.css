@@ -10,7 +10,6 @@ body {
 
 .container-layout {
 	width: 100%;
-    margin-top: 50px; 
     background-color: #fff;
     border-top: 10px solid #337AB7;
 }
@@ -27,6 +26,10 @@ body {
 .text-footer{
 	padding: 10px 0px;   
 	color: #F8F8F8;
+}
+
+.navbar {
+	margin-bottom: 0px;
 }
 
 .navbar-nav {
@@ -133,6 +136,10 @@ legend {
 	float: left;
 }
 
+dd, dt {
+    line-height: 1.55;
+}
+
 .table-responsive {
 	/* min-height: .01%; */
 	overflow-x: initial;
@@ -142,6 +149,11 @@ legend {
 	color: #337AB7 !important;
 	font-weight: bold;
 }
+
+.panel-history{
+	padding-left: 0px; padding-right: 0px;
+}
+
 
 .historico {
 	width: 190px;
