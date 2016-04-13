@@ -257,47 +257,21 @@ dd, dt {
 	font-size: 13px;
 }
 
-.feedbackPanel {
-	margin-top: 10px;
+.feedbackPanel{
 	margin-left: -40px;
-	font-size: 16px;
-	margin-bottom: -5px;
+    margin-top: 5px;
 }
 
-.feedbackPanelWARNING {
-	color: #8A6D3B;
-	font-size: 16px;
-	background-color: #FCF8E3;  
-	border-color: #FAEBCC;
-	padding: 15px;
-	border: 1px solid transparent;
-	border-radius: 4px;
+.feedbackPanel > li {
 	list-style: none;
-	margin-bottom: 5px;
 }
 
-.feedbackPanelINFO {
-	color: #3c763d;
-	font-size: 16px;
-	background-color: #dff0d8;
-	border-color: #d6e9c6;
-	padding: 15px;
-	border: 1px solid transparent;
-	border-radius: 4px;
-	list-style: none;
-	margin-bottom: 5px;
+.alert{
+    margin-bottom: 10px;
 }
-
-.feedbackPanelERROR {
-	color: #a94442;
-	background-color: #f2dede;
-	border-color: #ebccd1;
-	font-size: 16px;
-	padding: 15px;
-	border: 1px solid transparent;
-	border-radius: 4px;
-	list-style: none;    
-	margin-bottom: 5px;
+.alert > span{
+	border-color: transparent;
+   font-size: 14px;	
 }
 
 #Aguardando {

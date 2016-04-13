@@ -42,7 +42,7 @@ public class ListaTipoArquivoPage extends BasePage<TipoArquivo> {
 
 	public ListaTipoArquivoPage(String mensagem) {
 		this.tipoArquivo = new TipoArquivo();
-		info(mensagem);
+		success(mensagem);
 		add(carregarListaTipos());
 	}
 

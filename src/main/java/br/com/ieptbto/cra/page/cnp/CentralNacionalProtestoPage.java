@@ -11,11 +11,11 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.component.CustomFeedbackPanel;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.TituloCnp;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -61,7 +61,7 @@ public class CentralNacionalProtestoPage extends WebPage {
 	}
 
 	private void addFeedbackPanel() {
-		FeedbackPanel feedBackPanel = new FeedbackPanel("feedback");
+		CustomFeedbackPanel feedBackPanel = new CustomFeedbackPanel("feedback");
 		feedBackPanel.setOutputMarkupId(true);
 		add(feedBackPanel);
 	}
@@ -127,7 +127,8 @@ public class CentralNacionalProtestoPage extends WebPage {
 			@Override
 			protected void populateItem(ListItem<String> item) {
 				String municipioGuarai = item.getModelObject();
-				item.add(new Label("protesto", "CONSTA(M) PROTESTO(S) NO TABELIONATO DE PROTESTO DE TÍTULOS DE " + municipioGuarai + "."));
+				item.add(new Label("protesto", "CONSTA(M) PROTESTO(S) NO TABELIONATO DE PROTESTO DE TÍTULOS DE "
+						+ municipioGuarai + "."));
 			}
 		};
 		pageableListView.setOutputMarkupId(true);

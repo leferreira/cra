@@ -36,7 +36,7 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 	private Instituicao cartorio;
 
 	public ListaCartorioPage(String mensagem) {
-		info(mensagem);
+		success(mensagem);
 		adicionarComponentes();
 	}
 

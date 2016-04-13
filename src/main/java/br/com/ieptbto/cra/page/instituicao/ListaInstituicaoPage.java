@@ -42,7 +42,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 
 	public ListaInstituicaoPage(String mensagem) {
 		instituicao = new Instituicao();
-		info(mensagem);
+		success(mensagem);
 		adicionarComponentes();
 	}
 

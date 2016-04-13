@@ -40,7 +40,7 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 
 	public ListaUsuarioPage(String mensagem) {
 		this.usuario = new Usuario();
-		info(mensagem);
+		success(mensagem);
 		adicionarComponentes();
 	}
 

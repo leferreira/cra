@@ -65,7 +65,7 @@ public class ImportarExtratoPage extends BasePage<Batimento> {
 					}
 					batimentoMediator.processarExtrato(getUser(), uploadedFile);
 
-					info("Arquivo de Extrato importado com Sucesso !");
+					success("Arquivo de Extrato importado com Sucesso !");
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					getFeedbackPanel().error(ex.getMessage());

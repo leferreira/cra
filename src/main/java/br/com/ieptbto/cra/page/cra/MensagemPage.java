@@ -25,7 +25,7 @@ public class MensagemPage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		this.nomeDaPagina = pageName;
 		this.mensagem = message;
 
-		info(getMensagem());
+		success(message);
 		adicionarComponentes();
 	}
 

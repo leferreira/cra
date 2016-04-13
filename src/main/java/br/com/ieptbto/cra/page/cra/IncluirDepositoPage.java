@@ -56,7 +56,7 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 	public IncluirDepositoPage(String message, Deposito deposito, List<Deposito> depositos) {
 		this.deposito = deposito;
 		this.depositos = depositos;
-		info(message);
+		success(message);
 		adicionarComponentes();
 	}
 

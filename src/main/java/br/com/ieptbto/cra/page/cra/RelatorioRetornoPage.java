@@ -54,7 +54,7 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 		this.retorno = new Retorno();
 		this.pageName = pageName;
 
-		info(message);
+		success(message);
 		adicionarComponentes();
 	}
 
@@ -62,7 +62,7 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 		this.retorno = new Retorno();
 		this.arquivo = arquivo;
 
-		info(message);
+		success(message);
 		adicionarComponentes();
 	}
 
@@ -94,7 +94,8 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 					connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
 
 					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
-					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
+					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH
+							+ "ieptb.gif")));
 					parametros.put("DATA_GERACAO", new LocalDate().toDate());
 
 					String urlJasper = "../../relatorio/RelatorioRetornoLiberado.jrxml";

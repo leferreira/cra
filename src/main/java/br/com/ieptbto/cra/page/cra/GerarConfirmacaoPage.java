@@ -53,7 +53,7 @@ public class GerarConfirmacaoPage extends BasePage<Confirmacao> {
 	public GerarConfirmacaoPage(String message) {
 		this.confirmacao = new Confirmacao();
 		this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
-		info(message);
+		success(message);
 		adicionarComponentes();
 	}
 

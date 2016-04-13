@@ -33,6 +33,9 @@ import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
 import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
@@ -218,6 +221,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
+						setResponsePage(new TitulosDesistenciaPage(desistenciaProtesto));
 					}
 				};
 				linkArquivo.add(new Label("nomeArquivo", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
@@ -277,6 +281,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
+						setResponsePage(new TitulosCancelamentoPage(cancelamento));
 					}
 				};
 				linkArquivo.add(new Label("nomeArquivo", cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
@@ -334,6 +339,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
+						setResponsePage(new TitulosAutorizacaoCancelamentoPage(ac));
 					}
 				};
 				linkArquivo.add(new Label("nomeArquivo", ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));

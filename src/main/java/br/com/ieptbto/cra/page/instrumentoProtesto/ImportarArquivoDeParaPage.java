@@ -62,7 +62,7 @@ public class ImportarArquivoDeParaPage extends BasePage<AgenciaCAF> {
 
 				try {
 					arquivoDeParaMediator.processarArquivo(uploadedFile);
-					info("Arquivo " + uploadedFile.getClientFileName() + " foi importado com sucesso na CRA !");
+					success("Arquivo " + uploadedFile.getClientFileName() + " foi importado com sucesso na CRA !");
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());

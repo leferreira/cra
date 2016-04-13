@@ -39,7 +39,7 @@ public class ListaFiliadoPage extends BasePage<Filiado> {
 
 	public ListaFiliadoPage(String mensagem) {
 		this.filiado = new Filiado();
-		info(mensagem);
+		success(mensagem);
 		adicionarComponentes();
 	}
 

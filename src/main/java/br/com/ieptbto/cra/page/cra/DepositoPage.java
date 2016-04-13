@@ -55,7 +55,7 @@ public class DepositoPage extends BasePage<Deposito> {
 		this.deposito = deposito;
 		this.depositos = depositos;
 
-		info(message);
+		success(message);
 		adicionarComponentes();
 	}
 

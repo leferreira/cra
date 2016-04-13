@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.component.iframe;
+package br.com.ieptbto.cra.component;
 
 import org.apache.wicket.IResourceListener;
 import org.apache.wicket.markup.ComponentTag;

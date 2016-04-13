@@ -6,10 +6,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.app.IWebApplication;
+import br.com.ieptbto.cra.component.CustomFeedbackPanel;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.page.login.LoginPage;
@@ -92,7 +92,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	}
 
 	private void addFeedbackPanel() {
-		FeedbackPanel feedBackPanel = new FeedbackPanel(WID_FEEDBACK);
+		CustomFeedbackPanel feedBackPanel = new CustomFeedbackPanel(WID_FEEDBACK);
 		feedBackPanel.setOutputMarkupId(true);
 		add(feedBackPanel);
 	}

@@ -89,11 +89,11 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 
 				try {
 					if (remessa.getDevolvidoPelaCRA().equals(true)) {
-						warn("Arquivo já bloqueado anteriormente!");
+						info("Arquivo já bloqueado anteriormente!");
 					} else {
 						remessaMediator.alterarParaDevolvidoPelaCRA(remessa);
 						getRemessa().setDevolvidoPelaCRA(true);
-						info("Arquivo bloqueado com sucesso !");
+						success("Arquivo bloqueado com sucesso !");
 					}
 				} catch (InfraException ex) {
 					error(ex.getMessage());

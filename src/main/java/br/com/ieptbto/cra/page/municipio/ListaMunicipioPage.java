@@ -42,7 +42,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 
 	public ListaMunicipioPage(String mensagem) {
 		this.municipio = new Municipio();
-		info(mensagem);
+		success(mensagem);
 		adicionarComponentes();
 	}
 
