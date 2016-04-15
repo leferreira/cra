@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
 import br.com.ieptbto.cra.conversor.ConversorArquivoVO;
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
@@ -22,6 +23,7 @@ import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 
@@ -35,6 +37,8 @@ public class RemessaService extends CraWebService {
 
 	@Autowired
 	private RemessaMediator remessaMediator;
+	@Autowired
+	private ArquivoMediator arquivoMediator;
 	private String arquivoRecebido;
 	private List<RemessaVO> remessas;
 	private ArquivoVO arquivoVO;
@@ -60,6 +64,14 @@ public class RemessaService extends CraWebService {
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
+
+			// Valida se a remessa já foi enviada anteriormente
+			Arquivo arquivoJaEnviado = arquivoJaEnviado(usuario, nomeArquivo);
+			if (arquivoJaEnviado != null) {
+				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo,
+				        arquivoJaEnviado);
+			}
+
 			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 			}
@@ -69,14 +81,18 @@ public class RemessaService extends CraWebService {
 
 			setRemessas(ConversorArquivoVO.converterParaRemessaVO(converterStringArquivoVO(dados)));
 			setObjectMensagemXml(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo));
-			loggerCra.sucess(usuario, getTipoAcaoLog(),
-					"O arquivo de Remessa " + nomeArquivo + ", enviado por " + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
+			loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
+			        + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex.getCause());
 			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno no processamento do arquivo de Remessa " + nomeArquivo + ".", ex);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return gerarMensagem(getObjectMensagemXml(), CONSTANTE_RELATORIO_XML);
+	}
+
+	private Arquivo arquivoJaEnviado(Usuario usuario, String nomeArquivo) {
+		return arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
 	}
 
 	private ArquivoVO converterStringArquivoVO(String dados) {
@@ -137,13 +153,12 @@ public class RemessaService extends CraWebService {
 			}
 
 			setMensagem(gerarResposta(remessaVO, getNomeArquivo(), CONSTANTE_REMESSA_XML));
-			loggerCra.sucess(getUsuario(), getTipoAcaoLog(),
-					"Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
+			loggerCra.sucess(getUsuario(), getTipoAcaoLog(), "Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por "
+			        + getUsuario().getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e.getCause());
-			loggerCra.error(getUsuario(), getTipoAcaoLog(),
-					"Erro interno ao construir o arquivo de Remessa " + nomeArquivo + " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".",
-					e);
+			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo de Remessa " + nomeArquivo
+			        + " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".", e);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return getMensagem();
