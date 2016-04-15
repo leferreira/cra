@@ -33,6 +33,7 @@ public class MonitorarTitulosCraPanel extends Panel {
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
+
 	private IModel<TituloRemessa> model;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
@@ -97,13 +98,15 @@ public class MonitorarTitulosCraPanel extends Panel {
 
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
+		comboMunicipio =
+				new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;
 	}
 
 	private DropDownChoice<Instituicao> comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		this.comboPortador = new DropDownChoice<Instituicao>("remessa.instituicaoOrigem", instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
+		this.comboPortador = new DropDownChoice<Instituicao>("remessa.instituicaoOrigem",
+				instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
 		return comboPortador;
 	}
 

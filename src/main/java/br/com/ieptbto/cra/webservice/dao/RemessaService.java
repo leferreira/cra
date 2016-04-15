@@ -33,151 +33,151 @@ import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 @Service
 public class RemessaService extends CraWebService {
 
-    @Autowired
-    private RemessaMediator remessaMediator;
-    private String arquivoRecebido;
-    private List<RemessaVO> remessas;
-    private ArquivoVO arquivoVO;
+	@Autowired
+	private RemessaMediator remessaMediator;
+	private String arquivoRecebido;
+	private List<RemessaVO> remessas;
+	private ArquivoVO arquivoVO;
 
-    /**
-     * Envio de remessas pelos bancos/convênios
-     * 
-     * @param nomeArquivo
-     * @param usuario
-     * @param dados
-     * @return
-     */
-    public String processar(String nomeArquivo, Usuario usuario, String dados) {
-	ArquivoVO arquivoVO = new ArquivoVO();
-	setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_REMESSA);
-	setUsuario(usuario);
-	setNomeArquivo(nomeArquivo);
+	/**
+	 * Envio de remessas pelos bancos/convênios
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @param dados
+	 * @return
+	 */
+	public String processar(String nomeArquivo, Usuario usuario, String dados) {
+		ArquivoVO arquivoVO = new ArquivoVO();
+		setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_REMESSA);
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
 
-	try {
-	    if (getUsuario().getId() == 0) {
-		return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
-	    }
-	    if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-		return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
-	    }
-	    if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
-		return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
-	    }
-	    if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
-		return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
-	    }
+		try {
+			if (getUsuario().getId() == 0) {
+				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
+				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
+			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
 
-	    setRemessas(ConversorArquivoVO.converterParaRemessaVO(converterStringArquivoVO(dados)));
-	    setObjectMensagemXml(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo));
-	    loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
-		    + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
-	} catch (Exception ex) {
-	    logger.error(ex.getMessage(), ex.getCause());
-	    loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno no processamento do arquivo de Remessa "
-		    + nomeArquivo + ".", ex);
-	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
-	}
-	return gerarMensagem(getObjectMensagemXml(), CONSTANTE_RELATORIO_XML);
-    }
-
-    private ArquivoVO converterStringArquivoVO(String dados) {
-	JAXBContext context;
-	ArquivoVO arquivo = null;
-
-	try {
-	    context = JAXBContext.newInstance(ArquivoVO.class);
-	    Unmarshaller unmarshaller = context.createUnmarshaller();
-	    String xmlRecebido = "";
-
-	    Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
-	    while (scanner.hasNext()) {
-		xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
-		if (xmlRecebido.contains("<?xml version=")) {
-		    xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", StringUtils.EMPTY);
+			setRemessas(ConversorArquivoVO.converterParaRemessaVO(converterStringArquivoVO(dados)));
+			setObjectMensagemXml(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo));
+			loggerCra.sucess(usuario, getTipoAcaoLog(),
+					"O arquivo de Remessa " + nomeArquivo + ", enviado por " + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex.getCause());
+			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno no processamento do arquivo de Remessa " + nomeArquivo + ".", ex);
+			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
-		if (xmlRecebido.contains("<comarca CodMun")) {
-		    xmlRecebido = xmlRecebido.replaceAll("<comarca CodMun=.[0-9]+..", StringUtils.EMPTY);
-		}
-		if (xmlRecebido.contains("</comarca>")) {
-		    xmlRecebido = xmlRecebido.replaceAll("</comarca>", StringUtils.EMPTY);
-		}
-	    }
-	    scanner.close();
-
-	    InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
-	    arquivo = (ArquivoVO) unmarshaller.unmarshal(new InputSource(xml));
-
-	} catch (JAXBException e) {
-	    logger.error(e.getMessage(), e.getCause());
-	    new InfraException(e.getMessage(), e.getCause());
+		return gerarMensagem(getObjectMensagemXml(), CONSTANTE_RELATORIO_XML);
 	}
-	return arquivo;
-    }
 
-    /**
-     * Consulta de remessas pelos cartórios
-     * 
-     * @param nomeArquivo
-     * @param usuario
-     * @return
-     */
-    public String buscarRemessa(String nomeArquivo, Usuario usuario) {
-	setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_REMESSA);
-	Remessa remessa = null;
-	RemessaVO remessaVO = null;
-	setUsuario(usuario);
-	setNomeArquivo(nomeArquivo);
+	private ArquivoVO converterStringArquivoVO(String dados) {
+		JAXBContext context;
+		ArquivoVO arquivo = null;
 
-	try {
-	    if (getUsuario().getId() == 0) {
-		return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
-	    }
-	    remessaVO = remessaMediator.buscarRemessaParaCartorio(remessa, usuario.getInstituicao(), nomeArquivo);
-	    if (remessaVO == null) {
-		return setRespostaPadrao(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
-	    }
+		try {
+			context = JAXBContext.newInstance(ArquivoVO.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			String xmlRecebido = "";
 
-	    setMensagem(gerarResposta(remessaVO, getNomeArquivo(), CONSTANTE_REMESSA_XML));
-	    loggerCra.sucess(getUsuario(), getTipoAcaoLog(), "Arquivo de Remessa " + nomeArquivo
-		    + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
-	} catch (Exception e) {
-	    logger.error(e.getMessage(), e.getCause());
-	    loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo de Remessa "
-		    + nomeArquivo + " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".", e);
-	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
+			Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
+			while (scanner.hasNext()) {
+				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
+				if (xmlRecebido.contains("<?xml version=")) {
+					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", StringUtils.EMPTY);
+				}
+				if (xmlRecebido.contains("<comarca CodMun")) {
+					xmlRecebido = xmlRecebido.replaceAll("<comarca CodMun=.[0-9]+..", StringUtils.EMPTY);
+				}
+				if (xmlRecebido.contains("</comarca>")) {
+					xmlRecebido = xmlRecebido.replaceAll("</comarca>", StringUtils.EMPTY);
+				}
+			}
+			scanner.close();
+
+			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
+			arquivo = (ArquivoVO) unmarshaller.unmarshal(new InputSource(xml));
+
+		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(e.getMessage(), e.getCause());
+		}
+		return arquivo;
 	}
-	return getMensagem();
-    }
 
-    private String gerarResposta(RemessaVO remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {
-	StringBuffer string = new StringBuffer();
-	String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
-	string.append(msg);
-	return string.toString();
-    }
+	/**
+	 * Consulta de remessas pelos cartórios
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @return
+	 */
+	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
+		setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_REMESSA);
+		Remessa remessa = null;
+		RemessaVO remessaVO = null;
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
 
-    public String getArquivoRecebido() {
-	return arquivoRecebido;
-    }
+		try {
+			if (getUsuario().getId() == 0) {
+				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			remessaVO = remessaMediator.buscarRemessaParaCartorio(remessa, usuario.getInstituicao(), nomeArquivo);
+			if (remessaVO == null) {
+				return setRespostaPadrao(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
+			}
 
-    public void setArquivoRecebido(String arquivoRecebido) {
-	this.arquivoRecebido = arquivoRecebido;
-    }
+			setMensagem(gerarResposta(remessaVO, getNomeArquivo(), CONSTANTE_REMESSA_XML));
+			loggerCra.sucess(getUsuario(), getTipoAcaoLog(),
+					"Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e.getCause());
+			loggerCra.error(getUsuario(), getTipoAcaoLog(),
+					"Erro interno ao construir o arquivo de Remessa " + nomeArquivo + " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".",
+					e);
+			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
+		}
+		return getMensagem();
+	}
 
-    public List<RemessaVO> getRemessas() {
-	return remessas;
-    }
+	private String gerarResposta(RemessaVO remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {
+		StringBuffer string = new StringBuffer();
+		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
+		string.append(msg);
+		return string.toString();
+	}
 
-    public void setRemessas(List<RemessaVO> remessas) {
-	this.remessas = remessas;
-    }
+	public String getArquivoRecebido() {
+		return arquivoRecebido;
+	}
 
-    public ArquivoVO getArquivoVO() {
-	return arquivoVO;
-    }
+	public void setArquivoRecebido(String arquivoRecebido) {
+		this.arquivoRecebido = arquivoRecebido;
+	}
 
-    public void setArquivoVO(ArquivoVO arquivoVO) {
-	this.arquivoVO = arquivoVO;
-    }
+	public List<RemessaVO> getRemessas() {
+		return remessas;
+	}
+
+	public void setRemessas(List<RemessaVO> remessas) {
+		this.remessas = remessas;
+	}
+
+	public ArquivoVO getArquivoVO() {
+		return arquivoVO;
+	}
+
+	public void setArquivoVO(ArquivoVO arquivoVO) {
+		this.arquivoVO = arquivoVO;
+	}
 
 }

@@ -93,7 +93,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 		});
 	}
 
-	public IModel<List<Municipio>> buscarMunicipios() {
+	private IModel<List<Municipio>> buscarMunicipios() {
 		return new LoadableDetachableModel<List<Municipio>>() {
 
 			/**/

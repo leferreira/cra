@@ -141,8 +141,8 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
-							+ remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+							"CRA_RELATORIO_" + remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
@@ -165,7 +165,8 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 					File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
 					IResourceStream resourceStream = new FileResourceStream(file);
 
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
+					getRequestCycle()
+							.scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {

@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
@@ -31,34 +32,41 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+
 	@SpringBean
 	TituloMediator tituloMediator;
 
-	private TituloRemessa tituloRemessa;
-	private List<TituloRemessa> titulos;
+	private TituloRemessa titulo;
+	private LocalDate dataInicio;
+	private LocalDate dataFim;
 	private Municipio municipio;
 
-	public ListaTitulosPage(LocalDate dataInicio, LocalDate dataFim, TituloRemessa titulo, Municipio pracaProtesto) {
-		this.tituloRemessa = titulo;
-		this.municipio = pracaProtesto;
-		this.titulos = tituloMediator.buscarListaTitulos(dataInicio, dataFim, titulo, pracaProtesto, getUser());
+	public ListaTitulosPage(LocalDate dataInicio, LocalDate dataFim, TituloRemessa titulo, Municipio municipio) {
+		this.dataInicio = dataInicio;
+		this.dataFim = dataFim;
+		this.titulo = titulo;
+		this.municipio = municipio;
+		adicionarComponentes();
 
-		add(carregarListaTitulos());
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		// TODO Auto-generated method stub
+		add(listaTitulos());
 
 	}
 
-	private ListView<TituloRemessa> carregarListaTitulos() {
-		return new ListView<TituloRemessa>("listViewTitulos", getTitulos()) {
+	private ListView<TituloRemessa> listaTitulos() {
+		return new ListView<TituloRemessa>("listViewTitulos", buscarTitulos()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
@@ -66,6 +74,9 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new TitulosArquivoPage(tituloLista.getRemessa()));
@@ -88,20 +99,26 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 				}
-				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
+				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getSaldoTitulo()));
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));
 					}
 				};
 				if (tituloLista.getNomeDevedor().length() > 25) {
-					linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor().substring(0, 24)));
+					linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor().substring(0, 24).toUpperCase()));
 				} else {
-					linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
+					linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor().toUpperCase()));
 				}
 				item.add(linkHistorico);
 				Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new TitulosArquivoPage(tituloLista.getRetorno().getRemessa()));
@@ -121,29 +138,21 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		};
 	}
 
-	public TituloRemessa getTituloRemessa() {
-		return tituloRemessa;
+	public IModel<List<TituloRemessa>> buscarTitulos() {
+		return new LoadableDetachableModel<List<TituloRemessa>>() {
+
+			/**/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected List<TituloRemessa> load() {
+				return tituloMediator.buscarListaTitulos(dataInicio, dataFim, titulo, municipio, getUser());
+			}
+		};
 	}
 
 	@Override
 	protected IModel<TituloRemessa> getModel() {
-		return new CompoundPropertyModel<TituloRemessa>(tituloRemessa);
+		return new CompoundPropertyModel<TituloRemessa>(titulo);
 	}
-
-	public List<TituloRemessa> getTitulos() {
-		return titulos;
-	}
-
-	public Municipio getMunicipio() {
-		return municipio;
-	}
-
-	public void setTitulos(List<TituloRemessa> titulos) {
-		this.titulos = titulos;
-	}
-
-	public void setMunicipio(Municipio municipio) {
-		this.municipio = municipio;
-	}
-
 }
