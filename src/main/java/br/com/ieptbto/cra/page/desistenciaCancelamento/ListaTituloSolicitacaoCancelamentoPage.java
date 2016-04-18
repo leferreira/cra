@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -132,7 +133,17 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 
 					@Override
 					public void onClick() {
-						setResponsePage(new SolicitacaoCancelamentoPage(titulo));
+						setResponsePage(new TituloSolicitacaoCancelamentoPage(titulo));
+					}
+
+					@Override
+					protected void onComponentTag(ComponentTag tag) {
+						super.onComponentTag(tag);
+						if (titulo.getStatusSolicitacaoCancelamento() == StatusSolicitacaoCancelamento.NAO_SOLICITADO) {
+							tag.put("class", "btn btn-danger btn-sm");
+						} else {
+							tag.put("class", "btn btn-warning btn-sm");
+						}
 					}
 				};
 				linkSolicitarCancelamento.setEnabled(false);
@@ -142,9 +153,15 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 							&& !titulo.getConfirmacao().getNumeroProtocoloCartorio().trim().equals("0")) {
 						linkSolicitarCancelamento.setEnabled(true);
 					}
+					if (titulo.getStatusSolicitacaoCancelamento() == StatusSolicitacaoCancelamento.NAO_SOLICITADO) {
+						linkSolicitarCancelamento.add(new Label("nomeAcao", "Solicitar Cancelamento".toUpperCase()));
+					} else {
+						linkSolicitarCancelamento.add(new Label("nomeAcao", "Solicitação já Enviada".toUpperCase()));
+					}
 					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(titulo.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 					item.add(new Label("protocolo", titulo.getConfirmacao().getNumeroProtocoloCartorio()));
 				} else {
+					linkSolicitarCancelamento.add(new Label("nomeAcao", "Aguardando o protocolo".toUpperCase()));
 					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 				}

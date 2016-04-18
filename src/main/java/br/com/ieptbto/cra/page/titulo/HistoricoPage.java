@@ -175,7 +175,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 						public void onClick() {
 						}
 					};
-					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+					linkArquivo.add(new Label("nomeArquivo",
+							arquivoOcorrenciaBean.getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 					item.add(linkArquivo);
 					item.add(new Label("acao", " enviado para CRA em "));
 				}
@@ -221,8 +222,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		add(valorCustasCartorioDistribuidor());
 		add(valorDemaisDespesas());
 		add(valorGravacaoEletronica());
-		add(nomeCedenteFavorecido());
-		add(agenciaCodigoCedente());
 	}
 
 	private Label codigoCartorio() {
@@ -275,8 +274,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		if (getTituloRemessa().getConfirmacao() != null) {
 			if (getTituloRemessa().getConfirmacao().getTipoOcorrencia() != null) {
 				String tipoOcorrencia = getTituloRemessa().getConfirmacao().getTipoOcorrencia().trim();
-				if (!tipoOcorrencia.equals(StringUtils.EMPTY)
-						|| tipoOcorrencia.equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
+				if (!tipoOcorrencia.equals(StringUtils.EMPTY) || tipoOcorrencia.equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
 					valorGravacao = getTituloRemessa().getRemessa().getInstituicaoOrigem().getValorConfirmacao();
 				}
 			}
@@ -341,14 +339,12 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	public Label valorTitulo() {
-		Label textField = new Label("valorTitulo", new Model<String>("R$ "
-				+ getTituloRemessa().getValorTitulo().toString()));
+		Label textField = new Label("valorTitulo", new Model<String>("R$ " + getTituloRemessa().getValorTitulo().toString()));
 		return textField;
 	}
 
 	public Label saldoTitulo() {
-		Label textField = new Label("saldoTitulo", new Model<String>("R$ "
-				+ getTituloRemessa().getSaldoTitulo().toString()));
+		Label textField = new Label("saldoTitulo", new Model<String>("R$ " + getTituloRemessa().getSaldoTitulo().toString()));
 		return textField;
 	}
 
@@ -383,16 +379,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			valorDemaisDespesas = getTituloRemessa().getRetorno().getValorDemaisDespesas();
 		}
 		return new LabelValorMonetario<BigDecimal>("valorDemaisDespesas", valorDemaisDespesas);
-	}
-
-	public Label nomeCedenteFavorecido() {
-		Label textField = new Label("nomeCedenteFavorecido", new Model<String>(getTituloRemessa().getNomeCedenteFavorecido()));
-		return textField;
-	}
-
-	public Label agenciaCodigoCedente() {
-		Label textField = new Label("agenciaCodigoCedente", new Model<String>(getTituloRemessa().getAgenciaCodigoCedente()));
-		return textField;
 	}
 
 	private Label nomeSacadorVendedor() {

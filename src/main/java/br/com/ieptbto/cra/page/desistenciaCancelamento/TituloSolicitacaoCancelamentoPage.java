@@ -1,11 +1,16 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -13,6 +18,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.StatusSolicitacaoCancelamento;
+import br.com.ieptbto.cra.enumeration.TipoMotivoCancelamento;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -24,7 +32,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
-public class SolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
+public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -36,7 +44,9 @@ public class SolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 
 	private TituloRemessa tituloRemessa;
 
-	public SolicitacaoCancelamentoPage(TituloRemessa titulo) {
+	private DropDownChoice<TipoMotivoCancelamento> dropDownMotivoCancelamento;
+
+	public TituloSolicitacaoCancelamentoPage(TituloRemessa titulo) {
 		this.tituloRemessa = titulo;
 		adicionarComponentes();
 	}
@@ -56,11 +66,28 @@ public class SolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 
 			@Override
 			protected void onSubmit() {
-				// TODO Auto-generated method stub
-				super.onSubmit();
+				TituloRemessa titulo = getModelObject();
+
+				try {
+					if (dropDownMotivoCancelamento.getModelObject().equals(TipoMotivoCancelamento.CANCELAMENTO_POR_IRREGULARIDADE)) {
+						titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
+					}
+					if (dropDownMotivoCancelamento.getModelObject().equals(TipoMotivoCancelamento.CANCELAMENTO_POR_PAGAMENTO)) {
+						titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
+					}
+					cancelamentoProtestoMediator.salvarSolicitacaoCancelamento(titulo);
+					success("Solicitação de cancelamento efetuada com sucesso!");
+
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					getFeedbackPanel().error(ex.getMessage());
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					error("Não foi possível enviar a solicitação de cancelamento ! \n Entre em contato com o IEPTB ! ");
+				}
 			}
 		};
-		// form.add(dropDownMotivoCancelamento());
+		form.add(dropDownMotivoCancelamento());
 		form.add(numeroTituloModal());
 		form.add(nomeDevedorModal());
 		form.add(saldoTituloModal());
@@ -82,6 +109,16 @@ public class SolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 		add(saldoTitulo());
 		add(numeroProtocoloCartorio());
 
+	}
+
+	private DropDownChoice<TipoMotivoCancelamento> dropDownMotivoCancelamento() {
+		IChoiceRenderer<TipoMotivoCancelamento> renderer = new ChoiceRenderer<TipoMotivoCancelamento>("label");
+		dropDownMotivoCancelamento = new DropDownChoice<TipoMotivoCancelamento>("tipoMotivo", new Model<TipoMotivoCancelamento>(),
+				Arrays.asList(TipoMotivoCancelamento.values()), renderer);
+		dropDownMotivoCancelamento.setLabel(new Model<String>("Motivo do Cancelameto"));
+		dropDownMotivoCancelamento.setOutputMarkupId(true);
+		dropDownMotivoCancelamento.setRequired(true);
+		return dropDownMotivoCancelamento;
 	}
 
 	private Label pracaProtesto() {

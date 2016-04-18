@@ -114,7 +114,8 @@ public class CentralNacionalProtestoPage extends WebPage {
 		WebMarkupContainer divResultadoConsulta = new WebMarkupContainer("resultado");
 		divResultadoConsulta.setOutputMarkupId(true);
 
-		Label labelNaoHaProtestos = new Label("labelNaoHaProtestos", "Não constam protestos, por falta de pagamento, para este CPF/CNPJ nos tabelionatos do estado do Tocantins!".toUpperCase());
+		Label labelNaoHaProtestos = new Label("labelNaoHaProtestos",
+				"Não constam protestos, por falta de pagamento, para este CPF/CNPJ nos tabelionatos do estado do Tocantins!".toUpperCase());
 		labelNaoHaProtestos.setOutputMarkupId(true);
 		labelNaoHaProtestos.setVisible(false);
 		divResultadoConsulta.add(labelNaoHaProtestos);
@@ -127,15 +128,15 @@ public class CentralNacionalProtestoPage extends WebPage {
 			@Override
 			protected void populateItem(ListItem<String> item) {
 				String municipioGuarai = item.getModelObject();
-				item.add(new Label("protesto", "CONSTA(M) PROTESTO(S) NO TABELIONATO DE PROTESTO DE TÍTULOS DE "
-						+ municipioGuarai + "."));
+				item.add(new Label("protesto", "CONSTA(M) PROTESTO(S) NO TABELIONATO DE PROTESTO DE TÍTULOS DE " + municipioGuarai + "."));
 			}
 		};
 		pageableListView.setOutputMarkupId(true);
 		pageableListView.setVisible(false);
 		divResultadoConsulta.add(pageableListView);
 
-		Label labelMensagemDevedor = new Label("prazo", "OBS: O prazo para exclusão do registro de protesto da base é de 5 dias após o cancelamento do protesto no cartório".toUpperCase());
+		Label labelMensagemDevedor = new Label("prazo",
+				"OBS: O prazo para exclusão do registro de protesto da base é de 5 dias após o cancelamento do protesto no cartório".toUpperCase());
 		labelMensagemDevedor.setOutputMarkupId(true);
 		labelMensagemDevedor.setVisible(false);
 		divResultadoConsulta.add(labelMensagemDevedor);

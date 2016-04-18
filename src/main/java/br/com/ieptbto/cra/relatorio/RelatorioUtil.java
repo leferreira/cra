@@ -75,8 +75,8 @@ public class RelatorioUtil implements Serializable {
 		return null;
 	}
 
-	public JasperPrint gerarRelatorioArquivos(TipoArquivoEnum tipoArquivo, TipoRelatorio tipoRelatorio, Instituicao instituicao,
-			LocalDate dataInicio, LocalDate dataFim) throws JRException {
+	public JasperPrint gerarRelatorioArquivos(TipoArquivoEnum tipoArquivo, TipoRelatorio tipoRelatorio, Instituicao instituicao, LocalDate dataInicio,
+			LocalDate dataFim) throws JRException {
 		this.instituicao = instituicao;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
@@ -97,8 +97,8 @@ public class RelatorioUtil implements Serializable {
 		return null;
 	}
 
-	public JasperPrint gerarRelatorioTitulosPorSituacao(SituacaoTituloRelatorio situacaoTitulosRelatorio, Instituicao instituicao,
-			LocalDate dataInicio, LocalDate dataFim) throws JRException {
+	public JasperPrint gerarRelatorioTitulosPorSituacao(SituacaoTituloRelatorio situacaoTitulosRelatorio, Instituicao instituicao, LocalDate dataInicio,
+			LocalDate dataFim) throws JRException {
 		this.instituicao = instituicao;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
@@ -187,8 +187,7 @@ public class RelatorioUtil implements Serializable {
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
 	}
 
-	public JasperPrint gerarRelatorioCustasCRA(Usuario user, Instituicao instituicao, LocalDate dataInicio, LocalDate dataFim)
-			throws JRException {
+	public JasperPrint gerarRelatorioCustasCRA(Usuario user, Instituicao instituicao, LocalDate dataInicio, LocalDate dataFim) throws JRException {
 		this.instituicao = instituicao;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
@@ -201,8 +200,7 @@ public class RelatorioUtil implements Serializable {
 			initParams();
 
 			TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
-			if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-					|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+			if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
 				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 			} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
@@ -256,8 +254,7 @@ public class RelatorioUtil implements Serializable {
 		JasperReport jasperReport = null;
 		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
@@ -269,8 +266,7 @@ public class RelatorioUtil implements Serializable {
 		JasperReport jasperReport = null;
 		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
@@ -282,8 +278,7 @@ public class RelatorioUtil implements Serializable {
 		JasperReport jasperReport = null;
 		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
@@ -295,8 +290,7 @@ public class RelatorioUtil implements Serializable {
 		JasperReport jasperReport = null;
 		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
@@ -308,8 +302,7 @@ public class RelatorioUtil implements Serializable {
 		JasperReport jasperReport = null;
 		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
@@ -321,8 +314,7 @@ public class RelatorioUtil implements Serializable {
 		JasperReport jasperReport = null;
 		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
@@ -334,8 +326,7 @@ public class RelatorioUtil implements Serializable {
 		JasperReport jasperReport = null;
 		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
@@ -347,8 +338,7 @@ public class RelatorioUtil implements Serializable {
 		JasperReport jasperReport = null;
 		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
@@ -360,8 +350,7 @@ public class RelatorioUtil implements Serializable {
 		JasperReport jasperReport = null;
 		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA) || tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));

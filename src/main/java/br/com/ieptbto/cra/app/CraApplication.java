@@ -51,7 +51,7 @@ import br.com.ieptbto.cra.page.desistenciaCancelamento.BuscarDesistenciaCancelam
 import br.com.ieptbto.cra.page.desistenciaCancelamento.BuscarTituloSolicitacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.ListaDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.ListaTituloSolicitacaoCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.SolicitacaoCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TituloSolicitacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
@@ -212,7 +212,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("TitulosCancelamento", TitulosCancelamentoPage.class);
 		mountPage("BuscarTituloSolicitacaoCancelamento", BuscarTituloSolicitacaoCancelamentoPage.class);
 		mountPage("ListaTituloSolicitacaoCancelamento", ListaTituloSolicitacaoCancelamentoPage.class);
-		mountPage("SolicitacaoCancelamento", SolicitacaoCancelamentoPage.class);
+		mountPage("SolicitacaoCancelamento", TituloSolicitacaoCancelamentoPage.class);
 		mountPage("TitulosAutorizacaoCancelamento", TitulosAutorizacaoCancelamentoPage.class);
 
 		mountPage("RemoverArquivo", RemoverArquivoPage.class);

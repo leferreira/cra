@@ -134,7 +134,6 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(CabecalhoCnp.class);
 		classesHibernate.add(TituloCnp.class);
 		classesHibernate.add(RodapeCnp.class);
-
 		classesHibernate.add(Deposito.class);
 		classesHibernate.add(BatimentoDeposito.class);
 		classesHibernate.add(Batimento.class);

@@ -187,8 +187,11 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 				final TituloRemessa tituloRemessa = item.getModelObject();
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloRemessa.getSaldoTitulo()));
 				item.add(new Label("nossoNumero", tituloRemessa.getNossoNumero()));
-				item.add(new Label("pracaProtesto", tituloRemessa.getPracaProtesto()));
-				item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
+				String municipio = tituloRemessa.getPracaProtesto();
+				if (municipio.length() > 20) {
+					municipio = municipio.substring(0, 19);
+				}
+				item.add(new Label("pracaProtesto", municipio.toUpperCase()));
 				if (tituloRemessa.getConfirmacao() == null) {
 					item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
 					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
@@ -207,6 +210,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 					item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
 				}
+				item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
 
 				Link<Arquivo> linkArquivoRemessa = new Link<Arquivo>("linkArquivo") {
 
