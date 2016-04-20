@@ -212,7 +212,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 				try {
 					instrumentoMediator.salvarInstrumentoProtesto(getRetornos(), getUser());
 					setRetornos(null);
-					setResponsePage(new MensagemPage<InstrumentoProtesto>(InstrumentoProtestoPage.class, "ENTRADA DE INSTRUMENTO DE PROTESTO", "Entrada dos instrumentos realizada com sucesso!"));
+					setResponsePage(new MensagemPage<InstrumentoProtesto>(InstrumentoProtestoPage.class, "ENTRADA DE INSTRUMENTO DE PROTESTO",
+							"Entrada dos instrumentos realizada com sucesso!"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);

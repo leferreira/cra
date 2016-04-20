@@ -21,7 +21,7 @@ import br.com.ieptbto.cra.entidade.vo.RemessaDesistenciaProtestoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.exception.DesistenciaException;
+import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -141,7 +141,7 @@ public class DesistenciaProtestoService extends CraWebService {
 		}
 
 		for (Exception ex : getErros()) {
-			DesistenciaException exception = DesistenciaException.class.cast(ex);
+			DesistenciaCancelamentoException exception = DesistenciaCancelamentoException.class.cast(ex);
 			Mensagem erro = new Mensagem();
 			erro.setDescricao(exception.getMessage());
 			erro.setMunicipio(exception.getMunicipio());

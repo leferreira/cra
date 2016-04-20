@@ -18,8 +18,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.StatusSolicitacaoCancelamento;
-import br.com.ieptbto.cra.enumeration.TipoMotivoCancelamento;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
@@ -44,7 +44,7 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 
 	private TituloRemessa tituloRemessa;
 
-	private DropDownChoice<TipoMotivoCancelamento> dropDownMotivoCancelamento;
+	private DropDownChoice<CodigoIrregularidade> dropDownMotivoCancelamento;
 
 	public TituloSolicitacaoCancelamentoPage(TituloRemessa titulo) {
 		this.tituloRemessa = titulo;
@@ -69,14 +69,27 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 				TituloRemessa titulo = getModelObject();
 
 				try {
-					if (dropDownMotivoCancelamento.getModelObject().equals(TipoMotivoCancelamento.CANCELAMENTO_POR_IRREGULARIDADE)) {
-						titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
+					if (titulo.getStatusSolicitacaoCancelamento() != StatusSolicitacaoCancelamento.NAO_SOLICITADO) {
+						throw new InfraException("Solicitação de cancelamento para este título já foi enviada anteriormente !");
 					}
-					if (dropDownMotivoCancelamento.getModelObject().equals(TipoMotivoCancelamento.CANCELAMENTO_POR_PAGAMENTO)) {
+					if (dropDownMotivoCancelamento.getModelObject() == null) {
 						titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
+					} else {
+						CodigoIrregularidade codigoIrregularidade = dropDownMotivoCancelamento.getModelObject();
+						if (codigoIrregularidade == CodigoIrregularidade.IRREGULARIDADE_0) {
+							titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
+						} else {
+							if (titulo.getConfirmacao().getDataProtocolo().isAfter(DataUtil.stringToLocalDate("17/03/2016"))) {
+								throw new InfraException("Segundo ofício do Tribunal de Justiça, não é permitido "
+										+ "o cancelamento por irregularidade para protocolos após 16/03/2016!");
+							}
+							titulo.setCodigoIrregularidadeCancelamento(codigoIrregularidade);
+							titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
+						}
 					}
 					cancelamentoProtestoMediator.salvarSolicitacaoCancelamento(titulo);
 					success("Solicitação de cancelamento efetuada com sucesso!");
+					info("O devedor deverá comparacer ao cartório para quitação das custas do cancelamento e do protesto! ");
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -111,13 +124,12 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 
 	}
 
-	private DropDownChoice<TipoMotivoCancelamento> dropDownMotivoCancelamento() {
-		IChoiceRenderer<TipoMotivoCancelamento> renderer = new ChoiceRenderer<TipoMotivoCancelamento>("label");
-		dropDownMotivoCancelamento = new DropDownChoice<TipoMotivoCancelamento>("tipoMotivo", new Model<TipoMotivoCancelamento>(),
-				Arrays.asList(TipoMotivoCancelamento.values()), renderer);
+	private DropDownChoice<CodigoIrregularidade> dropDownMotivoCancelamento() {
+		IChoiceRenderer<CodigoIrregularidade> renderer = new ChoiceRenderer<CodigoIrregularidade>("motivo");
+		dropDownMotivoCancelamento = new DropDownChoice<CodigoIrregularidade>("tipoMotivo", new Model<CodigoIrregularidade>(),
+				Arrays.asList(CodigoIrregularidade.values()), renderer);
 		dropDownMotivoCancelamento.setLabel(new Model<String>("Motivo do Cancelameto"));
 		dropDownMotivoCancelamento.setOutputMarkupId(true);
-		dropDownMotivoCancelamento.setRequired(true);
 		return dropDownMotivoCancelamento;
 	}
 

@@ -20,7 +20,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
-import br.com.ieptbto.cra.exception.DesistenciaException;
+import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -95,7 +95,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					}
 					for (Exception exception : arquivoRetorno.getErros()) {
 						if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
-							info(DesistenciaException.class.cast(exception).toString());
+							info(DesistenciaCancelamentoException.class.cast(exception).toString());
 						} else {
 							info(exception.getMessage());
 						}

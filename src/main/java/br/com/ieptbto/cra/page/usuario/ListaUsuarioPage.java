@@ -23,7 +23,6 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaUsuarioPage extends BasePage<Usuario> {
@@ -92,8 +91,7 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 
 			@Override
 			protected List<Usuario> load() {
-				List<Usuario> list = usuarioMediator.listarTodos();
-				return list;
+				return usuarioMediator.listarTodos();
 			}
 		};
 	}

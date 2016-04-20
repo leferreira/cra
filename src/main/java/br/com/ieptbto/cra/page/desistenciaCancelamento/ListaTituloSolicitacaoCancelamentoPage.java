@@ -36,7 +36,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 
 	/***/

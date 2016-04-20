@@ -7,8 +7,8 @@
 	<wicket:extend>
 		<h4 class="titulo-top">SOLICITAR CANCELAMENTO
 			<span class="pull-right">
-				<a href="SolicitacaoCancelamento" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
-			</span>
+				<a href="BuscarTituloSolicitacaoCancelamento" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+			</span>  
 		</h4>
 		<div class="well well-sm">  
 			<div class="col-lg-4" style="font-size: 14px;">
@@ -45,7 +45,7 @@
 			</div>
 			<div class="col-lg-4" style="font-size: 14px;">
 				<fieldset>
-					<legend>CANCELAMENTO</legend>
+					<legend>SOLICITAR CANCELAMENTO</legend>
 					<dl class="dl-horizontal">
 						  <dt>SITUA&Ccedil;&Atilde;O</dt><dd><span class="info-titulo" wicket:id="situacaoTitulo" style="font-size: 13px; margin-top: 10px;"></span></dd>
 					</dl>
@@ -53,9 +53,10 @@
 					  <dt>PRA&Ccedil;A PROTESTO</dt><dd><span wicket:id="pracaProtesto"></span></dd>
 					  <dt>PROTOCOLO</dt><dd><span wicket:id="numeroProtocoloCartorio"></span></dd>
 					</dl>
-					<form wicket:id="form">
+					<form wicket:id="form">  
+						<label>PERMITIDO PARA TÍTULOS PROTOCOLADOS ATÉ 16/03/2016.</label>
 						<div class="form-group">
-						  <label>MOTIVO DO CANCELAMENTO</label>
+						  <label>IRREGULARIDE&nbsp;<small>*opcional</small></label>
 						  <select class="form-control" autofocus="autofocus" wicket:id="tipoMotivo"></select>
 						</div>
 						<a class="btn btn-danger" data-toggle="modal" data-target="#myModal">

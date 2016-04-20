@@ -40,6 +40,7 @@ import br.com.ieptbto.cra.page.cnp.CentralNacionalProtestoPage;
 import br.com.ieptbto.cra.page.convenio.GerarRemessaConvenioPage;
 import br.com.ieptbto.cra.page.cra.BatimentoPage;
 import br.com.ieptbto.cra.page.cra.BuscarDepositoPage;
+import br.com.ieptbto.cra.page.cra.GerarCancelamentosPage;
 import br.com.ieptbto.cra.page.cra.GerarConfirmacaoPage;
 import br.com.ieptbto.cra.page.cra.GerarRetornoPage;
 import br.com.ieptbto.cra.page.cra.ImportarExtratoPage;
@@ -175,6 +176,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("GerarRemessasConvenio", GerarRemessaConvenioPage.class);
 		mountPage("GerarConfirmacao", GerarConfirmacaoPage.class);
 		mountPage("GerarRetorno", GerarRetornoPage.class);
+		mountPage("GerarCancelamentos", GerarCancelamentosPage.class);
 
 		mountPage("Instituicoes", ListaInstituicaoPage.class);
 		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);

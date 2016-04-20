@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+		<form wicket:id="form">
+			<h4 class="titulo-top">CANCELAMENTOS CONVÊNIOS
+				<span class="pull-right">
+					<button type="submit" class="btn btn-primary"><span class="fa fa-check"></span> LIBERAR CANCELAMENTOS</button>
+				</span>
+			</h4>
+		</form>
+		<br style="clear: both;"/>
+		<table id="table" class="table table-responsive table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="col-center">NOSSO Nº</th>
+					<th class="col-center">Nº TÍTULO</th>
+					<th>MUNCÍPIO</th>
+					<th>DEVEDOR</th>
+					<th class="col-right valor">VALOR TÍTULO</th>
+					<th class="col-center">TIPO</th>
+					<th class="col-center">MOTIVO</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="listaTitulosCancelamento">
+					<td wicket:id="nossoNumero" class="col-center"></td>
+					<td class="col-center" wicket:id="numeroTitulo"></td>
+					<td wicket:id="pracaProtesto"></td>
+					<td wicket:id="devedor"></td>
+					<td class="col-right valor" wicket:id="valor"></td>
+					<td class="col-center" wicket:id="tipoSolicitacao"></td>
+					<td wicket:id="motivo"></td>
+				</tr>
+			</tbody>
+		</table>
+	</wicket:extend>
+</body>
+</html>
