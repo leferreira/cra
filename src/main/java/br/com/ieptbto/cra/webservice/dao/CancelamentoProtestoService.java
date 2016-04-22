@@ -40,9 +40,10 @@ import br.com.ieptbto.cra.webservice.VO.TituloDetalhamentoSerpro;
 public class CancelamentoProtestoService extends CraWebService {
 
 	@Autowired
-	private CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	CancelamentoProtestoMediator cancelamentoProtestoMediator;
 	@Autowired
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
+
 	private List<Exception> erros;
 
 	/**
@@ -59,7 +60,7 @@ public class CancelamentoProtestoService extends CraWebService {
 		setNomeArquivo(nomeArquivo);
 
 		try {
-			if (getUsuario() == null) {
+			if (getUsuario().getId() == 0) {
 				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
@@ -156,44 +157,13 @@ public class CancelamentoProtestoService extends CraWebService {
 				titulo.setNumeroTitulo(pedidoCancelamento.getNumeroTitulo());
 				titulo.setNumeroProtocoloCartorio(pedidoCancelamento.getNumeroProtocolo());
 				titulo.setDataProtocolo(DataUtil.localDateToStringddMMyyyy(pedidoCancelamento.getDataProtocolagem()));
-				titulo.setCodigo(CodigoErro.SERPRO_SUCESSO_DESISTENCIA_CANCELAMENTO.getCodigo());
-				titulo.setOcorrencia(CodigoErro.SERPRO_SUCESSO_DESISTENCIA_CANCELAMENTO.getDescricao());
+				titulo.setCodigo(pedidoCancelamento.getCodigoErroProcessamento().getCodigo());
+				titulo.setOcorrencia(pedidoCancelamento.getCodigoErroProcessamento().getDescricao());
 
 				mensagemCancelamento.getTitulosDetalhamento().add(titulo);
 			}
 		}
 		return gerarMensagem(mensagemCancelamento, constanteRelatorioXml);
-	}
-
-	private String gerarMensagemErroCancelamento(LayoutPadraoXML layoutPadraoXML, List<PedidoCancelamento> pedidosCancelamento) {
-		if (layoutPadraoXML.equals(LayoutPadraoXML.SERPRO)) {
-			return gerarMensagemErroCancelamentoSerpro(pedidosCancelamento, CONSTANTE_RELATORIO_XML);
-		}
-		return gerarMensagemErroCancelamento(pedidosCancelamento, CONSTANTE_RELATORIO_XML);
-	}
-
-	private String gerarMensagemErroCancelamento(List<PedidoCancelamento> pedidosCancelamento, String constanteRelatorioXml) {
-		return null;
-	}
-
-	private String gerarMensagemErroCancelamentoSerpro(List<PedidoCancelamento> pedidosCancelamento, String constanteRelatorioXml) {
-		MensagemXmlDesistenciaCancelamentoSerpro mensagemErroCancelamento = new MensagemXmlDesistenciaCancelamentoSerpro();
-		mensagemErroCancelamento.setNomeArquivo(getNomeArquivo());
-		mensagemErroCancelamento.setTitulosDetalhamento(new ArrayList<TituloDetalhamentoSerpro>());
-
-		for (PedidoCancelamento pedidoCancelamento : pedidosCancelamento) {
-			TituloDetalhamentoSerpro titulo = new TituloDetalhamentoSerpro();
-			titulo.setDataHora(DataUtil.localDateToStringddMMyyyy(new LocalDate()) + DataUtil.localTimeToStringMMmm(new LocalTime()));
-			titulo.setCodigoCartorio(pedidoCancelamento.getCancelamentoProtesto().getCabecalhoCartorio().getCodigoCartorio());
-			titulo.setNumeroTitulo(pedidoCancelamento.getNumeroTitulo());
-			titulo.setNumeroProtocoloCartorio(pedidoCancelamento.getNumeroProtocolo());
-			titulo.setDataProtocolo(DataUtil.localDateToStringddMMyyyy(pedidoCancelamento.getDataProtocolagem()));
-			titulo.setCodigo(CodigoErro.SERPRO_NUMERO_PROTOCOLO_INVALIDO.getCodigo());
-			titulo.setOcorrencia(CodigoErro.SERPRO_NUMERO_PROTOCOLO_INVALIDO.getDescricao());
-
-			mensagemErroCancelamento.getTitulosDetalhamento().add(titulo);
-		}
-		return gerarMensagem(mensagemErroCancelamento, constanteRelatorioXml);
 	}
 
 	public List<Exception> getErros() {

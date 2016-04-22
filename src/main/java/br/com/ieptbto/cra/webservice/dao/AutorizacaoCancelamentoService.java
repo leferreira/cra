@@ -157,44 +157,13 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 				titulo.setNumeroTitulo(pedidoAC.getNumeroTitulo());
 				titulo.setNumeroProtocoloCartorio(pedidoAC.getNumeroProtocolo());
 				titulo.setDataProtocolo(DataUtil.localDateToStringddMMyyyy(pedidoAC.getDataProtocolagem()));
-				titulo.setCodigo(CodigoErro.SERPRO_SUCESSO_DESISTENCIA_CANCELAMENTO.getCodigo());
-				titulo.setOcorrencia(CodigoErro.SERPRO_SUCESSO_DESISTENCIA_CANCELAMENTO.getDescricao());
+				titulo.setCodigo(pedidoAC.getCodigoErroProcessamento().getCodigo());
+				titulo.setOcorrencia(pedidoAC.getCodigoErroProcessamento().getDescricao());
 
 				mensagemAC.getTitulosDetalhamento().add(titulo);
 			}
 		}
 		return gerarMensagem(mensagemAC, constanteRelatorioXml);
-	}
-
-	private String gerarMensagemErroAutorizacaoCancelamento(LayoutPadraoXML layoutPadraoXML, List<PedidoAutorizacaoCancelamento> pedidoAC) {
-		if (layoutPadraoXML.equals(LayoutPadraoXML.SERPRO)) {
-			return gerarMensagemErroAutorizacaoCancelamentoSerpro(pedidoAC, CONSTANTE_RELATORIO_XML);
-		}
-		return gerarMensagemErroAutorizacaoCancelamento(pedidoAC, CONSTANTE_RELATORIO_XML);
-	}
-
-	private String gerarMensagemErroAutorizacaoCancelamento(List<PedidoAutorizacaoCancelamento> pedidosDesistenciaCancelamento, String constanteRelatorioXml) {
-		return null;
-	}
-
-	private String gerarMensagemErroAutorizacaoCancelamentoSerpro(List<PedidoAutorizacaoCancelamento> pedidosAC, String constanteRelatorioXml) {
-		MensagemXmlDesistenciaCancelamentoSerpro mensagemErroDesistencia = new MensagemXmlDesistenciaCancelamentoSerpro();
-		mensagemErroDesistencia.setNomeArquivo(getNomeArquivo());
-		mensagemErroDesistencia.setTitulosDetalhamento(new ArrayList<TituloDetalhamentoSerpro>());
-
-		for (PedidoAutorizacaoCancelamento pedidoAC : pedidosAC) {
-			TituloDetalhamentoSerpro titulo = new TituloDetalhamentoSerpro();
-			titulo.setDataHora(DataUtil.localDateToStringddMMyyyy(new LocalDate()) + DataUtil.localTimeToStringMMmm(new LocalTime()));
-			titulo.setCodigoCartorio(pedidoAC.getAutorizacaoCancelamento().getCabecalhoCartorio().getCodigoCartorio());
-			titulo.setNumeroTitulo(pedidoAC.getNumeroTitulo());
-			titulo.setNumeroProtocoloCartorio(pedidoAC.getNumeroProtocolo());
-			titulo.setDataProtocolo(DataUtil.localDateToStringddMMyyyy(pedidoAC.getDataProtocolagem()));
-			titulo.setCodigo(CodigoErro.SERPRO_NUMERO_PROTOCOLO_INVALIDO.getCodigo());
-			titulo.setOcorrencia(CodigoErro.SERPRO_NUMERO_PROTOCOLO_INVALIDO.getDescricao());
-
-			mensagemErroDesistencia.getTitulosDetalhamento().add(titulo);
-		}
-		return gerarMensagem(mensagemErroDesistencia, constanteRelatorioXml);
 	}
 
 	public List<Exception> getErros() {

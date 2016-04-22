@@ -88,6 +88,7 @@ import br.com.ieptbto.cra.security.ISecureApplication;
 import br.com.ieptbto.cra.security.UserRoleAuthorizationStrategy;
 import br.com.ieptbto.cra.security.UserRolesAuthorizer;
 import br.com.ieptbto.cra.security.UserSession;
+import br.com.ieptbto.cra.util.CargaInicialPage;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
 
@@ -164,6 +165,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("SobreCra", SobreCraPage.class);
 		mountPage("CentralDeAcoes", CentralDeAcoesPage.class);
 		mountPage("CentralNacionalProtesto", CentralNacionalProtestoPage.class);
+		mountPage("CargaInicial", CargaInicialPage.class);
 
 		/** Administracao */
 		mountPage("Batimento", BatimentoPage.class);

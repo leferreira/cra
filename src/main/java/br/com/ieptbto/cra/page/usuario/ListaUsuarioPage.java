@@ -27,6 +27,11 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaUsuarioPage extends BasePage<Usuario> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private Usuario usuario;
 
 	@SpringBean
@@ -52,6 +57,11 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 	private void botaoNovoUsuario() {
 		add(new Link<Usuario>("botaoNovo") {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			public void onClick() {
 				setResponsePage(new IncluirUsuarioPage());
 			}
@@ -61,11 +71,21 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 	private void listaUsuario() {
 		add(new ListView<Usuario>("listViewUsuario", buscarUsuarios()) {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<Usuario> item) {
 				final Usuario usuarioLista = item.getModelObject();
 
 				Link<Void> linkAlterar = new Link<Void>("linkAlterar") {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new IncluirUsuarioPage(usuarioLista));
@@ -88,6 +108,11 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 
 	public IModel<List<Usuario>> buscarUsuarios() {
 		return new LoadableDetachableModel<List<Usuario>>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected List<Usuario> load() {
