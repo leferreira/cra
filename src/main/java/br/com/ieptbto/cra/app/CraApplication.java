@@ -48,6 +48,7 @@ import br.com.ieptbto.cra.page.cra.IncluirDepositoPage;
 import br.com.ieptbto.cra.page.cra.LiberarRetornoPage;
 import br.com.ieptbto.cra.page.cra.ListaDepositoPage;
 import br.com.ieptbto.cra.page.cra.RelatorioRetornoPage;
+import br.com.ieptbto.cra.page.cra.RetornosLiberadosPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.BuscarDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.BuscarTituloSolicitacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.ListaDesistenciaCancelamentoPage;
@@ -172,6 +173,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("ImportarExtrato", ImportarExtratoPage.class);
 		mountPage("BuscarDepositos", BuscarDepositoPage.class);
 		mountPage("LiberarRetornos", LiberarRetornoPage.class);
+		mountPage("RetornosLiberados", RetornosLiberadosPage.class);
 		mountPage("ListaDepositos", ListaDepositoPage.class);
 		mountPage("Deposito", IncluirDepositoPage.class);
 

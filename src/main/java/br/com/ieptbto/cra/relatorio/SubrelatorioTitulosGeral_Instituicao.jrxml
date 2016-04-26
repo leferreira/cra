@@ -7,8 +7,8 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="INSTITUICAO_ID" class="java.lang.Integer"/>
-	<parameter name="DATA_INICIO" class="java.util.Date"/>
-	<parameter name="DATA_FIM" class="java.util.Date"/>
+	<parameter name="DATA_INICIO" class="java.sql.Date"/>
+	<parameter name="DATA_FIM" class="java.sql.Date"/>
 	<queryString>
 		<![CDATA[SELECT tit.numero_titulo,
 		 tit.nosso_numero,

@@ -36,6 +36,7 @@ import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
@@ -173,6 +174,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 						@Override
 						public void onClick() {
+							setResponsePage(new TitulosDesistenciaPage(arquivoOcorrenciaBean.getDesistenciaProtesto()));
 						}
 					};
 					linkArquivo.add(new Label("nomeArquivo",

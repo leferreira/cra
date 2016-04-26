@@ -35,9 +35,16 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 
 	private Instituicao cartorio;
 
-	public ListaCartorioPage(String mensagem) {
-		success(mensagem);
+	public ListaCartorioPage() {
+		this.cartorio = new Instituicao();
 		adicionarComponentes();
+	}
+
+	public ListaCartorioPage(String mensagem) {
+		this.cartorio = new Instituicao();
+		adicionarComponentes();
+
+		success(mensagem);
 	}
 
 	@Override
@@ -47,7 +54,6 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 	}
 
 	private void listaMunicipioPage() {
-		this.cartorio = new Instituicao();
 		add(new Link<Instituicao>("botaoNovo") {
 
 			/***/

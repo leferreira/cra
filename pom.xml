@@ -29,7 +29,7 @@
 		<commons-collections.version>3.2.1</commons-collections.version>
 		<postgresql.version>9.1-901.jdbc4</postgresql.version>
 		<joda-time.version>2.2</joda-time.version>
-
+ 
 		<!-- allowed values: R7, 1.0, 1.5, 2.0 or none -->
 		<wtp.version>none</wtp.version>
 	</properties>
@@ -217,7 +217,7 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.9</version>
 		</dependency>
-	
+
 		<!-- Wicket Extension -->
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
@@ -250,9 +250,7 @@
 		    <artifactId>wicket-jquery-ui</artifactId>
 		    <version>7.0.0</version> <!-- or 1.5.11, 6.20.0 -->
 		</dependency>
-					
 	</dependencies>
-
 	<build>
 		<resources>
 			<resource>

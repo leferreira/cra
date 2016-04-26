@@ -46,13 +46,13 @@ public class CentralNacionalProtestoService extends CnpWebService {
 				}
 
 			}
-			loggerCra.sucess(getUsuario(), TipoAcaoLog.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, "Arquivo CNP do dia "
-					+ DataUtil.localDateToString(new LocalDate()) + ", enviado com sucesso para o IEPTB nacional.");
+			loggerCra.sucess(getUsuario(), TipoAcaoLog.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+					"Arquivo CNP do dia " + DataUtil.localDateToString(new LocalDate()) + ", enviado com sucesso para o IEPTB nacional.");
 		} catch (Exception ex) {
 			logger.info(ex.getMessage(), ex.getCause());
 			ex.printStackTrace();
-			loggerCra.error(getUsuario(), TipoAcaoLog.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, "Erro interno ao construir o arquivo da CNP do dia "
-					+ DataUtil.localDateToString(new LocalDate()) + ".", ex);
+			loggerCra.error(getUsuario(), TipoAcaoLog.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+					"Erro interno ao construir o arquivo da CNP do dia " + DataUtil.localDateToString(new LocalDate()) + ".", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}
 		return gerarMensagem(arquivoCnp, CONSTANTE_CNP_XML);

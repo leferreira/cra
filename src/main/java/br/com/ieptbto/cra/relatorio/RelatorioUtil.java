@@ -44,8 +44,8 @@ public class RelatorioUtil implements Serializable {
 		this.params.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
 		this.params.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
 		this.params.put("INSTIUICAO_ID", getInstituicao().getId());
-		this.params.put("DATA_INICIO", getDataInicio().toDate());
-		this.params.put("DATA_FIM", getDataFim().toDate());
+		this.params.put("DATA_INICIO", new java.sql.Date(getDataInicio().toDate().getTime()));
+		this.params.put("DATA_FIM", new java.sql.Date(getDataFim().toDate().getTime()));
 	}
 
 	public JasperPrint relatorioArquivoCartorio(Remessa remessa) throws JRException {
@@ -361,10 +361,10 @@ public class RelatorioUtil implements Serializable {
 	private Connection getConnection() {
 		try {
 			Class.forName("org.postgresql.Driver");
+			return DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
 			// return
-			// DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra",
-			// "postgres", "@dminB3g1n");
-			return DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra", "postgres", "1234");
+			// DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra",
+			// "postgres", "1234");
 		} catch (Exception e) {
 			throw new InfraException("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
 		}

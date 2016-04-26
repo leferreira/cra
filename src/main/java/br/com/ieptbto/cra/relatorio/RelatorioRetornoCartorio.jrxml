@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
-	<property name="ireport.zoom" value="1.3310000000000046"/>
-	<property name="ireport.x" value="29"/>
+	<property name="ireport.zoom" value="2.5937424601000107"/>
+	<property name="ireport.x" value="1059"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="NOME_ARQUIVO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -39,7 +39,8 @@
 		WHEN ret.tipo_ocorrencia='4' THEN 4
 		WHEN ret.tipo_ocorrencia='5' THEN 5
 		WHEN ret.tipo_ocorrencia='6' THEN 5
-	END as ocorrencia
+	END as ocorrencia,
+	ret.valor_demais_despesas
 from tb_retorno AS ret
 INNER JOIN tb_titulo AS tit ON ret.titulo_id=tit.id_titulo
 INNER JOIN tb_confirmacao AS conf ON conf.titulo_id=tit.id_titulo
@@ -56,6 +57,7 @@ ORDER BY tit.nome_devedor ASC]]>
 	<field name="valor_custa_cartorio" class="java.math.BigDecimal"/>
 	<field name="tipo_ocorrencia" class="java.lang.String"/>
 	<field name="ocorrencia" class="java.lang.Integer"/>
+	<field name="valor_demais_despesas" class="java.math.BigDecimal"/>
 	<variable name="PAGOS" class="java.lang.Long" calculation="Count">
 		<variableExpression><![CDATA[$F{ocorrencia} == 1 ? $F{ocorrencia} : null]]></variableExpression>
 	</variable>
@@ -81,7 +83,7 @@ ORDER BY tit.nome_devedor ASC]]>
 		<variableExpression><![CDATA[$F{ocorrencia} == 1 ? $F{valor_saldo_titulo} : null]]></variableExpression>
 	</variable>
 	<variable name="TOTAL_DEMAIS_DESPESAS" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{valor_custa_cartorio}]]></variableExpression>
+		<variableExpression><![CDATA[$F{valor_demais_despesas}]]></variableExpression>
 	</variable>
 	<variable name="TOTAL_CUSTAS" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{ocorrencia} == 2 || $F{ocorrencia} == 3 || $F{ocorrencia} == 6 ? $F{valor_custa_cartorio} : 0]]></variableExpression>
@@ -351,7 +353,7 @@ ORDER BY tit.nome_devedor ASC]]>
 				<text><![CDATA[SUSTADOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="722" y="0" width="80" height="15" uuid="eb49a9ad-7614-4f85-b3e1-737fc57e1838"/>
+				<reportElement x="704" y="0" width="98" height="15" uuid="eb49a9ad-7614-4f85-b3e1-737fc57e1838"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true" isStrikeThrough="false"/>
 				</textElement>

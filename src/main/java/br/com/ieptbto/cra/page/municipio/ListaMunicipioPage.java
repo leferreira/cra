@@ -66,7 +66,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 	}
 
 	private void listaMunicipio() {
-		add(new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {
+		final ListView<Municipio> listView = new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -90,7 +90,21 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				item.add(new Label("inicioCep", municipioLista.getFaixaInicialCep()));
 				item.add(new Label("finalCep", municipioLista.getFaixaFinalCep()));
 			}
+		};
+		add(listView);
+
+		add(new Link<Void>("exportToXLS") {
+
+			/**
+			 *  
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+			}
 		});
+
 	}
 
 	private IModel<List<Municipio>> buscarMunicipios() {
@@ -110,5 +124,4 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 	protected IModel<Municipio> getModel() {
 		return new CompoundPropertyModel<Municipio>(municipio);
 	}
-
 }
