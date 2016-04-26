@@ -193,6 +193,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		add(numeroProtocoloCartorio());
 		add(dataProtocolo());
 		add(codigoCartorio());
+		add(labelAgenciaCodigoCedente());
 		add(dataOcorrencia());
 		add(irregularidade());
 		add(codigoMunicipio());
@@ -314,6 +315,10 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 	private Label numeroTitulo() {
 		return new Label("numeroTitulo", new Model<String>(getTituloRemessa().getNumeroTitulo()));
+	}
+
+	private Label labelAgenciaCodigoCedente() {
+		return new Label("agenciaCodigoCedente", getTituloRemessa().getAgenciaCodigoCedente());
 	}
 
 	private Label portador() {
