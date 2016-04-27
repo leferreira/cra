@@ -72,7 +72,7 @@ public class ImportarArquivoDeParaPage extends BasePage<AgenciaCAF> {
 				}
 			}
 		};
-		form.setMaxSize(Bytes.megabytes(10));
+		form.setMaxSize(Bytes.megabytes(100));
 
 		form.add(campoArquivo());
 		form.add(botaoEnviar());
