@@ -1,19 +1,26 @@
 package br.com.ieptbto.cra.page.municipio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.component.CustomExportToolbar;
+import br.com.ieptbto.cra.component.dataProvider.MunicipioProvider;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -49,7 +56,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 	@Override
 	protected void adicionarComponentes() {
 		botaoNovoMunicipio();
-		listaMunicipio();
+		dataTableMunicipio();
 
 	}
 
@@ -65,63 +72,71 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 		});
 	}
 
-	private void listaMunicipio() {
-		final ListView<Municipio> listView = new ListView<Municipio>("listViewMunicipio", buscarMunicipios()) {
+	private void dataTableMunicipio() {
+		MunicipioProvider dataProvider = new MunicipioProvider(municipioMediator.listarTodos());
+
+		List<IColumn<Municipio, String>> columns = new ArrayList<>();
+		columns.add(new AbstractColumn<Municipio, String>(new Model<String>("EDITAR")) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<Municipio> item) {
-				final Municipio municipioLista = item.getModelObject();
-				Link<Municipio> linkAlterar = new Link<Municipio>("linkAlterar") {
-
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					public void onClick() {
-						setResponsePage(new IncluirMunicipioPage(municipioLista));
-					}
-				};
-				linkAlterar.add(new Label("nomeMunicipio", municipioLista.getNomeMunicipio()));
-				item.add(linkAlterar);
-				item.add(new Label("uf", municipioLista.getUf()));
-				item.add(new Label("codIBGE", municipioLista.getCodigoIBGE()));
-				item.add(new Label("inicioCep", municipioLista.getFaixaInicialCep()));
-				item.add(new Label("finalCep", municipioLista.getFaixaFinalCep()));
+			public void populateItem(Item<ICellPopulator<Municipio>> cellItem, String id, IModel<Municipio> model) {
+				cellItem.add(new MunicipioActionPanel(id, model));
 			}
-		};
-		add(listView);
 
-		add(new Link<Void>("exportToXLS") {
-
-			/**
-			 *  
-			 */
+			@Override
+			public String getCssClass() {
+				return "col-center text-center col-action";
+			}
+		});
+		columns.add(new PropertyColumn<Municipio, String>(new Model<String>("MUNICÍPIO"), "nomeMunicipio"));
+		columns.add(new PropertyColumn<Municipio, String>(new Model<String>("UF"), "uf") {
+			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick() {
+			public String getCssClass() {
+				return "text-center";
+			}
+		});
+		columns.add(new PropertyColumn<Municipio, String>(new Model<String>("CÓD. IBGE"), "codigoIBGE") {
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getCssClass() {
+				return "text-center";
+			}
+		});
+		columns.add(new PropertyColumn<Municipio, String>(new Model<String>("CEP INÍCIAL"), "faixaInicialCep") {
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getCssClass() {
+				return "text-center";
+			}
+		});
+		columns.add(new PropertyColumn<Municipio, String>(new Model<String>("CEP FINAL"), "faixaFinalCep") {
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getCssClass() {
+				return "text-center";
 			}
 		});
 
-	}
-
-	private IModel<List<Municipio>> buscarMunicipios() {
-		return new LoadableDetachableModel<List<Municipio>>() {
-
-			/**/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected List<Municipio> load() {
-				return municipioMediator.listarTodos();
-			}
-		};
+		DataTable<Municipio, String> dataTable = new DefaultDataTable<>("table", columns, dataProvider, 1000);
+		dataTable.addBottomToolbar(new CustomExportToolbar(dataTable, "CRA_TO_Muncipios"));
+		add(dataTable);
 	}
 
 	@Override
 	protected IModel<Municipio> getModel() {
 		return new CompoundPropertyModel<Municipio>(municipio);
 	}
+
 }

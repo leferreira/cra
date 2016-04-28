@@ -429,3 +429,15 @@ span:hover.tooltips span {
 	margin-left: -76px;
 	z-index: 999;
 }
+
+/**
+Exporter csv
+*/
+.export-td > span > a{
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.col-action{
+	width: 80px;
+}

@@ -11,26 +11,7 @@
 		</span>
 		</h4>
 		<br style="clear: both;"/>
-		<table id="table" class="table table-striped table-hover">
-			<thead>
-				<tr>
-					<th>MUNICÍPIO</th>
-					<th class="col-center">UF</th>
-					<th class="col-center">CÓD. IBGE</th>
-					<th class="col-center">CEP INÍCIAL</th>
-					<th class="col-center">CEP FINAL</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr wicket:id="listViewMunicipio">
-					<td><a wicket:id="linkAlterar"><span class="link" wicket:id="nomeMunicipio"></span></a></td>
-					<td class="col-center" wicket:id="uf"></td>
-					<td class="col-center" wicket:id="codIBGE"></td>
-					<td class="col-center" wicket:id="inicioCep"></td>
-					<td class="col-center" wicket:id="finalCep"></td>
-				</tr>
-			</tbody>
-		</table>
+		<table id="table" class="table table-responsive table-striped table-hover" wicket:id="table"></table>
 	</wicket:extend>
 </body>
 </html>
