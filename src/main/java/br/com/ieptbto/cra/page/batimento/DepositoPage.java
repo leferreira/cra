@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.cra;
+package br.com.ieptbto.cra.page.batimento;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
@@ -24,7 +23,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.enumeration.SituacaoDeposito;
-import br.com.ieptbto.cra.enumeration.TipoDeposito;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -36,7 +34,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class IncluirDepositoPage extends BasePage<Deposito> {
+public class DepositoPage extends BasePage<Deposito> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -47,15 +45,16 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 	private Deposito deposito;
 	private List<Deposito> depositos;
 
-	public IncluirDepositoPage(Deposito deposito, List<Deposito> depositos) {
+	public DepositoPage(Deposito deposito, List<Deposito> depositos) {
 		this.deposito = deposito;
 		this.depositos = depositos;
 		adicionarComponentes();
 	}
 
-	public IncluirDepositoPage(String message, Deposito deposito, List<Deposito> depositos) {
+	public DepositoPage(String message, Deposito deposito, List<Deposito> depositos) {
 		this.deposito = deposito;
 		this.depositos = depositos;
+
 		success(message);
 		adicionarComponentes();
 	}
@@ -77,7 +76,7 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 
 				try {
 					batimentoMediator.atualizarInformacoesDeposito(deposito);
-					setResponsePage(new IncluirDepositoPage("Informações do depósito foram atualizadas com sucesso!", getDeposito(), getDepositos()));
+					setResponsePage(new DepositoPage("Informações do depósito foram atualizadas com sucesso!", getDeposito(), getDepositos()));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -93,9 +92,13 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 		form.add(numeroDocumento());
 		form.add(valor());
 		form.add(situacaoDeposito());
-		form.add(tipoDeposito());
 		form.add(descricao());
-		form.add(new Link<Deposito>("botaoVoltar") {
+		form.add(botaoVoltar());
+		add(form);
+	}
+
+	private Link<Deposito> botaoVoltar() {
+		return new Link<Deposito>("botaoVoltar") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -104,8 +107,7 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 			public void onClick() {
 				setResponsePage(new ListaDepositoPage(getDepositos()));
 			}
-		});
-		add(form);
+		};
 	}
 
 	private RadioChoice<SituacaoDeposito> situacaoDeposito() {
@@ -113,13 +115,6 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 		List<SituacaoDeposito> list = new ArrayList<SituacaoDeposito>(Arrays.asList(SituacaoDeposito.values()));
 		RadioChoice<SituacaoDeposito> comboSituacao = new RadioChoice<SituacaoDeposito>("situacaoDeposito", list, renderer);
 		return comboSituacao;
-	}
-
-	private DropDownChoice<TipoDeposito> tipoDeposito() {
-		IChoiceRenderer<TipoDeposito> renderer = new ChoiceRenderer<TipoDeposito>("label");
-		List<TipoDeposito> list = new ArrayList<TipoDeposito>(Arrays.asList(TipoDeposito.values()));
-		DropDownChoice<TipoDeposito> comboTipoDeposito = new DropDownChoice<TipoDeposito>("tipoDeposito", list, renderer);
-		return comboTipoDeposito;
 	}
 
 	private TextField<BigDecimal> valor() {

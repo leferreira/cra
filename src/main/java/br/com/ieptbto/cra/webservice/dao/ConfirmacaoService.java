@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
 import br.com.ieptbto.cra.conversor.ConversorArquivoVO;
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoConfirmacaoVO;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
@@ -30,6 +31,7 @@ import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
@@ -44,9 +46,12 @@ import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 public class ConfirmacaoService extends CraWebService {
 
 	@Autowired
-	private RemessaMediator remessaMediator;
+	RemessaMediator remessaMediator;
 	@Autowired
-	private ConfirmacaoMediator confirmacaoMediator;
+	ConfirmacaoMediator confirmacaoMediator;
+	@Autowired
+	ArquivoMediator arquivoMediator;
+
 	private ArquivoVO arquivoVO;
 	private ArquivoConfirmacaoVO arquivoConfirmacaoVO;
 	private ConfirmacaoVO confirmacaoVO;
@@ -81,7 +86,8 @@ public class ConfirmacaoService extends CraWebService {
 				return setRespostaArquivoEmProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 			}
 
-			setMensagem(gerarResposta(usuario.getInstituicao().getLayoutPadraoXML(), remessas, getNomeArquivo(), CONSTANTE_CONFIRMACAO_XML));
+			setMensagem(
+					gerarResposta(usuario.getInstituicao().getLayoutPadraoXML(), remessas, getNomeArquivo(), CONSTANTE_CONFIRMACAO_XML));
 			loggerCra.sucess(getUsuario(), getTipoAcaoLog(), "Arquivo de Confirmação " + nomeArquivo + " recebido com sucesso por "
 					+ getUsuario().getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
@@ -166,12 +172,17 @@ public class ConfirmacaoService extends CraWebService {
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 			}
-			setArquivoConfirmacaoVO(converterStringArquivoVO(dados));
-
-			if (getArquivoConfirmacaoVO() == null || getUsuario() == null) {
+			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
+			if (arquivoJaEnviado != null) {
+				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo,
+						arquivoJaEnviado);
+			}
+			if (getArquivoConfirmacaoVO() == null || getUsuario().getId() == 0) {
 				ArquivoVO arquivo = new ArquivoVO();
 				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
 			}
+
+			setArquivoConfirmacaoVO(converterStringArquivoVO(dados));
 			setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
 			setMensagemXml(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo));
 			loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Confirmação " + nomeArquivo + ", enviado por "

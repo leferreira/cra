@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.cra;
+package br.com.ieptbto.cra.page.batimento;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -9,24 +9,23 @@ import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.enumeration.SituacaoDeposito;
+import br.com.ieptbto.cra.enumeration.TipoDeposito;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
@@ -34,37 +33,28 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class DepositoPage extends BasePage<Deposito> {
+public class BuscarDepositoPage extends BasePage<Deposito> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	@SpringBean
-	BatimentoMediator batimentoMediator;
-
 	private Deposito deposito;
-	private List<Deposito> depositos;
 
-	public DepositoPage(Deposito deposito, List<Deposito> depositos) {
-		this.deposito = deposito;
-		this.depositos = depositos;
-		adicionarComponentes();
-	}
+	private TextField<LocalDate> fieldDataInicio;
+	private TextField<LocalDate> fieldDataFinal;
 
-	public DepositoPage(String message, Deposito deposito, List<Deposito> depositos) {
-		this.deposito = deposito;
-		this.depositos = depositos;
-
-		success(message);
+	public BuscarDepositoPage() {
+		this.deposito = new Deposito();
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		carregarFormulario();
+		formularioBuscarDepositos();
+
 	}
 
-	private void carregarFormulario() {
+	private void formularioBuscarDepositos() {
 		Form<Deposito> form = new Form<Deposito>("form", getModel()) {
 
 			/***/
@@ -73,11 +63,22 @@ public class DepositoPage extends BasePage<Deposito> {
 			@Override
 			protected void onSubmit() {
 				Deposito deposito = getModelObject();
+				LocalDate dataInicio = null;
+				LocalDate dataFim = null;
 
 				try {
-					batimentoMediator.atualizarInformacoesDeposito(deposito);
-					setResponsePage(new DepositoPage("Informações do depósito foram atualizadas com sucesso!", getDeposito(), getDepositos()));
+					if (fieldDataInicio.getDefaultModelObject() != null) {
+						if (fieldDataFinal.getDefaultModelObject() != null) {
+							dataInicio = DataUtil.stringToLocalDate(fieldDataInicio.getDefaultModelObject().toString());
+							dataFim = DataUtil.stringToLocalDate(fieldDataFinal.getDefaultModelObject().toString());
+							if (!dataInicio.isBefore(dataFim))
+								if (!dataInicio.isEqual(dataFim))
+									throw new InfraException("A data de início deve ser antes da data fim.");
+						} else
+							throw new InfraException("As duas datas devem ser preenchidas.");
+					}
 
+					setResponsePage(new ListaDepositoPage(deposito, dataInicio, dataFim));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -87,68 +88,48 @@ public class DepositoPage extends BasePage<Deposito> {
 				}
 			}
 		};
-		form.add(dataImportacao());
-		form.add(data());
+		form.add(dataInicial());
+		form.add(dataFinal());
 		form.add(numeroDocumento());
 		form.add(valor());
 		form.add(situacaoDeposito());
-		form.add(descricao());
-		form.add(botaoVoltar());
+		form.add(tipoDeposito());
 		add(form);
-	}
-
-	private Link<Deposito> botaoVoltar() {
-		return new Link<Deposito>("botaoVoltar") {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				setResponsePage(new ListaDepositoPage(getDepositos()));
-			}
-		};
 	}
 
 	private RadioChoice<SituacaoDeposito> situacaoDeposito() {
 		IChoiceRenderer<SituacaoDeposito> renderer = new ChoiceRenderer<SituacaoDeposito>("label");
 		List<SituacaoDeposito> list = new ArrayList<SituacaoDeposito>(Arrays.asList(SituacaoDeposito.values()));
 		RadioChoice<SituacaoDeposito> comboSituacao = new RadioChoice<SituacaoDeposito>("situacaoDeposito", list, renderer);
+
 		return comboSituacao;
 	}
 
+	private DropDownChoice<TipoDeposito> tipoDeposito() {
+		IChoiceRenderer<TipoDeposito> renderer = new ChoiceRenderer<TipoDeposito>("label");
+		List<TipoDeposito> list = new ArrayList<TipoDeposito>(Arrays.asList(TipoDeposito.values()));
+		DropDownChoice<TipoDeposito> comboTipoDeposito = new DropDownChoice<TipoDeposito>("tipoDeposito", list, renderer);
+		return comboTipoDeposito;
+	}
+
 	private TextField<BigDecimal> valor() {
-		TextField<BigDecimal> textField = new TextField<BigDecimal>("valorCredito");
-		textField.setEnabled(false);
-		return textField;
+		return new TextField<BigDecimal>("valorCredito");
 	}
 
 	private TextField<String> numeroDocumento() {
-		TextField<String> textField = new TextField<String>("numeroDocumento");
-		textField.setEnabled(false);
-		return textField;
+		return new TextField<String>("numeroDocumento");
 	}
 
-	private TextField<String> dataImportacao() {
-		return new TextField<String>("dataImportacao", new Model<String>(DataUtil.localDateToString(getDeposito().getData())));
+	private TextField<LocalDate> dataFinal() {
+		fieldDataFinal = new TextField<LocalDate>("dataFinal", new Model<LocalDate>());
+		return fieldDataFinal;
 	}
 
-	private TextField<String> data() {
-		TextField<String> textField = new TextField<String>("data", new Model<String>(DataUtil.localDateToString(getDeposito().getData())));
-		return textField;
-	}
-
-	private TextArea<String> descricao() {
-		TextArea<String> text = new TextArea<String>("descricao");
-		return text;
-	}
-
-	public Deposito getDeposito() {
-		return deposito;
-	}
-
-	public List<Deposito> getDepositos() {
-		return depositos;
+	private TextField<LocalDate> dataInicial() {
+		fieldDataInicio = new TextField<LocalDate>("dataInicial", new Model<LocalDate>());
+		fieldDataInicio.setLabel(new Model<String>("Período de Datas"));
+		fieldDataInicio.setRequired(true);
+		return fieldDataInicio;
 	}
 
 	@Override

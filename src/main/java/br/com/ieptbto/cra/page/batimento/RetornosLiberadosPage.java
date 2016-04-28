@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.cra;
+package br.com.ieptbto.cra.page.batimento;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,7 +69,7 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 	public RetornosLiberadosPage(LocalDate dataBatimento) {
 		this.retorno = new Retorno();
 		this.dataBatimento = dataBatimento;
-		this.arquivosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao(null, dataBatimento, false);
+		this.arquivosAguardandoLiberacao = retornoMediator.buscarRetornosParaPagamentoInstituicao(dataBatimento);
 		adicionarComponentes();
 	}
 
@@ -90,9 +90,6 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 				LocalDate dataBatimento = null;
 
 				try {
-					if (campoDataBatimento.getModelObject() == null) {
-						throw new InfraException("O campo 'Data Batimento' deve ser preenchido pois é obrigatório!");
-					}
 					dataBatimento = DataUtil.stringToLocalDate(campoDataBatimento.getModelObject().toString());
 					setResponsePage(new RetornosLiberadosPage(dataBatimento));
 
@@ -111,9 +108,14 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 
 	private TextField<String> campoDataBatimento() {
 		if (dataBatimento != null) {
-			return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>(DataUtil.localDateToString(dataBatimento)));
+			return campoDataBatimento =
+					new TextField<String>("dataBatimento", new Model<String>(DataUtil.localDateToString(dataBatimento)));
+		} else {
+			campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>());
 		}
-		return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>());
+		campoDataBatimento.setRequired(true);
+		campoDataBatimento.setLabel(new Model<String>("Data do Batimento"));
+		return campoDataBatimento;
 	}
 
 	private void carregarListaRetornos() {
@@ -152,7 +154,6 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 				item.add(linkArquivo);
 
 				item.add(botaoGerarRelatorio(retorno));
-
 			}
 
 			private Link<Remessa> botaoGerarRelatorio(final Remessa retorno) {

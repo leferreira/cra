@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.cra;
+package br.com.ieptbto.cra.page.batimento;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;

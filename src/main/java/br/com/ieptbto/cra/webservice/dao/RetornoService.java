@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
 import br.com.ieptbto.cra.conversor.ConversorArquivoVO;
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoRetornoVO;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
@@ -30,6 +31,7 @@ import br.com.ieptbto.cra.entidade.vo.RetornoVO;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
@@ -41,198 +43,206 @@ import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 @Service
 public class RetornoService extends CraWebService {
 
-    @Autowired
-    private RemessaMediator remessaMediator;
-    @Autowired
-    private RetornoMediator retornoMediator;
-    private ArquivoVO arquivoVO;
-    private ArquivoRetornoVO arquivoRetornoVO;
-    private RetornoVO retornoVO;
+	@Autowired
+	ArquivoMediator arquivoMediator;
+	@Autowired
+	RemessaMediator remessaMediator;
+	@Autowired
+	RetornoMediator retornoMediator;
 
-    /**
-     * Consulta de Retorno pelos bancos/convênios
-     * 
-     * @param nomeArquivo
-     * @param usuario
-     * @return
-     */
-    public String processar(String nomeArquivo, Usuario usuario) {
-	setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_RETORNO);
-	List<RemessaVO> remessas = new ArrayList<RemessaVO>();
-	ArquivoVO arquivoVO = null;
-	setUsuario(usuario);
-	setNomeArquivo(nomeArquivo);
+	private ArquivoVO arquivoVO;
+	private ArquivoRetornoVO arquivoRetornoVO;
+	private RetornoVO retornoVO;
 
-	try {
+	/**
+	 * Consulta de Retorno pelos bancos/convênios
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @return
+	 */
+	public String processar(String nomeArquivo, Usuario usuario) {
+		setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_RETORNO);
+		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
+		ArquivoVO arquivoVO = null;
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
 
-	    if (getUsuario().getId() == 0) {
-		return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
-	    }
-	    if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-		return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
-	    }
-	    if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
-		return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
-	    }
+		try {
 
-	    remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
-	    if (remessas.isEmpty()) {
-		return setRespostaArquivoEmProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
-	    }
-	    setMensagem(gerarResposta(usuario.getInstituicao().getLayoutPadraoXML(), remessas, getNomeArquivo(), CONSTANTE_RETORNO_XML));
-	    loggerCra.sucess(getUsuario(), getTipoAcaoLog(), "Arquivo de Retorno " + nomeArquivo
-		    + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
-	} catch (Exception e) {
-	    logger.error(e.getMessage(), e.getCause());
-	    loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo de Retorno "
-		    + nomeArquivo + " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".", e);
-	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
-	}
-	return getMensagem();
-    }
+			if (getUsuario().getId() == 0) {
+				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
+				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
 
-    private String gerarResposta(LayoutPadraoXML layoutPadraoResposta, List<RemessaVO> remessas, String nomeArquivo, String constanteRetornoXml) {
-	StringBuffer string = new StringBuffer();
-	String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
-	String cabecalho = "<retorno>";
-
-	if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
-	    string.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>");
-	}
-	for (RemessaVO remessaVO : remessas) {
-	    if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
-		string.append("<comarca CodMun=\"" + remessaVO.getCabecalho().getCodigoMunicipio() + "\">");
-		String msg = gerarMensagem(remessaVO, CONSTANTE_RETORNO_XML).replace("</retorno>", "").replace(cabecalho, "");
-		string.append(msg);
-		string.append("</comarca>");
-	    } else {
-		String msg = gerarMensagem(remessaVO, CONSTANTE_RETORNO_XML).replace("</retorno>", "").replace(cabecalho, "");
-		string.append(msg);
-	    }
-	}
-	string.append("</retorno>");
-	return xml + cabecalho + string.toString();
-
-    }
-
-    protected String gerarMensagem(Object mensagem, String nomeNo) {
-	Writer writer = new StringWriter();
-	JAXBContext context;
-	try {
-	    context = JAXBContext.newInstance(mensagem.getClass());
-
-	    Marshaller marshaller = context.createMarshaller();
-	    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-	    marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
-	    marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-	    JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
-	    marshaller.marshal(element, writer);
-	    String msg = writer.toString();
-	    msg = msg.replace("<retorno xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
-	    writer.close();
-	    return msg;
-
-	} catch (JAXBException e) {
-	    logger.error(e.getMessage(), e.getCause());
-	    new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e.getCause());
-	    new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-	}
-	return null;
-    }
-
-    /**
-     * Envio de retorno pelo cartório
-     * 
-     * @param nomeArquivo
-     * @param usuario
-     * @param dados
-     * @return
-     */
-    public String processar(String nomeArquivo, Usuario usuario, String dados) {
-	setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_RETORNO);
-	setUsuario(usuario);
-	setNomeArquivo(nomeArquivo);
-
-	try {
-	    if (getUsuario() == null) {
-		return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
-	    }
-	    if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
-		return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
-	    }
-	    setArquivoRetornoVO(converterStringArquivoVO(dados));
-
-	    if (getArquivoRetornoVO() == null || getUsuario() == null) {
-		ArquivoVO arquivo = new ArquivoVO();
-		return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
-	    }
-	    setRetornoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoRetornoVO()));
-	    setMensagemXml(retornoMediator.processarXML(getRetornoVO(), getUsuario(), nomeArquivo));
-	    loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Retorno " + nomeArquivo + ", enviado por "
-		    + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
-	} catch (InfraException ex) {
-	    logger.info(ex.getMessage(), ex.getCause());
-	    loggerCra.error(getUsuario(), getTipoAcaoLog(), ex.getMessage());
-	    return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
-	} catch (Exception e) {
-	    logger.info(e.getMessage(), e.getCause());
-	    loggerCra.error(getUsuario(), getTipoAcaoLog(), e.getMessage(), e);
-	    return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
-	}
-	return gerarMensagem(getMensagemXml(), CONSTANTE_CONFIRMACAO_XML);
-    }
-
-    private ArquivoRetornoVO converterStringArquivoVO(String dados) {
-	JAXBContext context;
-	ArquivoRetornoVO arquivo = null;
-
-	try {
-	    context = JAXBContext.newInstance(ArquivoRetornoVO.class);
-	    Unmarshaller unmarshaller = context.createUnmarshaller();
-	    String xmlRecebido = "";
-
-	    Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
-	    while (scanner.hasNext()) {
-		xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
-		if (xmlRecebido.contains("<?xml version=")) {
-		    xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
+			remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
+			if (remessas.isEmpty()) {
+				return setRespostaArquivoEmProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
+			setMensagem(gerarResposta(usuario.getInstituicao().getLayoutPadraoXML(), remessas, getNomeArquivo(), CONSTANTE_RETORNO_XML));
+			loggerCra.sucess(getUsuario(), getTipoAcaoLog(), "Arquivo de Retorno " + nomeArquivo + " recebido com sucesso por "
+					+ getUsuario().getInstituicao().getNomeFantasia() + ".");
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e.getCause());
+			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo de Retorno " + nomeArquivo
+					+ " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".", e);
+			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
-	    }
-	    scanner.close();
-
-	    InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
-	    arquivo = (ArquivoRetornoVO) unmarshaller.unmarshal(new InputSource(xml));
-
-	} catch (JAXBException e) {
-	    logger.error(e.getMessage(), e.getCause());
-	    new InfraException(e.getMessage(), e.getCause());
+		return getMensagem();
 	}
-	return arquivo;
-    }
 
-    public ArquivoVO getArquivoVO() {
-	return arquivoVO;
-    }
+	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta, List<RemessaVO> remessas, String nomeArquivo,
+			String constanteRetornoXml) {
+		StringBuffer string = new StringBuffer();
+		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
+		String cabecalho = "<retorno>";
 
-    public void setArquivoVO(ArquivoVO arquivoVO) {
-	this.arquivoVO = arquivoVO;
-    }
+		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+			string.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>");
+		}
+		for (RemessaVO remessaVO : remessas) {
+			if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+				string.append("<comarca CodMun=\"" + remessaVO.getCabecalho().getCodigoMunicipio() + "\">");
+				String msg = gerarMensagem(remessaVO, CONSTANTE_RETORNO_XML).replace("</retorno>", "").replace(cabecalho, "");
+				string.append(msg);
+				string.append("</comarca>");
+			} else {
+				String msg = gerarMensagem(remessaVO, CONSTANTE_RETORNO_XML).replace("</retorno>", "").replace(cabecalho, "");
+				string.append(msg);
+			}
+		}
+		string.append("</retorno>");
+		return xml + cabecalho + string.toString();
 
-    public ArquivoRetornoVO getArquivoRetornoVO() {
-	return arquivoRetornoVO;
-    }
+	}
 
-    public RetornoVO getRetornoVO() {
-	return retornoVO;
-    }
+	protected String gerarMensagem(Object mensagem, String nomeNo) {
+		Writer writer = new StringWriter();
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(mensagem.getClass());
 
-    public void setArquivoRetornoVO(ArquivoRetornoVO arquivoRetornoVO) {
-	this.arquivoRetornoVO = arquivoRetornoVO;
-    }
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
+			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
+			marshaller.marshal(element, writer);
+			String msg = writer.toString();
+			msg = msg.replace("<retorno xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
+			writer.close();
+			return msg;
 
-    public void setRetornoVO(RetornoVO retornoVO) {
-	this.retornoVO = retornoVO;
-    }
+		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		}
+		return null;
+	}
+
+	/**
+	 * Envio de retorno pelo cartório
+	 * 
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @param dados
+	 * @return
+	 */
+	public String enviarRetorno(String nomeArquivo, Usuario usuario, String dados) {
+		setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_RETORNO);
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
+
+		try {
+			if (getUsuario().getId() == 0) {
+				return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
+			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
+			if (arquivoJaEnviado != null) {
+				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo,
+						arquivoJaEnviado);
+			}
+			if (getArquivoRetornoVO() == null || getUsuario().getId() == 0) {
+				ArquivoVO arquivo = new ArquivoVO();
+				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
+			}
+			setArquivoRetornoVO(converterStringArquivoVO(dados));
+			setRetornoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoRetornoVO()));
+			setMensagemXml(retornoMediator.processarXML(getRetornoVO(), getUsuario(), nomeArquivo));
+			loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Retorno " + nomeArquivo + ", enviado por "
+					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
+		} catch (InfraException ex) {
+			logger.info(ex.getMessage(), ex.getCause());
+			loggerCra.error(getUsuario(), getTipoAcaoLog(), ex.getMessage());
+			return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
+		} catch (Exception e) {
+			logger.info(e.getMessage(), e.getCause());
+			loggerCra.error(getUsuario(), getTipoAcaoLog(), e.getMessage(), e);
+			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
+		}
+		return gerarMensagem(getMensagemXml(), CONSTANTE_CONFIRMACAO_XML);
+	}
+
+	private ArquivoRetornoVO converterStringArquivoVO(String dados) {
+		JAXBContext context;
+		ArquivoRetornoVO arquivo = null;
+
+		try {
+			context = JAXBContext.newInstance(ArquivoRetornoVO.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			String xmlRecebido = "";
+
+			Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
+			while (scanner.hasNext()) {
+				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
+				if (xmlRecebido.contains("<?xml version=")) {
+					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
+				}
+			}
+			scanner.close();
+
+			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
+			arquivo = (ArquivoRetornoVO) unmarshaller.unmarshal(new InputSource(xml));
+
+		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(e.getMessage(), e.getCause());
+		}
+		return arquivo;
+	}
+
+	public ArquivoVO getArquivoVO() {
+		return arquivoVO;
+	}
+
+	public void setArquivoVO(ArquivoVO arquivoVO) {
+		this.arquivoVO = arquivoVO;
+	}
+
+	public ArquivoRetornoVO getArquivoRetornoVO() {
+		return arquivoRetornoVO;
+	}
+
+	public RetornoVO getRetornoVO() {
+		return retornoVO;
+	}
+
+	public void setArquivoRetornoVO(ArquivoRetornoVO arquivoRetornoVO) {
+		this.arquivoRetornoVO = arquivoRetornoVO;
+	}
+
+	public void setRetornoVO(RetornoVO retornoVO) {
+		this.retornoVO = retornoVO;
+	}
 }

@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.cra;
+package br.com.ieptbto.cra.page.batimento;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.cra.MensagemPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 

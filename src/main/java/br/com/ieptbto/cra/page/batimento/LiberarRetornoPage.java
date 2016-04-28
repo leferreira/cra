@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.cra;
+package br.com.ieptbto.cra.page.batimento;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,6 +46,7 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.cra.MensagemPage;
 import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -96,7 +97,8 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		this.dataBatimento = dataBatimento;
 		this.instituicao = instituicao;
 		this.dataComoDataLimite = dataComoDataLimite;
-		this.arquivosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao(instituicao, dataBatimento, dataComoDataLimite);
+		this.arquivosAguardandoLiberacao =
+				retornoMediator.buscarRetornosAguardandoLiberacao(instituicao, dataBatimento, dataComoDataLimite);
 		this.totalNaoSelecionados = retornoMediator.buscarSomaValorTitulosPagosRemessas(instituicao, dataBatimento, dataComoDataLimite);
 		adicionarComponentes();
 	}
@@ -161,15 +163,18 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 	private DropDownChoice<Instituicao> campoInstituicao() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
 		if (instituicao == null) {
-			campoInstituicao = new DropDownChoice<Instituicao>("instituicaoEnvio", new Model<Instituicao>(), instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
+			campoInstituicao = new DropDownChoice<Instituicao>("instituicaoEnvio", new Model<Instituicao>(),
+					instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
 		}
-		campoInstituicao = new DropDownChoice<Instituicao>("instituicaoEnvio", new Model<Instituicao>(instituicao), instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
+		campoInstituicao = new DropDownChoice<Instituicao>("instituicaoEnvio", new Model<Instituicao>(instituicao),
+				instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
 		return campoInstituicao;
 	}
 
 	private TextField<String> campoDataBatimento() {
 		if (dataBatimento != null) {
-			return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>(DataUtil.localDateToString(dataBatimento)));
+			return campoDataBatimento =
+					new TextField<String>("dataBatimento", new Model<String>(DataUtil.localDateToString(dataBatimento)));
 		}
 		return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>());
 	}
@@ -214,8 +219,8 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 
 					retornoMediator.liberarRetornoBatimentoInstituicao(retornoLiberados);
 					campoDataBatimento.setModelObject(null);
-					setResponsePage(new MensagemPage<Batimento>(LiberarRetornoPage.class, "LIBERAR RETORNO", "Os arquivos de retorno foram"
-							+ " liberados para serem gerados ao banco!"));
+					setResponsePage(new MensagemPage<Batimento>(LiberarRetornoPage.class, "LIBERAR RETORNO",
+							"Os arquivos de retorno foram" + " liberados para serem gerados ao banco!"));
 
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
@@ -298,7 +303,6 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 							labelValorSelecionados.setDefaultModelObject(resultadoValorSelecionados);
 							check.setModelObject(null);
 						}
-
 						target.add(labelNaoSelecionados);
 						target.add(labelValorNaoSelecionados);
 						target.add(labelSelecionados);
@@ -357,8 +361,8 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 							File pdf = File.createTempFile("report", ".pdf");
 							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 							IResourceStream resourceStream = new FileResourceStream(pdf);
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
-									+ retorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+									"CRA_RELATORIO_" + retorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 						} catch (InfraException ex) {
 							error(ex.getMessage());
 						} catch (Exception e) {

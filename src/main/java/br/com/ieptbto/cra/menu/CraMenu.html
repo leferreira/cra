@@ -44,7 +44,19 @@
 			<div wicket:id="menuAdministrador">
 			 <ul class="nav navbar-nav">
 		        <li class="dropdown">
-		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Instrumento de Protesto<span class="caret"></span></a>
+		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Batimento<span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+				 	<li><a wicket:id="ImportarExtrato" href="ImportarExtrato" class="font-menu">Importar Extrato</a></li>
+				 	<li><a wicket:id="BuscarDepositos" href="BuscarDepositos" class="font-menu">Buscar Depósitos</a></li>
+				 	<li><a wicket:id="Batimento" href="Batimento" class="font-menu">Batimento</a></li>
+				 	<li><a wicket:id="LiberarRetornos" href="LiberarRetornos" class="font-menu">Liberar Retornos</a></li> 
+				 	<li><a wicket:id="RetornosLiberados" href="RetornosLiberados" class="font-menu">Pagamento de Retornos</a></li> 
+		          </ul>
+		        </li>
+		      </ul>
+			 <ul class="nav navbar-nav">
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Slips<span class="caret"></span></a>
 		          <ul class="dropdown-menu">
 				 	<li><a href="InstrumentoDeProtesto" wicket:id="InstrumentoDeProtesto" class="font-menu">Entrada de Instrumentos</a></li>
 				 	<li><a href="GerarSlip" wicket:id="GerarSlip" class="font-menu">Gerar SLIPS</a></li>
@@ -55,11 +67,6 @@
 		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administra&ccedil;&atilde;o<span class="caret"></span></a>
 		          <ul class="dropdown-menu">
 		         	<li><a wicket:id="CentralDeAcoes" href="CentralDeAcoes" class="font-menu">Central de A&ccedil;&otilde;es</a></li>
-		          	<li role="separator" class="divider"></li>
-				 	<li><a wicket:id="ImportarExtrato" href="ImportarExtrato" class="font-menu">Importar Extrato</a></li>
-				 	<li><a wicket:id="BuscarDepositos" href="BuscarDepositos" class="font-menu">Buscar Depósitos</a></li>
-				 	<li><a wicket:id="Batimento" href="Batimento" class="font-menu">Batimento</a></li>
-				 	<li><a wicket:id="LiberarRetornos" href="LiberarRetornos" class="font-menu">Liberar Retornos</a></li>
 				 	<li role="separator" class="divider"></li>
 					<li><a wicket:id="GerarRemessasConvenio" href="GerarRemessasConvenio" class="font-menu">Gerar Remessas Conv&ecirc;nios</a></li>
 					<li><a wicket:id="GerarConfirmacao" href="GerarConfirmacao" class="font-menu">Gerar Confirma&ccedil;&otilde;es</a></li>
