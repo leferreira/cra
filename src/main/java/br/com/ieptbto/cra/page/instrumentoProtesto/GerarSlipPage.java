@@ -128,7 +128,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				};
 				linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));
 				item.add(linkHistorico);
-				item.add(new Label("portador", instituicaoMediator.buscarBancoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
+				item.add(new Label("portador",
+						instituicaoMediator.buscarBancoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
 			}
@@ -146,7 +147,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
 
 				try {
-					InstrumentoProtestoMediator instrumento = instrumentoMediator.processarInstrumentos(getInstrumentosProtesto(), getRetornos());
+					InstrumentoProtestoMediator instrumento =
+							instrumentoMediator.processarInstrumentos(getInstrumentosProtesto(), getRetornos());
 
 					if (instrumento.getEtiquetas().isEmpty()) {
 						throw new InfraException("Não foi possível gerar SLIPs. Não há entrada de títulos processados !");
@@ -156,14 +158,15 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 
 					HashMap<String, Object> parametros = new HashMap<String, Object>();
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(instrumento.getEtiquetas());
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEtiqueta.jrxml"));
+					JasperReport jasperReport =
+							JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEtiqueta.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_SLIP_"
-							+ dataPadrao.format(new Date()).toString() + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+							"CRA_SLIP_" + dataPadrao.format(new Date()).toString() + ".pdf"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
@@ -194,14 +197,15 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 
 					HashMap<String, Object> parametros = new HashMap<String, Object>();
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getEnvelopes());
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEnvelope.jrxml"));
+					JasperReport jasperReport =
+							JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEnvelope.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_ENVELOPES_"
-							+ dataPadrao.format(new Date()).toString() + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+							"CRA_ENVELOPES_" + dataPadrao.format(new Date()).toString() + ".pdf"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
@@ -232,8 +236,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
 
 					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
-					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH
-							+ "ieptb.gif")));
+					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
 					parametros.put("DATA_GERACAO", new LocalDate().toDate());
 
 					String urlJasper = "../../relatorio/ListagemInstrumentosBancos.jrxml";
@@ -243,8 +246,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_LISTAGEM_"
-							+ dataPadrao.format(new Date()).toString() + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+							"CRA_LISTAGEM_" + dataPadrao.format(new Date()).toString() + ".pdf"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
