@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -32,8 +31,12 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 public class BuscarArquivoCraPanel extends Panel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger logger = Logger.getLogger(BuscarArquivoCraPanel.class);
 
@@ -46,13 +49,19 @@ public class BuscarArquivoCraPanel extends Panel {
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	private DropDownChoice<Municipio> comboMunicipio;
-
-	private ArrayList<TipoArquivoEnum> tiposArquivo = new ArrayList<TipoArquivoEnum>();;
-	private ArrayList<StatusRemessa> situacaoRemessa = new ArrayList<StatusRemessa>();;
+	private ArrayList<TipoArquivoEnum> tiposArquivo;
+	private ArrayList<StatusRemessa> situacaoRemessa;
 
 	public BuscarArquivoCraPanel(String id, IModel<Arquivo> model, Instituicao instituicao) {
 		super(id, model);
 		this.model = model;
+		this.tiposArquivo = new ArrayList<TipoArquivoEnum>();
+		this.situacaoRemessa = new ArrayList<StatusRemessa>();
+
+		adicionarCampos();
+	}
+
+	private void adicionarCampos() {
 		add(comboTipoArquivos());
 		add(comboSituacaoArquivos());
 		add(dataEnvioInicio());
@@ -61,10 +70,16 @@ public class BuscarArquivoCraPanel extends Panel {
 		add(comboPortador());
 		add(pracaProtesto());
 		add(botaoEnviar());
+
 	}
 
-	private Component botaoEnviar() {
+	private Button botaoEnviar() {
 		return new Button("botaoBuscar") {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSubmit() {
@@ -117,14 +132,16 @@ public class BuscarArquivoCraPanel extends Panel {
 		listaTipos.add(TipoArquivoEnum.REMESSA);
 		listaTipos.add(TipoArquivoEnum.CONFIRMACAO);
 		listaTipos.add(TipoArquivoEnum.RETORNO);
-		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos", new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
+		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",
+				new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
 		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
 	}
 
 	private CheckBoxMultipleChoice<StatusRemessa> comboSituacaoArquivos() {
 		List<StatusRemessa> listaSituacao = Arrays.asList(StatusRemessa.values());
-		CheckBoxMultipleChoice<StatusRemessa> situacao = new CheckBoxMultipleChoice<StatusRemessa>("situacaoArquivos", new Model<ArrayList<StatusRemessa>>(situacaoRemessa), listaSituacao);
+		CheckBoxMultipleChoice<StatusRemessa> situacao = new CheckBoxMultipleChoice<StatusRemessa>("situacaoArquivos",
+				new Model<ArrayList<StatusRemessa>>(situacaoRemessa), listaSituacao);
 		situacao.setLabel(new Model<String>("Situacao do Arquivo"));
 		return situacao;
 	}
@@ -140,13 +157,15 @@ public class BuscarArquivoCraPanel extends Panel {
 
 	private DropDownChoice<Instituicao> comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		DropDownChoice<Instituicao> comboPortador = new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
+		DropDownChoice<Instituicao> comboPortador =
+				new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
 		return comboPortador;
 	}
 
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
+		comboMunicipio =
+				new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;
 	}
 

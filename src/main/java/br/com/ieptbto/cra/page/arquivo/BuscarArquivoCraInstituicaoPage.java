@@ -40,8 +40,11 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo> {
 
-	/***/
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
+
 	private static final Logger logger = Logger.getLogger(BuscarArquivoCraInstituicaoPage.class);
 
 	@SpringBean
@@ -59,6 +62,7 @@ public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo> {
 		this.arquivo = new Arquivo();
 		this.tiposArquivo = new ArrayList<TipoArquivoEnum>();
 		this.situacaoArquivo = new ArrayList<SituacaoArquivo>();
+
 		adicionarComponentes();
 	}
 
@@ -100,7 +104,8 @@ public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo> {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
 
-					setResponsePage(new ListaArquivoInstituicaoPage(arquivoBuscado, municipio, dataInicio, dataFim, getTiposArquivo(), getSituacaoArquivo()));
+					setResponsePage(new ListaArquivoInstituicaoPage(arquivoBuscado, municipio, dataInicio, dataFim, getTiposArquivo(),
+							getSituacaoArquivo()));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -128,14 +133,16 @@ public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo> {
 		listaTipos.add(TipoArquivoEnum.REMESSA);
 		listaTipos.add(TipoArquivoEnum.CONFIRMACAO);
 		listaTipos.add(TipoArquivoEnum.RETORNO);
-		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos", new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
+		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",
+				new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
 		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
 	}
 
 	private CheckBoxMultipleChoice<SituacaoArquivo> comboSituacaoArquivos() {
 		List<SituacaoArquivo> listaSituacao = Arrays.asList(SituacaoArquivo.values());
-		CheckBoxMultipleChoice<SituacaoArquivo> situacao = new CheckBoxMultipleChoice<SituacaoArquivo>("situacaoArquivos", new Model<ArrayList<SituacaoArquivo>>(situacaoArquivo), listaSituacao);
+		CheckBoxMultipleChoice<SituacaoArquivo> situacao = new CheckBoxMultipleChoice<SituacaoArquivo>("situacaoArquivos",
+				new Model<ArrayList<SituacaoArquivo>>(situacaoArquivo), listaSituacao);
 		situacao.setLabel(new Model<String>("Situacao do Arquivo"));
 		return situacao;
 	}
@@ -151,7 +158,8 @@ public class BuscarArquivoCraInstituicaoPage extends BasePage<Arquivo> {
 
 	private DropDownChoice<Instituicao> comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		DropDownChoice<Instituicao> comboPortador = new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
+		DropDownChoice<Instituicao> comboPortador =
+				new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
 		return comboPortador;
 	}
 

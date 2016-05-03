@@ -19,8 +19,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.component.CustomExportToolbar;
-import br.com.ieptbto.cra.component.dataProvider.MunicipioProvider;
+import br.com.ieptbto.cra.dataProvider.DataProvider;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -73,7 +72,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 	}
 
 	private void dataTableMunicipio() {
-		MunicipioProvider dataProvider = new MunicipioProvider(municipioMediator.listarTodos());
+		DataProvider<Municipio> dataProvider = new DataProvider<Municipio>(municipioMediator.listarTodos());
 
 		List<IColumn<Municipio, String>> columns = new ArrayList<>();
 		columns.add(new AbstractColumn<Municipio, String>(new Model<String>("EDITAR")) {
@@ -130,7 +129,6 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 		});
 
 		DataTable<Municipio, String> dataTable = new DefaultDataTable<>("table", columns, dataProvider, 1000);
-		dataTable.addBottomToolbar(new CustomExportToolbar(dataTable, "CRA_TO_Muncipios"));
 		add(dataTable);
 	}
 

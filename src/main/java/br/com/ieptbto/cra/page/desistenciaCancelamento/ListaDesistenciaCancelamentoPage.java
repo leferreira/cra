@@ -19,7 +19,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.ArquivoDesistenciaCancelamento;
+import br.com.ieptbto.cra.bean.ArquivoDesistenciaCancelamentoBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
@@ -58,7 +58,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 	private Arquivo arquivo;
 
-	private List<ArquivoDesistenciaCancelamento> arquivosDesistenciasCancelamentos;
+	private List<ArquivoDesistenciaCancelamentoBean> arquivosDesistenciasCancelamentos;
 	private List<DesistenciaProtesto> desistenciaProtesto;
 	private List<CancelamentoProtesto> cancelamentoProtestos;
 	private List<AutorizacaoCancelamento> autorizacaoCancelamentos;
@@ -80,14 +80,14 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 	}
 
 	private void listaArquivosDevolucaoCancelamento() {
-		add(new ListView<ArquivoDesistenciaCancelamento>("dataTableRemessa", getArquivosDesistenciasCancelamentos()) {
+		add(new ListView<ArquivoDesistenciaCancelamentoBean>("dataTableRemessa", getArquivosDesistenciasCancelamentos()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<ArquivoDesistenciaCancelamento> item) {
-				final ArquivoDesistenciaCancelamento arquivo = item.getModelObject();
+			protected void populateItem(ListItem<ArquivoDesistenciaCancelamentoBean> item) {
+				final ArquivoDesistenciaCancelamentoBean arquivo = item.getModelObject();
 
 				if (arquivo.getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
 					item.add(downloadArquivoTXT(arquivo.getDesistenciaProtesto()));
@@ -201,7 +201,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 	private void converterDesistenciasCancelamentos() {
 		if (!getDesistenciaProtesto().isEmpty()) {
 			for (DesistenciaProtesto desistenciaProtesto : getDesistenciaProtesto()) {
-				ArquivoDesistenciaCancelamento arquivo = new ArquivoDesistenciaCancelamento();
+				ArquivoDesistenciaCancelamentoBean arquivo = new ArquivoDesistenciaCancelamentoBean();
 				arquivo.parseDesistenciaProtesto(desistenciaProtesto);
 				getArquivosDesistenciasCancelamentos().add(arquivo);
 			}
@@ -209,7 +209,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 		if (!getCancelamentoProtestos().isEmpty()) {
 			for (CancelamentoProtesto cancelamento : getCancelamentoProtestos()) {
-				ArquivoDesistenciaCancelamento arquivo = new ArquivoDesistenciaCancelamento();
+				ArquivoDesistenciaCancelamentoBean arquivo = new ArquivoDesistenciaCancelamentoBean();
 				arquivo.parseCancelamentoProtesto(cancelamento);
 				getArquivosDesistenciasCancelamentos().add(arquivo);
 			}
@@ -217,7 +217,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 		if (!getAutorizacaoCancelamentos().isEmpty()) {
 			for (AutorizacaoCancelamento ac : getAutorizacaoCancelamentos()) {
-				ArquivoDesistenciaCancelamento arquivo = new ArquivoDesistenciaCancelamento();
+				ArquivoDesistenciaCancelamentoBean arquivo = new ArquivoDesistenciaCancelamentoBean();
 				arquivo.parseAutorizacaoCancelamento(ac);
 				getArquivosDesistenciasCancelamentos().add(arquivo);
 			}
@@ -245,9 +245,9 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 		return autorizacaoCancelamentos;
 	}
 
-	public List<ArquivoDesistenciaCancelamento> getArquivosDesistenciasCancelamentos() {
+	public List<ArquivoDesistenciaCancelamentoBean> getArquivosDesistenciasCancelamentos() {
 		if (arquivosDesistenciasCancelamentos == null) {
-			arquivosDesistenciasCancelamentos = new ArrayList<ArquivoDesistenciaCancelamento>();
+			arquivosDesistenciasCancelamentos = new ArrayList<ArquivoDesistenciaCancelamentoBean>();
 		}
 		return arquivosDesistenciasCancelamentos;
 	}

@@ -306,7 +306,16 @@ dd, dt {
 	color: #FFF;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10px;
+	font-size: 11px;
+	width: 100%;
+}
+
+#info-titulo{
+	background: #6D95B7 none repeat scroll 0% 0%;
+	color: #FFF;
+	font-weight: bold;
+	padding: 3px;
+	font-size: 11px;
 	width: 100%;
 }
 
@@ -440,4 +449,14 @@ Exporter csv
 
 .col-action{
 	width: 80px;
+}
+.excel-icon{
+	background-color: #eee;
+    color: #3c763d;
+    font-size: 1.3em;
+}
+.pdf-icon{
+	background-color: #eee;
+    color: #A94442;
+    font-size: 1.3em;
 }

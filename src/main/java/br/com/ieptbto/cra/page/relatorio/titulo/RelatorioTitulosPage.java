@@ -49,6 +49,8 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
+	private static final String RELATORIO_PDF = "PDF";
+	private static final String RELATORIO_CSV = "CSV";
 
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
@@ -56,8 +58,10 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 	private Arquivo arquivo;
 
 	private List<Instituicao> listaInstituicoes;
-	private DropDownChoice<Instituicao> comboInstituicao;
+	private DropDownChoice<Instituicao> dropDownInstituicao;
+	private DropDownChoice<Instituicao> dropDownCartorio;
 	private RadioGroup<SituacaoTituloRelatorio> radioSituacaoTituloRelatorio;
+	private RadioGroup<String> radioExportacao;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 
@@ -81,7 +85,9 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 			@Override
 			protected void onSubmit() {
 				SituacaoTituloRelatorio situacaoTitulo = radioSituacaoTituloRelatorio.getModelObject();
-				Instituicao instituicao = comboInstituicao.getModelObject();
+				Instituicao bancoConvenio = dropDownInstituicao.getModelObject();
+				Instituicao cartorio = dropDownCartorio.getModelObject();
+				String tipoExportacao = radioExportacao.getModelObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 
@@ -97,12 +103,22 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
 
-					JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosPorSituacao(situacaoTitulo, instituicao, dataInicio, dataFim);
-					File pdf = File.createTempFile("report", ".pdf");
-					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
-							"CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
+					if (dropDownInstituicao.getModelObject() == null && dropDownCartorio.getModelObject() == null) {
+						throw new InfraException("Por favor, informe o Banco/Convênio ou a Comarca...");
+					}
+
+					if (tipoExportacao.equals(RELATORIO_PDF)) {
+						JasperPrint jasperPrint =
+								new RelatorioUtil().gerarRelatorioTitulosPorSituacao(situacaoTitulo, bancoConvenio, dataInicio, dataFim);
+						File pdf = File.createTempFile("report", ".pdf");
+						JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+						IResourceStream resourceStream = new FileResourceStream(pdf);
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+								"CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
+
+					} else if (tipoExportacao.equals(RELATORIO_CSV)) {
+						setResponsePage(new RelatorioTitulosCsvPage(situacaoTitulo, bancoConvenio, cartorio, dataInicio, dataFim));
+					}
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
@@ -111,39 +127,49 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 				}
 			}
 		};
+		form.add(radioTipoExportacao());
 		form.add(dataEnvioInicio());
 		form.add(dataEnvioFinal());
 		form.add(tipoInstituicao());
-		form.add(instituicaoCartorio());
+		form.add(dropDownBancoConvenios());
+		form.add(dropDownCartorio());
 		form.add(situcaoTituloRelatorio());
 		add(form);
+	}
+
+	private RadioGroup<String> radioTipoExportacao() {
+		radioExportacao = new RadioGroup<String>("exportacao", new Model<String>());
+		radioExportacao.setLabel(new Model<String>("Tipo Exportação Relatório"));
+		radioExportacao.setRequired(true);
+		radioExportacao.add(new Radio<String>("pdf", new Model<String>(RELATORIO_PDF)).setEnabled(false));
+		radioExportacao.add(new Radio<String>("csv", new Model<String>(RELATORIO_CSV)));
+		return radioExportacao;
 	}
 
 	private RadioGroup<SituacaoTituloRelatorio> situcaoTituloRelatorio() {
 		radioSituacaoTituloRelatorio = new RadioGroup<SituacaoTituloRelatorio>("situacao", new Model<SituacaoTituloRelatorio>());
 		radioSituacaoTituloRelatorio.setLabel(new Model<String>("Situação dos Títulos"));
 		radioSituacaoTituloRelatorio.setRequired(true);
-
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("todos", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.GERAL)));
 		radioSituacaoTituloRelatorio
-				.add(new Radio<SituacaoTituloRelatorio>("semConfirmacao", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.SEM_CONFIRMACAO)));
-		radioSituacaoTituloRelatorio
-				.add(new Radio<SituacaoTituloRelatorio>("comConfirmacao", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.COM_RETORNO)));
-		radioSituacaoTituloRelatorio
-				.add(new Radio<SituacaoTituloRelatorio>("semRetorno", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.SEM_RETORNO)));
-		radioSituacaoTituloRelatorio
-				.add(new Radio<SituacaoTituloRelatorio>("comRetorno", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.COM_RETORNO)));
-
-		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("pagos", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.PAGOS)));
-		radioSituacaoTituloRelatorio
-				.add(new Radio<SituacaoTituloRelatorio>("protestados", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.PROTESTADOS)));
+				.add(new Radio<SituacaoTituloRelatorio>("todos", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.GERAL)));
+		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("semConfirmacao",
+				new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.SEM_CONFIRMACAO)));
+		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("comConfirmacao",
+				new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.COM_CONFIRMACAO)));
 		radioSituacaoTituloRelatorio.add(
-				new Radio<SituacaoTituloRelatorio>("retiradosDevolvidos", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.RETIRADOS_DEVOLVIDOS)));
+				new Radio<SituacaoTituloRelatorio>("comRetorno", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.COM_RETORNO)));
 		radioSituacaoTituloRelatorio
-				.add(new Radio<SituacaoTituloRelatorio>("desistencia", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.DESISTÊNCIA_DE_PROTESTO)));
-		radioSituacaoTituloRelatorio
-				.add(new Radio<SituacaoTituloRelatorio>("cancelamento", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.CANCELAMENTO_DE_PROTESTO)));
-
+				.add(new Radio<SituacaoTituloRelatorio>("pagos", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.PAGOS)));
+		radioSituacaoTituloRelatorio.add(
+				new Radio<SituacaoTituloRelatorio>("protestados", new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.PROTESTADOS)));
+		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("retiradosDevolvidos",
+				new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.RETIRADOS_DEVOLVIDOS)));
+		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("desistencia",
+				new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.DESISTÊNCIA_DE_PROTESTO)).setEnabled(false));
+		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("cancelamento",
+				new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.CANCELAMENTO_DE_PROTESTO)).setEnabled(false));
+		radioSituacaoTituloRelatorio.add(new Radio<SituacaoTituloRelatorio>("semRetorno",
+				new Model<SituacaoTituloRelatorio>(SituacaoTituloRelatorio.AUTORIZACAO_CANCELAMENTO)).setEnabled(false));
 		return radioSituacaoTituloRelatorio;
 	}
 
@@ -164,7 +190,6 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 	private DropDownChoice<TipoInstituicaoCRA> tipoInstituicao() {
 		IChoiceRenderer<TipoInstituicaoCRA> renderer = new ChoiceRenderer<TipoInstituicaoCRA>("label");
 		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
-		choices.add(TipoInstituicaoCRA.CARTORIO);
 		choices.add(TipoInstituicaoCRA.CONVENIO);
 		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
 		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao =
@@ -185,33 +210,38 @@ public class RelatorioTitulosPage extends BasePage<Arquivo> {
 					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
-					} else if (tipo.equals(TipoInstituicaoCRA.CARTORIO)) {
-						getListaInstituicoes().clear();
-						getListaInstituicoes().addAll(instituicaoMediator.getCartorios());
 					}
 
-					comboInstituicao.setEnabled(true);
-					comboInstituicao.setRequired(true);
+					dropDownInstituicao.setEnabled(true);
+					dropDownInstituicao.setRequired(true);
 				} else {
-					comboInstituicao.setEnabled(false);
-					comboInstituicao.setRequired(false);
+					dropDownInstituicao.setEnabled(false);
+					dropDownInstituicao.setRequired(false);
 					getListaInstituicoes().clear();
 				}
-				target.add(comboInstituicao);
+				target.add(dropDownInstituicao);
 			}
 		});
 		tipoInstituicao.setLabel(new Model<String>("Tipo Instituição"));
-		tipoInstituicao.setRequired(true);
 		return tipoInstituicao;
 	}
 
-	private DropDownChoice<Instituicao> instituicaoCartorio() {
+	private DropDownChoice<Instituicao> dropDownBancoConvenios() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		comboInstituicao = new DropDownChoice<Instituicao>("instituicaoOrigem", new Model<Instituicao>(), getListaInstituicoes(), renderer);
-		comboInstituicao.setLabel(new Model<String>("Portador"));
-		comboInstituicao.setOutputMarkupId(true);
-		comboInstituicao.setEnabled(false);
-		return comboInstituicao;
+		dropDownInstituicao =
+				new DropDownChoice<Instituicao>("instituicaoOrigem", new Model<Instituicao>(), getListaInstituicoes(), renderer);
+		dropDownInstituicao.setLabel(new Model<String>("Portador"));
+		dropDownInstituicao.setOutputMarkupId(true);
+		dropDownInstituicao.setEnabled(false);
+		return dropDownInstituicao;
+	}
+
+	private DropDownChoice<Instituicao> dropDownCartorio() {
+		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio");
+		dropDownCartorio =
+				new DropDownChoice<Instituicao>("cartorio", new Model<Instituicao>(), instituicaoMediator.getCartorios(), renderer);
+		dropDownCartorio.setOutputMarkupId(true);
+		return dropDownCartorio;
 	}
 
 	public List<Instituicao> getListaInstituicoes() {
