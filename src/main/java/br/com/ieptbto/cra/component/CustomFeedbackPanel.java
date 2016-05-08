@@ -20,16 +20,16 @@ public class CustomFeedbackPanel extends FeedbackPanel {
 		String css;
 		switch (message.getLevel()) {
 			case FeedbackMessage.SUCCESS:
-				css = "alert alert-success alert-dismissable";
+				css = "alert alert-success alert-dismissable text-left";
 				break;
 			case FeedbackMessage.INFO:
-				css = "alert alert-info alert-dismissable";
+				css = "alert alert-info alert-dismissable text-left";
 				break;
 			case FeedbackMessage.ERROR:
-				css = "alert alert-danger alert-dismissable";
+				css = "alert alert-danger alert-dismissable text-left";
 				break;
 			default:
-				css = "alert alert-dismissable";
+				css = "alert alert-dismissable text-left";
 		}
 
 		return css;

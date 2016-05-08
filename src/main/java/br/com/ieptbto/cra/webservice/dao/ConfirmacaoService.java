@@ -177,10 +177,6 @@ public class ConfirmacaoService extends CraWebService {
 				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo,
 						arquivoJaEnviado);
 			}
-			if (getArquivoConfirmacaoVO() == null || getUsuario().getId() == 0) {
-				ArquivoVO arquivo = new ArquivoVO();
-				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
-			}
 
 			setArquivoConfirmacaoVO(converterStringArquivoVO(dados));
 			setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
@@ -192,6 +188,7 @@ public class ConfirmacaoService extends CraWebService {
 			loggerCra.error(getUsuario(), getTipoAcaoLog(), ex.getMessage());
 			return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.info(e.getMessage(), e.getCause());
 			loggerCra.error(getUsuario(), getTipoAcaoLog(), e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
