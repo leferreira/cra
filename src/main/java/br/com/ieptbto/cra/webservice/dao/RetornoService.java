@@ -173,10 +173,7 @@ public class RetornoService extends CraWebService {
 				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo,
 						arquivoJaEnviado);
 			}
-			if (getArquivoRetornoVO() == null || getUsuario().getId() == 0) {
-				ArquivoVO arquivo = new ArquivoVO();
-				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivo, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
-			}
+
 			setArquivoRetornoVO(converterStringArquivoVO(dados));
 			setRetornoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoRetornoVO()));
 			setMensagemXml(retornoMediator.processarXML(getRetornoVO(), getUsuario(), nomeArquivo));
