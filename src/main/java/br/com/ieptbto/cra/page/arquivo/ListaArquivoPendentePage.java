@@ -140,9 +140,9 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
 									new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
 						} catch (InfraException ex) {
-							getFeedbackPanel().error(ex.getMessage());
+							error(ex.getMessage());
 						} catch (Exception e) {
-							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+							error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA...");
 						}
 					}
 				};

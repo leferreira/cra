@@ -28,12 +28,9 @@ public class DataTableAcoesPanel extends Panel {
 
 	private DataProvider<LogCra> dataProvider;
 
-	private Integer pagination;
-
-	public DataTableAcoesPanel(String id, DataProvider<LogCra> dataProvider, Integer pagination) {
+	public DataTableAcoesPanel(String id, DataProvider<LogCra> dataProvider) {
 		super(id);
 		this.dataProvider = dataProvider;
-		this.pagination = pagination;
 		adicionarComponentes();
 	}
 
@@ -102,13 +99,6 @@ public class DataTableAcoesPanel extends Panel {
 				return "col-center text-center col-action";
 			}
 		});
-		return new DefaultDataTable<>("table", columns, dataProvider, getPagination());
-	}
-
-	public Integer getPagination() {
-		if (pagination == null) {
-			pagination = 10;
-		}
-		return pagination;
+		return new DefaultDataTable<>("table", columns, dataProvider, 1000);
 	}
 }

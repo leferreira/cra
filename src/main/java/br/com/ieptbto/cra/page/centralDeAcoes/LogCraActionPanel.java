@@ -15,8 +15,11 @@ public class LogCraActionPanel extends Panel {
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	public LogCraActionPanel(String id, final IModel<LogCra> model) {
+	private LogCra logCra;
+
+	public LogCraActionPanel(String id, IModel<LogCra> model) {
 		super(id, model);
+		this.logCra = model.getObject();
 		add(new Link<LogCra>("descricaoGeral") {
 
 			/***/
@@ -24,6 +27,7 @@ public class LogCraActionPanel extends Panel {
 
 			@Override
 			public void onClick() {
+				setResponsePage(new LogCraPage(logCra));
 			}
 		});
 	}
