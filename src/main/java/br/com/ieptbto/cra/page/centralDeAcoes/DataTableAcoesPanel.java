@@ -41,8 +41,6 @@ public class DataTableAcoesPanel extends Panel {
 
 	private Component dataTableLogCra() {
 		List<IColumn<LogCra, String>> columns = new ArrayList<>();
-		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("AÇÃO"), "acao.label"));
-		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("INSTITUIÇÃO"), "instituicao"));
 		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("DATA E HORA"), "data") {
 
 			/***/
@@ -54,6 +52,8 @@ public class DataTableAcoesPanel extends Panel {
 						+ DataUtil.localTimeToString(model.getObject().getHora())));
 			}
 		});
+		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("AÇÃO"), "acao.label"));
+		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("INSTITUIÇÃO"), "instituicao"));
 		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("DESCRIÇÃO"), "descricao") {
 			/***/
 			private static final long serialVersionUID = 1L;

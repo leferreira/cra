@@ -77,9 +77,11 @@ public class DesistenciaProtestoService extends CraWebService {
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 			}
-			Arquivo arquivoJaEnviado = desistenciaProtestoMediator.verificarDesistenciaJaEnviadaAnteriormente(nomeArquivo, usuario.getInstituicao());
+			Arquivo arquivoJaEnviado =
+					desistenciaProtestoMediator.verificarDesistenciaJaEnviadaAnteriormente(nomeArquivo, usuario.getInstituicao());
 			if (arquivoJaEnviado != null) {
-				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo, arquivoJaEnviado);
+				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo,
+						arquivoJaEnviado);
 			}
 
 			arquivo = gerarArquivoDesistencia(getUsuario().getInstituicao().getLayoutPadraoXML(), arquivo, dados);
@@ -96,8 +98,8 @@ public class DesistenciaProtestoService extends CraWebService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(Arrays.toString(e.getStackTrace()));
-			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno no processamento do arquivo de Desistência de Protesto "
-					+ nomeArquivo + "." + e.getMessage(), e);
+			loggerCra.error(getUsuario(), getTipoAcaoLog(),
+					"Erro interno no processamento do arquivo de Desistência de Protesto " + nomeArquivo + "." + e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		}
 		return gerarMensagem(getMensagemXml(), CONSTANTE_RELATORIO_XML);
@@ -147,8 +149,8 @@ public class DesistenciaProtestoService extends CraWebService {
 			erro.setMunicipio(exception.getMunicipio());
 			erro.setCodigo(exception.getCodigoErro());
 			mensagens.add(erro);
-			loggerCra.alert(getUsuario(), getTipoAcaoLog(), "Comarca Rejeitada: " + exception.getMunicipio() + " - "
-					+ exception.getMessage());
+			loggerCra.alert(getUsuario(), getTipoAcaoLog(),
+					"Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
 		}
 		getErros().clear();
 		return mensagemRetorno;
@@ -159,7 +161,8 @@ public class DesistenciaProtestoService extends CraWebService {
 	}
 
 	private String formatarMensagemRetorno(DesistenciaProtesto desistenciaProtesto) {
-		Instituicao instituicao = instituicaoMediator.getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio());
+		Instituicao instituicao =
+				instituicaoMediator.getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio());
 		String titulos = "titulo";
 		if (desistenciaProtesto.getDesistencias().size() > 1) {
 			titulos = "titulos";
@@ -222,8 +225,8 @@ public class DesistenciaProtestoService extends CraWebService {
 				return setRespostaPadrao(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 			}
 			setMensagem(gerarResposta(remessaVO, getNomeArquivo()));
-			loggerCra.sucess(usuario, getTipoAcaoLog(), "Arquivo " + nomeArquivo + ", recebido com sucesso por "
-					+ usuario.getInstituicao().getNomeFantasia() + ".");
+			loggerCra.sucess(usuario, getTipoAcaoLog(),
+					"Arquivo " + nomeArquivo + ", enviado com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
 			e.printStackTrace();
 			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo " + nomeArquivo + "." + e.getMessage(), e);
@@ -236,17 +239,73 @@ public class DesistenciaProtestoService extends CraWebService {
 		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
 
 		if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
-			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<sustacao>");
+			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">",
+					"<sustacao>");
 			msg = msg.replace("</remessa>", "</sustacao>");
 		} else if (nomeArquivo.contains(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.getConstante())) {
-			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<cancelamento>");
+			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">",
+					"<cancelamento>");
 			msg = msg.replace("</remessa>", "</cancelamento>");
 		} else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
-			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<autoriza_cancelamento>");
+			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">",
+					"<autoriza_cancelamento>");
 			msg = msg.replace("</remessa>", "</autoriza_cancelamento>");
 		}
 		msg = msg.replace("<registros>", "");
 		msg = msg.replace("</registros>", "");
 		return XmlFormatterUtil.format(msg);
+	}
+
+	public String confirmarRecebimentoDesistenciaCancelamento(String nomeArquivo, Usuario usuario) {
+		setUsuario(usuario);
+		setNomeArquivo(nomeArquivo);
+
+		try {
+			if (usuario.getId() == 0) {
+				return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+
+			if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
+				setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO);
+			} else if (nomeArquivo.contains(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.getConstante())) {
+				setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO);
+			} else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
+				setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO);
+			}
+			desistenciaProtestoMediator.confirmarRecebimentoDesistenciaCancelamento(usuario.getInstituicao(), nomeArquivo);
+			loggerCra.sucess(usuario, getTipoAcaoLog(),
+					"Arquivo " + nomeArquivo + " foi confirmado o recebimento pelo " + usuario.getInstituicao().getNomeFantasia() + ".");
+		} catch (Exception e) {
+			e.printStackTrace();
+			loggerCra.error(getUsuario(), getTipoAcaoLog(),
+					"Erro ao confirmar o recebimento do arquivo " + nomeArquivo + "." + e.getMessage(), e);
+			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
+		}
+		return gerarMensagemSucessoProcessamentoCartorio(nomeArquivo, usuario);
+	}
+
+	private String gerarMensagemSucessoProcessamentoCartorio(String nomeArquivo, Usuario user) {
+		String xml = StringUtils.EMPTY;
+
+		xml = xml.concat("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\" ?>");
+		xml = xml.concat("<relatorio xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
+		xml = xml.concat("	<descricao>");
+		xml = xml.concat("		<dataEnvio>" + LocalDateTime.now().toString(DataUtil.PADRAO_FORMATACAO_DATAHORASEG) + "</dataEnvio>");
+		xml = xml.concat("		<tipoArquivo>XML_DOWNLOAD_DESISTENCIA_CANCELAMENTO</tipoArquivo>");
+		xml = xml.concat("		<nomeArquivo>" + nomeArquivo + "</nomeArquivo>");
+		xml = xml.concat("		<dataMovimento>" + DataUtil.localDateToString(new LocalDate()) + "</dataMovimento>");
+		xml = xml.concat("		<usuario>" + user.getNome() + "</usuario>");
+		xml = xml.concat("	</descricao>");
+		xml = xml.concat("	<detalhamento>");
+		xml = xml.concat("		<mensagem codigo=\"" + CodigoErro.CARTORIO_RECEBIMENTO_DESISTENCIA_CANCELAMENTO_COM_SUCESSO.getCodigo()
+				+ "\" descricao=\"" + CodigoErro.CARTORIO_RECEBIMENTO_DESISTENCIA_CANCELAMENTO_COM_SUCESSO.getDescricao() + "\"/>");
+		xml = xml.concat("	</detalhamento>");
+		xml = xml.concat("	<final>0000</final>");
+		xml = xml.concat("	<descricao_final>Arquivo de Desistência/Cancelamento confirmado o recebimento com sucesso</descricao_final>");
+		xml = xml.concat("</relatorio>");
+		return XmlFormatterUtil.format(xml);
 	}
 }

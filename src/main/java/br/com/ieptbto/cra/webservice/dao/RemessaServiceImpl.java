@@ -121,6 +121,15 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
+	@WebMethod(operationName = "confirmarRecebimentoDesistenciaCancelamento")
+	@GET
+	public String confirmarRecebimentoDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo,
+			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+		init(login, senha);
+		return desistenciaProtestoService.confirmarRecebimentoDesistenciaCancelamento(nomeArquivo, usuario);
+	}
+
+	@Override
 	@WebMethod(operationName = "autorizacaoCancelamento")
 	@GET
 	public String autorizacaoCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
