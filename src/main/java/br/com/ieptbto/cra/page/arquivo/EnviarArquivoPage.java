@@ -145,6 +145,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			protected void finalize() throws Throwable {
 				super.finalize();
 			}
+
 		};
 	}
 

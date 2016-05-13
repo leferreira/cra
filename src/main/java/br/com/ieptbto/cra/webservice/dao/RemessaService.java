@@ -152,10 +152,10 @@ public class RemessaService extends CraWebService {
 			setMensagem(gerarResposta(remessaVO, getNomeArquivo(), CONSTANTE_REMESSA_XML));
 			loggerCra.sucess(getUsuario(), getTipoAcaoLog(), "Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por "
 					+ getUsuario().getInstituicao().getNomeFantasia() + ".");
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e.getCause());
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex.getCause());
 			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo de Remessa " + nomeArquivo
-					+ " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".", e);
+					+ " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".", ex);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return getMensagem();

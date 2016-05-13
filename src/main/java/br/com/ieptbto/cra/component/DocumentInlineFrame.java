@@ -11,8 +11,8 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.string.Strings;
 
 /**
- * Implementation of an <a
- * href="http://www.w3.org/TR/REC-html40/present/frames.html#h-16.5">inline
+ * Implementation of an
+ * <a href="http://www.w3.org/TR/REC-html40/present/frames.html#h-16.5">inline
  * frame</a> component. Must be used with an iframe (&lt;iframe src...) element.
  * The src attribute will be generated. Its is suitable for displaying
  * <em>generated contend</em> like PDF, EXCEL, WORD, etc.
@@ -73,7 +73,6 @@ public class DocumentInlineFrame extends WebMarkupContainer implements IResource
 
 		// generate the src attribute
 		tag.put("src", Strings.replaceAll(url, "&", "&amp;"));
-
 		super.onComponentTag(tag);
 	}
 

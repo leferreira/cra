@@ -1,16 +1,10 @@
 package br.com.ieptbto.cra.page.base;
 
-import java.io.File;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
 
-import br.com.ieptbto.cra.component.DocumentInlineFrame;
-import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 
 /**
@@ -20,23 +14,24 @@ import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 @SuppressWarnings({ "serial", "unused" })
 public class ComunicadoModal extends WebPage {
 
-    private ModalWindow modalWindow;
-    private PageReference modalWindowPage;
+	private ModalWindow modalWindow;
+	private PageReference modalWindowPage;
 
-    @SpringBean
-    UsuarioFiliadoMediator usuarioFiliadoMediator;
+	@SpringBean
+	UsuarioFiliadoMediator usuarioFiliadoMediator;
 
-    public ComunicadoModal(final PageReference modalWindowPage, final ModalWindow window) {
-	this.modalWindowPage = modalWindowPage;
-	this.modalWindow = window;
+	public ComunicadoModal(final PageReference modalWindowPage, final ModalWindow window) {
+		this.modalWindowPage = modalWindowPage;
+		this.modalWindow = window;
 
-	carregarIFramePDF();
-    }
+		// carregarIFramePDF();
+	}
 
-    private void carregarIFramePDF() {
-	File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Decisao_Oficio.pdf");
-	IResourceStream resourceStream = new FileResourceStream(file);
-	DocumentInlineFrame iFramePDF = new DocumentInlineFrame("pdf", resourceStream);
-	add(iFramePDF);
-    }
+	// private void carregarIFramePDF() {
+	// File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "banner.jpg");
+	// IResourceStream resourceStream = new FileResourceStream(file);
+	// DocumentInlineFrame iFramePDF = new DocumentInlineFrame("pdf",
+	// resourceStream);
+	// add(iFramePDF);
+	// }
 }
