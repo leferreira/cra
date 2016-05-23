@@ -78,17 +78,15 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	public GerarSlipPage() {
 		this.instrumento = new InstrumentoProtesto();
 		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
-		this.envelopes = null;
-		this.etiquetas = null;
+
 		adicionarComponentes();
 	}
 
 	public GerarSlipPage(String message) {
 		this.instrumento = new InstrumentoProtesto();
 		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
-		this.envelopes = null;
-		this.etiquetas = null;
-		info(message);
+
+		success(message);
 		adicionarComponentes();
 	}
 

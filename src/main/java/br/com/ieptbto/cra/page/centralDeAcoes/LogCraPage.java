@@ -90,8 +90,8 @@ public class LogCraPage extends BasePage<LogCra> {
 		if (getModel().getObject().getExcecao() == null) {
 			textArea = new TextArea<String>("exception", new Model<String>("Não foi registrada nenhuma exceção nesta ação..."));
 		} else {
-			textArea = new TextArea<String>("exception",
-					new Model<String>(Arrays.toString(getModel().getObject().getExcecao().getStackTrace())));
+			textArea = new TextArea<String>("exception", new Model<String>(getModel().getObject().getExcecao().getMessage() + "\n"
+					+ Arrays.toString(getModel().getObject().getExcecao().getStackTrace())));
 		}
 		textArea.setEnabled(false);
 		return textArea;

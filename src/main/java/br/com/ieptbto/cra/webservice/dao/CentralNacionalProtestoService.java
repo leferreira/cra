@@ -19,7 +19,7 @@ import br.com.ieptbto.cra.util.DataUtil;
 public class CentralNacionalProtestoService extends CnpWebService {
 
 	@Autowired
-	private CentralNacionalProtestoMediator centralNacionalProtestoMediator;
+	CentralNacionalProtestoMediator centralNacionalProtestoMediator;
 
 	public String processar(Usuario usuario) {
 		ArquivoCnpVO arquivoCnp = new ArquivoCnpVO();
@@ -44,7 +44,6 @@ public class CentralNacionalProtestoService extends CnpWebService {
 				if (arquivoCnp.getRemessasCnpVO().isEmpty()) {
 					return naoHaRemessasParaArquivoCnp(usuario);
 				}
-
 			}
 			loggerCra.sucess(getUsuario(), TipoAcaoLog.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Arquivo CNP do dia " + DataUtil.localDateToString(new LocalDate()) + ", enviado com sucesso para o IEPTB nacional.");

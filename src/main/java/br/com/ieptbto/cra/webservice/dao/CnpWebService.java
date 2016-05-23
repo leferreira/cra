@@ -180,7 +180,7 @@ public class CnpWebService {
 		detalhamento.setMensagem(new ArrayList<Mensagem>());
 		Mensagem mensagem = new Mensagem();
 
-		for (RemessaCnp remessaCnp : arquivoCNP.getRemessaCnp()) {
+		for (RemessaCnp remessaCnp : arquivoCNP.getRemessasCnp()) {
 			mensagem.setDescricao("Foram enviados " + remessaCnp.getTitulos().size() + " títulos para CNP.");
 		}
 		mensagemXml.setDetalhamento(detalhamento);
@@ -199,6 +199,18 @@ public class CnpWebService {
 		mensagemXml.setDescricao(descricao);
 		mensagemXml.setCodigoFinal(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getCodigo());
 		mensagemXml.setDescricaoFinal(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao());
+		return mensagemXml;
+	}
+
+	protected MensagemXml gerarMensagemErroProcessamento(String descricaoFinal) {
+		MensagemXml mensagemXml = new MensagemXml();
+		Descricao descricao = new Descricao();
+		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
+
+		mensagemXml.setDescricao(descricao);
+		mensagemXml.setCodigoFinal("9999");
+		mensagemXml.setDescricaoFinal(descricaoFinal);
 		return mensagemXml;
 	}
 

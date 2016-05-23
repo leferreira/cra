@@ -61,11 +61,17 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			arquivoCnp = centralNacionalProtestoMediator.processarArquivoCartorio(getUsuario(), converterStringArquivoCnpVO(dados));
 			loggerCra.sucess(getUsuario(), TipoAcaoLog.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Arquivo da CNP enviado por " + getUsuario().getInstituicao().getNomeFantasia() + " processado com sucesso!");
+		} catch (InfraException ex) {
+			ex.printStackTrace();
+			logger.info(ex.getMessage(), ex.getCause());
+			loggerCra.error(getUsuario(), TipoAcaoLog.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+					"Erro no processamento do arquivo da CNP de " + getUsuario().getInstituicao().getNomeFantasia() + "!", ex);
+			return gerarMensagem(gerarMensagemErroProcessamento(ex.getMessage()), CONSTANTE_RELATORIO_XML);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.info(ex.getMessage(), ex.getCause());
 			loggerCra.error(getUsuario(), TipoAcaoLog.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
-					"Erro no processamento do arquivo da CNP de " + getUsuario().getInstituicao().getNomeFantasia() + "!");
+					"Erro no processamento do arquivo da CNP de " + getUsuario().getInstituicao().getNomeFantasia() + "!", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}
 		return gerarMensagem(gerarMensagemSucesso(arquivoCnp), CONSTANTE_RELATORIO_XML);

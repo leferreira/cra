@@ -31,7 +31,7 @@ public class LoginForm extends BaseForm<Usuario> {
 
 			if (usuario != null) {
 				getSession().setUser(usuario);
-				setResponsePage(new HomePage(true));
+				setResponsePage(new HomePage());
 			}
 		} catch (Exception ex) {
 			transError(ex.getMessage());

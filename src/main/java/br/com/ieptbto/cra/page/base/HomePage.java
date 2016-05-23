@@ -5,13 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -77,22 +73,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	private Arquivo arquivo;
 	private Usuario usuario;
-	private Boolean bannerDivulgacao;
-
-	public HomePage(Boolean bannerDivulgacao) {
-		super();
-		this.usuario = getUser();
-		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
-		this.bannerDivulgacao = bannerDivulgacao;
-
-		adicionarComponentes();
-	}
 
 	public HomePage() {
 		super();
 		this.usuario = getUser();
 		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
-		this.bannerDivulgacao = false;
 
 		adicionarComponentes();
 	}
@@ -100,7 +85,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	public HomePage(PageParameters parameters) {
 		this.usuario = getUser();
 		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
-		this.bannerDivulgacao = false;
 
 		error(parameters.get("error"));
 		adicionarComponentes();
@@ -108,7 +92,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	@Override
 	protected void adicionarComponentes() {
-		modalBannerDivulgacao();
 		divInformacoes();
 		labelQtdRemessasPendentes();
 		labelQtdDesistenciasCancelamentosPendentes();
@@ -117,46 +100,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		listaDesistenciaPendentes();
 		listaCancelamentoPendentes();
 		listaAutorizacaoCancelamentoPendentes();
-	}
-
-	private void modalBannerDivulgacao() {
-		final ModalWindow modalBannerDivulgacao = new ModalWindow("modalBanner");
-		modalBannerDivulgacao.setPageCreator(new ModalWindow.PageCreator() {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Page createPage() {
-				return new ComunicadoModal(HomePage.this.getPageReference(), modalBannerDivulgacao);
-			}
-		});
-		modalBannerDivulgacao.setResizable(false);
-		modalBannerDivulgacao.setAutoSize(false);
-		modalBannerDivulgacao.setInitialWidth(95);
-		modalBannerDivulgacao.setInitialHeight(40);
-		modalBannerDivulgacao.setMinimalWidth(95);
-		modalBannerDivulgacao.setMinimalHeight(40);
-		modalBannerDivulgacao.setWidthUnit("em");
-		modalBannerDivulgacao.setHeightUnit("em");
-		add(modalBannerDivulgacao);
-
-		AjaxLink<?> openModal = new AjaxLink<Void>("showModal") {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				modalBannerDivulgacao.show(target);
-			}
-		};
-		if (bannerDivulgacao) {
-			if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-				openModal.setMarkupId("showModal");
-			}
-		}
-		add(openModal);
 	}
 
 	private void divInformacoes() {
