@@ -1,0 +1,62 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Nome do Usuário</label> <input autofocus="autofocus" class="form-control"
+							maxlength="150" wicket:id="nome" onkeyup="this.value = this.value.toUpperCase()">
+					</div>
+					<div class="form-group">
+						<label>Login</label> <input wicket:id="login" maxlength="20" class="form-control">
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-6">
+								<label>Senha</label> <input type="password" wicket:id="senha" class="form-control">
+							</div>
+							<div class="col-md-6">
+								<label>Confirmar Senha</label> <input type="password" wicket:id="confirmarSenha"
+									class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-8">
+								<label>Email</label> <input wicket:id="email" maxlength="45" class="form-control">
+							</div>
+							<div class="col-md-4">
+								<label>Telefone</label> <input placeholder="(__)____-____" wicket:id="contato"
+									class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Situação</label> <label class="radio-inline inline" wicket:id="situacao"
+							style="text-align: left;"></label>
+					</div>
+					<div class="form-group">
+						<label>Instituição</label> <select class="form-control" wicket:id="instituicao">
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Grupo de Usuário</label> <select class="form-control" wicket:id="grupoUsuario"></select>
+					</div>
+					<div class="form-group">
+						<label></label>
+						<button type="submit" class="btn btn-primary pull-right" onclick="openLoading()">
+							<span class="fa fa-save"></span>&nbsp;Salvar
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

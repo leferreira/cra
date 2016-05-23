@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.page.municipio;
 
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -26,7 +25,6 @@ public class MunicipioInputPanel extends Panel {
 		add(campoUF());
 		add(campoCepInicio());
 		add(campoCepFinal());
-		add(new Button("botaoSalvar"));
 	}
 
 	private TextField<String> campoNomeMunicipio() {

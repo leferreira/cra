@@ -4,38 +4,55 @@
 			<div class="row">
 				<div class="col-md-10">
 					<div class="form-group">
-						<label>Nome Fantasia</label> <input tabindex="1" autofocus="autofocus" maxlength="45"
+						<label>Nome Fantasia</label> <input autofocus="autofocus" maxlength="45"
 							wicket:id="nomeFantasia" class="form-control">
 					</div>
 					<div class="form-group">
-						<label>Razão Social</label> <input tabindex="2"
-							onkeyup="this.value = this.value.toUpperCase()" maxlength="45" wicket:id="razaoSocial"
-							class="form-control">
+						<label>Razão Social</label> <input onkeyup="this.value = this.value.toUpperCase()"
+							maxlength="45" wicket:id="razaoSocial" class="form-control">
 					</div>
 					<div class="row">
 						<div class="form-group">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label>CNPJ</label> <input tabindex="3"
-										onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
-										onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" wicket:id="cnpj"
-										class="form-control" maxlength="18">
+									<label>Código Compensação</label> <input wicket:id="codigoCompensacao" maxlength="3"
+										class="form-control">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label>Reponsável</label> <input tabindex="9" wicket:id="responsavel" maxlength="45"
+									<label>Agência Centralizadora</label> <input wicket:id="agenciaCentralizadora"
+										maxlength="6" class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>CPF/CNPJ</label> <input wicket:id="cnpj"
+										onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+										onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" class="form-control"
+										maxlength="18">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Responsável</label> <input wicket:id="responsavel" maxlength="20"
 										class="form-control">
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<label>Código do Cartório</label>
+						<label>Valor Confirmação</label>
 						<div class="form-group input-group">
-							<span class="input-group-addon">##</span> <input tabindex="6" wicket:id="codigoCartorio"
-								maxlength="2" class="form-control">
+							<span class="input-group-addon">R$</span>
+							<input wicket:id="valorConfirmacao" onkeypress="FormataValor(this.id, 12, event);"
+								maxlength="15" class="form-control">
 						</div>
+
 					</div>
 				</div>
 			</div>
@@ -44,38 +61,42 @@
 			<div class="row">
 				<div class="col-md-10">
 					<div class="form-group">
-						<label>Situação</label>&nbsp;<label tabindex="7" class="radio-inline inline" wicket:id="status"></label>
+						<label>Situação</label> <label class="radio-inline inline" wicket:id="status"> </label>
 					</div>
 					<div class="form-group">
-						<label>Município</label> <select tabindex="5" wicket:id="municipio" class="form-control">
+						<label>Tipo Instituição</label> <select wicket:id="tipoInstituicao" class="form-control">
 						</select>
 					</div>
 					<div class="row">
 						<div class="form-group">
 							<div class="col-md-8">
 								<div class="form-group">
-									<label>Email</label> <input tabindex="4" wicket:id="email" maxlength="45"
+									<label>Email</label> <input type="text" wicket:id="email" maxlength="45"
 										class="form-control">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label>Telefone</label> <input tabindex="8" wicket:id="contato" placeholder="(__)____-____"
+									<label>Telefone</label> <input wicket:id="contato" placeholder="(__)____-____"
 										class="form-control">
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
+						<label>Município</label> <select wicket:id="municipio" class="form-control">
+						</select>
+					</div>
+					<div class="form-group">
 						<label>Endereço</label>
-						<textarea tabindex="10" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
+						<textarea class="form-control" maxlength="45" wicket:id="endereco"></textarea>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<fieldset>
-		<legend>DADOS PARA DEPÓSITOS</legend>
+		<legend>CONFIGURAÇÕES DE USO</legend>
 		<div class="row">
 			<div class="col-md-6">
 				<div class="row">
@@ -84,18 +105,21 @@
 							<div class="form-group">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label>Banco</label> <input tabindex="11" wicket:id="bancoContaCorrente" maxlength="45"
+										<label>Layout de Transmissão</label> <select wicket:id="layoutPadraoXML"
 											class="form-control">
+										</select>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label>Agência</label> <input tabindex="12" wicket:id="agenciaContaCorrente"
-											maxlength="10" class="form-control">
+										<label>Campo Complemento Registro</label> <select wicket:id="tipoCampo51"
+											class="form-control">
+										</select>
 									</div>
 								</div>
 							</div>
 						</div>
+
 					</div>
 				</div>
 			</div>
@@ -106,14 +130,14 @@
 							<div class="form-group">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label>Conta corrente</label> <input tabindex="13" wicket:id="numeroContaCorrente"
-											maxlength="10" class="form-control">
+										<label for="tipo">Batimento</label> <select wicket:id="tipoBatimento" class="form-control"></select>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label>Favorecido</label> <input tabindex="14" wicket:id="favorecido" maxlength="45"
+										<label>Setores&nbsp;(Convênios): </label> <select wicket:id="permitidoSetoresConvenio"
 											class="form-control">
+										</select>
 									</div>
 									<div class="form-group">
 										<label></label>
@@ -129,7 +153,4 @@
 			</div>
 		</div>
 	</fieldset>
-
-
-
 </wicket:panel>

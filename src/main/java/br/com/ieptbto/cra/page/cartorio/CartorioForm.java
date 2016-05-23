@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.page.cartorio;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -21,10 +20,9 @@ public class CartorioForm extends BaseForm<Instituicao> {
 
 	/****/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(CartorioForm.class);
-	
+
 	@SpringBean
-	TipoInstituicaoMediator tipoMediator;
+	TipoInstituicaoMediator tipoInstituicaoMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
@@ -38,9 +36,9 @@ public class CartorioForm extends BaseForm<Instituicao> {
 	public void onSubmit() {
 
 		Instituicao instituicao = getModelObject();
-		TipoInstituicao tipo = tipoMediator.buscarTipoInstituicao(TipoInstituicaoCRA.CARTORIO);
+		TipoInstituicao tipo = tipoInstituicaoMediator.buscarTipoInstituicao(TipoInstituicaoCRA.CARTORIO);
 		instituicao.setTipoInstituicao(tipo);
-		try{
+		try {
 			Instituicao cartorio = municipioMediator.isMunicipioTemCartorio(instituicao.getMunicipio());
 			if (instituicao.getId() != 0) {
 				if (cartorio.getId() == instituicao.getId()) {
@@ -48,17 +46,17 @@ public class CartorioForm extends BaseForm<Instituicao> {
 					setResponsePage(new ListaCartorioPage("Os dados do cartório foram alterados com sucesso !"));
 				} else
 					throw new InfraException("Já existe um cartório cadastrado nesta cidade!");
-			}else{
+			} else {
 				if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
 					if (cartorio == null) {
 						instituicaoMediator.salvar(instituicao);
 						setResponsePage(new ListaCartorioPage("Os dados do cartório foram salvos com sucesso !"));
 					} else
 						throw new InfraException("Já existe um cartório cadastrado nesta cidade!");
-				} else 
+				} else
 					error("Cartório não criado, pois já existe!");
-			}	
-			
+			}
+
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage());
 			error(ex.getMessage());

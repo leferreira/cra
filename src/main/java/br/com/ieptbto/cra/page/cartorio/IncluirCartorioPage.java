@@ -22,7 +22,6 @@ public class IncluirCartorioPage extends BasePage<Instituicao> {
 	private static final long serialVersionUID = 1L;
 
 	private Instituicao cartorio;
-	private CartorioForm form;
 
 	public IncluirCartorioPage() {
 		this.cartorio = new Instituicao();
@@ -40,7 +39,7 @@ public class IncluirCartorioPage extends BasePage<Instituicao> {
 	}
 
 	private void formCartorio() {
-		form = new CartorioForm("form", getModel());
+		CartorioForm form = new CartorioForm("form", getModel());
 		form.add(new CartorioInputPanel("cartorioInputPanel", getModel()));
 		add(form);
 	}

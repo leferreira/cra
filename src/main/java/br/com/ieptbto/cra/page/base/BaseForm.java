@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.base;
 
 import static br.com.ieptbto.cra.util.MessageUtils._;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
@@ -13,6 +14,7 @@ import br.com.ieptbto.cra.security.UserSession;
 public abstract class BaseForm<T> extends Form<T> {
 
 	private static final long serialVersionUID = 1L;
+	protected static final Logger logger = Logger.getLogger(BaseForm.class);
 
 	public BaseForm(String id) {
 		super(id);

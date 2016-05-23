@@ -4,10 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -30,14 +28,19 @@ public class CartorioInputPanel extends Panel {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	
+
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
-	
+
 	public CartorioInputPanel(String id, IModel<Instituicao> model) {
 		super(id, model);
+
+		adicionarCampos();
+	}
+
+	private void adicionarCampos() {
 		add(campoInstituicao());
 		add(campoRazaoSocial());
 		add(campoCnpj());
@@ -52,7 +55,6 @@ public class CartorioInputPanel extends Panel {
 		add(campoFavorecido());
 		add(campoAgenciaConta());
 		add(campoCodigoCartorio());
-		add(new Button("botaoSubmit"));
 	}
 
 	private TextField<String> campoInstituicao() {
@@ -132,7 +134,7 @@ public class CartorioInputPanel extends Panel {
 		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
 		return new RadioChoice<String>("status", status);
 	}
-	
+
 	private TextField<String> campoCodigoCartorio() {
 		TextField<String> text = new TextField<String>("codigoCartorio");
 		text.setLabel(new Model<String>("Código do Cartório"));
@@ -140,8 +142,8 @@ public class CartorioInputPanel extends Panel {
 	}
 
 	private Component comboMunicipios() {
-		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> combo = new DropDownChoice<Municipio>("municipio", municipioMediator.getMunicipiosTocantins(), renderer);
+		DropDownChoice<Municipio> combo = new DropDownChoice<Municipio>("municipio", municipioMediator.getMunicipiosTocantins(),
+				new ChoiceRenderer<Municipio>("nomeMunicipio"));
 		combo.setLabel(new Model<String>("Município"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);

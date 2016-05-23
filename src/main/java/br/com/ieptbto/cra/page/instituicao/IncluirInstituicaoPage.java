@@ -1,40 +1,14 @@
 package br.com.ieptbto.cra.page.instituicao;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.entidade.TipoInstituicao;
-import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
-import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoBatimento;
-import br.com.ieptbto.cra.enumeration.TipoCampo51;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.MunicipioMediator;
-import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.EmailValidator;
 
 /**
  * @author Thasso Araújo
@@ -46,15 +20,6 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-
-	private static final Logger logger = Logger.getLogger(IncluirInstituicaoPage.class);
-
-	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	MunicipioMediator municipioMediator;
-	@SpringBean
-	TipoInstituicaoMediator tipoMediator;
 
 	private Instituicao instituicao;
 
@@ -75,182 +40,9 @@ public class IncluirInstituicaoPage extends BasePage<Instituicao> {
 	}
 
 	public void formularioInstituicao() {
-		Form<Instituicao> form = new Form<Instituicao>("form", getModel()) {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onSubmit() {
-				Instituicao instituicao = getModelObject();
-
-				try {
-					if (getModelObject().getId() != 0) {
-						instituicaoMediator.alterar(instituicao);
-						setResponsePage(new ListaInstituicaoPage("Os dados da instituição foram salvos com sucesso !"));
-					} else {
-						if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
-							instituicaoMediator.salvar(instituicao);
-							setResponsePage(new ListaInstituicaoPage("Os dados da instituição foram salvos com sucesso !"));
-						} else {
-							error("Instituição não criada, pois já existe!");
-						}
-					}
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
-					error(ex.getMessage());
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar esta operação! Entre em contato com a CRA!");
-				}
-			}
-		};
-		form.add(campoNomeFantasia());
-		form.add(campoRazaoSocial());
-		form.add(comboTipoInstituicao());
-		form.add(campoCnpj());
-		form.add(campoCodigoCompensacao());
-		form.add(campoEmail());
-		form.add(campoContato());
-		form.add(campoValorConfirmacao());
-		form.add(campoEndereco());
-		form.add(campoResponsavel());
-		form.add(campoAgenciaCentralizadora());
-		form.add(campoStatus());
-		form.add(comboMunicipios());
-		form.add(comboTipoCampo51());
-		form.add(comboTipoBatimento());
-		form.add(comboPadraoLayoutXML());
-		form.add(campoPermitidoSetores());
-		form.add(new Button("botaoSalvar"));
+		InstituicaoForm form = new InstituicaoForm("form", getModel());
+		form.add(new InstituicaoInputPanel("instituicaoInputPanel", getModel()));
 		add(form);
-	}
-
-	private DropDownChoice<EnumerationSimNao> campoPermitidoSetores() {
-		IChoiceRenderer<EnumerationSimNao> renderer = new ChoiceRenderer<EnumerationSimNao>("label");
-		DropDownChoice<EnumerationSimNao> dropDown = new DropDownChoice<EnumerationSimNao>("permitidoSetoresConvenio", Arrays.asList(EnumerationSimNao.values()), renderer);
-		dropDown.setLabel(new Model<String>("Permitido Setores Convênios"));
-		dropDown.setRequired(true);
-		return dropDown;
-	}
-
-	private TextField<String> campoNomeFantasia() {
-		TextField<String> textField = new TextField<String>("nomeFantasia");
-		textField.setLabel(new Model<String>("Nome Fantasia"));
-		textField.setRequired(true);
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
-
-	private TextField<String> campoRazaoSocial() {
-		TextField<String> textField = new TextField<String>("razaoSocial");
-		textField.setLabel(new Model<String>("Razão Social"));
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
-
-	private TextField<String> campoCnpj() {
-		TextField<String> textField = new TextField<String>("cnpj");
-		textField.setLabel(new Model<String>("CNPJ"));
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
-
-	private TextField<String> campoCodigoCompensacao() {
-		TextField<String> textField = new TextField<String>("codigoCompensacao");
-		textField.setLabel(new Model<String>("Código Compensação"));
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
-
-	private TextField<String> campoEmail() {
-		TextField<String> textField = new TextField<String>("email");
-		textField.setLabel(new Model<String>("Email"));
-		textField.add(new EmailValidator());
-		return textField;
-	}
-
-	private TextField<String> campoContato() {
-		TextField<String> textField = new TextField<String>("contato");
-		textField.setLabel(new Model<String>("Contato"));
-		textField.setMarkupId("telefone");
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
-
-	private TextField<String> campoValorConfirmacao() {
-		TextField<String> textField = new TextField<String>("valorConfirmacao");
-		textField.setLabel(new Model<String>("Valor Confirmação"));
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
-
-	private TextArea<String> campoEndereco() {
-		TextArea<String> text = new TextArea<String>("endereco");
-		text.setLabel(new Model<String>("Endereço"));
-		return text;
-	}
-
-	private TextField<String> campoResponsavel() {
-		TextField<String> text = new TextField<String>("responsavel");
-		text.setLabel(new Model<String>("Resposável"));
-		return text;
-	}
-
-	private TextField<String> campoAgenciaCentralizadora() {
-		TextField<String> text = new TextField<String>("agenciaCentralizadora");
-		text.setLabel(new Model<String>("Agência Centralizadora"));
-		return text;
-	}
-
-	private Component campoStatus() {
-		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
-		return new RadioChoice<String>("status", status);
-	}
-
-	private DropDownChoice<TipoInstituicao> comboTipoInstituicao() {
-		IChoiceRenderer<TipoInstituicao> renderer = new ChoiceRenderer<TipoInstituicao>("tipoInstituicao.label");
-		DropDownChoice<TipoInstituicao> combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao", tipoMediator.listaTipoInstituicao(), renderer);
-		combo.setLabel(new Model<String>("Tipo Instituição"));
-		combo.setOutputMarkupId(true);
-		combo.setRequired(true);
-		return combo;
-	}
-
-	private DropDownChoice<TipoCampo51> comboTipoCampo51() {
-		IChoiceRenderer<TipoCampo51> renderer = new ChoiceRenderer<TipoCampo51>("label");
-		DropDownChoice<TipoCampo51> combo = new DropDownChoice<TipoCampo51>("tipoCampo51", Arrays.asList(TipoCampo51.values()), renderer);
-		combo.setLabel(new Model<String>("Tipo de Informação Campo 51"));
-		combo.setOutputMarkupId(true);
-		combo.setRequired(true);
-		return combo;
-	}
-
-	private DropDownChoice<TipoBatimento> comboTipoBatimento() {
-		IChoiceRenderer<TipoBatimento> renderer = new ChoiceRenderer<TipoBatimento>("label");
-		DropDownChoice<TipoBatimento> combo = new DropDownChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()), renderer);
-		combo.setLabel(new Model<String>("Tipo Batimento"));
-		combo.setOutputMarkupId(true);
-		combo.setRequired(true);
-		return combo;
-	}
-
-	private DropDownChoice<LayoutPadraoXML> comboPadraoLayoutXML() {
-		IChoiceRenderer<LayoutPadraoXML> renderer = new ChoiceRenderer<LayoutPadraoXML>("label");
-		DropDownChoice<LayoutPadraoXML> combo = new DropDownChoice<LayoutPadraoXML>("layoutPadraoXML", Arrays.asList(LayoutPadraoXML.values()), renderer);
-		combo.setLabel(new Model<String>("Layout padrão XML"));
-		combo.setOutputMarkupId(true);
-		combo.setRequired(true);
-		return combo;
-	}
-
-	private Component comboMunicipios() {
-		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> combo = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);
-		combo.setLabel(new Model<String>("Município"));
-		combo.setOutputMarkupId(true);
-		combo.setRequired(true);
-		return combo;
 	}
 
 	@Override

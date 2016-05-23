@@ -1,47 +1,47 @@
-<head>
-<meta charset="UTF8">
-</head>
-<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
-	<h4 class="titulo-top">CADASTRO DE MUNICÍPIO
-	<span class="pull-right">
-		<a href="Municipios" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
-	</span>   
-	</h4>
-	<br style="clear: both;"/>
-	<div class="col-lg-10 col-md-offset-1" style="text-align: left;">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="form-group">
-					<label >NOME DO MUNICÍPIO:</label> 
-					<input autofocus="autofocus" maxlength="45" wicket:id="nomeMunicipio" class="form-control"/>
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Nome do Município</label> <input autofocus="autofocus" maxlength="45"
+							wicket:id="nomeMunicipio" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">UF</label> <select wicket:id="uf" class="form-control"></select>
+					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="form-group">
-					<label>CÓDIGO DO IBGE:</label> 
-					<input maxlength="7" wicket:id="codigoIBGE" class="form-control"/>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Código IBGE</label> <input maxlength="7" wicket:id="codigoIBGE" class="form-control" />
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>CEP Inicial</label> <input maxlength="10" wicket:id="faixaInicialCep"
+										class="form-control" id="cep" placeholder="__.___-___" />
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>CEP Final</label> <input maxlength="10" wicket:id="faixaFinalCep"
+										class="form-control" id="cep1" placeholder="__.___-___" />
+								</div>
+								<div class="form-group">
+									<label></label>
+									<button type="submit" class="btn btn-primary pull-right" onclick="openLoading()">
+										<span class="fa fa-save"></span>&nbsp;Salvar
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="form-group">
-					<label class="control-label">UF:</label> 
-						<select wicket:id="uf" class="form-control"></select>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="form-group">
-					<label>CEP INICIAL:</label> 
-					<input maxlength="10" wicket:id="faixaInicialCep" class="form-control" id="cep" placeholder="__.___-___"/>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="form-group">
-					<label>CEP FINAL:</label> 
-					<input maxlength="10" wicket:id="faixaFinalCep" class="form-control" id="cep1" placeholder="__.___-___"/>  
-				</div>
-			</div>
-			<div class="col-md-12">
-				<button wicket:id="botaoSalvar" type="submit" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
 			</div>
 		</div>
 	</div>
