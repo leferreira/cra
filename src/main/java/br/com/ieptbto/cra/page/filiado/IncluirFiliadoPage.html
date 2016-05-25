@@ -1,85 +1,20 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:wicket="http://wicket.apache.org/">
-<head>
-<meta charset="UTF8">
-</head>
 <body>
 	<wicket:extend>
-		<h4 class="titulo-top">CADASTRO DE EMPRESA ASSOCIADA
-		<span class="pull-right">
-			<a href="EmpresasFiliadas" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
-		</span> 
-		</h4> 
-		<br style="clear: both;"/>
-		<form wicket:id="form" id="form" class="form-horizontal">
-			<div class="col-md-6">
-				<div class="form-group">
-				  <label class="col-md-4 control-label">RAZÃO SOCIAL:</label>  
-				  <div class="col-md-6">
-				  <input wicket:id="razaoSocial" tabindex="1" autofocus="autofocus" maxlength="45" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md uppercase react">
-				    
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">CPF/CNPJ:</label>  
-				  <div class="col-md-6">
-				  <input wicket:id="cnpjCpf" maxlength="18"  tabindex="2" onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
-			  			onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" class="form-control input-md">
-				    
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">CONVÊNIO:</label>
-				  <div class="col-md-6">
-				    <select wicket:id="instituicaoConvenio" tabindex="5" class="form-control">
-				    </select>
-				  </div>
-				</div>
-				<div class="form-group"> 
-				  <label class="col-md-4 control-label" >SITUAÇÃO:</label>
-				  <div class="col-md-6" style="text-align: left;"> 
-				    <label class="radio-inline inline" tabindex="3" wicket:id="situacao">
-				    </label>
-				  </div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="form-group">
-				  <label class="col-md-4 control-label">MUNICÍPIO:</label>
-				  <div class="col-md-6">
-				    <select wicket:id="municipio" tabindex="6" class="form-control">
-				    </select>
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">CEP:</label>  
-				  <div class="col-md-6">  
-				  <input id="cep" wicket:id="cep" tabindex="7" class="form-control input-md">
-				    
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-4 control-label" for="uf">UF:</label>  
-				  <div class="col-md-6">
-				 	<select wicket:id="uf" tabindex="8" class="form-control">
-				    </select>
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-4 control-label">ENDEREÇO:</label>
-				  <div class="col-md-6">                     
-				    <textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control" rows="4" maxlength="45" wicket:id="endereco"></textarea>
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-2 control-label"></label>
-				  <div class="col-md-8">
-				    <button id="salvar" type="submit" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
-				  </div>
-				</div>
-			</div>
-		</form>
-		<div class="col-md-12" wicket:id="divSetoresFiliados">		
+		<div class="col-md-12">
+			<h4 class="titulo-top">EMPRESA ASSOCIADA
+				<span class="pull-right">
+					<a href="EmpresasFiliadas" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+				</span> 
+			</h4> 
+			<form wicket:id="form" id="form">
+				<div wicket:id="filiadoInputPanel"></div>
+				<br style="clear: both;" />
+			</form>
+			<br style="clear: both;"/>
+		</div>
+		<div class="col-md-11" wicket:id="divSetoresFiliados"> 
 			<fieldset>
 			  	<legend class="legend">INFORMAÇÕES DE SETOR (Para lançamento e relatórios separados)</legend>
 				  	<div class="well well-sm">
@@ -87,11 +22,11 @@
                          		<a href="#" class="link" data-toggle="modal" data-target="#myModal" style="float: right;">
                                 <span class="fa fa-plus"></span>&nbsp;ADICIONAR SETOR
                             </a>
-                                <br style="clear: both;">  
+                                <br style="clear: both;">    
                           		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                 <div class="modal-dialog" style="width: 60%;">
-                                    <div class="modal-content">
-		                           		<div wicket:id="setorPanel"></div>
+                                    <div class="modal-content">  
+		                           		<div wicket:id="setorPanel"></div> 
                                     </div>
                                 </div>
                             </div>

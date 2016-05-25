@@ -6,13 +6,15 @@
 <body>
 	<wicket:extend>
 		<form wicket:id="form">
-			<h4 class="titulo-top">REMESSAS CONVÊNIOS
-				<span class="pull-right">
-					<button type="submit" class="btn btn-primary"><span class="fa fa-check"></span> LIBERAR REMESSAS</button>
+			<h4 class="titulo-top">
+				REMESSAS CONVÊNIOS <span class="pull-right">
+					<button type="submit" class="btn btn-primary" onclick="openLoading()">
+						<span class="fa fa-check"></span> LIBERAR REMESSAS
+					</button>
 				</span>
 			</h4>
 		</form>
-		<br style="clear: both;"/>
+		<br style="clear: both;" />
 		<table id="table" class="table table-responsive table-striped table-hover">
 			<thead>
 				<tr>

@@ -5,28 +5,30 @@
 </head>
 <body>
 	<wicket:extend>
-		<form wicket:id="form">   
+		<form wicket:id="form">
 			<h4 class="titulo-top">ENVIAR ARQUIVO</h4>
-			<br style="clear: both;"/>
+			<br style="clear: both;" />
 			<div class="row">
 				<div class="col-lg-8 col-md-offset-2" style="text-align: left">
-					<label>ANEXAR ARQUIVO:</label>
-					<input wicket:id="file" type="file" class="filestyle" data-buttonText="Procurar">
+					<label>ANEXAR ARQUIVO:</label> <input wicket:id="file" type="file" class="filestyle"
+						data-buttonText="Procurar">
 				</div>
 			</div>
 			<br style="clear: both;">
 			<div class="row">
 				<div class="col-lg-8 col-md-offset-2">
-					<button wicket:id="enviarArquivo" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-send"></span>&nbsp;ENVIAR</button>
+					<button wicket:id="enviarArquivo" class="btn btn-primary pull-right">
+						<span class="glyphicon glyphicon-send"></span>&nbsp;ENVIAR
+					</button>
 				</div>
 			</div>
 		</form>
-	<script type="text/javascript" src="js/bootstrap-filestyle.min.js" charset="utf-8"></script>
-	<script>
-		$( document ).ready(function() {
-			$(":file").filestyle({buttonText: "Procurar"});
-		});	
-	</script>
+		<script type="text/javascript" src="js/bootstrap-filestyle.min.js" charset="utf-8"></script>
+		<script>
+			$( document ).ready(function() {
+				$(":file").filestyle({buttonText: "Procurar"});
+			});	
+		</script>
 	</wicket:extend>
 </body>
 </html>

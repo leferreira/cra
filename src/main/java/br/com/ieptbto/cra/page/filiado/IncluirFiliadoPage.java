@@ -1,43 +1,27 @@
 package br.com.ieptbto.cra.page.filiado;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
 import br.com.ieptbto.cra.enumeration.BooleanSimNao;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.EstadoUtils;
 
 /**
  * @author Thasso Araújo
@@ -51,28 +35,24 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	MunicipioMediator municipioMediator;
-	@SpringBean
-	InstituicaoMediator InstituicaoMediator;
-	@SpringBean
 	FiliadoMediator filiadoMediator;
 
 	private Filiado filiado;
 	private List<SetorFiliado> setoresFiliado;
-	private SetorFiliado setorPadraoCra;
 
 	public IncluirFiliadoPage() {
 		this.filiado = new Filiado();
-		this.setoresFiliado = new ArrayList<SetorFiliado>();
 		this.filiado.setSetoresFiliado(getSetoresFiliado());
-		this.setoresFiliado.add(getSetorPadraoCra());
+		getSetoresFiliado().add(getSetorPadraoCra());
+
 		adicionarComponentes();
 	}
 
 	public IncluirFiliadoPage(Filiado filiado) {
 		this.filiado = filiado;
 		this.setoresFiliado = filiadoMediator.buscarSetoresFiliado(filiado);
-		this.filiado.setSetoresFiliado(getSetoresFiliado());
+		this.filiado.setSetoresFiliado(setoresFiliado);
+
 		adicionarComponentes();
 	}
 
@@ -83,114 +63,16 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 	}
 
 	private void formularioFiliado() {
-		Form<?> form = new Form<Filiado>("form", getModel()) {
-
-			/**/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onSubmit() {
-				Filiado novoFiliado = getModelObject();
-				boolean existeSetorAtivo = false;
-
-				try {
-					for (SetorFiliado setor : getSetoresFiliado()) {
-						if (setor.isSituacaoAtivo() == true) {
-							existeSetorAtivo = true;
-							break;
-						}
-					}
-					if (existeSetorAtivo == false) {
-						throw new InfraException("Não é possível salvar os dados do filiado! Ao menos um setor deve estar ativo!");
-					}
-
-					if (filiado.getId() != 0) {
-						filiadoMediator.alterarFiliado(novoFiliado);
-					} else {
-						filiadoMediator.salvarFiliado(novoFiliado);
-					}
-					setResponsePage(new ListaFiliadoPage("Os dados do novo filiado foi salvo com sucesso !"));
-				} catch (InfraException ex) {
-					error(ex.getMessage());
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-					error("Não foi possível cadastrar a empresa filiada ! Entre em contato com o IEPTB !");
-				}
-			}
-		};
-		form.add(campoNomeCredor());
-		form.add(campoDocumentoCredor());
-		form.add(campoEnderecoCredor());
-		form.add(campoCepCredor());
-		form.add(campoCidadeCredor());
-		form.add(campoUfCredor());
-		form.add(campoSituacao());
-		form.add(campoInstituicaoConvenio());
+		FiliadoForm form = new FiliadoForm("form", getModel(), setoresFiliado);
+		form.add(new FiliadoInputPanel("filiadoInputPanel", getModel()));
 		add(form);
-	}
-
-	private DropDownChoice<String> campoUfCredor() {
-		DropDownChoice<String> textField = new DropDownChoice<String>("uf", EstadoUtils.getEstadosToList());
-		textField.setLabel(new Model<String>("UF"));
-		textField.setRequired(true);
-		return textField;
-	}
-
-	private DropDownChoice<Municipio> campoCidadeCredor() {
-		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("municipio", municipioMediator.getMunicipiosTocantins(), renderer);
-		comboMunicipio.setLabel(new Model<String>("Município"));
-		comboMunicipio.setRequired(true);
-		return comboMunicipio;
-	}
-
-	private DropDownChoice<Instituicao> campoInstituicaoConvenio() {
-		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		DropDownChoice<Instituicao> comboInstituicaoConvenio = new DropDownChoice<Instituicao>("instituicaoConvenio", InstituicaoMediator.getConvenios(), renderer);
-		comboInstituicaoConvenio.setLabel(new Model<String>("Instituicao Convênio"));
-		comboInstituicaoConvenio.setRequired(true);
-		return comboInstituicaoConvenio;
-	}
-
-	private TextField<String> campoCepCredor() {
-		TextField<String> textField = new TextField<String>("cep");
-		textField.setLabel(new Model<String>("CEP"));
-		textField.setRequired(true);
-		return textField;
-	}
-
-	private TextArea<String> campoEnderecoCredor() {
-		TextArea<String> textArea = new TextArea<String>("endereco");
-		textArea.setLabel(new Model<String>("Endereço"));
-		textArea.setRequired(true);
-		return textArea;
-	}
-
-	private TextField<String> campoDocumentoCredor() {
-		TextField<String> textField = new TextField<String>("cnpjCpf");
-		textField.setLabel(new Model<String>("CNPJ/CPF"));
-		textField.setRequired(true);
-		return textField;
-	}
-
-	private TextField<String> campoNomeCredor() {
-		TextField<String> textField = new TextField<String>("razaoSocial");
-		textField.setLabel(new Model<String>("Razão Social"));
-		textField.setRequired(true);
-		return textField;
-	}
-
-	private Component campoSituacao() {
-		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
-		return new RadioChoice<String>("situacao", status).setRequired(true);
 	}
 
 	private void divSetores() {
 		WebMarkupContainer divSetoresFiliados = new WebMarkupContainer("divSetoresFiliados");
 		divSetoresFiliados.add(new SetorFiliadoInputPanel("setorPanel", getModel(), getSetoresFiliado()));
 		divSetoresFiliados.add(listaSetoresFiliado());
-		if (getUser().getInstituicao().getPermitidoSetoresConvenio().equals(BooleanSimNao.NAO)
-				&& getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+		if (getModel().getObject().getInstituicaoConvenio().getPermitidoSetoresConvenio().equals(BooleanSimNao.NAO)) {
 			divSetoresFiliados.setVisible(false);
 		}
 		add(divSetoresFiliados);
@@ -247,10 +129,10 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 	}
 
 	public SetorFiliado getSetorPadraoCra() {
-		this.setorPadraoCra = new SetorFiliado();
-		this.setorPadraoCra.setDescricao("GERAL");
-		this.setorPadraoCra.setSetorPadraoFiliado(true);
-		this.setorPadraoCra.setSituacaoAtivo(true);
+		SetorFiliado setorPadraoCra = new SetorFiliado();
+		setorPadraoCra.setDescricao("GERAL");
+		setorPadraoCra.setSetorPadraoFiliado(true);
+		setorPadraoCra.setSituacaoAtivo(true);
 		return setorPadraoCra;
 	}
 
@@ -259,10 +141,6 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 			setoresFiliado = new ArrayList<SetorFiliado>();
 		}
 		return setoresFiliado;
-	}
-
-	public Filiado getFiliado() {
-		return filiado;
 	}
 
 	@Override

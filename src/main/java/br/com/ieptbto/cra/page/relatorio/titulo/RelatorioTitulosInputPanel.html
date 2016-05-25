@@ -1,0 +1,140 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+	<div class="col-lg-8 col-md-offset-2">
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="form-group">
+					<label>Período</label>
+					<div class="row">
+						<div class="col-xs-6">
+							<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataInicio"
+								class="form-control">
+						</div>
+						<div class="col-xs-6">
+							<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" wicket:id="dataFim"
+								class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="form-group">
+					<label>Formato</label>
+					<div class="row">
+						<div class="col-md-12">
+							<div wicket:id="tipoExportacao">
+								<div class="radio">
+									<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+										wicket:id="pdf" /> &nbsp;<span class="fa fa-file-pdf-o pdf-icon"></span>&nbsp;PDF
+									</label> &nbsp;&nbsp;&nbsp;&nbsp; <label style="font-weight: bolder;"> <input
+										class="radio-inline" type="radio" wicket:id="csv" /> &nbsp;<span
+										class="fa fa-file-excel-o excel-icon"></span>&nbsp;CSV
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>Banco/Convênio</label>
+			<div class="row">
+				<div class="col-md-4">
+					<select wicket:id="tipoInstituicao" class="form-control">
+					</select>
+				</div>
+				<div class="col-md-8">
+					<select wicket:id="bancoConvenio" class="form-control">
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-7">
+				<div class="form-group">
+					<label>Município</label>
+					<select wicket:id="cartorio" class="form-control"></select>
+				</div>
+			</div>
+			<div class="col-md-5">
+				<div class="form-group">
+					<label>Pendências CRA&nbsp;<small>(somente xlsx)</small></label> <input wicket:id="planilhaPendenciaCra" type="file"
+						class="filestyle" data-buttonText="Procurar">
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>Situação</label>
+			<div class="row">
+				<div wicket:id="situacaoTituloRelatorio">
+					<div class="col-md-4">
+						<div class="radio">
+							<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+								wicket:id="todos" />&nbsp;Todos
+							</label>
+						</div>
+						<div class="radio">
+							<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+								wicket:id="semConfirmacao" />&nbsp;Pendentes de Confirmação
+							</label>
+						</div>
+						<div class="radio">
+							<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+								wicket:id="comConfirmacao" />&nbsp;Aberto (Pendente de Retorno)
+							</label>
+						</div>
+						<div class="radio">
+							<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+								wicket:id="comRetorno" />&nbsp;Finalizados (Com Retorno)
+							</label>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="radio">
+							<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+								wicket:id="pagos" />&nbsp;Pagos
+							</label>
+						</div>
+						<div class="radio">
+							<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+								wicket:id="protestados" />&nbsp;Protestados
+							</label>
+						</div>
+						<div class="radio">
+							<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+								wicket:id="retiradosDevolvidos" />&nbsp;Retirados ou Devolvidos
+							</label>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="radio">
+							<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+								wicket:id="cancelamento" />&nbsp;Desistências de Protesto
+							</label>
+						</div>
+						<div class="radio">
+							<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+								wicket:id="desistencia" />&nbsp;Cancelamentos de Protesto
+							</label>
+						</div>
+						<div class="radio">
+							<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+								wicket:id="semRetorno" />&nbsp;Autorização de Cancelamento
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br style="clear: both;">
+			<button type="submit" class="btn btn-primary pull-right" onclick="openLoading()">
+				<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
+			</button>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/bootstrap-filestyle.min.js" charset="utf-8"></script>
+	<script>
+		$( document ).ready(function() {
+			$(":file").filestyle({buttonText: "Procurar"});
+		});	
+	</script>
+</wicket:panel>

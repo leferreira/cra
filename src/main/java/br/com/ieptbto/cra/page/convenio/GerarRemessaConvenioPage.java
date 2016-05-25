@@ -17,6 +17,7 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConvenioMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -67,7 +68,11 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 
 				try {
 					convenioMediator.gerarRemessas(getUser(), getListaTitulosConvenios());
-					setResponsePage(new MensagemPage<TituloFiliado>(GerarRemessaConvenioPage.class, "REMESSAS CONVÊNIOS", "Os arquivos de remessa dos convênios foram gerados com sucesso!"));
+					setResponsePage(new MensagemPage<TituloFiliado>(GerarRemessaConvenioPage.class, "REMESSAS CONVÊNIOS",
+							"Os arquivos de remessa dos convênios foram gerados com sucesso!"));
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage(), ex);
+					error("Não foi gerar os arquivos de remessa dos convênios ! \n Entre em contato com a CRA ");
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");

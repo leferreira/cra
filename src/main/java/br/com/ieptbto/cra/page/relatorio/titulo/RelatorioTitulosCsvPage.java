@@ -3,12 +3,14 @@ package br.com.ieptbto.cra.page.relatorio.titulo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -43,11 +45,22 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 
 	private TituloRemessa tituloRemessa;
 	private List<TituloRemessa> titulos;
+	private Boolean relatorioCraPendencias;
 
-	public RelatorioTitulosCsvPage(SituacaoTituloRelatorio situacaoTitulo, Instituicao instituicao, Instituicao cartorio,
-			LocalDate dataInicio, LocalDate dataFim) {
+	public RelatorioTitulosCsvPage(SituacaoTituloRelatorio situacaoTitulo, Instituicao instituicao, Instituicao cartorio, LocalDate dataInicio,
+			LocalDate dataFim) {
 		this.tituloRemessa = new TituloRemessa();
+		this.relatorioCraPendencias = false;
 		this.titulos = relatorioMediator.relatorioTitulosPorSituacao(situacaoTitulo, instituicao, cartorio, dataInicio, dataFim);
+
+		adicionarComponentes();
+	}
+
+	public RelatorioTitulosCsvPage(FileUpload fileUpload) {
+		this.tituloRemessa = new TituloRemessa();
+		this.relatorioCraPendencias = true;
+		this.titulos = relatorioMediator.relatorioTitulosPlanilhaPendencias(fileUpload);
+
 		adicionarComponentes();
 	}
 
@@ -82,8 +95,34 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				return "text-center";
 			}
 		});
-		columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("MUNICÍPIO"), "municipio"));
-		columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("DEVEDOR"), "nomeDevedor"));
+		columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("MUNICÍPIO"), "municipio") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void populateItem(Item<ICellPopulator<TituloBean>> item, String id, IModel<TituloBean> model) {
+				String municipio = model.getObject().getMunicipio();
+				if (municipio.length() > 14) {
+					municipio = municipio.substring(0, 14);
+				}
+				item.add(new Label(id, municipio));
+			}
+		});
+		columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("DEVEDOR"), "nomeDevedor") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void populateItem(Item<ICellPopulator<TituloBean>> item, String id, IModel<TituloBean> model) {
+				String nomeDevedor = model.getObject().getNomeDevedor();
+				if (nomeDevedor.length() > 25) {
+					nomeDevedor = nomeDevedor.substring(0, 24);
+				}
+				item.add(new Label(id, nomeDevedor));
+			}
+		});
 		columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("VALOR"), "saldoTitulo") {
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -102,33 +141,80 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				return "text-center valor";
 			}
 		});
-		columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("CONFIR."), "dataConfirmacao") {
-			/***/
-			private static final long serialVersionUID = 1L;
+		if (relatorioCraPendencias == false) {
+			columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("CONFIR."), "dataConfirmacao") {
+				/***/
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			public String getCssClass() {
-				return "text-center";
-			}
-		});
-		columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("RETORNO"), "retorno") {
-			/***/
-			private static final long serialVersionUID = 1L;
+				@Override
+				public String getCssClass() {
+					return "text-center";
+				}
+			});
+			columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("RETORNO"), "retorno") {
+				/***/
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			public String getCssClass() {
-				return "text-center valor";
-			}
-		});
-		columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("DATA OC."), "dataOcorrencia") {
-			/***/
-			private static final long serialVersionUID = 1L;
+				@Override
+				public String getCssClass() {
+					return "text-center valor";
+				}
+			});
+			columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("DATA OC."), "dataOcorrencia") {
+				/***/
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			public String getCssClass() {
-				return "text-center";
-			}
-		});
+				@Override
+				public String getCssClass() {
+					return "text-center";
+				}
+			});
+		} else {
+			columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("CONFIR."), "dataConfirmacao") {
+				/***/
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public String getCssClass() {
+					return "text-center";
+				}
+
+				@Override
+				public void populateItem(Item<ICellPopulator<TituloBean>> item, String id, IModel<TituloBean> model) {
+					String confirmacao = StringUtils.EMPTY;
+					if (model.getObject().getTitulo().getConfirmacao() != null) {
+						if (model.getObject().getTitulo().getConfirmacao().getRemessa().getArquivoGeradoProBanco() != null) {
+							item.add(new Label(id,
+									model.getObject().getTitulo().getConfirmacao().getRemessa().getArquivoGeradoProBanco().getNomeArquivo()));
+						}
+					} else {
+						item.add(new Label(id, confirmacao));
+					}
+				}
+			});
+			columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("RETORNO"), "retorno") {
+				/***/
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public String getCssClass() {
+					return "text-center valor";
+				}
+
+				@Override
+				public void populateItem(Item<ICellPopulator<TituloBean>> item, String id, IModel<TituloBean> model) {
+					String retorno = StringUtils.EMPTY;
+					if (model.getObject().getTitulo().getRetorno() != null) {
+						if (model.getObject().getTitulo().getRetorno().getRemessa().getArquivoGeradoProBanco() != null) {
+							item.add(new Label(id,
+									model.getObject().getTitulo().getRetorno().getRemessa().getArquivoGeradoProBanco().getNomeArquivo()));
+						}
+					} else {
+						item.add(new Label(id, retorno));
+					}
+				}
+			});
+		}
 		columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("DP"), "desistencia") {
 			/***/
 			private static final long serialVersionUID = 1L;

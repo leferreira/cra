@@ -1,0 +1,67 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Razão Social</label> <input wicket:id="razaoSocial" tabindex="1" autofocus="autofocus"
+							maxlength="45" onkeyup="this.value = this.value.toUpperCase()"
+							class="form-control uppercase react">
+					</div>
+					<div class="form-group">
+						<label>CPF/CNPJ</label> <input wicket:id="cnpjCpf" maxlength="18" tabindex="2"
+							onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+							onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+							class="form-control input-md">
+					</div>
+					<div class="form-group">
+						<label>Convênio</label> <select wicket:id="instituicaoConvenio" tabindex="5"
+							class="form-control">
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Município</label> <select wicket:id="municipio" tabindex="6" class="form-control">
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Situação</label> <label class="radio-inline inline" tabindex="3" wicket:id="situacao">
+						</label>
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-8">
+								<div class="form-group">
+									<label>CEP</label> <input id="cep" wicket:id="cep" tabindex="7"
+										class="form-control input-md">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>UF</label> <select wicket:id="uf" tabindex="8" class="form-control">
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Endereço</label>
+						<textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control"
+							rows="4" maxlength="45" wicket:id="endereco"></textarea>
+					</div>
+					<div class="form-group">
+						<label></label>
+						<button id="salvar" type="submit" class="btn btn-primary pull-right" onclick="openLoading()">
+							<span class="fa fa-save"></span>&nbsp;SALVAR
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
@@ -49,15 +50,10 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (StringUtils.isBlank(dados)) {
 				return dadosArquivoCnpEmBranco(usuario);
 			}
-			// if (new LocalTime().isBefore(getHoraInicioServicoEnvio()) || new
-			// LocalTime().isAfter(getHoraFimServicoEnvio())) {
-			// return servicoNaoDisponivelForaDoHorarioEnvio(usuario);
-			// }
-			// if (isInstituicaoEnviouArquivoCnpHoje(usuario.getInstituicao()))
-			// {
-			// return arquivoCnpJaEnviadoHoje(usuario);
-			// }
-			logger.info("Iniciar procesaamento arquivo cnp do cartório");
+			if (new LocalTime().isBefore(getHoraInicioServicoEnvio()) || new LocalTime().isAfter(getHoraFimServicoEnvio())) {
+				return servicoNaoDisponivelForaDoHorarioEnvio(usuario);
+			}
+			logger.info("Iniciar procesaamento arquivo cnp do cartÃ³rio");
 			arquivoCnp = centralNacionalProtestoMediator.processarArquivoCartorio(getUsuario(), converterStringArquivoCnpVO(dados));
 			loggerCra.sucess(getUsuario(), TipoAcaoLog.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Arquivo da CNP enviado por " + getUsuario().getInstituicao().getNomeFantasia() + " processado com sucesso!");
@@ -143,7 +139,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			}
 			xml.append("</protesto>");
 		} else {
-			String mensagem = "NÃO CONSTAM PROTESTOS, POR FALTA DE PAGAMENTO, PARA ESTE CPF/CNPJ NOS TABELIONATOS DO ESTADO DO TOCANTINS!";
+			String mensagem = "Nï¿½O CONSTAM PROTESTOS, POR FALTA DE PAGAMENTO, PARA ESTE CPF/CNPJ NOS TABELIONATOS DO ESTADO DO TOCANTINS!";
 			xml.append("<protesto>");
 			xml.append("	<mensagem>" + mensagem + "</mensagem>");
 			xml.append("</protesto>");
