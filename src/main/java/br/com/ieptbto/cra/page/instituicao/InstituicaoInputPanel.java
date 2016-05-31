@@ -18,7 +18,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
-import br.com.ieptbto.cra.enumeration.BooleanSimNao;
+import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.enumeration.TipoCampo51;
@@ -64,10 +64,10 @@ public class InstituicaoInputPanel extends Panel {
 		add(campoPermitidoSetores());
 	}
 
-	private DropDownChoice<BooleanSimNao> campoPermitidoSetores() {
-		IChoiceRenderer<BooleanSimNao> renderer = new ChoiceRenderer<BooleanSimNao>("label");
-		DropDownChoice<BooleanSimNao> dropDown =
-				new DropDownChoice<BooleanSimNao>("permitidoSetoresConvenio", Arrays.asList(BooleanSimNao.values()), renderer);
+	private DropDownChoice<EnumerationSimNao> campoPermitidoSetores() {
+		IChoiceRenderer<EnumerationSimNao> renderer = new ChoiceRenderer<EnumerationSimNao>("label");
+		DropDownChoice<EnumerationSimNao> dropDown =
+				new DropDownChoice<EnumerationSimNao>("permitidoSetoresConvenio", Arrays.asList(EnumerationSimNao.values()), renderer);
 		dropDown.setLabel(new Model<String>("Permitido Setores Convênios"));
 		dropDown.setRequired(true);
 		return dropDown;
@@ -157,8 +157,8 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	private DropDownChoice<TipoCampo51> comboTipoCampo51() {
-		DropDownChoice<TipoCampo51> combo = new DropDownChoice<TipoCampo51>("tipoCampo51", Arrays.asList(TipoCampo51.values()),
-				new ChoiceRenderer<TipoCampo51>("label"));
+		DropDownChoice<TipoCampo51> combo =
+				new DropDownChoice<TipoCampo51>("tipoCampo51", Arrays.asList(TipoCampo51.values()), new ChoiceRenderer<TipoCampo51>("label"));
 		combo.setLabel(new Model<String>("Tipo de Informação Campo 51"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
@@ -166,8 +166,8 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	private DropDownChoice<TipoBatimento> comboTipoBatimento() {
-		DropDownChoice<TipoBatimento> combo = new DropDownChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()),
-				new ChoiceRenderer<TipoBatimento>("label"));
+		DropDownChoice<TipoBatimento> combo =
+				new DropDownChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()), new ChoiceRenderer<TipoBatimento>("label"));
 		combo.setLabel(new Model<String>("Tipo Batimento"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
@@ -175,8 +175,8 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	private DropDownChoice<LayoutPadraoXML> comboPadraoLayoutXML() {
-		DropDownChoice<LayoutPadraoXML> combo = new DropDownChoice<LayoutPadraoXML>("layoutPadraoXML",
-				Arrays.asList(LayoutPadraoXML.values()), new ChoiceRenderer<LayoutPadraoXML>("label"));
+		DropDownChoice<LayoutPadraoXML> combo = new DropDownChoice<LayoutPadraoXML>("layoutPadraoXML", Arrays.asList(LayoutPadraoXML.values()),
+				new ChoiceRenderer<LayoutPadraoXML>("label"));
 		combo.setLabel(new Model<String>("Layout padrão XML"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);

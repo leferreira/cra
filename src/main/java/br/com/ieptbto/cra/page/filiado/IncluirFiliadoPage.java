@@ -17,7 +17,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
-import br.com.ieptbto.cra.enumeration.BooleanSimNao;
+import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -72,7 +72,7 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 		WebMarkupContainer divSetoresFiliados = new WebMarkupContainer("divSetoresFiliados");
 		divSetoresFiliados.add(new SetorFiliadoInputPanel("setorPanel", getModel(), getSetoresFiliado()));
 		divSetoresFiliados.add(listaSetoresFiliado());
-		if (getModel().getObject().getInstituicaoConvenio().getPermitidoSetoresConvenio().equals(BooleanSimNao.NAO)) {
+		if (getModel().getObject().getInstituicaoConvenio().getPermitidoSetoresConvenio().equals(EnumerationSimNao.NAO)) {
 			divSetoresFiliados.setVisible(false);
 		}
 		add(divSetoresFiliados);

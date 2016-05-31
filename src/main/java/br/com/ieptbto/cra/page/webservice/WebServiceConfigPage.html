@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<div class="col-md-12">
+			<form wicket:id="form">
+				<h4 class="titulo-top">CONFIGURAÇÕES DE SERVIÇOS
+					<button type="submit" class="btn btn-primary pull-right" onclick="openLoading()">
+						<span class="fa fa-save"></span>&nbsp;Salvar
+					</button>
+				</h4>
+				<fieldset>
+					<legend>CRA-NACIONAL</legend>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Envio de Remessas</label><br> <input type="checkbox" wicket:id="checkEnvioRemessa" class="form-control switch">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Download de Confirmações</label><br> <input type="checkbox" wicket:id="checkDownloadConfirmacao"
+									class="form-control switch">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Download de Retornos</label><br> <input type="checkbox" wicket:id="checkDownloadRetorno"
+									class="form-control switch">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Envio de Desistências</label><br> <input type="checkbox" wicket:id="checkEnvioDeDesistencia"
+									class="form-control switch">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Envio de Cancelamentos de Protesto</label><br> <input type="checkbox" wicket:id="checkEnvioDeCancelamento"
+									class="form-control switch">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Envio de Autorização de Cancelamento</label><br> <input type="checkbox" wicket:id="checkEnvioDeAutorizacao"
+									class="form-control switch">
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<br style="clear: both;" />
+				<fieldset>
+					<legend>CARTÓRIOS DE PROTESTO</legend>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Download de Remessas</label><br> <input type="checkbox" wicket:id="checkDownloadRemessas"
+									class="form-control switch">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Envio de Confirmações</label><br> <input type="checkbox" wicket:id="checkEnvioConfirmacao"
+									class="form-control switch">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Envio de Retornos</label><br> <input type="checkbox" wicket:id="checkEnvioRetorno" class="form-control switch"
+									>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Download de Desitências e Cancelamentos</label><br> <input type="checkbox" wicket:id="checkDownloadDesistenciaCancelamentos"
+									class="form-control switch">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Confirmar Recebimento de Desistências e Cancelamentos</label><br> <input
+									type="checkbox" wicket:id="checkConfirmarDesistenciaCancelamentos" class="form-control switch">
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<br style="clear: both;" />
+				<fieldset>
+					<legend>CENTRAL NACIONAL DE PROTESTO</legend>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Consulta da Base CNP (CRA-NACIONAL)</label><br> <input type="checkbox" wicket:id="checkDownloadCnp"
+									class="form-control switch">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Envio de CNP (Cartório)</label><br> <input type="checkbox" wicket:id="checkEnvioCnp"
+									class="form-control switch">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Consulta de Protesto Simples</label><br> <input type="checkbox" wicket:id="checkConsultaCnp"
+									class="form-control switch">
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<br style="clear: both;" />
+		</div>
+	</wicket:extend>
+</body>
+</html>

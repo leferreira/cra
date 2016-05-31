@@ -1,45 +1,36 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:wicket="http://wicket.apache.org/">
-<head>
-<meta charset="UTF8">
-</head>
 <body>
 	<wicket:extend>
-		<form wicket:id="form" id="form">
-			<h4 class="titulo-top">CADASTRO DE TIPO DE INSTITUIÇÃO
-			<span class="pull-right">
-				<a href="TipoInstituicoes" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
-			</span>   
+		<div class="col-md-12">
+			<h4 class="titulo-top">
+				TIPO DE INSTITUIÇÃO <span class="pull-right"> <a href="TipoInstituicoes" class="link"
+					style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+				</span>
 			</h4>
-			<br style="clear: both;"/> 
-			<div class="col-md-12 col-md-offset-1">
+		</div>
+		<br style="clear: both;" />
+		<form wicket:id="form" id="form">
+			<div class="col-md-10 col-md-offset-1">
 				<br style="clear: both;">
 				<div class="form-group">
-				  <label class="col-md-2 control-label">TIPO INSTITUIÇÃO:</label>  
-				  <div class="col-md-6">
-				  <input wicket:id="tipoInstituicao" maxlength="20" class="form-control input-md">
-				  </div>
+					<label>Tipo Instituição</label> <input wicket:id="tipoInstituicao" maxlength="20"
+						class="form-control input-md">
 				</div>
-				<br style="clear: both;"/>
 				<div class="form-group">
-				  	<label class="col-md-2 control-label"></label>  
-				  	<div class="col-md-6" style="text-align: left;">
-						<small>B - Remessa/ C - Confirma&ccedil;&atilde;o/ R - Retorno/ CP - Cancelamento/ DP - Devolu&ccedil;&atilde;o/ AC - Autoriza&ccedil;&atilde;o</small>
+					<label>Tipos Arquivos</label> <br>
+					<small>B - Remessa/ C - Confirma&ccedil;&atilde;o/ R - Retorno/ CP - Cancelamento/ DP -
+						Devolu&ccedil;&atilde;o/ AC - Autoriza&ccedil;&atilde;o</small> <br style="clear: both;" />
+					<div class="col-md-6" style="text-align: left;">
+						<span class="checkbox-inline inline" wicket:id="arquivosEnvioPermitido"></span>
 					</div>
 				</div>
-				<br style="clear: both;"/>				
+				<br style="clear: both" />
 				<div class="form-group">
-				  <label class="col-md-2 control-label">TIPOS ARQUIVOS:</label>
-				  <div class="col-md-6" style="text-align: left;">
-				    <span class="checkbox-inline inline" wicket:id="arquivosEnvioPermitido"></span>
-				  </div>
-				</div>
-				<br style="clear: both"/>
-				<div class="form-group">
-				  <label class="col-md-2 control-label"></label>
-				  <div class="col-md-6">
-				    <button type="submit" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
-				  </div>
+					<label></label>
+					<button type="submit" class="btn btn-primary pull-right" onclick="openLoading()">
+						<span class="fa fa-save"></span>&nbsp;Salvar
+					</button>
 				</div>
 			</div>
 		</form>

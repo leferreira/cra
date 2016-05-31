@@ -24,7 +24,7 @@
 				<br class="clear">
 			</div>
 		</fieldset>
-		<table id="table" class="table table-striped table-hover">
+		<table id="table" class="table table-striped table-hover" style="font-size: 12px;">
 			<thead>
 				<tr>
 					<th class="col-center">NOSSO N.</th>
@@ -52,7 +52,11 @@
 					<td class="text-center" wicket:id="dataConfirmacao"></td>
 					<td class="text-center"><a target="_blank" wicket:id="linkRetorno"><span class="link" wicket:id="retorno"></span></a></td>
 					<td class="text-center" wicket:id="dataSituacao"></td>
-					<td class="text-center"><span class="info-titulo" wicket:id="situacaoTitulo"></span></td>
+					<td class="col-center" >
+						<div class="info-titulo">
+							<span wicket:id="situacaoTitulo"></span>
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>

@@ -9,6 +9,10 @@ public class NotFoundPage extends BasePage {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	public NotFoundPage() {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

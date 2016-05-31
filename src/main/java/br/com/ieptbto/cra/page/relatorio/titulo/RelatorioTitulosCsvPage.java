@@ -170,7 +170,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				}
 			});
 		} else {
-			columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("CONFIR."), "dataConfirmacao") {
+			columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("CONF. LIB."), "dataConfirmacao") {
 				/***/
 				private static final long serialVersionUID = 1L;
 
@@ -192,7 +192,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 					}
 				}
 			});
-			columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("RETORNO"), "retorno") {
+			columns.add(new PropertyColumn<TituloBean, String>(new Model<String>("RET. LIB."), "retorno") {
 				/***/
 				private static final long serialVersionUID = 1L;
 

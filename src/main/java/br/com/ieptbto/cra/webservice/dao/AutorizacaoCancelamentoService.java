@@ -17,8 +17,8 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.exception.XmlCraException;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
@@ -52,7 +52,7 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
-		setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_AUTORIZACAO_CANCELAMENTO);
+		setCraAcao(CraAcao.ENVIO_ARQUIVO_AUTORIZACAO_CANCELAMENTO);
 		Arquivo arquivo = new Arquivo();
 		ArquivoVO arquivoVO = new ArquivoVO();
 		setUsuario(usuario);
@@ -78,17 +78,17 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 			}
 
 			setMensagemXml(gerarResposta(arquivo, getUsuario()));
-			loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Autorização de Cancelamento " + nomeArquivo + ", enviado por "
+			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Autorização de Cancelamento " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage());
-			loggerCra.error(getUsuario(), getTipoAcaoLog(), ex.getMessage());
+			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage());
 			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(Arrays.toString(e.getStackTrace()));
-			loggerCra.error(getUsuario(), getTipoAcaoLog(),
+			loggerCra.error(getUsuario(), getCraAcao(),
 					"Erro interno no processamento do arquivo de Autorização de Cancelamento " + nomeArquivo + "." + e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		}
@@ -132,9 +132,10 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 			Mensagem mensagem = new Mensagem();
 			mensagem.setCodigo(exception.getErro().getCodigo());
 			mensagem.setMunicipio(exception.getCodigoIbge());
-			mensagem.setDescricao("Município: " + exception.getCodigoIbge() + " - " + exception.getMunicipio() + " - " + exception.getErro().getDescricao());
+			mensagem.setDescricao(
+					"Município: " + exception.getCodigoIbge() + " - " + exception.getMunicipio() + " - " + exception.getErro().getDescricao());
 			mensagens.add(mensagem);
-			loggerCra.alert(getUsuario(), getTipoAcaoLog(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
+			loggerCra.alert(getUsuario(), getCraAcao(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
 		}
 		return mensagemRetorno;
 	}

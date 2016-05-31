@@ -28,8 +28,8 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoRetornoVO;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.entidade.vo.RetornoVO;
+import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -62,7 +62,7 @@ public class RetornoService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario) {
-		setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_RETORNO);
+		setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_RETORNO);
 		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 		ArquivoVO arquivoVO = null;
 		setUsuario(usuario);
@@ -85,19 +85,18 @@ public class RetornoService extends CraWebService {
 				return setRespostaArquivoEmProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 			}
 			setMensagem(gerarResposta(usuario.getInstituicao().getLayoutPadraoXML(), remessas, getNomeArquivo(), CONSTANTE_RETORNO_XML));
-			loggerCra.sucess(getUsuario(), getTipoAcaoLog(), "Arquivo de Retorno " + nomeArquivo + " recebido com sucesso por "
-					+ getUsuario().getInstituicao().getNomeFantasia() + ".");
+			loggerCra.sucess(getUsuario(), getCraAcao(),
+					"Arquivo de Retorno " + nomeArquivo + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e.getCause());
-			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo de Retorno " + nomeArquivo
-					+ " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".", e);
+			loggerCra.error(getUsuario(), getCraAcao(), "Erro interno ao construir o arquivo de Retorno " + nomeArquivo + " recebido por "
+					+ getUsuario().getInstituicao().getNomeFantasia() + ".", e);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return getMensagem();
 	}
 
-	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta, List<RemessaVO> remessas, String nomeArquivo,
-			String constanteRetornoXml) {
+	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta, List<RemessaVO> remessas, String nomeArquivo, String constanteRetornoXml) {
 		StringBuffer string = new StringBuffer();
 		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
 		String cabecalho = "<retorno>";
@@ -157,7 +156,7 @@ public class RetornoService extends CraWebService {
 	 * @return
 	 */
 	public String enviarRetorno(String nomeArquivo, Usuario usuario, String dados) {
-		setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_RETORNO);
+		setCraAcao(CraAcao.ENVIO_ARQUIVO_RETORNO);
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 
@@ -170,22 +169,21 @@ public class RetornoService extends CraWebService {
 			}
 			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
-				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo,
-						arquivoJaEnviado);
+				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo, arquivoJaEnviado);
 			}
 
 			setArquivoRetornoVO(converterStringArquivoVO(dados));
 			setRetornoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoRetornoVO()));
 			setMensagemXml(retornoMediator.processarXML(getRetornoVO(), getUsuario(), nomeArquivo));
-			loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Retorno " + nomeArquivo + ", enviado por "
+			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Retorno " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex.getCause());
-			loggerCra.error(getUsuario(), getTipoAcaoLog(), ex.getMessage());
+			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage());
 			return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
 		} catch (Exception e) {
 			logger.info(e.getMessage(), e.getCause());
-			loggerCra.error(getUsuario(), getTipoAcaoLog(), e.getMessage(), e);
+			loggerCra.error(getUsuario(), getCraAcao(), e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return gerarMensagem(getMensagemXml(), CONSTANTE_CONFIRMACAO_XML);

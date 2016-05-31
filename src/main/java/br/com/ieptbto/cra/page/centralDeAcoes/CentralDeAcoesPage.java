@@ -138,12 +138,15 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 
 				if (tipoInstituicao.getModelObject() != null) {
 					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
+						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
 					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
 					} else if (tipo.equals(TipoInstituicaoCRA.CARTORIO)) {
+						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getCartorios());
 					}
@@ -163,8 +166,8 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 	}
 
 	private DropDownChoice<Instituicao> dropDownInstituicaoBancosConvenios() {
-		dropDownBancosConveniosCartorios = new DropDownChoice<Instituicao>("instituicaoOrigem", new Model<Instituicao>(instituicao),
-				getListaInstituicoes(), new ChoiceRenderer<Instituicao>("nomeFantasia"));
+		dropDownBancosConveniosCartorios =
+				new DropDownChoice<Instituicao>("instituicaoOrigem", new Model<Instituicao>(instituicao), getListaInstituicoes());
 		dropDownBancosConveniosCartorios.setLabel(new Model<String>("Banco/Convênio"));
 		dropDownBancosConveniosCartorios.setOutputMarkupId(true);
 		dropDownBancosConveniosCartorios.setEnabled(false);

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
+import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
@@ -93,8 +93,7 @@ public class UsuariosComarcasHomologadasService extends CraWebService {
 		for (Municipio municipio : municipiosHomologados) {
 			xml = xml.concat("<comarca>");
 			xml = xml.concat("<codigo_comarca>" + municipio.getCodigoIBGE() + "</codigo_comarca>");
-			xml = xml.concat(
-					"<municipio codigo_municipio=\"" + municipio.getCodigoIBGE() + "\" nome=\"" + municipio.getNomeMunicipio() + "\" />");
+			xml = xml.concat("<municipio codigo_municipio=\"" + municipio.getCodigoIBGE() + "\" nome=\"" + municipio.getNomeMunicipio() + "\" />");
 			xml = xml.concat("</comarca>");
 		}
 
@@ -113,7 +112,7 @@ public class UsuariosComarcasHomologadasService extends CraWebService {
 		}
 		xml = xml.concat("<usuario credenciaisCorretas=\"true\"/>");
 		if (usuario != null) {
-			loggerCra.alert(usuario, TipoAcaoLog.VERIFICACAO_CREDENCIAIS_ACESSO_SUCESSO,
+			loggerCra.alert(usuario, CraAcao.VERIFICACAO_CREDENCIAIS_ACESSO_SUCESSO,
 					"Acesso à CRA via WebServices liberado com sucesso para o usuário " + usuario.getNome() + ".");
 		}
 		return XmlFormatterUtil.format(xml);

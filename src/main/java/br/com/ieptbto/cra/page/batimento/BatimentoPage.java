@@ -96,7 +96,8 @@ public class BatimentoPage extends BasePage<Remessa> {
 						}
 					}
 					retornoMediator.salvarBatimentos(arquivosRetornoSelecionados);
-					setResponsePage(new MensagemPage<Batimento>(BatimentoPage.class, "BATIMENTO", "Batimento dos arquivos de retorno salvo com sucesso!"));
+					setResponsePage(
+							new MensagemPage<Batimento>(BatimentoPage.class, "BATIMENTO", "Batimento dos arquivos de retorno salvo com sucesso!"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());

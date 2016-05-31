@@ -29,6 +29,7 @@ import br.com.ieptbto.cra.entidade.CabecalhoCnp;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.Confirmacao;
+import br.com.ieptbto.cra.entidade.CraServiceConfig;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
@@ -87,6 +88,7 @@ public class AnnotatedClassesFactory {
 	 */
 	private static void adicionarClassesHibernate() {
 		classesHibernate.add(LogCra.class);
+		classesHibernate.add(CraServiceConfig.class);
 		classesHibernate.add(Usuario.class);
 		classesHibernate.add(GrupoUsuario.class);
 		classesHibernate.add(Instituicao.class);

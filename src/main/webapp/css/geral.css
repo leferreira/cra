@@ -1,9 +1,9 @@
 body {
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Open Sans', sans-serif;
 	font-size: 13px;   
 	background-color: #337ab7;
-}
-
+} 
+  
 .clear{
 	clear: both;
 }
@@ -161,12 +161,7 @@ dd, dt {
 
 .cabecalho-painel {
 	font-size: 16px;
-	font-weight: bolder;
-	font-family: Titillium Web;
-}
-
-.btn-primary {
-	font-family: Titillium Web;
+	font-weight: bolder; 
 }
 
 #table_filter {
@@ -236,8 +231,7 @@ dd, dt {
 
 .titulo-top {
 	text-align: left;
-	font-size: 22px;
-	font-family: 'Titillium Web', sans-serif;
+	font-size: 18px;
 }
 
 .col-center {
@@ -463,3 +457,6 @@ Exporter csv
 .pagination {
 	    float: right!important;
 } 
+.norecords-td{
+	display: none;
+}

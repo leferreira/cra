@@ -101,6 +101,7 @@ public class CraMenu extends Panel {
 		menuAdministrador.addItem("LayoutsPersonalizados", rolesIncluir);
 		menuAdministrador.addItem("Municipios", rolesIncluir);
 		menuAdministrador.addItem("TipoInstituicoes", rolesIncluir);
+		menuAdministrador.addItem("TipoArquivos", rolesIncluir);
 		menuAdministrador.addItem("Usuarios", rolesIncluir);
 
 		menuAdministrador.addItem("InstrumentoDeProtesto", rolesIncluir);
@@ -108,6 +109,7 @@ public class CraMenu extends Panel {
 		menuAdministrador.addItem("ImportarArquivoDePara", rolesIncluir);
 
 		menuAdministrador.addItem("CentralDeAcoes", rolesIncluir);
+		menuAdministrador.addItem("WebServiceConfig", rolesIncluir);
 	}
 
 	private boolean verificaPermissao(Usuario user) {

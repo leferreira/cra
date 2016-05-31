@@ -20,8 +20,8 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
+import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -54,7 +54,7 @@ public class RemessaService extends CraWebService {
 	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		ArquivoVO arquivoVO = new ArquivoVO();
-		setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_REMESSA);
+		setCraAcao(CraAcao.ENVIO_ARQUIVO_REMESSA);
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 
@@ -69,8 +69,7 @@ public class RemessaService extends CraWebService {
 			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
 				if (!arquivoJaEnviado.getInstituicaoEnvio().getCodigoCompensacao().trim().equals("582")) {
-					return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo,
-							arquivoJaEnviado);
+					return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo, arquivoJaEnviado);
 				}
 			}
 			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
@@ -82,11 +81,11 @@ public class RemessaService extends CraWebService {
 
 			setRemessas(ConversorArquivoVO.converterParaRemessaVO(converterStringArquivoVO(dados)));
 			setObjectMensagemXml(remessaMediator.processarArquivoXML(getRemessas(), getUsuario(), nomeArquivo));
-			loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
+			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex.getCause());
-			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno no processamento do arquivo de Remessa " + nomeArquivo + ".", ex);
+			loggerCra.error(getUsuario(), getCraAcao(), "Erro interno no processamento do arquivo de Remessa " + nomeArquivo + ".", ex);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return gerarMensagem(getObjectMensagemXml(), CONSTANTE_RELATORIO_XML);
@@ -134,7 +133,7 @@ public class RemessaService extends CraWebService {
 	 * @return
 	 */
 	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
-		setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_REMESSA);
+		setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_REMESSA);
 		Remessa remessa = null;
 		RemessaVO remessaVO = null;
 		setUsuario(usuario);
@@ -150,12 +149,12 @@ public class RemessaService extends CraWebService {
 			}
 
 			setMensagem(gerarResposta(remessaVO, getNomeArquivo(), CONSTANTE_REMESSA_XML));
-			loggerCra.sucess(getUsuario(), getTipoAcaoLog(), "Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por "
-					+ getUsuario().getInstituicao().getNomeFantasia() + ".");
+			loggerCra.sucess(getUsuario(), getCraAcao(),
+					"Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex.getCause());
-			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo de Remessa " + nomeArquivo
-					+ " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".", ex);
+			loggerCra.error(getUsuario(), getCraAcao(), "Erro interno ao construir o arquivo de Remessa " + nomeArquivo + " recebido por "
+					+ getUsuario().getInstituicao().getNomeFantasia() + ".", ex);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return getMensagem();
