@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.batimento;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,6 +37,7 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.cra.MensagemPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.util.PeriodoDataUtil;
 
 /**
  * @author Thasso Araújo
@@ -119,7 +121,9 @@ public class BatimentoPage extends BasePage<Remessa> {
 	}
 
 	private ListView<Remessa> carregarArquivosRetorno() {
-		return remessas = new ListView<Remessa>("retornos", retornoMediator.buscarRetornosParaBatimento()) {
+		return remessas = new ListView<Remessa>("retornos", new ArrayList<Remessa>()) {
+			// return remessas = new ListView<Remessa>("retornos",
+			// retornoMediator.buscarRetornosParaBatimento()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -151,6 +155,11 @@ public class BatimentoPage extends BasePage<Remessa> {
 				retorno.setListaDepositos(depositos);
 				item.add(new Check<Remessa>("checkbox", item.getModel()));
 				item.add(new ListMultipleChoice<Deposito>("depositos", new Model<ArrayList<Deposito>>(depositos), getDepositos()));
+
+				if (PeriodoDataUtil.diferencaDeDiasEntreData(retorno.getDataRecebimento().toDate(), new Date()) > 9) {
+					item.setOutputMarkupId(true);
+					item.setMarkupId("retornoPendente10Dias");
+				}
 			}
 		};
 	}

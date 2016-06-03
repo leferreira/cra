@@ -1,29 +1,27 @@
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
-<head>
-<meta charset="UTF8">
-</head>
 <body>
 	<wicket:extend>
 		<h4 class="titulo-top">PAGAMENTO DE ARQUIVOS DE RETORNO</h4>
-		<br style="clear: both;"/>
-		<form wicket:id="formFiltros" class="form-horizontal">
-			<div class="col-md-7"> 
-				<div class="form-group">
-				  <label class="col-md-3 control-label">DATA BATIMENTO:</label>
-				  <div class="col-md-3">
-				  	<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataBatimento"  class="form-control input-md">
-				  </div>
-				  <div class="col-md-2">     
-				    <button type="submit" class="btn btn-primary pull-rigth" style="margin-bottom: 10px;"> 
-				    	<span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR
-				    </button>   
-				 </div>     
+		<form wicket:id="formFiltros">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Data Batimento</label> <input id="date" name="date" maxlength="10"
+							placeholder="__/__/____" wicket:id="dataBatimento" class="form-control">
+					</div>
 				</div>
-			</div>  
+				<div class="col-md-2">
+					<div class="form-group">
+						<label>&nbsp;</label><br>
+						<button type="submit" class="btn btn-primary pull-rigth">
+							<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
+						</button>
+					</div>
+				</div>
+			</div>
 		</form>
-		<table id="table-no-pagination"
-			class="table table-striped table-hover table-responsive">
+		<table id="table-no-pagination" class="table table-striped table-hover table-responsive">
 			<thead>
 				<tr>
 					<th>BANCO/CONVÊNIO</th>
@@ -43,12 +41,12 @@
 					<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
 					<td class="col-center" wicket:id="horaEnvio"></td>
 					<td class="pull-left" wicket:id="instituicaoOrigem.nomeFantasia"></td>
-					<td class="col-center"><a wicket:id="linkArquivo"> <span
-							class="link" wicket:id="arquivo.nomeArquivo"></span>
+					<td class="col-center"><a wicket:id="linkArquivo"> <span class="link"
+							wicket:id="arquivo.nomeArquivo"></span>
 					</a></td>
 					<td class="col-right valor" wicket:id="valorPagos"></td>
-					<td class="col-center"><button type="button"
-							wicket:id="gerarRelatorio" style="float: inherit;">
+					<td class="col-center"><button type="button" wicket:id="gerarRelatorio"
+							style="float: inherit;">
 							<span class="col-center fa fa-print"></span>
 						</button></td>
 				</tr>

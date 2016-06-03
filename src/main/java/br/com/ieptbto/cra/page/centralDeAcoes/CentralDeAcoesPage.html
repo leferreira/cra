@@ -2,47 +2,45 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 	<wicket:extend>
-		<div class="col-md-12">
-			<h4 class="titulo-top">CENTRAL DE AÇÕES</h4>
-			<div class="row">
-				<form wicket:id="form">
-					<div class="col-md-4">
-						<label>Período</label>
-						<div class="form-group">
-							<div class="row">
-								<div class="col-xs-6">
-									<input wicket:id="dataEnvioInicio" id="date" name="date" maxlength="10"
-										placeholder="__/__/____" class="form-control">
-								</div>
-								<div class="col-xs-6">
-									<input wicket:id="dataEnvioFinal" id="date1" name="date1" maxlength="10"
-										placeholder="__/__/____" class="form-control">
-								</div>
+		<h4 class="titulo-top">CENTRAL DE AÇÕES</h4>
+		<div class="row">
+			<form wicket:id="form">
+				<div class="col-md-4">
+					<label>Período</label>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-xs-6">
+								<input wicket:id="dataEnvioInicio" id="date" name="date" maxlength="10"
+									placeholder="__/__/____" class="form-control">
+							</div>
+							<div class="col-xs-6">
+								<input wicket:id="dataEnvioFinal" id="date1" name="date1" maxlength="10"
+									placeholder="__/__/____" class="form-control">
 							</div>
 						</div>
 					</div>
-					<div class="col-md-3">
-						<label>Tipo Instituição</label>
-						<div class="form-group">
-							<select wicket:id="tipoInstituicao" class="form-control"></select>
-						</div>
+				</div>
+				<div class="col-md-3">
+					<label>Tipo Instituição</label>
+					<div class="form-group">
+						<select wicket:id="tipoInstituicao" class="form-control"></select>
 					</div>
-					<div class="col-md-4">
-						<label>Instituição/Município</label>
-						<div class="form-group"> 
-							<select class="form-control" wicket:id="instituicaoOrigem"></select>
-						</div>
+				</div>
+				<div class="col-md-4">
+					<label>Instituição/Município</label>
+					<div class="form-group">
+						<select class="form-control" wicket:id="instituicaoOrigem"></select>
 					</div>
-					<div class="col-md-1">
-						<br style="clear: both;">
-						<button type="submit" class="btn btn-primary pull-right">
-							<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
-						</button>
-					</div>
-				</form>
-			</div>
-			<div wicket:id="panelDataTableAcoes"></div>
+				</div>
+				<div class="col-md-1">
+					<br style="clear: both;">
+					<button type="submit" class="btn btn-primary pull-right">
+						<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
+					</button>
+				</div>
+			</form>
 		</div>
+		<div wicket:id="panelDataTableAcoes"></div>
 	</wicket:extend>
 </body>
 </html>

@@ -1,32 +1,31 @@
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
-<head>
-<meta charset="UTF8">
-</head>
 <body>
 	<wicket:extend>
+		<h4 class="titulo-top">IMPORTAR ARQUIVO DE/PARA</h4>
+		<br style="clear: both;" />
 		<form wicket:id="form">
-			<h4 class="titulo-top">IMPORTAR ARQUIVO DE/PARA</h4>
-			<br style="clear: both;"/>
 			<div class="row">
 				<div class="col-lg-8 col-md-offset-2" style="text-align: left">
-					<label>ANEXAR ARQUIVO DE/PARA:</label>
-					<input wicket:id="file" type="file" class="filestyle" data-buttonText="Procurar">
+					<label>Anexar Arquivo De/Para</label> <input wicket:id="file" type="file" class="filestyle"
+						data-buttonText="Procurar">
 				</div>
 			</div>
-			<br/>
+			<br />
 			<div class="row">
 				<div class="col-lg-8 col-md-offset-2">
-					<button wicket:id="enviarArquivo" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-send"></span>&nbsp;ENVIAR</button>
+					<button wicket:id="enviarArquivo" class="btn btn-primary pull-right">
+						<span class="glyphicon glyphicon-send"></span>&nbsp;Enviar
+					</button>
 				</div>
 			</div>
 		</form>
-	<script type="text/javascript" src="js/bootstrap-filestyle.min.js" charset="utf-8"></script>
-	<script>
-	$( document ).ready(function() {
-		$(":file").filestyle({buttonText: "Procurar"});
-	});	
-	</script>
-</wicket:extend>
+		<script type="text/javascript" src="js/bootstrap-filestyle.min.js" charset="utf-8"></script>
+		<script>
+			$( document ).ready(function() {
+				$(":file").filestyle({buttonText: "Procurar"});
+			});	
+		</script>
+	</wicket:extend>
 </body>
 </html>

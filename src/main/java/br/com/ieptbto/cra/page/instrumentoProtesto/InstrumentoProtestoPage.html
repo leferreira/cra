@@ -5,52 +5,62 @@
 </head>
 <body>
 	<wicket:extend>
-		<h4 class="titulo-top">ENTRADA DE INSTRUMENTO DE PROTESTO
-			<button wicket:id="botaoSalvarInstrumentos" class="btn btn-primary pull-right"><span class="fa fa-save"></span> Salvar</button>
+		<h4 class="titulo-top">
+			ENTRADA DE INSTRUMENTO DE PROTESTO
+			<button wicket:id="botaoSalvarInstrumentos" class="btn btn-primary pull-right">
+				<span class="fa fa-save"></span> Salvar
+			</button>
 		</h4>
-		<br style="clear: both;"/>
-		<div class="row">
-			<form wicket:id="formCodigo" class="form-horizontal">
-				<div class="col-md-5">
-					<div class="form-group">
-					  <label class="col-md-4 control-label">CÓDIGO DE BARRA:</label>
-					  <div class="col-md-7">
-					    <div class="input-group">
-					      <input onfocus="onfocus" wicket:id="codigoInstrumento" maxlength="18" class="form-control">
-					      <span class="input-group-addon"><span class="fa fa-barcode"></span></span>
-					    </div>
-					  </div>
+		<form wicket:id="formCodigo">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Código de Barra</label>
+								<div class="input-group">
+									<input onfocus="onfocus" wicket:id="codigoInstrumento" maxlength="18" class="form-control">
+									<span class="input-group-addon"><span class="fa fa-barcode"></span></span>
+								</div>
+							</div>
+							<input type="hidden" wicket:id="addCodigo" value="enviar" />
+						</div>
 					</div>
 				</div>
-				<input type="hidden" wicket:id="addCodigo" value="enviar"/>
-			</form>
-		</div>
-		<div class="row">
-			<form wicket:id="formManual" class="form-horizontal">
-				<div class="col-md-5">
-					<div class="form-group">
-					  <label class="col-md-4 control-label">MUNICÍPIO:</label>
-					  <div class="col-md-7">
-					    <select wicket:id="codigoIbge" class="form-control">
-					    </select>
-					  </div>
+			</div>
+		</form>
+		<form wicket:id="formManual">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="row">
+						<div class="col-md-10">
+							<div class="form-group">
+								<label>Município</label> <select wicket:id="codigoIbge" class="form-control">
+								</select>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="col-md-5">
-					<div class="form-group">
-					  <label class="col-md-4 control-label">NºPROTOCOLO:</label>  
-					  <div class="col-md-7">
-					  <input wicket:id="protocoloCartorio" maxlength="10" class="form-control input-md" autofocus="autofocus">
-					  </div>
+				<div class="col-md-4">
+					<div class="row">
+						<div class="col-md-10">
+							<div class="form-group">
+								<label>Nº Protocolo</label> <input wicket:id="protocoloCartorio" maxlength="10"
+									class="form-control input-md" autofocus="autofocus">
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="col-md-2">
-					<button wicket:id="addManual" class="btn btn-primary pull-right"><span class="fa fa-plus"></span>&nbsp;Adicionar</button>
+				<div class="col-md-4">
+					<label>&nbsp;</label><br class="clear">
+					<button wicket:id="addManual" class="btn btn-primary pull-left">
+						<span class="fa fa-plus"></span>&nbsp;Adicionar
+					</button>
 				</div>
-			</form>
-		</div>
-  			<table id="table" class="table table-striped table-hover">
-          		<thead>
+			</div>
+		</form>
+		<table id="table" class="table table-striped table-hover">
+			<thead>
 				<tr>
 					<th class="col-center">#</th>
 					<th class="col-center">Nº TITULO</th>
@@ -64,19 +74,21 @@
 				</tr>
 			</thead>
 			<tbody>
-                  <tr wicket:id="instrumentos">
-                  <td class="col-center" wicket:id="ordem"></td>
-				<td class="col-center" wicket:id="numeroTitulo"></td>
-				<td class="col-center" wicket:id="protocolo"></td>
-				<td wicket:id="pracaProtesto"></td>
-				<td><a href="#" wicket:id="linkHistorico"><span class="link" wicket:id="nomeDevedor"></span></a></td>
+				<tr wicket:id="instrumentos">
+					<td class="col-center" wicket:id="ordem"></td>
+					<td class="col-center" wicket:id="numeroTitulo"></td>
+					<td class="col-center" wicket:id="protocolo"></td>
+					<td wicket:id="pracaProtesto"></td>
+					<td><a href="#" wicket:id="linkHistorico"><span class="link" wicket:id="nomeDevedor"></span></a></td>
 					<td wicket:id="portador"></td>
-				<td class="col-center" wicket:id="especie"></td>
-				<td class="col-right valor" wicket:id="valorTitulo"></td>
-				<td class="col-center"><button wicket:id="remover"><span class="fa fa-trash-o"></span></button></td>
-                  </tr>
-                 </tbody>
-            </table>
+					<td class="col-center" wicket:id="especie"></td>
+					<td class="col-right valor" wicket:id="valorTitulo"></td>
+					<td class="col-center"><button wicket:id="remover">
+							<span class="fa fa-trash-o"></span>
+						</button></td>
+				</tr>
+			</tbody>
+		</table>
 	</wicket:extend>
 </body>
 </html>

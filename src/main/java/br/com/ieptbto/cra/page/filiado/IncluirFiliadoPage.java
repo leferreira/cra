@@ -72,8 +72,10 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 		WebMarkupContainer divSetoresFiliados = new WebMarkupContainer("divSetoresFiliados");
 		divSetoresFiliados.add(new SetorFiliadoInputPanel("setorPanel", getModel(), getSetoresFiliado()));
 		divSetoresFiliados.add(listaSetoresFiliado());
-		if (getModel().getObject().getInstituicaoConvenio().getPermitidoSetoresConvenio().equals(EnumerationSimNao.NAO)) {
-			divSetoresFiliados.setVisible(false);
+		if (getModel().getObject().getInstituicaoConvenio() != null) {
+			if (getModel().getObject().getInstituicaoConvenio().getPermitidoSetoresConvenio().equals(EnumerationSimNao.NAO)) {
+				divSetoresFiliados.setVisible(false);
+			}
 		}
 		add(divSetoresFiliados);
 	}

@@ -78,7 +78,7 @@ public class CraMenu extends Panel {
 			menuRelatorioCra.setVisible(false);
 		}
 		menuRelatorioCra.addItem("Relatorio", rolesIncluir);
-		menuRelatorioCra.addItem("RelatorioCustasCra", rolesIncluir);
+		// menuRelatorioCra.addItem("RelatorioCustasCra", rolesIncluir);
 		menuRelatorioCra.addItem("RelatorioTitulos", rolesIncluir);
 
 		/** Menus Administrador */
