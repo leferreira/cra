@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
 	<div class="row">
 		<div class="col-md-6">
@@ -140,4 +141,148 @@
 
 
 
+=======
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Nome Fantasia</label> <input tabindex="1" autofocus="autofocus" maxlength="45"
+							wicket:id="nomeFantasia" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Razão Social</label> <input tabindex="2" maxlength="100" wicket:id="razaoSocial"
+							class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Tabelião</label> <input maxlength="150" wicket:id="tabeliao" class="form-control">
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>CNPJ</label>
+									<!-- 									<input tabindex="3" -->
+									<!-- 										onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)" -->
+									<!-- 										onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" wicket:id="cnpj" -->
+									<!-- 										class="form-control" maxlength="18"> -->
+									<input tabindex="3" wicket:id="cnpj" class="form-control" maxlength="18">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Reponsável</label> <input tabindex="9" wicket:id="responsavel" maxlength="45"
+										class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Código do Cartório</label>
+						<div class="form-group input-group">
+							<span class="input-group-addon">##</span> <input tabindex="6" wicket:id="codigoCartorio"
+								maxlength="2" class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Situação</label>&nbsp;<label tabindex="7" class="radio-inline inline"
+							wicket:id="status"></label>
+					</div>
+					<div class="form-group">
+						<label>Município</label> <select tabindex="5" wicket:id="municipio" class="form-control">
+						</select>
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-8">
+								<div class="form-group">
+									<label>Email</label> <input tabindex="4" wicket:id="email" maxlength="45"
+										class="form-control">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Telefone</label> <input tabindex="8" wicket:id="contato" placeholder="(__)____-____"
+										class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Bairro</label> <input maxlength="150" wicket:id="bairro" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Endereço</label>
+						<textarea tabindex="10" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<fieldset>
+		<legend>DADOS PARA DEPÓSITOS</legend>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-10">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Banco</label> <input tabindex="11" wicket:id="bancoContaCorrente" maxlength="45"
+											class="form-control">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Agência</label> <input tabindex="12" wicket:id="agenciaContaCorrente"
+											maxlength="10" class="form-control">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-10">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Conta corrente</label> <input tabindex="13" wicket:id="numeroContaCorrente"
+											maxlength="10" class="form-control">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Favorecido</label> <input tabindex="14" wicket:id="favorecido" maxlength="45"
+											class="form-control">
+									</div>
+									<div class="form-group">
+										<label></label>
+										<button type="submit" class="btn btn-primary pull-right" onclick="openLoading()">
+											<span class="fa fa-save"></span>&nbsp;Salvar
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+
+
+
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git
 </wicket:panel>

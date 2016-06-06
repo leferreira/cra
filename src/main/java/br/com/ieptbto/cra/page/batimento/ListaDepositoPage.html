@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
@@ -43,4 +44,51 @@
 		</table>
 	</wicket:extend>
 </body>
+=======
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">BUSCAR DEPÓSITOS
+			<span class="pull-right">
+				<a href="BuscarDepositos" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+			</span>
+		</h4>
+		<br style="clear: both;"/>
+		<table id="table" class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="col-center">IMPORTADO EM</th>
+					<th class="col-center">DATA DEPÓSITO</th>
+					<th>LANÇAMENTO</th>
+					<th class="col-center">Nº DOCUMENTO</th>
+					<th class="col-right">VALOR</th>
+					<th class="col-center">SITUAÇÃO</th>
+					<th class="col-center" style="min-width: 90px;">TIPO</th>
+					<th class="col-center">DESCRIÇÃO</th>
+					<th class="col-center" width="80">EDITAR</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="extrato">
+					<td class="col-center"><span wicket:id="dataEntrada"></span></td>
+					<td class="col-center"><span wicket:id="data"></span></td>
+					<td><span wicket:id="lancamento"></span></td>
+					<td class="col-center"><span wicket:id="numeroDocumento"></span></td>
+					<td class="col-right valor"><span wicket:id="valor"></span></td>
+					<td class="col-center"><span wicket:id="situacao"></span></td>
+					<td class="col-center"><span wicket:id="tipoDeposito"></span></td>
+					<td class="col-center"><span wicket:id="descricao"></span></td>
+					<td class="col-center">
+						<button wicket:id="editarDeposito" type="button"
+							style="float: inherit;">
+							<span class="col-center fa fa-edit"></span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</wicket:extend>
+</body>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git
 </html>

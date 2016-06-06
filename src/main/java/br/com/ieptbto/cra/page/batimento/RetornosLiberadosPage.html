@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
@@ -54,4 +55,62 @@
 		</table>
 	</wicket:extend>
 </body>
+=======
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">PAGAMENTO DE ARQUIVOS DE RETORNO</h4>
+		<form wicket:id="formFiltros">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Data Batimento</label> <input id="date" name="date" maxlength="10"
+							placeholder="__/__/____" wicket:id="dataBatimento" class="form-control">
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label>&nbsp;</label><br>
+						<button type="submit" class="btn btn-primary pull-rigth">
+							<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<table id="table-no-pagination" class="table table-striped table-hover table-responsive">
+			<thead>
+				<tr>
+					<th>BANCO/CONVÊNIO</th>
+					<th class="col-center">DATA BATIMENTO</th>
+					<th class="col-center">DATA ENVIO</th>
+					<th class="col-center" style="width: 90px;">HORA</th>
+					<th>CARTÓRIO</th>
+					<th class="col-center">ARQUIVO</th>
+					<th class="col-right">VALOR PAGOS</th>
+					<th class="col-center" style="width: 100px;">REL.</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="retornos" style="text-align: center;">
+					<td wicket:id="banco"></td>
+					<td class="col-center" wicket:id="dataBatimento"></td>
+					<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
+					<td class="col-center" wicket:id="horaEnvio"></td>
+					<td class="pull-left" wicket:id="instituicaoOrigem.nomeFantasia"></td>
+					<td class="col-center"><a wicket:id="linkArquivo"> <span class="link"
+							wicket:id="arquivo.nomeArquivo"></span>
+					</a></td>
+					<td class="col-right valor" wicket:id="valorPagos"></td>
+					<td class="col-center"><button type="button" wicket:id="gerarRelatorio"
+							style="float: inherit;">
+							<span class="col-center fa fa-print"></span>
+						</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</wicket:extend>
+</body>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git
 </html>

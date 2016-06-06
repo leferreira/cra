@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
 <head>
@@ -38,3 +39,45 @@
 	</wicket:extend>
 </body>
 </html>
+=======
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">
+			USUÁRIOS <span class="pull-right">
+				<button wicket:id="botaoNovo" class="btn btn-primary">
+					<span class="fa fa-plus"></span> Novo Usuário
+				</button>
+			</span>
+		</h4>
+		<br style="clear: both;" />
+		<table id="table"
+			class="table table-responsive table-striped table-hover">
+			<thead>
+				<tr>
+					<th>NOME</th>
+					<th>LOGIN</th>
+					<th>EMAIL</th>
+					<th>LOCAL</th>
+					<th class="col-center">ATIVO</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="listViewUsuario">
+					<td><a wicket:id="linkAlterar"><span class="link"
+							wicket:id="nomeUsuario"></span></a></td>
+					<td wicket:id="loginUsuario"></td>
+					<td wicket:id="emailUsuario"></td>
+					<td wicket:id="instituicaoUsuario"></td>
+					<td class="col-center" wicket:id="status"></td>
+				</tr>
+			</tbody>
+		</table>
+	</wicket:extend>
+</body>
+</html>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE HTML >
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
@@ -60,4 +61,68 @@
 		</div>
 	</wicket:extend>
 </body>
+=======
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">
+			EMPRESA ASSOCIADA <span class="pull-right"> <a href="EmpresasFiliadas" class="link-voltar"><span
+					class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+			</span>
+		</h4>
+		<form wicket:id="form" id="form">
+			<div wicket:id="filiadoInputPanel"></div>
+			<br class="clear"/>
+		</form>
+		<br class="clear"/>
+		<div class="col-md-11" wicket:id="divSetoresFiliados">
+			<fieldset>
+				<legend class="legend">INFORMAÇÕES DE SETOR (Para lançamento e relatórios separados)</legend>
+				<div class="well well-sm">
+					<div class="col-md-12">
+						<a href="#" class="link" data-toggle="modal" data-target="#myModal" style="float: right;">
+							<span class="fa fa-plus"></span>&nbsp;ADICIONAR SETOR
+						</a> <br style="clear: both;">
+						<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+							aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+							<div class="modal-dialog" style="width: 60%;">
+								<div class="modal-content">
+									<div wicket:id="setorPanel"></div>
+								</div>
+							</div>
+						</div>
+						<br style="clear: both;" />
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th class="col-center" style="width: 80px;">#</th>
+										<th>DESCRIÇÃO</th>
+										<th class="col-center" style="width: 40px;">ATIVO</th>
+										<th class="col-center" style="width: 150px;"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr wicket:id="listaSetor" style="text-align: center;">
+										<td class="col-center" wicket:id="contador" style="font-weight: bold;"></td>
+										<td class="col-left" wicket:id="descricao"></td>
+										<td class="col-center" wicket:id="ativo"></td>
+										<td class="col-center">
+											<button type="button" wicket:id="alterar">
+												<span class="fa fa-refresh"></span>&nbsp;Ativar/Desativar
+											</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br style="clear: both;">
+				</div>
+			</fieldset>
+		</div>
+	</wicket:extend>
+</body>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git
 </html>

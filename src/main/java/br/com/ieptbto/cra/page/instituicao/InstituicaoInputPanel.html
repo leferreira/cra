@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
 	<div class="row">
 		<div class="col-md-6">
@@ -153,3 +154,160 @@
 		</div>
 	</fieldset>
 </wicket:panel>
+=======
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Nome Fantasia</label> <input autofocus="autofocus" maxlength="45"
+							wicket:id="nomeFantasia" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Razão Social</label> <input onkeyup="this.value = this.value.toUpperCase()"
+							maxlength="45" wicket:id="razaoSocial" class="form-control">
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Código Compensação</label> <input wicket:id="codigoCompensacao" maxlength="3"
+										class="form-control">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Agência Centralizadora</label> <input wicket:id="agenciaCentralizadora"
+										maxlength="6" class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>CPF/CNPJ</label> <input wicket:id="cnpj"
+										onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+										onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" class="form-control"
+										maxlength="18">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Responsável</label> <input wicket:id="responsavel" maxlength="20"
+										class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Valor Confirmação</label>
+						<div class="form-group input-group">
+							<span class="input-group-addon">R$</span> <input wicket:id="valorConfirmacao"
+								onkeypress="FormataValor(this.id, 12, event);" maxlength="15" class="form-control">
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Situação</label> <label class="radio-inline inline" wicket:id="status"> </label>
+					</div>
+					<div class="form-group">
+						<label>Tipo Instituição</label> <select wicket:id="tipoInstituicao" class="form-control">
+						</select>
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-8">
+								<div class="form-group">
+									<label>Email</label> <input type="text" wicket:id="email" maxlength="45"
+										class="form-control">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Telefone</label> <input wicket:id="contato" placeholder="(__)____-____"
+										class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Município</label> <select wicket:id="municipio" class="form-control">
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Endereço</label>
+						<textarea class="form-control" maxlength="45" wicket:id="endereco"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<fieldset>
+		<legend>CONFIGURAÇÕES DE USO</legend>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-10">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Layout de Transmissão</label> <select wicket:id="layoutPadraoXML"
+											class="form-control">
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Campo Complemento Registro</label> <select wicket:id="tipoCampo51"
+											class="form-control">
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-10">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="tipo">Batimento</label> <select wicket:id="tipoBatimento" class="form-control"></select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Setores&nbsp;(Convênios): </label> <select wicket:id="permitidoSetoresConvenio"
+											class="form-control">
+										</select>
+									</div>
+									<div class="form-group">
+										<label></label>
+										<button type="submit" class="btn btn-primary pull-right" onclick="openLoading()">
+											<span class="fa fa-save"></span>&nbsp;Salvar
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</wicket:panel>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:wicket="http://wicket.apache.org/">
@@ -68,4 +69,76 @@
 	    }
 	</script>
 </body>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:wicket="http://wicket.apache.org/">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>CRA - Central de Remessa de Arquivos</title>
+	
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet'
+		type='text/css'>
+	<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="dist/css/sb-admin-2.css" rel="stylesheet">
+	<link href="bower_components/morrisjs/morris.css" rel="stylesheet">
+	<link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href="css/jquery-ui.css" type="text/css" media="screen" rel="stylesheet" title="Stylesheet" />
+	<link href="css/jquery-ui.theme.css" type="text/css" rel="stylesheet" />
+	<link href="css/bootstrap-switch.min.css" type="text/css" rel="stylesheet" />
+	
+	<link rel="stylesheet" href="chosen/chosen.min.css">
+	<link href="css/geral.css" rel="stylesheet">
+	<link rel="shortcut icon" href="img/favicon.ico">
+</head>
+<body>
+	<wicket:child>
+			Aqui vai o conteúdo da página.
+	</wicket:child>
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+	<script src="js/formatador.js"></script>
+	<script src="js/jquery.min.js"></script>
+
+	<script src="js/mascaras.js"></script>
+	<script src="js/jquery.maskedinput.js"></script>
+
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.bootstrap.min.js"></script>
+	<script src="js/tables.js"></script>
+	<script src="js/ajaxloading.js"></script>
+	<script src="js/bootstrap-switch.min.js"></script>
+
+	<script src="js/jquery-ui-1.11.4.js"></script>
+
+	<script type="text/javascript">
+	    $(document).ready(function() {
+	         $(function() {
+	            $( "#date" ).datepicker();
+	          });
+	         $(function() {
+	             $( "#date1" ).datepicker();
+	          });        
+		    jQuery(function($){
+		    	$('#showModal').click();
+		    });
+	    } );
+	    $.fn.bootstrapSwitch.defaults.size = 'small'; 
+	    $.fn.bootstrapSwitch.defaults.onColor = 'success';
+	    $(".switch").bootstrapSwitch();	
+		$('td.export-td>span>a').html('<span class="fa fa-file-excel-o excel-icon"></span>&nbsp;Exportar CSV');
+
+	    $(document).ready(function() {   
+	        $(".container-layout").prepend('<div id="overlay" class="ui-widget-overlay" style="z-index: 1001; display: none;"></div>');
+	    });  
+	    var loading = $.loading();
+	    function openLoading() {
+	    	 $("#overlay").show(); 
+	        loading.open();
+	    }
+	</script>
+</body>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git
 </html>

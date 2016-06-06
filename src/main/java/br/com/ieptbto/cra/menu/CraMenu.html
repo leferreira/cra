@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
 	<div wicket:id="CraMenu">
 		<div wicket:id="menuPadrao">
@@ -87,4 +88,95 @@
 		 </ul>
 		</div>
 	</div>
+=======
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="UTF8">
+	<div wicket:id="CraMenu">
+		<div wicket:id="menuPadrao">
+		 <ul class="nav navbar-nav">
+	        <li class="active"><a href="HomePage" >In&iacute;cio <span class="sr-only"></span></a></li>
+	        <li><a href="EnviarArquivo" wicket:id="EnviarArquivo">Enviar Arquivo</a></li>
+	        <li><a href="EnviarArquivoEmpresa" wicket:id="EnviarArquivoEmpresa">Enviar Arquivo</a></li>
+	        <li><a href="BuscarTituloSolicitacaoCancelamento" wicket:id="BuscarTituloSolicitacaoCancelamento">Solicitar Cancelamento</a></li>
+	        <li class="dropdown">
+	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Buscar Arquivos<span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="BuscarArquivo" wicket:id="BuscarArquivo">Buscar B, C e R</a></li>
+				<li><a wicket:id="BuscarDesistenciaCancelamento" href="BuscarDesistenciaCancelamento">Buscar Desist&ecirc;ncias<br>e Cancelamentos</a></li>
+			  </ul>
+	        </li>  
+	        <li><a wicket:id="MonitorarTitulos" href="MonitorarTitulos" >Buscar T&iacute;tulos</a></li>  
+	      </ul>
+		</div>
+		<div wicket:id="menuRelatorioPadrao">
+		 <ul class="nav navbar-nav">
+	      	<li class="dropdown">
+	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relat&oacute;rios<span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+			 	<li><a href="RelatorioArquivosInstituicoesCartorios" wicket:id="RelatorioArquivosInstituicoesCartorios" class="font-menu">Anal&iacute;tico de T&iacute;tulos</a></li>
+			  </ul>
+	        </li>
+		 </ul>
+		</div>
+		<div wicket:id="menuRelatorioCra">
+		 <ul class="nav navbar-nav">
+	      	<li class="dropdown">
+	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relat&oacute;rios<span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+			 	<li><a href="Relatorio" wicket:id="Relatorio" class="font-menu">Remessa, Confirma&ccedil;&atilde;o e Retorno</a></li>
+			 	<li><a href="RelatorioTitulos" wicket:id="RelatorioTitulos" class="font-menu">T&iacute;tulos: Detalhados por Situa&ccedil;&atilde;o</a></li>
+<!-- 				<li role="separator" class="divider"></li>  -->
+<!-- 			 	<li><a href="RelatorioCustasCra" wicket:id="RelatorioCustasCra" class="font-menu">Custas CRA</a></li>   -->
+			  </ul>
+	        </li> 
+		 </ul> 
+		</div>
+		<div wicket:id="menuAdministrador">
+		 <ul class="nav navbar-nav">
+	        <li class="dropdown">
+	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Batimento<span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+			 	<li><a wicket:id="ImportarExtrato" href="ImportarExtrato" class="font-menu">Importar Extrato</a></li>
+			 	<li><a wicket:id="BuscarDepositos" href="BuscarDepositos" class="font-menu">Buscar Depósitos</a></li>
+			 	<li role="separator" class="divider"></li> 
+			 	<li><a wicket:id="Batimento" href="Batimento" class="font-menu">Batimento</a></li>
+			 	<li><a wicket:id="LiberarRetornos" href="LiberarRetornos" class="font-menu">Liberar Retornos</a></li> 
+			 	<li><a wicket:id="RetornosLiberados" href="RetornosLiberados" class="font-menu">Pagamento de Retornos</a></li> 
+	          </ul>
+	        </li>
+	      </ul>
+		 <ul class="nav navbar-nav">
+	        <li class="dropdown">
+	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Slips<span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+			 	<li><a href="InstrumentoDeProtesto" wicket:id="InstrumentoDeProtesto" class="font-menu">Entrada de Instrumentos</a></li>
+			 	<li><a href="GerarSlip" wicket:id="GerarSlip" class="font-menu">Gerar SLIPS</a></li>
+			 	<li role="separator" class="divider"></li> 
+				<li><a href="ImportarArquivoDePara" wicket:id="ImportarArquivoDePara" class="font-menu">Importar De/Para</a></li>
+			  </ul>
+	        </li>
+	        <li class="dropdown"> 
+	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administra&ccedil;&atilde;o<span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+	         	<li><a wicket:id="CentralDeAcoes" href="CentralDeAcoes" class="font-menu">Central de A&ccedil;&otilde;es</a></li>
+	         	<li><a wicket:id="WebServiceConfig" href="WebServiceConfig" class="font-menu">Configurações de Serviços</a></li>
+			 	<li role="separator" class="divider"></li>
+				<li><a wicket:id="GerarRemessasConvenio" href="GerarRemessasConvenio" class="font-menu">Gerar Remessas Conv&ecirc;nios</a></li>
+				<li><a wicket:id="GerarConfirmacao" href="GerarConfirmacao" class="font-menu">Gerar Confirma&ccedil;&otilde;es</a></li>
+				<li><a wicket:id="GerarRetorno" href="GerarRetorno" class="font-menu">Gerar Retornos</a></li>
+				<li><a wicket:id="GerarCancelamentos" href="GerarCancelamentos" class="font-menu">Gerar Cancelamentos</a></li>
+			  	<li role="separator" class="divider"></li> 
+			  	<li><a href="Instituicoes" wicket:id="Instituicoes" class="font-menu">Bancos e Conv&ecirc;nios</a></li>
+				<li><a wicket:id="CartoriosProtesto" href="Cartorios" class="font-menu">Cart&oacute;rios de Protesto</a></li>
+				<li><a wicket:id="EmpresasFiliadas" href="EmpresasFiliadas" class="font-menu">Empresas Associadas</a></li>
+				<li><a  href="LayoutsPersonalizados" wicket:id="LayoutsPersonalizados" class="font-menu">Layouts Personalizados</a></li>
+				<li><a href="Municipios" wicket:id="Municipios" class="font-menu">Munic&iacute;pios</a></li>
+				<li><a href="TipoInstituicoes" wicket:id="TipoInstituicoes" class="font-menu">Tipo de Institui&ccedil;&otilde;es</a></li>
+				<li><a href="TipoArquivos" wicket:id="TipoArquivos" class="font-menu">Tipo de Arquivos</a></li>
+				<li><a href="Usuarios" wicket:id="Usuarios" class="font-menu">Usu&aacute;rios</a></li>
+			  </ul>
+	        </li>
+		 </ul>
+		</div>
+	</div>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git
 </wicket:panel>

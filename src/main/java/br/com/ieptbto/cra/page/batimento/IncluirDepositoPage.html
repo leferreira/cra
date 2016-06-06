@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
@@ -79,4 +80,87 @@
 		</form>
 	</wicket:extend>
 </body>
+=======
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<form wicket:id="form">
+			<h4 class="titulo-top">
+				DEPÓSITO<span class="pull-right"> <a class="link-voltar" wicket:id="botaoVoltar"> <span
+						class="fa fa-mail-reply"></span>&nbsp;VOLTAR
+				</a>
+				</span>
+			</h4>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-10">
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-6">
+										<label>Importado em</label> <input wicket:id="dataImportacao"
+											class="form-control input-md" disabled="disabled">
+									</div>
+									<div class="col-md-6">
+										<label>Data do Depósito</label> <input wicket:id="data" class="form-control input-md"
+											disabled="disabled">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Nº do Documento</label> <input maxlength="13" wicket:id="numeroDocumento"
+												class="form-control input-md">
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Valor</label>
+											<div class="form-group input-group">
+												<span class="input-group-addon">R$</span> <input maxlength="13" wicket:id="valorCredito"
+													class="form-control input-md">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-10">
+							<div class="form-group">
+								<label>Situação</label> <label class="checkbox-inline inline" wicket:id="situacaoDeposito">
+								</label>
+							</div>
+							<div class="form-group">
+								<label>Tipo Depósito</label> <select wicket:id="tipoDeposito" class="form-control">
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Descrição</label>
+								<textarea class="form-control" maxlength="45" wicket:id="descricao"></textarea>
+							</div>
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<button type="submit" class="btn btn-primary pull-right">
+									<span class="fa fa-save"></span>&nbsp;Salvar
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</wicket:extend>
+</body>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git
 </html>

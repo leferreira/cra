@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
 <head>
@@ -35,4 +36,43 @@
 		</table>
 	</wicket:extend>
 </body>
+=======
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">CARTÓRIOS DE PROTESTO
+		<span class="pull-right">
+			<button wicket:id="botaoNovo" class="btn btn-primary"><span class="fa fa-plus"></span> Novo Cartório</button>
+		</span>
+		</h4>
+		<br style="clear: both;"/>
+		<table id="table" class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>CARTÓRIO</th>
+					<th>MUNICÍPIO/COMARCA</th>
+					<th class="col-center">CÓDIGO</th>
+					<th>RESPONSÁVEL</th>
+					<th>CONTATO</th>
+					<th class="col-center">ATIVO</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="listViewCartorio">
+					<td ><a wicket:id="linkAlterar"><span title="Clique para alterar!" class="link" wicket:id="nomeFantasia"></span></a></td>
+					<td wicket:id="municipio"></td>
+					<td class="col-center" style="width: 90px;" wicket:id="codigoCartorio"></td>
+					<td wicket:id="responsavel"></td>
+					<td wicket:id="contato"></td>
+					<td class="col-center" style="width: 60px" wicket:id="situacao"></td>
+				</tr>
+			</tbody>
+		</table>
+	</wicket:extend>
+</body>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git
 </html>

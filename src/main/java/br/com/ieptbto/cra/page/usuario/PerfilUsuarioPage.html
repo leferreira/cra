@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
@@ -53,4 +54,61 @@
 		</form>
 	</wicket:extend>
 </body>
+=======
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<form wicket:id="formUsuario">
+			<h4 class="titulo-top">PERFIL DO USUÁRIO</h4>
+			<div class="col-lg-10 col-md-offset-1">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Nome</label> <input onkeyup="this.value = this.value.toUpperCase()" maxlength="45"
+							tabindex="1" wicket:id="nome" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Login</label> <input wicket:id="login" maxlength="20" tabindex="2" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Instituição</label> <select class="form-control" tabindex="4" wicket:id="instituicao"></select>
+					</div>
+					<div class="form-group">
+						<label>Email</label> <input wicket:id="email" maxlength="45" tabindex="3" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Telefone</label> <input wicket:id="contato" tabindex="7" class="form-control">
+					</div>
+					<div class="form-group" style="display: none;">
+						<label>Situação</label> <label class="radio-inline inline" tabindex="8" wicket:id="situacao"></label>
+					</div>
+					<div class="form-group" style="display: none;">
+						<label>Grupo do Usuário</label> <select class="form-control" tabindex="9"
+							wicket:id="grupoUsuario"></select>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<fieldset>
+						<legend>TROCAR SENHA</legend>
+						<div class="form-group">
+							<label>Nova Senha</label> <input type="password" tabindex="5" wicket:id="senha"
+								class="form-control">
+						</div>
+						<div class="form-group">
+							<label>Confirmar Senha</label> <input type="password" tabindex="6" wicket:id="confirmarSenha"
+								class="form-control">
+						</div>
+						<div class="form-group">
+							<button wicket:id="botaoSalvar" tabindex="10" class="btn btn-primary pull-right">
+								<span class="fa fa-save"></span>&nbsp;Salvar
+							</button>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+			<br style="clear: both;" />
+		</form>
+	</wicket:extend>
+</body>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git
 </html>

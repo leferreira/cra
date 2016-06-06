@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
@@ -78,4 +79,86 @@
 		</form>
 	</wicket:extend>
 </body>
+=======
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">BUSCAR DEPÓSITOS</h4>
+		<form wicket:id="form">
+			<div class="col-lg-10 col-md-offset-1">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="row">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-5">
+										<label>Data do Depósito</label> <input id="date" name="date" maxlength="10"
+											placeholder="__/__/____" wicket:id="dataInicial" class="form-control">
+									</div>
+									<div class="col-md-5">
+										<label>&nbsp;</label> <input id="date1" name="date1" maxlength="10"
+											placeholder="__/__/____" wicket:id="dataFinal" class="form-control">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-10">
+								<div class="row">
+									<div class="form-group">
+										<label>Valor</label>
+										<div class="form-group input-group">
+											<span class="input-group-addon">R$</span><input maxlength="13" wicket:id="valorCredito"
+												class="form-control input-md">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-10">
+								<div class="row">
+									<div class="form-group">
+										<label>Nº Documento</label> <input maxlength="13" wicket:id="numeroDocumento"
+											class="form-control input-md">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-10">
+								<div class="row">
+									<div class="form-group">
+										<label>Tipo Depósito</label> <select wicket:id="tipoDeposito" class="form-control">
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="row">
+						<label>Situação</label> <label class="checkbox-inline inline" wicket:id="situacaoDeposito">
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label>&nbsp;</label>
+					<button type="submit" class="btn btn-primary pull-right">
+						<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
+					</button>
+				</div>
+			</div>
+		</form>
+	</wicket:extend>
+</body>
+>>>>>>> branch 'master' of https://github.com/leferreira/cra.git
 </html>
