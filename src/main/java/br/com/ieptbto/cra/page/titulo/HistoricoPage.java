@@ -39,6 +39,7 @@ import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -70,6 +71,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	BatimentoMediator batimentoMediator;
 	@SpringBean
 	InstrumentoProtestoMediator instrumentoMediator;
+	@SpringBean
+	RetornoMediator retornoMediator;
 
 	private TituloRemessa tituloRemessa;
 	private List<ArquivoOcorrenciaBean> arquivosOcorrencias;
@@ -123,7 +126,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 						|| titulo.getRetorno().getRemessa().getSituacaoBatimentoRetorno().equals(SituacaoBatimentoRetorno.CONFIRMADO)) {
 					List<Deposito> depositos = batimentoMediator.buscarDepositosArquivoRetorno(titulo.getRetorno().getRemessa().getBatimento());
 					novaOcorrencia = new ArquivoOcorrenciaBean();
-					novaOcorrencia.parseToBatimento(titulo.getRetorno().getRemessa().getBatimento(), depositos);
+					novaOcorrencia.parseToBatimento(titulo.getRetorno().getRemessa().getBatimento(), depositos,
+							retornoMediator.buscarValorDeTitulosPagos(titulo.getRetorno().getRemessa()));
 					getArquivosOcorrencias().add(novaOcorrencia);
 				}
 			}

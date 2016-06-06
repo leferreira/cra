@@ -1,27 +1,24 @@
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
-<head>
-<meta charset="UTF8">
-</head>
 <body>
 	<wicket:extend>
 		<h4 class="titulo-top">
 			GERAR SLIP
-			<button wicket:id="botaoSlip" class="btn btn-primary pull-right" onclick="openLoading()">
+			<a wicket:id="botaoSlip" class="btn btn-primary pull-right" onclick="openLoading()">
 				<span class="fa fa-print"></span> Gerar Slips
-			</button>
-			<button wicket:id="botaoEnvelope" class="btn btn-primary pull-right" style="margin-right: 10px;"
+			</a>
+			<a wicket:id="botaoEnvelope" class="btn btn-primary pull-right" style="margin-right: 10px;"
 				onclick="openLoading()">
 				<span class="fa fa-envelope-o"></span> Envelopes
-			</button>
-			<button wicket:id="botaoListagem" class="btn btn-primary pull-right" style="margin-right: 10px;"
+			</a>
+			<a wicket:id="botaoListagem" class="btn btn-primary pull-right" style="margin-right: 10px;"
 				onclick="openLoading()">
 				<span class="fa fa-th-list"></span> Listagem
-			</button>
-			<button wicket:id="botaoConfirmar" type="button" class="btn btn-success pull-right"
+			</a>
+			<a wicket:id="botaoConfirmar" type="button" class="btn btn-success pull-right"
 				onclick="openLoading()" style="margin-right: 10px;">
 				<span class="fa fa-check-square-o"></span> Confirmar
-			</button>
+			</a>
 		</h4>
 		<br class="clear">
 		<table id="table" class="table table-striped table-hover">

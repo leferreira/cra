@@ -5,17 +5,17 @@ import java.util.Date;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 
 public class RelatorioTitulosFormBean implements Serializable {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	private Date dataInicio;
 	private Date dataFim;
 	private String tipoExportacao;
+	private TipoInstituicaoCRA tipoInstituicao;
 	private Instituicao bancoConvenio;
 	private Instituicao cartorio;
 	private SituacaoTituloRelatorio situacaoTituloRelatorio;
@@ -58,6 +58,14 @@ public class RelatorioTitulosFormBean implements Serializable {
 
 	public void setBancoConvenio(Instituicao bancoConvenio) {
 		this.bancoConvenio = bancoConvenio;
+	}
+
+	public TipoInstituicaoCRA getTipoInstituicao() {
+		return tipoInstituicao;
+	}
+
+	public void setTipoInstituicao(TipoInstituicaoCRA tipoInstituicao) {
+		this.tipoInstituicao = tipoInstituicao;
 	}
 
 	public void setCartorio(Instituicao cartorio) {

@@ -37,7 +37,7 @@ public class RelatorioTitulosInputPanel extends Panel {
 	private List<Instituicao> listaInstituicoes;
 	private DropDownChoice<Instituicao> dropDownInstituicao;
 
-	public RelatorioTitulosInputPanel(String id, IModel<?> model, FileUploadField fileUploadField) {
+	public RelatorioTitulosInputPanel(String id, IModel<RelatorioTitulosFormBean> model, FileUploadField fileUploadField) {
 		super(id, model);
 		this.fileUploadField = fileUploadField;
 
@@ -122,8 +122,8 @@ public class RelatorioTitulosInputPanel extends Panel {
 		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
 		choices.add(TipoInstituicaoCRA.CONVENIO);
 		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao",
-				new Model<TipoInstituicaoCRA>(), choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
+		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao =
+				new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -142,10 +142,8 @@ public class RelatorioTitulosInputPanel extends Panel {
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
 					}
 					dropDownInstituicao.setEnabled(true);
-					dropDownInstituicao.setRequired(true);
 				} else {
 					dropDownInstituicao.setEnabled(false);
-					dropDownInstituicao.setRequired(false);
 					getListaInstituicoes().clear();
 				}
 				target.add(dropDownInstituicao);

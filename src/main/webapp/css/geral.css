@@ -33,7 +33,7 @@ body {
 }
 
 .navbar-nav {
-	font-size: 14.5px;
+	font-size: 14px;
 }
 
 .navbar-default .navbar-nav>li>a {
@@ -69,7 +69,7 @@ body {
 }
 
 legend {
-	font-size: 15px !important;
+	font-size: 14px !important;
 }
 
 .navbar-nav>li>.dropdown-menu {
@@ -96,7 +96,7 @@ legend {
 }
 
 .link-pendentes {
-	font-size: 13px;
+	font-size: 14px;
 	color: #fff;
 	font-weight: bolder;
 }

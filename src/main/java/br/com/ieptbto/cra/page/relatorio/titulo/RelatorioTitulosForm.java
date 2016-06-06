@@ -70,8 +70,8 @@ public class RelatorioTitulosForm extends BaseForm<RelatorioTitulosFormBean> {
 					}
 					setResponsePage(new RelatorioTitulosCsvPage(fileUploadField.getFileUpload()));
 				} else {
-					setResponsePage(new RelatorioTitulosCsvPage(bean.getSituacaoTituloRelatorio(), bean.getBancoConvenio(), bean.getCartorio(),
-							dataInicio, dataFim));
+					setResponsePage(new RelatorioTitulosCsvPage(bean.getSituacaoTituloRelatorio(), bean.getTipoInstituicao(), bean.getBancoConvenio(),
+							bean.getCartorio(), dataInicio, dataFim));
 				}
 			}
 

@@ -24,6 +24,7 @@ import br.com.ieptbto.cra.dataProvider.DataProvider;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -47,11 +48,11 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 	private List<TituloRemessa> titulos;
 	private Boolean relatorioCraPendencias;
 
-	public RelatorioTitulosCsvPage(SituacaoTituloRelatorio situacaoTitulo, Instituicao instituicao, Instituicao cartorio, LocalDate dataInicio,
-			LocalDate dataFim) {
+	public RelatorioTitulosCsvPage(SituacaoTituloRelatorio situacaoTitulo, TipoInstituicaoCRA tipoInstituicao, Instituicao instituicao,
+			Instituicao cartorio, LocalDate dataInicio, LocalDate dataFim) {
 		this.tituloRemessa = new TituloRemessa();
 		this.relatorioCraPendencias = false;
-		this.titulos = relatorioMediator.relatorioTitulosPorSituacao(situacaoTitulo, instituicao, cartorio, dataInicio, dataFim);
+		this.titulos = relatorioMediator.relatorioTitulosPorSituacao(situacaoTitulo, tipoInstituicao, instituicao, cartorio, dataInicio, dataFim);
 
 		adicionarComponentes();
 	}
@@ -243,7 +244,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 		});
 
 		DataTable<TituloBean, String> dataTable =
-				new DefaultDataTable<>("table", columns, new DataProvider<TituloBean>(TituloBean.parseToListTituloRemessa(titulos)), 1000);
+				new DefaultDataTable<>("table", columns, new DataProvider<TituloBean>(TituloBean.parseToListTituloRemessa(titulos)), 10000);
 		dataTable.addBottomToolbar(
 				new CustomExportToolbar(dataTable, "CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_")));
 		add(dataTable);
