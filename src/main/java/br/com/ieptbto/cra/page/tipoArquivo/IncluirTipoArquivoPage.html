@@ -1,54 +1,57 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:wicket="http://wicket.apache.org/">
-<head>
-<meta charset="UTF8">
-</head>
 <body>
 	<wicket:extend>
-	<form wicket:id="form" id="form" class="form-horizontal">
-		<h4 class="titulo-top">CADASTRO DE TIPO DE ARQUIVO
-		<span class="pull-right"> 
-			<a href="TipoArquivo" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
-		</span>
+		<h4 class="titulo-top">
+			TIPO DE ARQUIVO <span class="pull-right"> <a href="TipoArquivos" class="link-voltar"><span
+					class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+			</span>
 		</h4>
-		<br style="clear: both;"/>
-		<div class="col-md-12 col-md-offset-1">
-			<div class="form-group">
-			  <label class="col-md-2 control-label" for="tipoArquivo">TIPO ARQUIVO:</label>  
-			  <div class="col-md-6">
-			  <input id="tipoArquivo" name="tipoArquivo" wicket:id="tipoArquivo.label" type="text" placeholder="" class="form-control input-md" required="required">
-			    
-			  </div>
+		<br style="clear: both;" />
+		<form wicket:id="form" id="form">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row">
+					<div class="form-group">
+						<div class="col-md-8">
+							<div class="form-group">
+								<label>Tipo Arquivo</label> <input id="tipoArquivo" name="tipoArquivo"
+									wicket:id="tipoArquivo.label" type="text" class="form-control input-md">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Constante</label> <input id="constante" maxlength="1" name="constante"
+									wicket:id="tipoArquivo.constante" type="text" class="form-control input-md">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Horário de Envio Início</label> <input id="hora" name="horaInicio"
+									wicket:id="dataEnvioInicio" type="text" placeholder="__:__" class="form-control input-md">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Horario de Envio Final</label> <input id="hora1" name="horaFim" maxlength="5"
+									wicket:id="dataEnvioFim" type="text" placeholder="__:__" class="form-control input-md">
+							</div>
+						</div>
+					</div>
+				</div>
+				<br style="clear: both;" />
+				<div class="form-group">
+					<label></label>
+					<button id="salvar" type="submit" name="salvar" class="btn btn-primary pull-right"
+						onclick="openLoading()">
+						<span class="fa fa-save"></span>&nbsp;Salvar
+					</button>
+				</div>
 			</div>
-			<br style="clear: both;"/>				
-			<div class="form-group">
-			  <label class="col-md-2 control-label" for="constante">CONSTANTE:</label>  
-			  <div class="col-md-6">
-			  <input id="constante" maxlength="1" name="constante" wicket:id="tipoArquivo.constante" type="text" placeholder="" class="form-control input-md" required="required">
-			    
-			  </div>
-			</div>
-			<div class="form-group">
-			  <label class="col-md-2 control-label" for="horaInicio">HORA ENVIO IN&Iacute;CIO:</label>  
-			  <div class="col-md-6">
-			  <input id="hora" name="horaInicio" wicket:id="dataEnvioInicio" type="text" placeholder="__:__" class="form-control input-md" required="required">
-			    
-			  </div>
-			</div>
-			<div class="form-group">
-			  <label class="col-md-2 control-label" for="horaFim">HORA ENVIO FIM:</label>  
-			  <div class="col-md-6">
-			  <input id="hora1" name="horaFim" maxlength="5" wicket:id="dataEnvioFim" type="text" placeholder="__:__" class="form-control input-md" required="required">
-			  </div>
-			</div>
-			<div class="form-group">
-			  <label class="col-md-2 control-label" for="salvar"></label>
-			  <div class="col-md-6">
-			    <button id="salvar" type="submit" name="salvar" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
-			  </div>
-			</div>
-		</div>
-	</form>
+		</form>
 	</wicket:extend>
 </body>
 </html>

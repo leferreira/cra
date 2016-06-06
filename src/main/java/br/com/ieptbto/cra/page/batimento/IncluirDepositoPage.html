@@ -1,69 +1,79 @@
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
-<head>
-<meta charset="UTF8">
-</head>
 <body>
 	<wicket:extend>
-		<form wicket:id="form" class="form-horizontal">  
-			<h4 class="titulo-top">DEPÓSITOS
-				<span class="pull-right">
-					<a class="link" type="button" style="font-size: 16px;" wicket:id="botaoVoltar">
-						<span class="fa fa-mail-reply"></span>&nbsp;VOLTAR
-					</a>
+		<form wicket:id="form">
+			<h4 class="titulo-top">
+				DEPÓSITO<span class="pull-right"> <a class="link-voltar" wicket:id="botaoVoltar"> <span
+						class="fa fa-mail-reply"></span>&nbsp;VOLTAR
+				</a>
 				</span>
 			</h4>
-			<br style="clear: both;"/>
-			<div class="col-lg-10 col-md-offset-2">
-			   <div class="form-group">
-				  <label class="col-md-2 control-label">IMPORTADO NA CRA EM:</label>  
-				  <div class="col-md-6">
-				  	<input wicket:id="dataImportacao" class="form-control input-md" disabled="disabled">
-				  </div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-10">
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-6">
+										<label>Importado em</label> <input wicket:id="dataImportacao"
+											class="form-control input-md" disabled="disabled">
+									</div>
+									<div class="col-md-6">
+										<label>Data do Depósito</label> <input wicket:id="data" class="form-control input-md"
+											disabled="disabled">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Nº do Documento</label> <input maxlength="13" wicket:id="numeroDocumento"
+												class="form-control input-md">
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Valor</label>
+											<div class="form-group input-group">
+												<span class="input-group-addon">R$</span> <input maxlength="13" wicket:id="valorCredito"
+													class="form-control input-md">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="form-group">
-				  <label class="col-md-2 control-label">DATA DO DEPÓSITO:</label>  
-				  <div class="col-md-6">
-				  	<input wicket:id="data"  class="form-control input-md" disabled="disabled">
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-2 control-label">Nº DOCUMENTO:</label>  
-				  <div class="col-md-6">
-				  <input maxlength="13" wicket:id="numeroDocumento" class="form-control input-md">
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-2 control-label">VALOR:</label>  
-				  <div class="col-md-6">
-				  <input maxlength="13" wicket:id="valorCredito" class="form-control input-md">
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-2 control-label">TIPO DEPÓSITO:</label>
-				  <div class="col-md-6" style="text-align: left;">
-				     <select wicket:id="tipoDeposito" class="form-control">
-				    </select>
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-2 control-label">SITUACAO:</label>
-				  <div class="col-md-6" style="text-align: left;">
-				    <label class="checkbox-inline inline" wicket:id="situacaoDeposito">
-				    </label>
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-2 control-label" for="endereco">DESCRIÇÃO:</label>
-				  <div class="col-md-6">                     
-				    <textarea class="form-control" maxlength="45" wicket:id="descricao"></textarea>
-				  </div>
-				</div>
-				<div class="form-group">
-				  <label class="col-md-2 control-label"></label>
-				  <div class="col-md-6"> 
-				    <button type="submit" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
-				  </div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-10">
+							<div class="form-group">
+								<label>Situação</label> <label class="checkbox-inline inline" wicket:id="situacaoDeposito">
+								</label>
+							</div>
+							<div class="form-group">
+								<label>Tipo Depósito</label> <select wicket:id="tipoDeposito" class="form-control">
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Descrição</label>
+								<textarea class="form-control" maxlength="45" wicket:id="descricao"></textarea>
+							</div>
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<button type="submit" class="btn btn-primary pull-right">
+									<span class="fa fa-save"></span>&nbsp;Salvar
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>

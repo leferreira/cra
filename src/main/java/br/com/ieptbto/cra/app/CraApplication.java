@@ -85,6 +85,7 @@ import br.com.ieptbto.cra.page.titulo.MonitorarTitulosPage;
 import br.com.ieptbto.cra.page.usuario.IncluirUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.ListaUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.PerfilUsuarioPage;
+import br.com.ieptbto.cra.page.webservice.WebServiceConfigPage;
 import br.com.ieptbto.cra.security.ISecureApplication;
 import br.com.ieptbto.cra.security.UserRoleAuthorizationStrategy;
 import br.com.ieptbto.cra.security.UserRolesAuthorizer;
@@ -142,7 +143,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		// don't throw exceptions for missing translations
 		getResourceSettings().setThrowExceptionOnMissingResource(false);
-		getApplicationSettings().setPageExpiredErrorPage(NotFoundPage.class);
+		getApplicationSettings().setPageExpiredErrorPage(LoginPage.class);
 		getApplicationSettings().setAccessDeniedPage(NotFoundPage.class);
 		getApplicationSettings().setInternalErrorPage(NotFoundPage.class);
 
@@ -161,10 +162,12 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	}
 
 	private void montaPaginas() {
+		mountPage("NotFoundPage", NotFoundPage.class);
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
 		mountPage("SobreCra", SobreCraPage.class);
 		mountPage("CentralDeAcoes", CentralDeAcoesPage.class);
+		mountPage("WebServiceConfig", WebServiceConfigPage.class);
 		mountPage("CentralNacionalProtesto", CentralNacionalProtestoPage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
 
@@ -192,7 +195,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("IncluirMunicipio", IncluirMunicipioPage.class);
 		mountPage("TipoInstituicoes", ListaTipoInstituicaoPage.class);
 		mountPage("IncluirTipoInstituicao", IncluirTipoInstituicaoPage.class);
-		mountPage("TipoArquivo", ListaTipoArquivoPage.class);
+		mountPage("TipoArquivos", ListaTipoArquivoPage.class);
 		mountPage("IncluirTipoArquivo", IncluirTipoArquivoPage.class);
 		mountPage("Usuarios", ListaUsuarioPage.class);
 		mountPage("IncluirUsuario", IncluirUsuarioPage.class);

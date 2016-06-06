@@ -28,8 +28,8 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoConfirmacaoVO;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.ConfirmacaoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
+import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoAcaoLog;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
@@ -65,7 +65,7 @@ public class ConfirmacaoService extends CraWebService {
 	 */
 	public String processar(String nomeArquivo, Usuario usuario) {
 		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
-		setTipoAcaoLog(TipoAcaoLog.DOWNLOAD_ARQUIVO_CONFIRMACAO);
+		setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_CONFIRMACAO);
 		ArquivoVO arquivoVO = null;
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
@@ -86,21 +86,19 @@ public class ConfirmacaoService extends CraWebService {
 				return setRespostaArquivoEmProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 			}
 
-			setMensagem(
-					gerarResposta(usuario.getInstituicao().getLayoutPadraoXML(), remessas, getNomeArquivo(), CONSTANTE_CONFIRMACAO_XML));
-			loggerCra.sucess(getUsuario(), getTipoAcaoLog(), "Arquivo de Confirmação " + nomeArquivo + " recebido com sucesso por "
-					+ getUsuario().getInstituicao().getNomeFantasia() + ".");
+			setMensagem(gerarResposta(usuario.getInstituicao().getLayoutPadraoXML(), remessas, getNomeArquivo(), CONSTANTE_CONFIRMACAO_XML));
+			loggerCra.sucess(getUsuario(), getCraAcao(),
+					"Arquivo de Confirmação " + nomeArquivo + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e.getCause());
-			loggerCra.error(getUsuario(), getTipoAcaoLog(), "Erro interno ao construir o arquivo de Confirmação " + nomeArquivo
-					+ " recebido por " + getUsuario().getInstituicao().getNomeFantasia() + ".", e);
+			loggerCra.error(getUsuario(), getCraAcao(), "Erro interno ao construir o arquivo de Confirmação " + nomeArquivo + " recebido por "
+					+ getUsuario().getInstituicao().getNomeFantasia() + ".", e);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return getMensagem();
 	}
 
-	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta, List<RemessaVO> remessas, String nomeArquivo,
-			String constanteConfirmacaoXml) {
+	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta, List<RemessaVO> remessas, String nomeArquivo, String constanteConfirmacaoXml) {
 		StringBuffer string = new StringBuffer();
 		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
 		String cabecalho = "<confirmacao>";
@@ -161,7 +159,7 @@ public class ConfirmacaoService extends CraWebService {
 	 * @return
 	 */
 	public String enviarConfirmacao(String nomeArquivo, Usuario usuario, String dados) {
-		setTipoAcaoLog(TipoAcaoLog.ENVIO_ARQUIVO_CONFIRMACAO);
+		setCraAcao(CraAcao.ENVIO_ARQUIVO_CONFIRMACAO);
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 
@@ -174,23 +172,22 @@ public class ConfirmacaoService extends CraWebService {
 			}
 			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
-				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo,
-						arquivoJaEnviado);
+				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo, arquivoJaEnviado);
 			}
 
 			setArquivoConfirmacaoVO(converterStringArquivoVO(dados));
 			setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
 			setMensagemXml(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo));
-			loggerCra.sucess(usuario, getTipoAcaoLog(), "O arquivo de Confirmação " + nomeArquivo + ", enviado por "
+			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Confirmação " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex.getCause());
-			loggerCra.error(getUsuario(), getTipoAcaoLog(), ex.getMessage());
+			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage());
 			return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info(e.getMessage(), e.getCause());
-			loggerCra.error(getUsuario(), getTipoAcaoLog(), e.getMessage(), e);
+			loggerCra.error(getUsuario(), getCraAcao(), e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
 		return gerarMensagem(getMensagemXml(), CONSTANTE_CONFIRMACAO_XML);

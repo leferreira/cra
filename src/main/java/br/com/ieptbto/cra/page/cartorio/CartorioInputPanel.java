@@ -43,10 +43,12 @@ public class CartorioInputPanel extends Panel {
 	private void adicionarCampos() {
 		add(campoInstituicao());
 		add(campoRazaoSocial());
+		add(textFieldTabeliao());
 		add(campoCnpj());
 		add(campoEmail());
 		add(campoContato());
 		add(campoEndereco());
+		add(textFieldBairro());
 		add(campoResponsavel());
 		add(campoStatus());
 		add(comboMunicipios());
@@ -69,6 +71,14 @@ public class CartorioInputPanel extends Panel {
 		TextField<String> textField = new TextField<String>("razaoSocial");
 		textField.setLabel(new Model<String>("Razão Social"));
 		textField.setOutputMarkupId(true);
+		return textField;
+	}
+
+	private TextField<String> textFieldTabeliao() {
+		TextField<String> textField = new TextField<String>("tabeliao");
+		textField.setLabel(new Model<String>("Tabelião"));
+		textField.setOutputMarkupId(true);
+		textField.setRequired(true);
 		return textField;
 	}
 
@@ -138,6 +148,12 @@ public class CartorioInputPanel extends Panel {
 	private TextField<String> campoCodigoCartorio() {
 		TextField<String> text = new TextField<String>("codigoCartorio");
 		text.setLabel(new Model<String>("Código do Cartório"));
+		return text;
+	}
+
+	private TextField<String> textFieldBairro() {
+		TextField<String> text = new TextField<String>("bairro");
+		text.setLabel(new Model<String>("Bairro"));
 		return text;
 	}
 

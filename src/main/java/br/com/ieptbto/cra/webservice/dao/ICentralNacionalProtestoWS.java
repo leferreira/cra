@@ -36,6 +36,15 @@ public interface ICentralNacionalProtestoWS {
 	public String centralNacionalProtesto(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
 
 	/**
+	 * @param login
+	 * @param senha
+	 * @return
+	 */
+	@WebMethod(operationName = "cartoriosDisponiveis")
+	@GET
+	public String cartoriosDisponiveis(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
+
+	/**
 	 * @param documentoDevedor
 	 * @return
 	 */

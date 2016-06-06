@@ -37,7 +37,7 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	@WebMethod(operationName = "cartorio")
 	@GET
 	public String cartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
-	        @WebParam(name = "user_dados") String dados) {
+			@WebParam(name = "user_dados") String dados) {
 		init(login, senha);
 		return centralNacionalProtestoCartorioService.processar(usuario, dados);
 	}
@@ -48,6 +48,14 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	public String centralNacionalProtesto(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
 		init(login, senha);
 		return centralNacionalProtestoService.processar(usuario);
+	}
+
+	@Override
+	@WebMethod(operationName = "cartoriosDisponiveis")
+	@GET
+	public String cartoriosDisponiveis(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+		init(login, senha);
+		return centralNacionalProtestoService.consultar(usuario);
 	}
 
 	@Override
@@ -67,8 +75,7 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		}
 
-		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context
-		        .getBean("centralNacionalProtestoCartorioService");
+		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
 
 		logger.info("O CPF/CNPJ " + documentoDevedor + " foi consultado na Central Nacional de Protesto. ");
 
@@ -80,8 +87,7 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		}
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
-		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context
-		        .getBean("centralNacionalProtestoCartorioService");
+		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
 		centralNacionalProtestoService = (CentralNacionalProtestoService) context.getBean("centralNacionalProtestoService");
 		setUsuario(login, senha);
 	}

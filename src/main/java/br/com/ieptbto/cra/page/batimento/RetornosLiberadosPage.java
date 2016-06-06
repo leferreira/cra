@@ -56,13 +56,13 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 	InstituicaoMediator instituicaoMediator;
 
 	private Retorno retorno;
-
 	private List<Remessa> arquivosAguardandoLiberacao;
 	private TextField<String> campoDataBatimento;
 	private LocalDate dataBatimento;
 
 	public RetornosLiberadosPage() {
 		this.retorno = new Retorno();
+
 		adicionarComponentes();
 	}
 
@@ -70,6 +70,7 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 		this.retorno = new Retorno();
 		this.dataBatimento = dataBatimento;
 		this.arquivosAguardandoLiberacao = retornoMediator.buscarRetornosParaPagamentoInstituicao(dataBatimento);
+
 		adicionarComponentes();
 	}
 
@@ -108,8 +109,7 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 
 	private TextField<String> campoDataBatimento() {
 		if (dataBatimento != null) {
-			return campoDataBatimento =
-					new TextField<String>("dataBatimento", new Model<String>(DataUtil.localDateToString(dataBatimento)));
+			return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>(DataUtil.localDateToString(dataBatimento)));
 		} else {
 			campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>());
 		}

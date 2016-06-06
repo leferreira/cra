@@ -1,30 +1,30 @@
 body {
-	font-family: 'Roboto', sans-serif;
-	font-size: 13px;   
+	font-family: 'Open Sans', sans-serif;
+	font-size: 13px;
 	background-color: #337ab7;
 }
 
-.clear{
+.clear {
 	clear: both;
 }
 
 .container-layout {
 	width: 100%;
-    background-color: #fff;
-    border-top: 10px solid #337AB7;
+	background-color: #fff;
+	border-top: 10px solid #337AB7;
 }
 
-.container{
-	width: 95%; 
+.container {
+	width: 95%;
 }
 
-.footer-cra{
-    background-color: #337AB7;
-    width: 100%;
+.footer-cra {
+	background-color: #337AB7;
+	width: 100%;
 }
 
-.text-footer{
-	padding: 10px 0px;   
+.text-footer {
+	padding: 10px 0px;
 	color: #F8F8F8;
 }
 
@@ -40,7 +40,8 @@ body {
 	color: #337AB7;
 }
 
-.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th,
+	.table>thead>tr>td, .table>thead>tr>th {
 	padding: 5px;
 }
 
@@ -82,6 +83,9 @@ legend {
 #retornoLiberado {
 	background-color: rgba(255, 235, 59, 0.74) !important;
 }
+#retornoPendente10Dias{
+	    background-color: rgba(217, 83, 79, 0.32) !important;
+}
 
 .dataTables_filter {
 	float: right;
@@ -90,20 +94,29 @@ legend {
 .panel-body {
 	background-color: #F8F8F8;
 }
-.link-pendentes{ 
-	font-size: 13px; color: #fff; font-weight: bolder; 
+
+.link-pendentes {
+	font-size: 13px;
+	color: #fff;
+	font-weight: bolder;
 }
-.link-pendentes:hover{ 
-	color: #fff; 
+
+.link-pendentes:hover {
+	color: #fff;
+}
+
+.link-voltar {
+	font-size: 14px;
+	font-weight: bold;
 }
 
 .list-group-item-heading {
-    border-bottom: #eee 1px solid;
+	border-bottom: #eee 1px solid;
 }
 
-.btn-pendentes{
-    position: absolute;
-    margin-top: -5px;
+.btn-pendentes {
+	position: absolute;
+	margin-top: -5px;
 }
 
 .col-10 {
@@ -117,8 +130,9 @@ legend {
 }
 
 .col-30 {
-	width: 30%;
-	float: left;
+	width: 34%;
+    float: left;
+    margin-left: 10px;
 }
 
 .col-40 {
@@ -127,7 +141,7 @@ legend {
 }
 
 .col-70 {
-	width: 70%;
+	width: 65%;
 	float: left;
 }
 
@@ -137,7 +151,7 @@ legend {
 }
 
 dd, dt {
-    line-height: 1.55;
+	line-height: 1.55;
 }
 
 .table-responsive {
@@ -150,10 +164,10 @@ dd, dt {
 	font-weight: bold;
 }
 
-.panel-history{
-	padding-left: 0px; padding-right: 0px;
+.panel-history {
+	padding-left: 0px;
+	padding-right: 0px;
 }
-
 
 .historico {
 	width: 190px;
@@ -162,11 +176,6 @@ dd, dt {
 .cabecalho-painel {
 	font-size: 16px;
 	font-weight: bolder;
-	font-family: Titillium Web;
-}
-
-.btn-primary {
-	font-family: Titillium Web;
 }
 
 #table_filter {
@@ -236,8 +245,7 @@ dd, dt {
 
 .titulo-top {
 	text-align: left;
-	font-size: 22px;
-	font-family: 'Titillium Web', sans-serif;
+	font-size: 18px;
 }
 
 .col-center {
@@ -257,21 +265,22 @@ dd, dt {
 	font-size: 13px;
 }
 
-.feedbackPanel{
+.feedbackPanel {
 	margin-left: -40px;
-    margin-top: 5px;
+	margin-top: 5px;
 }
 
-.feedbackPanel > li {
+.feedbackPanel>li {
 	list-style: none;
 }
 
-.alert{
-    margin-bottom: 10px;
+.alert {
+	margin-bottom: 10px;
 }
-.alert > span{
+
+.alert>span {
 	border-color: transparent;
-   font-size: 14px;	
+	font-size: 14px;
 }
 
 #Aguardando {
@@ -310,7 +319,7 @@ dd, dt {
 	width: 100%;
 }
 
-#info-titulo{
+#info-titulo {
 	background: #6D95B7 none repeat scroll 0% 0%;
 	color: #FFF;
 	font-weight: bold;
@@ -319,7 +328,7 @@ dd, dt {
 	width: 100%;
 }
 
-#ocorrencia-erro{
+#ocorrencia-erro {
 	background: #B33B3B none repeat scroll 0% 0%;
 	color: #FFF;
 	font-weight: bold;
@@ -327,7 +336,7 @@ dd, dt {
 	font-size: 12px;
 }
 
-#ocorrencia-sucesso{
+#ocorrencia-sucesso {
 	color: #FFF;
 	background: #209515 none repeat scroll 0% 0%;
 	font-weight: bold;
@@ -335,49 +344,52 @@ dd, dt {
 	font-size: 12px;
 }
 
-#ocorrencia-alerta{
+#ocorrencia-alerta {
 	color: #FFF;
 	background: #f0ad4e none repeat scroll 0% 0%;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 12px; 
+	font-size: 12px;
 }
 
-.media-body{
+.media-body {
 	font-size: 14px;
 }
 
-.first,.prev,.goto,.next,.last{
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
+.first, .prev, .goto, .next, .last {
+	color: #333;
+	background-color: #fff;
+	border-color: #ccc;
 }
-.first,.prev,.goto,.next,.last {
+
+.first, .prev, .goto, .next, .last {
 	color: #337AB7;
-    display: inline-block;
-    padding: 6px 12px;
-    margin-bottom: 0;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
-    border-radius: 4px;
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
 }
-.first,.last{
+
+.first, .last {
 	display: none;
 }
-.prev:hover,.goto:hover,.next:hover{
+
+.prev:hover, .goto:hover, .next:hover {
 	background-color: #F0F0F0;
 }
 /*
@@ -442,24 +454,39 @@ span:hover.tooltips span {
 /**
 Exporter csv
 */
-.export-td > span > a{
-    font-weight: 700;
-    font-size: 15px;
+.export-td>span>a {
+	font-weight: 700;
+	font-size: 15px;
 }
 
-.col-action{
+.col-action {
 	width: 80px;
 }
-.excel-icon{
+
+.excel-icon {
 	background-color: #eee;
-    color: #3c763d;
-    font-size: 1.3em;
+	color: #3c763d;
+	font-size: 1.3em;
 }
-.pdf-icon{
+
+.pdf-icon {
 	background-color: #eee;
-    color: #A94442;
-    font-size: 1.3em;
+	color: #A94442;
+	font-size: 1.3em;
 }
+
 .pagination {
-	    float: right!important;
-} 
+	float: right !important;
+}
+
+.norecords-td {
+	display: none;
+}
+.bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-default, .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-default{
+	color: #f5f5f5;
+    background: #d9534f;
+}
+.extrato{
+	font-size: 11.5px;
+	font-weight: bold;
+}
