@@ -121,7 +121,9 @@ public class BatimentoPage extends BasePage<Remessa> {
 	}
 
 	private ListView<Remessa> carregarArquivosRetorno() {
-		return remessas = new ListView<Remessa>("retornos", retornoMediator.buscarRetornosParaBatimento()) {
+		return remessas = new ListView<Remessa>("retornos", new ArrayList<Remessa>()) {
+			// return remessas = new ListView<Remessa>("retornos",
+			// retornoMediator.buscarRetornosParaBatimento()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;

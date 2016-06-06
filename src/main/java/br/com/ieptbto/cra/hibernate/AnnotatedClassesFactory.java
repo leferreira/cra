@@ -174,5 +174,4 @@ public class AnnotatedClassesFactory {
 	public static List<Class<?>> getClassesAnotadas() {
 		return classes;
 	}
-
 }

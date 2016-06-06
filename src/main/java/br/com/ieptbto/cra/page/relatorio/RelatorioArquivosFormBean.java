@@ -59,5 +59,4 @@ public class RelatorioArquivosFormBean implements Serializable {
 	public void setInstituicao(Instituicao instituicao) {
 		this.instituicao = instituicao;
 	}
-
 }

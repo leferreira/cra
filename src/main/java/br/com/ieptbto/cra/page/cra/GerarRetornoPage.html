@@ -1,8 +1,5 @@
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
-<head>
-<meta charset="UTF8">
-</head>
 <body>
 	<wicket:extend>
 		<form wicket:id="form">
@@ -14,8 +11,7 @@
 				</span>
 			</h4>
 			<br style="clear: both;" />
-			<table id="table"
-				class="table table-striped table-hover table-responsive">
+			<table id="table" class="table table-striped table-hover table-responsive">
 				<thead>
 					<tr>
 						<th class="col-center">DATA ENVIO</th>
@@ -34,14 +30,12 @@
 						<td class="col-center" wicket:id="arquivo.dataEnvio"></td>
 						<td class="col-center" wicket:id="horaEnvio"></td>
 						<td class="pull-left" wicket:id="instituicaoOrigem.nomeFantasia"></td>
-						<td class="col-center">
-							<a wicket:id="linkArquivo"> 
-								<span class="link" wicket:id="arquivo.nomeArquivo"></span>
-							</a>
-						</td>
+						<td class="col-center"><a wicket:id="linkArquivo"> <span class="link"
+								wicket:id="arquivo.nomeArquivo"></span>
+						</a></td>
 						<td class="col-center" wicket:id="sequencialCabecalho"></td>
 						<td class="col-right valor" wicket:id="valorPagos"></td>
- 						<td class="col-right valor" wicket:id="valorCustas"></td>
+						<td class="col-right valor" wicket:id="valorCustas"></td>
 						<td class="col-center">
 							<button type="button" wicket:id="gerarRelatorio" style="float: inherit;">
 								<span class="col-center fa fa-print"></span>

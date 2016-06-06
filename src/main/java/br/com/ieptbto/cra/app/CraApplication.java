@@ -1,6 +1,3 @@
-/**
- * 
- */
 package br.com.ieptbto.cra.app;
 
 import java.util.Locale;
@@ -275,5 +272,4 @@ public class CraApplication extends WebApplication implements ISecureApplication
 	public static CraApplication get() {
 		return (CraApplication) Application.get();
 	}
-
 }

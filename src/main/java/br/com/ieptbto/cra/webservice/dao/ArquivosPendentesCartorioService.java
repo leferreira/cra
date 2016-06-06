@@ -33,7 +33,7 @@ import br.com.ieptbto.cra.webservice.VO.RemessaPendente;
  *
  */
 @Service
-public class ArquivosPendentesCartorioService extends CraWebService{
+public class ArquivosPendentesCartorioService extends CraWebService {
 
 	@Autowired
 	private ArquivoMediator arquivoMediator;
@@ -41,24 +41,23 @@ public class ArquivosPendentesCartorioService extends CraWebService{
 	private RemessaMediator remessaMediator;
 	@Autowired
 	private DesistenciaProtestoMediator desistenciaMediator;
-	@Autowired 
+	@Autowired
 	private InstituicaoMediator instituicaoMediator;
-	
+
 	public String buscarArquivosPendentesCartorio(Usuario usuario) {
 		this.usuario = usuario;
-		this.nomeArquivo= StringUtils.EMPTY;
-		
+		this.nomeArquivo = StringUtils.EMPTY;
+
 		Arquivo arquivo = null;
 		try {
 			if (usuario == null) {
 				return setRespostaUsuarioInvalido();
 			}
 			Instituicao instituicaoUsuario = instituicaoMediator.carregarInstituicaoPorId(usuario.getInstituicao());
-			arquivo = remessaMediator.arquivosPendentes(instituicaoUsuario); 
-			if (arquivo.getRemessas().isEmpty() &&
-					arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty() &&
-					arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty() &&
-					arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
+			arquivo = remessaMediator.arquivosPendentes(instituicaoUsuario);
+			if (arquivo.getRemessas().isEmpty() && arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()
+					&& arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()
+					&& arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
 				return gerarMensagemNaoHaArquivosPendentes();
 			}
 		} catch (Exception e) {
@@ -67,63 +66,65 @@ public class ArquivosPendentesCartorioService extends CraWebService{
 		}
 		return gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivo), CONSTANTE_RELATORIO_XML);
 	}
-	
+
 	private RelatorioArquivosPendentes converterArquivoParaRelatorioArquivosPendentes(Arquivo arquivo) {
 		RelatorioArquivosPendentes relatorioArquivosPendentes = new RelatorioArquivosPendentes();
 
 		RemessaPendente remessaPendentes = new RemessaPendente();
 		if (!arquivo.getRemessas().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
-			for (Remessa remessa : arquivo.getRemessas()){
+			for (Remessa remessa : arquivo.getRemessas()) {
 				remessa.setArquivo(arquivoMediator.carregarArquivoPorId(remessa.getArquivo()));
 				nomeArquivos.add(remessa.getArquivo().getNomeArquivo());
 			}
 			remessaPendentes.setArquivos(nomeArquivos);
 		}
-		
+
 		CancelamentoPendente cancelamentoPendentes = new CancelamentoPendente();
 		if (!arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
-			for (CancelamentoProtesto cancelamento : arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto()){
-				cancelamento.setRemessaCancelamentoProtesto(desistenciaMediator.carregarRemessaCancelamentoPorId(cancelamento.getRemessaCancelamentoProtesto()));
+			for (CancelamentoProtesto cancelamento : arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
+				cancelamento.setRemessaCancelamentoProtesto(
+						desistenciaMediator.carregarRemessaCancelamentoPorId(cancelamento.getRemessaCancelamentoProtesto()));
 				nomeArquivos.add(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo());
 			}
 			cancelamentoPendentes.setArquivos(nomeArquivos);
 		}
-		
+
 		DesistenciaPendente desistenciaPendentes = new DesistenciaPendente();
-		if (!arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) { 
+		if (!arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
-			for (DesistenciaProtesto desistencia : arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto()){
-				desistencia.setRemessaDesistenciaProtesto(desistenciaMediator.carregarRemessaDesistenciaPorId(desistencia.getRemessaDesistenciaProtesto()));
+			for (DesistenciaProtesto desistencia : arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
+				desistencia.setRemessaDesistenciaProtesto(
+						desistenciaMediator.carregarRemessaDesistenciaPorId(desistencia.getRemessaDesistenciaProtesto()));
 				nomeArquivos.add(desistencia.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo());
 			}
 			desistenciaPendentes.setArquivos(nomeArquivos);
 		}
-		
+
 		AutorizaCancelamentoPendente autorizaCancelamentoPendentes = new AutorizaCancelamentoPendente();
 		if (!arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
-			for (AutorizacaoCancelamento ac : arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento()){
+			for (AutorizacaoCancelamento ac : arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento()) {
 				ac.setRemessaAutorizacaoCancelamento(desistenciaMediator.carregarRemessaAutorizacaoPorId(ac.getRemessaAutorizacaoCancelamento()));
 				nomeArquivos.add(ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo());
 			}
 			autorizaCancelamentoPendentes.setArquivos(nomeArquivos);
 		}
-		
+
 		relatorioArquivosPendentes.setRemessas(remessaPendentes);
 		relatorioArquivosPendentes.setCancelamentos(cancelamentoPendentes);
 		relatorioArquivosPendentes.setDesistencias(desistenciaPendentes);
 		relatorioArquivosPendentes.setAutorizaCancelamentos(autorizaCancelamentoPendentes);
-		return relatorioArquivosPendentes; 
-	} 
+		return relatorioArquivosPendentes;
+	}
 
 	private String setRespostaUsuarioInvalido() {
 		StringBuffer mensagem = new StringBuffer();
 		mensagem.append("<?xml version=\'1.0\' encoding=\'UTF-8\'?>");
 		mensagem.append("<relatorio>");
 		mensagem.append("	<descricao>");
-		mensagem.append("		<dataMovimento>"+ DataUtil.localDateTimeToString(new LocalDateTime()) +"</dataMovimento>");
+		mensagem.append("		<dataMovimento>" + DataUtil.localDateTimeToString(new LocalDateTime()) + "</dataMovimento>");
 		mensagem.append("	</descricao>");
 		mensagem.append("	<final>0001</final>");
 		mensagem.append("	<descricao_final>Falha na autenticação.</descricao_final>");
@@ -136,7 +137,7 @@ public class ArquivosPendentesCartorioService extends CraWebService{
 		mensagem.append("<?xml version=\'1.0\' encoding=\'UTF-8\'?>");
 		mensagem.append("<relatorio>");
 		mensagem.append("	<descricao>");
-		mensagem.append("		<dataMovimento>"+ DataUtil.localDateTimeToString(new LocalDateTime()) +"</dataMovimento>");
+		mensagem.append("		<dataMovimento>" + DataUtil.localDateTimeToString(new LocalDateTime()) + "</dataMovimento>");
 		mensagem.append("	</descricao>");
 		mensagem.append("	<final>0000</final>");
 		mensagem.append("	<descricao_final>Não há arquivos pendentes.</descricao_final>");

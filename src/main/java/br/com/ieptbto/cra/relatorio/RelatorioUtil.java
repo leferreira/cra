@@ -75,8 +75,8 @@ public class RelatorioUtil implements Serializable {
 		return null;
 	}
 
-	public JasperPrint gerarRelatorioArquivos(TipoArquivoEnum tipoArquivo, TipoRelatorio tipoRelatorio, Instituicao instituicao,
-			LocalDate dataInicio, LocalDate dataFim) throws JRException {
+	public JasperPrint gerarRelatorioArquivos(TipoArquivoEnum tipoArquivo, TipoRelatorio tipoRelatorio, Instituicao instituicao, LocalDate dataInicio,
+			LocalDate dataFim) throws JRException {
 		this.instituicao = instituicao;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
@@ -111,8 +111,7 @@ public class RelatorioUtil implements Serializable {
 			if (situacaoTitulosRelatorio.equals(SituacaoTituloRelatorio.GERAL)) {
 				if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
 						|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
-					jasperReport =
-							JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioTitulosGeral_Instituicao.jrxml"));
+					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioTitulosGeral_Instituicao.jrxml"));
 				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 				}
@@ -188,8 +187,7 @@ public class RelatorioUtil implements Serializable {
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
 	}
 
-	public JasperPrint gerarRelatorioCustasCRA(Usuario user, Instituicao instituicao, LocalDate dataInicio, LocalDate dataFim)
-			throws JRException {
+	public JasperPrint gerarRelatorioCustasCRA(Usuario user, Instituicao instituicao, LocalDate dataInicio, LocalDate dataFim) throws JRException {
 		this.instituicao = instituicao;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;

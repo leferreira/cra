@@ -152,5 +152,4 @@ public class CentralNacionalProtestoService extends CnpWebService {
 		}
 		return null;
 	}
-
 }
