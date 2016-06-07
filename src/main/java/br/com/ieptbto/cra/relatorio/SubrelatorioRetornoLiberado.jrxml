@@ -13,7 +13,7 @@
 	sum (CASE WHEN ret.tipo_ocorrencia='2' THEN 1 ELSE 0 END) AS protestados,
 	sum (CASE WHEN ret.tipo_ocorrencia='3' THEN 1 ELSE 0 END) AS retirados,
 	sum (CASE WHEN ret.tipo_ocorrencia='4' THEN 1 ELSE 0 END) AS sustados,
-	sum (CASE WHEN ret.tipo_ocorrencia='5' THEN 1 ELSE 0 END) AS devolvidos,
+	sum (CASE WHEN ret.tipo_ocorrencia='5' OR ret.tipo_ocorrencia='6' THEN 1 ELSE 0 END) AS devolvidos,
 	sum (CASE WHEN ret.tipo_ocorrencia='1' THEN ret.valor_saldo_titulo ELSE 0 END) AS VALOR_PAGOS,
 	sum (CASE WHEN ret.tipo_ocorrencia='2' OR ret.tipo_ocorrencia='3' OR ret.tipo_ocorrencia='6' THEN ret.valor_custa_cartorio ELSE 0 END)
 		AS CUSTAS_CARTORIO,

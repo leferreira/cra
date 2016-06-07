@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
 	<property name="ireport.zoom" value="2.5937424601000107"/>
-	<property name="ireport.x" value="1059"/>
+	<property name="ireport.x" value="1147"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="NOME_ARQUIVO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -13,7 +13,6 @@
 	<parameter name="ID_REMESSA" class="java.lang.Long"/>
 	<parameter name="INSTITUICAO_ENVIO" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.lang.Object"/>
-	<parameter name="TOTAL_VALOR_CUSTAS" class="java.math.BigDecimal"/>
 	<queryString>
 		<![CDATA[select row_number() over ( order by tit.nome_devedor ) as linha,
 	tit.nosso_numero,
@@ -38,7 +37,7 @@
 		WHEN ret.tipo_ocorrencia='3' THEN 3
 		WHEN ret.tipo_ocorrencia='4' THEN 4
 		WHEN ret.tipo_ocorrencia='5' THEN 5
-		WHEN ret.tipo_ocorrencia='6' THEN 5
+		WHEN ret.tipo_ocorrencia='6' THEN 6
 	END as ocorrencia,
 	ret.valor_demais_despesas
 from tb_retorno AS ret
@@ -73,8 +72,8 @@ ORDER BY tit.nome_devedor ASC]]>
 	<variable name="SUSTADOS" class="java.lang.Long" calculation="Count">
 		<variableExpression><![CDATA[$F{ocorrencia} == 4 ? $F{ocorrencia} : null]]></variableExpression>
 	</variable>
-	<variable name="DEVOLVIDOS" class="java.lang.Long" calculation="Count">
-		<variableExpression><![CDATA[$F{ocorrencia} == 5 || $F{ocorrencia} == 6 ? $F{ocorrencia} : null]]></variableExpression>
+	<variable name="DEVOLVIDOS" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{ocorrencia} == 5 || $F{ocorrencia} == 6 ? 1 : 0]]></variableExpression>
 	</variable>
 	<variable name="TOTAL_TITULOS" class="java.lang.Long" calculation="Count">
 		<variableExpression><![CDATA[$F{linha}]]></variableExpression>

@@ -45,11 +45,6 @@
 		<property name="automaticTestTable"><value>${c3p0.automaticTestTable}</value></property>
 	</bean>
 
-	<!-- CONNECT LOCALHOST TOMCAT -->
-<!-- 	<bean name="dataSource" id="basicDataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
-<!-- 		<property name="jndiName" value="java:comp/env/jdbc/localhost/nova_cra"/> -->
-<!-- 	</bean> -->
-	
 	<bean class="br.com.ieptbto.cra.hibernate.AnnotatedClassesFactory" id="AnnotatedClassesFactory" factory-method="getClassesAnotadas"  />
 
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" destroy-method="destroy">
