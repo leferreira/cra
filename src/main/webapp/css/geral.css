@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-	width: 95%;
+	width: 99%;
 }
 
 .footer-cra {
@@ -33,7 +33,7 @@ body {
 }
 
 .navbar-nav {
-	font-size: 14px;
+	font-size: 13px;
 }
 
 .navbar-default .navbar-nav>li>a {
@@ -69,7 +69,7 @@ body {
 }
 
 legend {
-	font-size: 14px !important;
+	font-size: 13px !important;
 }
 
 .navbar-nav>li>.dropdown-menu {
@@ -96,7 +96,7 @@ legend {
 }
 
 .link-pendentes {
-	font-size: 14px;
+	font-size: 13px;
 	color: #fff;
 	font-weight: bolder;
 }
@@ -106,12 +106,8 @@ legend {
 }
 
 .link-voltar {
-	font-size: 14px;
+	font-size: 13px;
 	font-weight: bold;
-}
-
-.list-group-item-heading {
-	border-bottom: #eee 1px solid;
 }
 
 .btn-pendentes {
@@ -174,7 +170,7 @@ dd, dt {
 }
 
 .cabecalho-painel {
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: bolder;
 }
 
@@ -189,7 +185,7 @@ dd, dt {
 .destaque {
 	color: red;
 	font-weight: bold;
-	font-size: 15px;
+	font-size: 14px;
 }
 
 .icon-home {
@@ -201,7 +197,7 @@ dd, dt {
 }
 
 .chat-body {
-	font-size: 15px;
+	font-size: 13px;
 }
 
 .checkbox-inline br {
@@ -227,7 +223,7 @@ dd, dt {
 }
 
 .inline {
-	font-size: 16px;
+	font-size: 14px;
 	margin-left: -25px;
 }
 
@@ -245,7 +241,7 @@ dd, dt {
 
 .titulo-top {
 	text-align: left;
-	font-size: 18px;
+	font-size: 16px;
 }
 
 .col-center {
@@ -270,7 +266,7 @@ dd, dt {
 	margin-top: 5px;
 }
 
-.feedbackPanel>li {
+.feedbackPanel>li { 
 	list-style: none;
 }
 
@@ -288,7 +284,7 @@ dd, dt {
 	background: #209515 none repeat scroll 0% 0%;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10px;
+	font-size: 11px;
 	width: 100%;
 }
 
@@ -297,7 +293,7 @@ dd, dt {
 	color: #FFF;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10px;
+	font-size: 11px;
 	width: 100%;
 }
 
@@ -306,7 +302,7 @@ dd, dt {
 	color: #FFF;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10px;
+	font-size: 11px;
 	width: 100%;
 }
 
@@ -318,7 +314,7 @@ dd, dt {
 	font-size: 11px;
 	width: 100%;
 }
-
+ 
 #info-titulo {
 	background: #6D95B7 none repeat scroll 0% 0%;
 	color: #FFF;
@@ -359,7 +355,7 @@ dd, dt {
 .first, .prev, .goto, .next, .last {
 	color: #333;
 	background-color: #fff;
-	border-color: #ccc;
+	border-color: #ccc; 
 }
 
 .first, .prev, .goto, .next, .last {
@@ -421,7 +417,7 @@ span.tooltips span {
 	position: absolute;
 	color: #FFFFFF;
 	background: #000;
-	font-size: 15px;
+	font-size: 14px;
 	text-align: center;
 	visibility: hidden;
 	border-radius: 6px;
@@ -489,4 +485,7 @@ Exporter csv
 .extrato{
 	font-size: 11.5px;
 	font-weight: bold;
+}
+.dropdown-menu{
+    font-size: 13px; 
 }

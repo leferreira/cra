@@ -93,7 +93,8 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				}
 				item.add(new Label("municipio", municipio.toUpperCase()));
 				if (tituloLista.getConfirmacao() != null) {
-					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+					item.add(new Label("dataConfirmacao",
+							DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
 				} else {
 					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
@@ -128,6 +129,9 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 					linkRetorno.add(new Label("retorno", tituloLista.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
 					item.add(linkRetorno);
 					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getRetorno().getDataOcorrencia())));
+				} else if (tituloLista.getConfirmacao() != null) {
+					linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
+					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getDataOcorrencia())));
 				} else {
 					linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
 					item.add(linkRetorno);

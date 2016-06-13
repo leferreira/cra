@@ -85,18 +85,19 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 							success("O arquivo de Confirmação " + arquivo.getNomeArquivo() + " enviado, foi processado com sucesso !");
 						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
 							setResponsePage(new RelatorioRetornoPage(
-									"O arquivo de Retorno " + arquivo.getNomeArquivo() + " enviado, foi processado com sucesso !",
-									getArquivo(), "ENVIAR ARQUIVO"));
+									"O arquivo de Retorno " + arquivo.getNomeArquivo() + " enviado, foi processado com sucesso !", getArquivo(),
+									"ENVIAR ARQUIVO"));
 						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
-							success("O arquivo de Desistência de Protesto " + arquivo.getNomeArquivo()
-									+ " enviado, foi processado com sucesso !");
+							success("O arquivo de Desistência de Protesto " + arquivo.getNomeArquivo() + " enviado, foi processado com sucesso !");
 						}
 					}
 					for (Exception exception : arquivoRetorno.getErros()) {
 						if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
 							info(DesistenciaCancelamentoException.class.cast(exception).toString());
 						} else {
-							info(exception.getMessage());
+							if (exception.getMessage() != null) {
+								info(exception.getMessage());
+							}
 						}
 					}
 					arquivoRetorno.getErros().clear();

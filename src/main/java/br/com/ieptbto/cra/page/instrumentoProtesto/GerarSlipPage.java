@@ -145,8 +145,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
 
 				try {
-					InstrumentoProtestoMediator instrumento =
-							instrumentoMediator.processarInstrumentos(getInstrumentosProtesto(), getRetornos());
+					InstrumentoProtestoMediator instrumento = instrumentoMediator.processarInstrumentos(getInstrumentosProtesto(), getRetornos());
 
 					if (instrumento.getEtiquetas().isEmpty()) {
 						throw new InfraException("Não foi possível gerar SLIPs. Não há entrada de títulos processados !");
@@ -163,8 +162,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
-							"CRA_SLIP_" + dataPadrao.format(new Date()).toString() + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							new ResourceStreamRequestHandler(resourceStream, "CRA_SLIP_" + dataPadrao.format(new Date()).toString() + ".pdf"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
@@ -202,8 +201,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
-							"CRA_ENVELOPES_" + dataPadrao.format(new Date()).toString() + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							new ResourceStreamRequestHandler(resourceStream, "CRA_ENVELOPES_" + dataPadrao.format(new Date()).toString() + ".pdf"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
@@ -244,8 +243,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
-							"CRA_LISTAGEM_" + dataPadrao.format(new Date()).toString() + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							new ResourceStreamRequestHandler(resourceStream, "CRA_LISTAGEM_" + dataPadrao.format(new Date()).toString() + ".pdf"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
@@ -270,7 +269,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				try {
 					instrumentoMediator.alterarInstrumentosParaGerado(getInstrumentosProtesto());
 
-					setResponsePage(new GerarSlipPage("As SLIPS e os envelopes foram processados com sucesso !"));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());
