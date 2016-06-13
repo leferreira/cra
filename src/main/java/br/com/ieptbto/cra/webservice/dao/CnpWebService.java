@@ -40,8 +40,6 @@ public class CnpWebService {
 	public static final String TIPO_ARQUIVO_CNP = "CENTRAL NACIONAL DE PROTESTO";
 	public static final String HORA_INICIO_CONSULTA = "07:59:59";
 	public static final String HORA_FIM_CONSULTA = "12:00:01";
-	// public static final String HORA_INICIO_ENVIO = "13:59:59";
-	// public static final String HORA_FIM_ENVIO = "17:00:01";
 	public static final String HORA_INICIO_ENVIO = "00:00:01";
 	public static final String HORA_FIM_ENVIO = "23:59:59";
 

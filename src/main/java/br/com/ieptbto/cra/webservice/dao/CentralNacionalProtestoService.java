@@ -54,11 +54,6 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			if (!getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 				return usuarioNaoPermitidoConsultaArquivoCNP();
 			}
-			// if (!new LocalTime().isAfter(getHoraInicioServicoConsulta()) &&
-			// !new LocalTime().isBefore(getHoraFimServicoConsulta())) {
-			// return servicoNaoDisponivelForaDoHorarioConsulta(usuario);
-			// }
-
 			if (centralNacionalProtestoMediator.isArquivoJaDisponibilizadoConsultaPorData(new LocalDate())) {
 				arquivoCnp = centralNacionalProtestoMediator.buscarArquivoNacionalPorData(new LocalDate());
 			} else {

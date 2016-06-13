@@ -10,7 +10,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
@@ -50,8 +49,8 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (StringUtils.isBlank(dados)) {
 				return dadosArquivoCnpEmBranco(usuario);
 			}
-			if (new LocalTime().isBefore(getHoraInicioServicoEnvio()) || new LocalTime().isAfter(getHoraFimServicoEnvio())) {
-				return servicoNaoDisponivelForaDoHorarioEnvio(usuario);
+			if (isInstituicaoEnviouArquivoCnpHoje(usuario.getInstituicao())) {
+				return arquivoCnpJaEnviadoHoje(usuario);
 			}
 			logger.info("Iniciar procesaamento arquivo cnp do cartório");
 			arquivoCnp = centralNacionalProtestoMediator.processarArquivoCartorio(getUsuario(), converterStringArquivoCnpVO(dados));
@@ -108,11 +107,9 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 		return arquivoCnp;
 	}
 
-	// private boolean isInstituicaoEnviouArquivoCnpHoje(Instituicao
-	// instituicao) {
-	// return
-	// centralNacionalProtestoMediator.isInstituicaoEnviouArquivoCnpHoje(instituicao);
-	// }
+	private boolean isInstituicaoEnviouArquivoCnpHoje(Instituicao instituicao) {
+		return centralNacionalProtestoMediator.isInstituicaoEnviouArquivoCnpHoje(instituicao);
+	}
 
 	public String consultarProtesto(String documentoDevedor) {
 
