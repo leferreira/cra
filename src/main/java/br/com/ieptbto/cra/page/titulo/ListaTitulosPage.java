@@ -131,6 +131,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getRetorno().getDataOcorrencia())));
 				} else if (tituloLista.getConfirmacao() != null) {
 					linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
+					item.add(linkRetorno);
 					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getDataOcorrencia())));
 				} else {
 					linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
