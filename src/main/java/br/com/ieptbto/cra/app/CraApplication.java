@@ -133,6 +133,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 	private void initConfig() {
 		getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
+		getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 

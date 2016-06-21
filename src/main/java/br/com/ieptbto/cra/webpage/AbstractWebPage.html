@@ -57,15 +57,6 @@
 	    $.fn.bootstrapSwitch.defaults.onColor = 'success';
 	    $(".switch").bootstrapSwitch();	
 		$('td.export-td>span>a').html('<span class="fa fa-file-excel-o excel-icon"></span>&nbsp;Exportar CSV');
-
-	    $(document).ready(function() {   
-	        $(".container-layout").prepend('<div id="overlay" class="ui-widget-overlay" style="z-index: 1001; display: none;"></div>');
-	    });  
-	    var loading = $.loading();
-	    function openLoading() {
-	    	 $("#overlay").show(); 
-	        loading.open();
-	    }
 	</script>
 </body>
 </html>

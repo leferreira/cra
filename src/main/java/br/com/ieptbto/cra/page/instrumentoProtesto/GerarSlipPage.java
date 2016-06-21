@@ -21,7 +21,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -69,21 +68,18 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	@SpringBean
 	TituloMediator tituloMediator;
 
-	private InstrumentoProtesto instrumento;
 	private List<Retorno> retornos;
 	private List<InstrumentoProtesto> instrumentosProtesto;
 	private List<EnvelopeSLIP> envelopes;
 	private List<EtiquetaSLIP> etiquetas;
 
 	public GerarSlipPage() {
-		this.instrumento = new InstrumentoProtesto();
 		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
 
 		adicionarComponentes();
 	}
 
 	public GerarSlipPage(String message) {
-		this.instrumento = new InstrumentoProtesto();
 		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
 
 		success(message);
@@ -310,6 +306,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 
 	@Override
 	protected IModel<InstrumentoProtesto> getModel() {
-		return new CompoundPropertyModel<InstrumentoProtesto>(instrumento);
+		return null;
 	}
 }
