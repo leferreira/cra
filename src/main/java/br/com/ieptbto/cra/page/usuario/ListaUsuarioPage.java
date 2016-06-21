@@ -82,9 +82,7 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 
 				Link<Void> linkAlterar = new Link<Void>("linkAlterar") {
 
-					/**
-					 * 
-					 */
+					/***/
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
@@ -109,9 +107,7 @@ public class ListaUsuarioPage extends BasePage<Usuario> {
 	public IModel<List<Usuario>> buscarUsuarios() {
 		return new LoadableDetachableModel<List<Usuario>>() {
 
-			/**
-			 * 
-			 */
+			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
