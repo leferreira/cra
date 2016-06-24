@@ -96,6 +96,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	private void addFeedbackPanel() {
 		CustomFeedbackPanel feedBackPanel = new CustomFeedbackPanel(WID_FEEDBACK);
 		feedBackPanel.setOutputMarkupId(true);
+		feedBackPanel.setEscapeModelStrings(false);
 		add(feedBackPanel);
 	}
 

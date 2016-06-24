@@ -80,15 +80,17 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 					if (arquivo != null) {
 						if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
-							success("O arquivo de Remessa " + arquivo.getNomeArquivo() + " enviado, foi processado com sucesso !");
+							success("O arquivo de Remessa <span class=\"alert-link\">" + arquivo.getNomeArquivo()
+									+ "</span> enviado, foi processado com sucesso !");
 						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
-							success("O arquivo de Confirmação " + arquivo.getNomeArquivo() + " enviado, foi processado com sucesso !");
+							success("O arquivo de Confirmação <span class=\"alert-link\">" + arquivo.getNomeArquivo()
+									+ "</span> enviado, foi processado com sucesso !");
 						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
-							setResponsePage(new RelatorioRetornoPage(
-									"O arquivo de Retorno " + arquivo.getNomeArquivo() + " enviado, foi processado com sucesso !", getArquivo(),
-									"ENVIAR ARQUIVO"));
+							setResponsePage(new RelatorioRetornoPage("O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo()
+									+ "</span> enviado, foi processado com sucesso !", getArquivo(), "ENVIAR ARQUIVO"));
 						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
-							success("O arquivo de Desistência de Protesto " + arquivo.getNomeArquivo() + " enviado, foi processado com sucesso !");
+							success("O arquivo de Desistência de Protesto <span class=\"alert-link\">" + arquivo.getNomeArquivo()
+									+ "</span> enviado, foi processado com sucesso !");
 						}
 					}
 					for (Exception exception : arquivoRetorno.getErros()) {

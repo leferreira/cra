@@ -54,14 +54,18 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			if (!getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 				return usuarioNaoPermitidoConsultaArquivoCNP();
 			}
-			if (centralNacionalProtestoMediator.isArquivoJaDisponibilizadoConsultaPorData(new LocalDate())) {
-				arquivoCnp = centralNacionalProtestoMediator.buscarArquivoNacionalPorData(new LocalDate());
-			} else {
-				arquivoCnp = centralNacionalProtestoMediator.gerarArquivoNacional();
-				if (arquivoCnp.getRemessasCnpVO().isEmpty()) {
-					return naoHaRemessasParaArquivoCnp(usuario);
-				}
+			// if
+			// (centralNacionalProtestoMediator.isArquivoJaDisponibilizadoConsultaPorData(new
+			// LocalDate())) {
+			// arquivoCnp =
+			// centralNacionalProtestoMediator.buscarArquivoNacionalPorData(new
+			// LocalDate());
+			// } else {
+			arquivoCnp = centralNacionalProtestoMediator.gerarArquivoNacional();
+			if (arquivoCnp.getRemessasCnpVO().isEmpty()) {
+				return naoHaRemessasParaArquivoCnp(usuario);
 			}
+			// }
 			loggerCra.sucess(getUsuario(), CraAcao.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Arquivo CNP do dia " + DataUtil.localDateToString(new LocalDate()) + ", enviado com sucesso para o IEPTB nacional.");
 		} catch (Exception ex) {
