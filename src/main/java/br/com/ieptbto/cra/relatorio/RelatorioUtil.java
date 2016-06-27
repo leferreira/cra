@@ -391,4 +391,10 @@ public class RelatorioUtil implements Serializable {
 	public LocalDate getDataFim() {
 		return dataFim;
 	}
+
+	public JasperPrint gerarRelatorioTaxaCra(String situacaoTituloRelatorio, Instituicao bancoConvenio, Instituicao cartorio, LocalDate dataInicio2,
+			LocalDate dataFim2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
