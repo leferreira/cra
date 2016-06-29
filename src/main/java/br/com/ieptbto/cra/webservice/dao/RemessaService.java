@@ -161,10 +161,9 @@ public class RemessaService extends CraWebService {
 	}
 
 	private String gerarResposta(RemessaVO remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {
-		StringBuffer string = new StringBuffer();
 		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
-		string.append(msg);
-		return string.toString();
+		msg = msg.replace(" xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+		return msg;
 	}
 
 	public String getArquivoRecebido() {

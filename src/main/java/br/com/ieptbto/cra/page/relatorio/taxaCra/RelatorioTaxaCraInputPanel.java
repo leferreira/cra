@@ -24,6 +24,9 @@ public class RelatorioTaxaCraInputPanel extends Panel {
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 
+	private DropDownChoice<Instituicao> dropDownConvenio;
+	private DropDownChoice<Instituicao> dropDownCartorio;
+
 	public RelatorioTaxaCraInputPanel(String id, IModel<RelatorioTaxaCraFormBean> model) {
 		super(id, model);
 
@@ -61,14 +64,14 @@ public class RelatorioTaxaCraInputPanel extends Panel {
 
 	private DropDownChoice<Instituicao> dropDownBancoConvenios() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		DropDownChoice<Instituicao> dropDownConvenio = new DropDownChoice<Instituicao>("convenio", instituicaoMediator.getConvenios(), renderer);
+		dropDownConvenio = new DropDownChoice<Instituicao>("convenio", instituicaoMediator.getConvenios(), renderer);
 		dropDownConvenio.setLabel(new Model<String>("Convênio"));
 		dropDownConvenio.setOutputMarkupId(true);
 		return dropDownConvenio;
 	}
 
 	private DropDownChoice<Instituicao> dropDownCartorio() {
-		DropDownChoice<Instituicao> dropDownCartorio = new DropDownChoice<Instituicao>("cartorio", instituicaoMediator.getCartorios(),
+		dropDownCartorio = new DropDownChoice<Instituicao>("cartorio", instituicaoMediator.getCartorios(),
 				new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio"));
 		dropDownCartorio.setOutputMarkupId(true);
 		return dropDownCartorio;
