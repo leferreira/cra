@@ -41,6 +41,7 @@ import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.page.centralDeAcoes.CentralDeAcoesPage;
 import br.com.ieptbto.cra.page.cnp.CentralNacionalProtestoPage;
+import br.com.ieptbto.cra.page.cnp.ImportarArquivo5AnosPage;
 import br.com.ieptbto.cra.page.convenio.GerarRemessaConvenioPage;
 import br.com.ieptbto.cra.page.cra.GerarCancelamentosPage;
 import br.com.ieptbto.cra.page.cra.GerarConfirmacaoPage;
@@ -168,6 +169,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("WebServiceConfig", WebServiceConfigPage.class);
 		mountPage("CentralNacionalProtesto", CentralNacionalProtestoPage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
+		mountPage("ImportarArquivo5Anos", ImportarArquivo5AnosPage.class);
 
 		/** Administracao */
 		mountPage("Batimento", BatimentoPage.class);

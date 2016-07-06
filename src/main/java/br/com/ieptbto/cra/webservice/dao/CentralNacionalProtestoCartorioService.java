@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
-import br.com.ieptbto.cra.entidade.ArquivoCnp;
 import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.LoteCnp;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoCnpVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
@@ -39,7 +39,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 	 * @return
 	 */
 	public String processar(Usuario usuario, String dados) {
-		ArquivoCnp arquivoCnp = new ArquivoCnp();
+		LoteCnp lote = new LoteCnp();
 		setUsuario(usuario);
 
 		try {
@@ -49,35 +49,30 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (StringUtils.isBlank(dados)) {
 				return dadosArquivoCnpEmBranco(usuario);
 			}
-			if (isInstituicaoEnviouArquivoCnpHoje(usuario.getInstituicao())) {
+			if (centralNacionalProtestoMediator.isCartorioEnviouLoteCnpHoje(usuario.getInstituicao())) {
 				return arquivoCnpJaEnviadoHoje(usuario);
 			}
-			logger.info("Iniciar procesaamento arquivo cnp do cartório");
-			arquivoCnp = centralNacionalProtestoMediator.processarArquivoCartorio(getUsuario(), converterStringArquivoCnpVO(dados));
+			if (usuario.getInstituicao().getId() == 24 || usuario.getInstituicao().getId() == 18 || usuario.getInstituicao().getId() == 14
+					|| usuario.getInstituicao().getId() == 13 || usuario.getInstituicao().getId() == 2 || usuario.getInstituicao().getId() == 82) {
+				return mensagemServicoIndisponivel(usuario);
+			}
+			lote = centralNacionalProtestoMediator.processarLoteCartorio(getUsuario().getInstituicao(), converterStringArquivoCnpVO(dados));
 			loggerCra.sucess(getUsuario(), CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Arquivo da CNP enviado por " + getUsuario().getInstituicao().getNomeFantasia() + " processado com sucesso!");
 		} catch (InfraException ex) {
-			ex.printStackTrace();
-			logger.info(ex.getMessage(), ex.getCause());
+			logger.info(ex.getMessage(), ex);
 			loggerCra.error(getUsuario(), CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Erro no processamento do arquivo da CNP de " + getUsuario().getInstituicao().getNomeFantasia() + "!", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(ex.getMessage()), CONSTANTE_RELATORIO_XML);
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			logger.info(ex.getMessage(), ex.getCause());
+			logger.info(ex.getMessage(), ex);
 			loggerCra.error(getUsuario(), CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Erro no processamento do arquivo da CNP de " + getUsuario().getInstituicao().getNomeFantasia() + "!", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}
-		return gerarMensagem(gerarMensagemSucesso(arquivoCnp), CONSTANTE_RELATORIO_XML);
+		return gerarMensagem(gerarMensagemSucesso(lote), CONSTANTE_RELATORIO_XML);
 	}
 
-	/**
-	 * Converter a String dados para ArquivoCnpVO
-	 * 
-	 * @param dados
-	 * @return
-	 */
 	private ArquivoCnpVO converterStringArquivoCnpVO(String dados) {
 		JAXBContext context;
 		ArquivoCnpVO arquivoCnp = null;
@@ -107,12 +102,13 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 		return arquivoCnp;
 	}
 
-	private boolean isInstituicaoEnviouArquivoCnpHoje(Instituicao instituicao) {
-		return centralNacionalProtestoMediator.isInstituicaoEnviouArquivoCnpHoje(instituicao);
-	}
-
+	/**
+	 * Consultar Protesto WS
+	 * 
+	 * @param dados
+	 * @return
+	 */
 	public String consultarProtesto(String documentoDevedor) {
-
 		if (documentoDevedor.contains(".")) {
 			documentoDevedor = documentoDevedor.replace(".", "");
 		}
@@ -136,7 +132,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			}
 			xml.append("</protesto>");
 		} else {
-			String mensagem = "N�O CONSTAM PROTESTOS, POR FALTA DE PAGAMENTO, PARA ESTE CPF/CNPJ NOS TABELIONATOS DO ESTADO DO TOCANTINS!";
+			String mensagem = "NÃO CONSTAM PROTESTOS, POR FALTA DE PAGAMENTO, PARA ESTE CPF/CNPJ NOS TABELIONATOS DO ESTADO DO TOCANTINS!";
 			xml.append("<protesto>");
 			xml.append("	<mensagem>" + mensagem + "</mensagem>");
 			xml.append("</protesto>");

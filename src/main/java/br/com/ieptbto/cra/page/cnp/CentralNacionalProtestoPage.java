@@ -17,7 +17,7 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.CustomFeedbackPanel;
 import br.com.ieptbto.cra.component.label.DataUtil;
-import br.com.ieptbto.cra.entidade.TituloCnp;
+import br.com.ieptbto.cra.entidade.RegistroCnp;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
 
@@ -27,27 +27,25 @@ import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
  */
 public class CentralNacionalProtestoPage extends WebPage {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	CentralNacionalProtestoMediator cnpMediator;
+	CentralNacionalProtestoMediator centralNacionalProtestoMediator;
 
-	private TituloCnp tituloCnp;
+	private RegistroCnp registro;
 	private List<String> titulosProtesto;
 	private TextField<String> textFieldDocumentoDevedor;
 	private boolean visibilidadeDivResultado;
 
 	public CentralNacionalProtestoPage() {
-		this.tituloCnp = new TituloCnp();
+		this.registro = new RegistroCnp();
 		this.visibilidadeDivResultado = false;
 		carregar();
 	}
 
-	public CentralNacionalProtestoPage(TituloCnp titulo, List<String> titulosProtesto) {
-		this.tituloCnp = titulo;
+	public CentralNacionalProtestoPage(RegistroCnp titulo, List<String> titulosProtesto) {
+		this.registro = titulo;
 		this.titulosProtesto = titulosProtesto;
 		this.visibilidadeDivResultado = true;
 		carregar();
@@ -67,7 +65,7 @@ public class CentralNacionalProtestoPage extends WebPage {
 	}
 
 	private void formularioConsultaProtesto() {
-		Form<TituloCnp> form = new Form<TituloCnp>("form") {
+		Form<RegistroCnp> form = new Form<RegistroCnp>("form") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -89,8 +87,7 @@ public class CentralNacionalProtestoPage extends WebPage {
 					if (documentoDevedor.contains("-")) {
 						documentoDevedor = documentoDevedor.replace("-", "");
 					}
-
-					setResponsePage(new CentralNacionalProtestoPage(tituloCnp, cnpMediator.consultarProtestos(documentoDevedor)));
+					setResponsePage(new CentralNacionalProtestoPage(registro, centralNacionalProtestoMediator.consultarProtestos(documentoDevedor)));
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {

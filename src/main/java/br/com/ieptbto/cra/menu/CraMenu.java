@@ -110,6 +110,7 @@ public class CraMenu extends Panel {
 
 		menuAdministrador.addItem("CentralDeAcoes", rolesIncluir);
 		menuAdministrador.addItem("WebServiceConfig", rolesIncluir);
+		menuAdministrador.addItem("ImportarArquivo5Anos", rolesIncluir);
 	}
 
 	private boolean verificaPermissao(Usuario user) {

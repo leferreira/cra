@@ -54,10 +54,10 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			if (!getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 				return usuarioNaoPermitidoConsultaArquivoCNP();
 			}
-			if (centralNacionalProtestoMediator.isArquivoJaDisponibilizadoConsultaPorData(new LocalDate())) {
-				arquivoCnp = centralNacionalProtestoMediator.buscarArquivoNacionalPorData(new LocalDate());
+			if (centralNacionalProtestoMediator.isLoteLiberadoConsultaPorData(new LocalDate())) {
+				arquivoCnp = centralNacionalProtestoMediator.processarLoteNacionalPorData(new LocalDate());
 			} else {
-				arquivoCnp = centralNacionalProtestoMediator.gerarArquivoNacional();
+				arquivoCnp = centralNacionalProtestoMediator.processarLoteNacional();
 				if (arquivoCnp.getRemessasCnpVO().isEmpty()) {
 					return naoHaRemessasParaArquivoCnp(usuario);
 				}
@@ -66,7 +66,6 @@ public class CentralNacionalProtestoService extends CnpWebService {
 					"Arquivo CNP do dia " + DataUtil.localDateToString(new LocalDate()) + ", enviado com sucesso para o IEPTB nacional.");
 		} catch (Exception ex) {
 			logger.info(ex.getMessage(), ex.getCause());
-			ex.printStackTrace();
 			loggerCra.error(getUsuario(), CraAcao.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Erro interno ao construir o arquivo da CNP do dia " + DataUtil.localDateToString(new LocalDate()) + ".", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);

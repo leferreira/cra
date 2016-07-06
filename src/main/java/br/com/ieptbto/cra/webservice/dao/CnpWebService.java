@@ -17,8 +17,7 @@ import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.ieptbto.cra.component.label.DataUtil;
-import br.com.ieptbto.cra.entidade.ArquivoCnp;
-import br.com.ieptbto.cra.entidade.RemessaCnp;
+import br.com.ieptbto.cra.entidade.LoteCnp;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
@@ -48,6 +47,19 @@ public class CnpWebService {
 	protected Usuario usuario;
 	protected LocalTime horaInicioServico;
 	protected LocalTime horaFimServico;
+
+	protected String mensagemServicoIndisponivel(Usuario usuario) {
+		MensagemXml mensagemXml = new MensagemXml();
+		Descricao descricao = new Descricao();
+		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
+		descricao.setUsuario(usuario.getLogin());
+
+		mensagemXml.setDescricao(descricao);
+		mensagemXml.setCodigoFinal(CodigoErro.CRA_SERVICO_INDISPONIVEL.getCodigo());
+		mensagemXml.setDescricaoFinal(CodigoErro.CRA_SERVICO_INDISPONIVEL.getDescricao());
+		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
+	}
 
 	protected String usuarioInvalido() {
 		MensagemXml mensagemXml = new MensagemXml();
@@ -167,7 +179,7 @@ public class CnpWebService {
 		return null;
 	}
 
-	protected MensagemXml gerarMensagemSucesso(ArquivoCnp arquivoCNP) {
+	protected MensagemXml gerarMensagemSucesso(LoteCnp loteCnp) {
 		MensagemXml mensagemXml = new MensagemXml();
 		Descricao descricao = new Descricao();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
@@ -178,9 +190,7 @@ public class CnpWebService {
 		detalhamento.setMensagem(new ArrayList<Mensagem>());
 		Mensagem mensagem = new Mensagem();
 
-		for (RemessaCnp remessaCnp : arquivoCNP.getRemessasCnp()) {
-			mensagem.setDescricao("Foram enviados " + remessaCnp.getTitulos().size() + " títulos para CNP.");
-		}
+		mensagem.setDescricao("Foram enviados " + loteCnp.getRegistrosCnp().size() + " registros para CNP.");
 		mensagemXml.setDetalhamento(detalhamento);
 		mensagemXml.setDescricao(descricao);
 		mensagemXml.setCodigoFinal(CodigoErro.CNP_SUCESSO.getCodigo());

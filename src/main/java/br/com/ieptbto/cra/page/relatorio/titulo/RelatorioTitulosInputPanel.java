@@ -25,9 +25,7 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 
 public class RelatorioTitulosInputPanel extends Panel {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean

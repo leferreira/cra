@@ -20,9 +20,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 
 public class RelatorioTitulosForm extends BaseForm<RelatorioTitulosFormBean> {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	private FileUploadField fileUploadField;
