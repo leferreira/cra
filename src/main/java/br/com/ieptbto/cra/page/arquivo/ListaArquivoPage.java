@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -52,8 +54,8 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 	private Arquivo arquivo;
 	private List<Remessa> remessas;
 
-	public ListaArquivoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim,
-			ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<StatusRemessa> situacoes) {
+	public ListaArquivoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo,
+			ArrayList<StatusRemessa> situacoes) {
 		this.arquivo = arquivo;
 		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio, dataInicio, dataFim, tiposArquivo, getUser(), situacoes);
 		adicionarComponentes();
@@ -105,7 +107,10 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 					item.add(new Label("downloadAnexos", StringUtils.EMPTY));
 				}
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(remessa.getArquivo().getHoraEnvio())));
-				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()).setMarkupId(remessa.getStatusRemessa().getLabel()));
+				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
+				divInfo.add(new AttributeAppender("id", remessa.getStatusRemessa().getLabel()));
+				divInfo.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()));
+				item.add(divInfo);
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
@@ -120,7 +125,8 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 							File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
 
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(
+									new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
@@ -178,8 +184,8 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 							File pdf = File.createTempFile("report", ".pdf");
 							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 							IResourceStream resourceStream = new FileResourceStream(pdf);
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
-									+ remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+									"CRA_RELATORIO_" + remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 						} catch (InfraException ex) {
 							error(ex.getMessage());
 						} catch (Exception e) {

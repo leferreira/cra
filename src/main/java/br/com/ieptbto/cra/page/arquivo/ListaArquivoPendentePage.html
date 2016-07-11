@@ -1,14 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:wicket="http://wicket.apache.org/">
-<head>
-<meta charset="UTF8">
-</head>
 <body>
 	<wicket:extend>
 		<h4 class="titulo-top">
 			ARQUIVOS PENDENTES <span class="pull-right"> <a
-				href="HomePage" class="link" style="font-size: 16px;"><span
-					class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+				href="HomePage" class="link-voltar"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
 			</span>
 		</h4>
 		<br style="clear: both;" />
@@ -58,7 +54,11 @@
 				        	<span wicket:id="pendente">[quantidade de dias]</span><span>&nbsp;DIA(S)</span>
 				        </small>
 				    </td>
-					<td class="col-center"><span wicket:id="status"></span></td>
+					<td class="col-center">
+						<div wicket:id="divInfo">
+							<span wicket:id="status"></span>
+						</div>
+					</td>
 				</tr>
 				<tr wicket:id="dataTableAutorizacao">
 					<td class="col-center"><a href="#" class="link"
@@ -82,7 +82,11 @@
 				        	<span wicket:id="dias">[quantidade de dias]</span><span>&nbsp;DIA(S)</span>
 				        </small>
 				    </td>
-					<td class="col-center"><span wicket:id="status"></span></td>
+					<td class="col-center">
+						<div wicket:id="divInfo">
+							<span wicket:id="status"></span>
+						</div>
+					</td>
 				</tr>
 				<tr wicket:id="dataTableCancelamento">
 					<td class="col-center"><a href="#" class="link"
@@ -106,7 +110,11 @@
 				        	<span wicket:id="dias">[quantidade de dias]</span><span>&nbsp;DIA(S)</span>
 				        </small>
 				    </td>
-					<td class="col-center"><span wicket:id="status"></span></td>
+					<td class="col-center">
+						<div wicket:id="divInfo">
+							<span wicket:id="status"></span>
+						</div>
+					</td>
 				</tr>
 				<tr wicket:id="dataTableDesistencia">
 					<td class="col-center"><a href="#" class="link"
@@ -131,7 +139,7 @@
 				        </small>
 				    </td>
 					<td class="col-center">
-						<div class="info-titulo">
+						<div wicket:id="divInfo">
 							<span wicket:id="status"></span>
 						</div>
 					</td>

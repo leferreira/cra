@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -85,7 +87,12 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(arquivo.getHoraEnvio())));
 				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
-				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
+				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase())
+						.setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
+				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
+				divInfo.add(new AttributeAppender("id", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
+				divInfo.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()));
+				item.add(divInfo);
 				item.add(downloadArquivoTXT(arquivo));
 				item.add(relatorioArquivo(arquivo));
 			}
@@ -101,7 +108,8 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 						File file = arquivoMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
+						getRequestCycle()
+								.scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
 					}
 				};
 			}
@@ -120,8 +128,8 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 							File pdf = File.createTempFile("report", ".pdf");
 							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 							IResourceStream resourceStream = new FileResourceStream(pdf);
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
-									+ arquivo.getNomeArquivo().replace(".", "_") + ".pdf"));
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+									"CRA_RELATORIO_" + arquivo.getNomeArquivo().replace(".", "_") + ".pdf"));
 						} catch (InfraException ex) {
 							error(ex.getMessage());
 						} catch (Exception e) {

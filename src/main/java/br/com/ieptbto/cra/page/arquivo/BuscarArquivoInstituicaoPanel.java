@@ -69,9 +69,7 @@ public class BuscarArquivoInstituicaoPanel extends Panel {
 	private Button botaoEnviar() {
 		return new Button("botaoBuscar") {
 
-			/**
-			 * 
-			 */
+			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -101,8 +99,8 @@ public class BuscarArquivoInstituicaoPanel extends Panel {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
 
-					setResponsePage(new ListaArquivoInstituicaoPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo(),
-							getSituacaoArquivo()));
+					setResponsePage(
+							new ListaArquivoInstituicaoPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo(), getSituacaoArquivo()));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -123,8 +121,8 @@ public class BuscarArquivoInstituicaoPanel extends Panel {
 		listaTipos.add(TipoArquivoEnum.REMESSA);
 		listaTipos.add(TipoArquivoEnum.CONFIRMACAO);
 		listaTipos.add(TipoArquivoEnum.RETORNO);
-		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos",
-				new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
+		CheckBoxMultipleChoice<TipoArquivoEnum> tipos =
+				new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos", new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
 		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
 	}

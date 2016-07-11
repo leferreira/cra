@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -117,11 +119,12 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 					item.add(new Label("destino", "CRA"));
 					item.add(new Label("downloadAnexos", StringUtils.EMPTY));
 				}
-				item.add(
-						new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
+				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(remessa.getArquivo().getHoraEnvio())));
-				item.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase())
-						.setMarkupId(remessa.getStatusRemessa().getLabel()));
+				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
+				divInfo.add(new AttributeAppender("id", remessa.getStatusRemessa().getLabel()));
+				divInfo.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()));
+				item.add(divInfo);
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
@@ -162,8 +165,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 							File file = remessaMediator.processarArquivosAnexos(getUser(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
 
-							getRequestCycle()
-									.scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
@@ -209,8 +211,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 	}
 
 	private void listaArquivosDesistenciaProtesto() {
-		add(new ListView<DesistenciaProtesto>("dataTableDesistencia",
-				getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
+		add(new ListView<DesistenciaProtesto>("dataTableDesistencia", getArquivo().getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -229,8 +230,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 						setResponsePage(new TitulosDesistenciaPage(desistenciaProtesto));
 					}
 				};
-				linkArquivo
-						.add(new Label("nomeArquivo", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+				linkArquivo.add(new Label("nomeArquivo", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
 				item.add(new Label("dataEnvio",
 						DataUtil.localDateToString(desistenciaProtesto.getRemessaDesistenciaProtesto().getCabecalho().getDataMovimento())));
@@ -243,10 +243,12 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 						.getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
 				item.add(new Label("horaEnvio",
 						DataUtil.localTimeToString(desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getHoraEnvio())));
-				item.add(new Label("status", verificaDownload(desistenciaProtesto).getLabel().toUpperCase())
-						.setMarkupId(verificaDownload(desistenciaProtesto).getLabel()));
 				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(
 						desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getDataRecebimento(), new Date())));
+				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
+				divInfo.add(new AttributeAppender("id", verificaDownload(desistenciaProtesto).getLabel()));
+				divInfo.add(new Label("status", verificaDownload(desistenciaProtesto).getLabel().toUpperCase()));
+				item.add(divInfo);
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto desistenciaProtesto) {
@@ -267,8 +269,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 			}
 
 			private StatusRemessa verificaDownload(DesistenciaProtesto desistencia) {
-				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao()
-						.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 					return StatusRemessa.ENVIADO;
 				}
 				if (desistencia.getDownload().equals(false)) {
@@ -280,8 +281,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 	}
 
 	private void listaArquivosCancelamentoProtesto() {
-		add(new ListView<CancelamentoProtesto>("dataTableCancelamento",
-				getArquivo().getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
+		add(new ListView<CancelamentoProtesto>("dataTableCancelamento", getArquivo().getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -304,18 +304,19 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 				item.add(linkArquivo);
 				item.add(new Label("dataEnvio",
 						DataUtil.localDateToString(cancelamento.getRemessaCancelamentoProtesto().getCabecalho().getDataMovimento())));
-				item.add(new Label("instituicao",
-						cancelamento.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("envio",
-						cancelamento.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoRecebe().getNomeFantasia()));
-				item.add(new Label("destino", instituicaoMediator
-						.getCartorioPorCodigoIBGE(cancelamento.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
+				item.add(
+						new Label("instituicao", cancelamento.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+				item.add(new Label("envio", cancelamento.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoRecebe().getNomeFantasia()));
+				item.add(new Label("destino",
+						instituicaoMediator.getCartorioPorCodigoIBGE(cancelamento.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
 				item.add(new Label("horaEnvio",
 						DataUtil.localTimeToString(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getHoraEnvio())));
-				item.add(new Label("status", verificaDownload(cancelamento).getLabel().toUpperCase())
-						.setMarkupId(verificaDownload(cancelamento).getLabel()));
-				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(
-						cancelamento.getRemessaCancelamentoProtesto().getArquivo().getDataRecebimento(), new Date())));
+				item.add(new Label("dias", PeriodoDataUtil
+						.diferencaDeDiasEntreData(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getDataRecebimento(), new Date())));
+				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
+				divInfo.add(new AttributeAppender("id", verificaDownload(cancelamento).getLabel()));
+				divInfo.add(new Label("status", verificaDownload(cancelamento).getLabel().toUpperCase()));
+				item.add(divInfo);
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto cancelamento) {
@@ -335,8 +336,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 			}
 
 			private StatusRemessa verificaDownload(CancelamentoProtesto cancelamento) {
-				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao()
-						.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 					return StatusRemessa.ENVIADO;
 				}
 				if (cancelamento.getDownload().equals(false)) {
@@ -348,8 +348,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 	}
 
 	private void listaAutorizacaoCancelamento() {
-		add(new ListView<AutorizacaoCancelamento>("dataTableAutorizacao",
-				getArquivo().getRemessaAutorizacao().getAutorizacaoCancelamento()) {
+		add(new ListView<AutorizacaoCancelamento>("dataTableAutorizacao", getArquivo().getRemessaAutorizacao().getAutorizacaoCancelamento()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -370,19 +369,19 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 				};
 				linkArquivo.add(new Label("nomeArquivo", ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				item.add(new Label("dataEnvio",
-						DataUtil.localDateToString(ac.getRemessaAutorizacaoCancelamento().getCabecalho().getDataMovimento())));
-				item.add(new Label("instituicao",
-						ac.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+				item.add(
+						new Label("dataEnvio", DataUtil.localDateToString(ac.getRemessaAutorizacaoCancelamento().getCabecalho().getDataMovimento())));
+				item.add(new Label("instituicao", ac.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("envio", ac.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoRecebe().getNomeFantasia()));
 				item.add(new Label("destino",
 						instituicaoMediator.getCartorioPorCodigoIBGE(ac.getCabecalhoCartorio().getCodigoMunicipio()).getNomeFantasia()));
-				item.add(new Label("horaEnvio",
-						DataUtil.localTimeToString(ac.getRemessaAutorizacaoCancelamento().getArquivo().getHoraEnvio())));
-				item.add(new Label("status", verificaDownload(ac).getLabel().toUpperCase()).setMarkupId(verificaDownload(ac).getLabel()));
+				item.add(new Label("horaEnvio", DataUtil.localTimeToString(ac.getRemessaAutorizacaoCancelamento().getArquivo().getHoraEnvio())));
 				item.add(new Label("dias", PeriodoDataUtil
 						.diferencaDeDiasEntreData(ac.getRemessaAutorizacaoCancelamento().getArquivo().getDataRecebimento(), new Date())));
-
+				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
+				divInfo.add(new AttributeAppender("id", verificaDownload(ac).getLabel()));
+				divInfo.add(new Label("status", verificaDownload(ac).getLabel().toUpperCase()));
+				item.add(divInfo);
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento ac) {
@@ -403,8 +402,7 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 			}
 
 			private StatusRemessa verificaDownload(AutorizacaoCancelamento ac) {
-				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao()
-						.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 					return StatusRemessa.ENVIADO;
 				}
 				if (ac.getDownload().equals(false)) {

@@ -6,49 +6,49 @@
 			<h4 class="titulo-top">
 				REMOVER ARQUIVO&nbsp;<span class="badge" style="background-color: #d9534f; font-weight: bolder;">CUIDADO!</span>
 			</h4>
-			<br style="clear: both;" />
-			<div class="col-lg-12 col-md-offset-2">
-				<div class="form-group">
-					<label>Nome do Arquivo</label> <input maxlength="13" wicket:id="nomeArquivo"
-						class="form-control input-md">
-				</div>
-				<div class="form-group">
-					<label>Tipo Arquivo</label> <label class="checkbox-inline inline" wicket:id="tipoArquivos"></label>
-				</div>
-				<div class="col-lg-6">
-					<div class="form-group">
-						<label>Período</label>
-						<div class="row">
-							<div class="col-xs-6">
-								<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataInicio"
-									class="form-control">
-							</div>
-							<div class="col-xs-6">
-								<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" wicket:id="dataFim"
-									class="form-control">
+			<div class="col-lg-8 col-md-offset-2">
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label>Nome do Arquivo</label> <input maxlength="13" wicket:id="nomeArquivo" autofocus="autofocus"
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label>Período</label>
+							<div class="row">
+								<div class="col-xs-6">
+									<input id="date" name="date" maxlength="10" placeholder="__/__/____"
+										wicket:id="dataEnvioInicio" class="form-control">
+								</div>
+								<div class="col-xs-6">
+									<input id="date1" name="date1" maxlength="10" placeholder="__/__/____"
+										wicket:id="dataEnvioFinal" class="form-control">
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 control-label">Bancos e Convênios</label>
-					<div class="col-md-6">
-						<select wicket:id="instituicaoEnvio" class="form-control">
-						</select>
+					<div class="col-lg-12">
+						<div class="form-group">
+							<label>Tipo Arquivo</label><br> <label class="checkbox-inline inline"
+								wicket:id="tipoArquivos" style="font-size: 12px;"></label>
+						</div>
+						<div class="form-group">
+							<label>Bancos e Convênios</label> <select wicket:id="instituicaoEnvio" class="form-control">
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Município</label> <select wicket:id="municipio" class="form-control">
+							</select>
+						</div>
+						<div class="form-group">
+							<label></label>
+							<button type="submit" class="btn btn-primary pull-right">
+								<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
+							</button>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-2 control-label">Município</label>
-					<div class="col-md-6">
-						<select wicket:id="municipio" class="form-control">
-						</select>
-					</div>
-				</div>
-				<div class="form-group">
-					<label></label>
-					<button type="submit" class="btn btn-primary pull-right">
-						<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
-					</button>
 				</div>
 			</div>
 		</form>

@@ -23,6 +23,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.AdministracaoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -40,6 +41,8 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 	/***/
 	private static final long serialVersionUID = 1L;
 
+	@SpringBean
+	AdministracaoMediator administracaoMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
@@ -77,11 +80,13 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 
 				try {
 					if (arquivo.getNomeArquivo() == null && dataEnvioInicio.getDefaultModelObject() == null) {
+						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
+					} else if (arquivo.getNomeArquivo() != null) {
 						if (arquivo.getNomeArquivo().length() < 4) {
 							throw new InfraException("Por favor, informe ao menos 4 caracteres!");
 						}
-						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Intervalo de datas'!");
 					}
+
 					if (dataEnvioInicio.getDefaultModelObject() != null) {
 						if (dataEnvioFinal.getDefaultModelObject() != null) {
 							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
@@ -96,10 +101,14 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 						municipio = comboMunicipio.getModelObject();
 					}
 
-					setResponsePage(new ListaRemoverArquivoPage(arquivo, municipio, dataInicio, dataFim, getTiposArquivo()));
+					List<Arquivo> arquivos =
+							administracaoMediator.buscarArquivosParaRemover(arquivo, municipio, dataInicio, dataFim, getTiposArquivo());
+					setResponsePage(new ListaRemoverArquivoPage(arquivos));
 				} catch (InfraException ex) {
+					logger.info(ex.getMessage(), ex);
 					error(ex.getMessage());
 				} catch (Exception e) {
+					logger.info(e.getMessage(), e);
 					error("Não foi possível buscar os arquivos ! \n Entre em contato com a CRA ");
 				}
 			}
@@ -122,7 +131,8 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 		listaTipos.add(TipoArquivoEnum.REMESSA);
 		listaTipos.add(TipoArquivoEnum.CONFIRMACAO);
 		listaTipos.add(TipoArquivoEnum.RETORNO);
-		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos", new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
+		CheckBoxMultipleChoice<TipoArquivoEnum> tipos =
+				new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos", new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
 		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
 	}
@@ -138,13 +148,15 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 
 	private DropDownChoice<Instituicao> comboPortador() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
-		DropDownChoice<Instituicao> comboPortador = new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.getInstituicoesFinanceiras(), renderer);
+		DropDownChoice<Instituicao> comboPortador =
+				new DropDownChoice<Instituicao>("instituicaoEnvio", instituicaoMediator.getInstituicoesFinanceiras(), renderer);
 		return comboPortador;
 	}
 
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		this.comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
+		this.comboMunicipio =
+				new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;
 	}
 

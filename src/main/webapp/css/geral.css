@@ -106,7 +106,7 @@ legend {
 }
 
 .link-voltar {
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: bold;
 }
 
@@ -284,7 +284,7 @@ dd, dt {
 	background: #209515 none repeat scroll 0% 0%;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10.5px;
+	font-size: 10px;
 	width: 100%;
 }
 
@@ -293,7 +293,7 @@ dd, dt {
 	color: #FFF;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10.5px;
+	font-size: 10px;
 	width: 100%;
 }
 
@@ -302,7 +302,7 @@ dd, dt {
 	color: #FFF;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10.5px;
+	font-size: 10px;
 	width: 100%;
 }
 
@@ -311,16 +311,16 @@ dd, dt {
 	color: #FFF;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10.5px;
+	font-size: 10px;
 	width: 100%;
 }
- 
+
 #info-titulo {
 	background: #6D95B7 none repeat scroll 0% 0%;
 	color: #FFF;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 10.5px;
+	font-size: 10px;
 	width: 100%;
 }
 
@@ -329,7 +329,7 @@ dd, dt {
 	color: #FFF;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 11px;
+	font-size: 10px;
 }
 
 #ocorrencia-sucesso {
@@ -337,7 +337,7 @@ dd, dt {
 	background: #209515 none repeat scroll 0% 0%;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 11px;
+	font-size: 10px;
 }
 
 #ocorrencia-alerta {
@@ -345,7 +345,7 @@ dd, dt {
 	background: #f0ad4e none repeat scroll 0% 0%;
 	font-weight: bold;
 	padding: 3px;
-	font-size: 11px;
+	font-size: 10px;
 }
 
 .media-body {

@@ -4,7 +4,7 @@
 	<wicket:extend>
 		<h4 class="titulo-top">RESULTADO DA BUSCA
 		<span class="pull-right">
-			<a href="BuscarArquivo" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+			<a href="BuscarArquivo" class="link-voltar"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
 		</span>
 		</h4>
 		<br style="clear: both;"/>
@@ -47,7 +47,7 @@
 					<td wicket:id="envio"></td>
 					<td wicket:id="destino"></td>
 					<td class="col-center">
-						<div class="info-titulo">
+						<div wicket:id="divInfo">
 							<span wicket:id="status"></span>
 						</div>
 					</td>

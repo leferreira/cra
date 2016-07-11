@@ -3,21 +3,18 @@ package br.com.ieptbto.cra.page.administracao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.AdministracaoMediator;
-import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -32,17 +29,12 @@ public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	ArquivoMediator arquivoMediator;
-	@SpringBean
 	AdministracaoMediator administracaoMediator;
 
-	private Arquivo arquivo;
 	private List<Arquivo> arquivos;
 
-	public ListaRemoverArquivoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim,
-			ArrayList<TipoArquivoEnum> tiposArquivo) {
-		this.arquivo = arquivo;
-		this.arquivos = new ArrayList<Arquivo>();
+	public ListaRemoverArquivoPage(List<Arquivo> arquivos) {
+		this.arquivos = arquivos;
 		adicionarComponentes();
 	}
 
@@ -60,7 +52,6 @@ public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 			@Override
 			protected void populateItem(ListItem<Arquivo> item) {
 				final Arquivo arquivo = item.getModelObject();
-				item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
 					/***/
@@ -76,7 +67,10 @@ public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio())));
 				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
-				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
+				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
+				divInfo.add(new AttributeAppender("id", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
+				divInfo.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()));
+				item.add(divInfo);
 				item.add(remover(arquivo));
 			}
 
@@ -90,12 +84,15 @@ public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 					public void onClick() {
 
 						try {
-							administracaoMediator.removerArquivo();
+							administracaoMediator.removerArquivo(arquivo);
+							arquivos.remove(arquivo);
+							ListaRemoverArquivoPage.this.success("O arquivo " + arquivo.getNomeArquivo() + " enviado por "
+									+ arquivo.getInstituicaoEnvio().getNomeFantasia() + " foi removido com sucesso!");
 
 						} catch (InfraException ex) {
 							error(ex.getMessage());
 						} catch (Exception e) {
-							error("Não foi possível remover o arquivo !");
+							error("Não foi possível remover o arquivo! ");
 						}
 					}
 				};
@@ -104,11 +101,14 @@ public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 	}
 
 	public List<Arquivo> getArquivos() {
+		if (arquivos == null) {
+			return new ArrayList<Arquivo>();
+		}
 		return arquivos;
 	}
 
 	@Override
 	protected IModel<Arquivo> getModel() {
-		return new CompoundPropertyModel<Arquivo>(arquivo);
+		return null;
 	}
 }
