@@ -109,8 +109,14 @@ public class CraMenu extends Panel {
 		menuAdministrador.addItem("ImportarArquivoDePara", rolesIncluir);
 
 		menuAdministrador.addItem("CentralDeAcoes", rolesIncluir);
-		menuAdministrador.addItem("WebServiceConfig", rolesIncluir);
-		menuAdministrador.addItem("ImportarArquivo5Anos", rolesIncluir);
+
+		MenuItem menuSuper = menu.addItem("menuSuper", rolesIncluir);
+		if (!usuario.getGrupoUsuario().getGrupo().equals(PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel())) {
+			menuSuper.setVisible(false);
+		}
+		menuSuper.addItem("WebServiceConfiguracao", rolesIncluir);
+		menuSuper.addItem("ImportarArquivo5Anos", rolesIncluir);
+		menuSuper.addItem("RemoverArquivo", rolesIncluir);
 	}
 
 	private boolean verificaPermissao(Usuario user) {

@@ -21,6 +21,7 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
+import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
@@ -53,17 +54,20 @@ public class RemessaService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
-		ArquivoVO arquivoVO = new ArquivoVO();
 		setCraAcao(CraAcao.ENVIO_ARQUIVO_REMESSA);
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 
+		ArquivoVO arquivoVO = new ArquivoVO();
 		try {
 			if (getUsuario().getId() == 0) {
 				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_REMESSA)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 
 			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
@@ -93,8 +97,8 @@ public class RemessaService extends CraWebService {
 
 	private ArquivoVO converterStringArquivoVO(String dados) {
 		JAXBContext context;
-		ArquivoVO arquivo = null;
 
+		ArquivoVO arquivo = null;
 		try {
 			context = JAXBContext.newInstance(ArquivoVO.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -134,14 +138,17 @@ public class RemessaService extends CraWebService {
 	 */
 	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
 		setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_REMESSA);
-		Remessa remessa = null;
-		RemessaVO remessaVO = null;
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 
+		Remessa remessa = null;
+		RemessaVO remessaVO = null;
 		try {
 			if (getUsuario().getId() == 0) {
 				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_REMESSA)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 			remessaVO = remessaMediator.buscarRemessaParaCartorio(remessa, usuario.getInstituicao(), nomeArquivo);
 			if (remessaVO == null) {

@@ -18,6 +18,7 @@ import br.com.ieptbto.cra.entidade.PedidoCancelamento;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
+import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.exception.XmlCraException;
@@ -54,17 +55,20 @@ public class CancelamentoProtestoService extends CraWebService {
 	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		setCraAcao(CraAcao.ENVIO_ARQUIVO_CANCELAMENTO_PROTESTO);
-		Arquivo arquivo = new Arquivo();
-		ArquivoVO arquivoVO = new ArquivoVO();
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 
+		Arquivo arquivo = new Arquivo();
+		ArquivoVO arquivoVO = new ArquivoVO();
 		try {
 			if (getUsuario().getId() == 0) {
 				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_CANCELAMENTO_PROTESTO)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);

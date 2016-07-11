@@ -30,7 +30,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
-public class ImportarArquivo5AnosPage extends BasePage<RegistroCnp> {
+public class Importar5AnosCartorioPage extends BasePage<RegistroCnp> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -43,7 +43,7 @@ public class ImportarArquivo5AnosPage extends BasePage<RegistroCnp> {
 	private FileUploadField fileUploadField;
 	private DropDownChoice<Instituicao> dropDownCartorio;
 
-	public ImportarArquivo5AnosPage() {
+	public Importar5AnosCartorioPage() {
 		adicionarComponentes();
 	}
 
@@ -60,7 +60,8 @@ public class ImportarArquivo5AnosPage extends BasePage<RegistroCnp> {
 					final FileUpload uploadedFile = fileUploadField.getFileUpload();
 					final Instituicao instituicao = dropDownCartorio.getModelObject();
 					centralNacionalProtestoMediator.importarCSVCnp(instituicao, uploadedFile);
-					success("Arquivo CNP do cartório importado com sucesso!");
+					success("O arquivo Central Nacional de Protesto ,do cartório de " + instituicao.getNomeFantasia()
+							+ ", foi importado com sucesso!");
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -72,7 +73,7 @@ public class ImportarArquivo5AnosPage extends BasePage<RegistroCnp> {
 			}
 		};
 		form.setMultiPart(true);
-		form.setMaxSize(Bytes.megabytes(10));
+		form.setMaxSize(Bytes.megabytes(20));
 
 		form.add(campoArquivo());
 		form.add(dropDownCartorio());

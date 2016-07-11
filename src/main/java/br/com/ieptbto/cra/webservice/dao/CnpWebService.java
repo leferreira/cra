@@ -113,6 +113,19 @@ public class CnpWebService {
 		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
 	}
 
+	protected String mensagemLoteCnpVazioOuNenhumRegistroValido(Usuario usuario) {
+		MensagemXml mensagemXml = new MensagemXml();
+		Descricao descricao = new Descricao();
+		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
+		descricao.setUsuario(usuario.getLogin());
+
+		mensagemXml.setDescricao(descricao);
+		mensagemXml.setCodigoFinal(CodigoErro.CNP_LOTE_VAZIO.getCodigo());
+		mensagemXml.setDescricaoFinal(CodigoErro.CNP_LOTE_VAZIO.getDescricao());
+		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
+	}
+
 	protected String servicoNaoDisponivelForaDoHorarioConsulta(Usuario usuario) {
 		MensagemXml mensagemXml = new MensagemXml();
 		Descricao descricao = new Descricao();

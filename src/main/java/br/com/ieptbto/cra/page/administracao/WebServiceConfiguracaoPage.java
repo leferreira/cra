@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.webservice;
+package br.com.ieptbto.cra.page.administracao;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
-public class WebServiceConfigPage extends BasePage<CraServiceConfig> {
+public class WebServiceConfiguracaoPage extends BasePage<CraServiceConfig> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -49,7 +49,7 @@ public class WebServiceConfigPage extends BasePage<CraServiceConfig> {
 	private CheckBox envioCnpService;
 	private CheckBox consultaProtestoCnpService;
 
-	public WebServiceConfigPage() {
+	public WebServiceConfiguracaoPage() {
 		this.services = craServiceMediator.carregarServicos();
 
 		adicionarComponentes();

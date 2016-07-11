@@ -20,7 +20,7 @@ import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.administracao.ListaRemoverArquivoPage;
 import br.com.ieptbto.cra.page.administracao.RemoverArquivoPage;
-import br.com.ieptbto.cra.page.administracao.SobreCraPage;
+import br.com.ieptbto.cra.page.administracao.WebServiceConfiguracaoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoCraInstituicaoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
@@ -30,6 +30,7 @@ import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
+import br.com.ieptbto.cra.page.base.SobreCraPage;
 import br.com.ieptbto.cra.page.batimento.BatimentoPage;
 import br.com.ieptbto.cra.page.batimento.BuscarDepositoPage;
 import br.com.ieptbto.cra.page.batimento.ImportarExtratoPage;
@@ -41,7 +42,7 @@ import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.page.centralDeAcoes.CentralDeAcoesPage;
 import br.com.ieptbto.cra.page.cnp.CentralNacionalProtestoPage;
-import br.com.ieptbto.cra.page.cnp.ImportarArquivo5AnosPage;
+import br.com.ieptbto.cra.page.cnp.Importar5AnosCartorioPage;
 import br.com.ieptbto.cra.page.convenio.GerarRemessaConvenioPage;
 import br.com.ieptbto.cra.page.cra.GerarCancelamentosPage;
 import br.com.ieptbto.cra.page.cra.GerarConfirmacaoPage;
@@ -83,7 +84,6 @@ import br.com.ieptbto.cra.page.titulo.MonitorarTitulosPage;
 import br.com.ieptbto.cra.page.usuario.IncluirUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.ListaUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.PerfilUsuarioPage;
-import br.com.ieptbto.cra.page.webservice.WebServiceConfigPage;
 import br.com.ieptbto.cra.security.ISecureApplication;
 import br.com.ieptbto.cra.security.UserRoleAuthorizationStrategy;
 import br.com.ieptbto.cra.security.UserRolesAuthorizer;
@@ -166,10 +166,14 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("HomePage", HomePage.class);
 		mountPage("SobreCra", SobreCraPage.class);
 		mountPage("CentralDeAcoes", CentralDeAcoesPage.class);
-		mountPage("WebServiceConfig", WebServiceConfigPage.class);
 		mountPage("CentralNacionalProtesto", CentralNacionalProtestoPage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
-		mountPage("ImportarArquivo5Anos", ImportarArquivo5AnosPage.class);
+
+		/** SUPER CRA */
+		mountPage("RemoverArquivo", RemoverArquivoPage.class);
+		mountPage("ListaArquivosRemover", ListaRemoverArquivoPage.class);
+		mountPage("WebServiceConfiguracao", WebServiceConfiguracaoPage.class);
+		mountPage("ImportarArquivo5Anos", Importar5AnosCartorioPage.class);
 
 		/** Administracao */
 		mountPage("Batimento", BatimentoPage.class);
@@ -224,12 +228,9 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("SolicitacaoCancelamento", TituloSolicitacaoCancelamentoPage.class);
 		mountPage("TitulosAutorizacaoCancelamento", TitulosAutorizacaoCancelamentoPage.class);
 
-		mountPage("RemoverArquivo", RemoverArquivoPage.class);
-		mountPage("ListaArquivosRemover", ListaRemoverArquivoPage.class);
-
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
-		mountPage("HistoricoDoTitulo", HistoricoPage.class);
+		mountPage("Historico", HistoricoPage.class);
 
 		/** Relatorios Padrão */
 		mountPage("RelatorioArquivosInstituicoesCartorios", RelatorioInstituicoesCartoriosPage.class);
@@ -245,6 +246,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("GerarSlip", GerarSlipPage.class);
 		mountPage("BuscarInstrumentoProtesto", BuscarInstrumentoProtestoPage.class);
 		mountPage("ImportarArquivoDePara", ImportarArquivoDeParaPage.class);
+
 	}
 
 	/**

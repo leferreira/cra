@@ -2,6 +2,9 @@ package br.com.ieptbto.cra.page.cra;
 
 import java.util.List;
 
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -19,16 +22,17 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.ConvenioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 
 /**
  * @author Thasso Araújo
  *
  */
+@AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class GerarCancelamentosPage extends BasePage<PedidoAutorizacaoCancelamento> {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean

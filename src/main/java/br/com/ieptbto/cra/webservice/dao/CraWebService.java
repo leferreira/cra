@@ -14,6 +14,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
@@ -24,8 +25,10 @@ import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
+import br.com.ieptbto.cra.mediator.CraServiceMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
+import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
 import br.com.ieptbto.cra.webservice.VO.Erro;
 import br.com.ieptbto.cra.webservice.VO.MensagemXml;
@@ -47,6 +50,8 @@ public class CraWebService {
 	public static final String CONSTANTE_CANCELAMENTO_XML = "cancelamento";
 
 	@Autowired
+	protected CraServiceMediator craServiceMediator;
+	@Autowired
 	protected LoggerCra loggerCra;
 	protected Usuario usuario;
 	protected String nomeArquivo;
@@ -54,6 +59,24 @@ public class CraWebService {
 	protected CraAcao craAcao;
 	protected MensagemXml mensagemXml;
 	protected Object objectMensagemXml;
+
+	protected String mensagemServicoIndisponivel(Usuario usuario) {
+		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
+			MensagemDeErro msg = new MensagemDeErro(getNomeArquivo(), getUsuario(), CodigoErro.CRA_SERVICO_INDISPONIVEL);
+			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+		}
+
+		MensagemXml mensagemXml = new MensagemXml();
+		Descricao descricao = new Descricao();
+		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setTipoArquivo(getCraAcao().getConstante());
+		descricao.setUsuario(usuario.getLogin());
+
+		mensagemXml.setDescricao(descricao);
+		mensagemXml.setCodigoFinal(CodigoErro.CRA_SERVICO_INDISPONIVEL.getCodigo());
+		mensagemXml.setDescricaoFinal(CodigoErro.CRA_SERVICO_INDISPONIVEL.getDescricao());
+		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
+	}
 
 	protected String setResposta(LayoutPadraoXML layoutPadraoResposta, ArquivoVO arquivo, String nomeArquivo, String nomeNode) {
 		if (getUsuario().getId() == 0) {

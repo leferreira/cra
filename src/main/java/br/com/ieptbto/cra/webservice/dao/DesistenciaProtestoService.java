@@ -19,6 +19,7 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaDesistenciaProtestoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
+import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
@@ -70,6 +71,9 @@ public class DesistenciaProtestoService extends CraWebService {
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_DESISTENCIA_PROTESTO)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
@@ -203,10 +207,10 @@ public class DesistenciaProtestoService extends CraWebService {
 	 * @return
 	 */
 	public String buscarDesistenciaCancelamento(String nomeArquivo, Usuario usuario) {
-		RemessaDesistenciaProtestoVO remessaVO = null;
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 
+		RemessaDesistenciaProtestoVO remessaVO = null;
 		try {
 			if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
 				setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO);
@@ -214,6 +218,9 @@ public class DesistenciaProtestoService extends CraWebService {
 				setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO);
 			} else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
 				setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_DESISTENCIA_CANCELAMENTO)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 
 			remessaVO = desistenciaProtestoMediator.buscarDesistenciaCancelamentoCartorio(usuario.getInstituicao(), nomeArquivo);
@@ -271,6 +278,10 @@ public class DesistenciaProtestoService extends CraWebService {
 			} else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
 				setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO);
 			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.CONFIRMAR_RECEBIMENTO_DESISTENCIA_CANCELAMENTO)) {
+				return mensagemServicoIndisponivel(usuario);
+			}
+
 			desistenciaProtestoMediator.confirmarRecebimentoDesistenciaCancelamento(usuario.getInstituicao(), nomeArquivo);
 			loggerCra.sucess(usuario, getCraAcao(),
 					"Arquivo " + nomeArquivo + " foi confirmado o recebimento pelo " + usuario.getInstituicao().getNomeFantasia() + ".");

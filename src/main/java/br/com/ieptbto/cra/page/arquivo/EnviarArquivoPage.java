@@ -105,7 +105,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					arquivoRetorno.getErros().clear();
 
 				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
+					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);

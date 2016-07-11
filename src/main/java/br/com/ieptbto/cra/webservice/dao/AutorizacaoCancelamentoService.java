@@ -18,6 +18,7 @@ import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
+import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.exception.XmlCraException;
@@ -64,6 +65,9 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_AUTORIZACAO_CANCELAMENTO)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);

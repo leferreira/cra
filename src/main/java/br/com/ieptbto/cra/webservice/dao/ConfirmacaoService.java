@@ -29,6 +29,7 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.ConfirmacaoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
+import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
@@ -66,16 +67,19 @@ public class ConfirmacaoService extends CraWebService {
 	public String processar(String nomeArquivo, Usuario usuario) {
 		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 		setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_CONFIRMACAO);
-		ArquivoVO arquivoVO = null;
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 
+		ArquivoVO arquivoVO = null;
 		try {
 			if (getUsuario().getId() == 0) {
 				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_CONFIRMACAO)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
@@ -166,6 +170,9 @@ public class ConfirmacaoService extends CraWebService {
 		try {
 			if (getUsuario().getId() == 0) {
 				return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_CONFIRMACAO)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);

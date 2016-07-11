@@ -22,6 +22,7 @@ import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
+import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 
 /**
  * @author Thasso Araújo
@@ -53,10 +54,15 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 				return arquivoCnpJaEnviadoHoje(usuario);
 			}
 			if (usuario.getInstituicao().getId() == 24 || usuario.getInstituicao().getId() == 18 || usuario.getInstituicao().getId() == 14
-					|| usuario.getInstituicao().getId() == 13 || usuario.getInstituicao().getId() == 2 || usuario.getInstituicao().getId() == 82) {
+					|| usuario.getInstituicao().getId() == 13 || usuario.getInstituicao().getId() == 2 || usuario.getInstituicao().getId() == 82
+					|| usuario.getInstituicao().getId() == 43) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			lote = centralNacionalProtestoMediator.processarLoteCartorio(getUsuario().getInstituicao(), converterStringArquivoCnpVO(dados));
+			if (lote == null) {
+				loggerCra.alert(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, CodigoErro.CNP_LOTE_VAZIO.getDescricao());
+				return mensagemLoteCnpVazioOuNenhumRegistroValido(usuario);
+			}
 			loggerCra.sucess(getUsuario(), CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Arquivo da CNP enviado por " + getUsuario().getInstituicao().getNomeFantasia() + " processado com sucesso!");
 		} catch (InfraException ex) {

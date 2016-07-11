@@ -264,6 +264,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 
 				try {
 					instrumentoMediator.alterarInstrumentosParaGerado(getInstrumentosProtesto());
+					getInstrumentosProtesto().clear();
+					success("As slips foram geradas com sucesso!");
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);

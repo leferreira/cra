@@ -29,6 +29,7 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.entidade.vo.RetornoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
+import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
@@ -62,12 +63,12 @@ public class RetornoService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario) {
-		setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_RETORNO);
 		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
-		ArquivoVO arquivoVO = null;
+		setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_RETORNO);
 		setUsuario(usuario);
 		setNomeArquivo(nomeArquivo);
 
+		ArquivoVO arquivoVO = null;
 		try {
 
 			if (getUsuario().getId() == 0) {
@@ -75,6 +76,9 @@ public class RetornoService extends CraWebService {
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_RETORNO)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
@@ -166,6 +170,9 @@ public class RetornoService extends CraWebService {
 			}
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_RETORNO)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {

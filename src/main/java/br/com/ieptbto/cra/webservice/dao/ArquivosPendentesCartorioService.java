@@ -15,6 +15,7 @@ import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
@@ -52,6 +53,9 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		try {
 			if (usuario == null) {
 				return setRespostaUsuarioInvalido();
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO)) {
+				return mensagemServicoIndisponivel(usuario);
 			}
 			Instituicao instituicaoUsuario = instituicaoMediator.carregarInstituicaoPorId(usuario.getInstituicao());
 			arquivo = remessaMediator.arquivosPendentes(instituicaoUsuario);

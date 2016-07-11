@@ -30,7 +30,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER, CraRoles.ADMIN })
 public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 
 	/***/
