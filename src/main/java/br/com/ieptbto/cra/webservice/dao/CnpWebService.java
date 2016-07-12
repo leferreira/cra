@@ -21,6 +21,7 @@ import br.com.ieptbto.cra.entidade.LoteCnp;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
+import br.com.ieptbto.cra.mediator.CraServiceMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
@@ -42,6 +43,8 @@ public class CnpWebService {
 	public static final String HORA_INICIO_ENVIO = "00:00:01";
 	public static final String HORA_FIM_ENVIO = "23:59:59";
 
+	@Autowired
+	protected CraServiceMediator craServiceMediator;
 	@Autowired
 	protected LoggerCra loggerCra;
 	protected Usuario usuario;

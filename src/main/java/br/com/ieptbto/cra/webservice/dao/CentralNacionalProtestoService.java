@@ -20,6 +20,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoCnpVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
+import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
@@ -54,6 +55,9 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			if (!getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 				return usuarioNaoPermitidoConsultaArquivoCNP();
 			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
+				return mensagemServicoIndisponivel(usuario);
+			}
 			if (centralNacionalProtestoMediator.isLoteLiberadoConsultaPorData(new LocalDate())) {
 				arquivoCnp = centralNacionalProtestoMediator.processarLoteNacionalPorData(new LocalDate());
 			} else {
@@ -84,8 +88,7 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			return gerarXmlConsultaCartoriosCnp(cartorios);
 
 		} catch (Exception ex) {
-			logger.info(ex.getMessage(), ex.getCause());
-			ex.printStackTrace();
+			logger.info(ex.getMessage(), ex);
 			loggerCra.error(getUsuario(), CraAcao.CONSULTA_CARTORIOS_CENTRAL_NACIONAL_PROTESTO,
 					"Erro interno ao informar os cartórios ativos na CNP.", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
