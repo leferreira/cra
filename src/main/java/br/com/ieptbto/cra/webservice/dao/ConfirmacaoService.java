@@ -94,7 +94,7 @@ public class ConfirmacaoService extends CraWebService {
 			loggerCra.sucess(getUsuario(), getCraAcao(),
 					"Arquivo de Confirmação " + nomeArquivo + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e.getCause());
+			logger.error(e.getMessage(), e);
 			loggerCra.error(getUsuario(), getCraAcao(), "Erro interno ao construir o arquivo de Confirmação " + nomeArquivo + " recebido por "
 					+ getUsuario().getInstituicao().getNomeFantasia() + ".", e);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
@@ -124,13 +124,13 @@ public class ConfirmacaoService extends CraWebService {
 		}
 		string.append("</confirmacao>");
 		return XmlFormatterUtil.format(xml + cabecalho + string.toString());
-
 	}
 
 	protected String gerarMensagem(Object mensagem, String nomeNo) {
 		String msg = null;
 		Writer writer = new StringWriter();
 		JAXBContext context;
+
 		try {
 			context = JAXBContext.newInstance(mensagem.getClass());
 
@@ -145,10 +145,10 @@ public class ConfirmacaoService extends CraWebService {
 			writer.close();
 
 		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
+			logger.error(e.getMessage(), e);
 			throw new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (IOException e) {
-			logger.error(e.getMessage(), e.getCause());
+			logger.error(e.getMessage(), e);
 			throw new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
 		return msg;
@@ -188,12 +188,11 @@ public class ConfirmacaoService extends CraWebService {
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Confirmação " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (InfraException ex) {
-			logger.info(ex.getMessage(), ex.getCause());
-			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage());
+			logger.info(ex.getMessage(), ex);
+			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage(), ex);
 			return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.info(e.getMessage(), e.getCause());
+			logger.info(e.getMessage(), e);
 			loggerCra.error(getUsuario(), getCraAcao(), e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
@@ -222,7 +221,7 @@ public class ConfirmacaoService extends CraWebService {
 			arquivo = (ArquivoConfirmacaoVO) unmarshaller.unmarshal(new InputSource(xml));
 
 		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
+			logger.error(e.getMessage(), e);
 			throw new InfraException("Erro ao ler o arquivo recebido. " + e.getMessage());
 		}
 		return arquivo;

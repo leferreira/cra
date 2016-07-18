@@ -1,5 +1,8 @@
 package br.com.ieptbto.cra.webservice.dao;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -25,6 +28,7 @@ import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
+import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.CraServiceMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
@@ -267,6 +271,24 @@ public class CraWebService {
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
 		return getMensagem();
+	}
+	
+	protected void salvarArquivoXMLParaFisico(String fileName, String content){
+		File diretorioTeste = new File(ConfiguracaoBase.DIRETORIO_TESTE);
+
+		try {
+			if (!diretorioTeste.exists()){
+				diretorioTeste.mkdirs();
+			}
+			File arquivo = new File(ConfiguracaoBase.DIRETORIO_TESTE + fileName);
+			BufferedWriter bWrite = new BufferedWriter(new FileWriter(arquivo));
+			bWrite.write(content);
+			bWrite.flush();
+			bWrite.close();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		}
 	}
 
 	public Usuario getUsuario() {

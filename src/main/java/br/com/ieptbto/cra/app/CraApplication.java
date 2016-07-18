@@ -18,6 +18,7 @@ import org.joda.time.DateTimeZone;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
+import br.com.ieptbto.cra.page.administracao.IncluirTaxaCraPage;
 import br.com.ieptbto.cra.page.administracao.ListaRemoverArquivoPage;
 import br.com.ieptbto.cra.page.administracao.RemoverArquivoPage;
 import br.com.ieptbto.cra.page.administracao.WebServiceConfiguracaoPage;
@@ -174,6 +175,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("ListaArquivosRemover", ListaRemoverArquivoPage.class);
 		mountPage("WebServiceConfiguracao", WebServiceConfiguracaoPage.class);
 		mountPage("ImportarArquivo5Anos", Importar5AnosCartorioPage.class);
+		mountPage("IncluirTaxaCra", IncluirTaxaCraPage.class);
 
 		/** Administracao */
 		mountPage("Batimento", BatimentoPage.class);

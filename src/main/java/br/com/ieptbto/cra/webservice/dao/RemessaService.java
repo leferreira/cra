@@ -88,7 +88,7 @@ public class RemessaService extends CraWebService {
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex.getCause());
+			logger.error(ex.getMessage(), ex);
 			loggerCra.error(getUsuario(), getCraAcao(), "Erro interno no processamento do arquivo de Remessa " + nomeArquivo + ".", ex);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}
@@ -159,7 +159,7 @@ public class RemessaService extends CraWebService {
 			loggerCra.sucess(getUsuario(), getCraAcao(),
 					"Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex.getCause());
+			logger.error(ex.getMessage(), ex);
 			loggerCra.error(getUsuario(), getCraAcao(), "Erro interno ao construir o arquivo de Remessa " + nomeArquivo + " recebido por "
 					+ getUsuario().getInstituicao().getNomeFantasia() + ".", ex);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);

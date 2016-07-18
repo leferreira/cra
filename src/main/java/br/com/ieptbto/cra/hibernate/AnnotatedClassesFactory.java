@@ -55,6 +55,7 @@ import br.com.ieptbto.cra.entidade.RodapeArquivo;
 import br.com.ieptbto.cra.entidade.RodapeCartorio;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
+import br.com.ieptbto.cra.entidade.TaxaCra;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
@@ -134,7 +135,7 @@ public class AnnotatedClassesFactory {
 
 		classesHibernate.add(LoteCnp.class);
 		classesHibernate.add(RegistroCnp.class);
-
+		classesHibernate.add(TaxaCra.class);
 	}
 
 	/**

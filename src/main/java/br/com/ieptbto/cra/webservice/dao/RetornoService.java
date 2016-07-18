@@ -70,7 +70,6 @@ public class RetornoService extends CraWebService {
 
 		ArquivoVO arquivoVO = null;
 		try {
-
 			if (getUsuario().getId() == 0) {
 				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
@@ -92,7 +91,7 @@ public class RetornoService extends CraWebService {
 			loggerCra.sucess(getUsuario(), getCraAcao(),
 					"Arquivo de Retorno " + nomeArquivo + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e.getCause());
+			logger.error(e.getMessage(), e);
 			loggerCra.error(getUsuario(), getCraAcao(), "Erro interno ao construir o arquivo de Retorno " + nomeArquivo + " recebido por "
 					+ getUsuario().getInstituicao().getNomeFantasia() + ".", e);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
@@ -185,11 +184,11 @@ public class RetornoService extends CraWebService {
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Retorno " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (InfraException ex) {
-			logger.info(ex.getMessage(), ex.getCause());
-			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage());
+			logger.info(ex.getMessage(), ex);
+			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage(), ex);
 			return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
 		} catch (Exception e) {
-			logger.info(e.getMessage(), e.getCause());
+			logger.info(e.getMessage(), e);
 			loggerCra.error(getUsuario(), getCraAcao(), e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
 		}

@@ -227,10 +227,13 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				try {
 					Class.forName("org.postgresql.Driver");
 					connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
+					// connection =
+					// DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra",
+					// "postgres", "1234");
 
 					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
 					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
-					parametros.put("DATA_GERACAO", new LocalDate().toDate());
+					parametros.put("DATA_GERACAO", new LocalDate("25/05/2016").toDate());
 
 					String urlJasper = "../../relatorio/ListagemInstrumentosBancos.jrxml";
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(urlJasper));

@@ -39,7 +39,7 @@ public class UsuariosComarcasHomologadasService extends CraWebService {
 	public String verificarComarcasHomologadas(Usuario usuario, String codigoApresentante) {
 		setUsuario(usuario);
 
-		if (getUsuario() == null) {
+		if (getUsuario().getId() == 0) {
 			return getMensagemFalhaAutenticao();
 		}
 
@@ -106,7 +106,7 @@ public class UsuariosComarcasHomologadasService extends CraWebService {
 		setUsuario(usuario);
 
 		xml = xml.concat("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\" ?>");
-		if (getUsuario() == null) {
+		if (getUsuario().getId() == 0) {
 			xml = xml.concat("<usuario credenciaisCorretas=\"false\"/>");
 			return XmlFormatterUtil.format(xml);
 		}

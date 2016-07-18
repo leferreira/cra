@@ -117,6 +117,7 @@ public class CraMenu extends Panel {
 		menuSuper.addItem("WebServiceConfiguracao", rolesIncluir);
 		menuSuper.addItem("ImportarArquivo5Anos", rolesIncluir);
 		menuSuper.addItem("RemoverArquivo", rolesIncluir);
+		menuSuper.addItem("IncluirTaxaCra", rolesIncluir);
 	}
 
 	private boolean verificaPermissao(Usuario user) {

@@ -1,7 +1,6 @@
 package br.com.ieptbto.cra.webservice.dao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -60,7 +59,7 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 		setNomeArquivo(nomeArquivo);
 
 		try {
-			if (getUsuario() == null) {
+			if (getUsuario().getId() == 0) {
 				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
@@ -86,12 +85,11 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 
 		} catch (InfraException ex) {
-			logger.error(ex.getMessage());
-			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage());
+			logger.error(ex.getMessage(), ex);
+			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage(), ex);
 			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(Arrays.toString(e.getStackTrace()));
+			logger.error(e.getMessage(), e);
 			loggerCra.error(getUsuario(), getCraAcao(),
 					"Erro interno no processamento do arquivo de Autorização de Cancelamento " + nomeArquivo + "." + e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);

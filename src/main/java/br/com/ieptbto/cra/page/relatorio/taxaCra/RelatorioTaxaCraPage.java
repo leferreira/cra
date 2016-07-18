@@ -15,7 +15,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER, CraRoles.ADMIN })
 public class RelatorioTaxaCraPage extends BasePage<TituloRemessa> {
 
 	/***/

@@ -1,7 +1,6 @@
 package br.com.ieptbto.cra.webservice.dao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -86,14 +85,13 @@ public class CancelamentoProtestoService extends CraWebService {
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 
 		} catch (InfraException ex) {
-			logger.error(ex.getMessage());
-			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage());
+			logger.error(ex.getMessage(), ex);
+			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage(), ex);
 			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(Arrays.toString(e.getStackTrace()));
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
 			loggerCra.error(getUsuario(), getCraAcao(),
-					"Erro interno no processamento do arquivo de Cancelamento de Protesto " + nomeArquivo + "." + e.getMessage(), e);
+					"Erro interno no processamento do arquivo de Cancelamento de Protesto " + nomeArquivo + "." + ex.getMessage(), ex);
 			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
 		}
 		return gerarMensagem(getMensagemXml(), CONSTANTE_RELATORIO_XML);
