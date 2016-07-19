@@ -3,7 +3,6 @@ package br.com.ieptbto.cra.webservice.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,8 +45,8 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 	private InstituicaoMediator instituicaoMediator;
 
 	public String buscarArquivosPendentesCartorio(Usuario usuario) {
-		this.usuario = usuario;
-		this.nomeArquivo = StringUtils.EMPTY;
+		setUsuario(usuario);
+		setNomeArquivo("");
 
 		Arquivo arquivo = null;
 		try {

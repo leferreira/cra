@@ -21,9 +21,7 @@ import br.com.ieptbto.cra.util.DataUtil;
 
 public class DataTableAcoesPanel extends Panel {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	private DataProvider<LogCra> dataProvider;
@@ -99,6 +97,6 @@ public class DataTableAcoesPanel extends Panel {
 				return "col-center text-center col-action";
 			}
 		});
-		return new DefaultDataTable<>("table", columns, dataProvider, 1000);
+		return new DefaultDataTable<>("table", columns, dataProvider, 10000);
 	}
 }

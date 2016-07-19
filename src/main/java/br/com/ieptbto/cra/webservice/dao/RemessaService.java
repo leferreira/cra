@@ -154,7 +154,6 @@ public class RemessaService extends CraWebService {
 			if (remessaVO == null) {
 				return setRespostaPadrao(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 			}
-
 			setMensagem(gerarResposta(remessaVO, getNomeArquivo(), CONSTANTE_REMESSA_XML));
 			loggerCra.sucess(getUsuario(), getCraAcao(),
 					"Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
@@ -196,5 +195,4 @@ public class RemessaService extends CraWebService {
 	public void setArquivoVO(ArquivoVO arquivoVO) {
 		this.arquivoVO = arquivoVO;
 	}
-
 }

@@ -416,9 +416,9 @@ public class RelatorioUtil implements Serializable {
 	private Connection getConnection() {
 		try {
 			Class.forName("org.postgresql.Driver");
-			 return	 DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra",
-			 "postgres", "@dminB3g1n");
-//			return DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra", "postgres", "1234");
+//			 return	 DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra",
+//			 "postgres", "@dminB3g1n");
+			return DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra", "postgres", "1234");
 		} catch (Exception e) {
 			throw new InfraException("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
 		}

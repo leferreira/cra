@@ -57,12 +57,12 @@ public class CraWebService {
 	protected CraServiceMediator craServiceMediator;
 	@Autowired
 	protected LoggerCra loggerCra;
-	protected Usuario usuario;
 	protected String nomeArquivo;
 	protected String mensagem;
 	protected CraAcao craAcao;
 	protected MensagemXml mensagemXml;
 	protected Object objectMensagemXml;
+	private Usuario usuario;
 
 	protected String mensagemServicoIndisponivel(Usuario usuario) {
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
@@ -291,13 +291,6 @@ public class CraWebService {
 		}
 	}
 
-	public Usuario getUsuario() {
-		if (usuario == null) {
-			usuario = new Usuario();
-		}
-		return usuario;
-	}
-
 	public String getNomeArquivo() {
 		return nomeArquivo;
 	}
@@ -335,10 +328,6 @@ public class CraWebService {
 		return mensagemXml;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
 	public void setNomeArquivo(String nomeArquivo) {
 		this.nomeArquivo = nomeArquivo;
 	}
@@ -352,5 +341,16 @@ public class CraWebService {
 
 	public void setCraAcao(CraAcao craAcao) {
 		this.craAcao = craAcao;
+	}
+	
+	public Usuario getUsuario() {
+		if (usuario == null) {
+			usuario = new Usuario();
+		}
+		return usuario;
+	}
+	
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 }
