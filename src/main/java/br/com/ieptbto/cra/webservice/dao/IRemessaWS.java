@@ -165,6 +165,18 @@ public interface IRemessaWS {
 	@GET
 	public String confirmarRecebimentoDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo,
 			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
+	
+	/**
+	 * 
+	 * @param nomeArquivo
+	 * @param login
+	 * @param senha
+	 * @return
+	 */
+	@WebMethod(operationName = "confirmarEnvioConfirmacaoRetorno")
+	@GET
+	public String confirmarEnvioConfirmacaoRetorno(@WebParam(name = "user_arq") String nomeArquivo,
+			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
 
 	/**
 	 * 

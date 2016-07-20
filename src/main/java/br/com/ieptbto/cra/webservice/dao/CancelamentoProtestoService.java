@@ -45,6 +45,7 @@ public class CancelamentoProtestoService extends CraWebService {
 	InstituicaoMediator instituicaoMediator;
 
 	private List<Exception> erros;
+	private Object relatorio;
 
 	/**
 	 * @param nomeArquivo
@@ -53,53 +54,46 @@ public class CancelamentoProtestoService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
-		setCraAcao(CraAcao.ENVIO_ARQUIVO_CANCELAMENTO_PROTESTO);
-		setUsuario(usuario);
-		setNomeArquivo(nomeArquivo);
+		this.craAcao = CraAcao.ENVIO_ARQUIVO_CANCELAMENTO_PROTESTO;
+		this.nomeArquivo = nomeArquivo;
 
 		Arquivo arquivo = new Arquivo();
 		ArquivoVO arquivoVO = new ArquivoVO();
 		try {
-			if (getUsuario().getId() == 0) {
-				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			if (usuario == null) {
+				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_CANCELAMENTO_PROTESTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
-				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
+				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
 			}
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
-				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
-
-			arquivo = gerarArquivoCancelamento(getUsuario().getInstituicao().getLayoutPadraoXML(), arquivo, dados);
-			if (getUsuario().getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
+			arquivo = cancelamentoProtestoMediator.processarCancelamento(nomeArquivo, dados, getErros(), usuario);
+			if (usuario.equals(LayoutPadraoXML.SERPRO)) {
 				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 			}
-			setMensagemXml(gerarResposta(arquivo, getUsuario()));
+			relatorio = gerarResposta(arquivo, usuario);
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Cancelamento de Protesto " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage(), ex);
-			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage(), ex);
-			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex);
+			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
-			loggerCra.error(getUsuario(), getCraAcao(),
+			loggerCra.error(usuario, getCraAcao(),
 					"Erro interno no processamento do arquivo de Cancelamento de Protesto " + nomeArquivo + "." + ex.getMessage(), ex);
-			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return gerarMensagem(getMensagemXml(), CONSTANTE_RELATORIO_XML);
-	}
-
-	private Arquivo gerarArquivoCancelamento(LayoutPadraoXML layoutPadraoXML, Arquivo arquivo, String dados) {
-		logger.info("Processando arquivo de cancelamento " + getNomeArquivo());
-		return cancelamentoProtestoMediator.processarCancelamento(getNomeArquivo(), layoutPadraoXML, dados, getErros(), getUsuario());
+		return gerarMensagem(relatorio, CONSTANTE_RELATORIO_XML);
 	}
 
 	private MensagemXml gerarResposta(Arquivo arquivo, Usuario usuario) {
@@ -119,7 +113,7 @@ public class CancelamentoProtestoService extends CraWebService {
 		desc.setDataMovimento(arquivo.getDataEnvio().toString(DataUtil.PADRAO_FORMATACAO_DATA));
 		desc.setPortador(arquivo.getInstituicaoEnvio().getCodigoCompensacao());
 		desc.setUsuario(usuario.getNome());
-		desc.setNomeArquivo(getNomeArquivo());
+		desc.setNomeArquivo(nomeArquivo);
 
 		for (CancelamentoProtesto cp : arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
 			Mensagem mensagem = new Mensagem();
@@ -137,7 +131,7 @@ public class CancelamentoProtestoService extends CraWebService {
 			mensagem.setDescricao(
 					"Município: " + exception.getCodigoIbge() + " - " + exception.getMunicipio() + " - " + exception.getErro().getDescricao());
 			mensagens.add(mensagem);
-			loggerCra.alert(getUsuario(), getCraAcao(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
+			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
 		}
 		return mensagemRetorno;
 	}

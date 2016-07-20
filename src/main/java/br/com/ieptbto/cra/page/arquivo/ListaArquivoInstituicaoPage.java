@@ -87,8 +87,6 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(arquivo.getHoraEnvio())));
 				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
-				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase())
-						.setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
 				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
 				divInfo.add(new AttributeAppender("id", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
 				divInfo.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()));

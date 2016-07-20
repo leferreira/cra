@@ -43,8 +43,10 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 	private AutorizacaoCancelamentoMediator autorizacaoCancelamentoMediator;
 	@Autowired
 	private InstituicaoMediator instituicaoMediator;
+	
 	private List<Exception> erros;
-
+	private Object relatorio;
+	
 	/**
 	 * @param nomeArquivo
 	 * @param usuario
@@ -52,54 +54,47 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
-		setCraAcao(CraAcao.ENVIO_ARQUIVO_AUTORIZACAO_CANCELAMENTO);
+		this.craAcao = CraAcao.ENVIO_ARQUIVO_AUTORIZACAO_CANCELAMENTO;
+		this.nomeArquivo = nomeArquivo;
+		
 		Arquivo arquivo = new Arquivo();
 		ArquivoVO arquivoVO = new ArquivoVO();
-		setUsuario(usuario);
-		setNomeArquivo(nomeArquivo);
-
 		try {
-			if (getUsuario().getId() == 0) {
-				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			if (usuario == null) {
+				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_AUTORIZACAO_CANCELAMENTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
-				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
+				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
 			}
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
-				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
 
-			arquivo = gerarArquivoAutorizacaoCancelamento(getUsuario().getInstituicao().getLayoutPadraoXML(), dados);
-			if (getUsuario().getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
+			arquivo = autorizacaoCancelamentoMediator.processarAutorizacaoCancelamento(nomeArquivo, dados, getErros(), usuario);
+			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 			}
-
-			setMensagemXml(gerarResposta(arquivo, getUsuario()));
+			relatorio = gerarResposta(arquivo, usuario);
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Autorização de Cancelamento " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage(), ex);
-			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage(), ex);
-			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex);
+			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			loggerCra.error(getUsuario(), getCraAcao(),
+			loggerCra.error(usuario, getCraAcao(),
 					"Erro interno no processamento do arquivo de Autorização de Cancelamento " + nomeArquivo + "." + e.getMessage(), e);
-			return setRespostaErroInternoNoProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return gerarMensagem(getMensagem(), CONSTANTE_RELATORIO_XML);
-	}
-
-	private Arquivo gerarArquivoAutorizacaoCancelamento(LayoutPadraoXML layoutPadraoXML, String dados) {
-		logger.info("Processando arquivo de autorizacao de cancelamento " + getNomeArquivo());
-		return autorizacaoCancelamentoMediator.processarAutorizacaoCancelamento(getNomeArquivo(), layoutPadraoXML, dados, getErros(), getUsuario());
+		return gerarMensagem(relatorio, CONSTANTE_RELATORIO_XML);
 	}
 
 	private MensagemXml gerarResposta(Arquivo arquivo, Usuario usuario) {
@@ -119,7 +114,7 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 		desc.setDataMovimento(arquivo.getDataEnvio().toString(DataUtil.PADRAO_FORMATACAO_DATA));
 		desc.setPortador(arquivo.getInstituicaoEnvio().getCodigoCompensacao());
 		desc.setUsuario(usuario.getNome());
-		desc.setNomeArquivo(getNomeArquivo());
+		desc.setNomeArquivo(nomeArquivo);
 
 		for (AutorizacaoCancelamento ac : arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento()) {
 			Mensagem mensagem = new Mensagem();
@@ -137,7 +132,7 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 			mensagem.setDescricao(
 					"Município: " + exception.getCodigoIbge() + " - " + exception.getMunicipio() + " - " + exception.getErro().getDescricao());
 			mensagens.add(mensagem);
-			loggerCra.alert(getUsuario(), getCraAcao(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
+			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
 		}
 		return mensagemRetorno;
 	}

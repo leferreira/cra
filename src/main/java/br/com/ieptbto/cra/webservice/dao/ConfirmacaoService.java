@@ -52,10 +52,9 @@ public class ConfirmacaoService extends CraWebService {
 	ConfirmacaoMediator confirmacaoMediator;
 	@Autowired
 	ArquivoMediator arquivoMediator;
-
-	private ArquivoVO arquivoVO;
-	private ArquivoConfirmacaoVO arquivoConfirmacaoVO;
-	private ConfirmacaoVO confirmacaoVO;
+	
+	private Object relatorio;
+	private String resposta;
 
 	/**
 	 * Métodos de consulta de confirmação pelos bancos/convênios
@@ -66,52 +65,50 @@ public class ConfirmacaoService extends CraWebService {
 	 */
 	public String processar(String nomeArquivo, Usuario usuario) {
 		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
-		setCraAcao(CraAcao.DOWNLOAD_ARQUIVO_CONFIRMACAO);
-		setUsuario(usuario);
-		setNomeArquivo(nomeArquivo);
+		this.craAcao =CraAcao.DOWNLOAD_ARQUIVO_CONFIRMACAO;
+		this.nomeArquivo = nomeArquivo;
 
 		ArquivoVO arquivoVO = null;
 		try {
-			if (getUsuario().getId() == 0) {
-				return setResposta(LayoutPadraoXML.CRA_NACIONAL, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			if (usuario == null) {
+				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-				return setResposta(usuario.getInstituicao().getLayoutPadraoXML(), arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_CONFIRMACAO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			if (!getNomeArquivo().contains(getUsuario().getInstituicao().getCodigoCompensacao())) {
-				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
+				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
 			}
-
-			remessas = remessaMediator.buscarArquivos(getNomeArquivo(), getUsuario().getInstituicao());
+			remessas = remessaMediator.buscarArquivos(nomeArquivo, usuario.getInstituicao());
 			if (remessas.isEmpty()) {
-				return setRespostaArquivoEmProcessamento(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+				return setRespostaArquivoEmProcessamento(usuario, nomeArquivo);
 			}
 
-			setMensagem(gerarResposta(usuario.getInstituicao().getLayoutPadraoXML(), remessas, getNomeArquivo(), CONSTANTE_CONFIRMACAO_XML));
-			loggerCra.sucess(getUsuario(), getCraAcao(),
-					"Arquivo de Confirmação " + nomeArquivo + " recebido com sucesso por " + getUsuario().getInstituicao().getNomeFantasia() + ".");
+			resposta = gerarResposta(usuario, remessas, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
+			loggerCra.sucess(usuario, getCraAcao(),
+					"Arquivo de Confirmação " + nomeArquivo + " recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			loggerCra.error(getUsuario(), getCraAcao(), "Erro interno ao construir o arquivo de Confirmação " + nomeArquivo + " recebido por "
-					+ getUsuario().getInstituicao().getNomeFantasia() + ".", e);
-			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
+			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo de Confirmação " + nomeArquivo + " recebido por "
+					+ usuario.getInstituicao().getNomeFantasia() + ".", e);
+			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return getMensagem();
+		return resposta;
 	}
 
-	private String gerarResposta(LayoutPadraoXML layoutPadraoResposta, List<RemessaVO> remessas, String nomeArquivo, String constanteConfirmacaoXml) {
+	private String gerarResposta(Usuario usuario, List<RemessaVO> remessas, String nomeArquivo, String constanteConfirmacaoXml) {
 		StringBuffer string = new StringBuffer();
 		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
 		String cabecalho = "<confirmacao>";
 
-		if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			string.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>");
 		}
 		for (RemessaVO remessaVO : remessas) {
-			if (layoutPadraoResposta.equals(LayoutPadraoXML.SERPRO)) {
+			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 				string.append("<comarca CodMun=\"" + remessaVO.getCabecalho().getCodigoMunicipio() + "\">");
 				String msg = gerarMensagem(remessaVO, CONSTANTE_CONFIRMACAO_XML).replace("</confirmacao>", "").replace(cabecalho, "");
 				string.append(msg);
@@ -163,40 +160,39 @@ public class ConfirmacaoService extends CraWebService {
 	 * @return
 	 */
 	public String enviarConfirmacao(String nomeArquivo, Usuario usuario, String dados) {
-		setCraAcao(CraAcao.ENVIO_ARQUIVO_CONFIRMACAO);
-		setUsuario(usuario);
-		setNomeArquivo(nomeArquivo);
+		this.craAcao = CraAcao.ENVIO_ARQUIVO_CONFIRMACAO;
+		this.nomeArquivo = nomeArquivo;
 
 		try {
-			if (getUsuario().getId() == 0) {
-				return setResposta(LayoutPadraoXML.CRA_NACIONAL, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+			if (usuario ==null) {
+				return setResposta(usuario, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_CONFIRMACAO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
-				return setRespostaArquivoEmBranco(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo);
+				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
 			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
-				return setRespostaArquivoJaEnviadoAnteriormente(usuario.getInstituicao().getLayoutPadraoXML(), nomeArquivo, arquivoJaEnviado);
+				return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
 			}
 
-			setArquivoConfirmacaoVO(converterStringArquivoVO(dados));
-			setConfirmacaoVO(ConversorArquivoVO.converterParaRemessaVO(getArquivoConfirmacaoVO()));
-			setMensagemXml(confirmacaoMediator.processarXML(getConfirmacaoVO(), getUsuario(), nomeArquivo));
+			ArquivoConfirmacaoVO arquivoConfirmacaoVO = converterStringArquivoVO(dados);
+			ConfirmacaoVO confirmacaoVO  = ConversorArquivoVO.converterParaRemessaVO(arquivoConfirmacaoVO);
+			relatorio = confirmacaoMediator.processarXML(confirmacaoVO, usuario, nomeArquivo);
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Confirmação " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex);
-			loggerCra.error(getUsuario(), getCraAcao(), ex.getMessage(), ex);
-			return setRespostaErrosServicosCartorios(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo, ex.getMessage());
+			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex);
+			return setRespostaErrosServicosCartorios(usuario, nomeArquivo, ex.getMessage());
 		} catch (Exception e) {
 			logger.info(e.getMessage(), e);
-			loggerCra.error(getUsuario(), getCraAcao(), e.getMessage(), e);
-			return setRespostaErroInternoNoProcessamento(LayoutPadraoXML.CRA_NACIONAL, nomeArquivo);
+			loggerCra.error(usuario, getCraAcao(), e.getMessage(), e);
+			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return gerarMensagem(getMensagemXml(), CONSTANTE_CONFIRMACAO_XML);
+		return gerarMensagem(relatorio, CONSTANTE_CONFIRMACAO_XML);
 	}
 
 	private ArquivoConfirmacaoVO converterStringArquivoVO(String dados) {
@@ -225,29 +221,5 @@ public class ConfirmacaoService extends CraWebService {
 			throw new InfraException("Erro ao ler o arquivo recebido. " + e.getMessage());
 		}
 		return arquivo;
-	}
-
-	public ArquivoVO getArquivoVO() {
-		return arquivoVO;
-	}
-
-	public void setArquivoVO(ArquivoVO arquivoVO) {
-		this.arquivoVO = arquivoVO;
-	}
-
-	public ConfirmacaoVO getConfirmacaoVO() {
-		return confirmacaoVO;
-	}
-
-	public void setConfirmacaoVO(ConfirmacaoVO confirmacaoVO) {
-		this.confirmacaoVO = confirmacaoVO;
-	}
-
-	public ArquivoConfirmacaoVO getArquivoConfirmacaoVO() {
-		return arquivoConfirmacaoVO;
-	}
-
-	public void setArquivoConfirmacaoVO(ArquivoConfirmacaoVO arquivoConfirmacaoVO) {
-		this.arquivoConfirmacaoVO = arquivoConfirmacaoVO;
 	}
 }

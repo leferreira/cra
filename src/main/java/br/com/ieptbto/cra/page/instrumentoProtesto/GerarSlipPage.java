@@ -26,7 +26,6 @@ import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
-import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
@@ -231,9 +230,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					// DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra",
 					// "postgres", "1234");
 
-					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
+					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH); 
 					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
-					parametros.put("DATA_GERACAO", new LocalDate("25/05/2016").toDate());
 
 					String urlJasper = "../../relatorio/ListagemInstrumentosBancos.jrxml";
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(urlJasper));

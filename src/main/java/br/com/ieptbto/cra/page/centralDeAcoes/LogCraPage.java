@@ -52,7 +52,11 @@ public class LogCraPage extends BasePage<LogCra> {
 	}
 
 	private TextArea<String> textAreaDescricao() {
-		TextArea<String> textArea = new TextArea<String>("descricao", new Model<String>(logCra.getDescricao()));
+		String descricao = logCra.getDescricao();
+		if  (logCra.getDescricao() == null) {
+			descricao = "";
+		}
+		TextArea<String> textArea = new TextArea<String>("descricao", new Model<String>(descricao));
 		textArea.setEnabled(false);
 		return textArea;
 	}
