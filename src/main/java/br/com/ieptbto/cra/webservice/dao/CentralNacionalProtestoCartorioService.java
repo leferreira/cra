@@ -34,7 +34,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 
 	@Autowired
 	CentralNacionalProtestoMediator centralNacionalProtestoMediator;
-
+	
 	/**
 	 * @param usuario
 	 * @param dados
@@ -42,10 +42,9 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 	 */
 	public String processar(Usuario usuario, String dados) {
 		LoteCnp lote = new LoteCnp();
-		setUsuario(usuario);
 
 		try {
-			if (getUsuario() == null) {
+			if (usuario == null) {
 				return usuarioInvalido();
 			}
 			if (StringUtils.isBlank(dados)) {
@@ -62,25 +61,25 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 					|| usuario.getInstituicao().getId() == 43) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			lote = centralNacionalProtestoMediator.processarLoteCartorio(getUsuario().getInstituicao(), converterStringArquivoCnpVO(dados));
+			lote = centralNacionalProtestoMediator.processarLoteCartorio(usuario.getInstituicao(), converterStringArquivoCnpVO(dados));
 			if (lote == null) {
 				loggerCra.alert(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, CodigoErro.CNP_LOTE_VAZIO.getDescricao());
 				return mensagemLoteCnpVazioOuNenhumRegistroValido(usuario);
 			}
-			loggerCra.sucess(getUsuario(), CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
-					"Arquivo da CNP enviado por " + getUsuario().getInstituicao().getNomeFantasia() + " processado com sucesso!");
+			loggerCra.sucess(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+					"Arquivo da CNP enviado por " + usuario.getInstituicao().getNomeFantasia() + " processado com sucesso!");
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex);
-			loggerCra.error(getUsuario(), CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
-					"Erro no processamento do arquivo da CNP de " + getUsuario().getInstituicao().getNomeFantasia() + "!", ex);
+			loggerCra.error(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+					"Erro no processamento do arquivo da CNP de " + usuario.getInstituicao().getNomeFantasia() + "!", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(ex.getMessage()), CONSTANTE_RELATORIO_XML);
 		} catch (Exception ex) {
 			logger.info(ex.getMessage(), ex);
-			loggerCra.error(getUsuario(), CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
-					"Erro no processamento do arquivo da CNP de " + getUsuario().getInstituicao().getNomeFantasia() + "!", ex);
+			loggerCra.error(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+					"Erro no processamento do arquivo da CNP de " + usuario.getInstituicao().getNomeFantasia() + "!", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}
-		return gerarMensagem(gerarMensagemSucesso(lote), CONSTANTE_RELATORIO_XML);
+		return gerarMensagem(gerarMensagemSucesso(usuario, lote), CONSTANTE_RELATORIO_XML);
 	}
 
 	private ArquivoCnpVO converterStringArquivoCnpVO(String dados) {

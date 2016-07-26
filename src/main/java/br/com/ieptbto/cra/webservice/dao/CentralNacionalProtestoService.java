@@ -46,13 +46,12 @@ public class CentralNacionalProtestoService extends CnpWebService {
 
 	public String processar(Usuario usuario) {
 		ArquivoCnpVO arquivoCnp = new ArquivoCnpVO();
-		setUsuario(usuario);
 
 		try {
-			if (getUsuario() == null) {
+			if (usuario == null) {
 				return usuarioInvalido();
 			}
-			if (!getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			if (!usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
 				return usuarioNaoPermitidoConsultaArquivoCNP();
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
@@ -66,11 +65,11 @@ public class CentralNacionalProtestoService extends CnpWebService {
 					return naoHaRemessasParaArquivoCnp(usuario);
 				}
 			}
-			loggerCra.sucess(getUsuario(), CraAcao.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+			loggerCra.sucess(usuario, CraAcao.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Arquivo CNP do dia " + DataUtil.localDateToString(new LocalDate()) + ", enviado com sucesso para o IEPTB nacional.");
 		} catch (Exception ex) {
 			logger.info(ex.getMessage(), ex.getCause());
-			loggerCra.error(getUsuario(), CraAcao.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+			loggerCra.error(usuario, CraAcao.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Erro interno ao construir o arquivo da CNP do dia " + DataUtil.localDateToString(new LocalDate()) + ".", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}
@@ -78,10 +77,9 @@ public class CentralNacionalProtestoService extends CnpWebService {
 	}
 
 	public String consultar(Usuario usuario) {
-		setUsuario(usuario);
 
 		try {
-			if (getUsuario() == null) {
+			if (usuario == null) {
 				return usuarioInvalido();
 			}
 			List<Instituicao> cartorios = centralNacionalProtestoMediator.consultarCartoriosCentralNacionalProtesto();
@@ -89,7 +87,7 @@ public class CentralNacionalProtestoService extends CnpWebService {
 
 		} catch (Exception ex) {
 			logger.info(ex.getMessage(), ex);
-			loggerCra.error(getUsuario(), CraAcao.CONSULTA_CARTORIOS_CENTRAL_NACIONAL_PROTESTO,
+			loggerCra.error(usuario, CraAcao.CONSULTA_CARTORIOS_CENTRAL_NACIONAL_PROTESTO,
 					"Erro interno ao informar os cartórios ativos na CNP.", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}

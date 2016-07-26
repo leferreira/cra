@@ -119,17 +119,15 @@ public class RemessaServiceImpl implements IRemessaWS {
 		init(login, senha);
 		return desistenciaProtestoService.processar(nomeArquivo, getUsuario(), dados);
 	}
-	
-	
+
 	@Override
 	@WebMethod(operationName = "confirmarEnvioConfirmacaoRetorno")
 	@GET
-	public String confirmarEnvioConfirmacaoRetorno(@WebParam(name = "user_arq") String nomeArquivo,
-			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+	public String confirmarEnvioConfirmacaoRetorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+			@WebParam(name = "user_pass") String senha) {
 		init(login, senha);
 		return arquivosPendentesCartorioService.confirmarEnvioConfirmacaoRetorno(nomeArquivo, getUsuario());
 	}
-
 
 	@Override
 	@WebMethod(operationName = "confirmarRecebimentoDesistenciaCancelamento")
@@ -155,7 +153,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	public String comarcasHomologadas(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
 			@WebParam(name = "codapres") String codigoApresentante) {
 		init(login, senha);
-		return usuariosComarcasHomologadasService.verificarComarcasHomologadas(usuario, codigoApresentante);
+		return usuariosComarcasHomologadasService.verificarComarcasHomologadas(getUsuario(), codigoApresentante);
 	}
 
 	@Override
@@ -191,8 +189,9 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	private void setUsuario(String login, String senha) {
-		logger.info("Inicio WebService pelo usuario= " + login);
+		this.usuario = new Usuario();
 		this.usuario = usuarioMediator.autenticarWS(login, senha);
+		logger.info("Inicio WebService pelo usuario= " + this.usuario.getLogin());
 	}
 
 	public Usuario getUsuario() {

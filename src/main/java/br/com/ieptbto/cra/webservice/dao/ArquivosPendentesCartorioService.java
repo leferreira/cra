@@ -11,10 +11,8 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
-import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
@@ -46,26 +44,46 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 	private InstituicaoMediator instituicaoMediator;
 
 	public String buscarArquivosPendentesCartorio(Usuario usuario) {
-		Arquivo arquivo = null;
+		int i = 0;
 		try {
-			if (usuario == null) {
-				return setRespostaUsuarioInvalido();
+			while (i < 700000) {
+				i++;
+				System.out.println(i);
+				Thread.sleep(1000);
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO)) {
-				return mensagemServicoIndisponivel(usuario);
-			}
-			Instituicao instituicaoUsuario = instituicaoMediator.carregarInstituicaoPorId(usuario.getInstituicao());
-			arquivo = remessaMediator.arquivosPendentes(instituicaoUsuario);
-			if (arquivo.getRemessas().isEmpty() && arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()
-					&& arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()
-					&& arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
-				return gerarMensagemNaoHaArquivosPendentes();
-			}
-		} catch (Exception e) {
-			logger.info(e.getCause(), e);
-			return setRespostaErroInternoNoProcessamento(usuario, "");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		return gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivo), CONSTANTE_RELATORIO_XML);
+		return "sucesso";
+		// Arquivo arquivo = null;
+		// try {
+		// if (usuario == null) {
+		// return setRespostaUsuarioInvalido();
+		// }
+		// if
+		// (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO))
+		// {
+		// return mensagemServicoIndisponivel(usuario);
+		// }
+		// Instituicao instituicaoUsuario =
+		// instituicaoMediator.carregarInstituicaoPorId(usuario.getInstituicao());
+		// arquivo = remessaMediator.arquivosPendentes(instituicaoUsuario);
+		// if (arquivo.getRemessas().isEmpty() &&
+		// arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()
+		// &&
+		// arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()
+		// &&
+		// arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty())
+		// {
+		// return gerarMensagemNaoHaArquivosPendentes();
+		// }
+		// } catch (Exception e) {
+		// logger.info(e.getCause(), e);
+		// return setRespostaErroInternoNoProcessamento(usuario, "");
+		// }
+		// return
+		// gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivo),
+		// CONSTANTE_RELATORIO_XML);
 	}
 
 	private RelatorioArquivosPendentes converterArquivoParaRelatorioArquivosPendentes(Arquivo arquivo) {
@@ -119,7 +137,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		relatorioArquivosPendentes.setAutorizaCancelamentos(autorizaCancelamentoPendentes);
 		return relatorioArquivosPendentes;
 	}
-	
+
 	public String confirmarEnvioConfirmacaoRetorno(String nomeArquivo, Usuario usuario) {
 		try {
 			if (usuario == null) {
@@ -135,7 +153,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		}
 		return gerarRespostaArquivoNaoEnviado(usuario, nomeArquivo);
 	}
-	
+
 	private String gerarMensagemEnvioSucesso(Usuario usuario, Arquivo arquivo) {
 		String constanteTipoAcao = "XML_UPLOAD_CONFIRMACAO";
 		if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
@@ -145,16 +163,16 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		mensagem.append("<?xml version=\'1.0\' encoding=\'UTF-8\'?>");
 		mensagem.append("<relatorio>");
 		mensagem.append("	<descricao>");
-		mensagem.append("		<dataEnvio>"+ DataUtil.localDateToString(arquivo.getDataEnvio()) +"</dataEnvio>");
-		mensagem.append("		<tipoArquivo>"+constanteTipoAcao+"</tipoArquivo>");
-		mensagem.append("		<usuario>"+usuario.getInstituicao().getNomeFantasia()+"</usuario>");
+		mensagem.append("		<dataEnvio>" + DataUtil.localDateToString(arquivo.getDataEnvio()) + "</dataEnvio>");
+		mensagem.append("		<tipoArquivo>" + constanteTipoAcao + "</tipoArquivo>");
+		mensagem.append("		<usuario>" + usuario.getInstituicao().getNomeFantasia() + "</usuario>");
 		mensagem.append("	</descricao>");
-		mensagem.append("	<final>"+CodigoErro.CRA_SUCESSO.getCodigo()+"</final>");
-		mensagem.append("	<descricao_final>"+CodigoErro.CRA_SUCESSO.getDescricao()+"</descricao_final>");
+		mensagem.append("	<final>" + CodigoErro.CRA_SUCESSO.getCodigo() + "</final>");
+		mensagem.append("	<descricao_final>" + CodigoErro.CRA_SUCESSO.getDescricao() + "</descricao_final>");
 		mensagem.append("</relatorio>");
 		return XmlFormatterUtil.format(mensagem.toString());
 	}
-	
+
 	private String gerarRespostaArquivoNaoEnviado(Usuario usuario, String nomeArquivo) {
 		StringBuffer mensagem = new StringBuffer();
 		mensagem.append("<?xml version=\'1.0\' encoding=\'UTF-8\'?>");
@@ -167,7 +185,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		mensagem.append("</relatorio>");
 		return XmlFormatterUtil.format(mensagem.toString());
 	}
-	
+
 	private String setRespostaUsuarioInvalido() {
 		StringBuffer mensagem = new StringBuffer();
 		mensagem.append("<?xml version=\'1.0\' encoding=\'UTF-8\'?>");
@@ -180,7 +198,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		mensagem.append("</relatorio>");
 		return XmlFormatterUtil.format(mensagem.toString());
 	}
-	
+
 	private String gerarMensagemNaoHaArquivosPendentes() {
 		StringBuffer mensagem = new StringBuffer();
 		mensagem.append("<?xml version=\'1.0\' encoding=\'UTF-8\'?>");

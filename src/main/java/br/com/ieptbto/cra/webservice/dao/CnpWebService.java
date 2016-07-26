@@ -47,7 +47,7 @@ public class CnpWebService {
 	protected CraServiceMediator craServiceMediator;
 	@Autowired
 	protected LoggerCra loggerCra;
-	protected Usuario usuario;
+	
 	protected LocalTime horaInicioServico;
 	protected LocalTime horaFimServico;
 
@@ -195,12 +195,12 @@ public class CnpWebService {
 		return null;
 	}
 
-	protected MensagemXml gerarMensagemSucesso(LoteCnp loteCnp) {
+	protected MensagemXml gerarMensagemSucesso(Usuario usuario, LoteCnp loteCnp) {
 		MensagemXml mensagemXml = new MensagemXml();
 		Descricao descricao = new Descricao();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
-		descricao.setUsuario(getUsuario().getLogin());
+		descricao.setUsuario(usuario.getLogin());
 
 		Detalhamento detalhamento = new Detalhamento();
 		detalhamento.setMensagem(new ArrayList<Mensagem>());
@@ -236,14 +236,6 @@ public class CnpWebService {
 		mensagemXml.setCodigoFinal("9999");
 		mensagemXml.setDescricaoFinal(descricaoFinal);
 		return mensagemXml;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
 	}
 
 	public LocalTime getHoraInicioServicoEnvio() {

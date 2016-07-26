@@ -125,6 +125,23 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 						instituicaoMediator.buscarBancoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
+				item.add(new Link<InstrumentoProtesto>("buttonRemoverInstrumento") {
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						try {
+							instrumentoMediator.removerInstrumento(instrumentoProtesto);
+							getInstrumentosProtesto().remove(instrumentoProtesto);
+							GerarSlipPage.this.success(
+									"Instrumento de protesto com o protocolo " + instrumentoProtesto.getTituloRetorno().getNumeroProtocoloCartorio()
+											+ " de " + retorno.getTitulo().getPracaProtesto() + " foi removido com sucesso!");
+						} catch (Exception ex) {
+							GerarSlipPage.this.error("Não foi possível remover o registro do instrumento de protesto. Entre em contato com a CRA !");
+						}
+					}
+				});
 			}
 		});
 	}
@@ -230,7 +247,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					// DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra",
 					// "postgres", "1234");
 
-					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH); 
+					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
 					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
 
 					String urlJasper = "../../relatorio/ListagemInstrumentosBancos.jrxml";

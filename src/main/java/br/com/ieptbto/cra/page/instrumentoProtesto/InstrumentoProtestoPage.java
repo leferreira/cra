@@ -183,7 +183,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 				};
 				linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));
 				item.add(linkHistorico);
-				item.add(new Label("portador", instituicaoMediator.getInstituicaoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
+				item.add(new Label("portador",
+						instituicaoMediator.getInstituicaoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
 				item.add(new Link<Retorno>("remover") {

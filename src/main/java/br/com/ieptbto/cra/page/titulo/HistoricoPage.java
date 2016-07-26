@@ -218,6 +218,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 						}
 					};
 					linkArquivo.add(new Label("nomeArquivo", "Instrumento de Protesto: "));
+					linkArquivo.setOutputMarkupId(true);
+					linkArquivo.setEnabled(false);
 					item.add(linkArquivo);
 					item.add(new Label("acao", "").setVisible(false));
 					item.add(new Label("mensagem", arquivoOcorrenciaBean.getMensagem()));
@@ -295,6 +297,15 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 					item.add(linkArquivo);
 					item.add(new Label("acao", " enviado para CRA em "));
 					item.add(new Label("mensagem", "").setVisible(false));
+				}
+				if (arquivoOcorrenciaBean.getInstrumentoProtesto() != null) {
+					if (arquivoOcorrenciaBean.getInstrumentoProtesto().getEtiquetaSlip() == null) {
+						item.add(new Label("por", ""));
+					} else {
+						item.add(new Label("por", " por "));
+					}
+				} else {
+					item.add(new Label("por", " por "));
 				}
 				item.add(new Label("dataOcorrencia", arquivoOcorrenciaBean.getDataHora()));
 				item.add(new Label("usuarioAcao", arquivoOcorrenciaBean.getNomeUsuario()));

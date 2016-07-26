@@ -39,7 +39,7 @@ public class RemessaService extends CraWebService {
 	RemessaMediator remessaMediator;
 	@Autowired
 	ArquivoMediator arquivoMediator;
-	
+
 	private Object relatorio;
 	private String resposta;
 
@@ -78,10 +78,10 @@ public class RemessaService extends CraWebService {
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
-			
+
 			List<RemessaVO> remessasVO = ConversorArquivoVO.converterParaRemessaVO(converterStringArquivoVO(dados));
 			relatorio = remessaMediator.processarArquivoXML(remessasVO, usuario, nomeArquivo);
-			
+
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (Exception ex) {
