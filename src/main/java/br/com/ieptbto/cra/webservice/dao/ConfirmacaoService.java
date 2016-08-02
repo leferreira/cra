@@ -37,6 +37,7 @@ import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
+import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 
 /**
  * 
@@ -52,8 +53,8 @@ public class ConfirmacaoService extends CraWebService {
 	ConfirmacaoMediator confirmacaoMediator;
 	@Autowired
 	ArquivoMediator arquivoMediator;
-	
-	private Object relatorio;
+
+	private MensagemCra mensagemCra;
 	private String resposta;
 
 	/**
@@ -65,8 +66,9 @@ public class ConfirmacaoService extends CraWebService {
 	 */
 	public String processar(String nomeArquivo, Usuario usuario) {
 		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
-		this.craAcao =CraAcao.DOWNLOAD_ARQUIVO_CONFIRMACAO;
+		this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CONFIRMACAO;
 		this.nomeArquivo = nomeArquivo;
+		this.resposta = null;
 
 		ArquivoVO arquivoVO = null;
 		try {
@@ -162,9 +164,10 @@ public class ConfirmacaoService extends CraWebService {
 	public String enviarConfirmacao(String nomeArquivo, Usuario usuario, String dados) {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_CONFIRMACAO;
 		this.nomeArquivo = nomeArquivo;
+		this.mensagemCra = null;
 
 		try {
-			if (usuario ==null) {
+			if (usuario == null) {
 				return setResposta(usuario, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_CONFIRMACAO)) {
@@ -179,8 +182,8 @@ public class ConfirmacaoService extends CraWebService {
 			}
 
 			ArquivoConfirmacaoVO arquivoConfirmacaoVO = converterStringArquivoVO(dados);
-			ConfirmacaoVO confirmacaoVO  = ConversorArquivoVO.converterParaRemessaVO(arquivoConfirmacaoVO);
-			relatorio = confirmacaoMediator.processarXML(confirmacaoVO, usuario, nomeArquivo);
+			ConfirmacaoVO confirmacaoVO = ConversorArquivoVO.converterParaRemessaVO(arquivoConfirmacaoVO);
+			mensagemCra = confirmacaoMediator.processarXML(confirmacaoVO, usuario, nomeArquivo);
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Confirmação " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (InfraException ex) {
@@ -192,7 +195,7 @@ public class ConfirmacaoService extends CraWebService {
 			loggerCra.error(usuario, getCraAcao(), e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return gerarMensagem(relatorio, CONSTANTE_CONFIRMACAO_XML);
+		return gerarMensagem(mensagemCra, CONSTANTE_CONFIRMACAO_XML);
 	}
 
 	private ArquivoConfirmacaoVO converterStringArquivoVO(String dados) {

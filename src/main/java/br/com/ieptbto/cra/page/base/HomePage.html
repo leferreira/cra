@@ -92,15 +92,6 @@
 				<div class="list-group">
 					<div class="list-group-item">
 						<h4 class="list-group-item-heading">
-							OFÍCIO CORREGEDORIA: <br>CANCELAMENTOS E DEVOLUÇÕES<span class="pull-right"><span
-								class="fa fa-info-circle"></span></span>
-						</h4>
-						<p class="list-group-item-text">
-							<a wicket:id="downloadOficio" class="link">Clique para fazer o download...</a>
-						</p>
-					</div>
-					<div class="list-group-item">
-						<h4 class="list-group-item-heading">
 							ACESSE IEPTB-TO<span class="pull-right"><span class="fa fa-desktop"></span></span>
 						</h4>
 						<p class="list-group-item-text">
@@ -119,8 +110,25 @@
 							BEM-VINDO(A) À CRA-TO<span class="pull-right"><span class="fa fa-wechat"></span></span>
 						</h4>
 						<p class="list-group-item-text">
-							Central de Remessa de Arquivos do Tocantins: <a href="SobreCra" target="_blank" class="link">Saiba
-								mais...</a>
+							Central de Remessa de Arquivos do Tocantins: <a href="SobreCra" target="_blank" class="link">Saiba mais...</a>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4" wicket:id="centralAcoes">
+				<h4 class="titulo-top">CENTRAL DE AÇÕES
+					<a href="CentralDeAcoes" class="pull-right" target="_blank" style="font-size: 15px; margin: 5px auto; font-weight: bold;">VER MAIS&nbsp;
+						<i class="fa fa-arrow-circle-right"></i>
+					</a>
+				</h4>
+				<div class="list-group">
+					<div class="list-group-item" wicket:id="listUltimosErrosLog">
+						<h4 class="list-group-item-heading">
+							<span wicket:id="instituicao"></span><span class="pull-right" wicket:id="tipoLog" style="padding: 5px;"></span>
+						</h4>
+						<p class="list-group-item-text">
+						<span wicket:id="descricao"></span>&nbsp;
+						<a target="_blank" class="link" wicket:id="descricaoGeral">Ver log...</a>
 						</p>
 					</div>
 				</div>

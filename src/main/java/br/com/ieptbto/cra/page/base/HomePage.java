@@ -26,19 +26,21 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
+import br.com.ieptbto.cra.entidade.LogCra;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
-import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.LoggerMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivoPendentePage;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
+import br.com.ieptbto.cra.page.centralDeAcoes.LogCraPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
@@ -70,6 +72,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	AutorizacaoCancelamentoMediator autorizacaoMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	LoggerMediator loggerMediator;
 
 	private Arquivo arquivo;
 	private Usuario usuario;
@@ -93,6 +97,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	@Override
 	protected void adicionarComponentes() {
 		divInformacoes();
+		divCentralAcoes();
 		labelQtdRemessasPendentes();
 		labelQtdDesistenciasCancelamentosPendentes();
 		linkArquivosPendentes();
@@ -105,28 +110,44 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private void divInformacoes() {
 		WebMarkupContainer divInformacoes = new WebMarkupContainer("informacoes");
 		divInformacoes.setOutputMarkupId(true);
-		divInformacoes.setVisible(true);
-		divInformacoes.add(new Link<T>("downloadOficio") {
+		divInformacoes.setVisible(false);
+		if (!usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			divInformacoes.setVisible(true);
+		}
+		add(divInformacoes);
+	}
+
+	private void divCentralAcoes() {
+		WebMarkupContainer divCentralAcoes = new WebMarkupContainer("centralAcoes");
+		divCentralAcoes.setOutputMarkupId(true);
+		divCentralAcoes.setVisible(false);
+		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			divCentralAcoes.setVisible(true);
+		}
+		divCentralAcoes.add(new ListView<LogCra>("listUltimosErrosLog", loggerMediator.buscarUltimosLogDeErros()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick() {
+			protected void populateItem(ListItem<LogCra> item) {
+				final LogCra log = item.getModelObject();
+				item.add(new Label("instituicao", log.getInstituicao()));
+				item.add(new Label("tipoLog", log.getTipoLog().getLabel()).setOutputMarkupId(true).setMarkupId(log.getTipoLog().getIdHtml()));
+				item.add(new Label("descricao", log.getDescricao()));
+				item.add(new Link<LogCra>("descricaoGeral") {
 
-				try {
-					File file = new File(ConfiguracaoBase.DIRETORIO_BASE + "Decisao_Oficio.pdf");
-					IResourceStream resourceStream = new FileResourceStream(file);
+					/***/
+					private static final long serialVersionUID = 1L;
 
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
-				} catch (InfraException ex) {
-					getFeedbackPanel().error(ex.getMessage());
-				} catch (Exception e) {
-					getFeedbackPanel().error("Não foi possível baixar o ofício ! \n Entre em contato com a CRA ");
-				}
+					@Override
+					public void onClick() {
+						setResponsePage(new LogCraPage(log));
+					}
+				});
 			}
 		});
-		add(divInformacoes);
+		add(divCentralAcoes);
 	}
 
 	private void labelQtdRemessasPendentes() {
@@ -204,8 +225,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					item.add(new Label("instituicao", municipio.toUpperCase()));
 					item.add(new Label("downloadAnexos", StringUtils.EMPTY));
 				}
-				item.add(new Label("pendente",
-						PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getArquivo().getDataRecebimento(), new Date())));
+				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getArquivo().getDataRecebimento(), new Date())));
 				item.add(downloadArquivoTXT(remessa));
 			}
 
@@ -248,8 +268,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 							File file = remessaMediator.processarArquivosAnexos(getUsuario(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
 
-							getRequestCycle()
-									.scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
@@ -293,16 +312,14 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				item.add(linkArquivo);
 				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) || getUsuario()
 						.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco",
-							municipioMediator.buscaMunicipioPorCodigoIBGE(cancelamento.getCabecalhoCartorio().getCodigoMunicipio())
-									.getNomeMunicipio().toUpperCase()));
+					item.add(new Label("banco", municipioMediator
+							.buscaMunicipioPorCodigoIBGE(cancelamento.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-					String nomeFantasia =
-							cancelamento.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
+					String nomeFantasia = cancelamento.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
-				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(
-						cancelamento.getRemessaCancelamentoProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
+				item.add(new Label("dias", PeriodoDataUtil
+						.diferencaDeDiasEntreData(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
 				item.add(downloadArquivoTXT(cancelamento));
 			}
 
@@ -348,8 +365,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				item.add(linkArquivo);
 				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) || getUsuario()
 						.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator
-							.buscaMunicipioPorCodigoIBGE(dp.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(dp.getCabecalhoCartorio().getCodigoMunicipio())
+							.getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = dp.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
@@ -400,14 +417,14 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				item.add(linkArquivo);
 				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) || getUsuario()
 						.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator
-							.buscaMunicipioPorCodigoIBGE(ac.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(ac.getCabecalhoCartorio().getCodigoMunicipio())
+							.getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = ac.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
-				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(
-						ac.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio().toDate(), new Date())));
+				item.add(new Label("dias", PeriodoDataUtil
+						.diferencaDeDiasEntreData(ac.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio().toDate(), new Date())));
 				item.add(downloadArquivoTXT(ac));
 			}
 

@@ -191,7 +191,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	private void setUsuario(String login, String senha) {
 		this.usuario = new Usuario();
 		this.usuario = usuarioMediator.autenticarWS(login, senha);
-		logger.info("Inicio WebService pelo usuario= " + this.usuario.getLogin());
+		logger.info("Inicio WebService pelo usuario= " + login);
 	}
 
 	public Usuario getUsuario() {

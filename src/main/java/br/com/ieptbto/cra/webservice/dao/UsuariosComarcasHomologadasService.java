@@ -94,7 +94,6 @@ public class UsuariosComarcasHomologadasService extends CraWebService {
 			xml = xml.concat("<municipio codigo_municipio=\"" + municipio.getCodigoIBGE() + "\" nome=\"" + municipio.getNomeMunicipio() + "\" />");
 			xml = xml.concat("</comarca>");
 		}
-
 		xml = xml.concat("</" + CONSTANTE_COMARCA_XML + ">");
 		return XmlFormatterUtil.format(xml);
 	}

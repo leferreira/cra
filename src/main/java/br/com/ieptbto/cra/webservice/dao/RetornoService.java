@@ -36,6 +36,7 @@ import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
+import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 
 /**
  * @author Thasso Araújo
@@ -51,9 +52,9 @@ public class RetornoService extends CraWebService {
 	@Autowired
 	RetornoMediator retornoMediator;
 
-	private Object relatorio;
+	private MensagemCra mensagemCra;
 	private String resposta;
-	
+
 	/**
 	 * Consulta de Retorno pelos bancos/convênios
 	 * 
@@ -65,6 +66,7 @@ public class RetornoService extends CraWebService {
 		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 		this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_RETORNO;
 		this.nomeArquivo = nomeArquivo;
+		this.resposta = null;
 
 		ArquivoVO arquivoVO = null;
 		try {
@@ -159,7 +161,8 @@ public class RetornoService extends CraWebService {
 	public String enviarRetorno(String nomeArquivo, Usuario usuario, String dados) {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_RETORNO;
 		this.nomeArquivo = nomeArquivo;
-		
+		this.mensagemCra = null;
+
 		try {
 			if (usuario == null) {
 				return setResposta(usuario, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
@@ -177,7 +180,7 @@ public class RetornoService extends CraWebService {
 
 			ArquivoRetornoVO arquivoRetornoVO = converterStringArquivoVO(dados);
 			RetornoVO retornoVO = ConversorArquivoVO.converterParaRemessaVO(arquivoRetornoVO);
-			relatorio = retornoMediator.processarXML(retornoVO, usuario, nomeArquivo);
+			mensagemCra = retornoMediator.processarXML(retornoVO, usuario, nomeArquivo);
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Retorno " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (InfraException ex) {
@@ -189,7 +192,7 @@ public class RetornoService extends CraWebService {
 			loggerCra.error(usuario, getCraAcao(), e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return gerarMensagem(relatorio, CONSTANTE_CONFIRMACAO_XML);
+		return gerarMensagem(mensagemCra, CONSTANTE_CONFIRMACAO_XML);
 	}
 
 	private ArquivoRetornoVO converterStringArquivoVO(String dados) {

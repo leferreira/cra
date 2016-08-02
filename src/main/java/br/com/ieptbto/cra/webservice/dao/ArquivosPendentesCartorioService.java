@@ -11,8 +11,10 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
@@ -44,46 +46,26 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 	private InstituicaoMediator instituicaoMediator;
 
 	public String buscarArquivosPendentesCartorio(Usuario usuario) {
-		int i = 0;
+		Arquivo arquivo = null;
 		try {
-			while (i < 700000) {
-				i++;
-				System.out.println(i);
-				Thread.sleep(1000);
+			if (usuario == null) {
+				return setRespostaUsuarioInvalido();
 			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO)) {
+				return mensagemServicoIndisponivel(usuario);
+			}
+			Instituicao instituicaoUsuario = instituicaoMediator.carregarInstituicaoPorId(usuario.getInstituicao());
+			arquivo = remessaMediator.arquivosPendentes(instituicaoUsuario);
+			if (arquivo.getRemessas().isEmpty() && arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()
+					&& arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()
+					&& arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
+				return gerarMensagemNaoHaArquivosPendentes();
+			}
+		} catch (Exception e) {
+			logger.info(e.getCause(), e);
+			return setRespostaErroInternoNoProcessamento(usuario, "");
 		}
-		return "sucesso";
-		// Arquivo arquivo = null;
-		// try {
-		// if (usuario == null) {
-		// return setRespostaUsuarioInvalido();
-		// }
-		// if
-		// (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO))
-		// {
-		// return mensagemServicoIndisponivel(usuario);
-		// }
-		// Instituicao instituicaoUsuario =
-		// instituicaoMediator.carregarInstituicaoPorId(usuario.getInstituicao());
-		// arquivo = remessaMediator.arquivosPendentes(instituicaoUsuario);
-		// if (arquivo.getRemessas().isEmpty() &&
-		// arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()
-		// &&
-		// arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()
-		// &&
-		// arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty())
-		// {
-		// return gerarMensagemNaoHaArquivosPendentes();
-		// }
-		// } catch (Exception e) {
-		// logger.info(e.getCause(), e);
-		// return setRespostaErroInternoNoProcessamento(usuario, "");
-		// }
-		// return
-		// gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivo),
-		// CONSTANTE_RELATORIO_XML);
+		return gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivo), CONSTANTE_RELATORIO_XML);
 	}
 
 	private RelatorioArquivosPendentes converterArquivoParaRelatorioArquivosPendentes(Arquivo arquivo) {

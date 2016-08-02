@@ -5,16 +5,17 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.bean.TituloTaxaCraBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
@@ -27,6 +28,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  * @author Thasso Aráujo
@@ -36,10 +38,7 @@ public class RelatorioUtil implements Serializable {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-
 	protected static final Logger logger = Logger.getLogger(BasePage.class);
-	private static final String TAXA_CRA_PAGOS = "PAGOS";
-	private static final String TAXA_CRA_CANCELADOS = "CANCELADOS";
 
 	private HashMap<String, Object> params;
 	private Instituicao instituicao;
@@ -190,34 +189,6 @@ public class RelatorioUtil implements Serializable {
 
 		} catch (IOException e) {
 			throw new InfraException("Não foi possível localizar o arquivo passado como parâmetro!");
-		}
-		return JasperFillManager.fillReport(jasperReport, params, getConnection());
-	}
-
-	public JasperPrint gerarRelatorioCustasCRA(Usuario user, Instituicao instituicao, LocalDate dataInicio, LocalDate dataFim) throws JRException {
-		this.instituicao = instituicao;
-		this.dataInicio = dataInicio;
-		this.dataFim = dataFim;
-
-		if (instituicao == null) {
-			this.instituicao = user.getInstituicao();
-		}
-		JasperReport jasperReport = null;
-		try {
-			initParams();
-
-			TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
-			if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-					|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
-				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-			} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
-				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-			} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CRA)) {
-				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-			}
-
-		} catch (IOException e) {
-			throw new InfraException("Não foi possível gerar o relatório de custas! Entre em contato com a CRA!");
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
 	}
@@ -375,7 +346,7 @@ public class RelatorioUtil implements Serializable {
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
 	}
 
-	public JasperPrint gerarRelatorioTaxaCra(String tipoRelatorio, Instituicao convenio, Instituicao cartorio, LocalDate dataInicio,
+	public JasperPrint gerarRelatorioTaxaCraPagos(List<TituloTaxaCraBean> titulos, Instituicao convenio, Instituicao cartorio, LocalDate dataInicio,
 			LocalDate dataFim) throws JRException {
 		JasperReport jasperReport = null;
 
@@ -383,32 +354,52 @@ public class RelatorioUtil implements Serializable {
 			this.params = new HashMap<String, Object>();
 			this.params.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
 			this.params.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
-			this.params.put("DATA_INICIO", new java.sql.Date(getDataInicio().toDate().getTime()));
-			this.params.put("DATA_FIM", new java.sql.Date(getDataFim().toDate().getTime()));
+			this.params.put("DATA_INICIO", new java.sql.Date(dataInicio.toDate().getTime()));
+			this.params.put("DATA_FIM", new java.sql.Date(dataFim.toDate().getTime()));
 
 			if (convenio != null && cartorio != null) {
-				if (tipoRelatorio.equals(TAXA_CRA_PAGOS)) {
-					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoRelatorio.equals(TAXA_CRA_CANCELADOS)) {
-					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				}
-			} else if (convenio != null && cartorio == null) {
-				if (tipoRelatorio.equals(TAXA_CRA_PAGOS)) {
-					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoRelatorio.equals(TAXA_CRA_CANCELADOS)) {
-					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				}
+				this.params.put("CONVENIO", convenio.getNomeFantasia());
+				this.params.put("MUNICIPIO", cartorio.getNomeFantasia());
+				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioPagos.jrxml"));
 
 			} else if (convenio == null && cartorio != null) {
-				if (tipoRelatorio.equals(TAXA_CRA_PAGOS)) {
-					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoRelatorio.equals(TAXA_CRA_CANCELADOS)) {
-					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				}
+				this.params.put("MUNICIPIO", cartorio.getNomeFantasia());
+				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioPagosPorMunicipio.jrxml"));
 			}
 		} catch (IOException | JRException ex) {
 			logger.info(ex.getMessage(), ex);
-			throw new InfraException("Não foi possível localizar o arquivo de relatório!");
+			throw new InfraException("Não foi possível localizar o arquivo de relatório. Entre em contato com a CRA!");
+		}
+		return JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(titulos));
+	}
+
+	public JasperPrint gerarRelatorioTaxaCraCancelados(Instituicao convenio, Instituicao cartorio, LocalDate dataInicio, LocalDate dataFim)
+			throws JRException {
+		JasperReport jasperReport = null;
+
+		try {
+			this.params = new HashMap<String, Object>();
+			this.params.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
+			this.params.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
+			this.params.put("DATA_INICIO", new java.sql.Date(dataInicio.toDate().getTime()));
+			this.params.put("DATA_FIM", new java.sql.Date(dataFim.toDate().getTime()));
+
+			if (convenio != null && cartorio != null) {
+				this.params.put("CONVENIO", convenio.getNomeFantasia());
+				this.params.put("CODIGO_PORTADOR", convenio.getCodigoCompensacao());
+				this.params.put("MUNICIPIO", cartorio.getMunicipio().getNomeMunicipio());
+				this.params.put("CODIGO_MUNICIPIO", cartorio.getMunicipio().getCodigoIBGE());
+				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioCancelados.jrxml"));
+
+			} else if (convenio == null && cartorio != null) {
+				this.params.put("MUNICIPIO", cartorio.getMunicipio().getNomeMunicipio());
+				this.params.put("CODIGO_MUNICIPIO", cartorio.getMunicipio().getCodigoIBGE());
+				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioCanceladosPorMunicipio.jrxml"));
+
+			}
+		} catch (IOException | JRException ex) {
+			logger.info(ex.getMessage(), ex);
+			throw new InfraException("Não foi possível localizar o arquivo de relatório. Entre em contato com a CRA!");
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
 	}
@@ -416,9 +407,10 @@ public class RelatorioUtil implements Serializable {
 	private Connection getConnection() {
 		try {
 			Class.forName("org.postgresql.Driver");
-			 return	 DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra",
-			 "postgres", "@dminB3g1n");
-//			return DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra", "postgres", "1234");
+			return DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
+			// return
+			// DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra",
+			// "postgres", "1234");
 		} catch (Exception e) {
 			throw new InfraException("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
 		}

@@ -26,6 +26,7 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
+import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 
 /**
  * 
@@ -40,7 +41,7 @@ public class RemessaService extends CraWebService {
 	@Autowired
 	ArquivoMediator arquivoMediator;
 
-	private Object relatorio;
+	private MensagemCra mensagemCra;
 	private String resposta;
 
 	/**
@@ -54,6 +55,7 @@ public class RemessaService extends CraWebService {
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_REMESSA;
 		this.nomeArquivo = nomeArquivo;
+		this.mensagemCra = null;
 
 		ArquivoVO arquivoVO = new ArquivoVO();
 		try {
@@ -80,7 +82,7 @@ public class RemessaService extends CraWebService {
 			}
 
 			List<RemessaVO> remessasVO = ConversorArquivoVO.converterParaRemessaVO(converterStringArquivoVO(dados));
-			relatorio = remessaMediator.processarArquivoXML(remessasVO, usuario, nomeArquivo);
+			mensagemCra = remessaMediator.processarArquivoXML(remessasVO, usuario, nomeArquivo);
 
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
@@ -89,7 +91,7 @@ public class RemessaService extends CraWebService {
 			loggerCra.error(usuario, getCraAcao(), "Erro interno no processamento do arquivo de Remessa " + nomeArquivo + ".", ex);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return gerarMensagem(relatorio, CONSTANTE_RELATORIO_XML);
+		return gerarMensagem(mensagemCra, CONSTANTE_RELATORIO_XML);
 	}
 
 	private ArquivoVO converterStringArquivoVO(String dados) {
@@ -135,6 +137,7 @@ public class RemessaService extends CraWebService {
 	public String buscarRemessa(String nomeArquivo, Usuario usuario) {
 		this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_REMESSA;
 		this.nomeArquivo = nomeArquivo;
+		this.resposta = null;
 
 		Remessa remessa = null;
 		RemessaVO remessaVO = null;

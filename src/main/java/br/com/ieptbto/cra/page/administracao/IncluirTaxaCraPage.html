@@ -3,63 +3,91 @@
 <body>
 	<wicket:extend>
 		<h4 class="titulo-top">TAXA CRA</h4>
-		<div class="row">
-			<div class="col-lg-8 col-md-offset-2">
-				<div class="row">
-					<div class="col-lg-6">
-						<form wicket:id="form" id="form">
-							<div class="form-group">
-								<label>Valor da Taxa</label>
-								<div class="form-group input-group">
-									<span class="input-group-addon">R$</span> <input wicket:id="valor"
-										onkeypress="FormataValor(this.id, 12, event);" maxlength="15" class="form-control">
-								</div>
+		<div class="col-lg-8 col-md-offset-2">
+			<div class="row">
+				<form wicket:id="form" id="form">
+					<div class="col-lg-12">
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Valor da Taxa</label>
+									<div class="form-group input-group">
+										<span class="input-group-addon">R$</span> <input wicket:id="valor"
+											onkeypress="FormataValor(this.id, 12, event);" maxlength="15" class="form-control">
+									</div>
 		
+								</div>
 							</div>
-							<div class="form-group"> 
-								<label>Vigência</label>
-								<div class="row">
-									<div class="col-xs-6">
-										<input id="date" name="date" maxlength="10" placeholder="__/__/____" wicket:id="dataInicio"
-											class="form-control">
-									</div>
-									<div class="col-xs-6">
-										<input id="date1" name="date1" maxlength="10" placeholder="__/__/____" wicket:id="dataFim"
-											class="form-control">
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Vigência</label>
+									<div class="row">
+										<div class="col-xs-6">
+											<input id="date" name="date" maxlength="10" placeholder="__/__/____"
+												wicket:id="dataInicio" class="form-control">
+										</div>
+										<div class="col-xs-6">
+											<input id="date1" name="date1" maxlength="10" placeholder="__/__/____"
+												wicket:id="dataFim" class="form-control">
+										</div>
 									</div>
 								</div>
 							</div>
-							<button class="btn btn-primary pull-right" type="submit">
-					            <span class="fa fa-save"></span>&nbsp;Salvar
-					        </button>
-						</form>
+						</div>
+						<button class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" type="button">
+							<span class="fa fa-save"></span>&nbsp;Salvar
+						</button>
 					</div>
-					<div class="col-lg-6"> 
-						<table class="table table-responsive table-striped table-hover">
-							<thead>
-								<tr>
-									<th class="text-center">DATA INÍCIO</th>
-									<th class="text-center">DATA FIM</th>
-									<th class="text-center">VALOR</th>
-									<th class="text-center">EDITAR</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr wicket:id="listTaxas"> 
-									<td class="text-center" wicket:id="dataInicio"></td>
-									<td class="text-center" wicket:id="dataFim"></td>
-									<td class="text-center" wicket:id="valor"></td>
-									<td class="text-center"><a wicket:id="linkAlterar"><span class="fa fa-edit"></span></a></td>
-								</tr>
-							</tbody>
-							<caption>
-								<span class="fa fa-square" style="color: rgba(217, 83, 79, 0.32) !important;"></span>&nbsp;<span>TAXA CRA VIGENTE</span>
-							</caption>
-						</table>
-					</div>
-				</div>
-				<br style="clear: both;" />
+                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                         <div class="modal-dialog">
+                             <div class="modal-content">
+                                 <div class="modal-header">
+                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                     <h4 class="modal-title" id="myModalLabel">TEM CERTEZA QUE DESEJA INCLUIR A NOVA TAXA?</h4>
+                                 </div>
+                                 <div class="modal-body">
+                                 	<div class="col-lg-10 col-md-offset-1"> 
+	                                 	<br class="both">
+	                                 	<h4>Vigência Atual: <span wicket:id="dataInicioVigenciaAtual" style="font-weight: bold;"></span> até <span wicket:id="dataFimVigenciaAtual" style="font-weight: bold;"></span></h4>
+	                                 	<br class="both">
+	                                 	<h4>Ao incluir a nova vigência, a atual terá o seu final alterado para <span wicket:id="novaDataFim" style="font-weight: bold; color: red;"></span>.</h4>
+	                                </div>
+                                 </div>
+                                 <div class="modal-footer">
+                                     <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="fa fa-remove"></span> Não</button>
+                                     <button type="submit" class="btn btn-success"><span class="fa fa-check"></span> Sim</button>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+				</form>
 			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<h5>VIGÊNCIAS DE TAXAS CRA</h5>
+					<table class="table table-responsive table-striped table-hover">
+						<thead>
+							<tr>
+								<th class="text-center">DATA INÍCIO</th>
+								<th class="text-center">DATA FIM</th>
+								<th class="text-center">VALOR</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr wicket:id="listTaxas">
+								<td class="text-center" wicket:id="dataInicio"></td>
+								<td class="text-center" wicket:id="dataFim"></td>
+								<td class="text-center" wicket:id="valor" style="font-weight: bold;"></td>
+							</tr>
+						</tbody>
+						<caption>
+							<span class="fa fa-square" style="color: rgba(92, 184, 92, 0.36) !important;"></span>&nbsp;<span>TAXA
+								CRA VIGENTE</span>
+						</caption>
+					</table>
+				</div>
+			</div>
+			<br style="clear: both;" />
 		</div>
 	</wicket:extend>
 </body>

@@ -10,7 +10,6 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -52,12 +51,6 @@ public class IncluirTaxaCraPage extends BasePage<TaxaCra> {
 		adicionarComponentes();
 	}
 
-	public IncluirTaxaCraPage(TaxaCra taxaCra) {
-		this.taxaCra = taxaCra;
-		this.taxaCraAtual = taxaCraMediator.buscarTaxaCraVigente(new LocalDate());
-		adicionarComponentes();
-	}
-
 	public IncluirTaxaCraPage(String message) {
 		this.taxaCra = new TaxaCra();
 		this.taxaCraAtual = taxaCraMediator.buscarTaxaCraVigente(new LocalDate());
@@ -81,16 +74,18 @@ public class IncluirTaxaCraPage extends BasePage<TaxaCra> {
 			protected void onSubmit() {
 				TaxaCra taxaCra = getModelObject();
 				TaxaCra taxaCraAtual = getTaxaCraAtual();
+				taxaCra.setDataFim(new LocalDate().minusDays(1).toDate());
 
 				try {
 					if (taxaCra.getDataInicio() != null) {
 						if (taxaCra.getDataFim() != null) {
 							if (!taxaCra.getDataInicio().before(taxaCra.getDataFim()))
 								if (!taxaCra.getDataInicio().equals(taxaCra.getDataFim()))
-									throw new InfraException("A data de início da vigência deve ser anterior a data fim!");
+									throw new InfraException("A data de início da vigência deve ser antes da data fim.");
 						} else
-							throw new InfraException("As duas datas da vigência devem ser preenchidas!");
+							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
+
 					if (taxaCraAtual.getId() != taxaCra.getId()) {
 						if (taxaCraAtual.getDataFim().after(taxaCra.getDataInicio())) {
 							throw new InfraException("A data de início da nova vigência não pode ser anterior ao final da atual!");
@@ -101,7 +96,7 @@ public class IncluirTaxaCraPage extends BasePage<TaxaCra> {
 						}
 
 					}
-					taxaCra = taxaCraMediator.salvarTaxa(taxaCra);
+					taxaCra = taxaCraMediator.salvarTaxa(taxaCra, taxaCraAtual);
 					setResponsePage(new IncluirTaxaCraPage("A vigência de Taxa CRA foi salva com sucesso"));
 
 				} catch (InfraException ex) {
@@ -116,7 +111,22 @@ public class IncluirTaxaCraPage extends BasePage<TaxaCra> {
 		form.add(fieldValorTaxa());
 		form.add(fieldDataInicio());
 		form.add(fieldDataFim());
+		form.add(labelDataInicioVigenciaAtual());
+		form.add(labelDataFimVigenciaAtual());
+		form.add(labelNovaDataFimVigenciaAtual());
 		add(form);
+	}
+
+	private Label labelNovaDataFimVigenciaAtual() {
+		return new Label("novaDataFim", DataUtil.localDateToString(new LocalDate().minusDays(1)));
+	}
+
+	private Label labelDataFimVigenciaAtual() {
+		return new Label("dataFimVigenciaAtual", DataUtil.dateToString(getTaxaCraAtual().getDataFim()));
+	}
+
+	private Label labelDataInicioVigenciaAtual() {
+		return new Label("dataInicioVigenciaAtual", DataUtil.dateToString(getTaxaCraAtual().getDataInicio()));
 	}
 
 	private TextField<String> fieldValorTaxa() {
@@ -161,19 +171,10 @@ public class IncluirTaxaCraPage extends BasePage<TaxaCra> {
 				item.add(new Label("dataInicio", new SimpleDateFormat("dd/MM/yyyy").format(taxa.getDataInicio())));
 				item.add(new Label("dataFim", new SimpleDateFormat("dd/MM/yyyy").format(taxa.getDataFim())));
 				item.add(new LabelValorMonetario<BigDecimal>("valor", taxa.getValor()));
-				item.add(new Link<TaxaCra>("linkAlterar") {
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						setResponsePage(new IncluirTaxaCraPage(taxa));
-					}
-				});
 				if (DataUtil.dataEstaNoPeriodo(new LocalDate(), new LocalDate(taxa.getDataInicio()), new LocalDate(taxa.getDataFim()))
 						|| taxa.getDataInicio().equals(new LocalDate().toDate())) {
 					item.setOutputMarkupId(true);
-					item.setMarkupId("retornoPendente10Dias");
+					item.setMarkupId("taxaCraVigente");
 				}
 			}
 		});

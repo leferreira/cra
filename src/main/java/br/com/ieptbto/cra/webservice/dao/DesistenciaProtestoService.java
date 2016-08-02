@@ -32,6 +32,7 @@ import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
 import br.com.ieptbto.cra.webservice.VO.Erro;
 import br.com.ieptbto.cra.webservice.VO.Mensagem;
+import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 import br.com.ieptbto.cra.webservice.VO.MensagemXml;
 import br.com.ieptbto.cra.webservice.VO.MensagemXmlDesistenciaCancelamentoSerpro;
 import br.com.ieptbto.cra.webservice.VO.TituloDetalhamentoSerpro;
@@ -47,9 +48,9 @@ public class DesistenciaProtestoService extends CraWebService {
 	private DesistenciaProtestoMediator desistenciaProtestoMediator;
 	@Autowired
 	private InstituicaoMediator instituicaoMediator;
-	
+
 	private List<Exception> erros;
-	private Object relatorio;
+	private MensagemCra mensagemCra;
 	private String resposta;
 
 	/**
@@ -63,6 +64,7 @@ public class DesistenciaProtestoService extends CraWebService {
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_DESISTENCIA_PROTESTO;
 		this.nomeArquivo = nomeArquivo;
+		this.mensagemCra = null;
 
 		ArquivoVO arquivoVO = new ArquivoVO();
 		try {
@@ -90,10 +92,10 @@ public class DesistenciaProtestoService extends CraWebService {
 			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 			}
-			relatorio = gerarResposta(arquivo, usuario);
+			mensagemCra = gerarResposta(arquivo, usuario);
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Desistência de Protesto " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
-			
+
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage(), ex);
 			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex);
@@ -104,7 +106,7 @@ public class DesistenciaProtestoService extends CraWebService {
 					"Erro interno no processamento do arquivo de Desistência de Protesto " + nomeArquivo + "." + e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return gerarMensagem(relatorio, CONSTANTE_RELATORIO_XML);
+		return gerarMensagem(mensagemCra, CONSTANTE_RELATORIO_XML);
 	}
 
 	private MensagemXml gerarResposta(Arquivo arquivo, Usuario usuario) {
@@ -200,14 +202,16 @@ public class DesistenciaProtestoService extends CraWebService {
 	 */
 	public String buscarDesistenciaCancelamento(String nomeArquivo, Usuario usuario) {
 		this.nomeArquivo = nomeArquivo;
+		this.resposta = null;
+
 		RemessaDesistenciaProtestoVO remessaVO = null;
 		try {
 			if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
-				this.craAcao =CraAcao.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO;
+				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO;
 			} else if (nomeArquivo.contains(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.getConstante())) {
-				this.craAcao =CraAcao.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO;
+				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO;
 			} else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
-				this.craAcao =CraAcao.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO;
+				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO;
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_DESISTENCIA_CANCELAMENTO)) {
 				return mensagemServicoIndisponivel(usuario);
@@ -219,7 +223,7 @@ public class DesistenciaProtestoService extends CraWebService {
 			}
 			resposta = gerarResposta(remessaVO, nomeArquivo);
 			loggerCra.sucess(usuario, getCraAcao(),
-					"Arquivo " + nomeArquivo + ", enviado com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
+					"Arquivo " + nomeArquivo + ", recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo " + nomeArquivo + "." + e.getMessage(), e);
@@ -251,6 +255,7 @@ public class DesistenciaProtestoService extends CraWebService {
 
 	public String confirmarRecebimentoDesistenciaCancelamento(String nomeArquivo, Usuario usuario) {
 		this.nomeArquivo = nomeArquivo;
+
 		try {
 			if (usuario == null) {
 				return setResposta(usuario, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
@@ -260,16 +265,15 @@ public class DesistenciaProtestoService extends CraWebService {
 			}
 
 			if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
-				this.craAcao =CraAcao.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO;
+				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO;
 			} else if (nomeArquivo.contains(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.getConstante())) {
-				this.craAcao =CraAcao.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO;
+				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO;
 			} else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
-				this.craAcao =CraAcao.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO;
+				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO;
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.CONFIRMAR_RECEBIMENTO_DESISTENCIA_CANCELAMENTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-
 			desistenciaProtestoMediator.confirmarRecebimentoDesistenciaCancelamento(usuario.getInstituicao(), nomeArquivo);
 			loggerCra.sucess(usuario, getCraAcao(),
 					"Arquivo " + nomeArquivo + " foi confirmado o recebimento pelo " + usuario.getInstituicao().getNomeFantasia() + ".");

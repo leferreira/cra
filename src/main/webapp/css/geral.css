@@ -86,7 +86,9 @@ legend {
 #retornoPendente10Dias{
 	    background-color: rgba(217, 83, 79, 0.32) !important;
 }
-
+#taxaCraVigente{
+	    background-color: rgba(92, 184, 92, 0.36) !important;
+}
 .dataTables_filter {
 	float: right;
 }

@@ -18,7 +18,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
-import br.com.ieptbto.cra.util.EmailValidator;
+import br.com.ieptbto.cra.validator.EmailValidator;
 
 /**
  * @author Thasso Araújo

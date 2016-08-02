@@ -74,6 +74,7 @@ public class RelatorioTaxaCraInputPanel extends Panel {
 		dropDownCartorio = new DropDownChoice<Instituicao>("cartorio", instituicaoMediator.getCartorios(),
 				new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio"));
 		dropDownCartorio.setOutputMarkupId(true);
+		dropDownCartorio.setRequired(true);
 		return dropDownCartorio;
 	}
 }

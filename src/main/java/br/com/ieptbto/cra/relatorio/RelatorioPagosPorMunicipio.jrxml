@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<property name="ireport.zoom" value="2.4157650000000044"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATA_INICIO" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATA_FIM" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO" class="java.lang.Object"/>
+	<parameter name="MUNICIPIO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="apresentante" class="java.lang.String"/>
+	<field name="nossoNumero" class="java.lang.String"/>
+	<field name="numeroTitulo" class="java.lang.String"/>
+	<field name="numeroDocumentoDevedor" class="java.lang.String"/>
+	<field name="numeroProtocoloCartorio" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="nomeDevedor" class="java.lang.String"/>
+	<field name="saldoTitulo" class="java.lang.String"/>
+	<field name="remessa" class="java.lang.String"/>
+	<field name="dataConfirmacao" class="java.lang.String"/>
+	<field name="retorno" class="java.lang.String"/>
+	<field name="dataOcorrencia" class="java.lang.String"/>
+	<field name="desistencia" class="java.lang.String"/>
+	<field name="situacaoTitulo" class="java.lang.String"/>
+	<field name="taxaCra.valor" class="java.math.BigDecimal"/>
+	<variable name="TOTAL_TITULOS" class="java.lang.Long" calculation="Count">
+		<variableExpression><![CDATA[$F{numeroProtocoloCartorio}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_TAXA_CRA" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{taxaCra.valor}]]></variableExpression>
+	</variable>
+	<variable name="CONVENIO_ATUAL" class="java.lang.String" calculation="Variance">
+		<variableExpression><![CDATA[( $F{apresentante}.toString() == $V{CONVENIO_ATUAL} ? $V{CONVENIO_ATUAL} : $F{apresentante}.toString() )]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{apresentante}]]></initialValueExpression>
+	</variable>
+	<title>
+		<band height="59">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="379" y="0" width="423" height="20" uuid="1666ad65-0216-4ee5-8aa6-4420a2dfdb59"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO TAXA CRA DE TÍTULOS PAGOS]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="378" y="39" width="424" height="20" uuid="fa344a01-47a6-448a-9ba2-253f66bdef42"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PERÍODO: ENTRE " + new SimpleDateFormat("dd/MM/yyyy").format($P{DATA_INICIO}) + " E " + new SimpleDateFormat("dd/MM/yyyy").format($P{DATA_FIM}) + "."]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="378" height="59" uuid="fe38ab7d-e116-47bb-80bd-656a95884071"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="379" y="19" width="423" height="20" uuid="0b396516-5647-4612-8fc7-75316713e898"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MUNICIPIO}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<printWhenExpression><![CDATA[($V{CONVENIO_ATUAL}.toString()!= $F{apresentante}.toString() ? false : true )]]></printWhenExpression>
+			<rectangle>
+				<reportElement x="0" y="0" width="803" height="15" backcolor="#CCCCCC" uuid="9654b6d4-15f2-41c0-a45f-98d98801db17">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="675" y="0" width="65" height="15" uuid="41522757-9bc4-40a6-af22-9906b97d4169"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROTOCOLO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="201" y="0" width="65" height="15" uuid="3db4d23e-605b-48d1-8fff-7bf9b81dc0c3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº TÍTULO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="0" width="130" height="15" uuid="d7704140-7a24-4fb4-94b1-0c65296c896f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEVEDOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="740" y="0" width="60" height="15" uuid="cb970fd0-a84c-45a8-bfa3-dfa96d0e1c53"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OCORRÊNCIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="542" y="0" width="75" height="15" uuid="f96782da-0ee6-4d7d-9b15-294905d41729"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATA OCORRÊNCIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="0" width="70" height="15" uuid="37e25b80-c50a-44ca-80c7-01581c244f86"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPF/CNPJ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="115" y="0" width="85" height="15" uuid="25ce9fc5-a09c-4438-a215-66c11699271b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOSSO NÚMERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="471" y="0" width="70" height="15" uuid="e9c18563-8cc0-4792-9d43-b62b54b5ce72"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SALDO TÍTULO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="618" y="0" width="55" height="15" uuid="0bdade98-63ca-4e35-adfc-4a57b7a7889d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TAXA CRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="0" width="113" height="15" uuid="67a1681c-5bbf-457d-b7e6-f7101c24e3fb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONVÊNIO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="0" width="803" height="14" isPrintInFirstWholeBand="true" forecolor="rgba(255, 255, 255, 0.0)" backcolor="#E8E8E8" uuid="921fe6bb-8850-4dd7-be56-e63ee6be4929">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<printWhenExpression><![CDATA[new Boolean(($V{REPORT_COUNT}.intValue()%2==0))]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="268" y="0" width="130" height="15" uuid="5dc0795b-b907-4619-a9db-9fcbef6eff7f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeDevedor}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="201" y="0" width="65" height="15" uuid="1a569b17-94a4-42e2-a0de-494d153ca204"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroTitulo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="400" y="0" width="70" height="15" uuid="ee0466ca-8ed6-4aab-93e0-2120377df702"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroDocumentoDevedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="115" y="0" width="85" height="15" uuid="abe42d26-9ef2-400c-bb09-164e81c3bec4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nossoNumero}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="542" y="0" width="75" height="15" uuid="74e162fb-5a1b-49e2-8282-5f1e91b14e69"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataOcorrencia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="471" y="0" width="70" height="15" uuid="08783e9c-ecf3-4bd2-a793-244775d4f947"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldoTitulo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="740" y="0" width="60" height="15" uuid="80658926-5da9-4268-aee6-6c9f670da283"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{situacaoTitulo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="674" y="0" width="65" height="15" uuid="30aa099e-a7cf-4263-ab4c-ae02cc63d172"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroProtocoloCartorio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="618" y="0" width="55" height="15" uuid="ff3c481b-400e-4134-b53b-df6f95fb0741"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{taxaCra.valor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="0" width="113" height="15" uuid="508a0975-ee7b-485c-9587-140691664788"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{apresentante}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="30">
+			<rectangle>
+				<reportElement x="1" y="0" width="802" height="30" backcolor="#B9D1EA" uuid="7d0d22ed-e0c8-4e2f-83d5-f3e9d69c7bd2">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+			</rectangle>
+			<textField pattern="###0">
+				<reportElement x="2" y="10" width="235" height="20" uuid="4852bb70-5d12-49ba-99ae-c9439ca5c9ac"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL DE TÍTULOS:  " + $V{TOTAL_TITULOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="423" y="10" width="252" height="20" uuid="fad93ba1-bbe1-477c-8e14-1219eb7147e6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="549" y="10" width="251" height="20" uuid="0ebe3c6a-3148-4a12-9b20-65baf07063e0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_TAXA_CRA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>
