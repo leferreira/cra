@@ -1,20 +1,14 @@
 package br.com.ieptbto.cra.webservice.dao;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +30,6 @@ import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
-import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 
 /**
@@ -123,34 +116,6 @@ public class ConfirmacaoService extends CraWebService {
 		}
 		string.append("</confirmacao>");
 		return XmlFormatterUtil.format(xml + cabecalho + string.toString());
-	}
-
-	protected String gerarMensagem(Object mensagem, String nomeNo) {
-		String msg = null;
-		Writer writer = new StringWriter();
-		JAXBContext context;
-
-		try {
-			context = JAXBContext.newInstance(mensagem.getClass());
-
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
-			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
-			marshaller.marshal(element, writer);
-			msg = writer.toString();
-			msg = msg.replace("<confirmacao xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
-			writer.close();
-
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e);
-			throw new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		}
-		return msg;
 	}
 
 	/**

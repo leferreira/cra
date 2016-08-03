@@ -56,10 +56,10 @@ public class CraWebService {
 	protected CraServiceMediator craServiceMediator;
 	@Autowired
 	protected LoggerCra loggerCra;
-	
+
 	protected CraAcao craAcao;
 	protected String nomeArquivo;
-	
+
 	protected String mensagemServicoIndisponivel(Usuario usuario) {
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(getNomeArquivo(), usuario, CodigoErro.CRA_SERVICO_INDISPONIVEL);
@@ -95,7 +95,7 @@ public class CraWebService {
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
-	private String setRespostaNomeArquivoInvalido(Usuario usuario,  String nomeArquivo) {
+	private String setRespostaNomeArquivoInvalido(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS : Nome do arquivo informado é inválido!");
 		loggerCra.error(usuario, getCraAcao(), "Nome do arquivo " + nomeArquivo + " está em branco ou é inválido ao layout FEBRABAN.");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
@@ -139,8 +139,8 @@ public class CraWebService {
 
 	protected String setRespostaArquivoEmBranco(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS: Dados do arquivo enviados em branco");
-		loggerCra.error(usuario, getCraAcao(), "Os dados do arquivo " + nomeArquivo + " da instituição "
-				+ usuario.getInstituicao().getNomeFantasia() + " foram enviados em branco ou estão corrimpidos.");
+		loggerCra.error(usuario, getCraAcao(), "Os dados do arquivo " + nomeArquivo + " da instituição " + usuario.getInstituicao().getNomeFantasia()
+				+ " foram enviados em branco ou estão corrimpidos.");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.SERPRO_ARQUIVO_INVALIDO_REMESSA_DESISTENCIA_CANCELAMENTO);
 			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
@@ -241,7 +241,7 @@ public class CraWebService {
 		String msg = "";
 		Writer writer = new StringWriter();
 		try {
-			JAXBContext	context = JAXBContext.newInstance(object.getClass());
+			JAXBContext context = JAXBContext.newInstance(object.getClass());
 
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -252,6 +252,7 @@ public class CraWebService {
 			msg = msg.replace(" xsi:type=\"mensagemXmlSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace(" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace(" xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace("<confirmacao xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
 			writer.close();
 
 		} catch (JAXBException e) {
@@ -263,12 +264,12 @@ public class CraWebService {
 		}
 		return msg;
 	}
-	
-	protected void salvarArquivoXMLParaFisico(String fileName, String content){
+
+	protected void salvarArquivoXMLParaFisico(String fileName, String content) {
 		File diretorioTeste = new File(ConfiguracaoBase.DIRETORIO_TESTE);
 
 		try {
-			if (!diretorioTeste.exists()){
+			if (!diretorioTeste.exists()) {
 				diretorioTeste.mkdirs();
 			}
 			File arquivo = new File(ConfiguracaoBase.DIRETORIO_TESTE + fileName);
@@ -281,14 +282,14 @@ public class CraWebService {
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
 	}
-	
+
 	public String getNomeArquivo() {
 		if (nomeArquivo == null) {
 			nomeArquivo = StringUtils.EMPTY;
 		}
 		return nomeArquivo;
 	}
-	
+
 	public CraAcao getCraAcao() {
 		if (craAcao == null) {
 			craAcao = CraAcao.ACESSO_CRA;

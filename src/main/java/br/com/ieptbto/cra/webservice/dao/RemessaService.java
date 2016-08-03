@@ -83,7 +83,6 @@ public class RemessaService extends CraWebService {
 
 			List<RemessaVO> remessasVO = ConversorArquivoVO.converterParaRemessaVO(converterStringArquivoVO(dados));
 			mensagemCra = remessaMediator.processarArquivoXML(remessasVO, usuario, nomeArquivo);
-
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (Exception ex) {
