@@ -16,7 +16,6 @@ import org.xml.sax.InputSource;
 
 import br.com.ieptbto.cra.conversor.ConversorArquivoVO;
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
@@ -138,7 +137,6 @@ public class RemessaService extends CraWebService {
 		this.nomeArquivo = nomeArquivo;
 		this.resposta = null;
 
-		Remessa remessa = null;
 		RemessaVO remessaVO = null;
 		try {
 			if (usuario == null) {
@@ -147,7 +145,7 @@ public class RemessaService extends CraWebService {
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_REMESSA)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			remessaVO = remessaMediator.buscarRemessaParaCartorio(remessa, usuario.getInstituicao(), nomeArquivo);
+			remessaVO = remessaMediator.buscarRemessaParaCartorio(usuario, nomeArquivo);
 			if (remessaVO == null) {
 				return setRespostaPadrao(usuario, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 			}
