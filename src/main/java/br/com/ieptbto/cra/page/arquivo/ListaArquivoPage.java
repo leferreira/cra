@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,6 +27,7 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.StatusRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -44,10 +44,11 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	protected static final Logger logger = Logger.getLogger(ListaArquivoPage.class);
 
 	@SpringBean
 	RemessaMediator remessaMediator;
+	@SpringBean
+	DownloadMediator downloadMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 
@@ -122,7 +123,7 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 					@Override
 					public void onClick() {
 						try {
-							File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
+							File file = downloadMediator.baixarRemessaTXT(getUser(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
 
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(

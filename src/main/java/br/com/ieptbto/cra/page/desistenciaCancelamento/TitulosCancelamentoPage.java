@@ -29,6 +29,7 @@ import br.com.ieptbto.cra.entidade.PedidoCancelamento;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
@@ -50,6 +51,8 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	DownloadMediator downloadMediator;
 	@SpringBean
 	CancelamentoProtestoMediator cancelamentoProtestoMediator;
 	@SpringBean
@@ -80,16 +83,18 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 
 			@Override
 			public void onClick() {
-				File file = cancelamentoProtestoMediator.baixarCancelamentoTXT(getUser(), getCancelamentoProtesto());
+				File file = downloadMediator.baixarCancelamentoTXT(getUser(), getCancelamentoProtesto());
 				IResourceStream resourceStream = new FileResourceStream(file);
-				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+						getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
 			}
 		});
 	}
 
 	private void informacoesArquivoCancelamento() {
 		add(new Label("nomeArquivo", getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
-		add(new Label("dataEnvio", DataUtil.localDateToString(getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getDataEnvio())));
+		add(new Label("dataEnvio",
+				DataUtil.localDateToString(getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getDataEnvio())));
 		add(new Label("enviadoPor", getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 		add(new Label("destino", cartorioDestino.getNomeFantasia()));
 	}
@@ -139,14 +144,17 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 						item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 						item.add(new Label("dataSituacao", StringUtils.EMPTY));
 
-					} else if (pedidoCancelamento.getTitulo().getConfirmacao() != null
-							&& pedidoCancelamento.getTitulo().getRetorno() == null) {
-						item.add(new Label("dataConfirmacao", DataUtil.localDateToString(pedidoCancelamento.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
-						item.add(new Label("dataSituacao", DataUtil.localDateToString(pedidoCancelamento.getTitulo().getConfirmacao().getDataOcorrencia())));
+					} else if (pedidoCancelamento.getTitulo().getConfirmacao() != null && pedidoCancelamento.getTitulo().getRetorno() == null) {
+						item.add(new Label("dataConfirmacao", DataUtil
+								.localDateToString(pedidoCancelamento.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+						item.add(new Label("dataSituacao",
+								DataUtil.localDateToString(pedidoCancelamento.getTitulo().getConfirmacao().getDataOcorrencia())));
 
 					} else if (pedidoCancelamento.getTitulo().getRetorno() != null) {
-						item.add(new Label("dataConfirmacao", DataUtil.localDateToString(pedidoCancelamento.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
-						item.add(new Label("dataSituacao", DataUtil.localDateToString(pedidoCancelamento.getTitulo().getRetorno().getDataOcorrencia())));
+						item.add(new Label("dataConfirmacao", DataUtil
+								.localDateToString(pedidoCancelamento.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+						item.add(new Label("dataSituacao",
+								DataUtil.localDateToString(pedidoCancelamento.getTitulo().getRetorno().getDataOcorrencia())));
 					}
 					Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 

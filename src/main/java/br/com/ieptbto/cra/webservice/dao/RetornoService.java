@@ -1,42 +1,24 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xml.sax.InputSource;
 
-import br.com.ieptbto.cra.conversor.ConversorArquivoVO;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.ArquivoRetornoVO;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
-import br.com.ieptbto.cra.entidade.vo.RetornoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.mediator.RetornoMediator;
-import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
+import br.com.ieptbto.cra.webservice.receiver.RetornoReceiver;
 
 /**
  * @author Thasso Araújo
@@ -50,7 +32,7 @@ public class RetornoService extends CraWebService {
 	@Autowired
 	RemessaMediator remessaMediator;
 	@Autowired
-	RetornoMediator retornoMediator;
+	RetornoReceiver retornoReceiver;
 
 	private MensagemCra mensagemCra;
 	private String resposta;
@@ -123,33 +105,6 @@ public class RetornoService extends CraWebService {
 
 	}
 
-	protected String gerarMensagem(Object mensagem, String nomeNo) {
-		Writer writer = new StringWriter();
-		JAXBContext context;
-		try {
-			context = JAXBContext.newInstance(mensagem.getClass());
-
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
-			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
-			marshaller.marshal(element, writer);
-			String msg = writer.toString();
-			msg = msg.replace("<retorno xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
-			writer.close();
-			return msg;
-
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		}
-		return null;
-	}
-
 	/**
 	 * Envio de retorno pelo cartório
 	 * 
@@ -178,9 +133,7 @@ public class RetornoService extends CraWebService {
 				return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
 			}
 
-			ArquivoRetornoVO arquivoRetornoVO = converterStringArquivoVO(dados);
-			RetornoVO retornoVO = ConversorArquivoVO.converterParaRemessaVO(arquivoRetornoVO);
-			mensagemCra = retornoMediator.processarXML(retornoVO, usuario, nomeArquivo);
+			mensagemCra = retornoReceiver.receber(usuario, nomeArquivo, dados);
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Retorno " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (InfraException ex) {
@@ -193,33 +146,5 @@ public class RetornoService extends CraWebService {
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
 		return gerarMensagem(mensagemCra, CONSTANTE_CONFIRMACAO_XML);
-	}
-
-	private ArquivoRetornoVO converterStringArquivoVO(String dados) {
-		JAXBContext context;
-		ArquivoRetornoVO arquivo = null;
-
-		try {
-			context = JAXBContext.newInstance(ArquivoRetornoVO.class);
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-			String xmlRecebido = "";
-
-			Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
-			while (scanner.hasNext()) {
-				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
-				if (xmlRecebido.contains("<?xml version=")) {
-					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
-				}
-			}
-			scanner.close();
-
-			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
-			arquivo = (ArquivoRetornoVO) unmarshaller.unmarshal(new InputSource(xml));
-
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(e.getMessage(), e.getCause());
-		}
-		return arquivo;
 	}
 }

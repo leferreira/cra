@@ -28,6 +28,7 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -51,6 +52,8 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 
 	@SpringBean
 	RemessaMediator remessaMediator;
+	@SpringBean
+	DownloadMediator downloadMediator;
 	@SpringBean
 	TituloMediator tituloMediator;
 
@@ -162,11 +165,11 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 			@Override
 			public void onClick() {
 				try {
-					File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
+					File file = downloadMediator.baixarRemessaTXT(getUser(), remessa);
 					IResourceStream resourceStream = new FileResourceStream(file);
 
-					getRequestCycle()
-							.scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
@@ -200,13 +203,15 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 
 				} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
 					item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
-					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+					item.add(new Label("dataConfirmacao",
+							DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 					item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
 
 				} else if (tituloRemessa.getRetorno() != null) {
 					item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
-					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+					item.add(new Label("dataConfirmacao",
+							DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 					item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
 				}

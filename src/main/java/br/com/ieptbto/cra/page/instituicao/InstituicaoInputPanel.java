@@ -24,7 +24,7 @@ import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.enumeration.TipoCampo51;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
-import br.com.ieptbto.cra.validator.EmailValidator;
+import br.com.ieptbto.cra.validador.EmailValidator;
 
 public class InstituicaoInputPanel extends Panel {
 

@@ -30,7 +30,7 @@ import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
@@ -57,7 +57,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 	@SpringBean
 	ArquivoMediator arquivoMediator;
 	@SpringBean
-	RemessaMediator remessaMediator;
+	DownloadMediator downloadMediator;
 
 	private Arquivo arquivo;
 	private List<Titulo> titulos;
@@ -112,13 +112,15 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 				} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
 					item.add(new Label("numeroTitulo", titulo.getNumeroTitulo()));
-					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
+					item.add(new Label("dataConfirmacao",
+							DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
 					item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
 
 				} else if (tituloRemessa.getRetorno() != null) {
 					item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
-					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
+					item.add(new Label("dataConfirmacao",
+							DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
 					item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
 				}
@@ -208,8 +210,8 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
-							+ arquivo.getNomeArquivo().replace(".", "_") + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + arquivo.getNomeArquivo().replace(".", "_") + ".pdf"));
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
@@ -228,7 +230,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 			@Override
 			public void onClick() {
-				File file = arquivoMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
+				File file = downloadMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
 				IResourceStream resourceStream = new FileResourceStream(file);
 
 				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));

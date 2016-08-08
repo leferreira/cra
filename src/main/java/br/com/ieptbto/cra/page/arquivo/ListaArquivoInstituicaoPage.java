@@ -25,7 +25,7 @@ import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -44,7 +44,7 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 	@SpringBean
 	ArquivoMediator arquivoMediator;
 	@SpringBean
-	RemessaMediator remessaMediator;
+	DownloadMediator downloadMediator;
 
 	private Arquivo arquivo;
 	private List<Arquivo> arquivos;
@@ -103,7 +103,7 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = arquivoMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
+						File file = downloadMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle()

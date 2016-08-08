@@ -1,31 +1,20 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Scanner;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xml.sax.InputSource;
 
-import br.com.ieptbto.cra.conversor.ConversorArquivoVO;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
-import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
+import br.com.ieptbto.cra.webservice.receiver.RemessaReceiver;
 
 /**
  * 
@@ -36,9 +25,11 @@ import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 public class RemessaService extends CraWebService {
 
 	@Autowired
+	ArquivoMediator arquivoMediator;
+	@Autowired
 	RemessaMediator remessaMediator;
 	@Autowired
-	ArquivoMediator arquivoMediator;
+	RemessaReceiver remessaReceiver;
 
 	private MensagemCra mensagemCra;
 	private String resposta;
@@ -51,7 +42,7 @@ public class RemessaService extends CraWebService {
 	 * @param dados
 	 * @return
 	 */
-	public String processar(String nomeArquivo, Usuario usuario, String dados) {
+	public String processar(Usuario usuario, String nomeArquivo, String dados) {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_REMESSA;
 		this.nomeArquivo = nomeArquivo;
 		this.mensagemCra = null;
@@ -80,8 +71,7 @@ public class RemessaService extends CraWebService {
 				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
 
-			List<RemessaVO> remessasVO = ConversorArquivoVO.converterParaRemessaVO(converterStringArquivoVO(dados));
-			mensagemCra = remessaMediator.processarArquivoXML(remessasVO, usuario, nomeArquivo);
+			mensagemCra = remessaReceiver.receber(usuario, nomeArquivo, dados);
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (Exception ex) {
@@ -90,39 +80,6 @@ public class RemessaService extends CraWebService {
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
 		return gerarMensagem(mensagemCra, CONSTANTE_RELATORIO_XML);
-	}
-
-	private ArquivoVO converterStringArquivoVO(String dados) {
-		JAXBContext context;
-
-		ArquivoVO arquivo = null;
-		try {
-			context = JAXBContext.newInstance(ArquivoVO.class);
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-			String xmlRecebido = "";
-
-			Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
-			while (scanner.hasNext()) {
-				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
-				if (xmlRecebido.contains("<?xml version=")) {
-					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", StringUtils.EMPTY);
-				}
-				if (xmlRecebido.contains("<comarca CodMun")) {
-					xmlRecebido = xmlRecebido.replaceAll("<comarca CodMun=.[0-9]+..", StringUtils.EMPTY);
-				}
-				if (xmlRecebido.contains("</comarca>")) {
-					xmlRecebido = xmlRecebido.replaceAll("</comarca>", StringUtils.EMPTY);
-				}
-			}
-			scanner.close();
-
-			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
-			arquivo = (ArquivoVO) unmarshaller.unmarshal(new InputSource(xml));
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(e.getMessage(), e.getCause());
-		}
-		return arquivo;
 	}
 
 	/**

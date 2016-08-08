@@ -34,6 +34,7 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.LoggerMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
@@ -60,6 +61,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	/***/
 	private static final long serialVersionUID = 1L;
 
+	@SpringBean
+	DownloadMediator downloadMediator;
 	@SpringBean
 	RemessaMediator remessaMediator;
 	@SpringBean
@@ -239,7 +242,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					public void onClick() {
 
 						try {
-							File file = remessaMediator.baixarRemessaTXT(getUsuario(), remessa);
+							File file = downloadMediator.baixarRemessaTXT(getUsuario(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
 
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(
@@ -331,7 +334,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-						File file = cancelamentoMediator.baixarCancelamentoTXT(getUsuario(), remessa);
+						File file = downloadMediator.baixarCancelamentoTXT(getUsuario(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
@@ -384,7 +387,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-						File file = desistenciaMediator.baixarDesistenciaTXT(getUsuario(), desistenciaProtesto);
+						File file = downloadMediator.baixarDesistenciaTXT(getUsuario(), desistenciaProtesto);
 						IResourceStream resourceStream = new FileResourceStream(file);
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
 								desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
@@ -436,7 +439,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 					@Override
 					public void onClick() {
-						File file = autorizacaoMediator.baixarAutorizacaoTXT(getUsuario(), ac);
+						File file = downloadMediator.baixarAutorizacaoTXT(getUsuario(), ac);
 						IResourceStream resourceStream = new FileResourceStream(file);
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
 								ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));

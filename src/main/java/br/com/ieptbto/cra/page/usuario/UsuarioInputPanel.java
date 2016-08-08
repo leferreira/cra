@@ -20,7 +20,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.GrupoUsuarioMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.validator.EmailValidator;
+import br.com.ieptbto.cra.validador.EmailValidator;
 
 public class UsuarioInputPanel extends Panel {
 
