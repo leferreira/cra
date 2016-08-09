@@ -95,10 +95,10 @@ public class ConfirmacaoService extends CraWebService {
 	}
 
 	private String gerarResposta(Usuario usuario, List<RemessaVO> remessas, String nomeArquivo, String constanteConfirmacaoXml) {
-		StringBuffer string = new StringBuffer();
-		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
-		String cabecalho = "<confirmacao>";
+		String cabecalho = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
 
+		StringBuffer string = new StringBuffer();
+		string.append("<confirmacao>");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			string.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>");
 		}
@@ -111,11 +111,10 @@ public class ConfirmacaoService extends CraWebService {
 			} else {
 				String msg = gerarMensagem(remessaVO, CONSTANTE_CONFIRMACAO_XML).replace("</confirmacao>", "").replace(cabecalho, "");
 				string.append(msg);
-
 			}
 		}
 		string.append("</confirmacao>");
-		return XmlFormatterUtil.format(xml + cabecalho + string.toString());
+		return XmlFormatterUtil.format(string.toString());
 	}
 
 	/**
