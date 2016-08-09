@@ -1,6 +1,6 @@
 package br.com.ieptbto.cra.exception;
 
-import br.com.ieptbto.cra.webservice.VO.CodigoErro;
+import br.com.ieptbto.cra.error.CodigoErro;
 
 /**
  * 

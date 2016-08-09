@@ -8,8 +8,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.ComarcaDetalhamentoSerpro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;

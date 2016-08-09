@@ -1,5 +1,7 @@
 package br.com.ieptbto.cra.page.arquivo;
 
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.Action;
@@ -22,6 +24,7 @@ import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.exception.TituloException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -52,7 +55,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	public EnviarArquivoPage() {
 		this.arquivo = new Arquivo();
 		this.usuario = getUser();
-		this.arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
 		adicionarComponentes();
 	}
 
@@ -69,38 +71,30 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 			@Override
 			protected void onSubmit() {
+				getFeedbackMessages().clear();
+				final Arquivo arquivo = getModelObject();
 				final FileUpload uploadedFile = fileUploadField.getFileUpload();
+
+				arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
 				arquivo.setDataRecebimento(new LocalDate().toDate());
-				getFeedbackMessages().clear();
-
 				try {
 					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUsuario());
-					setArquivo(arquivoRetorno.getArquivo());
 
-					if (arquivo != null) {
-						if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
-							success("O arquivo de Remessa <span class=\"alert-link\">" + arquivo.getNomeArquivo()
-									+ "</span> enviado, foi processado com sucesso !");
-						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
-							success("O arquivo de Confirmação <span class=\"alert-link\">" + arquivo.getNomeArquivo()
-									+ "</span> enviado, foi processado com sucesso !");
-						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
-							setResponsePage(new RelatorioRetornoPage("O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo()
-									+ "</span> enviado, foi processado com sucesso !", getArquivo(), "ENVIAR ARQUIVO"));
-						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
-							success("O arquivo de Desistência de Protesto <span class=\"alert-link\">" + arquivo.getNomeArquivo()
-									+ "</span> enviado, foi processado com sucesso !");
-						}
-					}
-					for (Exception exception : arquivoRetorno.getErros()) {
-						if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
-							info(DesistenciaCancelamentoException.class.cast(exception).toString());
-						} else {
-							if (exception.getMessage() != null) {
-								info(exception.getMessage());
-							}
-						}
+					if (!arquivoRetorno.getErros().isEmpty()) {
+						gerarMensagemErros(arquivo, arquivoRetorno.getErros());
+					} else if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
+						success("O arquivo de Remessa <span class=\"alert-link\">" + arquivo.getNomeArquivo()
+								+ "</span> enviado, foi processado com sucesso !");
+					} else if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
+						success("O arquivo de Confirmação <span class=\"alert-link\">" + arquivo.getNomeArquivo()
+								+ "</span> enviado, foi processado com sucesso !");
+					} else if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+						setResponsePage(new RelatorioRetornoPage("O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo()
+								+ "</span> enviado, foi processado com sucesso !", getArquivo(), "ENVIAR ARQUIVO"));
+					} else if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
+						success("O arquivo de Desistência de Protesto <span class=\"alert-link\">" + arquivo.getNomeArquivo()
+								+ "</span> enviado, foi processado com sucesso !");
 					}
 					arquivoRetorno.getErros().clear();
 
@@ -111,6 +105,31 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					logger.error(ex.getMessage(), ex);
 					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
 				}
+			}
+
+			private void gerarMensagemErros(Arquivo arquivo, List<Exception> erros) {
+				TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(arquivo);
+
+				String mensagemErro = "<a href=\"#\" class=\"alert-link\">Por favor corriga a(s) ocorrência(s) encontrada(s) no arquivo:</a>";
+				mensagemErro = mensagemErro + "<ul>";
+				for (Exception exception : erros) {
+					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo
+							|| TipoArquivoEnum.RETORNO == tipoArquivo) {
+						TituloException excecaoTitulo = TituloException.class.cast(exception);
+						if (excecaoTitulo.getNumeroSequencialRegistro() != 0) {
+							mensagemErro = mensagemErro + "<li><a href=\"#\" class=\"alert-link\">Linha" + excecaoTitulo.getNumeroSequencialRegistro()
+									+ ":</a> " + excecaoTitulo.getDescricao() + ";</li>";
+						} else {
+							mensagemErro = mensagemErro + "<li>" + excecaoTitulo.getDescricao() + ";</li>";
+						}
+					} else if (TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO == tipoArquivo || TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO == tipoArquivo
+							|| TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO == tipoArquivo) {
+						DesistenciaCancelamentoException excecaoDesistencia = DesistenciaCancelamentoException.class.cast(exception);
+						mensagemErro = mensagemErro + "<li>" + excecaoDesistencia.getDescricao() + ";</li>";
+					}
+				}
+				mensagemErro = mensagemErro + "</ul>";
+				info(mensagemErro);
 			}
 		};
 		form.setMultiPart(true);
