@@ -19,10 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.LoteCnp;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
 import br.com.ieptbto.cra.mediator.CraServiceMediator;
-import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
 import br.com.ieptbto.cra.webservice.VO.Mensagem;
@@ -47,7 +47,7 @@ public class CnpWebService {
 	protected CraServiceMediator craServiceMediator;
 	@Autowired
 	protected LoggerCra loggerCra;
-	
+
 	protected LocalTime horaInicioServico;
 	protected LocalTime horaFimServico;
 

@@ -21,13 +21,13 @@ import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
-import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
 import br.com.ieptbto.cra.webservice.VO.Erro;
@@ -48,7 +48,6 @@ public class DesistenciaProtestoService extends CraWebService {
 	private DesistenciaProtestoMediator desistenciaProtestoMediator;
 	@Autowired
 	private InstituicaoMediator instituicaoMediator;
-
 	private List<Exception> erros;
 	private MensagemCra mensagemCra;
 	private String resposta;
@@ -141,11 +140,11 @@ public class DesistenciaProtestoService extends CraWebService {
 		for (Exception ex : getErros()) {
 			DesistenciaCancelamentoException exception = DesistenciaCancelamentoException.class.cast(ex);
 			Mensagem erro = new Mensagem();
-			erro.setDescricao(exception.getMessage());
-			erro.setMunicipio(exception.getMunicipio());
-			erro.setCodigo(exception.getCodigoErro());
+			erro.setDescricao(exception.getDescricao());
+			erro.setMunicipio(exception.getCodigoMunicipio());
+			erro.setCodigo(exception.getCodigoErro().getCodigo());
 			mensagens.add(erro);
-			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
+			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getCodigoMunicipio() + " - " + exception.getDescricao());
 		}
 		getErros().clear();
 		return mensagemRetorno;
