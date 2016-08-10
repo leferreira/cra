@@ -23,81 +23,93 @@ import br.com.ieptbto.cra.util.XmlFormatterUtil;
 @Path("/CentralNacionalProtestoService")
 public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProtestoWS {
 
-	public static final Logger logger = Logger.getLogger(CentralNacionalProtestoServiceImpl.class);
+    public static final Logger logger = Logger.getLogger(CentralNacionalProtestoServiceImpl.class);
 
-	@Resource
-	private WebServiceContext wsctx;
-	private UsuarioMediator usuarioMediator;
-	private Usuario usuario;
-	private CentralNacionalProtestoCartorioService centralNacionalProtestoCartorioService;
-	private CentralNacionalProtestoService centralNacionalProtestoService;
-	private ClassPathXmlApplicationContext context;
+    @Resource
+    private WebServiceContext wsctx;
+    private UsuarioMediator usuarioMediator;
+    private Usuario usuario;
+    private CentralNacionalProtestoCartorioService centralNacionalProtestoCartorioService;
+    private CentralNacionalProtestoService centralNacionalProtestoService;
+    private ClassPathXmlApplicationContext context;
 
-	@Override
-	@WebMethod(operationName = "cartorio")
-	@GET
-	public String cartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
-			@WebParam(name = "user_dados") String dados) {
-		init(login, senha);
-		return centralNacionalProtestoCartorioService.processar(usuario, dados);
-	}
+    @Override
+    @WebMethod(operationName = "cartorio")
+    @GET
+    public String cartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
+            @WebParam(name = "user_dados") String dados) {
+        init(login, senha);
+        return centralNacionalProtestoCartorioService.processar(usuario, dados);
+    }
 
-	@Override
-	@WebMethod(operationName = "centralNacionalProtesto")
-	@GET
-	public String centralNacionalProtesto(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
-		init(login, senha);
-		return centralNacionalProtestoService.processar(usuario);
-	}
+    @Override
+    @WebMethod(operationName = "centralNacionalProtesto")
+    @GET
+    public String centralNacionalProtesto(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+        init(login, senha);
+        return centralNacionalProtestoService.processar(usuario);
+    }
 
-	@Override
-	@WebMethod(operationName = "cartoriosDisponiveis")
-	@GET
-	public String cartoriosDisponiveis(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
-		init(login, senha);
-		return centralNacionalProtestoService.consultar(usuario);
-	}
+    @Override
+    @WebMethod(operationName = "cartoriosDisponiveis")
+    @GET
+    public String cartoriosDisponiveis(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+        init(login, senha);
+        return centralNacionalProtestoService.consultar(usuario);
+    }
 
-	@Override
-	@WebMethod(operationName = "consultaProtesto")
-	@GET
-	public String consultaProtesto(@WebParam(name = "documentoDevedor") String documentoDevedor) {
-		if (documentoDevedor == null) {
-			StringBuffer xml = new StringBuffer();
-			xml.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\" ?>");
-			xml.append("<protesto>");
-			xml.append("<mensagem>CPF/CNPJ não informado</mensagem>");
-			xml.append("</protesto>");
-			return XmlFormatterUtil.format(xml.toString());
-		}
+    @Override
+    @WebMethod(operationName = "consultaMovimentoPorData")
+    @GET
+    public String consultaMovimentoPorData(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
+            @WebParam(name = "data") String data) {
+        init(login, senha);
+        logger.info("Inicio WebService consulta Movimento por data pelo usuário " + login);
+        return centralNacionalProtestoService.consultaMovimentoPorData(usuario, data);
+    }
 
-		if (context == null) {
-			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-		}
+    @Override
+    @WebMethod(operationName = "consultaProtesto")
+    @GET
+    public String consultaProtesto(@WebParam(name = "documentoDevedor") String documentoDevedor) {
+        if (documentoDevedor == null) {
+            StringBuffer xml = new StringBuffer();
+            xml.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\" ?>");
+            xml.append("<protesto>");
+            xml.append("<mensagem>CPF/CNPJ não informado</mensagem>");
+            xml.append("</protesto>");
+            return XmlFormatterUtil.format(xml.toString());
+        }
 
-		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
+        if (context == null) {
+            context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+        }
 
-		logger.info("O CPF/CNPJ " + documentoDevedor + " foi consultado na Central Nacional de Protesto. ");
+        centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context
+                .getBean("centralNacionalProtestoCartorioService");
 
-		return centralNacionalProtestoCartorioService.consultarProtesto(documentoDevedor);
-	}
+        logger.info("O CPF/CNPJ " + documentoDevedor + " foi consultado na Central Nacional de Protesto. ");
 
-	private void init(String login, String senha) {
-		if (context == null) {
-			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-		}
-		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
-		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
-		centralNacionalProtestoService = (CentralNacionalProtestoService) context.getBean("centralNacionalProtestoService");
-		setUsuario(login, senha);
-	}
+        return centralNacionalProtestoCartorioService.consultarProtesto(documentoDevedor);
+    }
 
-	private void setUsuario(String login, String senha) {
-		logger.info("Inicio WebService pelo usuario= " + login);
-		this.usuario = usuarioMediator.autenticarWS(login, senha);
-	}
+    private void init(String login, String senha) {
+        if (context == null) {
+            context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+        }
+        usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
+        centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context
+                .getBean("centralNacionalProtestoCartorioService");
+        centralNacionalProtestoService = (CentralNacionalProtestoService) context.getBean("centralNacionalProtestoService");
+        setUsuario(login, senha);
+    }
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
+    private void setUsuario(String login, String senha) {
+        logger.info("Inicio WebService pelo usuario= " + login);
+        this.usuario = usuarioMediator.autenticarWS(login, senha);
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
 }
