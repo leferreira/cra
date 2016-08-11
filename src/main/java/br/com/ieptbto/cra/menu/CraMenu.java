@@ -51,9 +51,9 @@ public class CraMenu extends Panel {
 		itemArquivo.authorize(rolesPesquisar);
 		itemArquivo.setVisible(false);
 
-		MenuItem itemArquivoCNP = new MenuItem("EnviarArquivoCNP");
-		itemArquivoCNP.authorize(rolesPesquisar);
-		itemArquivoCNP.setVisible(false);
+		MenuItem itemCentralDeProtestosCartorios = new MenuItem("CentralProtestosCartorio");
+		itemCentralDeProtestosCartorios.authorize(rolesPesquisar);
+		itemCentralDeProtestosCartorios.setVisible(false);
 
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.LAYOUT_PERSONALIZADO_CONVENIOS)) {
 			itemArquivoEmpresa.setVisible(true);
@@ -62,12 +62,12 @@ public class CraMenu extends Panel {
 			itemArquivo.setVisible(true);
 		}
 		if (TipoInstituicaoCRA.CARTORIO.equals(usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao())) {
-			itemArquivoCNP.setVisible(true);
+			itemCentralDeProtestosCartorios.setVisible(true);
 		}
 		menuPadrao.add(itemArquivo);
 		menuPadrao.add(itemArquivoEmpresa);
 		menuPadrao.add(itemSolicitarCancelamento);
-		menuPadrao.add(itemArquivoCNP);
+		menuPadrao.add(itemCentralDeProtestosCartorios);
 
 		menuPadrao.addItem("BuscarDesistenciaCancelamento", rolesPesquisar);
 		menuPadrao.addItem("MonitorarTitulos", rolesPesquisar);

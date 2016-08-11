@@ -27,7 +27,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
-public class EnviarArquivoCNP extends BasePage<Arquivo> {
+public class CentralProtestosCartorioPage extends BasePage<Arquivo> {
 
 	/****/
 	private static final long serialVersionUID = 852632145;
@@ -39,7 +39,7 @@ public class EnviarArquivoCNP extends BasePage<Arquivo> {
 	private Form<Arquivo> form;
 	private FileUploadField fileUploadField;
 
-	public EnviarArquivoCNP() {
+	public CentralProtestosCartorioPage() {
 		this.arquivo = new Arquivo();
 		adicionarComponentes();
 	}
