@@ -12,7 +12,6 @@ import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 import br.com.ieptbto.cra.webservice.receiver.RemessaReceiver;
 
@@ -25,11 +24,9 @@ import br.com.ieptbto.cra.webservice.receiver.RemessaReceiver;
 public class RemessaService extends CraWebService {
 
 	@Autowired
-	ArquivoMediator arquivoMediator;
+	private ArquivoMediator arquivoMediator;
 	@Autowired
-	RemessaMediator remessaMediator;
-	@Autowired
-	RemessaReceiver remessaReceiver;
+	private RemessaReceiver remessaReceiver;
 
 	private MensagemCra mensagemCra;
 	private String resposta;
@@ -102,7 +99,7 @@ public class RemessaService extends CraWebService {
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_REMESSA)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			remessaVO = remessaMediator.buscarRemessaParaCartorio(usuario, nomeArquivo);
+			remessaVO = arquivoMediator.buscarRemessaParaCartorio(usuario, nomeArquivo);
 			if (remessaVO == null) {
 				return setRespostaPadrao(usuario, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 			}

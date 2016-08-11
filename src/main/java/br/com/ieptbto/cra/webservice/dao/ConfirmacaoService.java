@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,7 +15,6 @@ import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 import br.com.ieptbto.cra.webservice.receiver.ConfirmacaoReceiver;
@@ -30,11 +28,9 @@ import br.com.ieptbto.cra.webservice.receiver.ConfirmacaoReceiver;
 public class ConfirmacaoService extends CraWebService {
 
 	@Autowired
-	RemessaMediator remessaMediator;
+	private ArquivoMediator arquivoMediator;
 	@Autowired
-	ArquivoMediator arquivoMediator;
-	@Autowired
-	ConfirmacaoReceiver confirmacaoReceiver;
+	private ConfirmacaoReceiver confirmacaoReceiver;
 
 	private MensagemCra mensagemCra;
 	private String resposta;
@@ -47,7 +43,6 @@ public class ConfirmacaoService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario) {
-		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 		this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CONFIRMACAO;
 		this.nomeArquivo = nomeArquivo;
 		this.resposta = null;
@@ -66,7 +61,7 @@ public class ConfirmacaoService extends CraWebService {
 			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
 			}
-			remessas = remessaMediator.buscarArquivos(nomeArquivo, usuario.getInstituicao());
+			List<RemessaVO> remessas = arquivoMediator.buscarArquivos(nomeArquivo, usuario.getInstituicao());
 			if (remessas.isEmpty()) {
 				return setRespostaArquivoEmProcessamento(usuario, nomeArquivo);
 			}

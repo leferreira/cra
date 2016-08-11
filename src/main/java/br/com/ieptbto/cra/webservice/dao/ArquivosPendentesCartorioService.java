@@ -20,7 +20,6 @@ import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.AutorizaCancelamentoPendente;
@@ -39,8 +38,6 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 	@Autowired
 	private ArquivoMediator arquivoMediator;
 	@Autowired
-	private RemessaMediator remessaMediator;
-	@Autowired
 	private DesistenciaProtestoMediator desistenciaMediator;
 	@Autowired
 	private InstituicaoMediator instituicaoMediator;
@@ -55,7 +52,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			Instituicao instituicaoUsuario = instituicaoMediator.carregarInstituicaoPorId(usuario.getInstituicao());
-			arquivo = remessaMediator.arquivosPendentes(instituicaoUsuario);
+			arquivo = arquivoMediator.arquivosPendentes(instituicaoUsuario);
 			if (arquivo.getRemessas().isEmpty() && arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()
 					&& arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()
 					&& arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {

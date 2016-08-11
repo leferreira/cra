@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,7 +15,6 @@ import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 import br.com.ieptbto.cra.webservice.receiver.RetornoReceiver;
 
@@ -28,11 +26,9 @@ import br.com.ieptbto.cra.webservice.receiver.RetornoReceiver;
 public class RetornoService extends CraWebService {
 
 	@Autowired
-	ArquivoMediator arquivoMediator;
+	private ArquivoMediator arquivoMediator;
 	@Autowired
-	RemessaMediator remessaMediator;
-	@Autowired
-	RetornoReceiver retornoReceiver;
+	private RetornoReceiver retornoReceiver;
 
 	private MensagemCra mensagemCra;
 	private String resposta;
@@ -45,7 +41,6 @@ public class RetornoService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario) {
-		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 		this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_RETORNO;
 		this.nomeArquivo = nomeArquivo;
 		this.resposta = null;
@@ -65,7 +60,7 @@ public class RetornoService extends CraWebService {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
 			}
 
-			remessas = remessaMediator.buscarArquivos(nomeArquivo, usuario.getInstituicao());
+			List<RemessaVO> remessas = arquivoMediator.buscarArquivos(nomeArquivo, usuario.getInstituicao());
 			if (remessas.isEmpty()) {
 				return setRespostaArquivoEmProcessamento(usuario, nomeArquivo);
 			}

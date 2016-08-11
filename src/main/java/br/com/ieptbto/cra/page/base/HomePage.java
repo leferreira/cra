@@ -31,6 +31,7 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
@@ -62,21 +63,23 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	DownloadMediator downloadMediator;
+	private ArquivoMediator arquivoMediator;
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private DownloadMediator downloadMediator;
 	@SpringBean
-	MunicipioMediator municipioMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	DesistenciaProtestoMediator desistenciaMediator;
+	private MunicipioMediator municipioMediator;
 	@SpringBean
-	CancelamentoProtestoMediator cancelamentoMediator;
+	private DesistenciaProtestoMediator desistenciaMediator;
 	@SpringBean
-	AutorizacaoCancelamentoMediator autorizacaoMediator;
+	private CancelamentoProtestoMediator cancelamentoMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private AutorizacaoCancelamentoMediator autorizacaoMediator;
 	@SpringBean
-	LoggerMediator loggerMediator;
+	private InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	private LoggerMediator loggerMediator;
 
 	private Arquivo arquivo;
 	private Usuario usuario;
@@ -84,14 +87,14 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	public HomePage() {
 		super();
 		this.usuario = getUser();
-		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
+		this.arquivo = arquivoMediator.arquivosPendentes(getUsuario().getInstituicao());
 
 		adicionarComponentes();
 	}
 
 	public HomePage(PageParameters parameters) {
 		this.usuario = getUser();
-		this.arquivo = remessaMediator.arquivosPendentes(getUsuario().getInstituicao());
+		this.arquivo = arquivoMediator.arquivosPendentes(getUsuario().getInstituicao());
 
 		error(parameters.get("error"));
 		adicionarComponentes();
