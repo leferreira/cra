@@ -59,7 +59,7 @@ public class Importar5AnosCartorioPage extends BasePage<RegistroCnp> {
 				try {
 					final FileUpload uploadedFile = fileUploadField.getFileUpload();
 					final Instituicao instituicao = dropDownCartorio.getModelObject();
-					centralNacionalProtestoMediator.importarCSVCnp(instituicao, uploadedFile);
+					centralNacionalProtestoMediator.importarBase5anosCSV(instituicao, uploadedFile);
 					success("O arquivo Central Nacional de Protesto ,do cartório de " + instituicao.getNomeFantasia()
 							+ ", foi importado com sucesso!");
 
