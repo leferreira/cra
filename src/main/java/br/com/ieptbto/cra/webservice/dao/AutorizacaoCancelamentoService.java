@@ -19,12 +19,12 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.error.CodigoErro;
+import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.exception.XmlCraException;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
 import br.com.ieptbto.cra.webservice.VO.Mensagem;
@@ -43,10 +43,10 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 	private AutorizacaoCancelamentoMediator autorizacaoCancelamentoMediator;
 	@Autowired
 	private InstituicaoMediator instituicaoMediator;
-	
+
 	private List<Exception> erros;
 	private Object relatorio;
-	
+
 	/**
 	 * @param nomeArquivo
 	 * @param usuario
@@ -56,7 +56,7 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_AUTORIZACAO_CANCELAMENTO;
 		this.nomeArquivo = nomeArquivo;
-		
+
 		Arquivo arquivo = new Arquivo();
 		ArquivoVO arquivoVO = new ArquivoVO();
 		try {
@@ -125,14 +125,13 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 		}
 
 		for (Exception ex : getErros()) {
-			XmlCraException exception = XmlCraException.class.cast(ex);
-			Mensagem mensagem = new Mensagem();
-			mensagem.setCodigo(exception.getErro().getCodigo());
-			mensagem.setMunicipio(exception.getCodigoIbge());
-			mensagem.setDescricao(
-					"Município: " + exception.getCodigoIbge() + " - " + exception.getMunicipio() + " - " + exception.getErro().getDescricao());
-			mensagens.add(mensagem);
-			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
+			DesistenciaCancelamentoException exception = DesistenciaCancelamentoException.class.cast(ex);
+			Mensagem erro = new Mensagem();
+			erro.setDescricao(exception.getDescricao());
+			erro.setMunicipio(exception.getCodigoMunicipio());
+			erro.setCodigo(exception.getCodigoErro().getCodigo());
+			mensagens.add(erro);
+			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getCodigoMunicipio() + " - " + exception.getDescricao());
 		}
 		return mensagemRetorno;
 	}

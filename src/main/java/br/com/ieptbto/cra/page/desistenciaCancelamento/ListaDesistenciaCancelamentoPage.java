@@ -32,6 +32,7 @@ import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -48,6 +49,8 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
+	DownloadMediator downloadMediator;
+	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	DesistenciaProtestoMediator desistenciaProtestoMediator;
@@ -63,12 +66,15 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 	private List<CancelamentoProtesto> cancelamentoProtestos;
 	private List<AutorizacaoCancelamento> autorizacaoCancelamentos;
 
-	public ListaDesistenciaCancelamentoPage(Arquivo arquivo, ArrayList<TipoArquivoEnum> tiposArquivo, Municipio municipio,
-			LocalDate dataInicio, LocalDate dataFim) {
+	public ListaDesistenciaCancelamentoPage(Arquivo arquivo, ArrayList<TipoArquivoEnum> tiposArquivo, Municipio municipio, LocalDate dataInicio,
+			LocalDate dataFim) {
 		this.arquivo = arquivo;
-		this.desistenciaProtesto = desistenciaProtestoMediator.buscarDesistenciaProtesto(arquivo, arquivo.getInstituicaoEnvio(), municipio, dataInicio, dataFim, tiposArquivo, getUser());
-		this.cancelamentoProtestos = cancelamentoMediator.buscarCancelamentoProtesto(arquivo, arquivo.getInstituicaoEnvio(), municipio, dataInicio, dataFim, tiposArquivo, getUser());
-		this.autorizacaoCancelamentos = autorizacaoMediator.buscarAutorizacaoCancelamento(arquivo, arquivo.getInstituicaoEnvio(), municipio, dataInicio, dataFim, tiposArquivo, getUser());
+		this.desistenciaProtesto = desistenciaProtestoMediator.buscarDesistenciaProtesto(arquivo, arquivo.getInstituicaoEnvio(), municipio,
+				dataInicio, dataFim, tiposArquivo, getUser());
+		this.cancelamentoProtestos = cancelamentoMediator.buscarCancelamentoProtesto(arquivo, arquivo.getInstituicaoEnvio(), municipio, dataInicio,
+				dataFim, tiposArquivo, getUser());
+		this.autorizacaoCancelamentos = autorizacaoMediator.buscarAutorizacaoCancelamento(arquivo, arquivo.getInstituicaoEnvio(), municipio,
+				dataInicio, dataFim, tiposArquivo, getUser());
 
 		converterDesistenciasCancelamentos();
 		adicionarComponentes();
@@ -138,7 +144,8 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 				item.add(new Label("envio", arquivo.getEnvio()));
 				item.add(new Label("destino", instituicaoMediator.getCartorioPorCodigoIBGE(arquivo.getCodigoMunicipioDestino()).getNomeFantasia()));
 				item.add(new Label("horaEnvio", arquivo.getHoraEnvio()));
-				item.add(new Label("status", verificaDownload(arquivo.getStatus()).getLabel().toUpperCase()).setMarkupId(verificaDownload(arquivo.getStatus()).getLabel()));
+				item.add(new Label("status", verificaDownload(arquivo.getStatus()).getLabel().toUpperCase())
+						.setMarkupId(verificaDownload(arquivo.getStatus()).getLabel()));
 			}
 
 			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto remessa) {
@@ -149,9 +156,10 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = desistenciaProtestoMediator.baixarDesistenciaTXT(getUser(), remessa);
+						File file = downloadMediator.baixarDesistenciaTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+								remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 					}
 				};
 			}
@@ -164,9 +172,10 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = cancelamentoMediator.baixarCancelamentoTXT(getUser(), remessa);
+						File file = downloadMediator.baixarCancelamentoTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+								remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
 					}
 				};
 			}
@@ -179,9 +188,10 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = autorizacaoMediator.baixarAutorizacaoTXT(getUser(), remessa);
+						File file = downloadMediator.baixarAutorizacaoTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+								remessa.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 					}
 				};
 			}

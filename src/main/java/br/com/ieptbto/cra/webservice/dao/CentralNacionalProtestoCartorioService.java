@@ -20,10 +20,10 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoCnpVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
+import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
-import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 
 /**
  * @author Thasso Araújo
@@ -34,7 +34,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 
 	@Autowired
 	CentralNacionalProtestoMediator centralNacionalProtestoMediator;
-	
+
 	/**
 	 * @param usuario
 	 * @param dados

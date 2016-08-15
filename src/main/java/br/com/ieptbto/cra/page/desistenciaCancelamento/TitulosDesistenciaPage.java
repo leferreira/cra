@@ -28,6 +28,7 @@ import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
@@ -48,9 +49,11 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-	@SpringBean
 	DesistenciaProtestoMediator desistenciaProtestoMediator;
+	@SpringBean
+	DownloadMediator downloadMediator;
+	@SpringBean
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	TituloMediator tituloMediator;
 
@@ -79,9 +82,10 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 
 			@Override
 			public void onClick() {
-				File file = desistenciaProtestoMediator.baixarDesistenciaTXT(getUser(), getDesistenciaProtesto());
+				File file = downloadMediator.baixarDesistenciaTXT(getUser(), getDesistenciaProtesto());
 				IResourceStream resourceStream = new FileResourceStream(file);
-				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+						getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 			}
 		});
 	}
@@ -116,13 +120,15 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("dataSituacao", StringUtils.EMPTY));
 
-				} else if (pedidoDesistencia.getTitulo().getConfirmacao() != null
-						&& pedidoDesistencia.getTitulo().getRetorno() == null) {
-					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(pedidoDesistencia.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
-					item.add(new Label("dataSituacao", DataUtil.localDateToString(pedidoDesistencia.getTitulo().getConfirmacao().getDataOcorrencia())));
+				} else if (pedidoDesistencia.getTitulo().getConfirmacao() != null && pedidoDesistencia.getTitulo().getRetorno() == null) {
+					item.add(new Label("dataConfirmacao",
+							DataUtil.localDateToString(pedidoDesistencia.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+					item.add(new Label("dataSituacao",
+							DataUtil.localDateToString(pedidoDesistencia.getTitulo().getConfirmacao().getDataOcorrencia())));
 
 				} else if (pedidoDesistencia.getTitulo().getRetorno() != null) {
-					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(pedidoDesistencia.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+					item.add(new Label("dataConfirmacao",
+							DataUtil.localDateToString(pedidoDesistencia.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 					item.add(new Label("dataSituacao", DataUtil.localDateToString(pedidoDesistencia.getTitulo().getRetorno().getDataOcorrencia())));
 				}
 

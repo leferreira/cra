@@ -29,6 +29,7 @@ import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
@@ -50,6 +51,8 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	DownloadMediator downloadMediator;
 	@SpringBean
 	AutorizacaoCancelamentoMediator autorizacaoCancelamentoMediator;
 	@SpringBean
@@ -79,17 +82,20 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 
 			@Override
 			public void onClick() {
-				File file = autorizacaoCancelamentoMediator.baixarAutorizacaoTXT(getUser(), autorizacaoCancelamento);
+				File file = downloadMediator.baixarAutorizacaoTXT(getUser(), autorizacaoCancelamento);
 				IResourceStream resourceStream = new FileResourceStream(file);
-				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+						autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 			}
 		});
 	}
 
 	private void informacoesAutorizacaoCancelamento() {
 		add(new Label("nomeArquivo", autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
-		add(new Label("dataEnvio", DataUtil.localDateToString(autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio())));
-		add(new Label("enviadoPor", autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+		add(new Label("dataEnvio",
+				DataUtil.localDateToString(autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio())));
+		add(new Label("enviadoPor",
+				autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 		add(new Label("destino", cartorioDestino.getNomeFantasia()));
 	}
 
@@ -138,14 +144,17 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 						item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 						item.add(new Label("dataSituacao", StringUtils.EMPTY));
 
-					} else if (pedidoAutorizacao.getTitulo().getConfirmacao() != null
-							&& pedidoAutorizacao.getTitulo().getRetorno() == null) {
-						item.add(new Label("dataConfirmacao", DataUtil.localDateToString(pedidoAutorizacao.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
-						item.add(new Label("dataSituacao", DataUtil.localDateToString(pedidoAutorizacao.getTitulo().getConfirmacao().getDataOcorrencia())));
+					} else if (pedidoAutorizacao.getTitulo().getConfirmacao() != null && pedidoAutorizacao.getTitulo().getRetorno() == null) {
+						item.add(new Label("dataConfirmacao",
+								DataUtil.localDateToString(pedidoAutorizacao.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+						item.add(new Label("dataSituacao",
+								DataUtil.localDateToString(pedidoAutorizacao.getTitulo().getConfirmacao().getDataOcorrencia())));
 
 					} else if (pedidoAutorizacao.getTitulo().getRetorno() != null) {
-						item.add(new Label("dataConfirmacao", DataUtil.localDateToString(pedidoAutorizacao.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
-						item.add(new Label("dataSituacao", DataUtil.localDateToString(pedidoAutorizacao.getTitulo().getRetorno().getDataOcorrencia())));
+						item.add(new Label("dataConfirmacao",
+								DataUtil.localDateToString(pedidoAutorizacao.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+						item.add(new Label("dataSituacao",
+								DataUtil.localDateToString(pedidoAutorizacao.getTitulo().getRetorno().getDataOcorrencia())));
 					}
 
 					Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
