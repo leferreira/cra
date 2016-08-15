@@ -8,11 +8,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.xml.ws.WebServiceContext;
 
-import org.apache.log4j.Logger;
 import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
+import br.com.ieptbto.cra.webservice.dados.ProcessarDadosRecebido;
 
 /**
  * 
@@ -21,9 +21,7 @@ import br.com.ieptbto.cra.mediator.UsuarioMediator;
  */
 @WebService(name = "/RemessaService", endpointInterface = "br.com.ieptbto.cra.webservice.dao.IRemessaWS")
 @Path("/RemessaService")
-public class RemessaServiceImpl implements IRemessaWS {
-
-    public static final Logger logger = Logger.getLogger(RemessaServiceImpl.class);
+public class RemessaServiceImpl extends AbstractRemessaService implements IRemessaWS {
 
     @Resource
     private WebServiceContext wsctx;
@@ -44,6 +42,7 @@ public class RemessaServiceImpl implements IRemessaWS {
     @GET
     public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
             @WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+        setDadosArquivoRecebido(login, senha, nomeArquivo, dados, "remessa");
         init(login, senha, "remessa");
         return remessaService.processar(nomeArquivo, getUsuario(), dados);
     }
@@ -53,6 +52,7 @@ public class RemessaServiceImpl implements IRemessaWS {
     @GET
     public String buscarRemessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
             @WebParam(name = "user_pass") String senha) {
+        setDadosArquivoRecebido(login, senha, nomeArquivo, "buscarRemessa");
         init(login, senha, "buscarRemessa");
         return remessaService.buscarRemessa(nomeArquivo, getUsuario());
     }
@@ -185,9 +185,10 @@ public class RemessaServiceImpl implements IRemessaWS {
         usuariosComarcasHomologadasService = (UsuariosComarcasHomologadasService) context.getBean("usuariosComarcasHomologadasService");
         arquivosPendentesCartorioService = (ArquivosPendentesCartorioService) context.getBean("arquivosPendentesCartorioService");
         usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
+        processarDadosRecebido = (ProcessarDadosRecebido) context.getBean("processarDadosRecebido");
 
         setUsuario(login, senha);
-
+        salvarDadosRecebidos();
         logger.info("................. Inicio WebService pelo usuario ...::: " + login + " ::... pelo serviço ...:: " + metodo
                 + " ::................");
     }
