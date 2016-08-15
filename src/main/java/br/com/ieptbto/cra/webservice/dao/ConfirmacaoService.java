@@ -1,23 +1,36 @@
 package br.com.ieptbto.cra.webservice.dao;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.InputSource;
 
+import br.com.ieptbto.cra.conversor.ConversorArquivoVO;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.entidade.vo.ArquivoConfirmacaoVO;
 import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.vo.ConfirmacaoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
-import br.com.ieptbto.cra.webservice.receiver.ConfirmacaoReceiver;
 
 /**
  * 
@@ -30,7 +43,9 @@ public class ConfirmacaoService extends CraWebService {
 	@Autowired
 	private ArquivoMediator arquivoMediator;
 	@Autowired
-	private ConfirmacaoReceiver confirmacaoReceiver;
+	private RemessaMediator remessaMediator;
+	@Autowired
+	private ConfirmacaoMediator confirmacaoMediator;
 
 	private MensagemCra mensagemCra;
 	private String resposta;
@@ -43,6 +58,7 @@ public class ConfirmacaoService extends CraWebService {
 	 * @return
 	 */
 	public String processar(String nomeArquivo, Usuario usuario) {
+		List<RemessaVO> remessas = new ArrayList<RemessaVO>();
 		this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CONFIRMACAO;
 		this.nomeArquivo = nomeArquivo;
 		this.resposta = null;
@@ -61,7 +77,7 @@ public class ConfirmacaoService extends CraWebService {
 			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
 			}
-			List<RemessaVO> remessas = arquivoMediator.buscarArquivos(nomeArquivo, usuario.getInstituicao());
+			remessas = remessaMediator.buscarArquivos(nomeArquivo, usuario.getInstituicao());
 			if (remessas.isEmpty()) {
 				return setRespostaArquivoEmProcessamento(usuario, nomeArquivo);
 			}
@@ -130,7 +146,9 @@ public class ConfirmacaoService extends CraWebService {
 				return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
 			}
 
-			mensagemCra = confirmacaoReceiver.receber(usuario, nomeArquivo, dados);
+			ArquivoConfirmacaoVO arquivoConfirmacaoVO = converterStringArquivoVO(dados);
+			ConfirmacaoVO confirmacaoVO = ConversorArquivoVO.converterParaRemessaVO(arquivoConfirmacaoVO);
+			mensagemCra = confirmacaoMediator.processarXML(confirmacaoVO, usuario, nomeArquivo);
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Confirmação " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 		} catch (InfraException ex) {
@@ -143,5 +161,33 @@ public class ConfirmacaoService extends CraWebService {
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
 		return gerarMensagem(mensagemCra, CONSTANTE_CONFIRMACAO_XML);
+	}
+
+	private ArquivoConfirmacaoVO converterStringArquivoVO(String dados) {
+		JAXBContext context;
+		ArquivoConfirmacaoVO arquivo = null;
+
+		try {
+			context = JAXBContext.newInstance(ArquivoConfirmacaoVO.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			String xmlRecebido = "";
+
+			Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
+			while (scanner.hasNext()) {
+				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
+				if (xmlRecebido.contains("<?xml version=")) {
+					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
+				}
+			}
+			scanner.close();
+
+			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
+			arquivo = (ArquivoConfirmacaoVO) unmarshaller.unmarshal(new InputSource(xml));
+
+		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e);
+			throw new InfraException("Erro ao ler o arquivo recebido. " + e.getMessage());
+		}
+		return arquivo;
 	}
 }

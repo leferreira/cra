@@ -26,12 +26,12 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.CraServiceMediator;
 import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
 import br.com.ieptbto.cra.webservice.VO.Erro;
@@ -61,11 +61,6 @@ public class CraWebService {
 	protected String nomeArquivo;
 
 	protected String mensagemServicoIndisponivel(Usuario usuario) {
-		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
-			MensagemDeErro msg = new MensagemDeErro(getNomeArquivo(), usuario, CodigoErro.CRA_SERVICO_INDISPONIVEL);
-			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
-		}
-
 		MensagemXml mensagemXml = new MensagemXml();
 		Descricao descricao = new Descricao();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));

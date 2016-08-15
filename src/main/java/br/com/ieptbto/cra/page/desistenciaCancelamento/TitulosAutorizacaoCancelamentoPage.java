@@ -29,7 +29,6 @@ import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
-import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
@@ -51,8 +50,6 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	DownloadMediator downloadMediator;
 	@SpringBean
 	AutorizacaoCancelamentoMediator autorizacaoCancelamentoMediator;
 	@SpringBean
@@ -82,7 +79,7 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 
 			@Override
 			public void onClick() {
-				File file = downloadMediator.baixarAutorizacaoTXT(getUser(), autorizacaoCancelamento);
+				File file = autorizacaoCancelamentoMediator.baixarAutorizacaoTXT(getUser(), autorizacaoCancelamento);
 				IResourceStream resourceStream = new FileResourceStream(file);
 				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
 						autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));

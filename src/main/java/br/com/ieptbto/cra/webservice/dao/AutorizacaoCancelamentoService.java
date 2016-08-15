@@ -127,11 +127,11 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 		for (Exception ex : getErros()) {
 			DesistenciaCancelamentoException exception = DesistenciaCancelamentoException.class.cast(ex);
 			Mensagem erro = new Mensagem();
-			erro.setDescricao(exception.getDescricao());
-			erro.setMunicipio(exception.getCodigoMunicipio());
-			erro.setCodigo(exception.getCodigoErro().getCodigo());
+			erro.setDescricao(exception.getMessage());
+			erro.setMunicipio(exception.getMunicipio());
+			erro.setCodigo(exception.getCodigoErro());
 			mensagens.add(erro);
-			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getCodigoMunicipio() + " - " + exception.getDescricao());
+			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
 		}
 		return mensagemRetorno;
 	}

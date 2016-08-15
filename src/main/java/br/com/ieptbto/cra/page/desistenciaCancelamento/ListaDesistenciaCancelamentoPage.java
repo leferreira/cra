@@ -32,7 +32,6 @@ import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
-import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -48,8 +47,6 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	@SpringBean
-	DownloadMediator downloadMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
@@ -148,15 +145,15 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 						.setMarkupId(verificaDownload(arquivo.getStatus()).getLabel()));
 			}
 
-			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto remessa) {
-				return new Link<Remessa>("downloadArquivo") {
+			private Link<DesistenciaProtesto> downloadArquivoTXT(final DesistenciaProtesto remessa) {
+				return new Link<DesistenciaProtesto>("downloadArquivo") {
 
 					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
-						File file = downloadMediator.baixarDesistenciaTXT(getUser(), remessa);
+						File file = desistenciaProtestoMediator.baixarDesistenciaTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
 								remessa.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
@@ -164,15 +161,15 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 				};
 			}
 
-			private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto remessa) {
-				return new Link<Remessa>("downloadArquivo") {
+			private Link<CancelamentoProtesto> downloadArquivoTXT(final CancelamentoProtesto remessa) {
+				return new Link<CancelamentoProtesto>("downloadArquivo") {
 
 					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
-						File file = downloadMediator.baixarCancelamentoTXT(getUser(), remessa);
+						File file = cancelamentoMediator.baixarCancelamentoTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
 								remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
@@ -188,7 +185,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						File file = downloadMediator.baixarAutorizacaoTXT(getUser(), remessa);
+						File file = autorizacaoMediator.baixarAutorizacaoTXT(getUser(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
 								remessa.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));

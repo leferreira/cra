@@ -31,11 +31,11 @@ import br.com.ieptbto.cra.entidade.vo.RetornoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
-import br.com.ieptbto.cra.webservice.VO.CodigoErro;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 
 /**

@@ -28,7 +28,6 @@ import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
-import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
@@ -50,8 +49,6 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 
 	@SpringBean
 	DesistenciaProtestoMediator desistenciaProtestoMediator;
-	@SpringBean
-	DownloadMediator downloadMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
@@ -82,7 +79,7 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 
 			@Override
 			public void onClick() {
-				File file = downloadMediator.baixarDesistenciaTXT(getUser(), getDesistenciaProtesto());
+				File file = desistenciaProtestoMediator.baixarDesistenciaTXT(getUser(), getDesistenciaProtesto());
 				IResourceStream resourceStream = new FileResourceStream(file);
 				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
 						getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
