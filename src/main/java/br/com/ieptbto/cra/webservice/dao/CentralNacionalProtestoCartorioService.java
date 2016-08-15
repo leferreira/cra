@@ -56,11 +56,6 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (centralNacionalProtestoMediator.isCartorioEnviouLoteCnpHoje(usuario.getInstituicao())) {
 				return arquivoCnpJaEnviadoHoje(usuario);
 			}
-			if (usuario.getInstituicao().getId() == 24 || usuario.getInstituicao().getId() == 18 || usuario.getInstituicao().getId() == 14
-					|| usuario.getInstituicao().getId() == 13 || usuario.getInstituicao().getId() == 2 || usuario.getInstituicao().getId() == 82
-					|| usuario.getInstituicao().getId() == 43) {
-				return mensagemServicoIndisponivel(usuario);
-			}
 			lote = centralNacionalProtestoMediator.processarLoteCartorio(usuario.getInstituicao(), converterStringArquivoCnpVO(dados));
 			if (lote == null) {
 				loggerCra.alert(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, CodigoErro.CNP_LOTE_VAZIO.getDescricao());

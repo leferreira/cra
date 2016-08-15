@@ -1,201 +1,122 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import javax.annotation.Resource;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebService;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.xml.ws.WebServiceContext;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import org.apache.log4j.Logger;
-import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
-
+import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.mediator.UsuarioMediator;
+import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.vo.RemessaVO;
+import br.com.ieptbto.cra.enumeration.CraAcao;
+import br.com.ieptbto.cra.enumeration.CraServiceEnum;
+import br.com.ieptbto.cra.error.CodigoErro;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 
 /**
  * 
  * @author Lefer
  *
  */
-@WebService(name = "/RemessaService", endpointInterface = "br.com.ieptbto.cra.webservice.dao.IRemessaWS")
-@Path("/RemessaService")
-public class RemessaServiceImpl implements IRemessaWS {
+@Service
+public class RemessaService extends CraWebService {
 
-	public static final Logger logger = Logger.getLogger(RemessaServiceImpl.class);
+    @Autowired
+    private ArquivoMediator arquivoMediator;
+    @Autowired
+    private RemessaReceiver remessaReceiver;
 
-	@Resource
-	private WebServiceContext wsctx;
-	private UsuarioMediator usuarioMediator;
-	private Usuario usuario;
-	private ClassPathXmlApplicationContext context;
-	private RemessaService remessaService;
-	private ConfirmacaoService confirmacaoService;
-	private RetornoService retornoService;
-	private DesistenciaProtestoService desistenciaProtestoService;
-	private CancelamentoProtestoService cancelamentoProtestoService;
-	private AutorizacaoCancelamentoService autorizacaoCancelamentoService;
-	private UsuariosComarcasHomologadasService usuariosComarcasHomologadasService;
-	private ArquivosPendentesCartorioService arquivosPendentesCartorioService;
+    private MensagemCra mensagemCra;
+    private String resposta;
 
-	@Override
-	@WebMethod(operationName = "remessa")
-	@GET
-	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
-		init(login, senha, "remessa");
-		return remessaService.processar(getUsuario(), nomeArquivo, dados);
-	}
+    /**
+     * Envio de remessas pelos bancos/convênios
+     * 
+     * @param nomeArquivo
+     * @param usuario
+     * @param dados
+     * @return
+     */
+    public String processar(Usuario usuario, String nomeArquivo, String dados) {
+        this.craAcao = CraAcao.ENVIO_ARQUIVO_REMESSA;
+        this.nomeArquivo = nomeArquivo;
+        this.mensagemCra = null;
 
-	@Override
-	@WebMethod(operationName = "buscarRemessa")
-	@GET
-	public String buscarRemessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha) {
-		init(login, senha, "buscarRemessa");
-		return remessaService.buscarRemessa(nomeArquivo, getUsuario());
-	}
+        ArquivoVO arquivoVO = new ArquivoVO();
+        try {
+            if (usuario == null) {
+                return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+            }
+            if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+                return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+            }
+            if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_REMESSA)) {
+                return mensagemServicoIndisponivel(usuario);
+            }
+            Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
+            if (arquivoJaEnviado != null) {
+                if (!arquivoJaEnviado.getInstituicaoEnvio().getCodigoCompensacao().trim().equals("582")) {
+                    return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
+                }
+            }
+            if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
+                return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
+            }
+            if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+                return setRespostaArquivoEmBranco(usuario, nomeArquivo);
+            }
 
-	@Override
-	@WebMethod(operationName = "confirmacao")
-	@GET
-	public String confirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha) {
-		init(login, senha, "confirmacao");
-		return confirmacaoService.processar(nomeArquivo, getUsuario());
-	}
+            mensagemCra = remessaReceiver.receber(usuario, nomeArquivo, dados);
+            loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
+                    + usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            loggerCra.error(usuario, getCraAcao(), "Erro interno no processamento do arquivo de Remessa " + nomeArquivo + ".", ex);
+            return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
+        }
+        return gerarMensagem(mensagemCra, CONSTANTE_RELATORIO_XML);
+    }
 
-	@Override
-	@WebMethod(operationName = "enviarConfirmacao")
-	@GET
-	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
-		init(login, senha, "enviarConfirmacao");
-		return confirmacaoService.enviarConfirmacao(nomeArquivo, getUsuario(), dados);
-	}
+    /**
+     * Consulta de remessas pelos cartórios
+     * 
+     * @param nomeArquivo
+     * @param usuario
+     * @return
+     */
+    public String buscarRemessa(String nomeArquivo, Usuario usuario) {
+        this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_REMESSA;
+        this.nomeArquivo = nomeArquivo;
+        this.resposta = null;
 
-	@Override
-	@WebMethod(operationName = "retorno")
-	@GET
-	public String retorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha) {
-		init(login, senha, "retorno");
-		return retornoService.processar(nomeArquivo, getUsuario());
-	}
+        RemessaVO remessaVO = null;
+        try {
+            if (usuario == null) {
+                return setResposta(usuario, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+            }
+            if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_REMESSA)) {
+                return mensagemServicoIndisponivel(usuario);
+            }
+            remessaVO = arquivoMediator.buscarRemessaParaCartorio(usuario, nomeArquivo);
+            if (remessaVO == null) {
+                return setRespostaPadrao(usuario, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
+            }
+            resposta = gerarResposta(remessaVO, nomeArquivo, CONSTANTE_REMESSA_XML);
+            loggerCra.sucess(usuario, getCraAcao(),
+                    "Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo de Remessa " + nomeArquivo + " recebido por "
+                    + usuario.getInstituicao().getNomeFantasia() + ".", ex);
+            return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
+        }
+        return resposta;
+    }
 
-	@Override
-	@WebMethod(operationName = "enviarRetorno")
-	@GET
-	public String enviarRetorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
-		init(login, senha, "enviarRetorno");
-		return retornoService.enviarRetorno(nomeArquivo, getUsuario(), dados);
-	}
-
-	@Override
-	@WebMethod(operationName = "buscarDesistenciaCancelamento")
-	@GET
-	public String buscarDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha) {
-		init(login, senha, "buscarDesistenciaCancelamento");
-		return desistenciaProtestoService.buscarDesistenciaCancelamento(nomeArquivo, getUsuario());
-	}
-
-	@Override
-	@WebMethod(operationName = "cancelamento")
-	@GET
-	public String cancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
-		init(login, senha, "cancelamento");
-		return cancelamentoProtestoService.processar(nomeArquivo, getUsuario(), dados);
-	}
-
-	@Override
-	@WebMethod(operationName = "desistencia")
-	@GET
-	public String desistencia(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
-		init(login, senha, "desistencia");
-		return desistenciaProtestoService.processar(nomeArquivo, getUsuario(), dados);
-	}
-
-	@Override
-	@WebMethod(operationName = "confirmarEnvioConfirmacaoRetorno")
-	@GET
-	public String confirmarEnvioConfirmacaoRetorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha) {
-		init(login, senha, "confirmarEnvioConfirmacaoRetorno");
-		return arquivosPendentesCartorioService.confirmarEnvioConfirmacaoRetorno(nomeArquivo, getUsuario());
-	}
-
-	@Override
-	@WebMethod(operationName = "confirmarRecebimentoDesistenciaCancelamento")
-	@GET
-	public String confirmarRecebimentoDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo,
-			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
-		init(login, senha, "confirmarRecebimentoDesistenciaCancelamento");
-		return desistenciaProtestoService.confirmarRecebimentoDesistenciaCancelamento(nomeArquivo, usuario);
-	}
-
-	@Override
-	@WebMethod(operationName = "autorizacaoCancelamento")
-	@GET
-	public String autorizacaoCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
-		init(login, senha, "autorizacaoCancelamento");
-		return autorizacaoCancelamentoService.processar(nomeArquivo, getUsuario(), dados);
-	}
-
-	@Override
-	@WebMethod(operationName = "comarcasHomologadas")
-	@GET
-	public String comarcasHomologadas(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
-			@WebParam(name = "codapres") String codigoApresentante) {
-		init(login, senha, "comarcasHomologadas");
-		return usuariosComarcasHomologadasService.verificarComarcasHomologadas(getUsuario(), codigoApresentante);
-	}
-
-	@Override
-	@WebMethod(operationName = "arquivosPendentesCartorio")
-	@GET
-	public String arquivosPendentesCartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
-		init(login, senha, "arquivosPendentesCartorio");
-		return arquivosPendentesCartorioService.buscarArquivosPendentesCartorio(getUsuario());
-	}
-
-	@Override
-	@WebMethod(operationName = "verificarAcessoUsuario")
-	@GET
-	public String verificarAcessoUsuario(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
-		init(login, senha, "verificarAcessoUsuario");
-		return usuariosComarcasHomologadasService.verificarAcessoUsuario(getUsuario());
-	}
-
-	private void init(String login, String senha, String metodo) {
-		if (context == null) {
-			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-		}
-		remessaService = (RemessaService) context.getBean("remessaService");
-		confirmacaoService = (ConfirmacaoService) context.getBean("confirmacaoService");
-		retornoService = (RetornoService) context.getBean("retornoService");
-		desistenciaProtestoService = (DesistenciaProtestoService) context.getBean("desistenciaProtestoService");
-		cancelamentoProtestoService = (CancelamentoProtestoService) context.getBean("cancelamentoProtestoService");
-		autorizacaoCancelamentoService = (AutorizacaoCancelamentoService) context.getBean("autorizacaoCancelamentoService");
-		usuariosComarcasHomologadasService = (UsuariosComarcasHomologadasService) context.getBean("usuariosComarcasHomologadasService");
-		arquivosPendentesCartorioService = (ArquivosPendentesCartorioService) context.getBean("arquivosPendentesCartorioService");
-		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
-
-		setUsuario(login, senha);
-		logger.info("======= WebService ====== Usuario: " + login + " ===== Serviço: " + metodo + " =======");
-	}
-
-	private void setUsuario(String login, String senha) {
-		this.usuario = new Usuario();
-		this.usuario = usuarioMediator.autenticarWS(login, senha);
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
+    private String gerarResposta(RemessaVO remessaVO, String nomeArquivo, String constanteConfirmacaoXml) {
+        String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
+        msg = msg.replace(" xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+        return msg;
+    }
 }
