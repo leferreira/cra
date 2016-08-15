@@ -32,95 +32,96 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
 public class Importar5AnosCartorioPage extends BasePage<RegistroCnp> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
+    /***/
+    private static final long serialVersionUID = 1L;
 
-	@SpringBean
-	CentralNacionalProtestoMediator centralNacionalProtestoMediator;
-	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+    @SpringBean
+    CentralNacionalProtestoMediator centralNacionalProtestoMediator;
+    @SpringBean
+    InstituicaoMediator instituicaoMediator;
 
-	private FileUploadField fileUploadField;
-	private DropDownChoice<Instituicao> dropDownCartorio;
+    private FileUploadField fileUploadField;
+    private DropDownChoice<Instituicao> dropDownCartorio;
 
-	public Importar5AnosCartorioPage() {
-		adicionarComponentes();
-	}
+    public Importar5AnosCartorioPage() {
+        adicionarComponentes();
+    }
 
-	@Override
-	protected void adicionarComponentes() {
-		Form<Void> form = new Form<Void>("form") {
+    @Override
+    protected void adicionarComponentes() {
+        Form<Void> form = new Form<Void>("form") {
 
-			/****/
-			private static final long serialVersionUID = 1L;
+            /****/
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onSubmit() {
-				try {
-					final FileUpload uploadedFile = fileUploadField.getFileUpload();
-					final Instituicao instituicao = dropDownCartorio.getModelObject();
-					centralNacionalProtestoMediator.importarCSVCnp(instituicao, uploadedFile);
-					success("O arquivo Central Nacional de Protesto ,do cartório de " + instituicao.getNomeFantasia()
-							+ ", foi importado com sucesso!");
+            @Override
+            protected void onSubmit() {
+                try {
+                    final FileUpload uploadedFile = fileUploadField.getFileUpload();
+                    final Instituicao instituicao = dropDownCartorio.getModelObject();
+                    // centralNacionalProtestoMediator.importarCSVCnp(instituicao,
+                    // uploadedFile);
+                    success("O arquivo Central Nacional de Protesto ,do cartório de " + instituicao.getNomeFantasia()
+                            + ", foi importado com sucesso!");
 
-				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
-					error(ex.getMessage());
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
-				}
-			}
-		};
-		form.setMultiPart(true);
-		form.setMaxSize(Bytes.megabytes(20));
+                } catch (InfraException ex) {
+                    logger.error(ex.getMessage());
+                    error(ex.getMessage());
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                    error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
+                }
+            }
+        };
+        form.setMultiPart(true);
+        form.setMaxSize(Bytes.megabytes(20));
 
-		form.add(campoArquivo());
-		form.add(dropDownCartorio());
-		form.add(botaoEnviar());
-		add(form);
-	}
+        form.add(campoArquivo());
+        form.add(dropDownCartorio());
+        form.add(botaoEnviar());
+        add(form);
+    }
 
-	private FileUploadField campoArquivo() {
-		fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
-		fileUploadField.setRequired(true);
-		fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
-		return fileUploadField;
-	}
+    private FileUploadField campoArquivo() {
+        fileUploadField = new FileUploadField("file", new ListModel<FileUpload>());
+        fileUploadField.setRequired(true);
+        fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
+        return fileUploadField;
+    }
 
-	private DropDownChoice<Instituicao> dropDownCartorio() {
-		dropDownCartorio = new DropDownChoice<Instituicao>("cartorio", new Model<Instituicao>(), instituicaoMediator.getCartorios(),
-				new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio"));
-		dropDownCartorio.setOutputMarkupId(true);
-		return dropDownCartorio;
-	}
+    private DropDownChoice<Instituicao> dropDownCartorio() {
+        dropDownCartorio = new DropDownChoice<Instituicao>("cartorio", new Model<Instituicao>(), instituicaoMediator.getCartorios(),
+                new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio"));
+        dropDownCartorio.setOutputMarkupId(true);
+        return dropDownCartorio;
+    }
 
-	private AjaxButton botaoEnviar() {
-		return new AjaxButton("enviarArquivo") {
+    private AjaxButton botaoEnviar() {
+        return new AjaxButton("enviarArquivo") {
 
-			/****/
-			private static final long serialVersionUID = 1L;
+            /****/
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				target.add(getFeedbackPanel());
-			}
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                target.add(getFeedbackPanel());
+            }
 
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				target.add(getFeedbackPanel());
-			}
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(getFeedbackPanel());
+            }
 
-			@Override
-			protected void finalize() throws Throwable {
-				super.finalize();
-			}
+            @Override
+            protected void finalize() throws Throwable {
+                super.finalize();
+            }
 
-		};
-	}
+        };
+    }
 
-	@Override
-	protected IModel<RegistroCnp> getModel() {
-		return null;
-	}
+    @Override
+    protected IModel<RegistroCnp> getModel() {
+        return null;
+    }
 }
