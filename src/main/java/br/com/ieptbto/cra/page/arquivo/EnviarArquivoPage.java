@@ -22,6 +22,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.exception.CabecalhoRodapeException;
 import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.exception.TituloException;
@@ -115,12 +116,13 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				for (Exception exception : erros) {
 					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo
 							|| TipoArquivoEnum.RETORNO == tipoArquivo) {
-						TituloException excecaoTitulo = TituloException.class.cast(exception);
-						if (excecaoTitulo.getNumeroSequencialRegistro() != 0) {
-							mensagemErro = mensagemErro + "<li><a href=\"#\" class=\"alert-link\">Linha" + excecaoTitulo.getNumeroSequencialRegistro()
-									+ ":</a> " + excecaoTitulo.getDescricao() + ";</li>";
-						} else {
-							mensagemErro = mensagemErro + "<li>" + excecaoTitulo.getDescricao() + ";</li>";
+						if (TituloException.class.isInstance(exception)) {
+							TituloException excecaoTitulo = TituloException.class.cast(exception);
+							mensagemErro = mensagemErro + "<li><a href=\"#\" class=\"alert-link\">Linha "
+									+ excecaoTitulo.getNumeroSequencialRegistro() + ": </a> " + excecaoTitulo.getDescricao() + ";</li>";
+						} else if (CabecalhoRodapeException.class.isInstance(exception)) {
+							CabecalhoRodapeException excecaoCabecalhoRodape = CabecalhoRodapeException.class.cast(exception);
+							mensagemErro = mensagemErro + "<li>" + excecaoCabecalhoRodape.getDescricao() + ";</li>";
 						}
 					} else if (TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO == tipoArquivo || TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO == tipoArquivo
 							|| TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO == tipoArquivo) {
@@ -129,7 +131,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					}
 				}
 				mensagemErro = mensagemErro + "</ul>";
-				info(mensagemErro);
+				warn(mensagemErro);
 			}
 		};
 		form.setMultiPart(true);
