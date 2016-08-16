@@ -4,19 +4,19 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.TextField;
 import org.junit.Before;
 
-import br.com.ieptbto.cra.base.BaseTest; 
+import br.com.ieptbto.cra.base.BaseTest;
 
-public class IncluirTipoInstituicaoPageTest extends BaseTest { 
+public class IncluirTipoInstituicaoPageTest extends BaseTest {
 
 	@Before
 	public void setUp() {
 		super.setUp();
 		logar();
 	}
-	
-//	@Test
-//	@Transactional
-//	@Rollback(true)
+
+	// @Test
+	// @Transactional
+	// @Rollback(true)
 	public void testCarregarIncluirTipoInstituicaoPage() {
 		tester.startPage(IncluirTipoInstituicaoPage.class);
 		form = tester.newFormTester("form");

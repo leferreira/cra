@@ -10,14 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.base.BaseTest;
 
-public class IncluirCartorioPageTest extends BaseTest{
+public class IncluirCartorioPageTest extends BaseTest {
 
 	@Before
 	public void setUp() {
 		super.setUp();
 		logar();
 	}
-	
+
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -33,17 +33,17 @@ public class IncluirCartorioPageTest extends BaseTest{
 		tester.assertComponent("form:cartorioInputPanel:bancoContaCorrente", TextField.class);
 		tester.assertComponent("form:cartorioInputPanel:numContaCorrente", TextField.class);
 		tester.assertComponent("form:cartorioInputPanel:agenciaContaCorrente", TextField.class);
-		
+
 		tester.assertComponent("form:cartorioInputPanel:endereco", TextArea.class);
 		tester.assertComponent("form:cartorioInputPanel:responsavel", TextField.class);
 		tester.assertComponent("form:cartorioInputPanel:status", Component.class);
 		tester.assertComponent("form:cartorioInputPanel:comarcaCartorio", Component.class);
 		tester.assertNoErrorMessage();
 	}
-	
+
 	/**
 	 * Teste falho devido o cnpj já existir e ser unicos
-	 * */
+	 */
 	@Test
 	public void testInsertCartorioFail() {
 		tester.startPage(IncluirCartorioPage.class);
@@ -65,7 +65,7 @@ public class IncluirCartorioPageTest extends BaseTest{
 		tester.assertErrorMessages(new String[] { "Cartório não criado, pois já existe!" });
 		tester.assertNoInfoMessage();
 	}
-	
+
 	@Test
 	public void testInsertCartorioSuccessful() {
 		tester.startPage(IncluirCartorioPage.class);
@@ -83,7 +83,6 @@ public class IncluirCartorioPageTest extends BaseTest{
 		form.setValue("cartorioInputPanel:comarcaCartorio", "0");
 		form.setValue("cartorioInputPanel:status", "Ativo");
 		form.submit();
-
 
 		tester.assertNoErrorMessage();
 		tester.assertInfoMessages(new String[] { "Cartório cadastrado com sucesso!" });

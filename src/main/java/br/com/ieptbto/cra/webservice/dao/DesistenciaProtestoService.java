@@ -139,12 +139,12 @@ public class DesistenciaProtestoService extends CraWebService {
 
 		for (Exception ex : getErros()) {
 			DesistenciaCancelamentoException exception = DesistenciaCancelamentoException.class.cast(ex);
-			Mensagem erro = new Mensagem();
-			erro.setDescricao(exception.getDescricao());
-			erro.setMunicipio(exception.getCodigoMunicipio());
-			erro.setCodigo(exception.getCodigoErro().getCodigo());
-			mensagens.add(erro);
-			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getCodigoMunicipio() + " - " + exception.getDescricao());
+			Mensagem mensagem = new Mensagem();
+			mensagem.setDescricao(exception.getMessage());
+			mensagem.setMunicipio(exception.getMunicipio());
+			mensagem.setCodigo(exception.getCodigoErro());
+			mensagens.add(mensagem);
+			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
 		}
 		getErros().clear();
 		return mensagemRetorno;

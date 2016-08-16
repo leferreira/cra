@@ -36,8 +36,9 @@ public class IncluirUsuarioPageTest extends BaseTest {
 	}
 
 	/**
-	 * Teste falho devido ao nome de usuário já existir e as senhas não coinsidirem
-	 * */
+	 * Teste falho devido ao nome de usuário já existir e as senhas não
+	 * coinsidirem
+	 */
 	@Test
 	public void testInsertUserFail() {
 		tester.startPage(IncluirUsuarioPage.class);
@@ -45,7 +46,8 @@ public class IncluirUsuarioPageTest extends BaseTest {
 		form.setValue("usuarioInputPanel:nome", "Teste1");
 		form.setValue("usuarioInputPanel:login", "teste");
 		form.setValue("usuarioInputPanel:senha", "123");
-		form.setValue("usuarioInputPanel:confirmarSenha", "1234"); // Senha diferente
+		form.setValue("usuarioInputPanel:confirmarSenha", "1234"); // Senha
+																	// diferente
 		form.setValue("usuarioInputPanel:email", "e@mail.com");
 		form.setValue("usuarioInputPanel:contato", "1234");
 		form.setValue("usuarioInputPanel:situacao", "Ativo");
@@ -60,7 +62,7 @@ public class IncluirUsuarioPageTest extends BaseTest {
 
 	/**
 	 * Teste de Sucesso do incluir usuário
-	 * */
+	 */
 	@Test
 	public void testInsertUserSuccessful() {
 		tester.startPage(IncluirUsuarioPage.class);

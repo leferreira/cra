@@ -9,9 +9,7 @@ import br.com.ieptbto.cra.enumeration.TipoRelatorio;
 
 public class RelatorioArquivosFormBean implements Serializable {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	private Date dataInicio;

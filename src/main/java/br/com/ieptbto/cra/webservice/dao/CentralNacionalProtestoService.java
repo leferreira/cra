@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,45 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}
 		return gerarMensagem(arquivoCnp, CONSTANTE_CNP_XML);
+	}
+
+	/**
+	 * - * - * @param usuario - * @param data - * @return -
+	 */
+	public String consultaMovimentoPorData(Usuario usuario, String data) {
+		ArquivoCnpVO arquivoCnp = new ArquivoCnpVO();
+		LocalDate dataMoviemnto = new LocalDate();
+		try {
+			if (usuario == null) {
+				return usuarioInvalido();
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
+				return mensagemServicoIndisponivel(usuario);
+			}
+			if (StringUtils.isBlank(data)) {
+				logger.error("Data informada <" + data + "> na consulta do movimento é inválida");
+				return mensagemDataInvalida(usuario);
+			} else {
+				try {
+					dataMoviemnto = DataUtil.stringToLocalDate("yyyy-MM-dd", data);
+				} catch (Exception ex) {
+					logger.error(ex.getMessage());
+					return mensagemDataInvalida(usuario);
+				}
+			}
+
+			arquivoCnp = centralNacionalProtestoMediator.processarLoteNacionalPorData(dataMoviemnto);
+
+			if (arquivoCnp == null || arquivoCnp.getRemessasCnpVO().isEmpty()) {
+				return mensagemSemMovimentoNessaData(usuario);
+			}
+			return gerarMensagem(arquivoCnp, CONSTANTE_CNP_XML);
+
+		} catch (Exception ex) {
+			logger.info(ex.getMessage(), ex.getCause());
+			return gerarMensagem(gerarMensagemErroProcessamento("Erro ao tentar consultar um movimento por data."), CONSTANTE_RELATORIO_XML);
+		}
+
 	}
 
 	public String consultar(Usuario usuario) {

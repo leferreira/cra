@@ -8,14 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.base.BaseTest;
 
-public class IncluirMunicipioPageTest extends BaseTest{
+public class IncluirMunicipioPageTest extends BaseTest {
 
 	@Before
 	public void setUp() {
 		super.setUp();
 		logar();
 	}
-	
+
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -27,10 +27,10 @@ public class IncluirMunicipioPageTest extends BaseTest{
 		tester.assertComponent("form:municipioInputPanel:codIBGE", TextField.class);
 		tester.assertNoErrorMessage();
 	}
-	
+
 	/**
 	 * Teste falho devido ao campo IBGE sem obrigatório
-	 * */
+	 */
 	@Test
 	public void testInsertMunicipioFail() {
 		tester.startPage(IncluirMunicipioPage.class);
@@ -43,7 +43,7 @@ public class IncluirMunicipioPageTest extends BaseTest{
 		tester.assertErrorMessages(new String[] { "Campo 'Código do IBGE' é obrigatório." });
 		tester.assertNoInfoMessage();
 	}
-	
+
 	@Test
 	public void testInsertMunicipioSuccessful() {
 		tester.startPage(IncluirMunicipioPage.class);
@@ -56,5 +56,5 @@ public class IncluirMunicipioPageTest extends BaseTest{
 		tester.assertNoErrorMessage();
 		tester.assertInfoMessages(new String[] { "Município criado com sucesso" });
 	}
-	
+
 }

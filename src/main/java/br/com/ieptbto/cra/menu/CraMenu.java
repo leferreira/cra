@@ -42,12 +42,22 @@ public class CraMenu extends Panel {
 		MenuItem itemArquivoEmpresa = new MenuItem("EnviarArquivoEmpresa");
 		itemArquivoEmpresa.authorize(rolesPesquisar);
 		itemArquivoEmpresa.setVisible(false);
+
 		MenuItem itemSolicitarCancelamento = new MenuItem("BuscarTituloSolicitacaoCancelamento");
 		itemSolicitarCancelamento.authorize(rolesPesquisar);
 		itemSolicitarCancelamento.setVisible(false);
+
 		MenuItem itemArquivo = new MenuItem("EnviarArquivo");
 		itemArquivo.authorize(rolesPesquisar);
 		itemArquivo.setVisible(false);
+
+		MenuItem itemCentralProtesto = new MenuItem("CentralProtestosCartorio");
+		itemCentralProtesto.authorize(rolesPesquisar);
+		itemCentralProtesto.setVisible(false);
+		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+			itemCentralProtesto.setVisible(true);
+		}
+
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.LAYOUT_PERSONALIZADO_CONVENIOS)) {
 			itemArquivoEmpresa.setVisible(true);
 			itemSolicitarCancelamento.setVisible(true);
@@ -57,6 +67,7 @@ public class CraMenu extends Panel {
 		menuPadrao.add(itemArquivo);
 		menuPadrao.add(itemArquivoEmpresa);
 		menuPadrao.add(itemSolicitarCancelamento);
+		menuPadrao.add(itemCentralProtesto);
 
 		menuPadrao.addItem("BuscarDesistenciaCancelamento", rolesPesquisar);
 		menuPadrao.addItem("MonitorarTitulos", rolesPesquisar);

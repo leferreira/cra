@@ -64,6 +64,32 @@ public class CnpWebService {
 		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
 	}
 
+	protected String mensagemDataInvalida(Usuario usuario) {
+		MensagemXml mensagemXml = new MensagemXml();
+		Descricao descricao = new Descricao();
+		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
+		descricao.setUsuario(usuario.getLogin());
+
+		mensagemXml.setDescricao(descricao);
+		mensagemXml.setCodigoFinal(CodigoErro.CNP_DATA_MOVIMENTO_INVALIDA.getCodigo());
+		mensagemXml.setDescricaoFinal(CodigoErro.CNP_DATA_MOVIMENTO_INVALIDA.getDescricao());
+		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
+	}
+
+	protected String mensagemSemMovimentoNessaData(Usuario usuario) {
+		MensagemXml mensagemXml = new MensagemXml();
+		Descricao descricao = new Descricao();
+		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
+		descricao.setUsuario(usuario.getLogin());
+
+		mensagemXml.setDescricao(descricao);
+		mensagemXml.setCodigoFinal(CodigoErro.CNP_NAO_HA_MOVIMENTO_NESSA_DATA.getCodigo());
+		mensagemXml.setDescricaoFinal(CodigoErro.CNP_NAO_HA_MOVIMENTO_NESSA_DATA.getDescricao());
+		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
+	}
+
 	protected String usuarioInvalido() {
 		MensagemXml mensagemXml = new MensagemXml();
 

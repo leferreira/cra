@@ -59,6 +59,16 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	}
 
 	@Override
+	@WebMethod(operationName = "consultaMovimentoPorData")
+	@GET
+	public String consultaMovimentoPorData(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
+			@WebParam(name = "data") String data) {
+		init(login, senha);
+		logger.info("Inicio WebService consulta Movimento por data pelo usuário " + login);
+		return centralNacionalProtestoService.consultaMovimentoPorData(usuario, data);
+	}
+
+	@Override
 	@WebMethod(operationName = "consultaProtesto")
 	@GET
 	public String consultaProtesto(@WebParam(name = "documentoDevedor") String documentoDevedor) {

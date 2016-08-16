@@ -148,8 +148,8 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 						.setMarkupId(verificaDownload(arquivo.getStatus()).getLabel()));
 			}
 
-			private Link<Remessa> downloadArquivoTXT(final DesistenciaProtesto remessa) {
-				return new Link<Remessa>("downloadArquivo") {
+			private Link<DesistenciaProtesto> downloadArquivoTXT(final DesistenciaProtesto remessa) {
+				return new Link<DesistenciaProtesto>("downloadArquivo") {
 
 					/***/
 					private static final long serialVersionUID = 1L;
@@ -164,8 +164,8 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 				};
 			}
 
-			private Link<Remessa> downloadArquivoTXT(final CancelamentoProtesto remessa) {
-				return new Link<Remessa>("downloadArquivo") {
+			private Link<CancelamentoProtesto> downloadArquivoTXT(final CancelamentoProtesto remessa) {
+				return new Link<CancelamentoProtesto>("downloadArquivo") {
 
 					/***/
 					private static final long serialVersionUID = 1L;

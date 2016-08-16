@@ -61,11 +61,6 @@ public class CraWebService {
 	protected String nomeArquivo;
 
 	protected String mensagemServicoIndisponivel(Usuario usuario) {
-		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
-			MensagemDeErro msg = new MensagemDeErro(getNomeArquivo(), usuario, CodigoErro.CRA_SERVICO_INDISPONIVEL);
-			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
-		}
-
 		MensagemXml mensagemXml = new MensagemXml();
 		Descricao descricao = new Descricao();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));

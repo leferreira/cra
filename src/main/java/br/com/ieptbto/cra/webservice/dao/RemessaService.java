@@ -39,7 +39,7 @@ public class RemessaService extends CraWebService {
 	 * @param dados
 	 * @return
 	 */
-	public String processar(Usuario usuario, String nomeArquivo, String dados) {
+	public String processar(String nomeArquivo, Usuario usuario, String dados) {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_REMESSA;
 		this.nomeArquivo = nomeArquivo;
 		this.mensagemCra = null;
@@ -91,7 +91,6 @@ public class RemessaService extends CraWebService {
 		this.nomeArquivo = nomeArquivo;
 		this.resposta = null;
 
-		RemessaVO remessaVO = null;
 		try {
 			if (usuario == null) {
 				return setResposta(usuario, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
@@ -99,7 +98,7 @@ public class RemessaService extends CraWebService {
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_REMESSA)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			remessaVO = arquivoMediator.buscarRemessaParaCartorio(usuario, nomeArquivo);
+			RemessaVO remessaVO = arquivoMediator.buscarRemessaParaCartorio(usuario, nomeArquivo);
 			if (remessaVO == null) {
 				return setRespostaPadrao(usuario, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 			}

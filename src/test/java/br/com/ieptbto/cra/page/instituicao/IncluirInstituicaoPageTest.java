@@ -10,14 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ieptbto.cra.base.BaseTest;
 
-public class IncluirInstituicaoPageTest extends BaseTest{
+public class IncluirInstituicaoPageTest extends BaseTest {
 
 	@Before
 	public void setUp() {
 		super.setUp();
 		logar();
 	}
-	
+
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -36,10 +36,10 @@ public class IncluirInstituicaoPageTest extends BaseTest{
 		tester.assertComponent("form:instituicaoInputPanel:tipoInstituicao", Component.class);
 		tester.assertNoErrorMessage();
 	}
-	
+
 	/**
 	 * Teste falho devido a instituicao e o cnpj já existir e serem unicos
-	 * */
+	 */
 	@Test
 	public void testInsertInstituicaoFail() {
 		tester.startPage(IncluirInstituicaoPage.class);
@@ -55,7 +55,7 @@ public class IncluirInstituicaoPageTest extends BaseTest{
 		tester.assertErrorMessages(new String[] { "Instituição não criada, pois já existe!" });
 		tester.assertNoInfoMessage();
 	}
-	
+
 	@Test
 	public void testInsertInstituicaoSuccessful() {
 		tester.startPage(IncluirInstituicaoPage.class);
