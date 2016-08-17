@@ -191,7 +191,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 
 		setUsuario(login, senha);
 
-		logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + DataUtil.localTimeToString(new LocalTime())
+		logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString(new LocalTime())
 				+ " ] ======= WebService ====== Usuario: " + login + " ===== Serviço: " + metodo + " =======");
 	}
 

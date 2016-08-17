@@ -248,6 +248,7 @@ public class CraWebService {
 			msg = msg.replace(" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace(" xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace("<confirmacao xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
+			msg = msg.replace("<retorno xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
 			writer.close();
 
 		} catch (JAXBException e) {

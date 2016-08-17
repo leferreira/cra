@@ -15,6 +15,7 @@ import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 import br.com.ieptbto.cra.webservice.receiver.RetornoReceiver;
 
@@ -77,26 +78,28 @@ public class RetornoService extends CraWebService {
 	}
 
 	private String gerarResposta(Usuario usuario, List<RemessaVO> remessas, String nomeArquivo, String constanteRetornoXml) {
-		StringBuffer string = new StringBuffer();
-		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
-		String cabecalho = "<retorno>";
+		StringBuffer conteudo = new StringBuffer();
+		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
 
+		conteudo.append("<retorno>\r\n");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
-			string.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>");
+			conteudo.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>\r\n");
 		}
 		for (RemessaVO remessaVO : remessas) {
 			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
-				string.append("<comarca CodMun=\"" + remessaVO.getCabecalho().getCodigoMunicipio() + "\">");
-				String msg = gerarMensagem(remessaVO, CONSTANTE_RETORNO_XML).replace("</retorno>", "").replace(cabecalho, "");
-				string.append(msg);
-				string.append("</comarca>");
+				conteudo.append("<comarca CodMun=\"" + remessaVO.getCabecalho().getCodigoMunicipio() + "\">\r\n");
+				String msg = gerarMensagem(remessaVO, CONSTANTE_RETORNO_XML).replace("<retorno>", "").replace("</retorno>", "");
+				msg = msg.replace(xml, "");
+				conteudo.append(msg);
+				conteudo.append("</comarca>\r\n");
 			} else {
-				String msg = gerarMensagem(remessaVO, CONSTANTE_RETORNO_XML).replace("</retorno>", "").replace(cabecalho, "");
-				string.append(msg);
+				String msg = gerarMensagem(remessaVO, CONSTANTE_RETORNO_XML).replace("<retorno>", "").replace("</retorno>", "");
+				msg = msg.replace(xml, "");
+				conteudo.append(msg);
 			}
 		}
-		string.append("</retorno>");
-		return xml + cabecalho + string.toString();
+		conteudo.append("</retorno>");
+		return XmlFormatterUtil.format(conteudo.toString());
 
 	}
 

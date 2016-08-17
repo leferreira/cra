@@ -205,6 +205,10 @@ public class DesistenciaProtestoService extends CraWebService {
 
 		RemessaDesistenciaProtestoVO remessaVO = null;
 		try {
+			if (usuario == null) {
+				return setResposta(usuario, null, nomeArquivo, CONSTANTE_RELATORIO_XML);
+			}
+
 			if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
 				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO;
 			} else if (nomeArquivo.contains(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.getConstante())) {
@@ -252,12 +256,17 @@ public class DesistenciaProtestoService extends CraWebService {
 		return XmlFormatterUtil.format(msg);
 	}
 
+	/**
+	 * @param nomeArquivo
+	 * @param usuario
+	 * @return
+	 */
 	public String confirmarRecebimentoDesistenciaCancelamento(String nomeArquivo, Usuario usuario) {
 		this.nomeArquivo = nomeArquivo;
 
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+				return setResposta(usuario, null, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
@@ -294,7 +303,7 @@ public class DesistenciaProtestoService extends CraWebService {
 		xml = xml.concat("		<tipoArquivo>XML_DOWNLOAD_DESISTENCIA_CANCELAMENTO</tipoArquivo>");
 		xml = xml.concat("		<nomeArquivo>" + nomeArquivo + "</nomeArquivo>");
 		xml = xml.concat("		<dataMovimento>" + DataUtil.localDateToString(new LocalDate()) + "</dataMovimento>");
-		xml = xml.concat("		<usuario>" + user.getNome() + "</usuario>");
+		xml = xml.concat("		<usuario>" + user.getLogin() + "</usuario>");
 		xml = xml.concat("	</descricao>");
 		xml = xml.concat("	<detalhamento>");
 		xml = xml.concat("		<mensagem codigo=\"" + CodigoErro.CARTORIO_RECEBIMENTO_DESISTENCIA_CANCELAMENTO_COM_SUCESSO.getCodigo()
