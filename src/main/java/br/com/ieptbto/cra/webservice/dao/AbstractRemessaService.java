@@ -13,12 +13,12 @@ import br.com.ieptbto.cra.webservice.dados.ProcessarDadosRecebido;
  * @author Leandro
  *
  */
-public abstract class AbstractRemessaService {
+public class AbstractRemessaService {
 
     public static Logger logger = Logger.getLogger(AbstractRemessaService.class);
 
+    private ProcessarDadosRecebido processarDadosRecebido;
     private DadosArquivoRecebido dadosArquivoRecebido;
-    protected ProcessarDadosRecebido processarDadosRecebido;
 
     public DadosArquivoRecebido getDadosArquivoRecebido() {
         return dadosArquivoRecebido;
@@ -59,6 +59,14 @@ public abstract class AbstractRemessaService {
         logger.info("Salvando dados recebidos pelo ws.");
         processarDadosRecebido.salvarDados(getDadosArquivoRecebido());
         logger.info("Dados recebidos salvos com sucesso.");
+    }
+
+    public void setProcessarDadosRecebido(ProcessarDadosRecebido processarDadosRecebido) {
+        this.processarDadosRecebido = processarDadosRecebido;
+    }
+
+    public ProcessarDadosRecebido getProcessarDadosRecebido() {
+        return processarDadosRecebido;
     }
 
 }

@@ -15,7 +15,7 @@ import br.com.ieptbto.cra.mediator.DadosArquivoRecebidoMediator;
 public class ProcessarDadosRecebido {
 
     @Autowired
-    private DadosArquivoRecebidoMediator dadosArquivoRecebidoMediator;
+    DadosArquivoRecebidoMediator dadosArquivoRecebidoMediator;
 
     public void salvarDados(DadosArquivoRecebido dadosArquivoRecebido) {
         dadosArquivoRecebidoMediator.salvarDados(dadosArquivoRecebido);
