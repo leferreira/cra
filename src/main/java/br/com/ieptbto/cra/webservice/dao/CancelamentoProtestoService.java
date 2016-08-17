@@ -126,9 +126,9 @@ public class CancelamentoProtestoService extends CraWebService {
 		for (Exception ex : getErros()) {
 			DesistenciaCancelamentoException exception = DesistenciaCancelamentoException.class.cast(ex);
 			Mensagem mensagem = new Mensagem();
-			mensagem.setDescricao(exception.getMessage());
+			mensagem.setDescricao(exception.getDescricao());
 			mensagem.setMunicipio(exception.getMunicipio());
-			mensagem.setCodigo(exception.getCodigoErro());
+			mensagem.setCodigo(exception.getCodigoErro().getCodigo());
 			mensagens.add(mensagem);
 			loggerCra.alert(usuario, getCraAcao(), "Comarca Rejeitada: " + exception.getMunicipio() + " - " + exception.getMessage());
 		}

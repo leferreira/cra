@@ -273,12 +273,13 @@ dd, dt {
 }
 
 .alert {
-	margin-bottom: 5px;
+    margin-bottom: 0px;
+    padding: 10px 10px;
 }
 
 .alert>span {
 	border-color: transparent;
-	font-size: 14px;
+	font-size: 14px; 
 }
 
 #Aguardando {

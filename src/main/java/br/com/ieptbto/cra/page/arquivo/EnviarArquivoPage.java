@@ -111,15 +111,16 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			private void gerarMensagemErros(Arquivo arquivo, List<Exception> erros) {
 				TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(arquivo);
 
-				String mensagemErro = "<a href=\"#\" class=\"alert-link\">Por favor corriga a(s) ocorrência(s) encontrada(s) no arquivo:</a>";
+				String mensagemErro =
+						"<span class=\"alert-link\">Por favor corriga a(s) ocorrência(s) e(ou) erros encontrado(s) no arquivo e o envie novamente:</span>";
 				mensagemErro = mensagemErro + "<ul>";
 				for (Exception exception : erros) {
 					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo
 							|| TipoArquivoEnum.RETORNO == tipoArquivo) {
 						if (TituloException.class.isInstance(exception)) {
 							TituloException excecaoTitulo = TituloException.class.cast(exception);
-							mensagemErro = mensagemErro + "<li><a href=\"#\" class=\"alert-link\">Linha "
-									+ excecaoTitulo.getNumeroSequencialRegistro() + ": </a> " + excecaoTitulo.getDescricao() + ";</li>";
+							mensagemErro = mensagemErro + "<li><span class=\"alert-link\">Linha " + excecaoTitulo.getNumeroSequencialRegistro()
+									+ ": </span> " + excecaoTitulo.getDescricao() + ";</li>";
 						} else if (CabecalhoRodapeException.class.isInstance(exception)) {
 							CabecalhoRodapeException excecaoCabecalhoRodape = CabecalhoRodapeException.class.cast(exception);
 							mensagemErro = mensagemErro + "<li>" + excecaoCabecalhoRodape.getDescricao() + ";</li>";

@@ -10,9 +10,12 @@ import javax.xml.ws.WebServiceContext;
 
 import org.apache.log4j.Logger;
 import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * 
@@ -188,7 +191,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 
 		setUsuario(login, senha);
 
-		logger.info("======= WebService ====== Usuario: " + login + " ===== Serviço: " + metodo + " =======");
+		logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + DataUtil.localTimeToString(new LocalTime())
+				+ " ] ======= WebService ====== Usuario: " + login + " ===== Serviço: " + metodo + " =======");
 	}
 
 	private void setUsuario(String login, String senha) {

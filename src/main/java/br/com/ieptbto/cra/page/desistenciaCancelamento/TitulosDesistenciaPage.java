@@ -63,6 +63,7 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 	public TitulosDesistenciaPage(DesistenciaProtesto deistenciaProtesto) {
 		this.desistenciaProtesto = deistenciaProtesto;
 		this.cartorioDestino = instituicaoMediator.getCartorioPorCodigoIBGE(getDesistenciaProtesto().getCabecalhoCartorio().getCodigoMunicipio());
+
 		adicionarComponentes();
 	}
 
