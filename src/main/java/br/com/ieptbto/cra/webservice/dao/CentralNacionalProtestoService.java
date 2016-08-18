@@ -110,7 +110,7 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			return gerarMensagem(arquivoCnp, CONSTANTE_CNP_XML);
 
 		} catch (Exception ex) {
-			logger.info(ex.getMessage(), ex.getCause());
+			logger.info(ex.getMessage(), ex);
 			return gerarMensagem(gerarMensagemErroProcessamento("Erro ao tentar consultar um movimento por data."), CONSTANTE_RELATORIO_XML);
 		}
 
