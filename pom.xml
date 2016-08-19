@@ -4,7 +4,7 @@
 	<groupId>br.com.ieptbto</groupId>
 	<artifactId>cra</artifactId> 
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>war</packaging> 
 	<name>cra-to</name>
 	<description>Central de Recebimento de Arquivos</description>
 	<organization>
