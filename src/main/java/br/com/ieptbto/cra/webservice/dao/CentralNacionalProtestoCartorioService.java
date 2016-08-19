@@ -100,8 +100,8 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			arquivoCnp = (ArquivoCnpVO) unmarshaller.unmarshal(new InputSource(xml));
 
 		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
-			throw new InfraException(e.getMessage(), e.getCause());
+			logger.error(e.getMessage(), e);
+			throw new InfraException(e.getMessage(), e);
 		}
 		return arquivoCnp;
 	}
