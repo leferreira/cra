@@ -225,7 +225,7 @@ public class RemessaServiceImpl extends AbstractRemessaService implements IRemes
 
 		setUsuario(login, senha);
 		salvarDadosRecebidos();
-		logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString(new LocalTime())
+		logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString("hh:mm:ss", new LocalTime())
 				+ " ] ======= WebService ====== Usuario: " + login + " ===== Serviço: " + metodo + " =======");
 
 	}
