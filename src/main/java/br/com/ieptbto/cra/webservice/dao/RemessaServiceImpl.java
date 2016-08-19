@@ -16,6 +16,7 @@ import org.joda.time.LocalTime;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.webservice.dados.ProcessarDadosRecebido;
 
 /**
  * 
@@ -24,13 +25,14 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 @WebService(name = "/RemessaService", endpointInterface = "br.com.ieptbto.cra.webservice.dao.IRemessaWS")
 @Path("/RemessaService")
-public class RemessaServiceImpl implements IRemessaWS {
+public class RemessaServiceImpl extends AbstractRemessaService implements IRemessaWS {
 
 	public static final Logger logger = Logger.getLogger(RemessaServiceImpl.class);
 
 	@Resource
 	private WebServiceContext wsctx;
 	private UsuarioMediator usuarioMediator;
+	private ProcessarDadosRecebido processarDadosRecebido;
 	private Usuario usuario;
 	private ClassPathXmlApplicationContext context;
 	private RemessaService remessaService;
@@ -47,6 +49,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String remessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, dados, "remessa");
 		init(login, senha, "remessa");
 		return remessaService.processar(nomeArquivo, getUsuario(), dados);
 	}
@@ -56,6 +60,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String buscarRemessa(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 			@WebParam(name = "user_pass") String senha) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, "buscarRemessa");
 		init(login, senha, "buscarRemessa");
 		return remessaService.buscarRemessa(nomeArquivo, getUsuario());
 	}
@@ -65,6 +71,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String confirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 			@WebParam(name = "user_pass") String senha) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, "confirmacao");
 		init(login, senha, "confirmacao");
 		return confirmacaoService.processar(nomeArquivo, getUsuario());
 	}
@@ -74,6 +82,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String enviarConfirmacao(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, dados, "enviarConfirmacao");
 		init(login, senha, "enviarConfirmacao");
 		return confirmacaoService.enviarConfirmacao(nomeArquivo, getUsuario(), dados);
 	}
@@ -83,6 +93,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String retorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 			@WebParam(name = "user_pass") String senha) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, "retorno");
 		init(login, senha, "retorno");
 		return retornoService.processar(nomeArquivo, getUsuario());
 	}
@@ -92,6 +104,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String enviarRetorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, dados, "enviarRetorno");
 		init(login, senha, "enviarRetorno");
 		return retornoService.enviarRetorno(nomeArquivo, getUsuario(), dados);
 	}
@@ -101,6 +115,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String buscarDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 			@WebParam(name = "user_pass") String senha) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, "buscarDesistenciaCancelamento");
 		init(login, senha, "buscarDesistenciaCancelamento");
 		return desistenciaProtestoService.buscarDesistenciaCancelamento(nomeArquivo, getUsuario());
 	}
@@ -110,6 +126,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String cancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, dados, "cancelamento");
 		init(login, senha, "cancelamento");
 		return cancelamentoProtestoService.processar(nomeArquivo, getUsuario(), dados);
 	}
@@ -119,6 +137,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String desistencia(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, dados, "desistencia");
 		init(login, senha, "desistencia");
 		return desistenciaProtestoService.processar(nomeArquivo, getUsuario(), dados);
 	}
@@ -126,8 +146,10 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@Override
 	@WebMethod(operationName = "confirmarEnvioConfirmacaoRetorno")
 	@GET
-	public String confirmarEnvioConfirmacaoRetorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha) {
+	public String confirmarEnvioConfirmacaoRetorno(@WebParam(name = "user_arq") String nomeArquivo,
+			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, "confirmarEnvioConfirmacaoRetorno");
 		init(login, senha, "confirmarEnvioConfirmacaoRetorno");
 		return arquivosPendentesCartorioService.confirmarEnvioConfirmacaoRetorno(nomeArquivo, getUsuario());
 	}
@@ -137,6 +159,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String confirmarRecebimentoDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo,
 			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, "confirmarRecebimentoDesistenciaCancelamento");
 		init(login, senha, "confirmarRecebimentoDesistenciaCancelamento");
 		return desistenciaProtestoService.confirmarRecebimentoDesistenciaCancelamento(nomeArquivo, usuario);
 	}
@@ -146,6 +170,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String autorizacaoCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
 			@WebParam(name = "user_pass") String senha, @WebParam(name = "user_dados") String dados) {
+
+		setDadosArquivoRecebido(login, senha, nomeArquivo, "autorizacaoCancelamento");
 		init(login, senha, "autorizacaoCancelamento");
 		return autorizacaoCancelamentoService.processar(nomeArquivo, getUsuario(), dados);
 	}
@@ -155,6 +181,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String comarcasHomologadas(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
 			@WebParam(name = "codapres") String codigoApresentante) {
+
+		setDadosArquivoRecebido(login, senha, codigoApresentante, "comarcasHomologadas");
 		init(login, senha, "comarcasHomologadas");
 		return usuariosComarcasHomologadasService.verificarComarcasHomologadas(getUsuario(), codigoApresentante);
 	}
@@ -163,6 +191,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@WebMethod(operationName = "arquivosPendentesCartorio")
 	@GET
 	public String arquivosPendentesCartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+
+		setDadosArquivoRecebido(login, senha, "", "arquivosPendentesCartorio");
 		init(login, senha, "arquivosPendentesCartorio");
 		return arquivosPendentesCartorioService.buscarArquivosPendentesCartorio(getUsuario());
 	}
@@ -171,6 +201,8 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@WebMethod(operationName = "verificarAcessoUsuario")
 	@GET
 	public String verificarAcessoUsuario(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+
+		setDadosArquivoRecebido(login, senha, "", "verificarAcessoUsuario");
 		init(login, senha, "verificarAcessoUsuario");
 		return usuariosComarcasHomologadasService.verificarAcessoUsuario(getUsuario());
 	}
@@ -188,11 +220,14 @@ public class RemessaServiceImpl implements IRemessaWS {
 		usuariosComarcasHomologadasService = (UsuariosComarcasHomologadasService) context.getBean("usuariosComarcasHomologadasService");
 		arquivosPendentesCartorioService = (ArquivosPendentesCartorioService) context.getBean("arquivosPendentesCartorioService");
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
+		this.processarDadosRecebido = (ProcessarDadosRecebido) context.getBean("processarDadosRecebido");
+		setProcessarDadosRecebido(processarDadosRecebido);
 
 		setUsuario(login, senha);
-
+		salvarDadosRecebidos();
 		logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString(new LocalTime())
 				+ " ] ======= WebService ====== Usuario: " + login + " ===== Serviço: " + metodo + " =======");
+
 	}
 
 	private void setUsuario(String login, String senha) {

@@ -13,52 +13,60 @@ import br.com.ieptbto.cra.webservice.dados.ProcessarDadosRecebido;
  * @author Leandro
  *
  */
-public abstract class AbstractRemessaService {
+public class AbstractRemessaService {
 
-	public static Logger logger = Logger.getLogger(AbstractRemessaService.class);
+    public static Logger logger = Logger.getLogger(AbstractRemessaService.class);
 
-	private DadosArquivoRecebido dadosArquivoRecebido;
-	protected ProcessarDadosRecebido processarDadosRecebido;
+    private ProcessarDadosRecebido processarDadosRecebido;
+    private DadosArquivoRecebido dadosArquivoRecebido;
 
-	public DadosArquivoRecebido getDadosArquivoRecebido() {
-		return dadosArquivoRecebido;
-	}
+    public DadosArquivoRecebido getDadosArquivoRecebido() {
+        return dadosArquivoRecebido;
+    }
 
-	/**
-	 * 
-	 * @param login
-	 * @param senha
-	 * @param nomeArquivo
-	 * @param dados
-	 * @param servico
-	 */
-	protected void setDadosArquivoRecebido(String login, String senha, String nomeArquivo, String dados, String servico) {
-		try {
-			this.dadosArquivoRecebido = DadosArquivoRecebido.set(login, senha, nomeArquivo, dados, servico);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-	}
+    /**
+     * 
+     * @param login
+     * @param senha
+     * @param nomeArquivo
+     * @param dados
+     * @param servico
+     */
+    protected void setDadosArquivoRecebido(String login, String senha, String nomeArquivo, String dados, String servico) {
+        try {
+            this.dadosArquivoRecebido = DadosArquivoRecebido.set(login, senha, nomeArquivo, dados, servico);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
 
-	/**
-	 * 
-	 * @param login
-	 * @param senha
-	 * @param nomeArquivo
-	 * @param servico
-	 */
-	protected void setDadosArquivoRecebido(String login, String senha, String nomeArquivo, String servico) {
-		try {
-			this.dadosArquivoRecebido = DadosArquivoRecebido.set(login, senha, nomeArquivo, StringUtils.EMPTY, servico);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-	}
+    /**
+     * 
+     * @param login
+     * @param senha
+     * @param nomeArquivo
+     * @param servico
+     */
+    protected void setDadosArquivoRecebido(String login, String senha, String nomeArquivo, String servico) {
+        try {
+            this.dadosArquivoRecebido = DadosArquivoRecebido.set(login, senha, nomeArquivo, StringUtils.EMPTY, servico);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
 
-	protected void salvarDadosRecebidos() {
-		logger.info("Salvando dados recebidos pelo ws.");
-		processarDadosRecebido.salvarDados(getDadosArquivoRecebido());
-		logger.info("Dados recebidos salvos com sucesso.");
-	}
+    protected void salvarDadosRecebidos() {
+        logger.info("Salvando dados recebidos pelo ws.");
+        processarDadosRecebido.salvarDados(getDadosArquivoRecebido());
+        logger.info("Dados recebidos salvos com sucesso.");
+    }
+
+    public void setProcessarDadosRecebido(ProcessarDadosRecebido processarDadosRecebido) {
+        this.processarDadosRecebido = processarDadosRecebido;
+    }
+
+    public ProcessarDadosRecebido getProcessarDadosRecebido() {
+        return processarDadosRecebido;
+    }
 
 }

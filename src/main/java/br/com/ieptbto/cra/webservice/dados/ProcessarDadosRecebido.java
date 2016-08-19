@@ -14,12 +14,12 @@ import br.com.ieptbto.cra.mediator.DadosArquivoRecebidoMediator;
 @Service
 public class ProcessarDadosRecebido {
 
-	@Autowired
-	private DadosArquivoRecebidoMediator dadosArquivoRecebidoMediator;
+    @Autowired
+    DadosArquivoRecebidoMediator dadosArquivoRecebidoMediator;
 
-	public void salvarDados(DadosArquivoRecebido dadosArquivoRecebido) {
-		dadosArquivoRecebidoMediator.salvarDados(dadosArquivoRecebido);
+    public void salvarDados(DadosArquivoRecebido dadosArquivoRecebido) {
+        dadosArquivoRecebidoMediator.salvarDados(dadosArquivoRecebido);
 
-	}
+    }
 
 }
