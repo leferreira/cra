@@ -29,7 +29,6 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 
 /**
@@ -83,8 +82,8 @@ public class ConfirmacaoService extends CraWebService {
 			}
 
 			resposta = gerarResposta(usuario, remessas, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
-			loggerCra.sucess(usuario, getCraAcao(),
-					"Arquivo de Confirmação " + nomeArquivo + " recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
+			loggerCra.sucess(usuario, getCraAcao(), "Arquivo de Confirmação " + nomeArquivo + " recebido com sucesso por "
+					+ usuario.getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo de Confirmação " + nomeArquivo + " recebido por "
@@ -96,7 +95,7 @@ public class ConfirmacaoService extends CraWebService {
 
 	private String gerarResposta(Usuario usuario, List<RemessaVO> remessas, String nomeArquivo, String constanteConfirmacaoXml) {
 		StringBuffer string = new StringBuffer();
-		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>";
+		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
 		String cabecalho = "<confirmacao>";
 
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
@@ -106,16 +105,17 @@ public class ConfirmacaoService extends CraWebService {
 			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 				string.append("<comarca CodMun=\"" + remessaVO.getCabecalho().getCodigoMunicipio() + "\">");
 				String msg = gerarMensagem(remessaVO, CONSTANTE_CONFIRMACAO_XML).replace("</confirmacao>", "").replace(cabecalho, "");
+				msg = msg.replace(xml, "");
 				string.append(msg);
 				string.append("</comarca>");
 			} else {
 				String msg = gerarMensagem(remessaVO, CONSTANTE_CONFIRMACAO_XML).replace("</confirmacao>", "").replace(cabecalho, "");
+				msg = msg.replace(xml, "");
 				string.append(msg);
-
 			}
 		}
 		string.append("</confirmacao>");
-		return XmlFormatterUtil.format(xml + cabecalho + string.toString());
+		return xml + cabecalho + string.toString();
 	}
 
 	/**
