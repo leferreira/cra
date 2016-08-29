@@ -53,6 +53,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 		this.arquivo = new Arquivo();
 		this.usuario = getUser();
 		this.arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
+
 		adicionarComponentes();
 	}
 
@@ -86,8 +87,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 							success("O arquivo de Confirmação <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 									+ "</span> enviado, foi processado com sucesso !");
 						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
-							setResponsePage(new RelatorioRetornoPage("O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo()
-									+ "</span> enviado, foi processado com sucesso !", getArquivo(), "ENVIAR ARQUIVO"));
+							setResponsePage(
+									new RelatorioRetornoPage("O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo()
+											+ "</span> enviado, foi processado com sucesso !", getArquivo(), "ENVIAR ARQUIVO"));
 						} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
 							success("O arquivo de Desistência de Protesto <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 									+ "</span> enviado, foi processado com sucesso !");
