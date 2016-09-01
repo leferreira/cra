@@ -34,7 +34,7 @@ import br.com.ieptbto.cra.security.CraRoles;
 
 /**
  * @author Thasso Araújo
- *
+ * 
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
@@ -91,8 +91,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 						success("O arquivo de Confirmação <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 								+ "</span> enviado, foi processado com sucesso !");
 					} else if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
-						setResponsePage(new RelatorioRetornoPage("O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo()
-								+ "</span> enviado, foi processado com sucesso !", getArquivo(), "ENVIAR ARQUIVO"));
+						setResponsePage(new RelatorioRetornoPage(
+								"O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo() + "</span> enviado, foi processado com sucesso !",
+								getArquivo(), "ENVIAR ARQUIVO"));
 					} else if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
 						success("O arquivo de Desistência de Protesto <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 								+ "</span> enviado, foi processado com sucesso !");
@@ -115,12 +116,11 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 						"<span class=\"alert-link\">Por favor corriga a(s) ocorrência(s) e(ou) erros encontrado(s) no arquivo e o envie novamente:</span>";
 				mensagemErro = mensagemErro + "<ul>";
 				for (Exception exception : erros) {
-					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo
-							|| TipoArquivoEnum.RETORNO == tipoArquivo) {
+					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo || TipoArquivoEnum.RETORNO == tipoArquivo) {
 						if (TituloException.class.isInstance(exception)) {
 							TituloException excecaoTitulo = TituloException.class.cast(exception);
-							mensagemErro = mensagemErro + "<li><span class=\"alert-link\">Linha " + excecaoTitulo.getNumeroSequencialRegistro()
-									+ ": </span> " + excecaoTitulo.getDescricao() + ";</li>";
+							mensagemErro = mensagemErro + "<li><span class=\"alert-link\">Linha " + excecaoTitulo.getNumeroSequencialRegistro() + ": </span> "
+									+ excecaoTitulo.getDescricao() + ";</li>";
 						} else if (CabecalhoRodapeException.class.isInstance(exception)) {
 							CabecalhoRodapeException excecaoCabecalhoRodape = CabecalhoRodapeException.class.cast(exception);
 							mensagemErro = mensagemErro + "<li>" + excecaoCabecalhoRodape.getDescricao() + ";</li>";
