@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.page.convenio;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -35,7 +34,6 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(GerarRemessaConvenioPage.class);
 
 	@SpringBean
 	ConvenioMediator convenioMediator;
@@ -48,6 +46,7 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 	public GerarRemessaConvenioPage() {
 		this.titulo = new TituloFiliado();
 		this.listaTitulosConvenios = convenioMediator.buscarTitulosConvenios();
+
 		adicionarComponentes();
 	}
 

@@ -79,10 +79,6 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 						if (codigoIrregularidade == CodigoIrregularidade.IRREGULARIDADE_0) {
 							titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
 						} else {
-							if (titulo.getConfirmacao().getDataProtocolo().isAfter(DataUtil.stringToLocalDate("17/03/2016"))) {
-								throw new InfraException("Segundo ofício do Tribunal de Justiça, não é permitido "
-										+ "o cancelamento por irregularidade para protocolos após 16/03/2016!");
-							}
 							titulo.setCodigoIrregularidadeCancelamento(codigoIrregularidade);
 							titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
 						}
