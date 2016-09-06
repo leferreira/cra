@@ -12,8 +12,10 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.LogCra;
+import br.com.ieptbto.cra.mediator.DadosArquivoRecebidoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -24,6 +26,9 @@ public class LogCraPage extends BasePage<LogCra> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
+
+	@SpringBean
+	DadosArquivoRecebidoMediator dadosRecebidosMediator;
 
 	private LogCra logCra;
 
@@ -42,7 +47,6 @@ public class LogCraPage extends BasePage<LogCra> {
 		add(textFieldInstituicao());
 		add(textFieldUsuario());
 		add(textAreaException());
-
 	}
 
 	private TextField<String> textFieldAcao() {
@@ -53,7 +57,7 @@ public class LogCraPage extends BasePage<LogCra> {
 
 	private TextArea<String> textAreaDescricao() {
 		String descricao = logCra.getDescricao();
-		if  (logCra.getDescricao() == null) {
+		if (logCra.getDescricao() == null) {
 			descricao = "";
 		}
 		TextArea<String> textArea = new TextArea<String>("descricao", new Model<String>(descricao));
@@ -94,8 +98,8 @@ public class LogCraPage extends BasePage<LogCra> {
 		if (getModel().getObject().getExcecao() == null) {
 			textArea = new TextArea<String>("exception", new Model<String>("Não foi registrada nenhuma exceção nesta ação..."));
 		} else {
-			textArea = new TextArea<String>("exception", new Model<String>(getModel().getObject().getExcecao().getMessage() + "\n"
-					+ Arrays.toString(getModel().getObject().getExcecao().getStackTrace())));
+			textArea = new TextArea<String>("exception", new Model<String>(
+					getModel().getObject().getExcecao().getMessage() + "\n" + Arrays.toString(getModel().getObject().getExcecao().getStackTrace())));
 		}
 		textArea.setEnabled(false);
 		return textArea;

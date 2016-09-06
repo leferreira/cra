@@ -82,8 +82,8 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		if (!arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (CancelamentoProtesto cancelamento : arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
-				cancelamento.setRemessaCancelamentoProtesto(
-						desistenciaMediator.carregarRemessaCancelamentoPorId(cancelamento.getRemessaCancelamentoProtesto()));
+				cancelamento
+						.setRemessaCancelamentoProtesto(desistenciaMediator.carregarRemessaCancelamentoPorId(cancelamento.getRemessaCancelamentoProtesto()));
 				nomeArquivos.add(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo());
 			}
 			cancelamentoPendentes.setArquivos(nomeArquivos);
@@ -93,8 +93,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		if (!arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (DesistenciaProtesto desistencia : arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
-				desistencia.setRemessaDesistenciaProtesto(
-						desistenciaMediator.carregarRemessaDesistenciaPorId(desistencia.getRemessaDesistenciaProtesto()));
+				desistencia.setRemessaDesistenciaProtesto(desistenciaMediator.carregarRemessaDesistenciaPorId(desistencia.getRemessaDesistenciaProtesto()));
 				nomeArquivos.add(desistencia.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo());
 			}
 			desistenciaPendentes.setArquivos(nomeArquivos);

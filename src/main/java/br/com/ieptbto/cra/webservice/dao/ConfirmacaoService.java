@@ -131,10 +131,8 @@ public class ConfirmacaoService extends CraWebService {
 			if (arquivoJaEnviado != null) {
 				return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
 			}
-
 			mensagemCra = confirmacaoReceiver.receber(usuario, nomeArquivo, dados);
-			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Confirmação " + nomeArquivo + ", enviado por " + usuario.getInstituicao().getNomeFantasia()
-					+ ", foi processado com sucesso.");
+
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex);
 			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex);

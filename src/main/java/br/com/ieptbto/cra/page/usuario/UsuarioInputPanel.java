@@ -20,7 +20,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.GrupoUsuarioMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.validador.EmailValidator;
+import br.com.ieptbto.cra.validator.EmailValidator;
 
 public class UsuarioInputPanel extends Panel {
 
@@ -106,8 +106,8 @@ public class UsuarioInputPanel extends Panel {
 	}
 
 	private DropDownChoice<Instituicao> comboInstituicao() {
-		DropDownChoice<Instituicao> comboInstituicao = new DropDownChoice<Instituicao>("instituicao", instituicaoMediator.listarTodas(),
-				new ChoiceRenderer<Instituicao>("nomeFantasia"));
+		DropDownChoice<Instituicao> comboInstituicao =
+				new DropDownChoice<Instituicao>("instituicao", instituicaoMediator.listarTodas(), new ChoiceRenderer<Instituicao>("nomeFantasia"));
 		comboInstituicao.setLabel(new Model<String>("Instituição"));
 		comboInstituicao.setRequired(true);
 		return comboInstituicao;

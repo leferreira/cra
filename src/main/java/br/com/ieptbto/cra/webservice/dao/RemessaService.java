@@ -67,10 +67,8 @@ public class RemessaService extends CraWebService {
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
-
 			mensagemCra = remessaReceiver.receber(usuario, nomeArquivo, dados);
-			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Remessa " + nomeArquivo + ", enviado por "
-					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
+
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			loggerCra.error(usuario, getCraAcao(), "Erro interno no processamento do arquivo de Remessa " + nomeArquivo + ".", ex);
@@ -107,8 +105,8 @@ public class RemessaService extends CraWebService {
 					"Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
-			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo de Remessa " + nomeArquivo + " recebido por "
-					+ usuario.getInstituicao().getNomeFantasia() + ".", ex);
+			loggerCra.error(usuario, getCraAcao(),
+					"Erro interno ao construir o arquivo de Remessa " + nomeArquivo + " recebido por " + usuario.getInstituicao().getNomeFantasia() + ".", ex);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
 		return resposta;

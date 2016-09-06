@@ -70,8 +70,8 @@ public class RetornoService extends CraWebService {
 					"Arquivo de Retorno " + nomeArquivo + " recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo de Retorno " + nomeArquivo + " recebido por "
-					+ usuario.getInstituicao().getNomeFantasia() + ".", e);
+			loggerCra.error(usuario, getCraAcao(),
+					"Erro interno ao construir o arquivo de Retorno " + nomeArquivo + " recebido por " + usuario.getInstituicao().getNomeFantasia() + ".", e);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
 		return resposta;
@@ -130,10 +130,8 @@ public class RetornoService extends CraWebService {
 			if (arquivoJaEnviado != null) {
 				return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
 			}
-
 			mensagemCra = retornoReceiver.receber(usuario, nomeArquivo, dados);
-			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Retorno " + nomeArquivo + ", enviado por "
-					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
+
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex);
 			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex);
