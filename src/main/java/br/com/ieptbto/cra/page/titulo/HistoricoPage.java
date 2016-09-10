@@ -60,19 +60,19 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	ArquivoMediator arquivoMediator;
+	private ArquivoMediator arquivoMediator;
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	TituloMediator tituloMediator;
+	private TituloMediator tituloMediator;
 	@SpringBean
-	DesistenciaProtestoMediator desistenciaMediator;
+	private DesistenciaProtestoMediator desistenciaMediator;
 	@SpringBean
-	BatimentoMediator batimentoMediator;
+	private BatimentoMediator batimentoMediator;
 	@SpringBean
-	InstrumentoProtestoMediator instrumentoMediator;
+	private InstrumentoProtestoMediator instrumentoMediator;
 	@SpringBean
-	RetornoMediator retornoMediator;
+	private RetornoMediator retornoMediator;
 
 	private TituloRemessa tituloRemessa;
 	private List<ArquivoOcorrenciaBean> arquivosOcorrencias;
@@ -401,8 +401,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		if (getTituloRemessa().getConfirmacao() != null) {
 			if (getTituloRemessa().getConfirmacao().getTipoOcorrencia() != null) {
 				String tipoOcorrencia = getTituloRemessa().getConfirmacao().getTipoOcorrencia().trim();
-				if (!tipoOcorrencia.equals(StringUtils.EMPTY)
-						|| tipoOcorrencia.equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
+				if (!tipoOcorrencia.equals(StringUtils.EMPTY) || tipoOcorrencia.equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
 					valorGravacao = getTituloRemessa().getRemessa().getInstituicaoOrigem().getValorConfirmacao();
 				}
 			}
