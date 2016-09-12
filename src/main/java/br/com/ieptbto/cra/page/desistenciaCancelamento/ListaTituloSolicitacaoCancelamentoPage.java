@@ -7,7 +7,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -22,8 +21,8 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Retorno;
+import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.StatusSolicitacaoCancelamento;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -53,6 +52,7 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 		this.tituloRemessa = titulo;
 		this.bancoConvenio = bancoConvenio;
 		this.municipio = municipio;
+
 		adicionarComponentes();
 	}
 
@@ -70,6 +70,7 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
 				final TituloRemessa titulo = item.getModelObject();
+				final SolicitacaoCancelamento solicitacaoCancelamento = cancelamentoProtestoMediator.buscarSolicitacaoCancelamentoPorTitulo(titulo);
 
 				item.add(new Label("numeroTitulo", titulo.getNumeroTitulo()));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
@@ -135,40 +136,28 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 					public void onClick() {
 						setResponsePage(new TituloSolicitacaoCancelamentoPage(titulo));
 					}
-
-					@Override
-					protected void onComponentTag(ComponentTag tag) {
-						super.onComponentTag(tag);
-						if (titulo.getStatusSolicitacaoCancelamento() == StatusSolicitacaoCancelamento.NAO_SOLICITADO) {
-							tag.put("class", "btn btn-danger btn-sm");
-						} else {
-							tag.put("class", "btn btn-warning btn-sm");
-						}
-					}
 				};
-				linkSolicitarCancelamento.setEnabled(false);
 				if (titulo.getConfirmacao() != null) {
-					if (titulo.getStatusSolicitacaoCancelamento() == StatusSolicitacaoCancelamento.NAO_SOLICITADO
-							&& StringUtils.isNotBlank(titulo.getConfirmacao().getNumeroProtocoloCartorio().trim())
+					if (StringUtils.isNotBlank(titulo.getConfirmacao().getNumeroProtocoloCartorio().trim())
 							&& !titulo.getConfirmacao().getNumeroProtocoloCartorio().trim().equals("0")) {
-						linkSolicitarCancelamento.setEnabled(true);
-					}
-					if (titulo.getStatusSolicitacaoCancelamento() == StatusSolicitacaoCancelamento.NAO_SOLICITADO) {
-						linkSolicitarCancelamento.add(new Label("nomeAcao", "Solicitar Cancelamento".toUpperCase()));
-					} else {
-						linkSolicitarCancelamento.add(new Label("nomeAcao", "Solicitação já Enviada".toUpperCase()));
+						if (solicitacaoCancelamento == null) {
+							linkSolicitarCancelamento.add(new Label("nomeAcao", "Solicitar".toUpperCase()));
+						} else {
+							linkSolicitarCancelamento.setEnabled(false);
+							linkSolicitarCancelamento.add(new Label("nomeAcao", "Enviado".toUpperCase()));
+						}
 					}
 					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(titulo.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 					item.add(new Label("protocolo", titulo.getConfirmacao().getNumeroProtocoloCartorio()));
 				} else {
-					linkSolicitarCancelamento.add(new Label("nomeAcao", "Aguardando o protocolo".toUpperCase()));
+					linkSolicitarCancelamento.add(new Label("nomeAcao", "Sem Protocolo".toUpperCase()));
 					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 				}
-
 				item.add(linkSolicitarCancelamento);
 			}
 		};
+
 	}
 
 	public IModel<List<TituloRemessa>> buscarTitulos() {

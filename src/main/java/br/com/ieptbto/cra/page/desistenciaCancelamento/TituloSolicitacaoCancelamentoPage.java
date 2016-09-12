@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
@@ -17,6 +18,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.component.label.DataUtil;
+import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.StatusSolicitacaoCancelamento;
@@ -32,7 +34,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
-public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
+public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCancelamento> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -42,12 +44,13 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 	@SpringBean
 	CancelamentoProtestoMediator cancelamentoProtestoMediator;
 
-	private TituloRemessa tituloRemessa;
-
+	private SolicitacaoCancelamento solicitacaoCancelamento;
 	private DropDownChoice<CodigoIrregularidade> dropDownMotivoCancelamento;
 
 	public TituloSolicitacaoCancelamentoPage(TituloRemessa titulo) {
-		this.tituloRemessa = titulo;
+		this.solicitacaoCancelamento = new SolicitacaoCancelamento();
+		this.solicitacaoCancelamento.setTituloRemessa(titulo);
+
 		adicionarComponentes();
 	}
 
@@ -55,40 +58,37 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 	protected void adicionarComponentes() {
 		informacoesTitulo();
 		formEnviarSolicitacao();
-
 	}
 
 	private void formEnviarSolicitacao() {
-		Form<TituloRemessa> form = new Form<TituloRemessa>("form", getModel()) {
+		Form<SolicitacaoCancelamento> form = new Form<SolicitacaoCancelamento>("form", getModel()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				TituloRemessa titulo = getModelObject();
+				SolicitacaoCancelamento solicitacaoCancelamento = getModelObject();
+				solicitacaoCancelamento.setDataSolicitacao(new Date());
+				solicitacaoCancelamento.setUsuario(getUser());
 
 				try {
-					if (titulo.getStatusSolicitacaoCancelamento() != StatusSolicitacaoCancelamento.NAO_SOLICITADO) {
-						throw new InfraException("Solicitação de cancelamento para este título já foi enviada anteriormente !");
-					}
 					if (dropDownMotivoCancelamento.getModelObject() == null) {
-						titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
+						solicitacaoCancelamento.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
 					} else {
 						CodigoIrregularidade codigoIrregularidade = dropDownMotivoCancelamento.getModelObject();
 						if (codigoIrregularidade == CodigoIrregularidade.IRREGULARIDADE_0) {
-							titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
+							solicitacaoCancelamento.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
 						} else {
-							titulo.setCodigoIrregularidadeCancelamento(codigoIrregularidade);
-							titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
+							solicitacaoCancelamento.setCodigoIrregularidadeCancelamento(codigoIrregularidade);
+							solicitacaoCancelamento.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
 						}
 					}
-					cancelamentoProtestoMediator.salvarSolicitacaoCancelamento(titulo);
-					success("Solicitação de cancelamento efetuada com sucesso!");
-					info("O devedor deverá comparacer ao cartório para quitação das custas do cancelamento e do protesto! ");
+					cancelamentoProtestoMediator.salvarSolicitacaoCancelamento(solicitacaoCancelamento);
+					success("A Solicitação de Cancelamento foi enviada com sucesso!");
 
 				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
+					logger.error(ex.getMessage(), ex);
 					getFeedbackPanel().error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
@@ -117,7 +117,6 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 		add(valorTitulo());
 		add(saldoTitulo());
 		add(numeroProtocoloCartorio());
-
 	}
 
 	private DropDownChoice<CodigoIrregularidade> dropDownMotivoCancelamento() {
@@ -146,13 +145,11 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 	}
 
 	public Label saldoTituloModal() {
-		Label textField = new Label("saldoTituloModal", new Model<String>("R$ " + getTituloRemessa().getSaldoTitulo().toString()));
-		return textField;
+		return new Label("saldoTituloModal", new Model<String>("R$ " + getTituloRemessa().getSaldoTitulo().toString()));
 	}
 
 	private Label nomeDevedorModal() {
-		Label textField = new Label("nomeDevedorModal", new Model<String>(getTituloRemessa().getNomeDevedor()));
-		return textField;
+		return new Label("nomeDevedorModal", new Model<String>(getTituloRemessa().getNomeDevedor()));
 	}
 
 	private Label especieTitulo() {
@@ -168,13 +165,11 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 	}
 
 	public Label valorTitulo() {
-		Label textField = new Label("valorTitulo", new Model<String>("R$ " + getTituloRemessa().getValorTitulo().toString()));
-		return textField;
+		return new Label("valorTitulo", new Model<String>("R$ " + getTituloRemessa().getValorTitulo().toString()));
 	}
 
 	public Label saldoTitulo() {
-		Label textField = new Label("saldoTitulo", new Model<String>("R$ " + getTituloRemessa().getSaldoTitulo().toString()));
-		return textField;
+		return new Label("saldoTitulo", new Model<String>("R$ " + getTituloRemessa().getSaldoTitulo().toString()));
 	}
 
 	private Label numeroProtocoloCartorio() {
@@ -186,31 +181,27 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
 	}
 
 	private Label nomeSacadorVendedor() {
-		Label textField = new Label("nomeSacadorVendedor", new Model<String>(getTituloRemessa().getNomeSacadorVendedor()));
-		return textField;
+		return new Label("nomeSacadorVendedor", new Model<String>(getTituloRemessa().getNomeSacadorVendedor()));
 	}
 
 	private Label documentoSacador() {
-		Label textField = new Label("documentoSacador", new Model<String>(getTituloRemessa().getDocumentoSacador()));
-		return textField;
+		return new Label("documentoSacador", new Model<String>(getTituloRemessa().getDocumentoSacador()));
 	}
 
 	private Label nomeDevedor() {
-		Label textField = new Label("nomeDevedor", new Model<String>(getTituloRemessa().getNomeDevedor()));
-		return textField;
+		return new Label("nomeDevedor", new Model<String>(getTituloRemessa().getNomeDevedor()));
 	}
 
 	private Label documentoDevedor() {
-		Label textField = new Label("documentoDevedor", new Model<String>(getTituloRemessa().getNumeroIdentificacaoDevedor()));
-		return textField;
+		return new Label("documentoDevedor", new Model<String>(getTituloRemessa().getNumeroIdentificacaoDevedor()));
 	}
 
 	private TituloRemessa getTituloRemessa() {
-		return tituloRemessa;
+		return solicitacaoCancelamento.getTituloRemessa();
 	}
 
 	@Override
-	protected IModel<TituloRemessa> getModel() {
-		return new CompoundPropertyModel<TituloRemessa>(tituloRemessa);
+	protected IModel<SolicitacaoCancelamento> getModel() {
+		return new CompoundPropertyModel<SolicitacaoCancelamento>(solicitacaoCancelamento);
 	}
 }

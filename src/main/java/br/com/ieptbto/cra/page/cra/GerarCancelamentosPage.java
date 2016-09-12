@@ -15,8 +15,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
-import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.StatusSolicitacaoCancelamento;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
@@ -30,7 +30,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
-public class GerarCancelamentosPage extends BasePage<PedidoAutorizacaoCancelamento> {
+public class GerarCancelamentosPage extends BasePage<SolicitacaoCancelamento> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -40,92 +40,93 @@ public class GerarCancelamentosPage extends BasePage<PedidoAutorizacaoCancelamen
 	@SpringBean
 	CancelamentoProtestoMediator cancelamentoProtestoMediator;
 
-	private PedidoAutorizacaoCancelamento pedidoAutorizacaoCancelamento;
-	private List<TituloRemessa> titulosCancelamento;
+	private SolicitacaoCancelamento solicitacaoCancelamento;
+	private List<SolicitacaoCancelamento> solicitacoesCancelamentos;
+	private Usuario usuario;
 
 	public GerarCancelamentosPage() {
-		this.pedidoAutorizacaoCancelamento = new PedidoAutorizacaoCancelamento();
+		this.solicitacaoCancelamento = new SolicitacaoCancelamento();
+		this.usuario = getUser();
+
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
 		formGerarCancelamentos();
-		listaPedidosCancelamento();
-
+		listaSolicitacoesCancelamento();
 	}
 
 	private void formGerarCancelamentos() {
-		Form<TituloRemessa> form = new Form<TituloRemessa>("form") {
+		Form<SolicitacaoCancelamento> form = new Form<SolicitacaoCancelamento>("form", getModel()) {
 
-			/**
-			 * 
-			 */
+			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
 
 				try {
-					convenioMediator.gerarCancelamentos(getUser(), titulosCancelamento);
-					success("Arquivos de cancelamento gerados com sucesso!");
+					convenioMediator.gerarCancelamentosConvenio(usuario, solicitacoesCancelamentos);
+					success("Os arquivos de cancelamento de protesto foram gerados com sucesso!");
 
 				} catch (InfraException ex) {
-					logger.error(ex.getMessage());
+					logger.error(ex.getMessage(), ex);
 					getFeedbackPanel().error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível gerar os arquivos de cancelamento ! \n Entre em contato com a CRA ");
+					error("Não foi possível gerar os arquivos de cancelamento de protesto! \n Entre em contato com a CRA ");
 				}
 			}
 		};
 		add(form);
 	}
 
-	private void listaPedidosCancelamento() {
-		add(new ListView<TituloRemessa>("listaTitulosCancelamento", buscarTituloParaCancelamento()) {
+	private void listaSolicitacoesCancelamento() {
+		add(new ListView<SolicitacaoCancelamento>("listaTitulosCancelamento", buscarTituloParaCancelamento()) {
 
-			/**
-			 * 
-			 */
+			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<TituloRemessa> item) {
-				final TituloRemessa titulo = item.getModelObject();
-				item.add(new Label("nossoNumero", titulo.getNossoNumero()));
-				item.add(new Label("numeroTitulo", titulo.getNumeroTitulo()));
-				item.add(new Label("pracaProtesto", titulo.getPracaProtesto()));
-				item.add(new Label("devedor", titulo.getNomeDevedor()));
-				item.add(new LabelValorMonetario<String>("valor", titulo.getValorTitulo()));
-				item.add(new Label("tipoSolicitacao", titulo.getStatusSolicitacaoCancelamento().getLabel()));
-				if (titulo.getStatusSolicitacaoCancelamento() == StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO) {
+			protected void populateItem(ListItem<SolicitacaoCancelamento> item) {
+				final SolicitacaoCancelamento solicitacaoCancelamento = item.getModelObject();
+				item.add(new Label("nossoNumero", solicitacaoCancelamento.getTituloRemessa().getNossoNumero()));
+				item.add(new Label("numeroTitulo", solicitacaoCancelamento.getTituloRemessa().getNumeroTitulo()));
+				item.add(new Label("pracaProtesto", solicitacaoCancelamento.getTituloRemessa().getPracaProtesto()));
+				item.add(new Label("devedor", solicitacaoCancelamento.getTituloRemessa().getNomeDevedor()));
+				item.add(new LabelValorMonetario<String>("valor", solicitacaoCancelamento.getTituloRemessa().getValorTitulo()));
+				item.add(new Label("tipoSolicitacao", solicitacaoCancelamento.getStatusSolicitacaoCancelamento().getLabel()));
+				if (solicitacaoCancelamento.getStatusSolicitacaoCancelamento() == StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO) {
 					item.add(new Label("motivo", "Pagamento".toUpperCase()));
 				} else {
-					item.add(new Label("motivo", titulo.getCodigoIrregularidadeCancelamento().getMotivo().toUpperCase()));
+					item.add(new Label("motivo", solicitacaoCancelamento.getCodigoIrregularidadeCancelamento().getMotivo().toUpperCase()));
 				}
 			}
 		});
 
 	}
 
-	private IModel<List<TituloRemessa>> buscarTituloParaCancelamento() {
-		return new LoadableDetachableModel<List<TituloRemessa>>() {
+	private IModel<List<SolicitacaoCancelamento>> buscarTituloParaCancelamento() {
+		return new LoadableDetachableModel<List<SolicitacaoCancelamento>>() {
 
 			/**/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected List<TituloRemessa> load() {
-				titulosCancelamento = cancelamentoProtestoMediator.buscarCancelamentosSolicitados();
-				return titulosCancelamento;
+			protected List<SolicitacaoCancelamento> load() {
+				setSolicitacoesCancelamentos(cancelamentoProtestoMediator.buscarSolicitacoesCancelamentos());
+				return solicitacoesCancelamentos;
 			}
 		};
 	}
 
-	@Override
-	protected IModel<PedidoAutorizacaoCancelamento> getModel() {
-		return new CompoundPropertyModel<PedidoAutorizacaoCancelamento>(pedidoAutorizacaoCancelamento);
+	public void setSolicitacoesCancelamentos(List<SolicitacaoCancelamento> titulosSolicitacaoCancelamento) {
+		this.solicitacoesCancelamentos = titulosSolicitacaoCancelamento;
 	}
 
+	@Override
+	protected IModel<SolicitacaoCancelamento> getModel() {
+		return new CompoundPropertyModel<SolicitacaoCancelamento>(solicitacaoCancelamento);
+	}
 }
