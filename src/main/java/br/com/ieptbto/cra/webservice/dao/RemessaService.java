@@ -96,6 +96,11 @@ public class RemessaService extends CraWebService {
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_REMESSA)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
+			if (nomeArquivo != null) {
+				if (StringUtils.isEmpty(nomeArquivo.trim())) {
+					return setRespostaPadrao(usuario, nomeArquivo, CodigoErro.CARTORIO_NOME_ARQUIVO_INVALIDO);
+				}
+			}
 			RemessaVO remessaVO = arquivoMediator.buscarRemessaParaCartorio(usuario, nomeArquivo);
 			if (remessaVO == null) {
 				return setRespostaPadrao(usuario, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);

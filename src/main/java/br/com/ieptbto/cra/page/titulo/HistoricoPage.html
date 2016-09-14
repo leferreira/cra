@@ -2,99 +2,131 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 	<wicket:extend>
-		<h4 class="titulo-top">INFORMA&Ccedil;&Otilde;ES DO T&Iacute;TULO</h4>
-		<div class="well well-sm">  
-			<div class="col-md-4">
-				<fieldset>
-					<legend>DADOS DO TÍTULO</legend>
-					<dl class="dl-horizontal">
-					  <dt>NOSSO N&Uacute;MERO</dt><dd><span class="info-titulo" wicket:id="nossoNumero" style="font-size: 13px;"></span></dd>
-					  <dt>N&Uacute;MERO T&Iacute;TULO</dt><dd><span wicket:id="numeroTitulo"></span></dd>
-					  <dt>APRESENTANTE</dt><dd><span wicket:id="portador"></span></dd>
-					  <dt>AG. CENTRALIZAD.</dt><dd><span wicket:id="agencia"></span></dd>
-					  <dt>AG. CÓDIGO CEDENTE.</dt><dd><span wicket:id="agenciaCodigoCedente"></span></dd>
-					  <dt>ESP&Eacute;CIE</dt><dd><span wicket:id="especieTitulo"></span></dd>
-					  <dt>EMISS&Atilde;O</dt><dd><span wicket:id="dataEmissaoTitulo"></span></dd>
-					  <dt>VENCIMENTO</dt><dd><span wicket:id="dataVencimentoTitulo"></span></dd>
-					</dl>
-				</fieldset>
-			</div>
-			<div class="col-md-4">
-				<fieldset>
-					<legend>DADOS DO PROTOCOLO</legend>
-					<dl class="dl-horizontal">
-					  <dt>SITUA&Ccedil;&Atilde;O</dt><dd><span class="info-titulo" wicket:id="situacaoTitulo" style="font-size: 13px;"></span></dd>
-					  <dt>PROTOCOLO</dt><dd><span wicket:id="numeroProtocoloCartorio"></span></dd>
-					  <dt>DATA PROTOCOLO</dt><dd><span wicket:id="dataProtocolo"></span></dd>
-					  <dt>DATAOCORR&Egrave;NCIA</dt><dd><span wicket:id="dataOcorrencia"></span></dd>
-					  <dt>IRREGULARIDADE</dt><dd><span wicket:id="irregularidade"></span></dd>
-					  <dt>CART&Oacute;RIO</dt><dd><span wicket:id="cartorio"></span></dd>
-					  <dt>C&Oacute;D. CART&Oacute;RIO</dt><dd><span wicket:id="codigoCartorio"></span></dd>
-					  <dt>PRA&Ccedil;A PROTESTO</dt><dd><span wicket:id="pracaProtesto"></span></dd>
-					  <dt>C&Oacute;D. MUNIC&Iacute;PIO</dt><dd><span wicket:id="codigoMunicipio"></span></dd>
-					</dl>
-				</fieldset>
-			</div>
-			<div class="col-md-4">
-				<fieldset>
-					<legend>VALORES DO TÍTULO E CUSTAS</legend>
-					<dl class="dl-horizontal">
-					  <dt>VALOR DO T&iacute;TULO</dt><dd><span wicket:id="valorTitulo" class="destaque"></span></dd>
-					  <dt>SALDO T&iacute;TULO</dt><dd><span wicket:id="saldoTitulo" class="destaque"></span></dd>
-					  <dt>GRAVA&Ccedil;&Atilde;O ELETR&Ocirc;</dt><dd><span wicket:id="valorGravacaoEletronica" class="destaque"></span></dd>
-					  <dt>CUSTAS CART&Oacute;RIO</dt><dd><span wicket:id="valorCustaCartorio" class="destaque"></span></dd>
-					  <dt>CUSTAS DISTRIB</dt><dd><span wicket:id="valorCustasCartorioDistribuidor" class="destaque"></span></dd>
-					  <dt>DEMAIS DESPESAS</dt><dd><span wicket:id="valorDemaisDespesas" class="destaque"></span></dd>
-					</dl>
-				</fieldset>
-			</div>
-			<br class="clear"/>
-		</div>
-		<div class="col-lg-6 panel panel-primary panel-history">
-            <div class="panel-heading">ARQUIVOS E OCORR&Ecirc;NCIAS</div>
-              <div class="panel-body" style="padding: 10px; min-height: 345px;">
-				<div wicket:id="divListaHistorico" style="margin-bottom: 10px;">
-					<span wicket:id="icon"></span>
-					<a target="_blank" wicket:id="linkArquivo" style="font-weight: bolder;">
-						<span wicket:id="nomeArquivo"></span>
-					</a>
-					<span wicket:id="mensagem"></span>
-					<span wicket:id="acao"></span>
-					<span wicket:id="dataOcorrencia" style="font-weight: bolder;"></span>
-					<span wicket:id="por"></span>
-					<span wicket:id="usuarioAcao"></span>.
+		<h4 class="titulo-top">HISTÓRICO</h4>
+			<div class="col-md-8 well well-sm">
+				<div class="col-md-6">
+					<h4 class="titulo-top">DADOS DO TÍTULO</h4>
+					<fieldset>
+						<dl class="dl-horizontal">
+						  <dt>NOSSO N&Uacute;MERO</dt><dd><span class="info-titulo" wicket:id="nossoNumero" style="font-size: 13px;"></span></dd>
+						  <dt>N&Uacute;MERO T&Iacute;TULO</dt><dd><span wicket:id="numeroTitulo"></span></dd>
+						  <dt>APRESENTANTE</dt><dd><span wicket:id="portador"></span></dd>
+						  <br>
+						  <dt>AG. CENTRALIZAD.</dt><dd><span wicket:id="agencia"></span></dd>
+						  <dt>AG. CÓDIGO CEDENTE.</dt><dd><span wicket:id="agenciaCodigoCedente"></span></dd>
+						  <dt>ESP&Eacute;CIE</dt><dd><span wicket:id="especieTitulo"></span></dd>
+						  <dt>EMISS&Atilde;O</dt><dd><span wicket:id="dataEmissaoTitulo"></span></dd>
+						  <dt>VENCIMENTO</dt><dd><span wicket:id="dataVencimentoTitulo"></span></dd>
+						  <br>
+						  <dt>PRA&Ccedil;A PROTESTO</dt><dd><span wicket:id="pracaProtesto"></span></dd>
+						  <dt>C&Oacute;D. MUNIC&Iacute;PIO</dt><dd><span wicket:id="codigoMunicipio"></span></dd>
+						  <dt>C&Oacute;D. CART&Oacute;RIO</dt><dd><span wicket:id="codigoCartorio"></span></dd>
+						</dl>
+					</fieldset>
+					<h4 class="titulo-top">VALOR DO TÍTULO E CUSTAS</h4>
+					<fieldset>
+						<dl class="dl-horizontal" style="font-size: 14px;">
+						  <dt>VALOR DO T&iacute;TULO</dt><dd><span wicket:id="valorTitulo" class="destaque"></span></dd>
+						  <dt>SALDO T&iacute;TULO</dt><dd><span wicket:id="saldoTitulo" class="destaque"></span></dd>
+						  <dt>CUSTAS CART&Oacute;RIO</dt><dd><span wicket:id="valorCustaCartorio" class="destaque"></span></dd>
+						  <dt>DEMAIS DESPESAS</dt><dd><span wicket:id="valorDemaisDespesas" class="destaque"></span></dd>
+						</dl>
+					</fieldset> 
 				</div>
-				<br class="clear"/>
-             </div> 
-		</div>
-		<div class="col-lg-6 well well-sm">
-			<div class="col-lg-12"> 
-				<fieldset>
-					<legend>DADOS DO DEVEDOR</legend>
-	                <dl class="dl-horizontal">
-					  <dt>NOME DEVEDOR</dt><dd><span wicket:id="nomeDevedor"></span></dd>
-					  <dt>CPF/CNPJ</dt><dd><span wicket:id="documentoDevedor"></span></dd>
-					  <dt>UF</dt><dd><span wicket:id="ufDevedor"></span></dd>
-					  <dt>CEP</dt><dd><span wicket:id="cepDevedor"></span></dd>
-					  <dt>CIDADE</dt><dd><span wicket:id="cidadeDevedor"></span></dd>
-					  <dt>ENDERE&Ccedil;O</dt><dd><span wicket:id="enderecoDevedor"></span></dd>
-					</dl>
-				</fieldset>
+				<div class="col-md-6">
+					<h4 class="titulo-top">DADOS DO PROTOCOLO</h4>
+					<fieldset>
+						<dl class="dl-horizontal">
+						  <dt>SITUA&Ccedil;&Atilde;O</dt><dd><span class="info-titulo" wicket:id="situacaoTitulo" style="font-size: 13px;"></span></dd>
+						  <dt>PROTOCOLO</dt><dd><span wicket:id="numeroProtocoloCartorio"></span></dd>
+						  <dt>DATA PROTOCOLO</dt><dd><span wicket:id="dataProtocolo"></span></dd>
+						  <dt>DATAOCORR&Egrave;NCIA</dt><dd><span wicket:id="dataOcorrencia"></span></dd>
+						  <dt>IRREGULARIDADE</dt><dd><span wicket:id="irregularidade"></span></dd>
+						</dl>
+					</fieldset>
+					<h4 class="titulo-top">DADOS DO DEVEDOR</h4>
+					<fieldset>
+		                <dl class="dl-horizontal">
+						  <dt>NOME DEVEDOR</dt><dd><span wicket:id="nomeDevedor"></span></dd>
+						  <dt>CPF/CNPJ</dt><dd><span wicket:id="documentoDevedor"></span></dd>
+						  <dt>UF</dt><dd><span wicket:id="ufDevedor"></span></dd>
+						  <dt>CEP</dt><dd><span wicket:id="cepDevedor"></span></dd>
+						  <dt>CIDADE</dt><dd><span wicket:id="cidadeDevedor"></span></dd>
+						  <dt>ENDERE&Ccedil;O</dt><dd><span wicket:id="enderecoDevedor"></span></dd>
+						</dl>
+					</fieldset>
+					<h4 class="titulo-top">DADOS DO CREDOR</h4>
+					<fieldset>
+						<dl class="dl-horizontal">
+						  <dt>NOME SACADOR</dt><dd><span wicket:id="nomeSacadorVendedor"></span></dd>
+						  <dt>CPF/CNPJ</dt><dd><span wicket:id="documentoSacador"></span></dd>
+						  <dt>UF</dt><dd><span wicket:id="ufSacadorVendedor"></span></dd>
+						  <dt>CEP</dt><dd><span wicket:id="cepSacadorVendedor"></span></dd>
+						  <dt>CIDADE</dt><dd><span wicket:id="cidadeSacadorVendedor"></span></dd>
+						  <dt>ENDERE&Ccedil;O</dt><dd><span wicket:id="enderecoSacadorVendedor"></span></dd>
+						</dl>
+					</fieldset>
+				</div> 
 			</div>
-          	<div class="col-lg-12">
-				<fieldset>
-					<legend>DADOS DO CREDOR</legend>
-					<dl class="dl-horizontal">
-					  <dt>NOME SACADOR</dt><dd><span wicket:id="nomeSacadorVendedor"></span></dd>
-					  <dt>CPF/CNPJ</dt><dd><span wicket:id="documentoSacador"></span></dd>
-					  <dt>UF</dt><dd><span wicket:id="ufSacadorVendedor"></span></dd>
-					  <dt>CEP</dt><dd><span wicket:id="cepSacadorVendedor"></span></dd>
-					  <dt>CIDADE</dt><dd><span wicket:id="cidadeSacadorVendedor"></span></dd>
-					  <dt>ENDERE&Ccedil;O</dt><dd><span wicket:id="enderecoSacadorVendedor"></span></dd>
-					</dl>
-				</fieldset>
+			<div class="col-md-4">
+<!-- 				<h4 class="titulo-top">ARQUIVOS E OCORRÊNCIAS</h4> -->
+<!-- 		        <div class="timeline-centered"> -->
+<!-- 			        <article class="timeline-entry" wicket:id="divListaHistorico"> -->
+<!-- 			            <div class="timeline-entry-inner"> -->
+<!-- 			                <div wicket:id="div-icon"> -->
+<!-- 			                    <span wicket:id="icon"></span> -->
+<!-- 			                </div> -->
+<!-- 			                <div class="timeline-label"> -->
+<!-- 			                	<h5><strong wicket:id="usuarioAcao"></strong></h5> -->
+<!-- 								<p> -->
+<!-- 				                    <a target="_blank" wicket:id="link" class="link" style="font-size: 14px;"> -->
+<!-- 										<span wicket:id="conteudoLink"></span> -->
+<!-- 									</a> -->
+<!-- 				                    <span wicket:id="mensagem" class="text-historico"></span> -->
+<!-- 									<span wicket:id="acao" class="text-historico"></span> -->
+<!-- 									<br class="clear"> -->
+<!-- 			                        <span class="text-muted pull-right clear"> -->
+<!-- 				                        <i class="fa fa-clock-o fa-fw"></i>&nbsp; -->
+<!-- 				                        <span wicket:id="data"></span> ás <span wicket:id="hora"></span> -->
+<!-- 			                        </span> -->
+<!-- 									<br class="clear"> -->
+<!-- 								</p> -->
+<!-- 			                </div> -->
+<!-- 			            </div> -->
+<!-- 			        </article> -->
+<!-- 		    	</div> -->
+				<div class="panel panel-primary">
+					<div class="panel-heading">ARQUIVOS E OCORRÊNCIAS</div>
+					<div class="panel-body" style="padding: 5px; background-color: transparent;">
+						<div class="timeline-centered">
+					        <article class="timeline-entry" wicket:id="divListaHistorico">
+					            <div class="timeline-entry-inner">
+					                <div wicket:id="div-icon">
+					                    <span wicket:id="icon"></span>
+					                </div>
+					                <div class="timeline-label">
+					                	<h5><strong wicket:id="usuarioAcao"></strong></h5>
+										<p>
+						                    <a target="_blank" wicket:id="link" class="link" style="font-size: 14px;">
+												<span wicket:id="conteudoLink"></span>
+											</a>
+						                    <span wicket:id="mensagem" class="text-historico"></span>
+											<span wicket:id="acao" class="text-historico"></span>
+											<br class="clear">
+					                        <span class="text-muted pull-right clear">
+						                        <i class="fa fa-clock-o fa-fw"></i>&nbsp;
+						                        <span wicket:id="data"></span> ás <span wicket:id="hora"></span>
+					                        </span>
+											<br class="clear">
+										</p>
+					                </div>
+					            </div>
+					        </article>
+				    	</div>
+					</div>
+				</div>
 			</div>
-		</div>      
+        <br class="clear"/>
 	</wicket:extend>
 </body>
 </html>

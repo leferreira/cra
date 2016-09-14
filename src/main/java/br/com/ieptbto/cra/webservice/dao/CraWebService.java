@@ -103,7 +103,7 @@ public class CraWebService {
 	}
 
 	protected String setRespostaPadrao(Usuario usuario, String nomeArquivo, CodigoErro codigoErro) {
-		logger.error("Erro WS: " + codigoErro.getDescricao());
+		logger.error("Erro WS: " + nomeArquivo + " ==== " + codigoErro.getDescricao());
 		loggerCra.error(usuario, getCraAcao(), codigoErro.getDescricao());
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), codigoErro);

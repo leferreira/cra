@@ -9,6 +9,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -197,4 +198,10 @@ public class DataUtil implements Serializable {
 		return DateTimeFormat.forPattern(formato).withZone(DateTimeZone.UTC);
 	}
 
+	public static String localTimeToString(String format, LocalTime localTime) {
+		if (localTime == null) {
+			return null;
+		}
+		return localTime.toString(getDateTimeFormatter(format));
+	}
 }

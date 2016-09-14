@@ -10,6 +10,7 @@ import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -27,15 +28,20 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
+import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
+import br.com.ieptbto.cra.entidade.PedidoCancelamento;
 import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
+import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.SituacaoBatimentoRetorno;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.BatimentoMediator;
+import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
@@ -67,6 +73,10 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private TituloMediator tituloMediator;
 	@SpringBean
 	private DesistenciaProtestoMediator desistenciaMediator;
+	@SpringBean
+	private CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	@SpringBean
+	private AutorizacaoCancelamentoMediator autorizacaoCancelamentoMediator;
 	@SpringBean
 	private BatimentoMediator batimentoMediator;
 	@SpringBean
@@ -156,6 +166,32 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 				getArquivosOcorrencias().add(novaOcorrencia);
 			}
 		}
+
+		if (titulo.getPedidosCancelamento() != null) {
+			List<PedidoCancelamento> pedidoCancelamento = cancelamentoProtestoMediator.buscarPedidosCancelamentoProtestoPorTitulo(titulo);
+			for (PedidoCancelamento pedido : pedidoCancelamento) {
+				novaOcorrencia = new ArquivoOcorrenciaBean();
+				novaOcorrencia.parseToCancelamentoProtesto(pedido.getCancelamentoProtesto());
+				getArquivosOcorrencias().add(novaOcorrencia);
+			}
+		}
+
+		if (titulo.getPedidosAutorizacaoCancelamento() != null) {
+			List<PedidoAutorizacaoCancelamento> pedidosAC = autorizacaoCancelamentoMediator.buscarPedidosAutorizacaoCancelamentoPorTitulo(titulo);
+			for (PedidoAutorizacaoCancelamento pedido : pedidosAC) {
+				novaOcorrencia = new ArquivoOcorrenciaBean();
+				novaOcorrencia.parseToAutorizacaoCanlamento(pedido.getAutorizacaoCancelamento());
+				getArquivosOcorrencias().add(novaOcorrencia);
+			}
+		}
+
+		SolicitacaoCancelamento solicitacaoCancelamento = cancelamentoProtestoMediator.buscarSolicitacaoCancelamentoPorTitulo(titulo);
+		if (solicitacaoCancelamento != null) {
+			novaOcorrencia = new ArquivoOcorrenciaBean();
+			novaOcorrencia.parseToSolicitacaoCancelamento(solicitacaoCancelamento);
+			getArquivosOcorrencias().add(novaOcorrencia);
+		}
+
 		Collections.sort(getArquivosOcorrencias());
 		add(listaArquivoOcorrenciaBean());
 	}
@@ -171,8 +207,11 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 				final ArquivoOcorrenciaBean arquivoOcorrenciaBean = item.getModelObject();
 
 				if (arquivoOcorrenciaBean.getRemessa() != null) {
-					item.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
-					Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-primary"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
+					item.add(divIcon);
+					Link<Remessa> link = new Link<Remessa>("link") {
 
 						/***/
 						private static final long serialVersionUID = 1L;
@@ -182,15 +221,19 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 							setResponsePage(new TitulosArquivoPage(arquivoOcorrenciaBean.getRemessa()));
 						}
 					};
-					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getRemessa().getArquivo().getNomeArquivo()));
-					item.add(linkArquivo);
-					item.add(new Label("acao", " enviado para CRA em "));
+					link.add(new Label("conteudoLink", arquivoOcorrenciaBean.getRemessa().getArquivo().getNomeArquivo()));
+					item.add(link);
+					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
 					item.add(new Label("mensagem", "").setVisible(false));
 				}
 
 				if (arquivoOcorrenciaBean.getBatimento() != null) {
-					item.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check-square-o")));
-					Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-warning"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check-square-o")));
+					item.add(divIcon);
+
+					Link<Remessa> link = new Link<Remessa>("link") {
 
 						/***/
 						private static final long serialVersionUID = 1L;
@@ -199,16 +242,20 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 						public void onClick() {
 						}
 					};
-					linkArquivo.add(new Label("nomeArquivo", ""));
-					linkArquivo.setVisible(false);
-					item.add(linkArquivo);
+					link.add(new Label("conteudoLink", ""));
+					link.setVisible(false);
+					item.add(link);
 					item.add(new Label("acao", "").setVisible(false));
-					item.add(new Label("mensagem", arquivoOcorrenciaBean.getMensagem()));
+					item.add(new Label("mensagem", arquivoOcorrenciaBean.getMensagem()).setOutputMarkupId(true).setEscapeModelStrings(false));
 				}
 
 				if (arquivoOcorrenciaBean.getInstrumentoProtesto() != null) {
-					item.add(new Label("icon").add(new AttributeAppender("class", "fa fa-list-ul")));
-					Link<Remessa> linkArquivo = new Link<Remessa>("linkArquivo") {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-warning"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-list-ul")));
+					item.add(divIcon);
+
+					Link<Remessa> link = new Link<Remessa>("link") {
 
 						/***/
 						private static final long serialVersionUID = 1L;
@@ -217,17 +264,21 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 						public void onClick() {
 						}
 					};
-					linkArquivo.add(new Label("nomeArquivo", "Instrumento de Protesto: "));
-					linkArquivo.setOutputMarkupId(true);
-					linkArquivo.setEnabled(false);
-					item.add(linkArquivo);
+					link.add(new Label("conteudoLink", "Instrumento de Protesto: "));
+					link.setOutputMarkupId(true);
+					link.setEnabled(false);
+					item.add(link);
 					item.add(new Label("acao", "").setVisible(false));
 					item.add(new Label("mensagem", arquivoOcorrenciaBean.getMensagem()));
 				}
 
-				if (arquivoOcorrenciaBean.getArquivoGerado() != null) {
-					item.add(new Label("icon").add(new AttributeAppender("class", "fa fa-send-o")));
-					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+				if (arquivoOcorrenciaBean.getArquivoLiberado() != null) {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-success"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-send-o")));
+					item.add(divIcon);
+
+					Link<Arquivo> link = new Link<Arquivo>("link") {
 
 						/***/
 						private static final long serialVersionUID = 1L;
@@ -236,15 +287,19 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 						public void onClick() {
 						}
 					};
-					linkArquivo.add(new Label("nomeArquivo", arquivoOcorrenciaBean.getArquivoGerado()));
-					item.add(linkArquivo);
-					item.add(new Label("acao", " liberado para instituição em "));
+					link.add(new Label("conteudoLink", arquivoOcorrenciaBean.getArquivoLiberado().getNomeArquivo()));
+					item.add(link);
+					item.add(new Label("acao", " Arquivo liberado para instituição."));
 					item.add(new Label("mensagem", "").setVisible(false));
 				}
 
 				if (arquivoOcorrenciaBean.getDesistenciaProtesto() != null) {
-					item.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
-					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-primary"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
+					item.add(divIcon);
+
+					Link<Arquivo> link = new Link<Arquivo>("link") {
 
 						/***/
 						private static final long serialVersionUID = 1L;
@@ -254,16 +309,20 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 							setResponsePage(new TitulosDesistenciaPage(arquivoOcorrenciaBean.getDesistenciaProtesto()));
 						}
 					};
-					linkArquivo.add(new Label("nomeArquivo",
+					link.add(new Label("conteudoLink",
 							arquivoOcorrenciaBean.getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
-					item.add(linkArquivo);
-					item.add(new Label("acao", " enviado para CRA em "));
+					item.add(link);
+					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
 					item.add(new Label("mensagem", "").setVisible(false));
 				}
 
 				if (arquivoOcorrenciaBean.getCancelamentoProtesto() != null) {
-					item.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
-					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-primary"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
+					item.add(divIcon);
+
+					Link<Arquivo> link = new Link<Arquivo>("link") {
 
 						/***/
 						private static final long serialVersionUID = 1L;
@@ -273,16 +332,20 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 							setResponsePage(new TitulosCancelamentoPage(arquivoOcorrenciaBean.getCancelamentoProtesto()));
 						}
 					};
-					linkArquivo.add(new Label("nomeArquivo",
+					link.add(new Label("conteudoLink",
 							arquivoOcorrenciaBean.getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
-					item.add(linkArquivo);
-					item.add(new Label("acao", " enviado para CRA em "));
+					item.add(link);
+					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
 					item.add(new Label("mensagem", "").setVisible(false));
 				}
 
 				if (arquivoOcorrenciaBean.getAutorizacaoCancelamento() != null) {
-					item.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
-					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-primary"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
+					item.add(divIcon);
+
+					Link<Arquivo> link = new Link<Arquivo>("link") {
 
 						/***/
 						private static final long serialVersionUID = 1L;
@@ -292,22 +355,38 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 							setResponsePage(new TitulosAutorizacaoCancelamentoPage(arquivoOcorrenciaBean.getAutorizacaoCancelamento()));
 						}
 					};
-					linkArquivo.add(new Label("nomeArquivo",
+					link.add(new Label("conteudoLink",
 							arquivoOcorrenciaBean.getAutorizacaoCancelamento().getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
-					item.add(linkArquivo);
-					item.add(new Label("acao", " enviado para CRA em "));
+					item.add(link);
+					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
 					item.add(new Label("mensagem", "").setVisible(false));
 				}
-				if (arquivoOcorrenciaBean.getInstrumentoProtesto() != null) {
-					if (arquivoOcorrenciaBean.getInstrumentoProtesto().getEtiquetaSlip() == null) {
-						item.add(new Label("por", ""));
-					} else {
-						item.add(new Label("por", " por "));
-					}
-				} else {
-					item.add(new Label("por", " por "));
+
+				if (arquivoOcorrenciaBean.getSolicitacaoCancelamento() != null) {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-danger"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-times")));
+					item.add(divIcon);
+
+					Link<Remessa> link = new Link<Remessa>("link") {
+
+						/***/
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public void onClick() {
+						}
+					};
+					link.add(new Label("conteudoLink", ""));
+					link.setOutputMarkupId(true);
+					link.setEnabled(false);
+					item.add(link);
+					item.add(new Label("acao", arquivoOcorrenciaBean.getMensagem()));
+					item.add(new Label("mensagem", "").setVisible(false));
 				}
-				item.add(new Label("dataOcorrencia", arquivoOcorrenciaBean.getDataHora()));
+
+				item.add(new Label("data", DataUtil.localDateToString(arquivoOcorrenciaBean.getData())));
+				item.add(new Label("hora", DataUtil.localTimeToString("HH:mm:ss", arquivoOcorrenciaBean.getHora())));
 				item.add(new Label("usuarioAcao", arquivoOcorrenciaBean.getNomeUsuario()));
 			}
 		};
@@ -322,7 +401,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		add(irregularidade());
 		add(codigoMunicipio());
 		add(pracaProtesto());
-		add(cartorio());
 		add(status());
 		add(nomeSacadorVendedor());
 		add(documentoSacador());
@@ -346,9 +424,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		add(valorTitulo());
 		add(saldoTitulo());
 		add(valorCustaCartorio());
-		add(valorCustasCartorioDistribuidor());
 		add(valorDemaisDespesas());
-		add(valorGravacaoEletronica());
 	}
 
 	private Label codigoCartorio() {
@@ -396,19 +472,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		return new Label("codigoMunicipio", new Model<String>(getTituloRemessa().getRemessa().getCabecalho().getCodigoMunicipio()));
 	}
 
-	private Label valorGravacaoEletronica() {
-		BigDecimal valorGravacao = BigDecimal.ZERO;
-		if (getTituloRemessa().getConfirmacao() != null) {
-			if (getTituloRemessa().getConfirmacao().getTipoOcorrencia() != null) {
-				String tipoOcorrencia = getTituloRemessa().getConfirmacao().getTipoOcorrencia().trim();
-				if (!tipoOcorrencia.equals(StringUtils.EMPTY) || tipoOcorrencia.equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
-					valorGravacao = getTituloRemessa().getRemessa().getInstituicaoOrigem().getValorConfirmacao();
-				}
-			}
-		}
-		return new LabelValorMonetario<BigDecimal>("valorGravacaoEletronica", valorGravacao);
-	}
-
 	private Label numeroProtocoloCartorio() {
 		String numeroProtocolo = StringUtils.EMPTY;
 		if (getTituloRemessa().getConfirmacao() != null) {
@@ -423,10 +486,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			dataProtocolo = DataUtil.localDateToString(getTituloRemessa().getConfirmacao().getDataProtocolo());
 		}
 		return new Label("dataProtocolo", new Model<String>(dataProtocolo));
-	}
-
-	private Label cartorio() {
-		return new Label("cartorio", new Model<String>(getTituloRemessa().getRemessa().getInstituicaoDestino().getNomeFantasia().toUpperCase()));
 	}
 
 	private Label pracaProtesto() {
@@ -488,17 +547,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			valorCustaCartorio = getTituloRemessa().getRetorno().getValorCustaCartorio();
 		}
 		return new LabelValorMonetario<BigDecimal>("valorCustaCartorio", valorCustaCartorio);
-	}
-
-	public Label valorCustasCartorioDistribuidor() {
-		BigDecimal valorCustasCartorioDistribuidor = BigDecimal.ZERO;
-		if (getTituloRemessa().getConfirmacao() != null) {
-			valorCustasCartorioDistribuidor = getTituloRemessa().getConfirmacao().getValorCustasCartorioDistribuidor();
-		}
-		if (getTituloRemessa().getRetorno() != null) {
-			valorCustasCartorioDistribuidor = getTituloRemessa().getRetorno().getValorCustasCartorioDistribuidor();
-		}
-		return new LabelValorMonetario<BigDecimal>("valorCustasCartorioDistribuidor", valorCustasCartorioDistribuidor);
 	}
 
 	public Label valorDemaisDespesas() {

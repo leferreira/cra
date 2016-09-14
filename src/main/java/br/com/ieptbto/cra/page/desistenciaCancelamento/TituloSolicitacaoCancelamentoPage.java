@@ -16,6 +16,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalTime;
 
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
@@ -70,6 +71,7 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCance
 			protected void onSubmit() {
 				SolicitacaoCancelamento solicitacaoCancelamento = getModelObject();
 				solicitacaoCancelamento.setDataSolicitacao(new Date());
+				solicitacaoCancelamento.setHoraSolicitacao(new LocalTime());
 				solicitacaoCancelamento.setUsuario(getUser());
 
 				try {
