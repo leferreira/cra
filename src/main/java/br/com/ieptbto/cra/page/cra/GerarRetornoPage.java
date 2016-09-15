@@ -27,7 +27,9 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
+import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -49,6 +51,8 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(GerarRetornoPage.class);
 
+	@SpringBean
+	RemessaMediator remessaMediator;
 	@SpringBean
 	RetornoMediator retornoMediator;
 
@@ -150,12 +154,21 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 
 					@Override
 					public void onClick() {
+						Remessa retornoAlterado = remessaMediator.carregarRemessaPorId(retorno);
 
 						try {
-							retornoMediator.removerBatimento(retorno);
-							setResponsePage(new MensagemPage<Remessa>(GerarRetornoPage.class, "GERAR RETORNO", "O arquivo "
-									+ retorno.getArquivo().getNomeArquivo() + " do " + retorno.getInstituicaoOrigem().getNomeFantasia()
-									+ " foi retornado ao batimento!"));
+							TipoBatimento tipoBatimento = retornoAlterado.getInstituicaoDestino().getTipoBatimento();
+							if (TipoBatimento.BATIMENTO_REALIZADO_PELA_CRA.equals(tipoBatimento)) {
+								retornoMediator.retornarArquivoRetornoParaBatimento(retornoAlterado);
+								getRetornosPendentes().remove(retorno);
+								GerarRetornoPage.this.success("O arquivo " + retornoAlterado.getArquivo().getNomeArquivo() + " do "
+										+ retornoAlterado.getInstituicaoOrigem().getNomeFantasia() + " foi retornado ao batimento!");
+							} else if (TipoBatimento.BATIMENTO_REALIZADO_PELA_INSTITUICAO.equals(tipoBatimento)) {
+								retornoMediator.retornarArquivoRetornoParaAguardandoLiberacao(retornoAlterado);
+								getRetornosPendentes().remove(retorno);
+								GerarRetornoPage.this.success("O arquivo " + retornoAlterado.getArquivo().getNomeArquivo() + " do "
+										+ retornoAlterado.getInstituicaoOrigem().getNomeFantasia() + " foi retornado para aguardando liberação!");
+							}
 
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
@@ -182,8 +195,8 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 							File pdf = File.createTempFile("report", ".pdf");
 							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 							IResourceStream resourceStream = new FileResourceStream(pdf);
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
-									+ retorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+									"CRA_RELATORIO_" + retorno.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 						} catch (InfraException ex) {
 							error(ex.getMessage());
 						} catch (Exception e) {

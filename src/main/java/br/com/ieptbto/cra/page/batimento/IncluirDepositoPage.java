@@ -95,7 +95,7 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 				Deposito deposito = getModelObject();
 
 				try {
-					batimentoMediator.atualizarInformacoesDeposito(deposito);
+					batimentoMediator.atualizarDeposito(deposito);
 					setResponsePage(new IncluirDepositoPage("Informações do depósito foram atualizadas com sucesso!", getDeposito(), getDepositos()));
 
 				} catch (InfraException ex) {
@@ -227,7 +227,6 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 							error(ex.getMessage());
 						} catch (Exception e) {
 							error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
-							e.printStackTrace();
 						}
 					}
 				};

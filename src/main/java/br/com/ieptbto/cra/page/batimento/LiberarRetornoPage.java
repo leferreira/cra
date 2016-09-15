@@ -97,8 +97,7 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		this.dataBatimento = dataBatimento;
 		this.instituicao = instituicao;
 		this.dataComoDataLimite = dataComoDataLimite;
-		this.arquivosAguardandoLiberacao =
-				retornoMediator.buscarRetornosAguardandoLiberacao(instituicao, dataBatimento, dataComoDataLimite);
+		this.arquivosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao(instituicao, dataBatimento, dataComoDataLimite);
 		this.totalNaoSelecionados = retornoMediator.buscarSomaValorTitulosPagosRemessas(instituicao, dataBatimento, dataComoDataLimite);
 		adicionarComponentes();
 	}
@@ -137,11 +136,11 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 					setResponsePage(new LiberarRetornoPage(dataBatimento, instituicao, dataComoDataLimite));
 
 				} catch (InfraException ex) {
+					logger.info(ex.getMessage(), ex);
 					error(ex.getMessage());
-					System.out.println(ex.getMessage() + ex.getCause());
 				} catch (Exception ex) {
-					error("Não foi possível buscar os arquivos para serem liberados!");
-					System.out.println(ex.getMessage() + ex.getCause());
+					logger.info(ex.getMessage(), ex);
+					error("Não foi possível buscar os arquivos de retorno para serem liberados! Favor entrar em contato com a CRA...");
 				}
 			}
 		};
@@ -173,8 +172,7 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 
 	private TextField<String> campoDataBatimento() {
 		if (dataBatimento != null) {
-			return campoDataBatimento =
-					new TextField<String>("dataBatimento", new Model<String>(DataUtil.localDateToString(dataBatimento)));
+			return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>(DataUtil.localDateToString(dataBatimento)));
 		}
 		return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>());
 	}
@@ -227,7 +225,7 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 					error(e.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar o batimento! Entre em contato com a CRA.");
+					error("Não foi possível confirmar a liberação dos arquivos de retorno! Favor entrar em contato com a CRA...");
 				}
 			}
 		};
@@ -332,16 +330,16 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 					public void onClick() {
 
 						try {
-							retornoMediator.removerBatimento(retorno);
-							getArquivosAguardandoLiberacao().remove(retorno);
-							info("O arquivo foi removido com sucesso e voltou ao batimento!");
+							Remessa retornoAlterado = retornoMediator.retornarArquivoRetornoParaBatimento(retorno);
+							getArquivosAguardandoLiberacao().remove(retornoAlterado);
+							LiberarRetornoPage.this.success("O(s) depósitos vínculados foram cancelados e o arquivo retornou ao batimento!");
 
 						} catch (InfraException ex) {
+							logger.error(ex.getMessage(), ex);
 							getFeedbackPanel().error(ex.getMessage());
-							System.out.println(ex.getMessage() + ex.getCause());
 						} catch (Exception ex) {
-							getFeedbackPanel().error("Não foi possível cancelar o batimento do arquivo de retorno selecionado!");
-							System.out.println(ex.getMessage() + ex.getCause());
+							logger.error(ex.getMessage(), ex);
+							getFeedbackPanel().error("Não foi possível retornar o arquivo de retorno o batimento! Favor entrar em contato com a CRA...");
 						}
 					}
 				};
@@ -366,8 +364,8 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 						} catch (InfraException ex) {
 							error(ex.getMessage());
 						} catch (Exception e) {
-							error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
-							e.printStackTrace();
+							logger.error(e.getMessage(), e);
+							error("Não foi possível gerar o relatório do arquivo ! Favor entrar em contato com a CRA...");
 						}
 					}
 				};

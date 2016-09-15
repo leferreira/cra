@@ -34,6 +34,7 @@ import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
+import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.SituacaoBatimentoRetorno;
@@ -46,6 +47,7 @@ import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
+import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -65,6 +67,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	/***/
 	private static final long serialVersionUID = 1L;
 
+	@SpringBean
+	private TituloFiliadoMediator tituloFiliadoMediator;
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
 	@SpringBean
@@ -102,6 +106,15 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private void carregarArquivosOcorrencias() {
 		TituloRemessa titulo = getTituloRemessa();
 		ArquivoOcorrenciaBean novaOcorrencia = null;
+
+		if (new Integer(titulo.getCodigoPortador()) > 799) {
+			TituloFiliado tituloFiliado = tituloFiliadoMediator.buscarTituloFiliadoProcessadoNaCra(titulo.getNossoNumero(), titulo.getNumeroTitulo());
+			if (tituloFiliado != null) {
+				novaOcorrencia = new ArquivoOcorrenciaBean();
+				novaOcorrencia.parseToTituloFiliado(tituloFiliado);
+				getArquivosOcorrencias().add(novaOcorrencia);
+			}
+		}
 
 		novaOcorrencia = new ArquivoOcorrenciaBean();
 		if (titulo.getRemessa() != null) {
@@ -205,6 +218,29 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			@Override
 			protected void populateItem(ListItem<ArquivoOcorrenciaBean> item) {
 				final ArquivoOcorrenciaBean arquivoOcorrenciaBean = item.getModelObject();
+
+				if (arquivoOcorrenciaBean.getTituloFiliado() != null) {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-success"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-edit")));
+					item.add(divIcon);
+
+					Link<Remessa> link = new Link<Remessa>("link") {
+
+						/***/
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public void onClick() {
+						}
+					};
+					link.add(new Label("conteudoLink", ""));
+					link.setOutputMarkupId(true);
+					link.setEnabled(false);
+					item.add(link);
+					item.add(new Label("acao", arquivoOcorrenciaBean.getMensagem()));
+					item.add(new Label("mensagem", "").setVisible(false));
+				}
 
 				if (arquivoOcorrenciaBean.getRemessa() != null) {
 					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");

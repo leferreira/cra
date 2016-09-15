@@ -74,11 +74,13 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCance
 				solicitacaoCancelamento.setHoraSolicitacao(new LocalTime());
 				solicitacaoCancelamento.setUsuario(getUser());
 
+				boolean cancelamentoPorIrregularidade = false;
 				try {
 					if (dropDownMotivoCancelamento.getModelObject() == null) {
 						solicitacaoCancelamento.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
 					} else {
 						CodigoIrregularidade codigoIrregularidade = dropDownMotivoCancelamento.getModelObject();
+						cancelamentoPorIrregularidade = true;
 						if (codigoIrregularidade == CodigoIrregularidade.IRREGULARIDADE_0) {
 							solicitacaoCancelamento.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
 						} else {
@@ -87,14 +89,17 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCance
 						}
 					}
 					cancelamentoProtestoMediator.salvarSolicitacaoCancelamento(solicitacaoCancelamento);
-					success("A Solicitação de Cancelamento foi enviada com sucesso!");
+					success("A solicitação de cancelamento foi enviada com sucesso! O IEPTB-TO pede um prazo de até <span class=\"alert-link\">48 horas</span> para ser processado em cartório.");
+					if (!cancelamentoPorIrregularidade) {
+						info("O devedor deverá comparecer em cartório para <span class=\"alert-link\">quitação das custas</span>. Somente após o pagamento, o título será cancelado!");
+					}
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					getFeedbackPanel().error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível enviar a solicitação de cancelamento ! \n Entre em contato com o IEPTB ! ");
+					error("Não foi possível enviar a solicitação de cancelamento ! Favor entrar em contato com o IEPTB...");
 				}
 			}
 		};
