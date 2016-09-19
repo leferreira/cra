@@ -6,6 +6,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
+import br.com.ieptbto.cra.bean.ArquivoFormBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -21,10 +22,10 @@ public class RelatorioArquivosPage extends BasePage<Arquivo> {
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	private RelatorioArquivosFormBean relatorioArquivosBean;
+	private ArquivoFormBean relatorioArquivosBean;
 
 	public RelatorioArquivosPage() {
-		this.relatorioArquivosBean = new RelatorioArquivosFormBean();
+		this.relatorioArquivosBean = new ArquivoFormBean();
 		adicionarComponentes();
 	}
 
@@ -35,9 +36,9 @@ public class RelatorioArquivosPage extends BasePage<Arquivo> {
 	}
 
 	private void carregarFormularioArquivoCartorio() {
-		RelatorioArquivosForm form = new RelatorioArquivosForm("form", new CompoundPropertyModel<RelatorioArquivosFormBean>(relatorioArquivosBean));
+		RelatorioArquivosForm form = new RelatorioArquivosForm("form", new CompoundPropertyModel<ArquivoFormBean>(relatorioArquivosBean));
 		form.add(new RelatorioArquivosInputPanel("relatorioArquivosInputPanel",
-				new CompoundPropertyModel<RelatorioArquivosFormBean>(relatorioArquivosBean)));
+				new CompoundPropertyModel<ArquivoFormBean>(relatorioArquivosBean)));
 		add(form);
 	}
 

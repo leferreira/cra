@@ -10,6 +10,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.bean.RelatorioFormBean;
 import br.com.ieptbto.cra.enumeration.TipoExportacaoRelatorio;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.page.base.BaseForm;
@@ -18,7 +19,7 @@ import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
-public class RelatorioTitulosForm extends BaseForm<RelatorioTitulosFormBean> {
+public class RelatorioTitulosForm extends BaseForm<RelatorioFormBean> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -27,14 +28,14 @@ public class RelatorioTitulosForm extends BaseForm<RelatorioTitulosFormBean> {
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 
-	public RelatorioTitulosForm(String id, IModel<RelatorioTitulosFormBean> model, FileUploadField fileUploadField) {
+	public RelatorioTitulosForm(String id, IModel<RelatorioFormBean> model, FileUploadField fileUploadField) {
 		super(id, model);
 		this.fileUploadField = fileUploadField;
 	}
 
 	@Override
 	protected void onSubmit() {
-		RelatorioTitulosFormBean bean = getModelObject();
+		RelatorioFormBean bean = getModelObject();
 
 		try {
 			if (bean.getBancoConvenio() == null && bean.getCartorio() == null && fileUploadField.getFileUpload() == null

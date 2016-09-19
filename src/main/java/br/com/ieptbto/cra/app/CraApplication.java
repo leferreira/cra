@@ -22,11 +22,10 @@ import br.com.ieptbto.cra.page.administracao.IncluirTaxaCraPage;
 import br.com.ieptbto.cra.page.administracao.ListaRemoverArquivoPage;
 import br.com.ieptbto.cra.page.administracao.RemoverArquivoPage;
 import br.com.ieptbto.cra.page.administracao.WebServiceConfiguracaoPage;
-import br.com.ieptbto.cra.page.arquivo.BuscarArquivoCraInstituicaoPage;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivoInstituicaoPage;
-import br.com.ieptbto.cra.page.arquivo.ListaArquivoPage;
+import br.com.ieptbto.cra.page.arquivo.ListaArquivoCartorioPage;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.HomePage;
@@ -216,8 +215,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("CentralProtestosCartorio", CentralProtestosCartorioPage.class);
 
 		mountPage("BuscarArquivo", BuscarArquivoPage.class);
-		mountPage("BuscarArquivoInstituicao", BuscarArquivoCraInstituicaoPage.class);
-		mountPage("ListaArquivo", ListaArquivoPage.class);
+		mountPage("ListaArquivo", ListaArquivoCartorioPage.class);
 		mountPage("TitulosArquivo", TitulosArquivoPage.class);
 
 		mountPage("ListaArquivoInstituicao", ListaArquivoInstituicaoPage.class);

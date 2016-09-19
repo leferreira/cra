@@ -2,18 +2,19 @@ package br.com.ieptbto.cra.page.relatorio;
 
 import org.apache.wicket.model.IModel;
 
+import br.com.ieptbto.cra.bean.ArquivoFormBean;
 import br.com.ieptbto.cra.page.base.BaseForm;
 
 /**
  * @author Thasso Araújo
  *
  */
-public class RelatorioArquivosForm extends BaseForm<RelatorioArquivosFormBean> {
+public class RelatorioArquivosForm extends BaseForm<ArquivoFormBean> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	public RelatorioArquivosForm(String id, IModel<RelatorioArquivosFormBean> model) {
+	public RelatorioArquivosForm(String id, IModel<ArquivoFormBean> model) {
 		super(id, model);
 
 	}

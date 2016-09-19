@@ -52,6 +52,13 @@
 		    	$('#showModal').click();
 		    });
 	    } );
+	    $(document).ready(function(){
+	        $(".codigoBarra").keydown(function(e){
+	            if(e.which==17 || e.which==74){
+	                e.preventDefault(); 
+	            }
+	        })
+	    });
 	    $.fn.bootstrapSwitch.defaults.size = 'small'; 
 	    $.fn.bootstrapSwitch.defaults.onColor = 'success';
 	    $(".switch").bootstrapSwitch();	

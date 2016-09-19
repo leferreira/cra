@@ -16,6 +16,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.bean.ArquivoFormBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
@@ -33,7 +34,7 @@ public class RelatorioArquivosInputPanel extends Panel {
 	private List<Instituicao> listaInstituicoes;
 	private DropDownChoice<Instituicao> comboInstituicao;
 
-	public RelatorioArquivosInputPanel(String id, IModel<RelatorioArquivosFormBean> model) {
+	public RelatorioArquivosInputPanel(String id, IModel<ArquivoFormBean> model) {
 		super(id, model);
 
 		adicionarCampos();

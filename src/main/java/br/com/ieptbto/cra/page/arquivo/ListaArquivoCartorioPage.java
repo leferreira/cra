@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.page.arquivo;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,17 +13,18 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.bean.ArquivoFormBean;
 import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.enumeration.StatusRemessa;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
@@ -40,25 +40,27 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Thasso Araújo
  *
  */
-public class ListaArquivoPage extends BasePage<Arquivo> {
+public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	DownloadMediator downloadMediator;
+	private DownloadMediator downloadMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 
+	private Usuario usuario;
 	private Arquivo arquivo;
-	private List<Remessa> remessas;
+	private ArquivoFormBean arquivoFormBean;
 
-	public ListaArquivoPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo,
-			ArrayList<StatusRemessa> situacoes) {
-		this.arquivo = arquivo;
-		this.remessas = remessaMediator.buscarRemessas(arquivo, municipio, dataInicio, dataFim, tiposArquivo, getUser(), situacoes);
+	public ListaArquivoCartorioPage(ArquivoFormBean arquivoFormBean, Usuario usuario) {
+		this.arquivo = new Arquivo();
+		this.arquivoFormBean = arquivoFormBean;
+		this.usuario = getUser();
+
 		adicionarComponentes();
 	}
 
@@ -68,7 +70,7 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 	}
 
 	private void listaArquivos() {
-		add(new ListView<Remessa>("dataTableRemessa", getRemessas()) {
+		add(new ListView<Remessa>("dataTableRemessa", buscarArquivos()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -131,8 +133,8 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
-							e.printStackTrace();
-							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+							logger.info(e.getMessage(), e);
+							getFeedbackPanel().error("Não foi possível fazer o download do arquivo ! Favor entrar em contato com a CRA...");
 						}
 					}
 				};
@@ -157,7 +159,8 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
-							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+							getFeedbackPanel().error("Não foi possível baixar o arquivo ! Favor entrar em contato com a CRA...");
+							logger.info(e.getMessage(), e);
 						}
 					}
 				};
@@ -188,10 +191,10 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
 									"CRA_RELATORIO_" + remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 						} catch (InfraException ex) {
-							error(ex.getMessage());
+							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
-							error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
-							e.printStackTrace();
+							getFeedbackPanel().error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+							logger.info(e.getMessage(), e);
 						}
 					}
 				};
@@ -199,8 +202,32 @@ public class ListaArquivoPage extends BasePage<Arquivo> {
 		});
 	}
 
-	public List<Remessa> getRemessas() {
-		return remessas;
+	public IModel<List<Remessa>> buscarArquivos() {
+		return new LoadableDetachableModel<List<Remessa>>() {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected List<Remessa> load() {
+				ArquivoFormBean bean = getArquivoFormBean();
+				LocalDate dataInicio = null;
+				LocalDate dataFim = null;
+
+				if (bean.getDataInicio() != null) {
+					dataInicio = new LocalDate(bean.getDataInicio());
+				}
+				if (bean.getDataFim() != null) {
+					dataFim = new LocalDate(bean.getDataFim());
+				}
+				return remessaMediator.buscarRemessas(usuario, bean.getNomeArquivo(), dataInicio, dataFim, bean.getTipoInstituicao(), bean.getBancoConvenio(),
+						bean.getCartorio(), bean.getTiposArquivos(), bean.getSituacoesArquivos());
+			}
+		};
+	}
+
+	public ArquivoFormBean getArquivoFormBean() {
+		return arquivoFormBean;
 	}
 
 	@Override

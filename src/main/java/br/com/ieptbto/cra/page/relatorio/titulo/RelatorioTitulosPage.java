@@ -10,6 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 
+import br.com.ieptbto.cra.bean.RelatorioFormBean;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -40,11 +41,11 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 	}
 
 	private void carregarFormulario() {
-		RelatorioTitulosFormBean relatorioTitulosBean = new RelatorioTitulosFormBean();
+		RelatorioFormBean relatorioTitulosBean = new RelatorioFormBean();
 		RelatorioTitulosForm form =
-				new RelatorioTitulosForm("form", new CompoundPropertyModel<RelatorioTitulosFormBean>(relatorioTitulosBean), fileUploadField);
+				new RelatorioTitulosForm("form", new CompoundPropertyModel<RelatorioFormBean>(relatorioTitulosBean), fileUploadField);
 		form.add(new RelatorioTitulosInputPanel("relatorioTitulosInputPanel",
-				new CompoundPropertyModel<RelatorioTitulosFormBean>(relatorioTitulosBean), fileUploadField));
+				new CompoundPropertyModel<RelatorioFormBean>(relatorioTitulosBean), fileUploadField));
 		add(form);
 	}
 
