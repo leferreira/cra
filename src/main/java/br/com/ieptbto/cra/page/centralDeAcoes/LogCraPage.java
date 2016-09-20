@@ -76,7 +76,7 @@ public class LogCraPage extends BasePage<LogCra> {
 
 	private TextField<String> textFieldDataHora() {
 		TextField<String> textField = new TextField<String>("dataHora",
-				new Model<String>(DataUtil.localDateToString(logCra.getData()) + " ás " + DataUtil.localTimeToString(logCra.getHora())));
+				new Model<String>(DataUtil.localDateToString(logCra.getData()) + " ás " + DataUtil.localTimeToString("HH:mm:ss", logCra.getHora())));
 		textField.setEnabled(false);
 		return textField;
 	}

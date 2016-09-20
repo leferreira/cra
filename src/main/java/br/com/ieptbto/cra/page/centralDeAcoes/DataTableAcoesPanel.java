@@ -47,7 +47,7 @@ public class DataTableAcoesPanel extends Panel {
 			@Override
 			public void populateItem(Item<ICellPopulator<LogCra>> item, String id, IModel<LogCra> model) {
 				item.add(new Label(id, DataUtil.localDateToString(model.getObject().getData()) + " ás "
-						+ DataUtil.localTimeToString("hh:mm:ss", model.getObject().getHora())));
+						+ DataUtil.localTimeToString("HH:mm:ss", model.getObject().getHora())));
 			}
 		});
 		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("AÇÃO"), "acao.label"));

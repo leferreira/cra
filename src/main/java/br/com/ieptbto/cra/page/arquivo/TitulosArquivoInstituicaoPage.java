@@ -2,11 +2,8 @@ package br.com.ieptbto.cra.page.arquivo;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.math.BigDecimal;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -16,24 +13,18 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Confirmacao;
-import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.Retorno;
-import br.com.ieptbto.cra.entidade.Titulo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
-import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -53,145 +44,132 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	TituloMediator tituloMediator;
+	private ArquivoMediator arquivoMediator;
 	@SpringBean
-	ArquivoMediator arquivoMediator;
-	@SpringBean
-	DownloadMediator downloadMediator;
+	private DownloadMediator downloadMediator;
 
 	private Arquivo arquivo;
-	private List<Titulo> titulos;
 
 	public TitulosArquivoInstituicaoPage(Arquivo arquivo) {
 		this.arquivo = arquivoMediator.carregarArquivoPorId(arquivo);
-		this.titulos = tituloMediator.carregarTitulosGenerico(arquivo);
 
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		add(nomeArquivo());
-		add(tipoArquivo());
-		add(instituicaoEnvio());
-		add(instituicaoDestino());
-		add(dataEnvio());
-		add(usuarioEnvio());
+		add(labelNomeArquivo());
+		add(labelTipoArquivo());
+		add(labelInstituicaoEnvio());
+		add(labelInstituicaoDestino());
+		add(labelDataEnvio());
+		add(labelUsuarioEnvio());
 		add(carregarListaTitulos());
 		add(botaoGerarRelatorio());
-		add(downloadArquivoTXT(getArquivo()));
+		add(downloadArquivoTXT(arquivo));
 	}
 
-	private ListView<Titulo> carregarListaTitulos() {
-		return new ListView<Titulo>("listViewTituloArquivo", getTitulos()) {
+	private ListView<TituloRemessa> carregarListaTitulos() {
+		return new ListView<TituloRemessa>("listViewTituloArquivo", buscarTituloArquivo()) {
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<Titulo> item) {
-				final Titulo titulo = item.getModelObject();
-				TituloRemessa tituloRemessa = null;
-
-				if (TituloRemessa.class.isInstance(titulo)) {
-					tituloRemessa = TituloRemessa.class.cast(titulo);
-				} else if (Confirmacao.class.isInstance(titulo)) {
-					tituloRemessa = Confirmacao.class.cast(titulo).getTitulo();
-				} else if (Retorno.class.isInstance(titulo)) {
-					tituloRemessa = Retorno.class.cast(titulo).getTitulo();
-				}
-
-				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", titulo.getSaldoTitulo()));
-				item.add(new Label("nossoNumero", titulo.getNossoNumero()));
-				item.add(new Label("pracaProtesto", tituloRemessa.getPracaProtesto()));
-				item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
-				if (tituloRemessa.getConfirmacao() == null) {
-					item.add(new Label("numeroTitulo", titulo.getNumeroTitulo()));
-					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
-					item.add(new Label("protocolo", StringUtils.EMPTY));
-					item.add(new Label("dataSituacao", StringUtils.EMPTY));
-
-				} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
-					item.add(new Label("numeroTitulo", titulo.getNumeroTitulo()));
-					item.add(new Label("dataConfirmacao",
-							DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
-					item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
-
-				} else if (tituloRemessa.getRetorno() != null) {
-					item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
-					item.add(new Label("dataConfirmacao",
-							DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
-					item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
-				}
-
-				Link<Arquivo> linkArquivoRemessa = new Link<Arquivo>("linkArquivo") {
-
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					public void onClick() {
-						TituloRemessa t = new TituloRemessa();
-						if (TituloRemessa.class.isInstance(titulo)) {
-							t = TituloRemessa.class.cast(titulo);
-						} else if (Confirmacao.class.isInstance(titulo)) {
-							t = Confirmacao.class.cast(titulo).getTitulo();
-						} else if (Retorno.class.isInstance(titulo)) {
-							t = Retorno.class.cast(titulo).getTitulo();
-						}
-						setResponsePage(new TitulosArquivoPage(t.getRemessa()));
-					}
-				};
-				linkArquivoRemessa.add(new Label("nomeRemessa", tituloRemessa.getRemessa().getArquivo().getNomeArquivo()));
-				item.add(linkArquivoRemessa);
-
-				Link<T> linkHistorico = new Link<T>("linkHistorico") {
-
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					public void onClick() {
-						TituloRemessa tituloHistorico = new TituloRemessa();
-						if (T.class.isInstance(titulo)) {
-							tituloHistorico = TituloRemessa.class.cast(titulo);
-						} else if (Confirmacao.class.isInstance(titulo)) {
-							tituloHistorico = Confirmacao.class.cast(titulo).getTitulo();
-						} else if (Retorno.class.isInstance(titulo)) {
-							tituloHistorico = Retorno.class.cast(titulo).getTitulo();
-						}
-						setResponsePage(new HistoricoPage(tituloHistorico));
-					}
-				};
-				if (tituloRemessa.getNomeDevedor().length() > 25) {
-					linkHistorico.add(new Label("nomeDevedor", tituloRemessa.getNomeDevedor().substring(0, 24)));
-				} else {
-					linkHistorico.add(new Label("nomeDevedor", tituloRemessa.getNomeDevedor()));
-				}
-				item.add(linkHistorico);
-
-				Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno") {
-
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					public void onClick() {
-						Remessa retorno = new Remessa();
-						if (TituloRemessa.class.isInstance(titulo)) {
-							retorno = TituloRemessa.class.cast(titulo).getRetorno().getRemessa();
-						} else if (Confirmacao.class.isInstance(titulo)) {
-							retorno = Confirmacao.class.cast(titulo).getTitulo().getRetorno().getRemessa();
-						} else if (Retorno.class.isInstance(titulo)) {
-							retorno = Retorno.class.cast(titulo).getTitulo().getRetorno().getRemessa();
-						}
-						setResponsePage(new TitulosArquivoPage(retorno));
-					}
-				};
-				if (tituloRemessa.getRetorno() != null) {
-					linkRetorno.add(new Label("retorno", tituloRemessa.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
-				} else {
-					linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
-				}
-				item.add(linkRetorno);
+			protected void populateItem(ListItem<TituloRemessa> item) {
+				final TituloRemessa tituloRemessa = item.getModelObject();
+				// item.add(new LabelValorMonetario<BigDecimal>("valorTitulo",
+				// tituloRemessa.getSaldoTitulo()));
+				// item.add(new Label("nossoNumero",
+				// tituloRemessa.getNossoNumero()));
+				// String municipio = tituloRemessa.getPracaProtesto();
+				// if (municipio.length() > 20) {
+				// municipio = municipio.substring(0, 19);
+				// }
+				// item.add(new Label("pracaProtesto",
+				// municipio.toUpperCase()));
+				// if (tituloRemessa.getConfirmacao() == null) {
+				// item.add(new Label("numeroTitulo",
+				// tituloRemessa.getNumeroTitulo()));
+				// item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
+				// item.add(new Label("protocolo", StringUtils.EMPTY));
+				// item.add(new Label("dataSituacao", StringUtils.EMPTY));
+				//
+				// } else if (tituloRemessa.getConfirmacao() != null &&
+				// tituloRemessa.getRetorno() == null) {
+				// item.add(new Label("numeroTitulo",
+				// tituloRemessa.getNumeroTitulo()));
+				// item.add(new Label("dataConfirmacao",
+				// DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().arquivo.getDataEnvio())));
+				// item.add(new Label("protocolo",
+				// tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+				// item.add(new Label("dataSituacao",
+				// DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
+				//
+				// } else if (tituloRemessa.getRetorno() != null) {
+				// item.add(new Label("numeroTitulo",
+				// tituloRemessa.getNumeroTitulo()));
+				// item.add(new Label("dataConfirmacao",
+				// DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().arquivo.getDataEnvio())));
+				// item.add(new Label("protocolo",
+				// tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+				// item.add(new Label("dataSituacao",
+				// DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
+				// }
+				// item.add(new Label("situacaoTitulo",
+				// tituloRemessa.getSituacaoTitulo()));
+				//
+				// Link<Arquivo> linkArquivoRemessa = new
+				// Link<Arquivo>("linkArquivo") {
+				//
+				// /***/
+				// private static final long serialVersionUID = 1L;
+				//
+				// public void onClick() {
+				// setResponsePage(new
+				// TitulosArquivoPage(tituloRemessa.getRemessa()));
+				// }
+				// };
+				// linkArquivoRemessa.add(new Label("nomeRemessa",
+				// tituloRemessa.getRemessa().arquivo.getNomeArquivo()));
+				// item.add(linkArquivoRemessa);
+				//
+				// Link<TituloRemessa> linkHistorico = new
+				// Link<TituloRemessa>("linkHistorico") {
+				//
+				// /***/
+				// private static final long serialVersionUID = 1L;
+				//
+				// public void onClick() {
+				// setResponsePage(new HistoricoPage(tituloRemessa));
+				// }
+				// };
+				// if (tituloRemessa.getNomeDevedor().length() > 25) {
+				// linkHistorico.add(new Label("nomeDevedor",
+				// tituloRemessa.getNomeDevedor().substring(0, 24)));
+				// } else {
+				// linkHistorico.add(new Label("nomeDevedor",
+				// tituloRemessa.getNomeDevedor()));
+				// }
+				// item.add(linkHistorico);
+				//
+				// Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno")
+				// {
+				//
+				// /***/
+				// private static final long serialVersionUID = 1L;
+				//
+				// public void onClick() {
+				// setResponsePage(new
+				// TitulosArquivoPage(tituloRemessa.getRetorno().getRemessa()));
+				// }
+				// };
+				// if (tituloRemessa.getRetorno() != null) {
+				// linkRetorno.add(new Label("retorno",
+				// tituloRemessa.getRetorno().getRemessa().arquivo.getNomeArquivo()));
+				// } else {
+				// linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
+				// }
+				// item.add(linkRetorno);
 			}
 		};
 	}
@@ -206,7 +184,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 			public void onClick() {
 
 				try {
-					JasperPrint jasperPrint = new RelatorioUtil().relatorioArquivoInstiuicao(getArquivo());
+					JasperPrint jasperPrint = new RelatorioUtil().relatorioArquivoInstiuicao(arquivo);
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
@@ -238,40 +216,41 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 		};
 	}
 
-	private Label nomeArquivo() {
-		return new Label("nomeArquivo", getArquivo().getNomeArquivo());
+	private Label labelNomeArquivo() {
+		return new Label("nomeArquivo", arquivo.getNomeArquivo());
 	}
 
-	private Label tipoArquivo() {
-		return new Label("tipo", getArquivo().getTipoArquivo().getTipoArquivo().getLabel());
+	private Label labelTipoArquivo() {
+		return new Label("tipo", arquivo.getTipoArquivo().getTipoArquivo().getLabel());
 	}
 
-	private Label instituicaoEnvio() {
-		return new Label("instituicaoEnvio", getArquivo().getInstituicaoEnvio().getNomeFantasia());
+	private Label labelInstituicaoEnvio() {
+		return new Label("instituicaoEnvio", arquivo.getInstituicaoEnvio().getNomeFantasia());
 	}
 
-	private Label instituicaoDestino() {
-		return new Label("instituicaoDestino", getArquivo().getInstituicaoRecebe().getNomeFantasia());
+	private Label labelInstituicaoDestino() {
+		return new Label("instituicaoDestino", arquivo.getInstituicaoRecebe().getNomeFantasia());
 	}
 
-	private Label usuarioEnvio() {
-		return new Label("usuario", getArquivo().getUsuarioEnvio().getNome());
+	private Label labelUsuarioEnvio() {
+		return new Label("usuario", arquivo.getUsuarioEnvio().getNome());
 	}
 
-	private Label dataEnvio() {
-		return new Label("dataEnvio", DataUtil.localDateToString(getArquivo().getDataEnvio()));
+	private Label labelDataEnvio() {
+		return new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio()));
 	}
 
-	public Arquivo getArquivo() {
-		return arquivo;
-	}
+	public IModel<List<TituloRemessa>> buscarTituloArquivo() {
+		return new LoadableDetachableModel<List<TituloRemessa>>() {
 
-	public void setArquivo(Arquivo arquivo) {
-		this.arquivo = arquivo;
-	}
+			/***/
+			private static final long serialVersionUID = 1L;
 
-	private List<Titulo> getTitulos() {
-		return titulos;
+			@Override
+			protected List<TituloRemessa> load() {
+				return null;
+			}
+		};
 	}
 
 	@Override
