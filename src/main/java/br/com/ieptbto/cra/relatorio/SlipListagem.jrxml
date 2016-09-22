@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SlipListagem2" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1ff80ed7-b7e9-46ae-b4b8-a3d3b46d68ee">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="2.593742460100003"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="4.177248169415659"/>
+	<property name="ireport.x" value="448"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="CODIGO_PORTADOR" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -11,7 +11,7 @@
 	<parameter name="TOTAL_ENVELOPES" class="java.lang.Long"/>
 	<parameter name="TOTAL_INSTRUMENTOS" class="java.lang.Long"/>
 	<queryString>
-		<![CDATA[SELECT row_number() over ( order by et.banco, et.praca_protesto, et.numero_protocolo_cartorio ASC ) as linha, et.banco, et.agencia_destino, et.municipio_agencia_destino, env.codigo_cra, et.praca_protesto, et.numero_protocolo_cartorio, et.nosso_numero, et.nome_sacador_vendedor
+		<![CDATA[SELECT row_number() over ( order by et.banco, et.praca_protesto, et.numero_protocolo_cartorio ASC ) as linha, et.banco, et.agencia_destino, et.municipio_agencia_destino, env.CODIGO_DE_BARRA, et.praca_protesto, et.numero_protocolo_cartorio, et.nosso_numero, et.nome_sacador_vendedor
 FROM tb_etiqueta_slip AS et
 INNER JOIN tb_envelope_slip AS env ON et.envelope_slip_id=env.id_envelope_slip
 INNER JOIN tb_instrumento_protesto AS ins ON et.instrumento_protesto_id=ins.id_instrumento_protesto
@@ -24,7 +24,7 @@ ORDER BY et.banco, et.praca_protesto, et.numero_protocolo_cartorio ASC]]>
 	<field name="banco" class="java.lang.String"/>
 	<field name="agencia_destino" class="java.lang.String"/>
 	<field name="municipio_agencia_destino" class="java.lang.String"/>
-	<field name="codigo_cra" class="java.lang.String"/>
+	<field name="codigo_de_barra" class="java.lang.String"/>
 	<field name="praca_protesto" class="java.lang.String"/>
 	<field name="numero_protocolo_cartorio" class="java.lang.String"/>
 	<field name="nosso_numero" class="java.lang.String"/>
@@ -120,7 +120,7 @@ ORDER BY et.banco, et.praca_protesto, et.numero_protocolo_cartorio ASC]]>
 				<text><![CDATA[PROTOCOLO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="224" y="1" width="115" height="14" uuid="0ba9b9bc-4c8f-45ea-88f3-746d76b97666"/>
+				<reportElement x="222" y="1" width="115" height="14" uuid="0ba9b9bc-4c8f-45ea-88f3-746d76b97666"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
@@ -192,13 +192,6 @@ ORDER BY et.banco, et.praca_protesto, et.numero_protocolo_cartorio ASC]]>
 				<textFieldExpression><![CDATA[$F{nosso_numero}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="224" y="1" width="115" height="15" uuid="b58a9d19-1985-491a-b890-285c17930146"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{codigo_cra}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="469" y="1" width="150" height="15" uuid="1baebdbe-5907-42ce-b6ec-f888d05592be"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
@@ -211,6 +204,13 @@ ORDER BY et.banco, et.praca_protesto, et.numero_protocolo_cartorio ASC]]>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{linha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="222" y="1" width="115" height="15" uuid="fd06e523-06ec-4953-b777-4b80530f1c33"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigo_de_barra}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

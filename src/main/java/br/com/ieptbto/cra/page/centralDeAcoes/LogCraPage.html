@@ -11,13 +11,31 @@
 		</span>   
 	</h4>
 		<div class="row">
-			<div class="col-lg-8">
+			<div class="col-lg-3">
 				<div class="form-group">
 				  <label>Ação</label>
 				  <input wicket:id="acao" class="form-control">
 				</div>
 			</div>
-			<div class="col-lg-4">
+			<div class="col-lg-3">
+				<div class="form-group">
+				  <label>Instituição</label>
+				  <input wicket:id="instituicao" class="form-control">
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="form-group">
+				  <label>Nome do Usuário</label>
+				  <input wicket:id="usuario" class="form-control">
+				</div>
+			</div>
+			<div class="col-lg-2">
+				<div class="form-group">
+				  <label>Data e Hora</label>
+				  <input wicket:id="dataHora" class="form-control">
+				</div>
+			</div>
+			<div class="col-lg-1">
 				<div class="form-group">
 				  <label>Ocorrência</label>
 				  <div wicket:id="divTipoOcorrencia" class="text-center">
@@ -27,31 +45,11 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-4">
-				<div class="form-group">
-				  <label>Instituição</label>
-				  <input wicket:id="instituicao" class="form-control">
-				</div>
-			</div>
-			<div class="col-lg-4">
-				<div class="form-group">
-				  <label>Nome do Usuário</label>
-				  <input wicket:id="usuario" class="form-control">
-				</div>
-			</div>
-			<div class="col-lg-4">
-				<div class="form-group">
-				  <label>Data e Hora</label>
-				  <input wicket:id="dataHora" class="form-control">
-				</div>
-			</div>
-		</div>
-		<div class="row">
 			<div class="col-lg-8">
 				<div class="form-group">
-				  <label>Descrição</label>
-				  <textarea wicket:id="descricao" class="form-control" rows="2" cols="5">
-				  </textarea>
+				  <label>Descrição</label><br>
+				  <span wicket:id="descricao" class="destaque">
+				  </span>
 				</div>
 			</div>
 		</div>
@@ -59,7 +57,7 @@
 			<div class="col-lg-12">
 				<div class="form-group">
 				  <label>Exceção</label>
-				  <textarea wicket:id="exception" class="form-control" rows="10" cols="10">
+				  <textarea wicket:id="exception" class="form-control" rows="15" cols="10">
 				  </textarea>
 				</div>
 			</div>

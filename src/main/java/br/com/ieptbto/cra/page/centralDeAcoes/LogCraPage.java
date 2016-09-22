@@ -55,14 +55,15 @@ public class LogCraPage extends BasePage<LogCra> {
 		return textField;
 	}
 
-	private TextArea<String> textAreaDescricao() {
+	private Label textAreaDescricao() {
 		String descricao = logCra.getDescricao();
 		if (logCra.getDescricao() == null) {
 			descricao = "";
 		}
-		TextArea<String> textArea = new TextArea<String>("descricao", new Model<String>(descricao));
-		textArea.setEnabled(false);
-		return textArea;
+		Label Label = new Label("descricao", new Model<String>(descricao));
+		Label.setEnabled(false);
+		Label.setEscapeModelStrings(false);
+		return Label;
 	}
 
 	private WebMarkupContainer textFieldTipoLog() {

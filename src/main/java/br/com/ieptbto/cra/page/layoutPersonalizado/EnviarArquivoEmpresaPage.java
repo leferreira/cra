@@ -72,7 +72,7 @@ public class EnviarArquivoEmpresaPage extends BasePage<Arquivo> {
 					error(ex.getMessage());
 				} catch (Exception ex) {
 					error("Não foi possível procesar o arquivo enviado. Por favor entre em contato com a CRA.");
-					logger.error(ex.getMessage());
+					logger.error(ex.getMessage(), ex);
 				}
 			}
 		};

@@ -140,7 +140,16 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				final LogCra log = item.getModelObject();
 				item.add(new Label("instituicao", log.getInstituicao()));
 				item.add(new Label("tipoLog", log.getTipoLog().getLabel()).setOutputMarkupId(true).setMarkupId(log.getTipoLog().getIdHtml()));
-				item.add(new Label("descricao", log.getDescricao()));
+
+				if (log.getDescricao() != null) {
+					if (log.getDescricao().length() > 80) {
+						item.add(new Label("descricao", log.getDescricao().substring(0, 79)).setEscapeModelStrings(false));
+					} else {
+						item.add(new Label("descricao", log.getDescricao()).setEscapeModelStrings(false));
+					}
+				} else {
+					item.add(new Label("descricao", StringUtils.EMPTY));
+				}
 				item.add(new Link<LogCra>("descricaoGeral") {
 
 					/***/
@@ -316,10 +325,10 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				};
 				linkArquivo.add(new Label("desistencia", cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) || getUsuario()
-						.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator
-							.buscaMunicipioPorCodigoIBGE(cancelamento.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)
+						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(cancelamento.getCabecalhoCartorio().getCodigoMunicipio())
+							.getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = cancelamento.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
@@ -340,8 +349,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						File file = downloadMediator.baixarCancelamentoTXT(getUsuario(), remessa);
 						IResourceStream resourceStream = new FileResourceStream(file);
 
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
-								remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+								new ResourceStreamRequestHandler(resourceStream, remessa.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
 					}
 				};
 			}
@@ -369,16 +378,16 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				};
 				linkArquivo.add(new Label("desistencia", dp.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) || getUsuario()
-						.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(dp.getCabecalhoCartorio().getCodigoMunicipio())
-							.getNomeMunicipio().toUpperCase()));
+				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)
+						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					item.add(new Label("banco",
+							municipioMediator.buscaMunicipioPorCodigoIBGE(dp.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = dp.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
-				item.add(new Label("dias", PeriodoDataUtil
-						.diferencaDeDiasEntreData(dp.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
+				item.add(new Label("dias",
+						PeriodoDataUtil.diferencaDeDiasEntreData(dp.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio().toDate(), new Date())));
 				item.add(downloadArquivoTXT(dp));
 			}
 
@@ -421,16 +430,16 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				};
 				linkArquivo.add(new Label("desistencia", ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
-				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA) || getUsuario()
-						.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(ac.getCabecalhoCartorio().getCodigoMunicipio())
-							.getNomeMunicipio().toUpperCase()));
+				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)
+						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					item.add(new Label("banco",
+							municipioMediator.buscaMunicipioPorCodigoIBGE(ac.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = ac.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia();
 					item.add(new Label("banco", nomeFantasia.toUpperCase()));
 				}
-				item.add(new Label("dias", PeriodoDataUtil
-						.diferencaDeDiasEntreData(ac.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio().toDate(), new Date())));
+				item.add(new Label("dias",
+						PeriodoDataUtil.diferencaDeDiasEntreData(ac.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio().toDate(), new Date())));
 				item.add(downloadArquivoTXT(ac));
 			}
 
@@ -444,8 +453,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					public void onClick() {
 						File file = downloadMediator.baixarAutorizacaoTXT(getUsuario(), ac);
 						IResourceStream resourceStream = new FileResourceStream(file);
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
-								ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(
+								new ResourceStreamRequestHandler(resourceStream, ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 					}
 				};
 			}

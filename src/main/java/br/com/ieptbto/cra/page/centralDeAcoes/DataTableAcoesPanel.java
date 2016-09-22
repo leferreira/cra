@@ -58,8 +58,8 @@ public class DataTableAcoesPanel extends Panel {
 
 			@Override
 			public void populateItem(Item<ICellPopulator<LogCra>> item, String id, IModel<LogCra> rowModel) {
-				if (rowModel.getObject().getDescricao().length() > 90) {
-					item.add(new Label(id, rowModel.getObject().getDescricao().substring(0, 89)));
+				if (rowModel.getObject().getDescricao().length() > 80) {
+					item.add(new Label(id, rowModel.getObject().getDescricao().substring(0, 79)).setEscapeModelStrings(false));
 				} else {
 					item.add(new Label(id, rowModel.getObject().getDescricao()));
 				}
