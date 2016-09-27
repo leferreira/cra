@@ -105,7 +105,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					error(ex.getMessage());
 				} catch (Exception ex) {
 					logger.error(ex.getMessage(), ex);
-					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
+					error("Não foi possível enviar o arquivo ! Favor entrar em contato com a CRA...");
 				}
 			}
 
