@@ -1,11 +1,13 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -18,7 +20,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.bean.ArquivoOcorrenciaBean;
@@ -39,6 +44,7 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.SituacaoBatimentoRetorno;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.BatimentoMediator;
@@ -461,6 +467,69 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		add(saldoTitulo());
 		add(valorCustaCartorio());
 		add(valorDemaisDespesas());
+		add(numeroControleDevedor());
+		add(linkAnexos());
+		add(labelAlinea());
+		add(campoAlinea());
+		add(labelDocumentosAnexos());
+	}
+
+	private Component labelAlinea() {
+		Label labelAlinea = new Label("labelAlinea", "ALÍNEA");
+		labelAlinea.setVisible(false);
+		if (getTituloRemessa().getComplementoRegistro() != null) {
+			if (getTituloRemessa().getComplementoRegistro().trim().length() == 2) {
+				labelAlinea.setVisible(true);
+			}
+		}
+		return labelAlinea;
+	}
+
+	private Label campoAlinea() {
+		Label campoAlinea = new Label("campoAlinea", "");
+		campoAlinea.setVisible(false);
+		if (getTituloRemessa().getComplementoRegistro() != null) {
+			if (getTituloRemessa().getComplementoRegistro().trim().length() == 2) {
+				campoAlinea = new Label("campoAlinea", getTituloRemessa().getComplementoRegistro().trim());
+				campoAlinea.setVisible(true);
+			}
+		}
+		return campoAlinea;
+	}
+
+	private Component labelDocumentosAnexos() {
+		Label labelDocumentos = new Label("labelDocumentosAnexos", "DOCUMENTOS ANEXOS");
+		labelDocumentos.setVisible(false);
+		if (getTituloRemessa().getAnexo() != null) {
+			labelDocumentos.setVisible(true);
+		}
+		return labelDocumentos;
+	}
+
+	private Link<Void> linkAnexos() {
+		Link<Void> linkAnexos = new Link<Void>("linkAnexos") {
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				try {
+					File file = remessaMediator.decodificarAnexoTitulo(getUser(), getTituloRemessa());
+					IResourceStream resourceStream = new FileResourceStream(file);
+
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				} catch (Exception e) {
+					error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
+				}
+
+			}
+		};
+		if (getTituloRemessa().getAnexo() == null) {
+			linkAnexos.setVisible(false);
+		}
+		return linkAnexos;
 	}
 
 	private Label codigoCartorio() {
@@ -597,63 +666,55 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	private Label nomeSacadorVendedor() {
-		Label textField = new Label("nomeSacadorVendedor", new Model<String>(getTituloRemessa().getNomeSacadorVendedor()));
-		return textField;
+		return new Label("nomeSacadorVendedor", new Model<String>(getTituloRemessa().getNomeSacadorVendedor()));
 	}
 
 	private Label documentoSacador() {
-		Label textField = new Label("documentoSacador", new Model<String>(getTituloRemessa().getDocumentoSacador()));
-		return textField;
+		return new Label("documentoSacador", new Model<String>(getTituloRemessa().getDocumentoSacador()));
 	}
 
 	private Label ufSacadorVendedor() {
-		Label textField = new Label("ufSacadorVendedor", new Model<String>(getTituloRemessa().getUfSacadorVendedor()));
-		return textField;
+		return new Label("ufSacadorVendedor", new Model<String>(getTituloRemessa().getUfSacadorVendedor()));
 	}
 
 	private Label cepSacadorVendedor() {
-		Label textField = new Label("cepSacadorVendedor", new Model<String>(getTituloRemessa().getCepSacadorVendedor()));
-		return textField;
+		return new Label("cepSacadorVendedor", new Model<String>(getTituloRemessa().getCepSacadorVendedor()));
 	}
 
 	private Label cidadeSacadorVendedor() {
-		Label textField = new Label("cidadeSacadorVendedor", new Model<String>(getTituloRemessa().getCidadeSacadorVendedor()));
-		return textField;
+		return new Label("cidadeSacadorVendedor", new Model<String>(getTituloRemessa().getCidadeSacadorVendedor()));
 	}
 
 	private Label enderecoSacadorVendedor() {
-		Label textField = new Label("enderecoSacadorVendedor", new Model<String>(getTituloRemessa().getEnderecoSacadorVendedor()));
-		return textField;
+		return new Label("enderecoSacadorVendedor", new Model<String>(getTituloRemessa().getEnderecoSacadorVendedor()));
 	}
 
 	private Label nomeDevedor() {
-		Label textField = new Label("nomeDevedor", new Model<String>(getTituloRemessa().getNomeDevedor()));
-		return textField;
+		return new Label("nomeDevedor", new Model<String>(getTituloRemessa().getNomeDevedor()));
 	}
 
 	private Label documentoDevedor() {
-		Label textField = new Label("documentoDevedor", new Model<String>(getTituloRemessa().getNumeroIdentificacaoDevedor()));
-		return textField;
+		return new Label("documentoDevedor", new Model<String>(getTituloRemessa().getNumeroIdentificacaoDevedor()));
 	}
 
 	private Label ufDevedor() {
-		Label textField = new Label("ufDevedor", new Model<String>(getTituloRemessa().getUfDevedor()));
-		return textField;
+		return new Label("ufDevedor", new Model<String>(getTituloRemessa().getUfDevedor()));
 	}
 
 	private Label cepDevedor() {
-		Label textField = new Label("cepDevedor", new Model<String>(getTituloRemessa().getCepDevedor()));
-		return textField;
+		return new Label("cepDevedor", new Model<String>(getTituloRemessa().getCepDevedor()));
 	}
 
 	private Label cidadeDevedor() {
-		Label textField = new Label("cidadeDevedor", new Model<String>(getTituloRemessa().getCidadeDevedor()));
-		return textField;
+		return new Label("cidadeDevedor", new Model<String>(getTituloRemessa().getCidadeDevedor()));
 	}
 
 	private Label enderecoDevedor() {
-		Label textField = new Label("enderecoDevedor", new Model<String>(getTituloRemessa().getEnderecoDevedor()));
-		return textField;
+		return new Label("enderecoDevedor", new Model<String>(getTituloRemessa().getEnderecoDevedor()));
+	}
+
+	private Label numeroControleDevedor() {
+		return new Label("numeroControleDevedor", new Model<String>(getTituloRemessa().getNumeroControleDevedor().toString()));
 	}
 
 	private TituloRemessa getTituloRemessa() {

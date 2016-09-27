@@ -146,6 +146,9 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 							linkSolicitarCancelamento.setEnabled(false);
 							linkSolicitarCancelamento.add(new Label("nomeAcao", "Enviado".toUpperCase()));
 						}
+					} else {
+						linkSolicitarCancelamento.setEnabled(false);
+						linkSolicitarCancelamento.add(new Label("nomeAcao", "Devolvido".toUpperCase()));
 					}
 					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(titulo.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 					item.add(new Label("protocolo", titulo.getConfirmacao().getNumeroProtocoloCartorio()));

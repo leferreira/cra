@@ -35,7 +35,6 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("rawtypes")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
@@ -74,6 +73,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 			/***/
 			private static final long serialVersionUID = 1L;
 
+			@SuppressWarnings("unused")
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
 				final TituloRemessa tituloRemessa = item.getModelObject();

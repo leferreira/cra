@@ -111,8 +111,8 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 			private void gerarMensagemErros(Arquivo arquivo, List<Exception> erros) {
 				TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(arquivo);
-
-				String mensagemErro =
+				String mensagemErro = null;
+				mensagemErro =
 						"<span class=\"alert-link\">Por favor corriga a(s) ocorrência(s) e(ou) erros encontrado(s) no arquivo e o envie novamente:</span>";
 				mensagemErro = mensagemErro + "<ul>";
 				for (Exception exception : erros) {

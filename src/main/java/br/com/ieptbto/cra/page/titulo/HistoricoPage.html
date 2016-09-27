@@ -11,16 +11,23 @@
 						  <dt>NOSSO N&Uacute;MERO</dt><dd><span class="info-titulo" wicket:id="nossoNumero" style="font-size: 13px;"></span></dd>
 						  <dt>N&Uacute;MERO T&Iacute;TULO</dt><dd><span wicket:id="numeroTitulo"></span></dd>
 						  <dt>APRESENTANTE</dt><dd><span wicket:id="portador"></span></dd>
-						  <br>
+						  <dt></dt><dd></dd>
 						  <dt>AG. CENTRALIZAD.</dt><dd><span wicket:id="agencia"></span></dd>
 						  <dt>AG. CÓDIGO CEDENTE.</dt><dd><span wicket:id="agenciaCodigoCedente"></span></dd>
 						  <dt>ESP&Eacute;CIE</dt><dd><span wicket:id="especieTitulo"></span></dd>
 						  <dt>EMISS&Atilde;O</dt><dd><span wicket:id="dataEmissaoTitulo"></span></dd>
 						  <dt>VENCIMENTO</dt><dd><span wicket:id="dataVencimentoTitulo"></span></dd>
-						  <br>
+						  <dt></dt><dd></dd>
 						  <dt>PRA&Ccedil;A PROTESTO</dt><dd><span wicket:id="pracaProtesto"></span></dd>
 						  <dt>C&Oacute;D. MUNIC&Iacute;PIO</dt><dd><span wicket:id="codigoMunicipio"></span></dd>
 						  <dt>C&Oacute;D. CART&Oacute;RIO</dt><dd><span wicket:id="codigoCartorio"></span></dd>
+						</dl>
+					</fieldset>
+					<h4 class="titulo-top">COMPLEMENTO REGISTRO</h4>
+					<fieldset>
+						<dl class="dl-horizontal">
+							<dt><span wicket:id="labelAlinea"></span></dt><dd><span wicket:id="campoAlinea"></span></dd>
+							<dt><span wicket:id="labelDocumentosAnexos"></span></dt><dd><a wicket:id="linkAnexos" class="link">DOWNLOAD</a></dd>
 						</dl>
 					</fieldset>
 					<h4 class="titulo-top">VALOR DO TÍTULO E CUSTAS</h4>
@@ -47,6 +54,7 @@
 					<h4 class="titulo-top">DADOS DO DEVEDOR</h4>
 					<fieldset>
 		                <dl class="dl-horizontal">
+		               	  <dt>Nº DEVEDOR</dt><dd><span wicket:id="numeroControleDevedor"></span></dd> 
 						  <dt>NOME DEVEDOR</dt><dd><span wicket:id="nomeDevedor"></span></dd>
 						  <dt>CPF/CNPJ</dt><dd><span wicket:id="documentoDevedor"></span></dd>
 						  <dt>UF</dt><dd><span wicket:id="ufDevedor"></span></dd>

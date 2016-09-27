@@ -91,7 +91,7 @@ public class CraWebService {
 	}
 
 	private String setRespostaNomeArquivoInvalido(Usuario usuario, String nomeArquivo) {
-		logger.error("Erro WS : Nome do arquivo informado é inválido!");
+		logger.error("Erro WS : Nome do arquivo " + nomeArquivo + " informado é inválido!");
 		loggerCra.error(usuario, getCraAcao(), "Nome do arquivo " + nomeArquivo + " está em branco ou é inválido ao layout FEBRABAN.");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			CodigoErro codigoErro = getCodigoErroNomeInvalidoSerpro(nomeArquivo);
@@ -114,13 +114,13 @@ public class CraWebService {
 	}
 
 	protected String setRespostaErrosServicosCartorios(Usuario usuario, String nomeArquivo, String descricao) {
-		logger.error("Erro WS: " + descricao);
+		logger.error("Erro WS: " + nomeArquivo + " : " + descricao);
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, descricao);
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
 	protected String setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(Usuario usuario, String nomeArquivo) {
-		logger.error("Erro WS: Este usuário não pode enviar o arquivo desta instituição");
+		logger.error("Erro WS: Este usuário não pode enviar o arquivo desta instituição. " + nomeArquivo);
 		loggerCra.error(usuario, getCraAcao(),
 				"Este usuário não pode enviar o arquivo desta instituição. O Código do Portador informado no arquivo difere da instituição "
 						+ usuario.getInstituicao().getNomeFantasia() + ".");
@@ -133,7 +133,7 @@ public class CraWebService {
 	}
 
 	protected String setRespostaArquivoEmBranco(Usuario usuario, String nomeArquivo) {
-		logger.error("Erro WS: Dados do arquivo enviados em branco");
+		logger.error("Erro WS: Dados do arquivo enviados em branco " + nomeArquivo);
 		loggerCra.error(usuario, getCraAcao(), "Os dados do arquivo " + nomeArquivo + " da instituição " + usuario.getInstituicao().getNomeFantasia()
 				+ " foram enviados em branco ou estão corrimpidos.");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {

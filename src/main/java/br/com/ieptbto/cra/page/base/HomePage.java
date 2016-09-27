@@ -29,6 +29,7 @@ import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.LogCra;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
@@ -40,12 +41,14 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.LoggerMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivoPendentePage;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.centralDeAcoes.LogCraPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
+import br.com.ieptbto.cra.page.layoutPersonalizado.EnviarArquivoEmpresaPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
 
@@ -102,6 +105,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	@Override
 	protected void adicionarComponentes() {
+		linkEnviarArquivo();
 		divInformacoes();
 		divCentralAcoes();
 		labelQtdRemessasPendentes();
@@ -111,6 +115,34 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		listaDesistenciaPendentes();
 		listaCancelamentoPendentes();
 		listaAutorizacaoCancelamentoPendentes();
+	}
+
+	private void linkEnviarArquivo() {
+		Link<Remessa> linkEnviarArquivo = null;
+		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.LAYOUT_PERSONALIZADO_CONVENIOS)) {
+			linkEnviarArquivo = new Link<Remessa>("linkArquivo") {
+
+				/***/
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick() {
+					setResponsePage(new EnviarArquivoEmpresaPage());
+				}
+			};
+		} else {
+			linkEnviarArquivo = new Link<Remessa>("linkArquivo") {
+
+				/***/
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick() {
+					setResponsePage(new EnviarArquivoPage());
+				}
+			};
+		}
+		add(linkEnviarArquivo);
 	}
 
 	private void divInformacoes() {

@@ -79,8 +79,7 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 					@Override
 					public void onClick() {
-						// setResponsePage(new
-						// TitulosArquivoInstituicaoPage(arquivo));
+						setResponsePage(new TitulosArquivoInstituicaoPage(arquivo));
 					}
 				};
 				linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));

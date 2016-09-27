@@ -64,8 +64,7 @@ public class EnviarArquivoEmpresaPage extends BasePage<Arquivo> {
 					arquivoRetorno.getErros().clear();
 
 					if (arquivoRetorno.getArquivo() != null) {
-						info("O arquivo " + fileUploadField.getInputName() + " com " + arquivoRetorno.getArquivo().getRemessas().size()
-								+ " Remessa(s), foi salvo com sucesso.");
+						success("O arquivo foi enviado com sucesso e encaminhado para os cartórios de protestos!");
 					}
 
 				} catch (InfraException ex) {

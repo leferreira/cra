@@ -48,8 +48,8 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 	private List<TituloRemessa> titulos;
 	private Boolean relatorioCraPendencias;
 
-	public RelatorioTitulosCsvPage(SituacaoTituloRelatorio situacaoTitulo, TipoInstituicaoCRA tipoInstituicao, Instituicao instituicao,
-			Instituicao cartorio, LocalDate dataInicio, LocalDate dataFim) {
+	public RelatorioTitulosCsvPage(SituacaoTituloRelatorio situacaoTitulo, TipoInstituicaoCRA tipoInstituicao, Instituicao instituicao, Instituicao cartorio,
+			LocalDate dataInicio, LocalDate dataFim) {
 		this.tituloRemessa = new TituloRemessa();
 		this.relatorioCraPendencias = false;
 		this.titulos = relatorioMediator.relatorioTitulosPorSituacao(situacaoTitulo, tipoInstituicao, instituicao, cartorio, dataInicio, dataFim);
@@ -184,9 +184,10 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				public void populateItem(Item<ICellPopulator<TituloBean>> item, String id, IModel<TituloBean> model) {
 					String confirmacao = StringUtils.EMPTY;
 					if (model.getObject().getTitulo().getConfirmacao() != null) {
-						if (model.getObject().getTitulo().getConfirmacao().getRemessa().getArquivoGeradoProBanco() != null) {
-							item.add(new Label(id,
-									model.getObject().getTitulo().getConfirmacao().getRemessa().getArquivoGeradoProBanco().getNomeArquivo()));
+						if (model.getObject().getTitulo().getConfirmacao().getRemessa().getSituacao().equals(true)) {
+							item.add(new Label(id, model.getObject().getTitulo().getConfirmacao().getRemessa().getArquivoGeradoProBanco().getNomeArquivo()));
+						} else {
+							item.add(new Label(id, confirmacao));
 						}
 					} else {
 						item.add(new Label(id, confirmacao));
@@ -206,9 +207,10 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				public void populateItem(Item<ICellPopulator<TituloBean>> item, String id, IModel<TituloBean> model) {
 					String retorno = StringUtils.EMPTY;
 					if (model.getObject().getTitulo().getRetorno() != null) {
-						if (model.getObject().getTitulo().getRetorno().getRemessa().getArquivoGeradoProBanco() != null) {
-							item.add(new Label(id,
-									model.getObject().getTitulo().getRetorno().getRemessa().getArquivoGeradoProBanco().getNomeArquivo()));
+						if (model.getObject().getTitulo().getRetorno().getRemessa().getSituacao().equals(true)) {
+							item.add(new Label(id, model.getObject().getTitulo().getRetorno().getRemessa().getArquivoGeradoProBanco().getNomeArquivo()));
+						} else {
+							item.add(new Label(id, retorno));
 						}
 					} else {
 						item.add(new Label(id, retorno));
@@ -245,8 +247,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 
 		DataTable<TituloBean, String> dataTable =
 				new DefaultDataTable<>("table", columns, new DataProvider<TituloBean>(TituloBean.parseToListTituloRemessa(titulos)), 10000);
-		dataTable.addBottomToolbar(
-				new CustomExportToolbar(dataTable, "CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_")));
+		dataTable.addBottomToolbar(new CustomExportToolbar(dataTable, "CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_")));
 		add(dataTable);
 	}
 
