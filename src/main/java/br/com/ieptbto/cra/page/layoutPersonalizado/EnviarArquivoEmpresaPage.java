@@ -61,11 +61,13 @@ public class EnviarArquivoEmpresaPage extends BasePage<Arquivo> {
 					for (Exception exception : arquivoRetorno.getErros()) {
 						warn(exception.getMessage());
 					}
-					arquivoRetorno.getErros().clear();
 
-					if (arquivoRetorno.getArquivo() != null) {
-						success("O arquivo foi enviado com sucesso e encaminhado para os cartórios de protestos!");
+					if (arquivoRetorno.getErros().isEmpty()) {
+						if (arquivoRetorno.getArquivo() != null) {
+							success("O arquivo foi enviado com sucesso e encaminhado para os cartórios de protestos!");
+						}
 					}
+					arquivoRetorno.getErros().clear();
 
 				} catch (InfraException ex) {
 					error(ex.getMessage());

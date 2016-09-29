@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">REQUISIÇÕES</h4>
+		<div class="row">
+			<form wicket:id="form">
+				<div class="col-md-4">
+					<label>Período</label>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-xs-6">
+								<input wicket:id="dataInicio" maxlength="10"
+									placeholder="__/__/____" class="form-control">
+							</div>
+							<div class="col-xs-6">
+								<input wicket:id="dataFim" maxlength="10"
+									placeholder="__/__/____" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<label>Ação</label>
+					<div class="form-group">
+						<select wicket:id="craAcao" class="form-control"></select>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<br style="clear: both;">
+					<button type="submit" class="btn btn-primary pull-right">
+						<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
+					</button>
+				</div>
+			</form>
+		</div>
+		<br style="clear: both;" />
+		<table id="table"
+			class="table table-responsive table-striped table-hover">
+			<thead>
+				<tr>
+					<th>DATA E HORA</th>
+					<th>AÇÃO</th>
+					<th>LOGIN</th>
+					<th>ARQUIVO</th>
+					<th class="col-center">CONTEÚDO</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="dataTableRequisicoes">
+					<td wicket:id="dataHora"></td> 
+					<td wicket:id="servico"></td>
+					<td wicket:id="loginInformado"></td>
+					<td class="col-center" wicket:id="nomeArquivo"></td>
+					<td class="col-center">
+						<a href="#" class="link" wicket:id="downloadConteudo">
+							<img border="0" class="download-ico" title="Clique para baixar" src="img/download.jpg">
+						</a>
+					</td> 
+				</tr>
+			</tbody>
+		</table>
+	</wicket:extend>
+</body>
+</html>

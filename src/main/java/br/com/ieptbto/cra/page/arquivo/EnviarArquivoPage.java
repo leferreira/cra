@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.arquivo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -73,32 +74,34 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			@Override
 			protected void onSubmit() {
 				getFeedbackMessages().clear();
-				final Arquivo arquivo = getModelObject();
-				final FileUpload uploadedFile = fileUploadField.getFileUpload();
+
+				Arquivo arquivo = getModelObject();
+				FileUpload uploadedFile = fileUploadField.getFileUpload();
+				List<Exception> erros = new ArrayList<Exception>();
 
 				arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
 				arquivo.setDataRecebimento(new LocalDate().toDate());
 				try {
-					ArquivoMediator arquivoRetorno = arquivoMediator.salvar(arquivo, uploadedFile, getUsuario());
+					arquivo = arquivoMediator.salvar(arquivo, uploadedFile, getUsuario(), erros);
 
-					if (!arquivoRetorno.getErros().isEmpty()) {
-						gerarMensagemErros(arquivo, arquivoRetorno.getErros());
-					} else if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
+					if (!erros.isEmpty()) {
+						gerarMensagemErros(arquivo, erros);
+					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
 						success("O arquivo de Remessa <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 								+ "</span> enviado, foi processado com sucesso !");
-					} else if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
+					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
 						success("O arquivo de Confirmação <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 								+ "</span> enviado, foi processado com sucesso !");
-					} else if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
 						setResponsePage(new RelatorioRetornoPage(
 								"O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo() + "</span> enviado, foi processado com sucesso !",
 								getArquivo(), "ENVIAR ARQUIVO"));
-					} else if (arquivoRetorno.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
+					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
 						success("O arquivo de Desistência de Protesto <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 								+ "</span> enviado, foi processado com sucesso !");
 					}
-					arquivoRetorno.getErros().clear();
+					erros.clear();
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);

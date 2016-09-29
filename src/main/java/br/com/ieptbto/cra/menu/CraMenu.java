@@ -126,6 +126,7 @@ public class CraMenu extends Panel {
 			menuSuper.setVisible(false);
 		}
 		menuSuper.addItem("WebServiceConfiguracao", rolesIncluir);
+		menuSuper.addItem("DadosRequisicoes", rolesIncluir);
 		menuSuper.addItem("ImportarArquivo5Anos", rolesIncluir);
 		menuSuper.addItem("RemoverArquivo", rolesIncluir);
 		menuSuper.addItem("IncluirTaxaCra", rolesIncluir);

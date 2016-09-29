@@ -358,7 +358,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				linkArquivo.add(new Label("desistencia", cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
 				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)
-						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
+						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CONVENIO)) {
 					item.add(new Label("banco", municipioMediator.buscaMunicipioPorCodigoIBGE(cancelamento.getCabecalhoCartorio().getCodigoMunicipio())
 							.getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
@@ -411,7 +412,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				linkArquivo.add(new Label("desistencia", dp.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
 				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)
-						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
+						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CONVENIO)) {
 					item.add(new Label("banco",
 							municipioMediator.buscaMunicipioPorCodigoIBGE(dp.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
@@ -463,7 +465,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				linkArquivo.add(new Label("desistencia", ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 				item.add(linkArquivo);
 				if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)
-						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
+						|| getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CONVENIO)) {
 					item.add(new Label("banco",
 							municipioMediator.buscaMunicipioPorCodigoIBGE(ac.getCabecalhoCartorio().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				} else if (getUsuario().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
