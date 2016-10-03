@@ -82,7 +82,7 @@ import br.com.ieptbto.cra.page.tipoInstituicao.IncluirTipoInstituicaoPage;
 import br.com.ieptbto.cra.page.tipoInstituicao.ListaTipoInstituicaoPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.page.titulo.ListaTitulosPage;
-import br.com.ieptbto.cra.page.titulo.MonitorarTitulosPage;
+import br.com.ieptbto.cra.page.titulo.BuscarTitulosPage;
 import br.com.ieptbto.cra.page.usuario.IncluirUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.ListaUsuarioPage;
 import br.com.ieptbto.cra.page.usuario.PerfilUsuarioPage;
@@ -232,7 +232,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("SolicitacaoCancelamento", TituloSolicitacaoCancelamentoPage.class);
 		mountPage("TitulosAutorizacaoCancelamento", TitulosAutorizacaoCancelamentoPage.class);
 
-		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
+		mountPage("MonitorarTitulos", BuscarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
 		mountPage("Historico", HistoricoPage.class);
 

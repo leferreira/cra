@@ -29,8 +29,6 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 
 	private Arquivo arquivo;
 	private Usuario usuario;
-	private LocalDate dataInicio;
-	private LocalDate dataFim;
 
 	public BuscarArquivoPage() {
 		this.arquivo = new Arquivo();
@@ -54,6 +52,8 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 			@Override
 			protected void onSubmit() {
 				ArquivoFormBean arquivoFormBean = getModelObject();
+				LocalDate dataInicio = null;
+				LocalDate dataFim = null;
 
 				try {
 					if (arquivoFormBean.getNomeArquivo() == null && arquivoFormBean.getDataInicio() == null) {

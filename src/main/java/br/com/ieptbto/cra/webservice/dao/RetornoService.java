@@ -138,7 +138,7 @@ public class RetornoService extends CraWebService {
 			}
 			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
-				return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
+				return setRespostaArquivoJaEnviadoCartorio(usuario, nomeArquivo, arquivoJaEnviado);
 			}
 			mensagemCra = retornoReceiver.receber(usuario, nomeArquivo, dados);
 
@@ -151,7 +151,7 @@ public class RetornoService extends CraWebService {
 			loggerCra.error(usuario, getCraAcao(), e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return gerarMensagemEnvioRetorno(mensagemCra, CONSTANTE_CONFIRMACAO_XML);
+		return gerarMensagemEnvioRetorno(mensagemCra, CONSTANTE_RETORNO_XML);
 	}
 
 	private String gerarMensagemEnvioRetorno(Object object, String nomeNo) {
@@ -166,8 +166,8 @@ public class RetornoService extends CraWebService {
 			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, object);
 			marshaller.marshal(element, writer);
 			msg = writer.toString();
-			msg = msg.replace("<confirmacao xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<relatorio>");
-			msg = msg.replace("</confirmacao>", "</relatorio>");
+			msg = msg.replace("<retorno xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<relatorio>");
+			msg = msg.replace("</retorno>", "</relatorio>");
 			writer.close();
 
 		} catch (JAXBException e) {

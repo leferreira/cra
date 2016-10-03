@@ -139,7 +139,7 @@ public class ConfirmacaoService extends CraWebService {
 			}
 			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
-				return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
+				return setRespostaArquivoJaEnviadoCartorio(usuario, nomeArquivo, arquivoJaEnviado);
 			}
 			mensagemCra = confirmacaoReceiver.receber(usuario, nomeArquivo, dados);
 

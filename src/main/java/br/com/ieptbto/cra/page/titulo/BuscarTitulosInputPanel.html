@@ -1,0 +1,98 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
+	<div class="col-lg-8 col-md-offset-2">
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="form-group">
+					<label>Nosso Número</label>  
+					<input wicket:id="nossoNumero" class="form-control " autofocus="autofocus" maxlength="15">
+				</div>
+				<div class="form-group">
+				  <label>Número do Título</label>  
+				  <input wicket:id="numeroTitulo" class="form-control" maxlength="11">
+				</div>
+				<div class="form-group">
+				  <label>Número do Protocolo</label>  
+				  <input wicket:id="numeroProtocoloCartorio" class="form-control " maxlength="10">
+				</div>
+			</div>
+			<div class="col-lg-8">
+				<div class="form-group">
+					<label>Período (entrada na CRA)</label>
+					<div class="row">
+						<div class="col-xs-6">
+							<input id="date" name="date" maxlength="10"
+								placeholder="__/__/____" wicket:id="dataInicio"
+								class="form-control">
+						</div>
+						<div class="col-xs-6">
+							<input id="date1" name="date1" maxlength="10"
+								placeholder="__/__/____" wicket:id="dataFim"
+								class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label wicket:id="labelBancoCovenio"></label>
+					<div class="row">
+						<div class="col-md-5">
+							<select wicket:id="tipoInstituicao" class="form-control">
+							</select>
+						</div>
+						<div class="col-md-7">
+							<select wicket:id="bancoConvenio" class="form-control">
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label wicket:id="labelMunicipio"></label> <select wicket:id="cartorio"
+						class="form-control">
+					</select>
+				</div>
+			</div>
+			<div class="col-lg-12">
+				<h4 class="titulo-top">DADOS DO DEVEDOR E CREDOR</h4>
+			</div>
+			<div class="col-lg-10">
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="form-group">
+						  <label>Nome devedor</label>  
+						  <input wicket:id="nomeDevedor" class="form-control " maxlength="45">
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="form-group">
+						  <label>Documento do Devedor</label>
+						  <input wicket:id="numeroIdentificacaoDevedor" class="form-control " maxlength="14">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-10">
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="form-group">
+						  <label>Nome do Sacador<small>&nbsp;(Credor)&nbsp;</small></label>  
+						  <input wicket:id="nomeCredor" class="form-control " maxlength="45">
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="form-group">
+						  <label>Documento do Sacador<small>&nbsp;(Credor)&nbsp;</small></label>  
+						  <input wicket:id="documentoCredor" class="form-control ">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-12">	
+				<div class="form-group">
+					<label></label>
+					<button type="submit" class="btn btn-primary pull-right">
+						<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
+					</button>
+				</div> 
+			</div>
+		</div>
+	</div>
+</wicket:panel>

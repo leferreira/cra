@@ -138,7 +138,7 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 					}
 				};
 				if (titulo.getConfirmacao() != null) {
-					if (StringUtils.isNotBlank(titulo.getConfirmacao().getNumeroProtocoloCartorio().trim())
+					if (StringUtils.isNotEmpty(titulo.getConfirmacao().getNumeroProtocoloCartorio().trim())
 							&& !titulo.getConfirmacao().getNumeroProtocoloCartorio().trim().equals("0")) {
 						if (solicitacaoCancelamento == null) {
 							linkSolicitarCancelamento.add(new Label("nomeAcao", "Solicitar".toUpperCase()));
@@ -153,6 +153,7 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(titulo.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 					item.add(new Label("protocolo", titulo.getConfirmacao().getNumeroProtocoloCartorio()));
 				} else {
+					linkSolicitarCancelamento.setEnabled(false);
 					linkSolicitarCancelamento.add(new Label("nomeAcao", "Sem Protocolo".toUpperCase()));
 					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("protocolo", StringUtils.EMPTY));

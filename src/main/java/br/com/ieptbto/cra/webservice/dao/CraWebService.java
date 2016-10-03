@@ -189,6 +189,24 @@ public class CraWebService {
 		return gerarMensagem(mensagem, CONSTANTE_RELATORIO_XML);
 	}
 
+	protected String setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
+		logger.error("Erro WS: Arquivo já enviado anteriormente.");
+		loggerCra.error(usuario, getCraAcao(),
+				"Arquivo " + nomeArquivo + " já enviado anteriormente em " + DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()) + ".");
+		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
+		MensagemXml mensagem = msg.getMensagemErro();
+
+		Detalhamento detalhamento = new Detalhamento();
+		List<Erro> erros = new ArrayList<Erro>();
+		Erro erro = new Erro();
+		erro.setCodigo("9999");
+		erro.setDescricao("O arquivo " + nomeArquivo + " já foi enviado em " + DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()));
+		erros.add(erro);
+		detalhamento.setErro(erros);
+		mensagem.setDetalhamento(detalhamento);
+		return gerarMensagem(mensagem, CONSTANTE_RELATORIO_XML);
+	}
+
 	private CodigoErro getCodigoErroEmProcessamentoSerpro(String nomeArquivo) {
 		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(nomeArquivo);
 

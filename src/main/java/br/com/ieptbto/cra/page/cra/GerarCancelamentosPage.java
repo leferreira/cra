@@ -75,7 +75,7 @@ public class GerarCancelamentosPage extends BasePage<SolicitacaoCancelamento> {
 					getFeedbackPanel().error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível gerar os arquivos de cancelamento de protesto! \n Entre em contato com a CRA ");
+					error("Não foi possível gerar os arquivos de cancelamento de protesto! Favor entrar em contato com a CRA...");
 				}
 			}
 		};

@@ -11,17 +11,17 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.bean.TituloFormBean;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -40,26 +40,21 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	TituloMediator tituloMediator;
+	private TituloMediator tituloMediator;
 
-	private TituloRemessa titulo;
-	private LocalDate dataInicio;
-	private LocalDate dataFim;
-	private Municipio municipio;
+	private TituloFormBean tituloBean;
+	private Usuario usuario;
 
-	public ListaTitulosPage(LocalDate dataInicio, LocalDate dataFim, TituloRemessa titulo, Municipio municipio) {
-		this.dataInicio = dataInicio;
-		this.dataFim = dataFim;
-		this.titulo = titulo;
-		this.municipio = municipio;
+	public ListaTitulosPage(TituloFormBean tituloBean) {
+		this.tituloBean = tituloBean;
+		this.usuario = getUser();
+
 		adicionarComponentes();
-
 	}
 
 	@Override
 	protected void adicionarComponentes() {
 		add(listaTitulos());
-
 	}
 
 	private ListView<TituloRemessa> listaTitulos() {
@@ -93,8 +88,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				}
 				item.add(new Label("municipio", municipio.toUpperCase()));
 				if (tituloLista.getConfirmacao() != null) {
-					item.add(new Label("dataConfirmacao",
-							DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
 				} else {
 					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
@@ -151,13 +145,29 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 			@Override
 			protected List<TituloRemessa> load() {
-				return tituloMediator.buscarListaTitulos(dataInicio, dataFim, titulo, municipio, getUser());
+				TituloFormBean bean = getTituloBean();
+				TituloRemessa tituloRemessa = bean.getTituloRemessa();
+				LocalDate dataInicio = null;
+				LocalDate dataFim = null;
+
+				if (bean.getDataInicio() != null) {
+					dataInicio = new LocalDate(bean.getDataInicio());
+				}
+				if (bean.getDataFim() != null) {
+					dataFim = new LocalDate(bean.getDataFim());
+				}
+				return tituloMediator.buscarTitulos(usuario, dataInicio, dataFim, bean.getTipoInstituicao(), bean.getBancoConvenio(), bean.getCartorio(),
+						tituloRemessa);
 			}
 		};
 	}
 
+	public TituloFormBean getTituloBean() {
+		return tituloBean;
+	}
+
 	@Override
 	protected IModel<TituloRemessa> getModel() {
-		return new CompoundPropertyModel<TituloRemessa>(titulo);
+		return null;
 	}
 }
