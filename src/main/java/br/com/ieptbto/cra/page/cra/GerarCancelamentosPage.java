@@ -95,7 +95,7 @@ public class GerarCancelamentosPage extends BasePage<SolicitacaoCancelamento> {
 				item.add(new Label("numeroTitulo", solicitacaoCancelamento.getTituloRemessa().getNumeroTitulo()));
 				item.add(new Label("pracaProtesto", solicitacaoCancelamento.getTituloRemessa().getPracaProtesto()));
 				item.add(new Label("devedor", solicitacaoCancelamento.getTituloRemessa().getNomeDevedor()));
-				item.add(new LabelValorMonetario<String>("valor", solicitacaoCancelamento.getTituloRemessa().getValorTitulo()));
+				item.add(new LabelValorMonetario<String>("valor", solicitacaoCancelamento.getTituloRemessa().getSaldoTitulo()));
 				item.add(new Label("tipoSolicitacao", solicitacaoCancelamento.getStatusSolicitacaoCancelamento().getLabel()));
 				if (solicitacaoCancelamento.getStatusSolicitacaoCancelamento() == StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO) {
 					item.add(new Label("motivo", "Pagamento".toUpperCase()));

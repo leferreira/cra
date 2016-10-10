@@ -20,6 +20,7 @@ import org.apache.wicket.util.lang.Bytes;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
@@ -82,6 +83,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
 				arquivo.setDataRecebimento(new LocalDate().toDate());
+				arquivo.setRemessas(new ArrayList<Remessa>());
 				try {
 					arquivo = arquivoMediator.salvar(arquivo, uploadedFile, getUsuario(), erros);
 

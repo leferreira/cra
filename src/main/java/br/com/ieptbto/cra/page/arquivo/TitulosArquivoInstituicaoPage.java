@@ -77,99 +77,6 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
 				final TituloRemessa tituloRemessa = item.getModelObject();
-				// item.add(new LabelValorMonetario<BigDecimal>("valorTitulo",
-				// tituloRemessa.getSaldoTitulo()));
-				// item.add(new Label("nossoNumero",
-				// tituloRemessa.getNossoNumero()));
-				// String municipio = tituloRemessa.getPracaProtesto();
-				// if (municipio.length() > 20) {
-				// municipio = municipio.substring(0, 19);
-				// }
-				// item.add(new Label("pracaProtesto",
-				// municipio.toUpperCase()));
-				// if (tituloRemessa.getConfirmacao() == null) {
-				// item.add(new Label("numeroTitulo",
-				// tituloRemessa.getNumeroTitulo()));
-				// item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
-				// item.add(new Label("protocolo", StringUtils.EMPTY));
-				// item.add(new Label("dataSituacao", StringUtils.EMPTY));
-				//
-				// } else if (tituloRemessa.getConfirmacao() != null &&
-				// tituloRemessa.getRetorno() == null) {
-				// item.add(new Label("numeroTitulo",
-				// tituloRemessa.getNumeroTitulo()));
-				// item.add(new Label("dataConfirmacao",
-				// DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().arquivo.getDataEnvio())));
-				// item.add(new Label("protocolo",
-				// tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-				// item.add(new Label("dataSituacao",
-				// DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
-				//
-				// } else if (tituloRemessa.getRetorno() != null) {
-				// item.add(new Label("numeroTitulo",
-				// tituloRemessa.getNumeroTitulo()));
-				// item.add(new Label("dataConfirmacao",
-				// DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().arquivo.getDataEnvio())));
-				// item.add(new Label("protocolo",
-				// tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-				// item.add(new Label("dataSituacao",
-				// DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
-				// }
-				// item.add(new Label("situacaoTitulo",
-				// tituloRemessa.getSituacaoTitulo()));
-				//
-				// Link<Arquivo> linkArquivoRemessa = new
-				// Link<Arquivo>("linkArquivo") {
-				//
-				// /***/
-				// private static final long serialVersionUID = 1L;
-				//
-				// public void onClick() {
-				// setResponsePage(new
-				// TitulosArquivoPage(tituloRemessa.getRemessa()));
-				// }
-				// };
-				// linkArquivoRemessa.add(new Label("nomeRemessa",
-				// tituloRemessa.getRemessa().arquivo.getNomeArquivo()));
-				// item.add(linkArquivoRemessa);
-				//
-				// Link<TituloRemessa> linkHistorico = new
-				// Link<TituloRemessa>("linkHistorico") {
-				//
-				// /***/
-				// private static final long serialVersionUID = 1L;
-				//
-				// public void onClick() {
-				// setResponsePage(new HistoricoPage(tituloRemessa));
-				// }
-				// };
-				// if (tituloRemessa.getNomeDevedor().length() > 25) {
-				// linkHistorico.add(new Label("nomeDevedor",
-				// tituloRemessa.getNomeDevedor().substring(0, 24)));
-				// } else {
-				// linkHistorico.add(new Label("nomeDevedor",
-				// tituloRemessa.getNomeDevedor()));
-				// }
-				// item.add(linkHistorico);
-				//
-				// Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno")
-				// {
-				//
-				// /***/
-				// private static final long serialVersionUID = 1L;
-				//
-				// public void onClick() {
-				// setResponsePage(new
-				// TitulosArquivoPage(tituloRemessa.getRetorno().getRemessa()));
-				// }
-				// };
-				// if (tituloRemessa.getRetorno() != null) {
-				// linkRetorno.add(new Label("retorno",
-				// tituloRemessa.getRetorno().getRemessa().arquivo.getNomeArquivo()));
-				// } else {
-				// linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
-				// }
-				// item.add(linkRetorno);
 			}
 		};
 	}
@@ -208,7 +115,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 			@Override
 			public void onClick() {
-				File file = downloadMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
+				File file = downloadMediator.baixarArquivoTXT(getUser(), arquivo);
 				IResourceStream resourceStream = new FileResourceStream(file);
 
 				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));

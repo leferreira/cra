@@ -106,7 +106,7 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 					public void onClick() {
 
 						try {
-							File file = downloadMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
+							File file = downloadMediator.baixarArquivoTXT(getUser(), arquivo);
 							IResourceStream resourceStream = new FileResourceStream(file);
 
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
