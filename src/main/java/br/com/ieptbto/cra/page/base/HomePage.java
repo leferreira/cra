@@ -30,6 +30,7 @@ import br.com.ieptbto.cra.entidade.LogCra;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.enumeration.TipoCampo51;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
@@ -302,7 +303,11 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			}
 
 			private Link<Remessa> downloadAnexos(final Remessa remessa) {
-				List<Anexo> anexos = remessaMediator.verificarAnexosRemessa(remessa);
+				Anexo anexo = null;
+				if (remessa.getInstituicaoOrigem().getTipoCampo51().equals(TipoCampo51.DOCUMENTOS_COMPACTADOS)) {
+					anexo = remessaMediator.verificarAnexosRemessa(remessa);
+				}
+
 				Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
 
 					/***/
@@ -324,12 +329,9 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						}
 					}
 				};
-
-				if (anexos != null) {
-					if (anexos.isEmpty()) {
-						linkAnexos.setOutputMarkupId(false);
-						linkAnexos.setVisible(false);
-					}
+				if (anexo == null) {
+					linkAnexos.setOutputMarkupId(false);
+					linkAnexos.setVisible(false);
 				}
 				return linkAnexos;
 			}

@@ -12,10 +12,8 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.LogCra;
-import br.com.ieptbto.cra.mediator.DadosArquivoRecebidoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -26,9 +24,6 @@ public class LogCraPage extends BasePage<LogCra> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-
-	@SpringBean
-	DadosArquivoRecebidoMediator dadosRecebidosMediator;
 
 	private LogCra logCra;
 

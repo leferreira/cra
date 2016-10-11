@@ -138,10 +138,10 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(BatimentoDeposito.class);
 		classesHibernate.add(Batimento.class);
 
+		classesHibernate.add(DadosArquivoRecebido.class);
 		classesHibernate.add(LoteCnp.class);
 		classesHibernate.add(RegistroCnp.class);
 		classesHibernate.add(TaxaCra.class);
-		classesHibernate.add(DadosArquivoRecebido.class);
 	}
 
 	/**

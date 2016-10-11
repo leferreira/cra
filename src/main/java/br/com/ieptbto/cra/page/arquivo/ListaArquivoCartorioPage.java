@@ -26,6 +26,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.TipoCampo51;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -141,7 +142,10 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 			}
 
 			private Link<Remessa> downloadAnexos(final Remessa remessa) {
-				List<Anexo> anexos = remessaMediator.verificarAnexosRemessa(remessa);
+				Anexo anexo = null;
+				if (remessa.getInstituicaoOrigem().getTipoCampo51().equals(TipoCampo51.DOCUMENTOS_COMPACTADOS)) {
+					anexo = remessaMediator.verificarAnexosRemessa(remessa);
+				}
 
 				Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
 
@@ -165,11 +169,9 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 					}
 				};
 
-				if (anexos != null) {
-					if (anexos.isEmpty()) {
-						linkAnexos.setOutputMarkupId(false);
-						linkAnexos.setVisible(false);
-					}
+				if (anexo == null) {
+					linkAnexos.setOutputMarkupId(false);
+					linkAnexos.setVisible(false);
 				}
 				return linkAnexos;
 			}
