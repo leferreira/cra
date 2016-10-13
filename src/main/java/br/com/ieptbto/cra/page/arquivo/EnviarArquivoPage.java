@@ -46,9 +46,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	private static final long serialVersionUID = 852632145;
 
 	@SpringBean
-	ArquivoMediator arquivoMediator;
+	private ArquivoMediator arquivoMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 
 	private Usuario usuario;
 	private Arquivo arquivo;

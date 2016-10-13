@@ -62,6 +62,10 @@ public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 						} else
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
+					if (tituloFormBean.isTodosCamposEmBranco()) {
+						throw new InfraException(
+								"Por favor, preencha um ou mais campos para realizar a busca, ou informe o período com um Banco/Convênio ou Município!");
+					}
 
 					setResponsePage(new ListaTitulosPage(tituloFormBean));
 				} catch (InfraException ex) {
