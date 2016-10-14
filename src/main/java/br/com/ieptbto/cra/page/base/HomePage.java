@@ -324,7 +324,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
-							e.printStackTrace();
+							logger.info(e.getMessage(), e);
 							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
 						}
 					}

@@ -44,6 +44,7 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 
 	private void formularioBuscarArquivo() {
 		ArquivoFormBean arquivoFormBean = new ArquivoFormBean();
+
 		Form<ArquivoFormBean> form = new Form<ArquivoFormBean>("form", new CompoundPropertyModel<ArquivoFormBean>(arquivoFormBean)) {
 
 			/***/
@@ -58,8 +59,8 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 				try {
 					if (arquivoFormBean.getNomeArquivo() == null && arquivoFormBean.getDataInicio() == null) {
 						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Período de datas' como parâmetro!");
-					} else if (arquivo.getNomeArquivo() != null) {
-						if (arquivo.getNomeArquivo().length() < 4) {
+					} else if (arquivoFormBean.getNomeArquivo() != null) {
+						if (arquivoFormBean.getNomeArquivo().length() < 4) {
 							throw new InfraException("Por favor, informe ao menos 4 caracteres!");
 						}
 					}

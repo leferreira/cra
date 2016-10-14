@@ -77,7 +77,7 @@ public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 				}
 			}
 		};
-		this.form.add(new BuscarTitulosInputPanel("buscarTitulosInputPanel", new CompoundPropertyModel<TituloFormBean>(beanForm), getUser()));
+		form.add(new BuscarTitulosInputPanel("buscarTitulosInputPanel", new CompoundPropertyModel<TituloFormBean>(beanForm), getUser()));
 		add(form);
 	}
 

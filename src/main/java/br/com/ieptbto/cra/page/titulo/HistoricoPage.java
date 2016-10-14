@@ -29,6 +29,7 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.bean.ArquivoOcorrenciaBean;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.Deposito;
@@ -95,10 +96,13 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private RetornoMediator retornoMediator;
 
 	private TituloRemessa tituloRemessa;
+	private Anexo anexo;
 	private List<ArquivoOcorrenciaBean> arquivosOcorrencias;
 
 	public HistoricoPage(TituloRemessa titulo) {
 		this.tituloRemessa = titulo;
+		this.anexo = tituloMediator.buscarAnexo(tituloRemessa);
+
 		adicionarComponentes();
 	}
 
@@ -106,7 +110,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	protected void adicionarComponentes() {
 		carregarArquivosOcorrencias();
 		carregarCampos();
-
 	}
 
 	private void carregarArquivosOcorrencias() {
@@ -500,7 +503,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private Component labelDocumentosAnexos() {
 		Label labelDocumentos = new Label("labelDocumentosAnexos", "DOCUMENTOS ANEXOS");
 		labelDocumentos.setVisible(false);
-		if (getTituloRemessa().getAnexo() != null) {
+		if (anexo != null) {
 			labelDocumentos.setVisible(true);
 		}
 		return labelDocumentos;
@@ -514,7 +517,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			@Override
 			public void onClick() {
 				try {
-					File file = remessaMediator.decodificarAnexoTitulo(getUser(), getTituloRemessa());
+					File file = remessaMediator.decodificarAnexoTitulo(getUser(), getTituloRemessa(), anexo);
 					IResourceStream resourceStream = new FileResourceStream(file);
 
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
@@ -526,7 +529,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 			}
 		};
-		if (getTituloRemessa().getAnexo() == null) {
+		if (anexo == null) {
 			linkAnexos.setVisible(false);
 		}
 		return linkAnexos;
