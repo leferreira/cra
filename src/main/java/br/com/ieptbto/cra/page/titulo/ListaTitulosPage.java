@@ -146,7 +146,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 			@Override
 			protected List<TituloRemessa> load() {
 				TituloFormBean bean = getTituloBean();
-				TituloRemessa tituloRemessa = bean.getTituloRemessa();
+
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 
@@ -156,8 +156,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				if (bean.getDataFim() != null) {
 					dataFim = new LocalDate(bean.getDataFim());
 				}
-				return tituloMediator.buscarTitulos(usuario, dataInicio, dataFim, bean.getTipoInstituicao(), bean.getBancoConvenio(), bean.getCartorio(),
-						tituloRemessa);
+				return tituloMediator.buscarTitulos(usuario, dataInicio, dataFim, bean.getTipoInstituicao(), bean.getBancoConvenio(), bean.getCartorio(), bean);
 			}
 		};
 	}

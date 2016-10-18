@@ -195,7 +195,7 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
-							getFeedbackPanel().error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+							getFeedbackPanel().error("Não foi possível gerar o relatório do arquivo. Favor entrar em contato com a CRA...");
 							logger.info(e.getMessage(), e);
 						}
 					}

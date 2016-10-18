@@ -55,17 +55,17 @@ public class ListaArquivoPendentePage extends BasePage<Arquivo> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	DownloadMediator downloadMediator;
+	private DownloadMediator downloadMediator;
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	DesistenciaProtestoMediator desistenciaProtestoMediator;
+	private DesistenciaProtestoMediator desistenciaProtestoMediator;
 	@SpringBean
-	CancelamentoProtestoMediator cancelamentoMediator;
+	private CancelamentoProtestoMediator cancelamentoMediator;
 	@SpringBean
-	AutorizacaoCancelamentoMediator autorizacaoMediator;
+	private AutorizacaoCancelamentoMediator autorizacaoMediator;
 
 	private Arquivo arquivo;
 

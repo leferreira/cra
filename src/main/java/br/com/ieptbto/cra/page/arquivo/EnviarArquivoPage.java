@@ -118,7 +118,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(arquivo);
 				String mensagemErro = null;
 				mensagemErro =
-						"<span class=\"alert-link\">Por favor corriga a(s) ocorrência(s) e(ou) erros encontrado(s) no arquivo e o envie novamente:</span>";
+						"<span class=\"alert-link\">Por favor, corrija a(s) ocorrência(s) e(ou) erros encontrado(s) no arquivo e o envie novamente:</span>";
 				mensagemErro = mensagemErro + "<ul>";
 				for (Exception exception : erros) {
 					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo || TipoArquivoEnum.RETORNO == tipoArquivo) {
