@@ -110,6 +110,16 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				item.add(new Label(id, municipio));
 			}
 		});
+		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("Nº DEV"), "numeroControleDevedor") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void populateItem(Item<ICellPopulator<TituloRelatorioCSVBean>> item, String id, IModel<TituloRelatorioCSVBean> model) {
+				item.add(new Label(id, model.getObject().getNumeroControleDevedor()));
+			}
+		});
 		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("DEVEDOR"), "nomeDevedor") {
 
 			/***/
@@ -245,8 +255,8 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 			}
 		});
 
-		DataTable<TituloRelatorioCSVBean, String> dataTable =
-				new DefaultDataTable<>("table", columns, new DataProvider<TituloRelatorioCSVBean>(TituloRelatorioCSVBean.parseToListTituloRemessa(titulos)), 10000);
+		DataTable<TituloRelatorioCSVBean, String> dataTable = new DefaultDataTable<>("table", columns,
+				new DataProvider<TituloRelatorioCSVBean>(TituloRelatorioCSVBean.parseToListTituloRemessa(titulos)), 10000);
 		dataTable.addBottomToolbar(new CustomExportToolbar(dataTable, "CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_")));
 		add(dataTable);
 	}

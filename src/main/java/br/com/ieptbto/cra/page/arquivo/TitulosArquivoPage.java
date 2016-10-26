@@ -168,8 +168,8 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 					File file = downloadMediator.baixarRemessaTXT(getUser(), remessa);
 					IResourceStream resourceStream = new FileResourceStream(file);
 
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
+					getRequestCycle()
+							.scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
@@ -190,30 +190,69 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 				final TituloRemessa tituloRemessa = item.getModelObject();
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloRemessa.getSaldoTitulo()));
 				item.add(new Label("nossoNumero", tituloRemessa.getNossoNumero()));
+
 				String municipio = tituloRemessa.getPracaProtesto();
 				if (municipio.length() > 20) {
 					municipio = municipio.substring(0, 19);
 				}
 				item.add(new Label("pracaProtesto", municipio.toUpperCase()));
-				if (tituloRemessa.getConfirmacao() == null) {
-					item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
-					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
-					item.add(new Label("protocolo", StringUtils.EMPTY));
-					item.add(new Label("dataSituacao", StringUtils.EMPTY));
 
-				} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
-					item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
-					item.add(new Label("dataConfirmacao",
-							DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
-					item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
+				item.add(new Label("numeroControleDevedor", tituloRemessa.getNumeroControleDevedor()));
+				if (tituloRemessa.isDevedorPrincipal()) {
+					if (tituloRemessa.getConfirmacao() == null) {
+						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+						item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
+						item.add(new Label("protocolo", StringUtils.EMPTY));
+						item.add(new Label("dataSituacao", StringUtils.EMPTY));
 
-				} else if (tituloRemessa.getRetorno() != null) {
-					item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
-					item.add(new Label("dataConfirmacao",
-							DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
-					item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
+					} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
+						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+						item.add(new Label("dataConfirmacao",
+								DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+						item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
+
+					} else if (tituloRemessa.getRetorno() != null) {
+						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+						item.add(new Label("dataConfirmacao",
+								DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+						item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
+					}
+
+				} else {
+					if (tituloRemessa.getConfirmacao() == null) {
+						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+						item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
+						item.add(new Label("protocolo", StringUtils.EMPTY));
+						item.add(new Label("dataSituacao", StringUtils.EMPTY));
+
+					} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() != null) {
+						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+						item.add(new Label("dataConfirmacao",
+								DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+						item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
+					} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
+						Retorno retornoDevedorPrincipal = tituloMediator.buscarRetornoTituloDevedorPrincipal(tituloRemessa.getConfirmacao());
+
+						if (retornoDevedorPrincipal == null) {
+							item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+							item.add(new Label("dataConfirmacao",
+									DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+							item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+							item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
+						} else {
+							tituloRemessa.setRetorno(retornoDevedorPrincipal);
+
+							item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+							item.add(new Label("dataConfirmacao",
+									DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+							item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+							item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
+
+						}
+					}
 				}
 				item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
 

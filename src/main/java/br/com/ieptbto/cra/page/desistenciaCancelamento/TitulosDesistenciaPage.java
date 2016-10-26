@@ -110,28 +110,86 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 				pedidoDesistencia.getTitulo().setConfirmacao(tituloMediator.buscarConfirmacao(pedidoDesistencia.getTitulo()));
 				pedidoDesistencia.getTitulo().setRetorno(tituloMediator.buscarRetorno(pedidoDesistencia.getTitulo()));
 
-				item.add(new Label("nossoNumerno", pedidoDesistencia.getTitulo().getNossoNumero()));
-				item.add(new Label("numeroTitulo", pedidoDesistencia.getTitulo().getNumeroTitulo()));
-				item.add(new Label("protocolo", pedidoDesistencia.getNumeroProtocolo()));
-				item.add(new Label("pracaProtesto", cartorioDestino.getMunicipio().getNomeMunicipio().toUpperCase()));
-				item.add(new LabelValorMonetario<BigDecimal>("valor", pedidoDesistencia.getTitulo().getSaldoTitulo()));
-				item.add(new Label("situacaoTitulo", pedidoDesistencia.getTitulo().getSituacaoTitulo()));
+				final TituloRemessa tituloRemessa = pedidoDesistencia.getTitulo();
+				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloRemessa.getSaldoTitulo()));
+				item.add(new Label("nossoNumero", tituloRemessa.getNossoNumero()));
 
-				if (pedidoDesistencia.getTitulo().getConfirmacao() == null) {
-					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
-					item.add(new Label("dataSituacao", StringUtils.EMPTY));
-
-				} else if (pedidoDesistencia.getTitulo().getConfirmacao() != null && pedidoDesistencia.getTitulo().getRetorno() == null) {
-					item.add(new Label("dataConfirmacao",
-							DataUtil.localDateToString(pedidoDesistencia.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
-					item.add(new Label("dataSituacao",
-							DataUtil.localDateToString(pedidoDesistencia.getTitulo().getConfirmacao().getDataOcorrencia())));
-
-				} else if (pedidoDesistencia.getTitulo().getRetorno() != null) {
-					item.add(new Label("dataConfirmacao",
-							DataUtil.localDateToString(pedidoDesistencia.getTitulo().getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
-					item.add(new Label("dataSituacao", DataUtil.localDateToString(pedidoDesistencia.getTitulo().getRetorno().getDataOcorrencia())));
+				String municipio = tituloRemessa.getPracaProtesto();
+				if (municipio.length() > 20) {
+					municipio = municipio.substring(0, 19);
 				}
+				item.add(new Label("pracaProtesto", municipio.toUpperCase()));
+				item.add(new Label("numeroControleDevedor", tituloRemessa.getNumeroControleDevedor()));
+
+				if (tituloRemessa.isDevedorPrincipal()) {
+					if (tituloRemessa.getConfirmacao() == null) {
+						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+						item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
+						item.add(new Label("protocolo", StringUtils.EMPTY));
+						item.add(new Label("dataSituacao", StringUtils.EMPTY));
+
+					} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
+						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+						item.add(new Label("dataConfirmacao",
+								DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+						item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
+
+					} else if (tituloRemessa.getRetorno() != null) {
+						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+						item.add(new Label("dataConfirmacao",
+								DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+						item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
+					}
+
+				} else {
+					if (tituloRemessa.getConfirmacao() == null) {
+						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+						item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
+						item.add(new Label("protocolo", StringUtils.EMPTY));
+						item.add(new Label("dataSituacao", StringUtils.EMPTY));
+
+					} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() != null) {
+						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+						item.add(new Label("dataConfirmacao",
+								DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+						item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
+					} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
+						Retorno retornoDevedorPrincipal = tituloMediator.buscarRetornoTituloDevedorPrincipal(tituloRemessa.getConfirmacao());
+
+						if (retornoDevedorPrincipal == null) {
+							item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+							item.add(new Label("dataConfirmacao",
+									DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+							item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+							item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
+						} else {
+							tituloRemessa.setRetorno(retornoDevedorPrincipal);
+
+							item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+							item.add(new Label("dataConfirmacao",
+									DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+							item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+							item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
+
+						}
+					}
+				}
+				item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
+
+				Link<Arquivo> linkArquivoRemessa = new Link<Arquivo>("linkArquivo") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+						setResponsePage(new TitulosArquivoPage(tituloRemessa.getRemessa()));
+					}
+				};
+				linkArquivoRemessa.add(new Label("nomeRemessa", tituloRemessa.getRemessa().getArquivo().getNomeArquivo()));
+				item.add(linkArquivoRemessa);
 
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 
@@ -139,27 +197,15 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
-						setResponsePage(new HistoricoPage(pedidoDesistencia.getTitulo()));
+						setResponsePage(new HistoricoPage(tituloRemessa));
 					}
 				};
-				if (pedidoDesistencia.getTitulo().getNomeDevedor().length() > 25) {
-					linkHistorico.add(new Label("nomeDevedor", pedidoDesistencia.getTitulo().getNomeDevedor().substring(0, 24)));
+				if (tituloRemessa.getNomeDevedor().length() > 25) {
+					linkHistorico.add(new Label("nomeDevedor", tituloRemessa.getNomeDevedor().substring(0, 24)));
 				} else {
-					linkHistorico.add(new Label("nomeDevedor", pedidoDesistencia.getTitulo().getNomeDevedor()));
+					linkHistorico.add(new Label("nomeDevedor", tituloRemessa.getNomeDevedor()));
 				}
 				item.add(linkHistorico);
-
-				Link<Arquivo> linkArquivoRemessa = new Link<Arquivo>("linkRemessa") {
-
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					public void onClick() {
-						setResponsePage(new TitulosArquivoPage(pedidoDesistencia.getTitulo().getRemessa()));
-					}
-				};
-				linkArquivoRemessa.add(new Label("nomeRemessa", pedidoDesistencia.getTitulo().getRemessa().getArquivo().getNomeArquivo()));
-				item.add(linkArquivoRemessa);
 
 				Link<Retorno> linkRetorno = new Link<Retorno>("linkRetorno") {
 
@@ -167,11 +213,11 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
-						setResponsePage(new TitulosArquivoPage(pedidoDesistencia.getTitulo().getRetorno().getRemessa()));
+						setResponsePage(new TitulosArquivoPage(tituloRemessa.getRetorno().getRemessa()));
 					}
 				};
-				if (pedidoDesistencia.getTitulo().getRetorno() != null) {
-					linkRetorno.add(new Label("retorno", pedidoDesistencia.getTitulo().getRetorno().getRemessa().getArquivo().getNomeArquivo()));
+				if (tituloRemessa.getRetorno() != null) {
+					linkRetorno.add(new Label("retorno", tituloRemessa.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
 				} else {
 					linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
 				}

@@ -110,7 +110,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					error(ex.getMessage());
 				} catch (Exception ex) {
 					logger.error(ex.getMessage(), ex);
-					error("Não foi possível enviar o arquivo ! Favor entrar em contato com a CRA...");
+					error("Não foi possível enviar o arquivo! Favor entrar em contato com a CRA...");
 				}
 			}
 
@@ -124,9 +124,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo || TipoArquivoEnum.RETORNO == tipoArquivo) {
 						if (TituloException.class.isInstance(exception)) {
 							TituloException excecaoTitulo = TituloException.class.cast(exception);
-							mensagemErro = mensagemErro + "<li><span class=\"alert-link\">" + excecaoTitulo.getNumeroSequencialRegistro()
-									+ "º Título: </span> [ Nosso Número = " + excecaoTitulo.getNossoNumero() + " ] [ Nosso Número = "
-									+ excecaoTitulo.getNumeroProtocoloCartorio() + " ] " + excecaoTitulo.getDescricao() + ";</li>";
+							mensagemErro = mensagemErro + "<li><span class=\"alert-link\">" + (Integer.valueOf(excecaoTitulo.getNumeroSequencialRegistro()) - 1)
+									+ "º Título: </span> [ Nosso Número = " + excecaoTitulo.getNossoNumero() + " ]  -  " + excecaoTitulo.getDescricao()
+									+ ";</li>";
 						} else if (CabecalhoRodapeException.class.isInstance(exception)) {
 							CabecalhoRodapeException excecaoCabecalhoRodape = CabecalhoRodapeException.class.cast(exception);
 							mensagemErro = mensagemErro + "<li>" + excecaoCabecalhoRodape.getDescricao() + ";</li>";
@@ -176,7 +176,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			protected void finalize() throws Throwable {
 				super.finalize();
 			}
-
 		};
 	}
 

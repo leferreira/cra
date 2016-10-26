@@ -11,6 +11,7 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.bean.ArquivoFormBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.TipoVisualizacaoArquivos;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -75,8 +76,12 @@ public class BuscarDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 							throw new InfraException("As duas datas devem ser preenchidas.");
 					}
 
-					setResponsePage(new ListaDesistenciaCancelamentoPage(arquivoFormBean.getNomeArquivo(), arquivoFormBean.getBancoConvenio(),
-							arquivoFormBean.getTiposArquivos(), arquivoFormBean.getMunicipio(), dataInicio, dataFim));
+					if (TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS.equals(arquivoFormBean.getTipoVisualizacaoArquivos())) {
+						setResponsePage(new ListaDesistenciaCancelamentoPage(arquivoFormBean.getNomeArquivo(), arquivoFormBean.getBancoConvenio(),
+								arquivoFormBean.getTiposArquivos(), arquivoFormBean.getMunicipio(), dataInicio, dataFim));
+					} else if (TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS.equals(arquivoFormBean.getTipoVisualizacaoArquivos())) {
+						setResponsePage(new ListaDesistenciaCancelamentoInstituicaoPage(arquivoFormBean, usuario));
+					}
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {

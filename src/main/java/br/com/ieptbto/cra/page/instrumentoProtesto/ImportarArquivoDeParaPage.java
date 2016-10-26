@@ -1,12 +1,16 @@
 package br.com.ieptbto.cra.page.instrumentoProtesto;
 
-import org.apache.log4j.Logger;
+import java.util.Arrays;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -17,6 +21,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 
 import br.com.ieptbto.cra.entidade.AgenciaCAF;
+import br.com.ieptbto.cra.enumeration.BooleanSimNao;
+import br.com.ieptbto.cra.enumeration.PadraoArquivoDePara;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoDeParaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -30,15 +36,15 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER })
 public class ImportarArquivoDeParaPage extends BasePage<AgenciaCAF> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(ImportarArquivoDeParaPage.class);
 
 	@SpringBean
 	ArquivoDeParaMediator arquivoDeParaMediator;
 
 	private AgenciaCAF arquivoCAF;
 	private FileUploadField fileUploadField;
+	private RadioChoice<BooleanSimNao> radioLimparBase;
+	private DropDownChoice<PadraoArquivoDePara> dropDownDePara;
 
 	public ImportarArquivoDeParaPage() {
 		this.arquivoCAF = new AgenciaCAF();
@@ -59,24 +65,43 @@ public class ImportarArquivoDeParaPage extends BasePage<AgenciaCAF> {
 			@Override
 			protected void onSubmit() {
 				final FileUpload uploadedFile = fileUploadField.getFileUpload();
+				final PadraoArquivoDePara padraoArquivo = dropDownDePara.getModelObject();
+				final BooleanSimNao limparBase = radioLimparBase.getModelObject();
 
 				try {
-					arquivoDeParaMediator.processarArquivo(uploadedFile);
-					success("Arquivo " + uploadedFile.getClientFileName() + " foi importado com sucesso na CRA !");
+					arquivoDeParaMediator.processarArquivo(uploadedFile, padraoArquivo, limparBase);
+					success("Arquivo " + padraoArquivo.getModelo() + " foi importado com sucesso na CRA !");
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível importar o arquivo De/Para ! \n Entre em contato com a CRA ");
+					error("Não foi possível importar o arquivo De/Para ! Favor entrar em contato com a CRA ");
 				}
 			}
 		};
 		form.setMaxSize(Bytes.megabytes(100));
-
+		form.add(dropDownTipoArquivoEnviado());
+		form.add(checkLimparBase());
 		form.add(campoArquivo());
 		form.add(botaoEnviar());
 		add(form);
+	}
+
+	private DropDownChoice<PadraoArquivoDePara> dropDownTipoArquivoEnviado() {
+		dropDownDePara = new DropDownChoice<PadraoArquivoDePara>("tipoDePara", new Model<PadraoArquivoDePara>(), Arrays.asList(PadraoArquivoDePara.values()),
+				new ChoiceRenderer<PadraoArquivoDePara>("modelo"));
+		dropDownDePara.setRequired(true);
+		dropDownDePara.setLabel(new Model<String>("Tipo Arquivo De/Para"));
+		return dropDownDePara;
+	}
+
+	private RadioChoice<BooleanSimNao> checkLimparBase() {
+		radioLimparBase = new RadioChoice<BooleanSimNao>("situacao", new Model<BooleanSimNao>(), Arrays.asList(BooleanSimNao.values()),
+				new ChoiceRenderer<BooleanSimNao>("label"));
+		radioLimparBase.setRequired(true);
+		radioLimparBase.setLabel(new Model<String>("Limpar a Base"));
+		return radioLimparBase;
 	}
 
 	private FileUploadField campoArquivo() {

@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">RESULTADO DA BUSCA
+		<span class="pull-right">
+			<a href="BuscarArquivo" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+		</span>
+		</h4>
+		<br style="clear: both;"/>
+		<table id="table" class="table table-responsive table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="col-center">TIPO</th>
+					<th class="col-center">BAIXAR</th>
+					<th class="col-center">RELATÓRIO</th>
+					<th class="col-center">ARQUIVO</th>
+					<th class="col-center">DATA</th>
+					<th class="col-center">HORA</th>
+					<th>ENVIADO POR</th>
+					<th>DESTINO</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="dataTableRemessa">
+					<td class="col-center" wicket:id="tipoArquivo"></td>
+					<td class="col-center">
+						<a href="#" class="link" wicket:id="downloadArquivo">
+							<img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg">
+						</a>
+					</td>
+					<td class="col-center"><button wicket:id="gerarRelatorio" type="button" style="float: inherit;"><span class="col-center fa fa-print"></span></button></td>
+					<td class="col-center"><a target="_blank" wicket:id="linkArquivo"><span class="link" wicket:id="nomeArquivo"></span></a></td>
+					<td class="col-center" wicket:id="dataEnvio"></td>
+					<td class="col-center" wicket:id="horaEnvio"></td>
+					<td wicket:id="instituicao"></td>
+					<td wicket:id="destino"></td>
+					<td class="col-center">
+						<div wicket:id="divInfo">
+							<span wicket:id="status"></span>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</wicket:extend>
+</body>
+</html>

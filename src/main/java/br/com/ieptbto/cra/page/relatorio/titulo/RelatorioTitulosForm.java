@@ -38,8 +38,7 @@ public class RelatorioTitulosForm extends BaseForm<RelatorioFormBean> {
 		RelatorioFormBean bean = getModelObject();
 
 		try {
-			if (bean.getBancoConvenio() == null && bean.getCartorio() == null && fileUploadField.getFileUpload() == null
-					&& bean.getDataInicio() == null) {
+			if (bean.getBancoConvenio() == null && bean.getCartorio() == null && fileUploadField.getFileUpload() == null && bean.getDataInicio() == null) {
 				throw new InfraException("Por favor, informe o Banco/Convênio, o Município ou anexe uma planilha de pendências !");
 			}
 			if (bean.getDataInicio() != null) {
@@ -54,8 +53,8 @@ public class RelatorioTitulosForm extends BaseForm<RelatorioFormBean> {
 			}
 
 			if (bean.getTipoExportacao().equals(TipoExportacaoRelatorio.PDF.toString())) {
-				JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosPorSituacao(bean.getSituacaoTituloRelatorio(),
-						bean.getBancoConvenio(), dataInicio, dataFim);
+				JasperPrint jasperPrint =
+						new RelatorioUtil().gerarRelatorioTitulosPorSituacao(bean.getSituacaoTituloRelatorio(), bean.getBancoConvenio(), dataInicio, dataFim);
 				File pdf = File.createTempFile("report", ".pdf");
 				JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 				IResourceStream resourceStream = new FileResourceStream(pdf);
@@ -77,8 +76,8 @@ public class RelatorioTitulosForm extends BaseForm<RelatorioFormBean> {
 		} catch (InfraException ex) {
 			error(ex.getMessage());
 		} catch (Exception e) {
+			logger.info(e.getMessage(), e);
 			error("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
-			e.printStackTrace();
 		}
 	}
 }
