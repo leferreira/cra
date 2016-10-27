@@ -41,6 +41,16 @@ public interface IRemessaWS {
 
 	/**
 	 * 
+	 * @param login
+	 * @param senha
+	 * @return
+	 */
+	@WebMethod(operationName = "desistenciasPendentesCartorio")
+	@GET
+	public String desistenciasPendentesCartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
+
+	/**
+	 * 
 	 * @param nomeArquivo
 	 * @param login
 	 * @param senha
@@ -163,8 +173,8 @@ public interface IRemessaWS {
 	 */
 	@WebMethod(operationName = "confirmarRecebimentoDesistenciaCancelamento")
 	@GET
-	public String confirmarRecebimentoDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo,
-			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
+	public String confirmarRecebimentoDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
+			@WebParam(name = "user_pass") String senha);
 
 	/**
 	 * 

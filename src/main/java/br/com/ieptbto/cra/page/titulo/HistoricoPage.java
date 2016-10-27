@@ -42,8 +42,11 @@ import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
+import br.com.ieptbto.cra.enumeration.PermissaoUsuario;
 import br.com.ieptbto.cra.enumeration.SituacaoBatimentoRetorno;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
@@ -58,6 +61,7 @@ import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TituloSolicitacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
@@ -98,18 +102,48 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private TituloRemessa tituloRemessa;
 	private Anexo anexo;
 	private List<ArquivoOcorrenciaBean> arquivosOcorrencias;
+	private SolicitacaoCancelamento solicitacaoCancelamento;
 
 	public HistoricoPage(TituloRemessa titulo) {
 		this.tituloRemessa = titulo;
 		this.anexo = tituloMediator.buscarAnexo(tituloRemessa);
+		this.solicitacaoCancelamento = cancelamentoProtestoMediator.buscarSolicitacaoCancelamentoPorTitulo(titulo);
 
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
+		adicionarLinkSolicitarCancelamento();
 		carregarArquivosOcorrencias();
 		carregarCampos();
+	}
+
+	private void adicionarLinkSolicitarCancelamento() {
+		Link<TituloRemessa> linkCancelamento = new Link<TituloRemessa>("linkCancelamento", getModel()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(new TituloSolicitacaoCancelamentoPage(getModel().getObject()));
+			}
+		};
+		linkCancelamento.setOutputMarkupId(true);
+		linkCancelamento.setVisible(false);
+
+		Usuario usuario = getUser();
+		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			if (usuario.getGrupoUsuario().getGrupo().equals(PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel())) {
+				linkCancelamento.setVisible(true);
+			}
+		}
+		if (solicitacaoCancelamento != null) {
+			linkCancelamento.setEnabled(false);
+			linkCancelamento.setVisible(false);
+		}
+		add(linkCancelamento);
 	}
 
 	private void carregarArquivosOcorrencias() {
@@ -207,7 +241,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			}
 		}
 
-		SolicitacaoCancelamento solicitacaoCancelamento = cancelamentoProtestoMediator.buscarSolicitacaoCancelamentoPorTitulo(titulo);
 		if (solicitacaoCancelamento != null) {
 			novaOcorrencia = new ArquivoOcorrenciaBean();
 			novaOcorrencia.parseToSolicitacaoCancelamento(solicitacaoCancelamento);

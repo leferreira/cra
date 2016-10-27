@@ -124,9 +124,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo || TipoArquivoEnum.RETORNO == tipoArquivo) {
 						if (TituloException.class.isInstance(exception)) {
 							TituloException excecaoTitulo = TituloException.class.cast(exception);
-							mensagemErro = mensagemErro + "<li><span class=\"alert-link\">" + (Integer.valueOf(excecaoTitulo.getNumeroSequencialRegistro()) - 1)
-									+ "º Título: </span> [ Nosso Número = " + excecaoTitulo.getNossoNumero() + " ]  -  " + excecaoTitulo.getDescricao()
-									+ ";</li>";
+							mensagemErro = mensagemErro + "<li><span class=\"alert-link\">Nº Sequencial do Registro "
+									+ excecaoTitulo.getNumeroSequencialRegistro() + ": </span> [ Nosso Número = " + excecaoTitulo.getNossoNumero() + " ]  -  "
+									+ excecaoTitulo.getDescricao() + ";</li>";
 						} else if (CabecalhoRodapeException.class.isInstance(exception)) {
 							CabecalhoRodapeException excecaoCabecalhoRodape = CabecalhoRodapeException.class.cast(exception);
 							mensagemErro = mensagemErro + "<li>" + excecaoCabecalhoRodape.getDescricao() + ";</li>";

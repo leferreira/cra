@@ -135,7 +135,7 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 
 					final TituloRemessa tituloRemessa = pedidoCancelamento.getTitulo();
 					item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloRemessa.getSaldoTitulo()));
-					item.add(new Label("nossoNumero", tituloRemessa.getNossoNumero()));
+					item.add(new Label("nossoNumerno", tituloRemessa.getNossoNumero()));
 
 					String municipio = tituloRemessa.getPracaProtesto();
 					if (municipio.length() > 20) {

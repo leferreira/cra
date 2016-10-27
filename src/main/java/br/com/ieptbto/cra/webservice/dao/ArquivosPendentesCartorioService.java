@@ -11,7 +11,6 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
-import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
@@ -19,7 +18,6 @@ import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.AutorizaCancelamentoPendente;
@@ -39,8 +37,6 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 	private ArquivoMediator arquivoMediator;
 	@Autowired
 	private DesistenciaProtestoMediator desistenciaMediator;
-	@Autowired
-	private InstituicaoMediator instituicaoMediator;
 
 	public String buscarArquivosPendentesCartorio(Usuario usuario) {
 		Arquivo arquivo = null;
@@ -51,8 +47,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			Instituicao instituicaoUsuario = instituicaoMediator.carregarInstituicaoPorId(usuario.getInstituicao());
-			arquivo = arquivoMediator.arquivosPendentes(instituicaoUsuario);
+			arquivo = arquivoMediator.arquivosPendentes(usuario.getInstituicao());
 			if (arquivo.getRemessas().isEmpty() && arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()
 					&& arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()
 					&& arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
@@ -69,7 +64,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		RelatorioArquivosPendentes relatorioArquivosPendentes = new RelatorioArquivosPendentes();
 
 		RemessaPendente remessaPendentes = new RemessaPendente();
-		if (!arquivo.getRemessas().isEmpty()) {
+		if (arquivo.getRemessas() != null && !arquivo.getRemessas().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (Remessa remessa : arquivo.getRemessas()) {
 				remessa.setArquivo(arquivoMediator.carregarArquivoPorId(remessa.getArquivo()));
@@ -79,7 +74,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		}
 
 		CancelamentoPendente cancelamentoPendentes = new CancelamentoPendente();
-		if (!arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()) {
+		if (arquivo.getRemessaCancelamentoProtesto() != null && !arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (CancelamentoProtesto cancelamento : arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
 				cancelamento
@@ -90,7 +85,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		}
 
 		DesistenciaPendente desistenciaPendentes = new DesistenciaPendente();
-		if (!arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
+		if (arquivo.getRemessaDesistenciaProtesto() != null && !arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (DesistenciaProtesto desistencia : arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
 				desistencia.setRemessaDesistenciaProtesto(desistenciaMediator.carregarRemessaDesistenciaPorId(desistencia.getRemessaDesistenciaProtesto()));
@@ -100,7 +95,7 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		}
 
 		AutorizaCancelamentoPendente autorizaCancelamentoPendentes = new AutorizaCancelamentoPendente();
-		if (!arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
+		if (arquivo.getRemessaAutorizacao() != null && !arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (AutorizacaoCancelamento ac : arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento()) {
 				ac.setRemessaAutorizacaoCancelamento(desistenciaMediator.carregarRemessaAutorizacaoPorId(ac.getRemessaAutorizacaoCancelamento()));
@@ -116,7 +111,33 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		return relatorioArquivosPendentes;
 	}
 
+	/**
+	 * @param usuario
+	 * @return
+	 */
+	public String buscarDesistenciaPendentesCartorio(Usuario usuario) {
+		Arquivo arquivo = null;
+
+		try {
+			if (usuario == null) {
+				return setRespostaUsuarioInvalido();
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO)) {
+				return mensagemServicoIndisponivel(usuario);
+			}
+			arquivo = arquivoMediator.desistenciaPendentes(usuario.getInstituicao());
+			if (arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
+				return gerarMensagemNaoHaArquivosPendentes();
+			}
+		} catch (Exception e) {
+			logger.info(e.getCause(), e);
+			return setRespostaErroInternoNoProcessamento(usuario, "Erro interno no processamento.");
+		}
+		return gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivo), CONSTANTE_RELATORIO_XML);
+	}
+
 	public String confirmarEnvioConfirmacaoRetorno(String nomeArquivo, Usuario usuario) {
+
 		try {
 			if (usuario == null) {
 				return setRespostaUsuarioInvalido();

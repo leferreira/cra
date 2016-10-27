@@ -5,11 +5,9 @@ import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.security.UserSession;
 
 /**
@@ -19,14 +17,13 @@ import br.com.ieptbto.cra.security.UserSession;
  * @param <T>
  */
 public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends WebPage implements IHeaderContributor {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	/** * Wicket-ID do feedback panel. */
 	protected static final String WID_FEEDBACK = "feedback";
-	@SpringBean
-	UsuarioMediator usuarioMediator;
 
 	/**
 	 * Construtor padrao.
@@ -68,7 +65,7 @@ public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends Web
 	 * @return {@link Colaborador}
 	 */
 	public Usuario getUser() {
-		return usuarioMediator.buscarUsuarioPorPK(getSession().getUser());
+		return getSession().getUser();
 	}
 
 	/**
@@ -79,5 +76,4 @@ public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends Web
 	public FeedbackPanel getFeedbackPanel() {
 		return (FeedbackPanel) get(WID_FEEDBACK);
 	}
-
 }

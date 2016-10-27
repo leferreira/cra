@@ -19,10 +19,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalTime;
 
 import br.com.ieptbto.cra.component.label.DataUtil;
+import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.StatusSolicitacaoCancelamento;
+import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
@@ -76,6 +78,17 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCance
 
 				boolean cancelamentoPorIrregularidade = false;
 				try {
+					Retorno retornoTitulo = solicitacaoCancelamento.getTituloRemessa().getRetorno();
+					if (retornoTitulo == null) {
+						throw new InfraException(
+								"O título ainda não foi protestado em cartório, aguarde o protesto e em seguida solicite novamente o cancelamento!");
+					} else if (StringUtils.isNotBlank(retornoTitulo.getTipoOcorrencia())) {
+						TipoOcorrencia ocorrencia = TipoOcorrencia.getTipoOcorrencia(retornoTitulo.getTipoOcorrencia());
+						if (!TipoOcorrencia.PROTESTADO.equals(ocorrencia)) {
+							throw new InfraException("Não é possível solicitar o cancelamento de um título que não esteja protestado!");
+						}
+					}
+
 					if (dropDownMotivoCancelamento.getModelObject() == null) {
 						solicitacaoCancelamento.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
 					} else {

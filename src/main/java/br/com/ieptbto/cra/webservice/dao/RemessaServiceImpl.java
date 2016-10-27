@@ -167,6 +167,14 @@ public class RemessaServiceImpl implements IRemessaWS {
 	}
 
 	@Override
+	@WebMethod(operationName = "desistenciasPendentesCartorio")
+	@GET
+	public String desistenciasPendentesCartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
+		Usuario usuario = init(login, senha, "desistenciasPendentesCartorio");
+		return arquivosPendentesCartorioService.buscarDesistenciaPendentesCartorio(usuario);
+	}
+
+	@Override
 	@WebMethod(operationName = "verificarAcessoUsuario")
 	@GET
 	public String verificarAcessoUsuario(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
