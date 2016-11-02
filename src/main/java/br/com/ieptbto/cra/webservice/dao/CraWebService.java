@@ -1,8 +1,5 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -22,14 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
-import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.mediator.CraServiceMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
@@ -73,7 +69,7 @@ public class CraWebService {
 		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setResposta(Usuario usuario, ArquivoVO arquivo, String nomeArquivo, String nomeNode) {
+	protected String setResposta(Usuario usuario, ArquivoGenericoVO arquivo, String nomeArquivo, String nomeNode) {
 		if (usuario == null) {
 			return setRespostaUsuarioInvalido(nomeArquivo);
 		}
@@ -277,24 +273,6 @@ public class CraWebService {
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
 		return msg;
-	}
-
-	protected void salvarArquivoXMLParaFisico(String fileName, String content) {
-		File diretorioTeste = new File(ConfiguracaoBase.DIRETORIO_TESTE);
-
-		try {
-			if (!diretorioTeste.exists()) {
-				diretorioTeste.mkdirs();
-			}
-			File arquivo = new File(ConfiguracaoBase.DIRETORIO_TESTE + fileName);
-			BufferedWriter bWrite = new BufferedWriter(new FileWriter(arquivo));
-			bWrite.write(content);
-			bWrite.flush();
-			bWrite.close();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		}
 	}
 
 	public String getNomeArquivo() {

@@ -134,7 +134,7 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 					pedidoCancelamento.getTitulo().setRetorno(tituloMediator.buscarRetorno(pedidoCancelamento.getTitulo()));
 
 					final TituloRemessa tituloRemessa = pedidoCancelamento.getTitulo();
-					item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloRemessa.getSaldoTitulo()));
+					item.add(new LabelValorMonetario<BigDecimal>("valor", tituloRemessa.getSaldoTitulo()));
 					item.add(new Label("nossoNumerno", tituloRemessa.getNossoNumero()));
 
 					String municipio = tituloRemessa.getPracaProtesto();
@@ -202,7 +202,7 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 					}
 					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
 
-					Link<Arquivo> linkArquivoRemessa = new Link<Arquivo>("linkArquivo") {
+					Link<Arquivo> linkArquivoRemessa = new Link<Arquivo>("linkRemessa") {
 
 						/***/
 						private static final long serialVersionUID = 1L;

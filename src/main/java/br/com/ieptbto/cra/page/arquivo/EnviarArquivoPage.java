@@ -22,8 +22,10 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.CabecalhoRodapeException;
 import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -129,6 +131,13 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 									+ excecaoTitulo.getDescricao() + ";</li>";
 						} else if (CabecalhoRodapeException.class.isInstance(exception)) {
 							CabecalhoRodapeException excecaoCabecalhoRodape = CabecalhoRodapeException.class.cast(exception);
+
+							if (arquivo.getInstituicaoEnvio().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
+								if (CodigoErro.CRA_ARQUIVO_CORROMPIDO_SOMA_DE_REGISTROS_DE_TRANSACAO_EXISTENTES_NO_ARQUIVO_NAO_CONFERE_COM_TOTAL_INFORMADO_NO_HEADER
+										.equals(excecaoCabecalhoRodape.getCodigoErro())) {
+									excecaoCabecalhoRodape.setCodigoErro(CodigoErro.SERPRO_QUANTIDADE_REGISTROS_INVALIDA);
+								}
+							}
 							mensagemErro = mensagemErro + "<li>" + excecaoCabecalhoRodape.getDescricao() + ";</li>";
 						}
 					} else if (TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO == tipoArquivo || TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO == tipoArquivo

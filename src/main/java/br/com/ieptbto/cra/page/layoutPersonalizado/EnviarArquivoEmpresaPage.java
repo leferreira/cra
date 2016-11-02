@@ -81,7 +81,6 @@ public class EnviarArquivoEmpresaPage extends BasePage<Arquivo> {
 		form.setMaxSize(Bytes.megabytes(10));
 		form.add(botaoEnviar());
 		form.add(campoArquivo());
-
 		add(form);
 	}
 

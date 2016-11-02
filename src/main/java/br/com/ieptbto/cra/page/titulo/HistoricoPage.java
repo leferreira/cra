@@ -42,7 +42,6 @@ import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.PermissaoUsuario;
 import br.com.ieptbto.cra.enumeration.SituacaoBatimentoRetorno;
@@ -114,12 +113,16 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 	@Override
 	protected void adicionarComponentes() {
-		adicionarLinkSolicitarCancelamento();
 		carregarArquivosOcorrencias();
+		adicionarLinkSolicitarCancelamento();
 		carregarCampos();
 	}
 
 	private void adicionarLinkSolicitarCancelamento() {
+		WebMarkupContainer divSolicitarCancelamento = new WebMarkupContainer("divCancelamento");
+		divSolicitarCancelamento.setOutputMarkupId(true);
+		divSolicitarCancelamento.setVisible(false);
+
 		Link<TituloRemessa> linkCancelamento = new Link<TituloRemessa>("linkCancelamento", getModel()) {
 
 			/***/
@@ -130,20 +133,20 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 				setResponsePage(new TituloSolicitacaoCancelamentoPage(getModel().getObject()));
 			}
 		};
-		linkCancelamento.setOutputMarkupId(true);
-		linkCancelamento.setVisible(false);
 
-		Usuario usuario = getUser();
-		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
-			if (usuario.getGrupoUsuario().getGrupo().equals(PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel())) {
-				linkCancelamento.setVisible(true);
-			}
+		String grupoUsuario = getUser().getGrupoUsuario().getGrupo();
+		TipoInstituicaoCRA tipoInstituicaoApresentante = getTituloRemessa().getRemessa().getInstituicaoOrigem().getTipoInstituicao().getTipoInstituicao();
+		TipoOcorrencia ocorrencia = null;
+		if (getTituloRemessa().getRetorno() != null) {
+			ocorrencia = TipoOcorrencia.getTipoOcorrencia(getTituloRemessa().getRetorno().getTipoOcorrencia());
 		}
-		if (solicitacaoCancelamento != null) {
-			linkCancelamento.setEnabled(false);
-			linkCancelamento.setVisible(false);
+		if (solicitacaoCancelamento == null && TipoOcorrencia.PROTESTADO.equals(ocorrencia) &&
+				TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicaoApresentante) &&
+				PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel().equals(grupoUsuario)) {
+			divSolicitarCancelamento.setVisible(true);
 		}
-		add(linkCancelamento);
+		divSolicitarCancelamento.add(linkCancelamento);
+		add(divSolicitarCancelamento);
 	}
 
 	private void carregarArquivosOcorrencias() {
@@ -479,6 +482,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		add(irregularidade());
 		add(codigoMunicipio());
 		add(pracaProtesto());
+		add(municipioDestino());
 		add(status());
 		add(nomeSacadorVendedor());
 		add(documentoSacador());
@@ -631,6 +635,10 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 	private Label pracaProtesto() {
 		return new Label("pracaProtesto", new Model<String>(getTituloRemessa().getPracaProtesto()));
+	}
+	
+	private Label municipioDestino() {
+		return new Label("municipioDestino", new Model<String>(getTituloRemessa().getRemessa().getInstituicaoDestino().getMunicipio().getNomeMunicipio().toUpperCase()));
 	}
 
 	private Label status() {

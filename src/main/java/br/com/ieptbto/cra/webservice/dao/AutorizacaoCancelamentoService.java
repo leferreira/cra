@@ -15,7 +15,7 @@ import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
@@ -58,7 +58,7 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 		this.nomeArquivo = nomeArquivo;
 
 		Arquivo arquivo = new Arquivo();
-		ArquivoVO arquivoVO = new ArquivoVO();
+		ArquivoGenericoVO arquivoVO = new ArquivoGenericoVO();
 		try {
 			if (usuario == null) {
 				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);

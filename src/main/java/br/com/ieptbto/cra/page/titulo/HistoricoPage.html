@@ -11,20 +11,21 @@
 						  <dt>NOSSO N&Uacute;MERO</dt><dd><span class="info-titulo" wicket:id="nossoNumero" style="font-size: 13px;"></span></dd>
 						  <dt>N&Uacute;MERO T&Iacute;TULO</dt><dd><span wicket:id="numeroTitulo"></span></dd>
 						  <dt>APRESENTANTE</dt><dd><span wicket:id="portador"></span></dd>
+						  <dt>MUNICÍPIO DESTINO</dt><dd><span wicket:id="municipioDestino"></span></dd>
 						  <dt></dt><dd></dd>
 						  <dt>AG. CENTRALIZAD.</dt><dd><span wicket:id="agencia"></span></dd>
 						  <dt>AG. CÓDIGO CEDENTE.</dt><dd><span wicket:id="agenciaCodigoCedente"></span></dd>
 						  <dt>ESP&Eacute;CIE</dt><dd><span wicket:id="especieTitulo"></span></dd>
 						  <dt>EMISS&Atilde;O</dt><dd><span wicket:id="dataEmissaoTitulo"></span></dd>
 						  <dt>VENCIMENTO</dt><dd><span wicket:id="dataVencimentoTitulo"></span></dd>
-						  <dt></dt><dd></dd>
+						  <dt><br class="both"></dt><dd></dd>
 						  <dt>PRA&Ccedil;A PROTESTO</dt><dd><span wicket:id="pracaProtesto"></span></dd>
 						  <dt>C&Oacute;D. MUNIC&Iacute;PIO</dt><dd><span wicket:id="codigoMunicipio"></span></dd>
 						  <dt>C&Oacute;D. CART&Oacute;RIO</dt><dd><span wicket:id="codigoCartorio"></span></dd>
 						</dl>
 					</fieldset>
 					<h4 class="titulo-top">COMPLEMENTO REGISTRO</h4>
-					<fieldset>
+					<fieldset> 
 						<dl class="dl-horizontal">
 							<dt><span wicket:id="labelAlinea"></span></dt><dd><span wicket:id="campoAlinea"></span></dd>
 							<dt><span wicket:id="labelDocumentosAnexos"></span></dt><dd><a wicket:id="linkAnexos" class="link">DOWNLOAD</a></dd>
@@ -46,10 +47,10 @@
 						<dl class="dl-horizontal">
 						  <dt>SITUA&Ccedil;&Atilde;O</dt><dd><span class="info-titulo" wicket:id="situacaoTitulo" style="font-size: 13px;"></span></dd>
 						  <dt>PROTOCOLO</dt><dd><span wicket:id="numeroProtocoloCartorio"></span></dd>
+						  <dt><br class="both"></dt><dd></dd> 
 						  <dt>DATA PROTOCOLO</dt><dd><span wicket:id="dataProtocolo"></span></dd>
 						  <dt>DATA OCORR&Egrave;NCIA</dt><dd><span wicket:id="dataOcorrencia"></span></dd>
 						  <dt>IRREGULARIDADE</dt><dd><span wicket:id="irregularidade"></span></dd>
-						  <dt>DEVOLUÇÃO/CANCELAMENTO</dt><dd><a type="button" target="_blank" class="btn btn-sm btn-danger" wicket:id="linkCancelamento"><span class="fa fa-times">&nbsp; Solicitar</span></a></dd>
 						</dl>
 					</fieldset>
 					<h4 class="titulo-top">DADOS DO DEVEDOR</h4>
@@ -77,6 +78,13 @@
 					</fieldset>
 				</div> 
 			</div>
+			<div class="col-md-4" wicket:id="divCancelamento">
+				<div class="form-group">
+					<label>DEVOLUÇÃO/CANCELAMENTO</label>&nbsp;
+					<a type="button" target="_blank" class="btn btn-sm btn-danger" wicket:id="linkCancelamento"><span class="fa fa-times">&nbsp; Solicitar</span></a>
+				</div>
+				<br class="clear">
+			</div>
 			<div class="col-md-4">
 				<div class="panel panel-primary">
 					<div class="panel-heading">ARQUIVOS E OCORRÊNCIAS</div>
@@ -98,7 +106,7 @@
 											<br class="clear">
 					                        <span class="text-muted pull-right clear">
 						                        <i class="fa fa-clock-o fa-fw"></i>&nbsp;
-						                        <span wicket:id="data"></span> ás <span wicket:id="hora"></span>
+						                        <span wicket:id="data"></span> Ã¡s <span wicket:id="hora"></span>
 					                        </span>
 											<br class="clear">
 										</p>

@@ -171,7 +171,11 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 				item.add(new Label("ordem", item.getIndex() + 1));
 				item.add(new Label("numeroTitulo", retorno.getTitulo().getNumeroTitulo()));
 				item.add(new Label("protocolo", retorno.getNumeroProtocoloCartorio()));
-				item.add(new Label("pracaProtesto", retorno.getTitulo().getPracaProtesto()));
+				String municipio = retorno.getRemessa().getInstituicaoOrigem().getMunicipio().getNomeMunicipio();
+				if (municipio.length() > 20) {
+					municipio = municipio.substring(0, 19);
+				}
+				item.add(new Label("pracaProtesto", municipio.toUpperCase()));
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 
 					/***/

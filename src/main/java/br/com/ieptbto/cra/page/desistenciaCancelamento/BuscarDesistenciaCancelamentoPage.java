@@ -72,13 +72,14 @@ public class BuscarDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
 									throw new InfraException("A data de início deve ser antes da data fim.");
-						} else
+						} else {
 							throw new InfraException("As duas datas devem ser preenchidas.");
+						}
 					}
 
 					if (TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS.equals(arquivoFormBean.getTipoVisualizacaoArquivos())) {
 						setResponsePage(new ListaDesistenciaCancelamentoPage(arquivoFormBean.getNomeArquivo(), arquivoFormBean.getBancoConvenio(),
-								arquivoFormBean.getTiposArquivos(), arquivoFormBean.getMunicipio(), dataInicio, dataFim));
+								arquivoFormBean.getTiposArquivos(), arquivoFormBean.getCartorio().getMunicipio(), dataInicio, dataFim));
 					} else if (TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS.equals(arquivoFormBean.getTipoVisualizacaoArquivos())) {
 						setResponsePage(new ListaDesistenciaCancelamentoInstituicaoPage(arquivoFormBean, usuario));
 					}

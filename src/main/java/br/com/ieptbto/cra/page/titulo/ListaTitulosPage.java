@@ -70,7 +70,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloRemessa.getSaldoTitulo()));
 				item.add(new Label("nossoNumero", tituloRemessa.getNossoNumero()));
 
-				String municipio = tituloRemessa.getPracaProtesto();
+				String municipio = tituloRemessa.getRemessa().getInstituicaoDestino().getMunicipio().getNomeMunicipio();
 				if (municipio.length() > 20) {
 					municipio = municipio.substring(0, 19);
 				}

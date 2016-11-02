@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.ArquivoVO;
+import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
@@ -44,7 +44,7 @@ public class RemessaService extends CraWebService {
 		this.nomeArquivo = nomeArquivo;
 		this.mensagemCra = null;
 
-		ArquivoVO arquivoVO = new ArquivoVO();
+		ArquivoGenericoVO arquivoVO = new ArquivoGenericoVO();
 		try {
 			if (usuario == null) {
 				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
@@ -91,7 +91,7 @@ public class RemessaService extends CraWebService {
 
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, new ArquivoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_REMESSA)) {
 				return mensagemServicoIndisponivel(usuario);
