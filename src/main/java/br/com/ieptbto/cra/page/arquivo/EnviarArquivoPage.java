@@ -26,6 +26,7 @@ import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.error.CodigoErro;
+import br.com.ieptbto.cra.exception.ArquivoException;
 import br.com.ieptbto.cra.exception.CabecalhoRodapeException;
 import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -98,9 +99,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 						success("O arquivo de Confirmação <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 								+ "</span> enviado, foi processado com sucesso !");
 					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
-						setResponsePage(new RelatorioRetornoPage(
-								"O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo() + "</span> enviado, foi processado com sucesso !",
-								getArquivo(), "ENVIAR ARQUIVO"));
+						setResponsePage(
+								new RelatorioRetornoPage("O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo()
+										+ "</span> enviado, foi processado com sucesso !", getArquivo(), "ENVIAR ARQUIVO"));
 					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
 						success("O arquivo de Desistência de Protesto <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 								+ "</span> enviado, foi processado com sucesso !");
@@ -110,6 +111,13 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());
+				} catch (ArquivoException ex) {
+					logger.info(ex.getMessage(), ex);
+					if (CodigoErro.CRA_ARQUIVO_ENVIADO_ANTERIORMENTE.equals(ex.getCodigoErro())) {
+						error("Não foi possível importar, pois, o arquivo [ " + ex.getNomeArquivo() + " ] já foi enviado para a CRA !");
+					} else {
+						error("Não foi possível enviar o arquivo! Favor entrar em contato com a CRA...");
+					}
 				} catch (Exception ex) {
 					logger.error(ex.getMessage(), ex);
 					error("Não foi possível enviar o arquivo! Favor entrar em contato com a CRA...");
@@ -123,12 +131,13 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 						"<span class=\"alert-link\">Por favor, corrija a(s) ocorrência(s) e(ou) erros encontrado(s) no arquivo e o envie novamente:</span>";
 				mensagemErro = mensagemErro + "<ul>";
 				for (Exception exception : erros) {
-					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo || TipoArquivoEnum.RETORNO == tipoArquivo) {
+					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo
+							|| TipoArquivoEnum.RETORNO == tipoArquivo) {
 						if (TituloException.class.isInstance(exception)) {
 							TituloException excecaoTitulo = TituloException.class.cast(exception);
 							mensagemErro = mensagemErro + "<li><span class=\"alert-link\">Nº Sequencial do Registro "
-									+ excecaoTitulo.getNumeroSequencialRegistro() + ": </span> [ Nosso Número = " + excecaoTitulo.getNossoNumero() + " ]  -  "
-									+ excecaoTitulo.getDescricao() + ";</li>";
+									+ excecaoTitulo.getNumeroSequencialRegistro() + ": </span> [ Nosso Número = "
+									+ excecaoTitulo.getNossoNumero() + " ]  -  " + excecaoTitulo.getDescricao() + ";</li>";
 						} else if (CabecalhoRodapeException.class.isInstance(exception)) {
 							CabecalhoRodapeException excecaoCabecalhoRodape = CabecalhoRodapeException.class.cast(exception);
 
@@ -140,7 +149,8 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 							}
 							mensagemErro = mensagemErro + "<li>" + excecaoCabecalhoRodape.getDescricao() + ";</li>";
 						}
-					} else if (TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO == tipoArquivo || TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO == tipoArquivo
+					} else if (TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO == tipoArquivo
+							|| TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO == tipoArquivo
 							|| TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO == tipoArquivo) {
 						DesistenciaCancelamentoException excecaoDesistencia = DesistenciaCancelamentoException.class.cast(exception);
 						mensagemErro = mensagemErro + "<li>" + excecaoDesistencia.getDescricao() + ";</li>";

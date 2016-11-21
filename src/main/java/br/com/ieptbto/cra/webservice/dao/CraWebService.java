@@ -42,6 +42,7 @@ public class CraWebService {
 	protected static final Logger logger = Logger.getLogger(CraWebService.class);
 	public static final String CONSTANTE_RELATORIO_XML = "relatorio";
 	public static final String CONSTANTE_COMARCA_XML = "comarcas";
+	public static final String CONSTANTE_APRESENTANTE_XML = "apresentante";
 	public static final String CONSTANTE_REMESSA_XML = "remessa";
 	public static final String CONSTANTE_CONFIRMACAO_XML = "confirmacao";
 	public static final String CONSTANTE_RETORNO_XML = "retorno";
@@ -130,10 +131,11 @@ public class CraWebService {
 
 	protected String setRespostaArquivoEmBranco(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS: Dados do arquivo enviados em branco " + nomeArquivo);
-		loggerCra.error(usuario, getCraAcao(), "Os dados do arquivo " + nomeArquivo + " da instituição " + usuario.getInstituicao().getNomeFantasia()
-				+ " foram enviados em branco ou estão corrimpidos.");
+		loggerCra.error(usuario, getCraAcao(), "Os dados do arquivo " + nomeArquivo + " da instituição "
+				+ usuario.getInstituicao().getNomeFantasia() + " foram enviados em branco ou estão corrimpidos.");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
-			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.SERPRO_ARQUIVO_INVALIDO_REMESSA_DESISTENCIA_CANCELAMENTO);
+			MensagemDeErro msg =
+					new MensagemDeErro(nomeArquivo, usuario, CodigoErro.SERPRO_ARQUIVO_INVALIDO_REMESSA_DESISTENCIA_CANCELAMENTO);
 			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
 		}
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_DADOS_DE_ENVIO_INVALIDOS);
@@ -165,8 +167,8 @@ public class CraWebService {
 
 	protected String setRespostaArquivoJaEnviadoAnteriormente(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
 		logger.error("Erro WS: Arquivo já enviado anteriormente.");
-		loggerCra.alert(usuario, getCraAcao(),
-				"Arquivo " + nomeArquivo + " já enviado anteriormente em " + DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()) + ".");
+		loggerCra.alert(usuario, getCraAcao(), "Arquivo " + nomeArquivo + " já enviado anteriormente em "
+				+ DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()) + ".");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
 			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
@@ -187,8 +189,8 @@ public class CraWebService {
 
 	protected String setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
 		logger.error("Erro WS: Arquivo já enviado anteriormente.");
-		loggerCra.error(usuario, getCraAcao(),
-				"Arquivo " + nomeArquivo + " já enviado anteriormente em " + DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()) + ".");
+		loggerCra.error(usuario, getCraAcao(), "Arquivo " + nomeArquivo + " já enviado anteriormente em "
+				+ DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()) + ".");
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
 		MensagemXml mensagem = msg.getMensagemErro();
 
@@ -197,6 +199,24 @@ public class CraWebService {
 		Erro erro = new Erro();
 		erro.setCodigo("9999");
 		erro.setDescricao("O arquivo " + nomeArquivo + " já foi enviado em " + DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()));
+		erros.add(erro);
+		detalhamento.setErro(erros);
+		mensagem.setDetalhamento(detalhamento);
+		return gerarMensagem(mensagem, CONSTANTE_RELATORIO_XML);
+	}
+
+	protected String setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, LocalDate dataEnvio) {
+		logger.error("Erro WS: Arquivo já enviado anteriormente.");
+		loggerCra.error(usuario, getCraAcao(),
+				"Arquivo " + nomeArquivo + " já enviado anteriormente em " + DataUtil.localDateToString(dataEnvio) + ".");
+		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
+		MensagemXml mensagem = msg.getMensagemErro();
+
+		Detalhamento detalhamento = new Detalhamento();
+		List<Erro> erros = new ArrayList<Erro>();
+		Erro erro = new Erro();
+		erro.setCodigo("9999");
+		erro.setDescricao("O arquivo " + nomeArquivo + " já foi enviado em " + DataUtil.localDateToString(dataEnvio));
 		erros.add(erro);
 		detalhamento.setErro(erros);
 		mensagem.setDetalhamento(detalhamento);
@@ -259,10 +279,12 @@ public class CraWebService {
 			marshaller.marshal(element, writer);
 			msg = writer.toString();
 			msg = msg.replace(" xsi:type=\"mensagemXmlSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-			msg = msg.replace(" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(
+					" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerpro\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace(" xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace("<confirmacao xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
 			msg = msg.replace("<retorno xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
+			msg = msg.replace(" xsi:type=\"instituicaoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			writer.close();
 
 		} catch (JAXBException e) {

@@ -23,8 +23,10 @@ import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.error.CodigoErro;
+import br.com.ieptbto.cra.exception.ArquivoException;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 import br.com.ieptbto.cra.webservice.receiver.RetornoReceiver;
@@ -80,8 +82,8 @@ public class RetornoService extends CraWebService {
 					"Arquivo de Retorno " + nomeArquivo + " recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			loggerCra.error(usuario, getCraAcao(),
-					"Erro interno ao construir o arquivo de Retorno " + nomeArquivo + " recebido por " + usuario.getInstituicao().getNomeFantasia() + ".", e);
+			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo de Retorno " + nomeArquivo + " recebido por "
+					+ usuario.getInstituicao().getNomeFantasia() + ".", e);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
 		return resposta;
@@ -144,11 +146,19 @@ public class RetornoService extends CraWebService {
 
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex);
-			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex);
+			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex, dados);
+			return setRespostaErrosServicosCartorios(usuario, nomeArquivo, ex.getMessage());
+		} catch (ArquivoException ex) {
+			logger.info(ex.getMessage(), ex);
+			if (CodigoErro.CRA_ARQUIVO_ENVIADO_ANTERIORMENTE.equals(ex.getCodigoErro())) {
+				loggerCra.error(usuario, getCraAcao(), "Arquivo " + ex.getNomeArquivo() + " já enviado anteriormente em "
+						+ DataUtil.localDateToString(ex.getDataEnvio()) + ".", ex);
+				return setRespostaArquivoJaEnviadoCartorio(usuario, ex.getNomeArquivo(), ex.getDataEnvio());
+			}
 			return setRespostaErrosServicosCartorios(usuario, nomeArquivo, ex.getMessage());
 		} catch (Exception e) {
 			logger.info(e.getMessage(), e);
-			loggerCra.error(usuario, getCraAcao(), e.getMessage(), e);
+			loggerCra.error(usuario, getCraAcao(), e.getMessage(), e, dados);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
 		return gerarMensagemEnvioRetorno(mensagemCra, CONSTANTE_RETORNO_XML);

@@ -62,9 +62,13 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	private TextField<String> protocoloCartorio;
 	private DropDownChoice<Municipio> codigoIbge;
 	private List<Retorno> retornos;
+	private boolean etiquetasNaoGeradas;
 
 	public InstrumentoProtestoPage() {
 		this.instrumento = new InstrumentoProtesto();
+		this.etiquetasNaoGeradas = instrumentoMediator.verificarEtiquetasGeradasNaoConfimadas();
+
+		verificarEtiquetasGeradasNaoConfimadas();
 		adicionarComponentes();
 	}
 
@@ -77,6 +81,12 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
 	}
 
+	private void verificarEtiquetasGeradasNaoConfimadas() {
+		if (etiquetasNaoGeradas) {
+			warn("Existem intrumentos com Slips geradas porém não foram confirmados! Por favor vá a página Gerar Slips e em seguida clique em confirmar...");
+		}
+	}
+
 	private void adicionarFormularioManual() {
 		Form<Retorno> formManual = new Form<Retorno>("formManual") {
 
@@ -87,11 +97,14 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 			protected void onSubmit() {
 
 				try {
+					if (etiquetasNaoGeradas) {
+						throw new InfraException("Por favor confirme os instrumentos lançados pois já tiveram Slips geradas...");
+					}
+
 					String numeroProtocolo = protocoloCartorio.getModelObject();
 					String codigoIBGE = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
 					Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(numeroProtocolo, codigoIBGE);
 					InstrumentoProtesto instrumento = instrumentoMediator.isTituloJaFoiGeradoInstrumento(tituloProtestado);
-
 					if (tituloProtestado != null) {
 						if (instrumento == null) {
 							if (!getRetornos().contains(tituloProtestado)) {
@@ -128,12 +141,16 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
 			@Override
 			protected void onSubmit() {
+
 				try {
+					if (etiquetasNaoGeradas) {
+						throw new InfraException("Por favor confirme os instrumentos lançados pois já tiveram Slips geradas...");
+					}
+
 					String codigoIbge = codigoInstrumento.getModelObject().substring(1, 8);
 					String protocolo = codigoInstrumento.getModelObject().substring(8, 18);
 					Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(protocolo, codigoIbge);
 					InstrumentoProtesto instrumento = instrumentoMediator.isTituloJaFoiGeradoInstrumento(tituloProtestado);
-
 					if (tituloProtestado != null) {
 						if (instrumento == null) {
 							if (!getRetornos().contains(tituloProtestado)) {
@@ -217,8 +234,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 				try {
 					instrumentoMediator.salvarInstrumentoProtesto(getRetornos(), getUser());
 					setRetornos(null);
-					setResponsePage(new MensagemPage<InstrumentoProtesto>(InstrumentoProtestoPage.class, "ENTRADA DE INSTRUMENTO DE PROTESTO",
-							"Entrada dos instrumentos realizada com sucesso!"));
+					setResponsePage(new MensagemPage<InstrumentoProtesto>(InstrumentoProtestoPage.class,
+							"ENTRADA DE INSTRUMENTO DE PROTESTO", "Entrada dos instrumentos realizada com sucesso!"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
@@ -237,7 +254,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
 	private DropDownChoice<Municipio> codigoIbgeCartorio() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		codigoIbge = new DropDownChoice<Municipio>("codigoIbge", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
+		codigoIbge =
+				new DropDownChoice<Municipio>("codigoIbge", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
 		codigoIbge.setLabel(new Model<String>("Município"));
 		codigoIbge.setRequired(true);
 		return codigoIbge;

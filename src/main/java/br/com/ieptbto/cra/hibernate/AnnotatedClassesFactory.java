@@ -43,7 +43,6 @@ import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.PedidoCancelamento;
 import br.com.ieptbto.cra.entidade.PedidoDesistencia;
-import br.com.ieptbto.cra.entidade.PermissaoEnvio;
 import br.com.ieptbto.cra.entidade.RegistroCnp;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.RemessaAutorizacaoCancelamento;
@@ -96,7 +95,6 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(TipoInstituicao.class);
 		classesHibernate.add(Municipio.class);
 		classesHibernate.add(TipoArquivo.class);
-		classesHibernate.add(PermissaoEnvio.class);
 		classesHibernate.add(Arquivo.class);
 		classesHibernate.add(TituloRemessa.class);
 		classesHibernate.add(Confirmacao.class);

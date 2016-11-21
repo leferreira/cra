@@ -78,8 +78,9 @@ public class BuscarDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 					}
 
 					if (TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS.equals(arquivoFormBean.getTipoVisualizacaoArquivos())) {
-						setResponsePage(new ListaDesistenciaCancelamentoPage(arquivoFormBean.getNomeArquivo(), arquivoFormBean.getBancoConvenio(),
-								arquivoFormBean.getTiposArquivos(), arquivoFormBean.getCartorio().getMunicipio(), dataInicio, dataFim));
+						setResponsePage(
+								new ListaDesistenciaCancelamentoPage(arquivoFormBean.getNomeArquivo(), arquivoFormBean.getBancoConvenio(),
+										arquivoFormBean.getTiposArquivos(), arquivoFormBean.getCartorio(), dataInicio, dataFim));
 					} else if (TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS.equals(arquivoFormBean.getTipoVisualizacaoArquivos())) {
 						setResponsePage(new ListaDesistenciaCancelamentoInstituicaoPage(arquivoFormBean, usuario));
 					}

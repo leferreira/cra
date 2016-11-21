@@ -43,9 +43,9 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCance
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	TituloMediator tituloMediator;
+	private TituloMediator tituloMediator;
 	@SpringBean
-	CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	private CancelamentoProtestoMediator cancelamentoProtestoMediator;
 
 	private SolicitacaoCancelamento solicitacaoCancelamento;
 	private DropDownChoice<CodigoIrregularidade> dropDownMotivoCancelamento;
@@ -78,7 +78,10 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCance
 
 				boolean cancelamentoPorIrregularidade = false;
 				try {
-					Retorno retornoTitulo = solicitacaoCancelamento.getTituloRemessa().getRetorno();
+					Retorno retornoTitulo = null;
+					if (solicitacaoCancelamento.getTituloRemessa().getRetorno() != null) {
+						retornoTitulo = solicitacaoCancelamento.getTituloRemessa().getRetorno();
+					}
 					if (retornoTitulo == null) {
 						throw new InfraException(
 								"O título ainda não foi protestado em cartório, aguarde o protesto e em seguida solicite novamente o cancelamento!");

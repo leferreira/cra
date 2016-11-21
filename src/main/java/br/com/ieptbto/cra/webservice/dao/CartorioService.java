@@ -1,23 +1,33 @@
 package br.com.ieptbto.cra.webservice.dao;
 
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.LocalDateTime;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ieptbto.cra.conversor.CampoArquivo;
+import br.com.ieptbto.cra.conversor.arquivo.FabricaConversor;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.entidade.vo.InstituicaoVO;
 import br.com.ieptbto.cra.enumeration.CraServiceEnum;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.TipoCampo51;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.VO.AutorizaCancelamentoPendente;
@@ -31,8 +41,10 @@ import br.com.ieptbto.cra.webservice.VO.RemessaPendente;
  *
  */
 @Service
-public class ArquivosPendentesCartorioService extends CraWebService {
+public class CartorioService extends CraWebService {
 
+	@Autowired
+	private InstituicaoMediator instituicaoMediator;
 	@Autowired
 	private ArquivoMediator arquivoMediator;
 	@Autowired
@@ -74,21 +86,24 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		}
 
 		CancelamentoPendente cancelamentoPendentes = new CancelamentoPendente();
-		if (arquivo.getRemessaCancelamentoProtesto() != null && !arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()) {
+		if (arquivo.getRemessaCancelamentoProtesto() != null
+				&& !arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (CancelamentoProtesto cancelamento : arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
-				cancelamento
-						.setRemessaCancelamentoProtesto(desistenciaMediator.carregarRemessaCancelamentoPorId(cancelamento.getRemessaCancelamentoProtesto()));
+				cancelamento.setRemessaCancelamentoProtesto(
+						desistenciaMediator.carregarRemessaCancelamentoPorId(cancelamento.getRemessaCancelamentoProtesto()));
 				nomeArquivos.add(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo());
 			}
 			cancelamentoPendentes.setArquivos(nomeArquivos);
 		}
 
 		DesistenciaPendente desistenciaPendentes = new DesistenciaPendente();
-		if (arquivo.getRemessaDesistenciaProtesto() != null && !arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
+		if (arquivo.getRemessaDesistenciaProtesto() != null
+				&& !arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (DesistenciaProtesto desistencia : arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
-				desistencia.setRemessaDesistenciaProtesto(desistenciaMediator.carregarRemessaDesistenciaPorId(desistencia.getRemessaDesistenciaProtesto()));
+				desistencia.setRemessaDesistenciaProtesto(
+						desistenciaMediator.carregarRemessaDesistenciaPorId(desistencia.getRemessaDesistenciaProtesto()));
 				nomeArquivos.add(desistencia.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo());
 			}
 			desistenciaPendentes.setArquivos(nomeArquivos);
@@ -98,7 +113,8 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		if (arquivo.getRemessaAutorizacao() != null && !arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (AutorizacaoCancelamento ac : arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento()) {
-				ac.setRemessaAutorizacaoCancelamento(desistenciaMediator.carregarRemessaAutorizacaoPorId(ac.getRemessaAutorizacaoCancelamento()));
+				ac.setRemessaAutorizacaoCancelamento(
+						desistenciaMediator.carregarRemessaAutorizacaoPorId(ac.getRemessaAutorizacaoCancelamento()));
 				nomeArquivos.add(ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo());
 			}
 			autorizaCancelamentoPendentes.setArquivos(nomeArquivos);
@@ -148,7 +164,8 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 			}
 		} catch (Exception e) {
 			logger.info(e.getCause(), e);
-			return setRespostaErroInternoNoProcessamento(usuario, "Erro interno ao verificar se o arquivo ja foi enviado!");
+			return setRespostaErroInternoNoProcessamento(usuario,
+					"Erro interno ao verificar se o arquivo de  Retorno/Confirmação ja foi enviado!");
 		}
 		return gerarRespostaArquivoNaoEnviado(usuario, nomeArquivo);
 	}
@@ -209,5 +226,76 @@ public class ArquivosPendentesCartorioService extends CraWebService {
 		mensagem.append("	<descricao_final>Não há arquivos pendentes.</descricao_final>");
 		mensagem.append("</relatorio>");
 		return XmlFormatterUtil.format(mensagem.toString());
+	}
+
+	/**
+	 * Consulta para atualização de apresentantes para o sistema de protesto
+	 * 
+	 * @param usuario
+	 * @param codigoAprensentante
+	 * @return
+	 */
+	public String consultaDadosApresentante(Usuario usuario, String codigoAprensentante) {
+		Instituicao instituicao = null;
+
+		try {
+			if (usuario == null) {
+				return setRespostaUsuarioInvalido();
+			}
+			instituicao = instituicaoMediator.buscarApresentantePorCodigoPortador(codigoAprensentante);
+			if (instituicao == null) {
+				return mensagemApresentanteNaoEncontrado(codigoAprensentante);
+			}
+		} catch (Exception e) {
+			logger.info(e.getCause(), e);
+			return setRespostaErroInternoNoProcessamento(usuario, "Erro interno ao verificar dados do apresentante.");
+		}
+		return gerarRespostaDadosApresentante(instituicao);
+	}
+
+	private String mensagemApresentanteNaoEncontrado(String codigoAprensentante) {
+		StringBuffer mensagem = new StringBuffer();
+		mensagem.append("<?xml version=\'1.0\' encoding=\'UTF-8\'?>");
+		mensagem.append("<relatorio>");
+		mensagem.append("	<descricao>");
+		mensagem.append("		<dataMovimento>" + DataUtil.localDateTimeToString(new LocalDateTime()) + "</dataMovimento>");
+		mensagem.append("	</descricao>");
+		mensagem.append("	<final>9999</final>");
+		mensagem.append("	<descricao_final>Apresentante com o código [" + codigoAprensentante + "] não encontrado.</descricao_final>");
+		mensagem.append("</relatorio>");
+		return XmlFormatterUtil.format(mensagem.toString());
+	}
+
+	private String gerarRespostaDadosApresentante(Instituicao instituicao) {
+		InstituicaoVO instituicaoVO = new InstituicaoVO();
+		BeanWrapper propertyAccessEntidadeVO = PropertyAccessorFactory.forBeanPropertyAccess(instituicaoVO);
+		BeanWrapper propertyAccessEntidade = PropertyAccessorFactory.forBeanPropertyAccess(instituicao);
+
+		PropertyDescriptor[] propertyDescriptorsVO = propertyAccessEntidadeVO.getPropertyDescriptors();
+		for (PropertyDescriptor propertyDescriptorVO : propertyDescriptorsVO) {
+			String propertyName = propertyDescriptorVO.getName();
+			if (propertyAccessEntidadeVO.isReadableProperty(propertyName) && propertyAccessEntidade.isWritableProperty(propertyName)) {
+				Object valor = propertyAccessEntidade.getPropertyValue(propertyName);
+				if (Boolean.class.isInstance(valor)) {
+					valor = Boolean.class.cast(valor).toString();
+				}
+				if (TipoInstituicao.class.isInstance(valor)) {
+					valor = TipoInstituicao.class.cast(valor).getTipoInstituicao().toString();
+				}
+				if (TipoCampo51.class.isInstance(valor)) {
+					valor = TipoCampo51.class.cast(valor).toString();
+				}
+				propertyAccessEntidadeVO.setPropertyValue(propertyName, valor);
+			}
+		}
+
+		return gerarMensagem(instituicaoVO, CONSTANTE_APRESENTANTE_XML);
+	}
+
+	protected String converterValor(Object propriedade, CampoArquivo campo) {
+		if (propriedade == null) {
+			return "";
+		}
+		return FabricaConversor.getValorConvertidoParaString(campo, propriedade.getClass(), propriedade).trim();
 	}
 }

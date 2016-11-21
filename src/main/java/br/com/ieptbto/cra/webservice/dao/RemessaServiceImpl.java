@@ -39,7 +39,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	private CancelamentoProtestoService cancelamentoProtestoService;
 	private AutorizacaoCancelamentoService autorizacaoCancelamentoService;
 	private UsuariosComarcasHomologadasService usuariosComarcasHomologadasService;
-	private ArquivosPendentesCartorioService arquivosPendentesCartorioService;
+	private CartorioService cartorioService;
 
 	@Override
 	@WebMethod(operationName = "remessa")
@@ -125,17 +125,17 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@Override
 	@WebMethod(operationName = "confirmarEnvioConfirmacaoRetorno")
 	@GET
-	public String confirmarEnvioConfirmacaoRetorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha) {
+	public String confirmarEnvioConfirmacaoRetorno(@WebParam(name = "user_arq") String nomeArquivo,
+			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
 		Usuario usuario = init(login, senha, "confirmarEnvioConfirmacaoRetorno");
-		return arquivosPendentesCartorioService.confirmarEnvioConfirmacaoRetorno(nomeArquivo, usuario);
+		return cartorioService.confirmarEnvioConfirmacaoRetorno(nomeArquivo, usuario);
 	}
 
 	@Override
 	@WebMethod(operationName = "confirmarRecebimentoDesistenciaCancelamento")
 	@GET
-	public String confirmarRecebimentoDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha) {
+	public String confirmarRecebimentoDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo,
+			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
 		Usuario usuario = init(login, senha, "confirmarRecebimentoDesistenciaCancelamento");
 		return desistenciaProtestoService.confirmarRecebimentoDesistenciaCancelamento(nomeArquivo, usuario);
 	}
@@ -163,7 +163,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String arquivosPendentesCartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
 		Usuario usuario = init(login, senha, "arquivosPendentesCartorio");
-		return arquivosPendentesCartorioService.buscarArquivosPendentesCartorio(usuario);
+		return cartorioService.buscarArquivosPendentesCartorio(usuario);
 	}
 
 	@Override
@@ -171,7 +171,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 	@GET
 	public String desistenciasPendentesCartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
 		Usuario usuario = init(login, senha, "desistenciasPendentesCartorio");
-		return arquivosPendentesCartorioService.buscarDesistenciaPendentesCartorio(usuario);
+		return cartorioService.buscarDesistenciaPendentesCartorio(usuario);
 	}
 
 	@Override
@@ -180,6 +180,14 @@ public class RemessaServiceImpl implements IRemessaWS {
 	public String verificarAcessoUsuario(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha) {
 		Usuario usuario = init(login, senha, "verificarAcessoUsuario");
 		return usuariosComarcasHomologadasService.verificarAcessoUsuario(usuario);
+	}
+
+	@WebMethod(operationName = "consultaDadosApresentante")
+	@GET
+	public String consultaDadosApresentante(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
+			@WebParam(name = "apres_code") String codigoAprensentante) {
+		Usuario usuario = init(login, senha, "consultaDadosApresentante");
+		return cartorioService.consultaDadosApresentante(usuario, codigoAprensentante);
 	}
 
 	private Usuario init(String login, String senha, String metodo) {
@@ -192,14 +200,20 @@ public class RemessaServiceImpl implements IRemessaWS {
 		this.desistenciaProtestoService = (DesistenciaProtestoService) context.getBean("desistenciaProtestoService");
 		this.cancelamentoProtestoService = (CancelamentoProtestoService) context.getBean("cancelamentoProtestoService");
 		this.autorizacaoCancelamentoService = (AutorizacaoCancelamentoService) context.getBean("autorizacaoCancelamentoService");
-		this.usuariosComarcasHomologadasService = (UsuariosComarcasHomologadasService) context.getBean("usuariosComarcasHomologadasService");
-		this.arquivosPendentesCartorioService = (ArquivosPendentesCartorioService) context.getBean("arquivosPendentesCartorioService");
+		this.usuariosComarcasHomologadasService =
+				(UsuariosComarcasHomologadasService) context.getBean("usuariosComarcasHomologadasService");
+		this.cartorioService = (CartorioService) context.getBean("cartorioService");
 		this.usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 
+		logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString("HH:mm:ss", new LocalTime())
+				+ " ] ======= WebService ====== Autenticando usuario " + login + "... ");
 		Usuario usuario = usuarioMediator.autenticarWS(login, senha);
 		if (usuario != null) {
 			logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString("HH:mm:ss", new LocalTime())
-					+ " ] ======= WebService ====== Usuario: " + login + " ===== Serviço: " + metodo + " =======");
+					+ " ] ======= WebService ====== Usuario : " + login + " ===== Serviço: " + metodo + " =======");
+		} else {
+			logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString("HH:mm:ss", new LocalTime())
+					+ " ] ======= WebService ====== Falha na autenticação do usuário " + login + " !");
 		}
 		return usuario;
 	}

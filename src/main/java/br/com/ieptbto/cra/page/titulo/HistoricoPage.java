@@ -135,14 +135,15 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		};
 
 		String grupoUsuario = getUser().getGrupoUsuario().getGrupo();
-		TipoInstituicaoCRA tipoInstituicaoApresentante = getTituloRemessa().getRemessa().getInstituicaoOrigem().getTipoInstituicao().getTipoInstituicao();
+		TipoInstituicaoCRA tipoInstituicaoApresentante =
+				getTituloRemessa().getRemessa().getInstituicaoOrigem().getTipoInstituicao().getTipoInstituicao();
 		TipoOcorrencia ocorrencia = null;
 		if (getTituloRemessa().getRetorno() != null) {
 			ocorrencia = TipoOcorrencia.getTipoOcorrencia(getTituloRemessa().getRetorno().getTipoOcorrencia());
 		}
-		if (solicitacaoCancelamento == null && TipoOcorrencia.PROTESTADO.equals(ocorrencia) &&
-				TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicaoApresentante) &&
-				PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel().equals(grupoUsuario)) {
+		if (solicitacaoCancelamento == null && TipoOcorrencia.PROTESTADO.equals(ocorrencia)
+				&& TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicaoApresentante)
+				&& PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel().equals(grupoUsuario)) {
 			divSolicitarCancelamento.setVisible(true);
 		}
 		divSolicitarCancelamento.add(linkCancelamento);
@@ -154,7 +155,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		ArquivoOcorrenciaBean novaOcorrencia = null;
 
 		if (new Integer(titulo.getCodigoPortador()) > 799) {
-			TituloFiliado tituloFiliado = tituloFiliadoMediator.buscarTituloFiliadoProcessadoNaCra(titulo.getNossoNumero(), titulo.getNumeroTitulo());
+			TituloFiliado tituloFiliado =
+					tituloFiliadoMediator.buscarTituloFiliadoProcessadoNaCra(titulo.getNossoNumero(), titulo.getNumeroTitulo());
 			if (tituloFiliado != null) {
 				novaOcorrencia = new ArquivoOcorrenciaBean();
 				novaOcorrencia.parseToTituloFiliado(tituloFiliado);
@@ -193,7 +195,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			if (titulo.getRetorno().getRemessa().getBatimento() != null) {
 				if (titulo.getRetorno().getRemessa().getSituacaoBatimentoRetorno().equals(SituacaoBatimentoRetorno.AGUARDANDO_LIBERACAO)
 						|| titulo.getRetorno().getRemessa().getSituacaoBatimentoRetorno().equals(SituacaoBatimentoRetorno.CONFIRMADO)) {
-					List<Deposito> depositos = batimentoMediator.buscarDepositosArquivoRetorno(titulo.getRetorno().getRemessa().getBatimento());
+					List<Deposito> depositos =
+							batimentoMediator.buscarDepositosArquivoRetorno(titulo.getRetorno().getRemessa().getBatimento());
 					novaOcorrencia = new ArquivoOcorrenciaBean();
 					novaOcorrencia.parseToBatimento(titulo.getRetorno().getRemessa().getBatimento(), depositos,
 							retornoMediator.buscarValorDeTitulosPagos(titulo.getRetorno().getRemessa()));
@@ -236,7 +239,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		}
 
 		if (titulo.getPedidosAutorizacaoCancelamento() != null) {
-			List<PedidoAutorizacaoCancelamento> pedidosAC = autorizacaoCancelamentoMediator.buscarPedidosAutorizacaoCancelamentoPorTitulo(titulo);
+			List<PedidoAutorizacaoCancelamento> pedidosAC =
+					autorizacaoCancelamentoMediator.buscarPedidosAutorizacaoCancelamentoPorTitulo(titulo);
 			for (PedidoAutorizacaoCancelamento pedido : pedidosAC) {
 				novaOcorrencia = new ArquivoOcorrenciaBean();
 				novaOcorrencia.parseToAutorizacaoCanlamento(pedido.getAutorizacaoCancelamento());
@@ -327,7 +331,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 					link.setVisible(false);
 					item.add(link);
 					item.add(new Label("acao", "").setVisible(false));
-					item.add(new Label("mensagem", arquivoOcorrenciaBean.getMensagem()).setOutputMarkupId(true).setEscapeModelStrings(false));
+					item.add(new Label("mensagem", arquivoOcorrenciaBean.getMensagem()).setOutputMarkupId(true)
+							.setEscapeModelStrings(false));
 				}
 
 				if (arquivoOcorrenciaBean.getInstrumentoProtesto() != null) {
@@ -343,11 +348,13 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 						@Override
 						public void onClick() {
+							// setResponsePage(new
+							// HistoricoInstrumentoProtestoPage(arquivoOcorrenciaBean.getInstrumentoProtesto()));
 						}
 					};
 					link.add(new Label("conteudoLink", "Instrumento de Protesto: "));
 					link.setOutputMarkupId(true);
-					link.setEnabled(false);
+					link.setVisible(false);
 					item.add(link);
 					item.add(new Label("acao", "").setVisible(false));
 					item.add(new Label("mensagem", arquivoOcorrenciaBean.getMensagem()));
@@ -413,8 +420,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 							setResponsePage(new TitulosCancelamentoPage(arquivoOcorrenciaBean.getCancelamentoProtesto()));
 						}
 					};
-					link.add(new Label("conteudoLink",
-							arquivoOcorrenciaBean.getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+					link.add(new Label("conteudoLink", arquivoOcorrenciaBean.getCancelamentoProtesto().getRemessaCancelamentoProtesto()
+							.getArquivo().getNomeArquivo()));
 					item.add(link);
 					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
 					item.add(new Label("mensagem", "").setVisible(false));
@@ -436,8 +443,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 							setResponsePage(new TitulosAutorizacaoCancelamentoPage(arquivoOcorrenciaBean.getAutorizacaoCancelamento()));
 						}
 					};
-					link.add(new Label("conteudoLink",
-							arquivoOcorrenciaBean.getAutorizacaoCancelamento().getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+					link.add(new Label("conteudoLink", arquivoOcorrenciaBean.getAutorizacaoCancelamento()
+							.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 					item.add(link);
 					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
 					item.add(new Label("mensagem", "").setVisible(false));
@@ -602,7 +609,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			irregularidade = getTituloRemessa().getConfirmacao().getCodigoIrregularidade();
 		}
 		if (getTituloRemessa().getRetorno() != null) {
-			if (getTituloRemessa().getRetorno().getTipoOcorrencia().equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
+			if (getTituloRemessa().getRetorno().getTipoOcorrencia()
+					.equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
 				irregularidade = getTituloRemessa().getRetorno().getCodigoIrregularidade();
 			}
 		}
@@ -636,9 +644,10 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private Label pracaProtesto() {
 		return new Label("pracaProtesto", new Model<String>(getTituloRemessa().getPracaProtesto()));
 	}
-	
+
 	private Label municipioDestino() {
-		return new Label("municipioDestino", new Model<String>(getTituloRemessa().getRemessa().getInstituicaoDestino().getMunicipio().getNomeMunicipio().toUpperCase()));
+		return new Label("municipioDestino",
+				new Model<String>(getTituloRemessa().getRemessa().getInstituicaoDestino().getMunicipio().getNomeMunicipio().toUpperCase()));
 	}
 
 	private Label status() {
@@ -674,7 +683,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	private Label dataVencimentoTitulo() {
-		return new Label("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(getTituloRemessa().getDataVencimentoTitulo())));
+		return new Label("dataVencimentoTitulo",
+				new Model<String>(DataUtil.localDateToString(getTituloRemessa().getDataVencimentoTitulo())));
 	}
 
 	public Label valorTitulo() {

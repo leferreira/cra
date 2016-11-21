@@ -173,8 +173,8 @@ public interface IRemessaWS {
 	 */
 	@WebMethod(operationName = "confirmarRecebimentoDesistenciaCancelamento")
 	@GET
-	public String confirmarRecebimentoDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha);
+	public String confirmarRecebimentoDesistenciaCancelamento(@WebParam(name = "user_arq") String nomeArquivo,
+			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
 
 	/**
 	 * 
@@ -185,8 +185,8 @@ public interface IRemessaWS {
 	 */
 	@WebMethod(operationName = "confirmarEnvioConfirmacaoRetorno")
 	@GET
-	public String confirmarEnvioConfirmacaoRetorno(@WebParam(name = "user_arq") String nomeArquivo, @WebParam(name = "user_code") String login,
-			@WebParam(name = "user_pass") String senha);
+	public String confirmarEnvioConfirmacaoRetorno(@WebParam(name = "user_arq") String nomeArquivo,
+			@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
 
 	/**
 	 * 
@@ -210,4 +210,16 @@ public interface IRemessaWS {
 	@WebMethod(operationName = "verificarAcessoUsuario")
 	@GET
 	public String verificarAcessoUsuario(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
+
+	/**
+	 * 
+	 * @param login
+	 * @param senha
+	 * @return
+	 */
+	@WebMethod(operationName = "consultaDadosApresentante")
+	@GET
+	public String consultaDadosApresentante(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
+			@WebParam(name = "apres_code") String codigoAprensentante);
+
 }

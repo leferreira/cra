@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -54,6 +55,7 @@ public class InstituicaoInputPanel extends Panel {
 		add(campoContato());
 		add(campoValorConfirmacao());
 		add(campoEndereco());
+		add(campoBairro());
 		add(campoResponsavel());
 		add(campoAgenciaCentralizadora());
 		add(campoStatus());
@@ -62,6 +64,9 @@ public class InstituicaoInputPanel extends Panel {
 		add(comboTipoBatimento());
 		add(comboPadraoLayoutXML());
 		add(campoPermitidoSetores());
+		add(checkSeloDiferido());
+		add(checkTaxaCra());
+		add(checkVerificacaoManual());
 	}
 
 	private DropDownChoice<EnumerationSimNao> campoPermitidoSetores() {
@@ -117,6 +122,12 @@ public class InstituicaoInputPanel extends Panel {
 		return textField;
 	}
 
+	private TextField<String> campoBairro() {
+		TextField<String> textField = new TextField<String>("bairro");
+		textField.setLabel(new Model<String>("Bairro"));
+		return textField;
+	}
+
 	private TextField<String> campoValorConfirmacao() {
 		TextField<String> textField = new TextField<String>("valorConfirmacao");
 		textField.setLabel(new Model<String>("Valor Confirmação"));
@@ -157,8 +168,8 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	private DropDownChoice<TipoCampo51> comboTipoCampo51() {
-		DropDownChoice<TipoCampo51> combo =
-				new DropDownChoice<TipoCampo51>("tipoCampo51", Arrays.asList(TipoCampo51.values()), new ChoiceRenderer<TipoCampo51>("label"));
+		DropDownChoice<TipoCampo51> combo = new DropDownChoice<TipoCampo51>("tipoCampo51", Arrays.asList(TipoCampo51.values()),
+				new ChoiceRenderer<TipoCampo51>("label"));
 		combo.setLabel(new Model<String>("Tipo de Informação Campo 51"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
@@ -166,8 +177,8 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	private DropDownChoice<TipoBatimento> comboTipoBatimento() {
-		DropDownChoice<TipoBatimento> combo =
-				new DropDownChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()), new ChoiceRenderer<TipoBatimento>("label"));
+		DropDownChoice<TipoBatimento> combo = new DropDownChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()),
+				new ChoiceRenderer<TipoBatimento>("label"));
 		combo.setLabel(new Model<String>("Tipo Batimento"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
@@ -175,8 +186,8 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	private DropDownChoice<LayoutPadraoXML> comboPadraoLayoutXML() {
-		DropDownChoice<LayoutPadraoXML> combo = new DropDownChoice<LayoutPadraoXML>("layoutPadraoXML", Arrays.asList(LayoutPadraoXML.values()),
-				new ChoiceRenderer<LayoutPadraoXML>("label"));
+		DropDownChoice<LayoutPadraoXML> combo = new DropDownChoice<LayoutPadraoXML>("layoutPadraoXML",
+				Arrays.asList(LayoutPadraoXML.values()), new ChoiceRenderer<LayoutPadraoXML>("label"));
 		combo.setLabel(new Model<String>("Layout padrão XML"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
@@ -190,5 +201,26 @@ public class InstituicaoInputPanel extends Panel {
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
 		return combo;
+	}
+
+	private CheckBox checkSeloDiferido() {
+		CheckBox checkbox = new CheckBox("seloDiferido");
+		checkbox.setLabel(new Model<String>("Selo Diferido"));
+		checkbox.setRequired(true);
+		return checkbox;
+	}
+
+	private CheckBox checkVerificacaoManual() {
+		CheckBox checkbox = new CheckBox("verificacaoManual");
+		checkbox.setLabel(new Model<String>("Verificação Manual"));
+		checkbox.setRequired(true);
+		return checkbox;
+	}
+
+	private CheckBox checkTaxaCra() {
+		CheckBox checkbox = new CheckBox("taxaCra");
+		checkbox.setLabel(new Model<String>("Taxa Cra"));
+		checkbox.setRequired(true);
+		return checkbox;
 	}
 }

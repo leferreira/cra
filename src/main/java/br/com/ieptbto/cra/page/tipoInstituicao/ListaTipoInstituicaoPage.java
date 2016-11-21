@@ -1,8 +1,5 @@
 package br.com.ieptbto.cra.page.tipoInstituicao;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -14,7 +11,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.PermissaoEnvio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -61,7 +57,6 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 
 			@Override
 			protected void populateItem(ListItem<TipoInstituicao> item) {
-				String todasPermissoes = "";
 				final TipoInstituicao tipoLista = item.getModelObject();
 
 				Link<TipoInstituicao> linkAlterar = new Link<TipoInstituicao>("linkAlterar") {
@@ -74,18 +69,6 @@ public class ListaTipoInstituicaoPage extends BasePage<TipoInstituicao> {
 				};
 				linkAlterar.add(new Label("tipoInstituicao", tipoLista.getTipoInstituicao().getLabel()));
 				item.add(linkAlterar);
-
-				List<PermissaoEnvio> permissoes = tipoInstituicaoMediator.permissoesPorTipoInstituicao(tipoLista);
-
-				if (!permissoes.isEmpty()) {
-					for (PermissaoEnvio p : permissoes) {
-						todasPermissoes += p.getTipoArquivo().getTipoArquivo().getConstante() + " ";
-					}
-					item.add(new Label("permissaoEnvio", todasPermissoes));
-				} else {
-					item.add(new Label("permissaoEnvio", StringUtils.EMPTY));
-				}
-				todasPermissoes = "";
 			}
 		});
 	}

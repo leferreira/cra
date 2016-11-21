@@ -6,15 +6,14 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.bean.ArquivoFormBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
@@ -41,24 +40,23 @@ public class RelatorioArquivosInputPanel extends Panel {
 	}
 
 	private void adicionarCampos() {
-		add(dataEnvioInicio());
-		add(dataEnvioFinal());
+		add(dateFieldDataInicio());
+		add(dateFieldDataFinal());
 		add(tipoRelatorio());
 		add(tipoArquivo());
 		add(tipoInstituicao());
 		add(instituicaoCartorio());
 	}
 
-	private TextField<LocalDate> dataEnvioInicio() {
-		TextField<LocalDate> dataEnvioInicio = new TextField<LocalDate>("dataInicio");
+	private DateTextField dateFieldDataInicio() {
+		DateTextField dataEnvioInicio = new DateTextField("dataInicio", "dd/MM/yyyy");
 		dataEnvioInicio.setLabel(new Model<String>("Período de datas"));
-		dataEnvioInicio.setRequired(true);
 		dataEnvioInicio.setMarkupId("date");
 		return dataEnvioInicio;
 	}
 
-	private TextField<LocalDate> dataEnvioFinal() {
-		TextField<LocalDate> dataEnvioFinal = new TextField<LocalDate>("dataFim");
+	private DateTextField dateFieldDataFinal() {
+		DateTextField dataEnvioFinal = new DateTextField("dataFim", "dd/MM/yyyy");
 		dataEnvioFinal.setMarkupId("date1");
 		return dataEnvioFinal;
 	}
@@ -129,7 +127,8 @@ public class RelatorioArquivosInputPanel extends Panel {
 	}
 
 	private DropDownChoice<Instituicao> instituicaoCartorio() {
-		comboInstituicao = new DropDownChoice<Instituicao>("instituicao", getListaInstituicoes(), new ChoiceRenderer<Instituicao>("nomeFantasia"));
+		comboInstituicao =
+				new DropDownChoice<Instituicao>("instituicao", getListaInstituicoes(), new ChoiceRenderer<Instituicao>("nomeFantasia"));
 		comboInstituicao.setLabel(new Model<String>("Instituição"));
 		comboInstituicao.setOutputMarkupId(true);
 		comboInstituicao.setEnabled(false);

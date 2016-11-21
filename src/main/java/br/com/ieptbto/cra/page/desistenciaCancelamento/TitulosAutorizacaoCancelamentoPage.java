@@ -63,7 +63,8 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 
 	public TitulosAutorizacaoCancelamentoPage(AutorizacaoCancelamento autorizacaoCancelamento) {
 		this.autorizacaoCancelamento = autorizacaoCancelamento;
-		this.cartorioDestino = instituicaoMediator.getCartorioPorCodigoIBGE(autorizacaoCancelamento.getCabecalhoCartorio().getCodigoMunicipio());
+		this.cartorioDestino =
+				instituicaoMediator.getCartorioPorCodigoIBGE(autorizacaoCancelamento.getCabecalhoCartorio().getCodigoMunicipio());
 		adicionarComponentes();
 	}
 
@@ -92,8 +93,10 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 
 	private void informacoesAutorizacaoCancelamento() {
 		add(new Label("nomeArquivo", autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
-		add(new Label("dataEnvio", DataUtil.localDateToString(autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio())));
-		add(new Label("enviadoPor", autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+		add(new Label("dataEnvio",
+				DataUtil.localDateToString(autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getDataEnvio())));
+		add(new Label("enviadoPor",
+				autorizacaoCancelamento.getRemessaAutorizacaoCancelamento().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
 		add(new Label("destino", cartorioDestino.getNomeFantasia()));
 	}
 
@@ -109,11 +112,11 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 
 				if (pedidoAutorizacao.getTitulo() == null) {
 					item.add(new Label("nossoNumerno", pedidoAutorizacao.getCarteiraNossoNumero()));
-					item.add(new Label("numeroTitulo", pedidoAutorizacao.getNumeroTitulo()));
-					item.add(new Label("protocolo", pedidoAutorizacao.getNumeroProtocolo()));
+					item.add(new LabelValorMonetario<BigDecimal>("valor", pedidoAutorizacao.getValorTitulo()));
 					item.add(new Label("pracaProtesto", cartorioDestino.getMunicipio().getNomeMunicipio().toUpperCase()));
 					item.add(new Label("numeroControleDevedor", 1));
-					item.add(new LabelValorMonetario<BigDecimal>("valor", pedidoAutorizacao.getValorTitulo()));
+					item.add(new Label("numeroTitulo", pedidoAutorizacao.getNumeroTitulo()));
+					item.add(new Label("protocolo", pedidoAutorizacao.getNumeroProtocolo()));
 
 					Button botaoHistorico = new Button("linkHistorico");
 					botaoHistorico.add(new Label("nomeDevedor", pedidoAutorizacao.getNomePrimeiroDevedor()));
@@ -133,8 +136,8 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 					pedidoAutorizacao.getTitulo().setRetorno(tituloMediator.buscarRetorno(pedidoAutorizacao.getTitulo()));
 
 					final TituloRemessa tituloRemessa = pedidoAutorizacao.getTitulo();
-					item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloRemessa.getSaldoTitulo()));
-					item.add(new Label("nossoNumero", tituloRemessa.getNossoNumero()));
+					item.add(new Label("nossoNumerno", tituloRemessa.getNossoNumero()));
+					item.add(new LabelValorMonetario<BigDecimal>("valor", tituloRemessa.getSaldoTitulo()));
 
 					String municipio = tituloRemessa.getPracaProtesto();
 					if (municipio.length() > 20) {
@@ -155,7 +158,8 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 							item.add(new Label("dataConfirmacao",
 									DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 							item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-							item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
+							item.add(new Label("dataSituacao",
+									DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
 
 						} else if (tituloRemessa.getRetorno() != null) {
 							item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
@@ -179,29 +183,32 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 							item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 							item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
 						} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
-							Retorno retornoDevedorPrincipal = tituloMediator.buscarRetornoTituloDevedorPrincipal(tituloRemessa.getConfirmacao());
+							Retorno retornoDevedorPrincipal =
+									tituloMediator.buscarRetornoTituloDevedorPrincipal(tituloRemessa.getConfirmacao());
 
 							if (retornoDevedorPrincipal == null) {
 								item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
-								item.add(new Label("dataConfirmacao",
-										DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+								item.add(new Label("dataConfirmacao", DataUtil
+										.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 								item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-								item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
+								item.add(new Label("dataSituacao",
+										DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
 							} else {
 								tituloRemessa.setRetorno(retornoDevedorPrincipal);
 
 								item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
-								item.add(new Label("dataConfirmacao",
-										DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+								item.add(new Label("dataConfirmacao", DataUtil
+										.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 								item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-								item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
+								item.add(new Label("dataSituacao",
+										DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
 
 							}
 						}
 					}
 					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
 
-					Link<Arquivo> linkArquivoRemessa = new Link<Arquivo>("linkArquivo") {
+					Link<Arquivo> linkArquivoRemessa = new Link<Arquivo>("linkRemessa") {
 
 						/***/
 						private static final long serialVersionUID = 1L;

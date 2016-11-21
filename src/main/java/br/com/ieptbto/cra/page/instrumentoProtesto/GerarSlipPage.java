@@ -71,17 +71,13 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private List<InstrumentoProtesto> instrumentosProtesto;
 	private List<EnvelopeSLIP> envelopes;
 	private List<EtiquetaSLIP> etiquetas;
+	private boolean etiquetasNaoGeradas;
 
 	public GerarSlipPage() {
 		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
+		this.etiquetasNaoGeradas = instrumentoMediator.verificarEtiquetasGeradasNaoConfimadas();
 
-		adicionarComponentes();
-	}
-
-	public GerarSlipPage(String message) {
-		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
-
-		success(message);
+		verificarEtiquetasGeradasNaoConfimadas();
 		adicionarComponentes();
 	}
 
@@ -92,7 +88,12 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 		botaoGerarEnvelopes();
 		botaoGerarListagem();
 		botaoConfirmarGeracaoSlips();
+	}
 
+	private void verificarEtiquetasGeradasNaoConfimadas() {
+		if (etiquetasNaoGeradas) {
+			warn("Existem intrumentos já tiveram Slips geradas porém não foram confirmados!");
+		}
 	}
 
 	private void carregarListaSlips() {
@@ -108,7 +109,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 
 				item.add(new Label("numeroTitulo", retorno.getTitulo().getNumeroTitulo()));
 				item.add(new Label("protocolo", retorno.getNumeroProtocoloCartorio()));
-				
+
 				String municipio = retorno.getRemessa().getInstituicaoOrigem().getMunicipio().getNomeMunicipio();
 				if (municipio.length() > 20) {
 					municipio = municipio.substring(0, 19);
@@ -127,7 +128,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));
 				item.add(linkHistorico);
 				item.add(new Label("portador",
-						instituicaoMediator.buscarBancoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
+						instituicaoMediator.buscarApresentantePorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
 				item.add(new Link<InstrumentoProtesto>("buttonRemoverInstrumento") {
@@ -139,11 +140,13 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 						try {
 							instrumentoMediator.removerInstrumento(instrumentoProtesto);
 							getInstrumentosProtesto().remove(instrumentoProtesto);
-							GerarSlipPage.this.success(
-									"Instrumento de protesto com o protocolo " + instrumentoProtesto.getTituloRetorno().getNumeroProtocoloCartorio()
-											+ " de " + retorno.getTitulo().getPracaProtesto() + " foi removido com sucesso!");
+							GerarSlipPage.this.success("Instrumento de protesto com o protocolo "
+									+ instrumentoProtesto.getTituloRetorno().getNumeroProtocoloCartorio() + " de "
+									+ retorno.getTitulo().getPracaProtesto() + " foi removido com sucesso!");
 						} catch (Exception ex) {
-							GerarSlipPage.this.error("Não foi possível remover o registro do instrumento de protesto. Entre em contato com a CRA !");
+							logger.error(ex.getMessage(), ex);
+							GerarSlipPage.this
+									.error("Não foi possível remover o registro do instrumento de protesto. Entre em contato com a CRA !");
 						}
 					}
 				});
@@ -162,7 +165,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				SimpleDateFormat dataPadrao = new SimpleDateFormat("dd_MM_yy");
 
 				try {
-					InstrumentoProtestoMediator instrumento = instrumentoMediator.processarInstrumentos(getInstrumentosProtesto(), getRetornos());
+					InstrumentoProtestoMediator instrumento =
+							instrumentoMediator.processarInstrumentos(getInstrumentosProtesto(), getRetornos());
 
 					if (instrumento.getEtiquetas().isEmpty()) {
 						throw new InfraException("Não foi possível gerar SLIPs. Não há entrada de títulos processados !");
@@ -179,16 +183,15 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							new ResourceStreamRequestHandler(resourceStream, "CRA_SLIP_" + dataPadrao.format(new Date()).toString() + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+							"CRA_SLIP_" + dataPadrao.format(new Date()).toString() + ".pdf"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());
 				} catch (Exception ex) {
-					ex.printStackTrace();
-					error("Não foi possível gerar as etiquetas ! Entre em contato com a CRA !");
 					logger.error(ex.getMessage(), ex);
+					error("Não foi possível gerar as etiquetas ! Entre em contato com a CRA !");
 				}
 			}
 		});
@@ -218,8 +221,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							new ResourceStreamRequestHandler(resourceStream, "CRA_ENVELOPES_" + dataPadrao.format(new Date()).toString() + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+							"CRA_ENVELOPES_" + dataPadrao.format(new Date()).toString() + ".pdf"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
@@ -262,8 +265,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							new ResourceStreamRequestHandler(resourceStream, "CRA_LISTAGEM_" + dataPadrao.format(new Date()).toString() + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+							"CRA_LISTAGEM_" + dataPadrao.format(new Date()).toString() + ".pdf"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
@@ -288,7 +291,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				try {
 					instrumentoMediator.alterarInstrumentosParaGerado(getInstrumentosProtesto());
 					getInstrumentosProtesto().clear();
-					success("As slips foram geradas com sucesso!");
+					success("Os intrumentos foram processados e as Slips foram geradas com sucesso!");
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
