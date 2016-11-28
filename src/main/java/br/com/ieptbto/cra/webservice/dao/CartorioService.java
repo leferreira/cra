@@ -30,7 +30,6 @@ import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
-import br.com.ieptbto.cra.webservice.VO.ArquivoRemessa;
 import br.com.ieptbto.cra.webservice.VO.AutorizaCancelamentoPendente;
 import br.com.ieptbto.cra.webservice.VO.CancelamentoPendente;
 import br.com.ieptbto.cra.webservice.VO.DesistenciaPendente;
@@ -78,17 +77,11 @@ public class CartorioService extends CraWebService {
 
 		RemessaPendente remessaPendentes = new RemessaPendente();
 		if (arquivo.getRemessas() != null && !arquivo.getRemessas().isEmpty()) {
-			List<ArquivoRemessa> arquivosRemessa = new ArrayList<ArquivoRemessa>();
+			List<String> nomeArquivos = new ArrayList<String>();
 			for (Remessa remessa : arquivo.getRemessas()) {
-				Arquivo arquivoRemessa = arquivoMediator.carregarArquivoPorId(remessa.getArquivo());
-
-				ArquivoRemessa remessaPendente = new ArquivoRemessa();
-				remessaPendente.setNomeArquivo(arquivoRemessa.getNomeArquivo());
-				remessaPendente.setCodigoApresentante(arquivoRemessa.getInstituicaoEnvio().getCodigoCompensacao());
-				remessaPendente.setVersaoAtualizacao(arquivoRemessa.getInstituicaoEnvio().getVersao());
-				arquivosRemessa.add(remessaPendente);
+				nomeArquivos.add(arquivoMediator.carregarArquivoPorId(remessa.getArquivo()).getNomeArquivo());
 			}
-			remessaPendentes.setArquivoRemessa(arquivosRemessa);
+			remessaPendentes.setNomeArquivos(nomeArquivos);
 		}
 
 		CancelamentoPendente cancelamentoPendentes = new CancelamentoPendente();
