@@ -28,8 +28,9 @@ public class InstituicaoForm extends BaseForm<Instituicao> {
 
 		try {
 			if (getModelObject().getId() != 0) {
+				instituicao.setVersao(instituicao.getVersao() + 1);
 				instituicaoMediator.alterar(instituicao);
-				setResponsePage(new ListaInstituicaoPage("Os dados da instituição foram salvos com sucesso !"));
+				setResponsePage(new ListaInstituicaoPage("Os dados da instituição foram alterados com sucesso !"));
 			} else {
 				if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
 					instituicaoMediator.salvar(instituicao);

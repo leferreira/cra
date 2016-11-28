@@ -45,15 +45,12 @@ import br.com.ieptbto.cra.page.cnp.CentralNacionalProtestoPage;
 import br.com.ieptbto.cra.page.cnp.CentralProtestosCartorioPage;
 import br.com.ieptbto.cra.page.cnp.Importar5AnosCartorioPage;
 import br.com.ieptbto.cra.page.convenio.GerarRemessaConvenioPage;
-import br.com.ieptbto.cra.page.cra.GerarCancelamentosPage;
 import br.com.ieptbto.cra.page.cra.GerarConfirmacaoPage;
+import br.com.ieptbto.cra.page.cra.GerarDesistenciasCancelamentosPage;
 import br.com.ieptbto.cra.page.cra.GerarRetornoPage;
 import br.com.ieptbto.cra.page.cra.RelatorioRetornoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.BuscarDesistenciaCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.BuscarTituloSolicitacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.ListaDesistenciaCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.ListaTituloSolicitacaoCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.TituloSolicitacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
@@ -75,6 +72,8 @@ import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioInstituicoesCartoriosPage;
 import br.com.ieptbto.cra.page.relatorio.taxaCra.RelatorioTaxaCraPage;
 import br.com.ieptbto.cra.page.relatorio.titulo.RelatorioTitulosPage;
+import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.EnviarSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.SolicitarDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.tipoArquivo.IncluirTipoArquivoPage;
 import br.com.ieptbto.cra.page.tipoArquivo.ListaTipoArquivoPage;
 import br.com.ieptbto.cra.page.tipoInstituicao.IncluirTipoInstituicaoPage;
@@ -189,7 +188,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("GerarRemessasConvenio", GerarRemessaConvenioPage.class);
 		mountPage("GerarConfirmacao", GerarConfirmacaoPage.class);
 		mountPage("GerarRetorno", GerarRetornoPage.class);
-		mountPage("GerarCancelamentos", GerarCancelamentosPage.class);
+		mountPage("GerarDesistenciasCancelamentos", GerarDesistenciasCancelamentosPage.class);
 
 		mountPage("Instituicoes", ListaInstituicaoPage.class);
 		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
@@ -225,10 +224,10 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("ListaDesistenciaCancelamento", ListaDesistenciaCancelamentoPage.class);
 		mountPage("TitulosDesistencia", TitulosDesistenciaPage.class);
 		mountPage("TitulosCancelamento", TitulosCancelamentoPage.class);
-		mountPage("BuscarTituloSolicitacaoCancelamento", BuscarTituloSolicitacaoCancelamentoPage.class);
-		mountPage("ListaTituloSolicitacaoCancelamento", ListaTituloSolicitacaoCancelamentoPage.class);
-		mountPage("SolicitacaoCancelamento", TituloSolicitacaoCancelamentoPage.class);
 		mountPage("TitulosAutorizacaoCancelamento", TitulosAutorizacaoCancelamentoPage.class);
+
+		mountPage("SolicitarDesistenciaCancelamento", SolicitarDesistenciaCancelamentoPage.class);
+		mountPage("EnviarSolicitacaoDesistenciaCancelamento", EnviarSolicitacaoDesistenciaCancelamento.class);
 
 		mountPage("MonitorarTitulos", BuscarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);

@@ -53,7 +53,7 @@ import br.com.ieptbto.cra.entidade.Rodape;
 import br.com.ieptbto.cra.entidade.RodapeArquivo;
 import br.com.ieptbto.cra.entidade.RodapeCartorio;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
-import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
+import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.TaxaCra;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
@@ -130,7 +130,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(PedidoCancelamento.class);
 		classesHibernate.add(AutorizacaoCancelamento.class);
 		classesHibernate.add(PedidoAutorizacaoCancelamento.class);
-		classesHibernate.add(SolicitacaoCancelamento.class);
+		classesHibernate.add(SolicitacaoDesistenciaCancelamento.class);
 		classesHibernate.add(Deposito.class);
 		classesHibernate.add(BatimentoDeposito.class);
 		classesHibernate.add(Batimento.class);

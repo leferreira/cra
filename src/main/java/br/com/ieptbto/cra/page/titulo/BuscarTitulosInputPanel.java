@@ -133,7 +133,8 @@ public class BuscarTitulosInputPanel extends Panel {
 		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
 		choices.add(TipoInstituicaoCRA.CONVENIO);
 		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoCRA> dropDowntipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, renderer);
+		final DropDownChoice<TipoInstituicaoCRA> dropDowntipoInstituicao =
+				new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, renderer);
 		dropDowntipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -169,7 +170,7 @@ public class BuscarTitulosInputPanel extends Panel {
 	private Label labelMunicipio() {
 		labelMunicipio = new Label("labelMunicipio", "Município");
 		labelMunicipio.setOutputMarkupId(true);
-		if (!TipoInstituicaoCRA.CRA.equals(tipoInstituicao)) {
+		if (TipoInstituicaoCRA.CARTORIO.equals(tipoInstituicao)) {
 			labelMunicipio.setVisible(false);
 		}
 		return labelMunicipio;
@@ -179,7 +180,7 @@ public class BuscarTitulosInputPanel extends Panel {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio");
 		dropDownCartorio = new DropDownChoice<Instituicao>("cartorio", instituicaoMediator.getCartorios(), renderer);
 		dropDownCartorio.setOutputMarkupId(true);
-		if (!TipoInstituicaoCRA.CRA.equals(tipoInstituicao)) {
+		if (TipoInstituicaoCRA.CARTORIO.equals(tipoInstituicao)) {
 			dropDownCartorio.setVisible(false);
 		}
 		return dropDownCartorio;

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2016-11-24T19:34:46 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubrelatorioRetornoLiberado2" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="50c581c6-7506-447f-adc5-081aea63c3e4">
 	<property name="ireport.zoom" value="2.1435888100000073"/>
 	<property name="ireport.x" value="0"/>
@@ -113,32 +115,39 @@ order by mun.nome_municipio asc]]>
 				<text><![CDATA[DEMAIS DESPESAS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="268" y="0" width="55" height="15" uuid="ba6c65df-a5a4-4b64-ad26-b48a86636833"/>
+				<reportElement x="265" y="0" width="42" height="15" uuid="ba6c65df-a5a4-4b64-ad26-b48a86636833"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TÍTULOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="327" y="0" width="55" height="15" uuid="ec281e8e-36b0-47bd-a473-82ae2638a08e"/>
+				<reportElement x="308" y="0" width="45" height="15" uuid="ec281e8e-36b0-47bd-a473-82ae2638a08e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PAGOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="387" y="0" width="66" height="15" uuid="eb28046f-6080-4e08-b1f0-82d4a5031836"/>
+				<reportElement x="353" y="0" width="65" height="15" uuid="eb28046f-6080-4e08-b1f0-82d4a5031836"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PROTESTADOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="462" y="0" width="66" height="15" uuid="baf5bcce-7c14-4356-8aef-019652a8d03a"/>
+				<reportElement x="476" y="0" width="56" height="15" uuid="baf5bcce-7c14-4356-8aef-019652a8d03a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[DEVOLVIDOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="0" width="55" height="15" uuid="fd07e5d0-f81e-4ccb-b795-9ec7d2362091"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RETIRADOS]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -198,39 +207,46 @@ order by mun.nome_municipio asc]]>
 				<textFieldExpression><![CDATA[$F{demais_despesas}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="268" y="0" width="55" height="15" uuid="2eb495f1-7d2d-43d5-baa4-df95533500bc"/>
+				<reportElement x="265" y="0" width="42" height="15" uuid="2eb495f1-7d2d-43d5-baa4-df95533500bc"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{quantidade_titulos}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="327" y="0" width="55" height="15" uuid="a08a8410-533f-4d60-bf9b-1190d4034dde"/>
+				<reportElement x="308" y="0" width="45" height="15" uuid="a08a8410-533f-4d60-bf9b-1190d4034dde"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pagos}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="387" y="0" width="66" height="15" uuid="b9f16a54-ec17-443e-ac39-02725dccb46b"/>
+				<reportElement x="360" y="0" width="55" height="15" uuid="b9f16a54-ec17-443e-ac39-02725dccb46b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{protestados}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="462" y="0" width="66" height="15" uuid="4d57a050-7ba6-4863-8879-2821fe0b52a2"/>
+				<reportElement x="476" y="0" width="56" height="15" uuid="4d57a050-7ba6-4863-8879-2821fe0b52a2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{devolvidos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="0" width="55" height="15" uuid="c1cfbc02-87ff-4a5f-bfa6-9c11b7cd7e8f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{retirados}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<lastPageFooter>
 		<band height="20">
 			<rectangle>
-				<reportElement x="0" y="0" width="803" height="20" backcolor="#B9D1EA" uuid="304af8e8-e77b-40fd-9100-6d5fc8dc7989">
+				<reportElement x="-1" y="0" width="803" height="20" backcolor="#B9D1EA" uuid="304af8e8-e77b-40fd-9100-6d5fc8dc7989">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="local_mesure_unitheight" value="pixel"/>

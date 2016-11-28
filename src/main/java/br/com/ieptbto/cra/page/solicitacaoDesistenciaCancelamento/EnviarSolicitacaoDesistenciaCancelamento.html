@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">ENVIAR SOLICITAÇÃO DE DESISTÊNCIA OU CANCELAMENTO</h4>
+		<div class="well well-sm">  
+			<div class="col-lg-4" style="font-size: 14px;">
+				<fieldset>
+					<legend>DADOS DO TÍTULO/DOCUMENTO</legend>
+					<dl class="dl-horizontal">
+						 <dt>SITUA&Ccedil;&Atilde;O</dt><dd><span class="info-titulo" wicket:id="situacaoTitulo" style="font-size: 13px; margin-top: 10px;"></span></dd>
+						 <dt><br></dt><dd></dd>
+						 <dt>PRAÇA DE PROTESTO</dt><dd><span wicket:id="pracaProtesto"></span></dd>
+					</dl>
+					<dl class="dl-horizontal">
+					  <dt>PROTOCOLO</dt><dd><span wicket:id="numeroProtocoloCartorio"></span></dd>
+					  <dt>N&Uacute;MERO T&Iacute;TULO/DOC.</dt><dd><span wicket:id="numeroTitulo" style="font-size: 13px;"></span></dd>
+					  <dt>EMISS&Atilde;O</dt><dd><span wicket:id="dataEmissaoTitulo"></span></dd>
+					  <dt>VENCIMENTO</dt><dd><span wicket:id="dataVencimentoTitulo"></span></dd>
+					</dl>
+				</fieldset>
+				<fieldset>
+	                <dl class="dl-horizontal">
+					  <dt>DEVEDOR</dt><dd><span wicket:id="nomeDevedor"></span></dd>
+					  <dt>CPF/CNPJ</dt><dd><span wicket:id="documentoDevedor"></span></dd>
+	               	</dl>
+	            </fieldset>
+				<fieldset>
+					<dl class="dl-horizontal">
+					  <dt>VALOR DO T&Iacute;TULO</dt><dd><span wicket:id="valorTitulo" class="destaque"></span></dd>
+					  <dt>SALDO TÍTULO</dt><dd><span wicket:id="saldoTitulo" class="destaque"></span></dd>
+					</dl>
+				</fieldset>
+			</div>
+			<div class="col-lg-4" style="font-size: 14px;">
+				<fieldset>
+					<legend>SOLICITAR DESISTÊNCIA</legend>
+					<form wicket:id="formDesistencia">
+						<div wicket:id="solicitarDesistenciaInputPanel" id="solicitarDesistenciaInputPanel"></div>
+						<wicket:child></wicket:child>
+						<br style="clear: both;" />
+					</form>
+				</fieldset>
+			</div>
+			<div class="col-lg-4" style="font-size: 14px;">
+				<fieldset>
+					<legend>SOLICITAR CANCELAMENTO</legend>
+					<form wicket:id="formCancelamento">
+						<div wicket:id="solicitarCancelamentoInputPanel" id="solicitarCancelamentoInputPanel"></div>
+						<wicket:child></wicket:child>
+						<br style="clear: both;" />
+					</form>
+				</fieldset>
+			</div>
+			<br class="clear"/>
+		</div>
+	</wicket:extend>
+</body>
+</html>

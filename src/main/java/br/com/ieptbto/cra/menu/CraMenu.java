@@ -43,7 +43,7 @@ public class CraMenu extends Panel {
 		itemArquivoEmpresa.authorize(rolesPesquisar);
 		itemArquivoEmpresa.setVisible(false);
 
-		MenuItem itemSolicitarCancelamento = new MenuItem("BuscarTituloSolicitacaoCancelamento");
+		MenuItem itemSolicitarCancelamento = new MenuItem("SolicitarDesistenciaCancelamento");
 		itemSolicitarCancelamento.authorize(rolesPesquisar);
 		itemSolicitarCancelamento.setVisible(false);
 
@@ -104,7 +104,7 @@ public class CraMenu extends Panel {
 		menuAdministrador.addItem("GerarRemessasConvenio", rolesIncluir);
 		menuAdministrador.addItem("GerarConfirmacao", rolesIncluir);
 		menuAdministrador.addItem("GerarRetorno", rolesIncluir);
-		menuAdministrador.addItem("GerarCancelamentos", rolesIncluir);
+		menuAdministrador.addItem("GerarDesistenciasCancelamentos", rolesIncluir);
 
 		menuAdministrador.addItem("Instituicoes", rolesIncluir);
 		menuAdministrador.addItem("CartoriosProtesto", rolesIncluir);

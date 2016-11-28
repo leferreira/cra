@@ -206,7 +206,7 @@ public class RemessaServiceImpl implements IRemessaWS {
 		this.usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
 
 		logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString("HH:mm:ss", new LocalTime())
-				+ " ] ======= WebService ====== Autenticando usuario " + login + "... ");
+				+ " ] ======= WebService ====== Autenticando : " + login + "... ");
 		Usuario usuario = usuarioMediator.autenticarWS(login, senha);
 		if (usuario != null) {
 			logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString("HH:mm:ss", new LocalTime())

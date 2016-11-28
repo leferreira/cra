@@ -1,0 +1,57 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
+	<div class="form-group">
+	  <label>Tipo de Desistência</label>
+	  <div wicket:id="tipoSolicitacao">
+			<div class="radio">
+				<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+					wicket:id="dpIrregularidade" />&nbsp;Desistência de Protesto por Irregularidade no Título
+				</label>
+			</div>
+			<div class="radio">
+				<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
+					wicket:id="dp" />&nbsp;Pagamento ao Credor<br><small>(O DEVEDOR PODERÁ SER PROTESTADO SE NÃO PAGAR AS CUSTAS DO CARTÓRIO)</small>
+				</label>
+			</div>
+		</div>
+	</div> 
+   <div class="col-md-10">
+		<div class="form-group">
+		  <label>Motivo</label>
+	  	  <select class="form-control" wicket:id="codigoIrregularidade"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		 <a class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#modalDesistencia"  
+		 	wicket:id="submitSolicitarDesistencia">
+            <span class="glyphicon glyphicon-send"></span>&nbsp;Solicitar Desistência
+        </a>
+       </div>
+	<!-- - Modal Confirmar Desistência  -->
+	<div class="modal fade" id="modalDesistencia" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                     <h4 class="modal-title" id="myModalLabel">Tem certeza que deseja enviar a solicitação de desistência?</h4>
+                 </div>
+                 <div class="modal-body">
+                 	<br style="clear: both;"/>
+                 	<div class="col-lg-10 col-md-offset-2"  style="font-size: 14px;">
+                 		<dl class="dl-horizontal">
+					  <dt>Nº T&Iacute;TULO/DOC</dt><dd><span wicket:id="numeroTituloModal"></span></dd>
+                  	</dl>
+                  	<dl class="dl-horizontal">
+					  <dt>NOME DO DEVEDOR</dt><dd><span wicket:id="nomeDevedorModal"></span></dd>
+					  <dt>VALOR</dt><dd><span wicket:id="saldoTituloModal"></span></dd>
+				  	</dl>
+                 	</div>
+                 	<br style="clear: both;"/>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>&nbsp;Não</button>
+                     <button type="submit" class="btn btn-success btn-lg"><span class="fa fa-check"></span>&nbsp;Sim</button>
+                 </div>
+             </div>
+         </div>
+       </div>
+</wicket:panel>

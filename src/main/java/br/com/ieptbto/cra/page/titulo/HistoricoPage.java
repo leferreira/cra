@@ -39,7 +39,7 @@ import br.com.ieptbto.cra.entidade.PedidoCancelamento;
 import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
-import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
+import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
@@ -60,10 +60,10 @@ import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.TituloSolicitacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
+import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.EnviarSolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
@@ -101,12 +101,13 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private TituloRemessa tituloRemessa;
 	private Anexo anexo;
 	private List<ArquivoOcorrenciaBean> arquivosOcorrencias;
-	private SolicitacaoCancelamento solicitacaoCancelamento;
+	private List<SolicitacaoDesistenciaCancelamento> solicitacoesDesistenciasCancelamentos;
 
 	public HistoricoPage(TituloRemessa titulo) {
 		this.tituloRemessa = titulo;
 		this.anexo = tituloMediator.buscarAnexo(tituloRemessa);
-		this.solicitacaoCancelamento = cancelamentoProtestoMediator.buscarSolicitacaoCancelamentoPorTitulo(titulo);
+		this.solicitacoesDesistenciasCancelamentos =
+				cancelamentoProtestoMediator.buscarSolicitacoesDesistenciasCancelamentoPorTitulo(titulo);
 
 		adicionarComponentes();
 	}
@@ -130,7 +131,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 			@Override
 			public void onClick() {
-				setResponsePage(new TituloSolicitacaoCancelamentoPage(getModel().getObject()));
+				setResponsePage(new EnviarSolicitacaoDesistenciaCancelamento(getModel().getObject()));
 			}
 		};
 
@@ -141,7 +142,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		if (getTituloRemessa().getRetorno() != null) {
 			ocorrencia = TipoOcorrencia.getTipoOcorrencia(getTituloRemessa().getRetorno().getTipoOcorrencia());
 		}
-		if (solicitacaoCancelamento == null && TipoOcorrencia.PROTESTADO.equals(ocorrencia)
+		if (solicitacoesDesistenciasCancelamentos == null && TipoOcorrencia.PROTESTADO.equals(ocorrencia)
 				&& TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicaoApresentante)
 				&& PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel().equals(grupoUsuario)) {
 			divSolicitarCancelamento.setVisible(true);
@@ -248,10 +249,12 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			}
 		}
 
-		if (solicitacaoCancelamento != null) {
-			novaOcorrencia = new ArquivoOcorrenciaBean();
-			novaOcorrencia.parseToSolicitacaoCancelamento(solicitacaoCancelamento);
-			getArquivosOcorrencias().add(novaOcorrencia);
+		if (solicitacoesDesistenciasCancelamentos != null && !solicitacoesDesistenciasCancelamentos.isEmpty()) {
+			for (SolicitacaoDesistenciaCancelamento solicitacao : solicitacoesDesistenciasCancelamentos) {
+				novaOcorrencia = new ArquivoOcorrenciaBean();
+				novaOcorrencia.parseToSolicitacaoCancelamento(solicitacao);
+				getArquivosOcorrencias().add(novaOcorrencia);
+			}
 		}
 
 		Collections.sort(getArquivosOcorrencias());
@@ -469,7 +472,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 					link.setOutputMarkupId(true);
 					link.setEnabled(false);
 					item.add(link);
-					item.add(new Label("acao", arquivoOcorrenciaBean.getMensagem()));
+					item.add(new Label("acao", arquivoOcorrenciaBean.getMensagem()).setEscapeModelStrings(false));
 					item.add(new Label("mensagem", "").setVisible(false));
 				}
 

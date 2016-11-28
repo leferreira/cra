@@ -6,7 +6,7 @@
 			<h4 class="titulo-top">
 				CANCELAMENTOS CONVÊNIOS <span class="pull-right">
 					<button type="submit" class="btn btn-primary">
-						<span class="fa fa-check"></span> Gerar Cancelamentos
+						<span class="fa fa-check"></span> Gerar Desistências e Cancelamentos
 					</button>
 				</span>
 			</h4>
@@ -21,18 +21,16 @@
 					<th>DEVEDOR</th>
 					<th class="col-right valor">VALOR TÍTULO</th>
 					<th class="col-center">TIPO</th>
-					<th class="col-center">MOTIVO</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr wicket:id="listaTitulosCancelamento">
+				<tr wicket:id="listaDesistenciasCancelamento">
 					<td wicket:id="nossoNumero" class="col-center"></td>
 					<td class="col-center" wicket:id="numeroTitulo"></td>
 					<td wicket:id="pracaProtesto"></td>
 					<td wicket:id="devedor"></td>
 					<td class="col-right valor" wicket:id="valor"></td>
 					<td class="col-center" wicket:id="tipoSolicitacao"></td>
-					<td wicket:id="motivo"></td>
 				</tr>
 			</tbody>
 		</table>

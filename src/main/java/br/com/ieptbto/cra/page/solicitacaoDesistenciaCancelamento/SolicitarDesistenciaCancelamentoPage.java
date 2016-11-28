@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.titulo;
+package br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento;
 
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -6,29 +6,37 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.joda.time.LocalDate;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.bean.TituloFormBean;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.titulo.BuscarTitulosInputPanel;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
- * @author Thasso Aráujo
+ * @author Thasso Araújo
  *
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
-public class BuscarTitulosPage extends BasePage<TituloRemessa> {
+public class SolicitarDesistenciaCancelamentoPage extends BasePage<TituloRemessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 
+	@SpringBean
+	private MunicipioMediator municipioMediator;
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
+
 	private TituloRemessa titulo;
 	private Form<TituloFormBean> form;
 
-	public BuscarTitulosPage() {
+	public SolicitarDesistenciaCancelamentoPage() {
 		this.titulo = new TituloRemessa();
 
 		adicionarComponentes();
@@ -48,31 +56,20 @@ public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 
 			@Override
 			protected void onSubmit() {
-				TituloFormBean tituloFormBean = getModelObject();
+				TituloFormBean tituloBean = getModelObject();
 
 				try {
-					if (tituloFormBean.getDataInicio() != null) {
-						if (tituloFormBean.getDataFim() != null) {
-							LocalDate dataInicio = new LocalDate(tituloFormBean.getDataInicio());
-							LocalDate dataFim = new LocalDate(tituloFormBean.getDataFim());
-							if (!dataInicio.isBefore(dataFim))
-								if (!dataInicio.isEqual(dataFim))
-									throw new InfraException("A data de início deve ser antes da data fim.");
-						} else
-							throw new InfraException("As duas datas devem ser preenchidas.");
-					}
-					if (tituloFormBean.isTodosCamposEmBranco()) {
+					if (tituloBean.isTodosCamposEmBranco()) {
 						throw new InfraException(
 								"Por favor, preencha um ou mais campos para realizar a busca, ou informe o período com um Banco/Convênio ou Município!");
 					}
-
-					setResponsePage(new ListaTitulosPage(tituloFormBean));
+					setResponsePage(new ListaTitulosDesistenciaCancelamentoPage(tituloBean));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar a busca ! Favor entrar em contato com a CRA...");
+					error("Não foi possível realizar a busca de títulos para cancelamento. Favor entrar em contato com a CRA!");
 				}
 			}
 		};

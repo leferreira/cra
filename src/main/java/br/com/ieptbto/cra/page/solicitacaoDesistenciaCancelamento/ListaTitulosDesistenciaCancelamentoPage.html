@@ -3,8 +3,8 @@
 <body>
 	<wicket:extend>
 		<h4 class="titulo-top">
-			SOLICITAR CANCELAMENTO <span class="pull-right"> <a
-				href="SolicitacaoCancelamento" class="link" style="font-size: 16px;"><span
+			SOLICITAR DESISTÊNCIA OU CANCELAMENTO<span class="pull-right"> <a
+				href="SolicitarDesistenciaCancelamento" class="link" style="font-size: 16px;"><span
 					class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
 			</span>
 		</h4>
@@ -13,12 +13,9 @@
 				<div class="alert alert-warning alert-dismissable">
 					<button type="button" class="close" data-dismiss="alert"
 						aria-hidden="true">×</button>
-					<span class="alert-link">ATENÇÃO:</span> A solicitação de
-					cancelamento só é permitida para títulos já <span
-						class="alert-link">PROTOCOLADOS EM CARTÓRIO</span>. Caso o título
-					esteja sem protocolo, aguarde a protocolização do mesmo e
-					finalmente solicite o cancelamento via sistema.
-
+					<span class="alert-link">ATENÇÃO:</span> A solicitação de Desistência ou Cancelamento só é permitida para títulos já <span
+						class="alert-link">PROTOCOLADOS EM CARTÓRIO</span>. Caso o título esteja sem protocolo, aguarde a protocolização do mesmo e
+					finalmente solicite a Desistência ou o Cancelamento via sistema.
 				</div>
 			</div> 
 			<div class="col-lg-12">
@@ -31,15 +28,12 @@
 							<th>MUNICÍPIO</th>
 							<th>DEVEDOR</th>
 							<th class="col-right">VALOR</th>
-							<th class="col-center">REMESSA</th>
-							<th class="col-center">CONFIR.</th>
-							<th class="col-center">RETORNO</th>
 							<th class="col-center">DATA OC.</th>
 							<th class="col-center">SITUAÇÃO</th>
-							<th class="col-center">AÇÃO</th>
+							<th class="col-center"></th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody> 
 						<tr wicket:id="listViewTitulos">
 							<td class="col-center" wicket:id="numeroTitulo"></td>
 							<td class="col-center" wicket:id="protocolo"></td>
@@ -47,21 +41,13 @@
 							<td><a href="#" target="_blank" wicket:id="linkHistorico"><span
 									class="link" style="font-weight: bold;" wicket:id="nomeDevedor"></span></a></td>
 							<td class="col-right valor" wicket:id="valorTitulo"></td>
-							<td class="col-center"><a href="#" target="_blank"
-								wicket:id="linkArquivo"><span class="link"
-									style="font-weight: bold;" wicket:id="nomeRemessa"></span></a></td>
-							<td class="col-center" wicket:id="dataConfirmacao"></td>
-							<td class="col-center"><a href="#" target="_blank"
-								wicket:id="linkRetorno"><span class="link"
-									style="font-weight: bold;" wicket:id="retorno"></span></a></td>
 							<td class="col-center" wicket:id="dataSituacao"></td>
 							<td class="col-center"><span class="info-titulo"
 								wicket:id="situacaoTitulo"></span></td>
-							<td class="col-center"><a
+							<td class="col-center"><a target="_blank" 
 								wicket:id="linkSolicitarCancelamento"
 								class="btn btn-warning btn-sm"> <span
-									class="glyphicon glyphicon-remove"></span>&nbsp;<span
-									wicket:id="nomeAcao"></span>
+									class="glyphicon glyphicon-send"></span>&nbsp;Solicitar
 							</a></td>
 						</tr>
 					</tbody>

@@ -30,6 +30,7 @@ import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
+import br.com.ieptbto.cra.webservice.VO.ArquivoRemessa;
 import br.com.ieptbto.cra.webservice.VO.AutorizaCancelamentoPendente;
 import br.com.ieptbto.cra.webservice.VO.CancelamentoPendente;
 import br.com.ieptbto.cra.webservice.VO.DesistenciaPendente;
@@ -77,12 +78,17 @@ public class CartorioService extends CraWebService {
 
 		RemessaPendente remessaPendentes = new RemessaPendente();
 		if (arquivo.getRemessas() != null && !arquivo.getRemessas().isEmpty()) {
-			List<String> nomeArquivos = new ArrayList<String>();
+			List<ArquivoRemessa> arquivosRemessa = new ArrayList<ArquivoRemessa>();
 			for (Remessa remessa : arquivo.getRemessas()) {
-				remessa.setArquivo(arquivoMediator.carregarArquivoPorId(remessa.getArquivo()));
-				nomeArquivos.add(remessa.getArquivo().getNomeArquivo());
+				Arquivo arquivoRemessa = arquivoMediator.carregarArquivoPorId(remessa.getArquivo());
+
+				ArquivoRemessa remessaPendente = new ArquivoRemessa();
+				remessaPendente.setNomeArquivo(arquivoRemessa.getNomeArquivo());
+				remessaPendente.setCodigoApresentante(arquivoRemessa.getInstituicaoEnvio().getCodigoCompensacao());
+				remessaPendente.setVersaoAtualizacao(arquivoRemessa.getInstituicaoEnvio().getVersao());
+				arquivosRemessa.add(remessaPendente);
 			}
-			remessaPendentes.setArquivos(nomeArquivos);
+			remessaPendentes.setArquivoRemessa(arquivosRemessa);
 		}
 
 		CancelamentoPendente cancelamentoPendentes = new CancelamentoPendente();
@@ -279,6 +285,9 @@ public class CartorioService extends CraWebService {
 				if (Boolean.class.isInstance(valor)) {
 					valor = Boolean.class.cast(valor).toString();
 				}
+				if (Integer.class.isInstance(valor)) {
+					valor = Integer.class.cast(valor);
+				}
 				if (TipoInstituicao.class.isInstance(valor)) {
 					valor = TipoInstituicao.class.cast(valor).getTipoInstituicao().toString();
 				}
@@ -288,7 +297,6 @@ public class CartorioService extends CraWebService {
 				propertyAccessEntidadeVO.setPropertyValue(propertyName, valor);
 			}
 		}
-
 		return gerarMensagem(instituicaoVO, CONSTANTE_APRESENTANTE_XML);
 	}
 

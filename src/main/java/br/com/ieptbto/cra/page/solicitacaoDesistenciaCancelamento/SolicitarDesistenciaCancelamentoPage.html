@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">SOLICITAR DESISTÊNCIA OU CANCELAMENTO</h4>
+		<div class="col-md-12">
+			<div class="row">
+				<div class="alert alert-warning alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert"
+						aria-hidden="true">×</button>
+					<span class="alert-link">ATENÇÃO:</span> A solicitação de desistências e
+					cancelamento só é permitida para títulos já <span
+						class="alert-link">PROTOCOLADOS EM CARTÓRIO</span>. Caso o título
+					esteja sem protocolo, aguarde a protocolização do mesmo e
+					finalmente solicite o cancelamento via sistema.
+				</div>
+			</div>
+		</div>
+		<form wicket:id="form" id="form">
+			<div wicket:id="buscarTitulosInputPanel" id="buscarTitulosInputPanel"></div>
+			<wicket:child></wicket:child>
+			<br style="clear: both;" />
+		</form>
+	</wicket:extend>
+</body>
+</html>
