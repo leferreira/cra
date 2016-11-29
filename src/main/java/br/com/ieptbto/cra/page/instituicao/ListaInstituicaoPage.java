@@ -82,7 +82,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
 				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorConfirmacao", instituicaoLista.getValorConfirmacao()));
-				if (instituicaoLista.getSituacao()) {
+				if (instituicaoLista.isSituacao()) {
 					item.add(new Label("situacao", "Sim"));
 				} else {
 					item.add(new Label("situacao", "Não"));

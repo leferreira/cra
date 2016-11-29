@@ -93,7 +93,7 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 				item.add(new Label("contato", instituicaoLista.getContato()));
 				item.add(new Label("codigoCartorio", instituicaoLista.getCodigoCartorio()));
 
-				if (instituicaoLista.getSituacao() == true) {
+				if (instituicaoLista.isSituacao() == true) {
 					item.add(new Label("situacao", "Sim"));
 				} else {
 					item.add(new Label("situacao", "Não"));
