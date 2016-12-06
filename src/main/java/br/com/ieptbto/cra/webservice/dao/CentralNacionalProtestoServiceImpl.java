@@ -10,9 +10,12 @@ import javax.xml.ws.WebServiceContext;
 
 import org.apache.log4j.Logger;
 import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
+import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
 
 /**
@@ -85,7 +88,8 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		}
 
-		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
+		centralNacionalProtestoCartorioService =
+				(CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
 
 		logger.info("O CPF/CNPJ " + documentoDevedor + " foi consultado na Central Nacional de Protesto. ");
 
@@ -97,14 +101,23 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 			context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		}
 		usuarioMediator = (UsuarioMediator) context.getBean("usuarioMediator");
-		centralNacionalProtestoCartorioService = (CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
+		centralNacionalProtestoCartorioService =
+				(CentralNacionalProtestoCartorioService) context.getBean("centralNacionalProtestoCartorioService");
 		centralNacionalProtestoService = (CentralNacionalProtestoService) context.getBean("centralNacionalProtestoService");
 		setUsuario(login, senha);
 	}
 
 	private void setUsuario(String login, String senha) {
-		logger.info("Inicio WebService pelo usuario= " + login);
+		logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString("HH:mm:ss", new LocalTime())
+				+ " ] ======= WebService ====== Autenticando : " + login + "... ");
 		this.usuario = usuarioMediator.autenticarWS(login, senha);
+		if (usuario != null) {
+			logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString("HH:mm:ss", new LocalTime())
+					+ " ] ======= WebService ====== Usuario : " + login + " ===== Serviço: Central Nacional de Protesto =======");
+		} else {
+			logger.info("[ " + DataUtil.localDateToString(new LocalDate()) + " " + DataUtil.localTimeToString("HH:mm:ss", new LocalTime())
+					+ " ] ======= WebService ====== Falha na autenticação do usuário " + login + " !");
+		}
 	}
 
 	public Usuario getUsuario() {
