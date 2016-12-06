@@ -231,8 +231,9 @@ public class CnpWebService {
 		Detalhamento detalhamento = new Detalhamento();
 		detalhamento.setMensagem(new ArrayList<Mensagem>());
 		Mensagem mensagem = new Mensagem();
-
 		mensagem.setDescricao("Foram enviados " + loteCnp.getRegistrosCnp().size() + " registros para CNP.");
+		detalhamento.getMensagem().add(mensagem);
+
 		mensagemXml.setDetalhamento(detalhamento);
 		mensagemXml.setDescricao(descricao);
 		mensagemXml.setCodigoFinal(CodigoErro.CNP_SUCESSO.getCodigo());
