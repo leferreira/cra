@@ -111,7 +111,8 @@ public class CentralNacionalProtestoService extends CnpWebService {
 
 		} catch (Exception ex) {
 			logger.info(ex.getMessage(), ex);
-			return gerarMensagem(gerarMensagemErroProcessamento("Erro ao tentar consultar um movimento por data."), CONSTANTE_RELATORIO_XML);
+			return gerarMensagem(gerarMensagemErroProcessamento("Erro ao tentar consultar um movimento por data."),
+					CONSTANTE_RELATORIO_XML);
 		}
 
 	}
@@ -127,8 +128,8 @@ public class CentralNacionalProtestoService extends CnpWebService {
 
 		} catch (Exception ex) {
 			logger.info(ex.getMessage(), ex);
-			loggerCra.error(usuario, CraAcao.CONSULTA_CARTORIOS_CENTRAL_NACIONAL_PROTESTO, "Erro interno ao informar os cartórios ativos na CNP.",
-					ex);
+			loggerCra.error(usuario, CraAcao.CONSULTA_CARTORIOS_CENTRAL_NACIONAL_PROTESTO,
+					"Erro interno ao informar os cartórios ativos na CNP.", ex);
 			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
 		}
 	}
