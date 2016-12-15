@@ -47,6 +47,7 @@ public class WebServiceConfiguracaoPage extends BasePage<CraServiceConfig> {
 	private CheckBox confirmarDesistenciaCancelamentoService;
 	private CheckBox downloadCnpService;
 	private CheckBox envioCnpService;
+	private CheckBox envioCnp5anosService;
 	private CheckBox consultaProtestoCnpService;
 
 	public WebServiceConfiguracaoPage() {
@@ -66,7 +67,8 @@ public class WebServiceConfiguracaoPage extends BasePage<CraServiceConfig> {
 			protected void onSubmit() {
 
 				try {
-					getCraService(CraServiceEnum.ENVIO_ARQUIVO_REMESSA).setAtivo(EnumerationSimNao.getSimNao(envioRemessaService.getModelObject()));
+					getCraService(CraServiceEnum.ENVIO_ARQUIVO_REMESSA)
+							.setAtivo(EnumerationSimNao.getSimNao(envioRemessaService.getModelObject()));
 					getCraService(CraServiceEnum.DOWNLOAD_ARQUIVO_CONFIRMACAO)
 							.setAtivo(EnumerationSimNao.getSimNao(downloadConfirmacaoService.getModelObject()));
 					getCraService(CraServiceEnum.DOWNLOAD_ARQUIVO_RETORNO)
@@ -81,7 +83,8 @@ public class WebServiceConfiguracaoPage extends BasePage<CraServiceConfig> {
 							.setAtivo(EnumerationSimNao.getSimNao(downloadRemessaService.getModelObject()));
 					getCraService(CraServiceEnum.ENVIO_ARQUIVO_CONFIRMACAO)
 							.setAtivo(EnumerationSimNao.getSimNao(envioConfirmacaoService.getModelObject()));
-					getCraService(CraServiceEnum.ENVIO_ARQUIVO_RETORNO).setAtivo(EnumerationSimNao.getSimNao(envioRetornoService.getModelObject()));
+					getCraService(CraServiceEnum.ENVIO_ARQUIVO_RETORNO)
+							.setAtivo(EnumerationSimNao.getSimNao(envioRetornoService.getModelObject()));
 					getCraService(CraServiceEnum.DOWNLOAD_ARQUIVO_DESISTENCIA_CANCELAMENTO)
 							.setAtivo(EnumerationSimNao.getSimNao(downloadDesistenciaCancelamentoService.getModelObject()));
 					getCraService(CraServiceEnum.CONFIRMAR_RECEBIMENTO_DESISTENCIA_CANCELAMENTO)
@@ -92,6 +95,8 @@ public class WebServiceConfiguracaoPage extends BasePage<CraServiceConfig> {
 							.setAtivo(EnumerationSimNao.getSimNao(envioCnpService.getModelObject()));
 					getCraService(CraServiceEnum.CONSULTA_PROTESTO)
 							.setAtivo(EnumerationSimNao.getSimNao(consultaProtestoCnpService.getModelObject()));
+					getCraService(CraServiceEnum.ENVIO_CNP_5_ANOS)
+							.setAtivo(EnumerationSimNao.getSimNao(envioCnp5anosService.getModelObject()));
 
 					craServiceMediator.salvarServicos(services);
 					success("Os serviços foram atualizados com sucesso !");
@@ -117,6 +122,7 @@ public class WebServiceConfiguracaoPage extends BasePage<CraServiceConfig> {
 		form.add(checkConfirmarDesistenciaCancelamentos());
 		form.add(checkDownloadCNP());
 		form.add(checkEnvioCNPCartorio());
+		form.add(checkEnvioCNP5Anos());
 		form.add(checkConsultaCnp());
 		add(form);
 	}
@@ -186,6 +192,11 @@ public class WebServiceConfiguracaoPage extends BasePage<CraServiceConfig> {
 	private CheckBox checkEnvioCNPCartorio() {
 		CraServiceConfig craService = getCraService(CraServiceEnum.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO);
 		return envioCnpService = new CheckBox("checkEnvioCnp", new Model<Boolean>(craService.getAtivo().getStatus()));
+	}
+
+	private CheckBox checkEnvioCNP5Anos() {
+		CraServiceConfig craService = getCraService(CraServiceEnum.ENVIO_CNP_5_ANOS);
+		return envioCnp5anosService = new CheckBox("checkEnvioCnp5anos", new Model<Boolean>(craService.getAtivo().getStatus()));
 	}
 
 	private CheckBox checkConsultaCnp() {

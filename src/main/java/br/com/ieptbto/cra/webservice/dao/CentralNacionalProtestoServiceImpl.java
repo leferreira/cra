@@ -37,12 +37,21 @@ public class CentralNacionalProtestoServiceImpl implements ICentralNacionalProte
 	private ClassPathXmlApplicationContext context;
 
 	@Override
-	@WebMethod(operationName = "cartorio")
+	@WebMethod(operationName = "cartorioProtesto5anos")
 	@GET
-	public String cartorio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
+	public String cartorioProtesto5anos(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
 			@WebParam(name = "user_dados") String dados) {
 		init(login, senha);
-		return centralNacionalProtestoCartorioService.processar(usuario, dados);
+		return centralNacionalProtestoCartorioService.processarLoteCnp5Anos(usuario, dados);
+	}
+
+	@Override
+	@WebMethod(operationName = "cartorioDiario")
+	@GET
+	public String cartorioDiario(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
+			@WebParam(name = "user_dados") String dados) {
+		init(login, senha);
+		return centralNacionalProtestoCartorioService.processarLoteCnpDiario(usuario, dados);
 	}
 
 	@Override

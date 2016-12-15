@@ -40,7 +40,50 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 	 * @param dados
 	 * @return
 	 */
-	public String processar(Usuario usuario, String dados) {
+	public String processarLoteCnp5Anos(Usuario usuario, String dados) {
+		LoteCnp lote = null;
+
+		try {
+			if (usuario == null) {
+				return usuarioInvalido();
+			}
+			if (StringUtils.isBlank(dados)) {
+				return dadosArquivoCnpEmBranco(usuario);
+			}
+			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_CNP_5_ANOS)) {
+				return mensagemServicoIndisponivel(usuario);
+			}
+			if (centralNacionalProtestoMediator.instituicaoEnviouLote5anos(usuario.getInstituicao())) {
+				return envio5anosSucesso(usuario);
+			}
+			lote = centralNacionalProtestoMediator.processarLote5anos(usuario.getInstituicao(), converterStringArquivoCnpVO(dados));
+			if (lote == null) {
+				loggerCra.alert(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, CodigoErro.CNP_LOTE_VAZIO.getDescricao());
+				return mensagemLoteCnpVazioOuNenhumRegistroValido(usuario);
+			}
+			loggerCra.sucess(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+					"Arquivo da CNP enviado por " + usuario.getInstituicao().getNomeFantasia() + ", com " + lote.getRegistrosCnp().size()
+							+ " títulos, processado com sucesso!");
+		} catch (InfraException ex) {
+			logger.info(ex.getMessage(), ex);
+			loggerCra.error(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+					"Erro no processamento do arquivo da CNP de " + usuario.getInstituicao().getNomeFantasia() + "!", ex);
+			return gerarMensagem(gerarMensagemErroProcessamento(ex.getMessage()), CONSTANTE_RELATORIO_XML);
+		} catch (Exception ex) {
+			logger.info(ex.getMessage(), ex);
+			loggerCra.error(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
+					"Erro no processamento do arquivo da CNP de " + usuario.getInstituicao().getNomeFantasia() + "!", ex);
+			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
+		}
+		return gerarMensagem(gerarMensagemSucesso(usuario, lote), CONSTANTE_RELATORIO_XML);
+	}
+
+	/**
+	 * @param usuario
+	 * @param dados
+	 * @return
+	 */
+	public String processarLoteCnpDiario(Usuario usuario, String dados) {
 		LoteCnp lote = new LoteCnp();
 
 		try {
@@ -53,16 +96,14 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			if (centralNacionalProtestoMediator.isCartorioEnviouLoteCnpHoje(usuario.getInstituicao())) {
-				return arquivoCnpJaEnviadoHoje(usuario);
-			}
-			lote = centralNacionalProtestoMediator.processarLoteCartorio(usuario.getInstituicao(), converterStringArquivoCnpVO(dados));
+			lote = centralNacionalProtestoMediator.processarLoteDiario(usuario.getInstituicao(), converterStringArquivoCnpVO(dados));
 			if (lote == null) {
 				loggerCra.alert(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, CodigoErro.CNP_LOTE_VAZIO.getDescricao());
 				return mensagemLoteCnpVazioOuNenhumRegistroValido(usuario);
 			}
 			loggerCra.sucess(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
-					"Arquivo da CNP enviado por " + usuario.getInstituicao().getNomeFantasia() + " processado com sucesso!");
+					"Arquivo da CNP enviado por " + usuario.getInstituicao().getNomeFantasia() + ", com " + lote.getRegistrosCnp().size()
+							+ " títulos, processado com sucesso!");
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex);
 			loggerCra.error(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
@@ -86,6 +127,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			String xmlRecebido = "";
 
+			logger.info("Início da conversão do XML...");
 			Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
 			while (scanner.hasNext()) {
 				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
@@ -98,6 +140,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 
 			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
 			arquivoCnp = (ArquivoCnpVO) unmarshaller.unmarshal(new InputSource(xml));
+			logger.info("Fim da conversão do XML...");
 
 		} catch (JAXBException e) {
 			logger.error(e.getMessage(), e);
