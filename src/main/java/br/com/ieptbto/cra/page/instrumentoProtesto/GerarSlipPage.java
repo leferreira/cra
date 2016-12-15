@@ -61,11 +61,11 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private static final Logger logger = Logger.getLogger(GerarSlipPage.class);
 
 	@SpringBean
-	InstrumentoProtestoMediator instrumentoMediator;
+	private InstrumentoProtestoMediator instrumentoMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	TituloMediator tituloMediator;
+	private TituloMediator tituloMediator;
 
 	private List<Retorno> retornos;
 	private List<InstrumentoProtesto> instrumentosProtesto;
@@ -127,8 +127,8 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				};
 				linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));
 				item.add(linkHistorico);
-				item.add(new Label("portador",
-						instituicaoMediator.buscarApresentantePorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
+				item.add(new Label("portador", instituicaoMediator
+						.buscarApresentantePorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
 				item.add(new Link<InstrumentoProtesto>("buttonRemoverInstrumento") {
@@ -251,9 +251,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				try {
 					Class.forName("org.postgresql.Driver");
 					connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
-					// connection =
-					// DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra",
-					// "postgres", "1234");
 
 					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
 					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));

@@ -7,16 +7,20 @@
 			<div class="row well well-sm">
 				<div class="col-lg-6" style="font-size: 15px;">
 					<span class="fa fa-file-o"></span>&nbsp;&nbsp;<b wicket:id="nomeArquivo"></b><br/>
-				  	<span class="fa fa-send-o"></span>&nbsp;&nbsp;<b>ENVIADO POR:&nbsp;</b><span wicket:id="enviadoPor"></span>&nbsp;<b>em</b>&nbsp;<span wicket:id="dataEnvio"></span>.<br/>
-				  	<span class="fa fa-check-square-o"></span>&nbsp;&nbsp;<b>DESTINO:&nbsp;</b><span wicket:id="destino"></span>
+				  	<span class="fa fa-send-o"></span>&nbsp;&nbsp;<b>Enviado por:&nbsp;</b><span wicket:id="enviadoPor"></span>&nbsp;<b>em</b>&nbsp;<span wicket:id="dataEnvio"></span>.<br/>
+				  	<span class="fa fa-user"></span>&nbsp;&nbsp;<b>Usuário:&nbsp;</b><span wicket:id="usuario"></span><br/>
+				  	<span class="fa fa-check-square-o"></span>&nbsp;&nbsp;<b>Destino:&nbsp;</b><span wicket:id="destino"></span>
 				</div>
 				<div class="col-lg-6">
-					<a class="btn btn-primary btn-sm pull-right" wicket:id="gerarRelatorio"> 
-						<span class="fa fa-print"></span>&nbsp;RELATÓRIO
-					</a>
-					<button class="btn btn-primary btn-sm pull-right" wicket:id="downloadArquivo" style="margin-right: 5px;">
-						<span class="fa fa-arrow-down"></span>&nbsp;DOWNLOAD
+					<button class="btn btn-primary btn-sm pull-right" wicket:id="downloadArquivo">
+						<span class="fa fa-arrow-down"></span>&nbsp;Download
 					</button>
+					<button class="btn btn-primary btn-sm pull-right" wicket:id="downloadAnexos" style="margin-right: 5px;">
+						<span class="glyphicon glyphicon-paperclip"></span>&nbsp;Anexos
+					</button>
+					<a class="btn btn-primary btn-sm pull-right" wicket:id="gerarRelatorio" style="margin-right: 5px;"> 
+						<span class="fa fa-print"></span>&nbsp;Relatório
+					</a>
 					<a wicket:id="bloquearRemessa" style="margin-right: 5px;"> 
 						<span class="fa fa-lock"></span>&nbsp;<span wicket:id="labelBloqueado"></span>
 					</a>

@@ -21,11 +21,13 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.TipoCampo51;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
@@ -51,11 +53,11 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	DownloadMediator downloadMediator;
+	private DownloadMediator downloadMediator;
 	@SpringBean
-	TituloMediator tituloMediator;
+	private TituloMediator tituloMediator;
 
 	private Remessa remessa;
 
@@ -73,10 +75,12 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	private void divInformacoesArquivo() {
 		add(botaoBloquearRemessa());
 		add(botaoGerarRelatorio());
+		add(downloadAnexos());
 		add(linkDownloadArquivoTXT());
 		add(new Label("nomeArquivo", getRemessa().getArquivo().getNomeArquivo()));
 		add(new Label("dataEnvio", DataUtil.localDateToString(getRemessa().getArquivo().getDataEnvio())));
 		add(new Label("enviadoPor", getRemessa().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+		add(new Label("usuario", getRemessa().getArquivo().getUsuarioEnvio().getNome()));
 		add(new Label("destino", getRemessa().getInstituicaoDestino().getNomeFantasia()));
 	}
 
@@ -130,6 +134,41 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 		return bloquearRemessa;
 	}
 
+	private Link<Remessa> downloadAnexos() {
+		Anexo anexo = null;
+		if (remessa.getInstituicaoOrigem().getTipoCampo51().equals(TipoCampo51.DOCUMENTOS_COMPACTADOS)) {
+			anexo = remessaMediator.verificarAnexosRemessa(remessa);
+		}
+
+		Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+
+				try {
+					File file = remessaMediator.processarArquivosAnexos(getUser(), remessa);
+					IResourceStream resourceStream = new FileResourceStream(file);
+
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
+				} catch (InfraException ex) {
+					getFeedbackPanel().error(ex.getMessage());
+				} catch (Exception e) {
+					getFeedbackPanel().error("Não foi possível baixar o arquivo ! Favor entrar em contato com a CRA...");
+					logger.info(e.getMessage(), e);
+				}
+			}
+		};
+
+		if (anexo == null) {
+			linkAnexos.setOutputMarkupId(false);
+			linkAnexos.setVisible(false);
+		}
+		return linkAnexos;
+	}
+
 	private Link<Remessa> botaoGerarRelatorio() {
 		return new Link<Remessa>("gerarRelatorio") {
 
@@ -168,8 +207,8 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 					File file = downloadMediator.baixarRemessaTXT(getUser(), remessa);
 					IResourceStream resourceStream = new FileResourceStream(file);
 
-					getRequestCycle()
-							.scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+							new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
@@ -234,14 +273,16 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 						item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
 					} else if (tituloRemessa.getConfirmacao() != null && tituloRemessa.getRetorno() == null) {
-						Retorno retornoDevedorPrincipal = tituloMediator.buscarRetornoTituloDevedorPrincipal(tituloRemessa.getConfirmacao());
+						Retorno retornoDevedorPrincipal =
+								tituloMediator.buscarRetornoTituloDevedorPrincipal(tituloRemessa.getConfirmacao());
 
 						if (retornoDevedorPrincipal == null) {
 							item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
 							item.add(new Label("dataConfirmacao",
 									DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 							item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-							item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
+							item.add(new Label("dataSituacao",
+									DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
 						} else {
 							tituloRemessa.setRetorno(retornoDevedorPrincipal);
 
