@@ -3,7 +3,6 @@ package br.com.ieptbto.cra.webservice.dao;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -125,20 +124,15 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 		try {
 			context = JAXBContext.newInstance(ArquivoCnpVO.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			String xmlRecebido = "";
 
 			logger.info("Início da conversão do XML...");
-			Scanner scanner = new Scanner(new ByteArrayInputStream(new String(dados).getBytes()));
-			while (scanner.hasNext()) {
-				xmlRecebido = xmlRecebido + scanner.nextLine().replaceAll("& ", "&amp;");
-				if (xmlRecebido.contains("<?xml version=")) {
-					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", StringUtils.EMPTY);
-					xmlRecebido = xmlRecebido.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", StringUtils.EMPTY);
-				}
+			if (dados.contains("<?xml version=")) {
+				dados = dados.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", StringUtils.EMPTY);
+				dados = dados.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", StringUtils.EMPTY);
 			}
-			scanner.close();
+			dados = dados.replaceAll("& ", "&amp;");
 
-			InputStream xml = new ByteArrayInputStream(xmlRecebido.getBytes());
+			InputStream xml = new ByteArrayInputStream(dados.getBytes());
 			arquivoCnp = (ArquivoCnpVO) unmarshaller.unmarshal(new InputSource(xml));
 			logger.info("Fim da conversão do XML...");
 
