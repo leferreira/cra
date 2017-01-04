@@ -1,38 +1,37 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
 	<div class="form-group">
-	  <label>Tipo de Desistência</label>
-	  <div wicket:id="tipoSolicitacao">
-			<div class="radio">
-				<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
-					wicket:id="dpIrregularidade" />&nbsp;Desistência de Protesto por Irregularidade no Título
-				</label>
-			</div>
-			<div class="radio">
-				<label style="font-weight: bolder;"> <input class="radio-inline" type="radio"
-					wicket:id="dp" />&nbsp;Pagamento ao Credor<br><small>(O DEVEDOR PODERÁ SER PROTESTADO SE NÃO PAGAR AS CUSTAS DO CARTÓRIO)</small>
-				</label>
-			</div>
-		</div>
-	</div> 
-   <div class="col-md-10">
+	  <label>Motivo da Solicitação</label>
+	</div>
+	<div class="form-group">
+	  <label wicket:id="radioMotivoSolicitacao"></label>
+   </div>
+   	<div class="col-md-10">
 		<div class="form-group">
-		  <label>Motivo</label>
+		  <label>Irregularidade</label>
 	  	  <select class="form-control" wicket:id="codigoIrregularidade"></select>
 		</div>
 	</div>
-	<div class="form-group">
-		 <a class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#modalDesistencia"  
-		 	wicket:id="submitSolicitarDesistencia">
-            <span class="glyphicon glyphicon-send"></span>&nbsp;Solicitar Desistência
-        </a>
-       </div>
+	<div class="col-md-10">  
+		<div class="form-group">
+			<label>Anexar Ofício: (somente ZIP)</label> <input
+				wicket:id="anexoDesistencia" type="file" class="filestyle"
+				data-buttonText="Procurar">
+		</div>
+	</div>
+	<div class="col-md-10">  
+		<div class="form-group">
+			 <a class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#modalDesistencia">
+	            <span class="glyphicon glyphicon-send"></span>&nbsp;Enviar
+	        </a>
+	    </div>
+	</div>
 	<!-- - Modal Confirmar Desistência  -->
 	<div class="modal fade" id="modalDesistencia" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
          <div class="modal-dialog">
              <div class="modal-content">
                  <div class="modal-header">
                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                     <h4 class="modal-title" id="myModalLabel">Tem certeza que deseja enviar a solicitação de desistência?</h4>
+                     <h4 class="modal-title" id="myModalLabel">Tem certeza que deseja enviar a solicitação de Desistência ou Cancelamento?</h4>
                  </div>
                  <div class="modal-body">
                  	<br style="clear: both;"/>
@@ -49,7 +48,7 @@
                  </div>
                  <div class="modal-footer">
                      <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>&nbsp;Não</button>
-                     <button type="submit" class="btn btn-success btn-lg"><span class="fa fa-check"></span>&nbsp;Sim</button>
+                     <button type="submit" wicket:id="submit" class="btn btn-success btn-lg"><span class="fa fa-check"></span>&nbsp;Sim</button>
                  </div>
              </div>
          </div>

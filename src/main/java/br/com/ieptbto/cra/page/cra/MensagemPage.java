@@ -29,6 +29,14 @@ public class MensagemPage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		adicionarComponentes();
 	}
 
+	public MensagemPage(String pageName, String message) {
+		this.nomeDaPagina = pageName;
+		this.mensagem = message;
+
+		info(message);
+		adicionarComponentes();
+	}
+
 	@Override
 	protected void adicionarComponentes() {
 		labelNomeDaPagina();

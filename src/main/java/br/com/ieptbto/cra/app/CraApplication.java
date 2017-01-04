@@ -72,7 +72,8 @@ import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioInstituicoesCartoriosPage;
 import br.com.ieptbto.cra.page.relatorio.taxaCra.RelatorioTaxaCraPage;
 import br.com.ieptbto.cra.page.relatorio.titulo.RelatorioTitulosPage;
-import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.EnviarSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.DownloadOficioIrregularidadePage;
+import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.EnviarSolicitacaoDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.SolicitarDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.tipoArquivo.IncluirTipoArquivoPage;
 import br.com.ieptbto.cra.page.tipoArquivo.ListaTipoArquivoPage;
@@ -227,7 +228,8 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("TitulosAutorizacaoCancelamento", TitulosAutorizacaoCancelamentoPage.class);
 
 		mountPage("SolicitarDesistenciaCancelamento", SolicitarDesistenciaCancelamentoPage.class);
-		mountPage("EnviarSolicitacaoDesistenciaCancelamento", EnviarSolicitacaoDesistenciaCancelamento.class);
+		mountPage("EnviarSolicitacaoDesistenciaCancelamento", EnviarSolicitacaoDesistenciaCancelamentoPage.class);
+		mountPage("DownloadOficioIrregularidade", DownloadOficioIrregularidadePage.class);
 
 		mountPage("MonitorarTitulos", BuscarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);

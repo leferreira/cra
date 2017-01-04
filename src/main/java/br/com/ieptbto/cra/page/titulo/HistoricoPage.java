@@ -63,7 +63,7 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
-import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.EnviarSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.EnviarSolicitacaoDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
@@ -131,7 +131,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 			@Override
 			public void onClick() {
-				setResponsePage(new EnviarSolicitacaoDesistenciaCancelamento(getModel().getObject()));
+				setResponsePage(new EnviarSolicitacaoDesistenciaCancelamentoPage(getModel().getObject()));
 			}
 		};
 

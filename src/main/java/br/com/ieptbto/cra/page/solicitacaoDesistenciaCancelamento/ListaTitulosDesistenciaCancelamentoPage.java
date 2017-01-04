@@ -114,7 +114,7 @@ public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloReme
 
 					@Override
 					public void onClick() {
-						setResponsePage(new EnviarSolicitacaoDesistenciaCancelamento(titulo));
+						setResponsePage(new EnviarSolicitacaoDesistenciaCancelamentoPage(titulo));
 					}
 				};
 				linkSolicitarCancelamento.setVisible(false);
