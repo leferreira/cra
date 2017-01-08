@@ -489,6 +489,12 @@ Exporter csv
 	font-size: 11.5px;
 	font-weight: bold;
 }
+
+.menu-acoes{ 
+	margin-top: 5px;	
+	margin-bottom: 5px;	
+}
+
 .dropdown-menu{
     font-size: 13px; 
 }

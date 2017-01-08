@@ -1,0 +1,32 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
+	<div class="panel panel-primary">
+		<div class="panel-heading">Arquivos e Ocorrências</div>
+		<div class="panel-body" style="padding: 5px; background-color: transparent;">
+			<div class="timeline-centered">
+		        <article class="timeline-entry" wicket:id="divListaHistorico">
+		            <div class="timeline-entry-inner">
+		                <div wicket:id="div-icon">
+		                    <span wicket:id="icon"></span>
+		                </div>
+		                <div class="timeline-label">
+		                	<h5><strong wicket:id="usuarioAcao"></strong></h5>
+							<p>
+			                    <a target="_blank" wicket:id="link" class="link" style="font-size: 14px;">
+									<span wicket:id="conteudoLink"></span>
+								</a>
+			                    <span wicket:id="mensagem" class="text-historico"></span>
+								<span wicket:id="acao" class="text-historico"></span>
+								<br class="clear">
+		                        <span class="text-muted pull-right clear">
+			                        <i class="fa fa-clock-o fa-fw"></i>&nbsp;
+			                        <span wicket:id="data"></span> às <span wicket:id="hora"></span>
+		                        </span>
+								<br class="clear">
+							</p>
+		                </div>
+		            </div>
+		        </article>
+	    	</div>
+		</div>
+	</div>
+</wicket:panel>

@@ -35,7 +35,7 @@ import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.cra.MensagemPage;
-import br.com.ieptbto.cra.page.titulo.HistoricoPage;
+import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
