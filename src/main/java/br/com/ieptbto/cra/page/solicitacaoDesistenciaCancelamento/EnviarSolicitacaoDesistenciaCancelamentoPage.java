@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -7,7 +8,9 @@ import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -50,7 +53,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	private TituloRemessa titulo;
 	private SolicitacaoDesistenciaCancelamento solicitacao;
 	private FileUploadField fileUploadField;
-	private RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> radioMotivoSolicitacao;
+	private RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> radioMotivo;
 
 	public EnviarSolicitacaoDesistenciaCancelamentoPage(TituloRemessa titulo) {
 		this.solicitacao = new SolicitacaoDesistenciaCancelamento();
@@ -62,6 +65,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	@Override
 	protected void adicionarComponentes() {
 		informacoesTitulo();
+		criarRadioMotivo();
 		criarCampoAnexoOficio();
 		formularioSolicitacao();
 	}
@@ -82,7 +86,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 				solicitacao.setStatusLiberacao(false);
 
 				try {
-					MotivoSolicitacaoDesistenciaCancelamento motivo = radioMotivoSolicitacao.getModelObject();
+					MotivoSolicitacaoDesistenciaCancelamento motivo = radioMotivo.getModelObject();
 					if (MotivoSolicitacaoDesistenciaCancelamento.PAGAMENTO_AO_CREDOR.equals(motivo)) {
 						if (titulo.getSituacaoTitulo().equals("ABERTO")) {
 							solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_DESISTENCIA_PROTESTO);
@@ -106,8 +110,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 							}
 						}
 						if (titulo.getSituacaoTitulo().equals("ABERTO")) {
-							solicitacao.setTipoSolicitacao(
-									TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_DESISTENCIA_PROTESTO_IRREGULARIDADE);
+							solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_DESISTENCIA_PROTESTO_IRREGULARIDADE);
 						} else if (titulo.getSituacaoTitulo().equals("PROTESTADO")) {
 							solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
 						}
@@ -130,8 +133,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 				}
 			}
 		};
-		form.add(new SolicitarDesistenciaCancelamentoInputPanel("solicitacaoInputPanel", getModel(), titulo, fileUploadField,
-				radioMotivoSolicitacao));
+		form.add(new SolicitarDesistenciaCancelamentoInputPanel("solicitacaoInputPanel", getModel(), titulo, fileUploadField, radioMotivo));
 		form.setMultiPart(true);
 		add(form);
 	}
@@ -139,6 +141,15 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	private void criarCampoAnexoOficio() {
 		this.fileUploadField = new FileUploadField("anexoDesistencia", new ListModel<FileUpload>());
 		this.fileUploadField.setLabel(new Model<String>("Anexo de Ofício"));
+	}
+	
+	private void criarRadioMotivo() {
+		IChoiceRenderer<MotivoSolicitacaoDesistenciaCancelamento> renderer = new ChoiceRenderer<MotivoSolicitacaoDesistenciaCancelamento>("label");
+		this.radioMotivo = new RadioChoice<MotivoSolicitacaoDesistenciaCancelamento>("radioMotivoSolicitacao",
+				new Model<MotivoSolicitacaoDesistenciaCancelamento>(), Arrays.asList(MotivoSolicitacaoDesistenciaCancelamento.values()), renderer);
+		this.radioMotivo.setLabel(new Model<String>("Motivo da Solicitação"));
+		this.radioMotivo.setRequired(true);
+		this.radioMotivo.setOutputMarkupId(true);
 	}
 
 	private void informacoesTitulo() {

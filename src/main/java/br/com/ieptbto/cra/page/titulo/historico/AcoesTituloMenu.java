@@ -9,6 +9,7 @@ import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
 import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.EnviarSolicitacaoDesistenciaCancelamentoPage;
 
 /**
@@ -48,6 +49,12 @@ public class AcoesTituloMenu extends Panel {
 				setResponsePage(new EnviarSolicitacaoDesistenciaCancelamentoPage(tituloRemessa));
 			}
 		};
+		String situacaoTitulo = tituloRemessa.getSituacaoTitulo();
+		if (situacaoTitulo.equals("ABERTO") || situacaoTitulo.equals(TipoOcorrencia.PROTESTADO.getLabel())) {
+		} else {
+			linkSolicitacao.setOutputMarkupId(true);
+			linkSolicitacao.setEnabled(false);
+		}
 		return linkSolicitacao;
 	}
 

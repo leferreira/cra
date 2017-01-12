@@ -63,7 +63,6 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
-import br.com.ieptbto.cra.hibernate.audit.CraCustomRevisionEntity;
 
 /**
  * 
@@ -85,8 +84,8 @@ public class AnnotatedClassesFactory {
 	/**
 	 * Metodo responsavel por mapear classes Hibernate.
 	 */
-	private static void adicionarClassesHibernate() {
-		classesHibernate.add(UsuarioAnonimo.class);
+	private static void adicionarClassesHibernate() { 
+		classesHibernate.add(UsuarioAnonimo.class); 
 		classesHibernate.add(LogCra.class);
 		classesHibernate.add(CraServiceConfig.class);
 		classesHibernate.add(Usuario.class);

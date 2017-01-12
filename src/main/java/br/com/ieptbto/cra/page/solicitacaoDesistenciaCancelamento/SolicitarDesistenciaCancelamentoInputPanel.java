@@ -42,10 +42,6 @@ public class SolicitarDesistenciaCancelamentoInputPanel extends Panel {
 		this.fileUploadField = fileUpload;
 		this.radioMotivoSolicitacao = radioMotivo;
 
-		adicionarCampos();
-	}
-
-	private void adicionarCampos() {
 		add(fileUploadAnexo());
 		add(tipoSolicitacao());
 		add(dropDownIrregularidade());
@@ -56,14 +52,6 @@ public class SolicitarDesistenciaCancelamentoInputPanel extends Panel {
 	}
 
 	private RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> tipoSolicitacao() {
-		IChoiceRenderer<MotivoSolicitacaoDesistenciaCancelamento> renderer =
-				new ChoiceRenderer<MotivoSolicitacaoDesistenciaCancelamento>("label");
-		radioMotivoSolicitacao = new RadioChoice<MotivoSolicitacaoDesistenciaCancelamento>("radioMotivoSolicitacao",
-				new Model<MotivoSolicitacaoDesistenciaCancelamento>(), Arrays.asList(MotivoSolicitacaoDesistenciaCancelamento.values()),
-				renderer);
-		radioMotivoSolicitacao.setLabel(new Model<String>("Motivo da Solicitação"));
-		radioMotivoSolicitacao.setRequired(true);
-		radioMotivoSolicitacao.setOutputMarkupId(true);
 		radioMotivoSolicitacao.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 			/***/
 			private static final long serialVersionUID = 1L;

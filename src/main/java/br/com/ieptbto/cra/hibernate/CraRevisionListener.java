@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.hibernate.audit;
+package br.com.ieptbto.cra.hibernate;
 
 import org.apache.wicket.protocol.http.WebSession;
 import org.hibernate.envers.RevisionListener;
