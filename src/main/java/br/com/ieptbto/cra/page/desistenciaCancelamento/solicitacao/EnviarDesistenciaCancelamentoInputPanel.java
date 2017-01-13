@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento;
+package br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,7 @@ import br.com.ieptbto.cra.enumeration.MotivoSolicitacaoDesistenciaCancelamento;
  * @author Thasso Araújo
  *
  */
-public class SolicitarDesistenciaCancelamentoInputPanel extends Panel {
+public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -35,7 +35,7 @@ public class SolicitarDesistenciaCancelamentoInputPanel extends Panel {
 	private DropDownChoice<CodigoIrregularidade> dropDownMotivoCancelamento;
 	private FileUploadField fileUploadField;
 
-	public SolicitarDesistenciaCancelamentoInputPanel(String id, IModel<SolicitacaoDesistenciaCancelamento> model, TituloRemessa titulo,
+	public EnviarDesistenciaCancelamentoInputPanel(String id, IModel<SolicitacaoDesistenciaCancelamento> model, TituloRemessa titulo,
 			FileUploadField fileUpload, RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> radioMotivo) {
 		super(id, model);
 		this.titulo = titulo;

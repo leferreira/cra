@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento;
+package br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -133,7 +133,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 				}
 			}
 		};
-		form.add(new SolicitarDesistenciaCancelamentoInputPanel("solicitacaoInputPanel", getModel(), titulo, fileUploadField, radioMotivo));
+		form.add(new EnviarDesistenciaCancelamentoInputPanel("solicitacaoInputPanel", getModel(), titulo, fileUploadField, radioMotivo));
 		form.setMultiPart(true);
 		add(form);
 	}

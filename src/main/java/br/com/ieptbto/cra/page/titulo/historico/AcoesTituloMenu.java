@@ -10,7 +10,7 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
-import br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento.EnviarSolicitacaoDesistenciaCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.EnviarSolicitacaoDesistenciaCancelamentoPage;
 
 /**
  * @author Thasso Araújo

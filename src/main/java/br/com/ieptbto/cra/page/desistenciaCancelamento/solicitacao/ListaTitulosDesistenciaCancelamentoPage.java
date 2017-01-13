@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.solicitacaoDesistenciaCancelamento;
+package br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao;
 
 import java.math.BigDecimal;
 import java.util.List;
