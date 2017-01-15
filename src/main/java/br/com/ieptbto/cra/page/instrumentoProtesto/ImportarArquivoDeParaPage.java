@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
@@ -41,22 +40,20 @@ public class ImportarArquivoDeParaPage extends BasePage<AgenciaCAF> {
 	@SpringBean
 	ArquivoDeParaMediator arquivoDeParaMediator;
 
-	private AgenciaCAF arquivoCAF;
 	private FileUploadField fileUploadField;
 	private RadioChoice<BooleanSimNao> radioLimparBase;
 	private DropDownChoice<PadraoArquivoDePara> dropDownDePara;
 
 	public ImportarArquivoDeParaPage() {
-		this.arquivoCAF = new AgenciaCAF();
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		formularioEnvioDePara();
+		add(formularioEnvioDePara());
 	}
 
-	private void formularioEnvioDePara() {
+	private Form<AgenciaCAF> formularioEnvioDePara() {
 		Form<AgenciaCAF> form = new Form<AgenciaCAF>("form", getModel()) {
 
 			/****/
@@ -70,7 +67,7 @@ public class ImportarArquivoDeParaPage extends BasePage<AgenciaCAF> {
 
 				try {
 					arquivoDeParaMediator.processarArquivo(uploadedFile, padraoArquivo, limparBase);
-					success("Arquivo " + padraoArquivo.getModelo() + " foi importado com sucesso na CRA !");
+					success("Arquivo " + padraoArquivo.getModelo() + " foi importado com sucesso na CRA!");
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
@@ -85,7 +82,7 @@ public class ImportarArquivoDeParaPage extends BasePage<AgenciaCAF> {
 		form.add(checkLimparBase());
 		form.add(campoArquivo());
 		form.add(botaoEnviar());
-		add(form);
+		return form;
 	}
 
 	private DropDownChoice<PadraoArquivoDePara> dropDownTipoArquivoEnviado() {
@@ -137,7 +134,6 @@ public class ImportarArquivoDeParaPage extends BasePage<AgenciaCAF> {
 
 	@Override
 	protected IModel<AgenciaCAF> getModel() {
-		return new CompoundPropertyModel<AgenciaCAF>(arquivoCAF);
+		return null;
 	}
-
 }
