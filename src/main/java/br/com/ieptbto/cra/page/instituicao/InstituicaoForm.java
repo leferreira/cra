@@ -32,6 +32,7 @@ public class InstituicaoForm extends BaseForm<Instituicao> {
 				instituicaoMediator.alterar(instituicao);
 				setResponsePage(new ListaInstituicaoPage("Os dados da instituição foram alterados com sucesso !"));
 			} else {
+				instituicao.setVersao(1);
 				if (instituicaoMediator.isInstituicaoNaoExiste(instituicao)) {
 					instituicaoMediator.salvar(instituicao);
 					setResponsePage(new ListaInstituicaoPage("Os dados da instituição foram salvos com sucesso !"));
