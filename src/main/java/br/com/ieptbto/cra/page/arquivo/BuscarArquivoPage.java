@@ -8,7 +8,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.ArquivoFormBean;
+import br.com.ieptbto.cra.beans.ArquivoBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoVisualizacaoArquivos;
@@ -43,16 +43,16 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 	}
 
 	private void formularioBuscarArquivo() {
-		ArquivoFormBean arquivoFormBean = new ArquivoFormBean();
+		ArquivoBean arquivoFormBean = new ArquivoBean();
 
-		Form<ArquivoFormBean> form = new Form<ArquivoFormBean>("form", new CompoundPropertyModel<ArquivoFormBean>(arquivoFormBean)) {
+		Form<ArquivoBean> form = new Form<ArquivoBean>("form", new CompoundPropertyModel<ArquivoBean>(arquivoFormBean)) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				ArquivoFormBean arquivoFormBean = getModelObject();
+				ArquivoBean arquivoFormBean = getModelObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 
@@ -89,7 +89,7 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 				}
 			}
 		};
-		form.add(new BuscarArquivoInputPanel("buscarArquivoInputPanel", new CompoundPropertyModel<ArquivoFormBean>(arquivoFormBean), usuario));
+		form.add(new BuscarArquivoInputPanel("buscarArquivoInputPanel", new CompoundPropertyModel<ArquivoBean>(arquivoFormBean), usuario));
 		add(form);
 	}
 

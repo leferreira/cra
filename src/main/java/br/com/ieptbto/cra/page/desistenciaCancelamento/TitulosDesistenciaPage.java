@@ -107,8 +107,8 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 			@Override
 			protected void populateItem(ListItem<PedidoDesistencia> item) {
 				final PedidoDesistencia pedidoDesistencia = item.getModelObject();
-				pedidoDesistencia.getTitulo().setConfirmacao(tituloMediator.buscarConfirmacao(pedidoDesistencia.getTitulo()));
-				pedidoDesistencia.getTitulo().setRetorno(tituloMediator.buscarRetorno(pedidoDesistencia.getTitulo()));
+				pedidoDesistencia.getTitulo().setConfirmacao(tituloMediator.buscarConfirmacaoPorTitulo(pedidoDesistencia.getTitulo()));
+				pedidoDesistencia.getTitulo().setRetorno(tituloMediator.buscarRetornoPorTitulo(pedidoDesistencia.getTitulo()));
 
 				final TituloRemessa tituloRemessa = pedidoDesistencia.getTitulo();
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloRemessa.getSaldoTitulo()));

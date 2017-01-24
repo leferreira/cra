@@ -17,8 +17,7 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
-import br.com.ieptbto.cra.mediator.ConvenioMediator;
+import br.com.ieptbto.cra.mediator.SolicitacaoDesistenciaCancelamentoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -34,16 +33,13 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private ConvenioMediator convenioMediator;
-	@SpringBean
-	private CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	SolicitacaoDesistenciaCancelamentoMediator solicitacaoMediator;
 
 	private List<SolicitacaoDesistenciaCancelamento> solicitacoesDesistenciasCancelamentos;
 	private Usuario usuario;
 
 	public GerarDesistenciasCancelamentosPage() {
 		this.usuario = getUser();
-
 		adicionarComponentes();
 	}
 
@@ -63,7 +59,7 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 			protected void onSubmit() {
 
 				try {
-					convenioMediator.gerarDesistenciasCancelamentosConvenio(usuario, solicitacoesDesistenciasCancelamentos);
+					solicitacaoMediator.gerarDesistenciasCancelamentosConvenio(usuario, solicitacoesDesistenciasCancelamentos);
 					success("Os arquivos de desistências e cancelamentos de protesto foram gerados com sucesso!");
 
 				} catch (InfraException ex) {
@@ -107,7 +103,7 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 
 			@Override
 			protected List<SolicitacaoDesistenciaCancelamento> load() {
-				solicitacoesDesistenciasCancelamentos = cancelamentoProtestoMediator.buscarSolicitacoesDesistenciasCancelamentos();
+				solicitacoesDesistenciasCancelamentos = solicitacaoMediator.buscarSolicitacoesDesistenciasCancelamentos();
 				return solicitacoesDesistenciasCancelamentos;
 			}
 		};

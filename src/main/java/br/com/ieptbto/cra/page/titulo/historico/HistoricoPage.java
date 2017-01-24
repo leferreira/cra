@@ -7,8 +7,10 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -23,11 +25,18 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	/***/
 	private static final long serialVersionUID = 1L;
 
+	@SpringBean
+	TituloMediator tituloMediator;
+	
 	private TituloRemessa tituloRemessa;
-
+	
+	public HistoricoPage(Integer idTitulo) {
+		this.tituloRemessa = tituloMediator.buscarTituloPorPK(idTitulo);
+		adicionarComponentes();
+	}
+	
 	public HistoricoPage(TituloRemessa titulo) {
 		this.tituloRemessa = titulo;
-
 		adicionarComponentes();
 	}
 

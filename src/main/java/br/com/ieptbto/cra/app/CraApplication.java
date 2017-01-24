@@ -28,7 +28,6 @@ import br.com.ieptbto.cra.page.arquivo.ListaArquivoCartorioPage;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivoInstituicaoPage;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
-import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.base.SobreCraPage;
 import br.com.ieptbto.cra.page.batimento.BatimentoPage;
@@ -59,6 +58,7 @@ import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.EnviarSolicit
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.SolicitarDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
+import br.com.ieptbto.cra.page.home.HomePage;
 import br.com.ieptbto.cra.page.instituicao.IncluirInstituicaoPage;
 import br.com.ieptbto.cra.page.instituicao.ListaInstituicaoPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.BuscarInstrumentoProtestoPage;
@@ -73,7 +73,6 @@ import br.com.ieptbto.cra.page.municipio.IncluirMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.ListaMunicipioPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioInstituicoesCartoriosPage;
-import br.com.ieptbto.cra.page.relatorio.taxaCra.RelatorioTaxaCraPage;
 import br.com.ieptbto.cra.page.relatorio.titulo.RelatorioTitulosPage;
 import br.com.ieptbto.cra.page.tipoArquivo.IncluirTipoArquivoPage;
 import br.com.ieptbto.cra.page.tipoArquivo.ListaTipoArquivoPage;
@@ -240,7 +239,6 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
 		/** Relatorios CRA */
 		mountPage("Relatorio", RelatorioArquivosPage.class);
-		mountPage("RelatorioTaxaCra", RelatorioTaxaCraPage.class);
 		mountPage("RelatorioTitulos", RelatorioTitulosPage.class);
 		mountPage("RelatorioRetorno", RelatorioRetornoPage.class);
 

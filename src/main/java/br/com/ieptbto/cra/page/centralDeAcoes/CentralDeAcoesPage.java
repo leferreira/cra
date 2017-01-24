@@ -20,7 +20,7 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.dataProvider.DataProvider;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.LogCra;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.LoggerMediator;
@@ -120,13 +120,13 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 		return dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataFim)));
 	}
 
-	private DropDownChoice<TipoInstituicaoCRA> textFieldTipoInstituicao() {
-		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
-		choices.add(TipoInstituicaoCRA.CARTORIO);
-		choices.add(TipoInstituicaoCRA.CONVENIO);
-		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao",
-				new Model<TipoInstituicaoCRA>(), choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
+	private DropDownChoice<TipoInstituicaoSistema> textFieldTipoInstituicao() {
+		List<TipoInstituicaoSistema> choices = new ArrayList<TipoInstituicaoSistema>();
+		choices.add(TipoInstituicaoSistema.CARTORIO);
+		choices.add(TipoInstituicaoSistema.CONVENIO);
+		choices.add(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA);
+		final DropDownChoice<TipoInstituicaoSistema> tipoInstituicao = new DropDownChoice<TipoInstituicaoSistema>("tipoInstituicao",
+				new Model<TipoInstituicaoSistema>(), choices, new ChoiceRenderer<TipoInstituicaoSistema>("label"));
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -134,18 +134,18 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				TipoInstituicaoCRA tipo = tipoInstituicao.getModelObject();
+				TipoInstituicaoSistema tipo = tipoInstituicao.getModelObject();
 
 				if (tipoInstituicao.getModelObject() != null) {
-					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
+					if (tipo.equals(TipoInstituicaoSistema.CONVENIO)) {
 						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
-					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					} else if (tipo.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
 						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
-					} else if (tipo.equals(TipoInstituicaoCRA.CARTORIO)) {
+					} else if (tipo.equals(TipoInstituicaoSistema.CARTORIO)) {
 						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getCartorios());

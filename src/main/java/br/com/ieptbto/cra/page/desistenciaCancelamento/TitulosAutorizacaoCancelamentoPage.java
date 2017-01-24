@@ -132,8 +132,8 @@ public class TitulosAutorizacaoCancelamentoPage extends BasePage<AutorizacaoCanc
 					item.add(new Label("situacaoTitulo", "TÍTULO ANTIGO"));
 
 				} else {
-					pedidoAutorizacao.getTitulo().setConfirmacao(tituloMediator.buscarConfirmacao(pedidoAutorizacao.getTitulo()));
-					pedidoAutorizacao.getTitulo().setRetorno(tituloMediator.buscarRetorno(pedidoAutorizacao.getTitulo()));
+					pedidoAutorizacao.getTitulo().setConfirmacao(tituloMediator.buscarConfirmacaoPorTitulo(pedidoAutorizacao.getTitulo()));
+					pedidoAutorizacao.getTitulo().setRetorno(tituloMediator.buscarRetornoPorTitulo(pedidoAutorizacao.getTitulo()));
 
 					final TituloRemessa tituloRemessa = pedidoAutorizacao.getTitulo();
 					item.add(new Label("nossoNumerno", tituloRemessa.getNossoNumero()));

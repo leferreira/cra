@@ -154,7 +154,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 
 					@Override
 					public void onClick() {
-						Remessa retornoAlterado = remessaMediator.carregarRemessaPorId(retorno);
+						Remessa retornoAlterado = remessaMediator.buscarRemessaPorPK(retorno);
 
 						try {
 							TipoBatimento tipoBatimento = retornoAlterado.getInstituicaoDestino().getTipoBatimento();

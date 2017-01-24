@@ -9,10 +9,10 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.ArquivoFormBean;
+import br.com.ieptbto.cra.beans.ArquivoBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.enumeration.TipoRelatorio;
+import br.com.ieptbto.cra.enumeration.NivelDetalhamentoRelatorio;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.page.base.BaseForm;
 import br.com.ieptbto.cra.relatorio.RelatorioUtil;
@@ -24,21 +24,21 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Thasso Araújo
  *
  */
-public class RelatorioArquivosForm extends BaseForm<ArquivoFormBean> {
+public class RelatorioArquivosForm extends BaseForm<ArquivoBean> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	public RelatorioArquivosForm(String id, IModel<ArquivoFormBean> model) {
+	public RelatorioArquivosForm(String id, IModel<ArquivoBean> model) {
 		super(id, model);
 
 	}
 
 	@Override
 	protected void onSubmit() {
-		ArquivoFormBean formBean = getModelObject();
-		TipoArquivoEnum tipoArquivo = formBean.getTipoArquivo();
-		TipoRelatorio tipoRelatorio = formBean.getTipoRelatorio();
+		ArquivoBean formBean = getModelObject();
+		TipoArquivoFebraban tipoArquivo = formBean.getTipoArquivo();
+		NivelDetalhamentoRelatorio tipoRelatorio = formBean.getTipoRelatorio();
 		Instituicao instituicao = formBean.getInstituicao();
 		LocalDate dataInicio = null;
 		LocalDate dataFim = null;

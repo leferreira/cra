@@ -16,7 +16,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.TituloFormBean;
+import br.com.ieptbto.cra.beans.TituloBean;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
@@ -43,10 +43,10 @@ public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloReme
 	@SpringBean
 	private TituloMediator tituloMediator;
 
-	private TituloFormBean tituloBean;
+	private TituloBean tituloBean;
 	private Usuario usuario;
 
-	public ListaTitulosDesistenciaCancelamentoPage(TituloFormBean tituloBean) {
+	public ListaTitulosDesistenciaCancelamentoPage(TituloBean tituloBean) {
 		this.tituloBean = tituloBean;
 		this.usuario = getUser();
 
@@ -135,7 +135,7 @@ public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloReme
 
 			@Override
 			protected List<TituloRemessa> load() {
-				TituloFormBean bean = tituloBean;
+				TituloBean bean = tituloBean;
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 
@@ -145,7 +145,7 @@ public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloReme
 				if (bean.getDataFim() != null) {
 					dataFim = new LocalDate(bean.getDataFim());
 				}
-				return tituloMediator.buscarTitulos(usuario, dataInicio, dataFim, bean.getTipoInstituicao(), bean.getBancoConvenio(),
+				return tituloMediator.consultarTitulos(usuario, dataInicio, dataFim, bean.getTipoInstituicao(), bean.getBancoConvenio(),
 						bean.getCartorio(), bean);
 			}
 		};

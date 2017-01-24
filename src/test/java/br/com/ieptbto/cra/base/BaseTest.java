@@ -21,7 +21,7 @@ import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.page.base.HomePage;
+import br.com.ieptbto.cra.page.home.HomePage;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.security.UserSession;
 

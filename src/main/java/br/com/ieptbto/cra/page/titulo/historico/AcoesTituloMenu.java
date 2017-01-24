@@ -8,8 +8,8 @@ import org.apache.wicket.model.IModel;
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
-import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
+import br.com.ieptbto.cra.enumeration.regra.TipoOcorrencia;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.EnviarSolicitacaoDesistenciaCancelamentoPage;
 
 /**
@@ -59,8 +59,8 @@ public class AcoesTituloMenu extends Panel {
 	}
 
 	private void verificarPermissaoUsuario() {
-		TipoInstituicaoCRA tipoInstituicaoUsuario = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
-		if (tipoInstituicaoUsuario.equals(TipoInstituicaoCRA.CRA)) {
+		TipoInstituicaoSistema tipoInstituicaoUsuario = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		if (tipoInstituicaoUsuario.equals(TipoInstituicaoSistema.CRA)) {
 			this.setVisible(true);
 		} else {
 			this.setVisible(false);
