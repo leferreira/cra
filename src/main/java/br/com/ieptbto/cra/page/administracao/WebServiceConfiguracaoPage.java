@@ -14,7 +14,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.CraServiceConfig;
 import br.com.ieptbto.cra.enumeration.CraServices;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.CraServiceMediator;
+import br.com.ieptbto.cra.mediator.CraMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -30,7 +30,7 @@ public class WebServiceConfiguracaoPage extends BasePage<CraServiceConfig> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	CraServiceMediator craServiceMediator;
+	CraMediator craServiceMediator;
 
 	private List<CraServiceConfig> services;
 	private CheckBox envioRemessaService;
