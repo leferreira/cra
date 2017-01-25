@@ -26,7 +26,7 @@ import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
-import br.com.ieptbto.cra.mediator.CraMediator;
+import br.com.ieptbto.cra.mediator.CraServiceMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
@@ -50,7 +50,7 @@ public class CraWebService {
 	public static final String CONSTANTE_CANCELAMENTO_XML = "cancelamento";
 
 	@Autowired
-	protected CraMediator craServiceMediator;
+	protected CraServiceMediator craServiceMediator;
 	@Autowired
 	protected LoggerCra loggerCra;
 

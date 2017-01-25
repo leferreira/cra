@@ -40,9 +40,9 @@ import br.com.ieptbto.cra.webservice.VO.TituloDetalhamentoSerpro;
 public class AutorizacaoCancelamentoService extends CraWebService {
 
 	@Autowired
-	AutorizacaoCancelamentoMediator autorizacaoCancelamentoMediator;
+	private AutorizacaoCancelamentoMediator autorizacaoCancelamentoMediator;
 	@Autowired
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 
 	private List<Exception> erros;
 	private Object relatorio;
