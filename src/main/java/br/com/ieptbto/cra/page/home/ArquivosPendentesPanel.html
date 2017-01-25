@@ -1,0 +1,72 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
+	<div class="col-md-8">
+		<h4 class="titulo-top">
+			ARQUIVOS PENDENTES 
+			<a href="#" class="pull-right" target="_blank" wicket:id="arquivosPendentes"
+				style="font-size: 15px; margin: 5px auto; font-weight: bold;">
+				VER MAIS&nbsp;<i class="fa fa-arrow-circle-right"></i>
+			</a>
+		</h4>
+	</div>
+	<div class="col-md-4 col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				REMESSAS&nbsp;&nbsp;
+				<button type="button" class="btn btn-danger btn-circle btn-pendentes">
+					<span wicket:id="totalRemessas"></span>
+				</button>
+			</div>
+			<div class="panel-footer" style="padding: 0px;">
+				<div style="height: 265px; overflow-y: scroll;">
+					<table class="table table-striped table-hover" style="font-size: 12.5px;">
+						<tbody>
+							<tr wicket:id="listaRemessas">
+								<td class="col-center"><a href="#" class="link" wicket:id="downloadArquivo"> <img
+										border="0" class="download-ico" title="Download em TXT" src="img/download.jpg">
+								</a>&nbsp; <a href="#" class="link" wicket:id="downloadAnexos"> <img border="0"
+										class="download-ico" title="Download Anexos" src="img/clipe.png">
+								</a></td>
+								<td class="col-center"><a wicket:id="linkArquivo" target="_blank"
+									title="Clique para baixar o arquivo"> <span wicket:id="nomeArquivo" class="link"
+										style="font-size: 13px;">[arquivo]</span></a></td>
+								<td><small class="pull-left text-muted" wicket:id="instituicao"
+									style="font-size: 11.5px;">[municipio]</small> <small class="pull-right text-muted">
+										<span class="glyphicon glyphicon-time"></span>&nbsp; <span wicket:id="dias">[quantidade
+											de dias]</span><span>&nbsp;DIA(S)</span>
+								</small></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				DESIST&Ecirc;NCIAS E CANCELAMENTOS&nbsp;&nbsp;
+				<button type="button" class="btn btn-danger btn-circle btn-pendentes">
+					<span wicket:id="totalDesistenciasCancelamentos"></span>
+				</button>
+			</div>
+			<div class="panel-footer" style="padding: 0px;">
+				<div style="height: 265px; overflow-y: scroll;">
+					<table class="table table-striped table-hover" style="font-size: 12.5px;">
+						<tbody>
+							<tr wicket:id="listaDesistenciasCancelamentos">
+								<td class="col-center"><a href="#" class="link" wicket:id="downloadArquivo"> <img
+										border="0" class="download-ico" title="Download em TXT" src="img/download.jpg">
+								</a></td>
+								<td class="col-center"><a wicket:id="linkArquivo" target="_blank"> <span
+										wicket:id="nomeArquivo" class="link" style="font-size: 13px;">[arquivo]</span></a></td>
+								<td><small class="pull-left text-muted" wicket:id="instituicao" style="font-size: 11.5px;">[municipio]</small>
+									<small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span>&nbsp;
+										<span wicket:id="dias">[quantidade de dias]</span><span>&nbsp;DIA(S)</span> </small></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

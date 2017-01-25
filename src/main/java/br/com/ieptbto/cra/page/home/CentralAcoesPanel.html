@@ -1,0 +1,20 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
+	<div class="col-md-4">
+		<h4 class="titulo-top">CENTRAL DE AÇÕES
+			<a href="CentralDeAcoes" class="pull-right" target="_blank" style="font-size: 15px; margin: 5px auto; font-weight: bold;">VER MAIS&nbsp;
+				<i class="fa fa-arrow-circle-right"></i>
+			</a>
+		</h4>
+		<div class="list-group">
+			<div class="list-group-item" wicket:id="listUltimosErrosLog">
+				<h4 class="list-group-item-heading">
+					<span wicket:id="instituicao"></span><span class="pull-right" wicket:id="tipoLog" style="padding: 5px;"></span>
+				</h4>
+				<p class="list-group-item-text">
+				<span wicket:id="descricao"></span>&nbsp;
+				<a target="_blank" class="link" wicket:id="descricaoGeral">Ver log...</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

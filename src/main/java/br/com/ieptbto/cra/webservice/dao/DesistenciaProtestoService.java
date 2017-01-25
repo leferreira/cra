@@ -18,12 +18,13 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaDesistenciaProtestoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
-import br.com.ieptbto.cra.enumeration.CraServiceEnum;
+import br.com.ieptbto.cra.enumeration.CraServices;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.DesistenciaCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -45,9 +46,12 @@ import br.com.ieptbto.cra.webservice.VO.TituloDetalhamentoSerpro;
 public class DesistenciaProtestoService extends CraWebService {
 
 	@Autowired
-	private DesistenciaProtestoMediator desistenciaProtestoMediator;
+	DesistenciaProtestoMediator desistenciaMediator;
 	@Autowired
-	private InstituicaoMediator instituicaoMediator;
+	DesistenciaCancelamentoMediator desistenciaCancelamentoMediator;
+	@Autowired
+	InstituicaoMediator instituicaoMediator;
+	
 	private List<Exception> erros;
 	private MensagemCra mensagemCra;
 	private String resposta;
@@ -73,7 +77,7 @@ public class DesistenciaProtestoService extends CraWebService {
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_DESISTENCIA_PROTESTO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_DESISTENCIA_PROTESTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
@@ -82,12 +86,12 @@ public class DesistenciaProtestoService extends CraWebService {
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
-			Arquivo arquivoJaEnviado = desistenciaProtestoMediator.verificarDesistenciaJaEnviadaAnteriormente(nomeArquivo, usuario.getInstituicao());
+			Arquivo arquivoJaEnviado = desistenciaMediator.verificarDesistenciaJaEnviadaAnteriormente(nomeArquivo, usuario.getInstituicao());
 			if (arquivoJaEnviado != null) {
 				return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
 			}
 
-			Arquivo arquivo = desistenciaProtestoMediator.processarDesistencia(nomeArquivo, dados, getErros(), usuario);
+			Arquivo arquivo = desistenciaMediator.processarDesistencia(nomeArquivo, dados, getErros(), usuario);
 			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 			}
@@ -209,18 +213,18 @@ public class DesistenciaProtestoService extends CraWebService {
 				return setResposta(usuario, null, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 
-			if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
+			if (nomeArquivo.contains(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO.getConstante())) {
 				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO;
-			} else if (nomeArquivo.contains(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.getConstante())) {
+			} else if (nomeArquivo.contains(TipoArquivoFebraban.CANCELAMENTO_DE_PROTESTO.getConstante())) {
 				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO;
-			} else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
+			} else if (nomeArquivo.contains(TipoArquivoFebraban.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
 				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO;
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_DESISTENCIA_CANCELAMENTO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.DOWNLOAD_ARQUIVO_DESISTENCIA_CANCELAMENTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 
-			remessaVO = desistenciaProtestoMediator.buscarDesistenciaCancelamentoCartorio(usuario.getInstituicao(), nomeArquivo);
+			remessaVO = desistenciaCancelamentoMediator.buscarDesistenciaCancelamentoCartorio(usuario.getInstituicao(), nomeArquivo);
 			if (remessaVO == null) {
 				return setRespostaPadrao(usuario, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 			}
@@ -238,15 +242,15 @@ public class DesistenciaProtestoService extends CraWebService {
 	private String gerarResposta(RemessaDesistenciaProtestoVO remessaVO, String nomeArquivo) {
 		String msg = gerarMensagem(remessaVO, CONSTANTE_REMESSA_XML);
 
-		if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
+		if (nomeArquivo.contains(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO.getConstante())) {
 			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">",
 					"<sustacao>");
 			msg = msg.replace("</remessa>", "</sustacao>");
-		} else if (nomeArquivo.contains(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.getConstante())) {
+		} else if (nomeArquivo.contains(TipoArquivoFebraban.CANCELAMENTO_DE_PROTESTO.getConstante())) {
 			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">",
 					"<cancelamento>");
 			msg = msg.replace("</remessa>", "</cancelamento>");
-		} else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
+		} else if (nomeArquivo.contains(TipoArquivoFebraban.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
 			msg = msg.replace("<remessa xsi:type=\"remessaDesistenciaProtestoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">",
 					"<autoriza_cancelamento>");
 			msg = msg.replace("</remessa>", "</autoriza_cancelamento>");
@@ -272,17 +276,17 @@ public class DesistenciaProtestoService extends CraWebService {
 				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
 
-			if (nomeArquivo.contains(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.getConstante())) {
+			if (nomeArquivo.contains(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO.getConstante())) {
 				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO;
-			} else if (nomeArquivo.contains(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.getConstante())) {
+			} else if (nomeArquivo.contains(TipoArquivoFebraban.CANCELAMENTO_DE_PROTESTO.getConstante())) {
 				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO;
-			} else if (nomeArquivo.contains(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
+			} else if (nomeArquivo.contains(TipoArquivoFebraban.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
 				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO;
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.CONFIRMAR_RECEBIMENTO_DESISTENCIA_CANCELAMENTO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.CONFIRMAR_RECEBIMENTO_DESISTENCIA_CANCELAMENTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			desistenciaProtestoMediator.confirmarRecebimentoDesistenciaCancelamento(usuario.getInstituicao(), nomeArquivo);
+			desistenciaCancelamentoMediator.confirmarRecebimentoDesistenciaCancelamento(usuario.getInstituicao(), nomeArquivo);
 			loggerCra.sucess(usuario, getCraAcao(),
 					"Arquivo " + nomeArquivo + " foi confirmado o recebimento pelo " + usuario.getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {

@@ -21,11 +21,13 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.InstituicaoVO;
-import br.com.ieptbto.cra.enumeration.CraServiceEnum;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.CraServices;
 import br.com.ieptbto.cra.enumeration.TipoCampo51;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
+import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -44,11 +46,15 @@ import br.com.ieptbto.cra.webservice.VO.RemessaPendente;
 public class CartorioService extends CraWebService {
 
 	@Autowired
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@Autowired
-	private ArquivoMediator arquivoMediator;
+	ArquivoMediator arquivoMediator;
 	@Autowired
-	private DesistenciaProtestoMediator desistenciaMediator;
+	DesistenciaProtestoMediator desistenciaMediator;
+	@Autowired
+	CancelamentoProtestoMediator cancelamentoMediator;
+	@Autowired
+	AutorizacaoCancelamentoMediator autorizacaoMediator;
 
 	public String buscarArquivosPendentesCartorio(Usuario usuario) {
 		Arquivo arquivo = null;
@@ -56,10 +62,10 @@ public class CartorioService extends CraWebService {
 			if (usuario == null) {
 				return setRespostaUsuarioInvalido();
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ARQUIVOS_PENDENTES_CARTORIO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			arquivo = arquivoMediator.arquivosPendentes(usuario.getInstituicao());
+			arquivo = arquivoMediator.consultarArquivosPendentes(usuario.getInstituicao());
 			if (arquivo.getRemessas().isEmpty() && arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()
 					&& arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()
 					&& arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
@@ -79,7 +85,7 @@ public class CartorioService extends CraWebService {
 		if (arquivo.getRemessas() != null && !arquivo.getRemessas().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (Remessa remessa : arquivo.getRemessas()) {
-				nomeArquivos.add(arquivoMediator.carregarArquivoPorId(remessa.getArquivo()).getNomeArquivo());
+				nomeArquivos.add(arquivoMediator.buscarArquivoPorPK(remessa.getArquivo()).getNomeArquivo());
 			}
 			remessaPendentes.setNomeArquivos(nomeArquivos);
 		}
@@ -89,8 +95,7 @@ public class CartorioService extends CraWebService {
 				&& !arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (CancelamentoProtesto cancelamento : arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
-				cancelamento.setRemessaCancelamentoProtesto(
-						desistenciaMediator.carregarRemessaCancelamentoPorId(cancelamento.getRemessaCancelamentoProtesto()));
+				cancelamento.setRemessaCancelamentoProtesto(cancelamentoMediator.buscarRemessaCancelamentoPorPK(cancelamento.getRemessaCancelamentoProtesto()));
 				nomeArquivos.add(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo());
 			}
 			cancelamentoPendentes.setArquivos(nomeArquivos);
@@ -101,8 +106,7 @@ public class CartorioService extends CraWebService {
 				&& !arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (DesistenciaProtesto desistencia : arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
-				desistencia.setRemessaDesistenciaProtesto(
-						desistenciaMediator.carregarRemessaDesistenciaPorId(desistencia.getRemessaDesistenciaProtesto()));
+				desistencia.setRemessaDesistenciaProtesto(desistenciaMediator.buscarRemessaDesistenciaPorPK(desistencia.getRemessaDesistenciaProtesto()));
 				nomeArquivos.add(desistencia.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo());
 			}
 			desistenciaPendentes.setArquivos(nomeArquivos);
@@ -112,8 +116,7 @@ public class CartorioService extends CraWebService {
 		if (arquivo.getRemessaAutorizacao() != null && !arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (AutorizacaoCancelamento ac : arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento()) {
-				ac.setRemessaAutorizacaoCancelamento(
-						desistenciaMediator.carregarRemessaAutorizacaoPorId(ac.getRemessaAutorizacaoCancelamento()));
+				ac.setRemessaAutorizacaoCancelamento(autorizacaoMediator.buscarRemessaAutorizacaoPorPK(ac.getRemessaAutorizacaoCancelamento()));
 				nomeArquivos.add(ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo());
 			}
 			autorizaCancelamentoPendentes.setArquivos(nomeArquivos);
@@ -137,7 +140,7 @@ public class CartorioService extends CraWebService {
 			if (usuario == null) {
 				return setRespostaUsuarioInvalido();
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ARQUIVOS_PENDENTES_CARTORIO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			arquivo = arquivoMediator.desistenciaPendentes(usuario.getInstituicao());
@@ -171,7 +174,7 @@ public class CartorioService extends CraWebService {
 
 	private String gerarMensagemEnvioSucesso(Usuario usuario, Arquivo arquivo) {
 		String constanteTipoAcao = "XML_UPLOAD_CONFIRMACAO";
-		if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+		if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoFebraban.RETORNO)) {
 			constanteTipoAcao = "XML_UPLOAD_RETORNO";
 		}
 		StringBuffer mensagem = new StringBuffer();

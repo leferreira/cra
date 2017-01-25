@@ -20,13 +20,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.bean.ArquivoFormBean;
+import br.com.ieptbto.cra.beans.ArquivoBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.SituacaoArquivo;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.StatusDownload;
 import br.com.ieptbto.cra.enumeration.TipoVisualizacaoArquivos;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 
@@ -49,9 +49,9 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 	private TipoVisualizacaoArquivos tipoVisualizacaoAtual;
 	private Label labelMunicipio;
 	private DropDownChoice<Instituicao> dropDownCartorio;
-	private TipoInstituicaoCRA tipoInstituicao;
+	private TipoInstituicaoSistema tipoInstituicao;
 
-	public BuscarDesistenciaCancelamentoInputPanel(String id, IModel<ArquivoFormBean> model, Usuario usuario) {
+	public BuscarDesistenciaCancelamentoInputPanel(String id, IModel<ArquivoBean> model, Usuario usuario) {
 		super(id, model);
 		this.tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
@@ -72,12 +72,12 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 		add(dropDownCartorio());
 	}
 
-	private CheckBoxMultipleChoice<TipoArquivoEnum> comboTipoArquivos() {
-		List<TipoArquivoEnum> listaTipos = new ArrayList<TipoArquivoEnum>();
-		listaTipos.add(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO);
-		listaTipos.add(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO);
-		listaTipos.add(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO);
-		CheckBoxMultipleChoice<TipoArquivoEnum> tipos = new CheckBoxMultipleChoice<TipoArquivoEnum>("tiposArquivos", listaTipos);
+	private CheckBoxMultipleChoice<TipoArquivoFebraban> comboTipoArquivos() {
+		List<TipoArquivoFebraban> listaTipos = new ArrayList<TipoArquivoFebraban>();
+		listaTipos.add(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO);
+		listaTipos.add(TipoArquivoFebraban.CANCELAMENTO_DE_PROTESTO);
+		listaTipos.add(TipoArquivoFebraban.AUTORIZACAO_DE_CANCELAMENTO);
+		CheckBoxMultipleChoice<TipoArquivoFebraban> tipos = new CheckBoxMultipleChoice<TipoArquivoFebraban>("tiposArquivos", listaTipos);
 		tipos.setLabel(new Model<String>("Tipos de Arquivo"));
 		return tipos;
 	}
@@ -87,17 +87,17 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 		final RadioChoice<TipoVisualizacaoArquivos> radioVisualizacao = new RadioChoice<TipoVisualizacaoArquivos>("tipoVisualizacaoArquivos",
 				new Model<TipoVisualizacaoArquivos>(), Arrays.asList(TipoVisualizacaoArquivos.values()), renderer);
 
-		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
 			tipoVisualizacaoAtual = TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS;
-			ArquivoFormBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS);
+			ArquivoBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS);
 			radioVisualizacao.setVisible(false);
-		} else if (TipoInstituicaoCRA.CARTORIO.equals(tipoInstituicao)) {
+		} else if (TipoInstituicaoSistema.CARTORIO.equals(tipoInstituicao)) {
 			tipoVisualizacaoAtual = TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS;
-			ArquivoFormBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS);
+			ArquivoBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS);
 			radioVisualizacao.setVisible(false);
 		} else {
 			tipoVisualizacaoAtual = TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS;
-			ArquivoFormBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS);
+			ArquivoBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS);
 			radioVisualizacao.setDefaultModel(new Model<TipoVisualizacaoArquivos>(TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS));
 		}
 		radioVisualizacao.setLabel(new Model<String>("Tipo de Visualização"));
@@ -111,12 +111,12 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 			protected void onEvent(AjaxRequestTarget target) {
 
 				if (TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS.equals(tipoVisualizacaoAtual)) {
-					ArquivoFormBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS);
+					ArquivoBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS);
 					tipoVisualizacaoAtual = TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS;
 					dropDownCartorio.setEnabled(true);
 					labelMunicipio.setEnabled(true);
 				} else if (TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS.equals(tipoVisualizacaoAtual)) {
-					ArquivoFormBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS);
+					ArquivoBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS);
 					tipoVisualizacaoAtual = TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS;
 					dropDownCartorio.setEnabled(false);
 					labelMunicipio.setEnabled(false);
@@ -146,9 +146,9 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 		return dataEnvioFinal;
 	}
 
-	private CheckBoxMultipleChoice<SituacaoArquivo> checkSituacaoArquivos() {
-		CheckBoxMultipleChoice<SituacaoArquivo> situacao =
-				new CheckBoxMultipleChoice<SituacaoArquivo>("situacoesArquivos", Arrays.asList(SituacaoArquivo.values()));
+	private CheckBoxMultipleChoice<StatusDownload> checkSituacaoArquivos() {
+		CheckBoxMultipleChoice<StatusDownload> situacao =
+				new CheckBoxMultipleChoice<StatusDownload>("situacoesArquivos", Arrays.asList(StatusDownload.values()));
 		situacao.setLabel(new Model<String>("Situação do Arquivo"));
 		return situacao;
 	}
@@ -156,7 +156,7 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 	private Label labelBancoCovenio() {
 		Label labelBancoCovenio = new Label("labelBancoCovenio", "Banco/Convênio");
 		labelBancoCovenio.setOutputMarkupId(true);
-		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
 			labelBancoCovenio.setVisible(false);
 		}
 		return labelBancoCovenio;
@@ -167,18 +167,18 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 		dropDownInstituicao = new DropDownChoice<Instituicao>("bancoConvenio", getListaInstituicoes(), renderer);
 		dropDownInstituicao.setLabel(new Model<String>("Banco/Convênio"));
 		dropDownInstituicao.setOutputMarkupId(true);
-		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
 			dropDownInstituicao.setVisible(false);
 		}
 		return dropDownInstituicao;
 	}
 
-	private DropDownChoice<TipoInstituicaoCRA> dropDownTipoInstituicao() {
-		IChoiceRenderer<TipoInstituicaoCRA> renderer = new ChoiceRenderer<TipoInstituicaoCRA>("label");
-		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
-		choices.add(TipoInstituicaoCRA.CONVENIO);
-		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoCRA> dropDowntipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, renderer);
+	private DropDownChoice<TipoInstituicaoSistema> dropDownTipoInstituicao() {
+		IChoiceRenderer<TipoInstituicaoSistema> renderer = new ChoiceRenderer<TipoInstituicaoSistema>("label");
+		List<TipoInstituicaoSistema> choices = new ArrayList<TipoInstituicaoSistema>();
+		choices.add(TipoInstituicaoSistema.CONVENIO);
+		choices.add(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA);
+		final DropDownChoice<TipoInstituicaoSistema> dropDowntipoInstituicao = new DropDownChoice<TipoInstituicaoSistema>("tipoInstituicao", choices, renderer);
 		dropDowntipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -186,13 +186,13 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				TipoInstituicaoCRA tipo = dropDowntipoInstituicao.getModelObject();
+				TipoInstituicaoSistema tipo = dropDowntipoInstituicao.getModelObject();
 
 				if (dropDowntipoInstituicao.getModelObject() != null) {
-					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
+					if (tipo.equals(TipoInstituicaoSistema.CONVENIO)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
-					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					} else if (tipo.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
 					}
@@ -204,7 +204,7 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 				target.add(dropDownInstituicao);
 			}
 		});
-		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
 			dropDowntipoInstituicao.setVisible(false);
 		}
 		dropDowntipoInstituicao.setLabel(new Model<String>("Tipo Instituição"));
@@ -214,7 +214,7 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 	private Label labelMunicipio() {
 		labelMunicipio = new Label("labelMunicipio", "Município");
 		labelMunicipio.setOutputMarkupId(true);
-		if (!TipoInstituicaoCRA.CRA.equals(tipoInstituicao)) {
+		if (!TipoInstituicaoSistema.CRA.equals(tipoInstituicao)) {
 			labelMunicipio.setVisible(false);
 		}
 		return labelMunicipio;
@@ -224,7 +224,7 @@ public class BuscarDesistenciaCancelamentoInputPanel extends Panel {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio");
 		dropDownCartorio = new DropDownChoice<Instituicao>("cartorio", instituicaoMediator.getCartorios(), renderer);
 		dropDownCartorio.setOutputMarkupId(true);
-		if (!TipoInstituicaoCRA.CRA.equals(tipoInstituicao)) {
+		if (!TipoInstituicaoSistema.CRA.equals(tipoInstituicao)) {
 			dropDownCartorio.setVisible(false);
 		}
 		return dropDownCartorio;

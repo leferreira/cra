@@ -18,7 +18,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.ArquivoDesistenciaCancelamentoBean;
+import br.com.ieptbto.cra.beans.DesistenciaCancelamentoBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
@@ -26,9 +26,9 @@ import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.StatusRemessa;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.StatusDownload;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
@@ -49,23 +49,23 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private DownloadMediator downloadMediator;
+	DownloadMediator downloadMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private DesistenciaProtestoMediator desistenciaMediator;
+	DesistenciaProtestoMediator desistenciaMediator;
 	@SpringBean
-	private CancelamentoProtestoMediator cancelamentoMediator;
+	CancelamentoProtestoMediator cancelamentoMediator;
 	@SpringBean
-	private AutorizacaoCancelamentoMediator autorizacaoMediator;
+	AutorizacaoCancelamentoMediator autorizacaoMediator;
 
 	private Usuario user;
-	private List<ArquivoDesistenciaCancelamentoBean> arquivosDesistenciasCancelamentos;
+	private List<DesistenciaCancelamentoBean> arquivosDesistenciasCancelamentos;
 	private List<DesistenciaProtesto> desistencias;
 	private List<CancelamentoProtesto> cancelamentos;
 	private List<AutorizacaoCancelamento> autorizacoes;
 
-	public ListaDesistenciaCancelamentoPage(String nomeArquivo, Instituicao bancoConvenio, List<TipoArquivoEnum> tiposArquivo,
+	public ListaDesistenciaCancelamentoPage(String nomeArquivo, Instituicao bancoConvenio, List<TipoArquivoFebraban> tiposArquivo,
 			Instituicao cartorio, LocalDate dataInicio, LocalDate dataFim) {
 		this.user = getUser();
 		this.desistencias = desistenciaMediator.buscarDesistenciaProtesto(nomeArquivo, bancoConvenio, cartorio, dataInicio, dataFim,
@@ -85,16 +85,16 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 	}
 
 	private void listaArquivosDevolucaoCancelamento() {
-		add(new ListView<ArquivoDesistenciaCancelamentoBean>("dataTableRemessa", getArquivosDesistenciasCancelamentos()) {
+		add(new ListView<DesistenciaCancelamentoBean>("dataTableRemessa", getArquivosDesistenciasCancelamentos()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<ArquivoDesistenciaCancelamentoBean> item) {
-				final ArquivoDesistenciaCancelamentoBean arquivo = item.getModelObject();
+			protected void populateItem(ListItem<DesistenciaCancelamentoBean> item) {
+				final DesistenciaCancelamentoBean arquivo = item.getModelObject();
 
-				if (arquivo.getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
+				if (arquivo.getTipoArquivo().equals(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO)) {
 					item.add(downloadArquivoTXT(arquivo.getDesistenciaProtesto()));
 					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
@@ -108,7 +108,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 					};
 					linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));
 					item.add(linkArquivo);
-				} else if (arquivo.getTipoArquivo().equals(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO)) {
+				} else if (arquivo.getTipoArquivo().equals(TipoArquivoFebraban.CANCELAMENTO_DE_PROTESTO)) {
 					item.add(downloadArquivoTXT(arquivo.getCancelamentoProtesto()));
 					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
@@ -122,7 +122,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 					};
 					linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));
 					item.add(linkArquivo);
-				} else if (arquivo.getTipoArquivo().equals(TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO)) {
+				} else if (arquivo.getTipoArquivo().equals(TipoArquivoFebraban.AUTORIZACAO_DE_CANCELAMENTO)) {
 					item.add(downloadArquivoTXT(arquivo.getAutorizacaoCancelamento()));
 					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
@@ -196,15 +196,15 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 				};
 			}
 
-			private StatusRemessa verificaDownload(Boolean download) {
+			private StatusDownload verificaDownload(Boolean download) {
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao()
-						.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
-					return StatusRemessa.ENVIADO;
+						.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
+					return StatusDownload.ENVIADO;
 				}
 				if (download.equals(false)) {
-					return StatusRemessa.AGUARDANDO;
+					return StatusDownload.AGUARDANDO;
 				}
-				return StatusRemessa.RECEBIDO;
+				return StatusDownload.RECEBIDO;
 			}
 		});
 	}
@@ -212,7 +212,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 	private void converterDesistenciasCancelamentos() {
 		if (!getDesistenciaProtesto().isEmpty()) {
 			for (DesistenciaProtesto desistenciaProtesto : getDesistenciaProtesto()) {
-				ArquivoDesistenciaCancelamentoBean arquivo = new ArquivoDesistenciaCancelamentoBean();
+				DesistenciaCancelamentoBean arquivo = new DesistenciaCancelamentoBean();
 				arquivo.parseDesistenciaProtesto(desistenciaProtesto);
 				getArquivosDesistenciasCancelamentos().add(arquivo);
 			}
@@ -220,7 +220,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 		if (!getCancelamentoProtestos().isEmpty()) {
 			for (CancelamentoProtesto cancelamento : getCancelamentoProtestos()) {
-				ArquivoDesistenciaCancelamentoBean arquivo = new ArquivoDesistenciaCancelamentoBean();
+				DesistenciaCancelamentoBean arquivo = new DesistenciaCancelamentoBean();
 				arquivo.parseCancelamentoProtesto(cancelamento);
 				getArquivosDesistenciasCancelamentos().add(arquivo);
 			}
@@ -228,7 +228,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 		if (!getAutorizacaoCancelamentos().isEmpty()) {
 			for (AutorizacaoCancelamento ac : getAutorizacaoCancelamentos()) {
-				ArquivoDesistenciaCancelamentoBean arquivo = new ArquivoDesistenciaCancelamentoBean();
+				DesistenciaCancelamentoBean arquivo = new DesistenciaCancelamentoBean();
 				arquivo.parseAutorizacaoCancelamento(ac);
 				getArquivosDesistenciasCancelamentos().add(arquivo);
 			}
@@ -256,9 +256,9 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 		return autorizacoes;
 	}
 
-	public List<ArquivoDesistenciaCancelamentoBean> getArquivosDesistenciasCancelamentos() {
+	public List<DesistenciaCancelamentoBean> getArquivosDesistenciasCancelamentos() {
 		if (arquivosDesistenciasCancelamentos == null) {
-			arquivosDesistenciasCancelamentos = new ArrayList<ArquivoDesistenciaCancelamentoBean>();
+			arquivosDesistenciasCancelamentos = new ArrayList<DesistenciaCancelamentoBean>();
 		}
 		return arquivosDesistenciasCancelamentos;
 	}

@@ -121,7 +121,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
-						TituloRemessa tituloRemessa = tituloMediator.carregarTituloRemessa(retorno.getTitulo());
+						TituloRemessa tituloRemessa = tituloMediator.buscarTituloPorPK(retorno.getTitulo());
 						setResponsePage(new HistoricoPage(tituloRemessa));
 					}
 				};

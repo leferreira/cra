@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.hibernate;
+package br.com.ieptbto.cra.hibernate.audit;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

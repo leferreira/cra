@@ -66,7 +66,7 @@ public class ListaLayoutEmpresaPage extends BasePage<LayoutFiliado> {
 			protected void populateItem(ListItem<LayoutFiliado> item) {
 				final LayoutFiliado layout = item.getModelObject();
 				item.add(new Label("empresa", layout.getEmpresa().getNomeFantasia()));
-				item.add(new Label("tipoArquivo", layout.getTipoArquivo().getLabel()));
+				item.add(new Label("tipoArquivo", layout.getLayoutArquivo().getLabel()));
 			}
 		};
 	}

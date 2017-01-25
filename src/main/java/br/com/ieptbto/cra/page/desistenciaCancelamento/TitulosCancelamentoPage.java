@@ -130,8 +130,8 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 					item.add(new Label("situacaoTitulo", "TÍTULO ANTIGO"));
 
 				} else {
-					pedidoCancelamento.getTitulo().setConfirmacao(tituloMediator.buscarConfirmacao(pedidoCancelamento.getTitulo()));
-					pedidoCancelamento.getTitulo().setRetorno(tituloMediator.buscarRetorno(pedidoCancelamento.getTitulo()));
+					pedidoCancelamento.getTitulo().setConfirmacao(tituloMediator.buscarConfirmacaoPorTitulo(pedidoCancelamento.getTitulo()));
+					pedidoCancelamento.getTitulo().setRetorno(tituloMediator.buscarRetornoPorTitulo(pedidoCancelamento.getTitulo()));
 
 					final TituloRemessa tituloRemessa = pedidoCancelamento.getTitulo();
 					item.add(new LabelValorMonetario<BigDecimal>("valor", tituloRemessa.getSaldoTitulo()));

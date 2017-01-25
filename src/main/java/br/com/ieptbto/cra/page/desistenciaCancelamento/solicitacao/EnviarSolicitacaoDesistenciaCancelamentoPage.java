@@ -25,11 +25,11 @@ import org.joda.time.LocalTime;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.MotivoSolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.enumeration.TipoSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.SolicitacaoDesistenciaCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -46,9 +46,9 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private TituloMediator tituloMediator;
+	TituloMediator tituloMediator;
 	@SpringBean
-	private CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	SolicitacaoDesistenciaCancelamentoMediator solicitacaoMediator;
 
 	private TituloRemessa titulo;
 	private SolicitacaoDesistenciaCancelamento solicitacao;
@@ -58,7 +58,6 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	public EnviarSolicitacaoDesistenciaCancelamentoPage(TituloRemessa titulo) {
 		this.solicitacao = new SolicitacaoDesistenciaCancelamento();
 		this.titulo = titulo;
-
 		adicionarComponentes();
 	}
 
@@ -116,7 +115,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 						}
 					}
 
-					cancelamentoProtestoMediator.salvarSolicitacaoDesistenciaCancelamento(solicitacao, fileUploadField.getFileUpload());
+					solicitacaoMediator.salvarSolicitacaoDesistenciaCancelamento(solicitacao, fileUploadField.getFileUpload());
 					if (MotivoSolicitacaoDesistenciaCancelamento.PAGAMENTO_AO_CREDOR.equals(motivo)) {
 						success("A solicitação por meio de Carta de Anuência Eletrônica foi enviada com sucesso! "
 								+ "O devedor deverá comparecer em cartório para <span class=\"alert-link\">quitação das custas</span>! ");

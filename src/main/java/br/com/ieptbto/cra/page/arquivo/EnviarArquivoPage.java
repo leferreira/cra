@@ -23,8 +23,8 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.ArquivoException;
 import br.com.ieptbto.cra.exception.CabecalhoRodapeException;
@@ -83,7 +83,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				FileUpload uploadedFile = fileUploadField.getFileUpload();
 				List<Exception> erros = new ArrayList<Exception>();
 
-				arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
+				arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoSistema.CRA.toString()));
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
 				arquivo.setDataRecebimento(new LocalDate().toDate());
 				arquivo.setRemessas(new ArrayList<Remessa>());
@@ -92,17 +92,17 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 
 					if (!erros.isEmpty()) {
 						gerarMensagemErros(arquivo, erros);
-					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
+					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoFebraban.REMESSA)) {
 						success("O arquivo de Remessa <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 								+ "</span> enviado, foi processado com sucesso !");
-					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.CONFIRMACAO)) {
+					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoFebraban.CONFIRMACAO)) {
 						success("O arquivo de Confirmação <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 								+ "</span> enviado, foi processado com sucesso !");
-					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoFebraban.RETORNO)) {
 						setResponsePage(
 								new RelatorioRetornoPage("O arquivo de Retorno <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 										+ "</span> enviado, foi processado com sucesso !", getArquivo(), "ENVIAR ARQUIVO"));
-					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
+					} else if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO)) {
 						success("O arquivo de Desistência de Protesto <span class=\"alert-link\">" + arquivo.getNomeArquivo()
 								+ "</span> enviado, foi processado com sucesso !");
 					}
@@ -125,14 +125,14 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			}
 
 			private void gerarMensagemErros(Arquivo arquivo, List<Exception> erros) {
-				TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(arquivo);
+				TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.getTipoArquivoEnum(arquivo);
 				String mensagemErro = null;
 				mensagemErro =
 						"<span class=\"alert-link\">Por favor, corrija a(s) ocorrência(s) e(ou) erros encontrado(s) no arquivo e o envie novamente:</span>";
 				mensagemErro = mensagemErro + "<ul>";
 				for (Exception exception : erros) {
-					if (TipoArquivoEnum.REMESSA == tipoArquivo || TipoArquivoEnum.CONFIRMACAO == tipoArquivo
-							|| TipoArquivoEnum.RETORNO == tipoArquivo) {
+					if (TipoArquivoFebraban.REMESSA == tipoArquivo || TipoArquivoFebraban.CONFIRMACAO == tipoArquivo
+							|| TipoArquivoFebraban.RETORNO == tipoArquivo) {
 						if (TituloException.class.isInstance(exception)) {
 							TituloException excecaoTitulo = TituloException.class.cast(exception);
 							mensagemErro = mensagemErro + "<li><span class=\"alert-link\">Nº Sequencial do Registro "
@@ -149,9 +149,9 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 							}
 							mensagemErro = mensagemErro + "<li>" + excecaoCabecalhoRodape.getDescricao() + ";</li>";
 						}
-					} else if (TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO == tipoArquivo
-							|| TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO == tipoArquivo
-							|| TipoArquivoEnum.AUTORIZACAO_DE_CANCELAMENTO == tipoArquivo) {
+					} else if (TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO == tipoArquivo
+							|| TipoArquivoFebraban.CANCELAMENTO_DE_PROTESTO == tipoArquivo
+							|| TipoArquivoFebraban.AUTORIZACAO_DE_CANCELAMENTO == tipoArquivo) {
 						DesistenciaCancelamentoException excecaoDesistencia = DesistenciaCancelamentoException.class.cast(exception);
 						mensagemErro = mensagemErro + "<li>" + excecaoDesistencia.getDescricao() + ";</li>";
 					}

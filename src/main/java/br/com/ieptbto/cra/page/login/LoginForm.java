@@ -7,13 +7,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
-import br.com.ieptbto.cra.page.base.HomePage;
+import br.com.ieptbto.cra.page.home.HomePage;
 
 @SuppressWarnings("serial")
 public class LoginForm extends BaseForm<Usuario> {
 
 	@SpringBean
-	private UsuarioMediator usuarioMediator;
+	UsuarioMediator usuarioMediator; 
 
 	public LoginForm(String id, IModel<Usuario> model) {
 		super(id, model);

@@ -22,11 +22,11 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
-import br.com.ieptbto.cra.mediator.CraServiceMediator;
+import br.com.ieptbto.cra.mediator.CraMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.VO.Descricao;
 import br.com.ieptbto.cra.webservice.VO.Detalhamento;
@@ -50,7 +50,7 @@ public class CraWebService {
 	public static final String CONSTANTE_CANCELAMENTO_XML = "cancelamento";
 
 	@Autowired
-	protected CraServiceMediator craServiceMediator;
+	protected CraMediator craServiceMediator;
 	@Autowired
 	protected LoggerCra loggerCra;
 
@@ -224,12 +224,12 @@ public class CraWebService {
 	}
 
 	private CodigoErro getCodigoErroEmProcessamentoSerpro(String nomeArquivo) {
-		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(nomeArquivo);
+		TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.getTipoArquivoEnum(nomeArquivo);
 
 		CodigoErro codigoErro = null;
-		if (TipoArquivoEnum.CONFIRMACAO.equals(tipoArquivo)) {
+		if (TipoArquivoFebraban.CONFIRMACAO.equals(tipoArquivo)) {
 			codigoErro = CodigoErro.SERPRO_AGUARDE_CONFIRMACAO_EM_PROCESSAMENTO;
-		} else if (TipoArquivoEnum.RETORNO.equals(tipoArquivo)) {
+		} else if (TipoArquivoFebraban.RETORNO.equals(tipoArquivo)) {
 			codigoErro = CodigoErro.SERPRO_NAO_HA_REGISTRO_DE_RETORNO_NESTA_DATA;
 		} else {
 			codigoErro = CodigoErro.CRA_NOME_DO_ARQUIVO_INVALIDO;
@@ -238,12 +238,12 @@ public class CraWebService {
 	}
 
 	private CodigoErro getCodigoErroEmProcessamentoCra(String nomeArquivo) {
-		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(nomeArquivo);
+		TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.getTipoArquivoEnum(nomeArquivo);
 
 		CodigoErro codigoErro = null;
-		if (TipoArquivoEnum.CONFIRMACAO.equals(tipoArquivo)) {
+		if (TipoArquivoFebraban.CONFIRMACAO.equals(tipoArquivo)) {
 			codigoErro = CodigoErro.CRA_NAO_EXISTE_CONFIRMACAO_NA_DATA_INFORMADA;
-		} else if (TipoArquivoEnum.RETORNO.equals(tipoArquivo)) {
+		} else if (TipoArquivoFebraban.RETORNO.equals(tipoArquivo)) {
 			codigoErro = CodigoErro.CRA_NAO_EXISTE_RETORNO_NA_DATA_INFORMADA;
 		} else {
 			codigoErro = CodigoErro.CRA_NOME_DO_ARQUIVO_INVALIDO;
@@ -252,13 +252,13 @@ public class CraWebService {
 	}
 
 	private CodigoErro getCodigoErroNomeInvalidoSerpro(String nomeArquivo) {
-		TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(nomeArquivo);
+		TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.getTipoArquivoEnum(nomeArquivo);
 
 		CodigoErro codigoErro = null;
-		if (TipoArquivoEnum.REMESSA.equals(tipoArquivo) || TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO.equals(tipoArquivo)
-				|| TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO.equals(tipoArquivo)) {
+		if (TipoArquivoFebraban.REMESSA.equals(tipoArquivo) || TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO.equals(tipoArquivo)
+				|| TipoArquivoFebraban.CANCELAMENTO_DE_PROTESTO.equals(tipoArquivo)) {
 			codigoErro = CodigoErro.SERPRO_NOME_ARQUIVO_INVALIDO_REMESSA_DESISTENCIA_CANCELAMENTO;
-		} else if (TipoArquivoEnum.CONFIRMACAO.equals(tipoArquivo) || TipoArquivoEnum.RETORNO.equals(tipoArquivo)) {
+		} else if (TipoArquivoFebraban.CONFIRMACAO.equals(tipoArquivo) || TipoArquivoFebraban.RETORNO.equals(tipoArquivo)) {
 			codigoErro = CodigoErro.SERPRO_NOME_ARQUIVO_INVALIDO_CONFIRMACAO_RETORNO;
 		} else {
 			codigoErro = CodigoErro.CRA_NOME_DO_ARQUIVO_INVALIDO;

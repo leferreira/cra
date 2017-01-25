@@ -43,15 +43,14 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private ArquivoMediator arquivoMediator;
+	ArquivoMediator arquivoMediator;
 	@SpringBean
-	private DownloadMediator downloadMediator;
+	DownloadMediator downloadMediator;
 
 	private Arquivo arquivo;
 
-	public TitulosArquivoInstituicaoPage(Arquivo arquivo) {
-		this.arquivo = arquivoMediator.carregarArquivoPorId(arquivo);
-
+	public TitulosArquivoInstituicaoPage(Arquivo arquivo) { 
+		this.arquivo = arquivoMediator.buscarArquivoPorPK(arquivo);
 		adicionarComponentes();
 	}
 
@@ -95,8 +94,8 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
-					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + arquivo.getNomeArquivo().replace(".", "_") + ".pdf"));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+									"CRA_RELATORIO_" + arquivo.getNomeArquivo().replace(".", "_") + ".pdf"));
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
@@ -118,7 +117,8 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 				File file = downloadMediator.baixarArquivoTXT(getUser(), arquivo);
 				IResourceStream resourceStream = new FileResourceStream(file);
 
-				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(
+								new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
 			}
 		};
 	}

@@ -18,13 +18,13 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.TituloRelatorioCSVBean;
+import br.com.ieptbto.cra.beans.TituloCSVBean;
 import br.com.ieptbto.cra.component.CustomExportToolbar;
 import br.com.ieptbto.cra.dataProvider.DataProvider;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -48,7 +48,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 	private List<TituloRemessa> titulos;
 	private Boolean relatorioCraPendencias;
 
-	public RelatorioTitulosCsvPage(SituacaoTituloRelatorio situacaoTitulo, TipoInstituicaoCRA tipoInstituicao, Instituicao instituicao, Instituicao cartorio,
+	public RelatorioTitulosCsvPage(SituacaoTituloRelatorio situacaoTitulo, TipoInstituicaoSistema tipoInstituicao, Instituicao instituicao, Instituicao cartorio,
 			LocalDate dataInicio, LocalDate dataFim) {
 		this.tituloRemessa = new TituloRemessa();
 		this.relatorioCraPendencias = false;
@@ -67,9 +67,9 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 
 	@Override
 	protected void adicionarComponentes() {
-		List<IColumn<TituloRelatorioCSVBean, String>> columns = new ArrayList<>();
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("BCO/CONV."), "apresentante"));
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("NOSSO N."), "nossoNumero") {
+		List<IColumn<TituloCSVBean, String>> columns = new ArrayList<>();
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("BCO/CONV."), "apresentante"));
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("NOSSO N."), "nossoNumero") {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -78,7 +78,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				return "text-center";
 			}
 		});
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("TÍTULO"), "numeroTitulo") {
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("TÍTULO"), "numeroTitulo") {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -87,7 +87,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				return "text-center";
 			}
 		});
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("PROTOC."), "numeroProtocoloCartorio") {
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("PROTOC."), "numeroProtocoloCartorio") {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -96,13 +96,13 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				return "text-center";
 			}
 		});
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("MUNICÍPIO"), "municipio") {
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("MUNICÍPIO"), "municipio") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void populateItem(Item<ICellPopulator<TituloRelatorioCSVBean>> item, String id, IModel<TituloRelatorioCSVBean> model) {
+			public void populateItem(Item<ICellPopulator<TituloCSVBean>> item, String id, IModel<TituloCSVBean> model) {
 				String municipio = model.getObject().getMunicipio();
 				if (municipio.length() > 14) {
 					municipio = municipio.substring(0, 14);
@@ -110,23 +110,23 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				item.add(new Label(id, municipio));
 			}
 		});
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("Nº DEV"), "numeroControleDevedor") {
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("Nº DEV"), "numeroControleDevedor") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void populateItem(Item<ICellPopulator<TituloRelatorioCSVBean>> item, String id, IModel<TituloRelatorioCSVBean> model) {
+			public void populateItem(Item<ICellPopulator<TituloCSVBean>> item, String id, IModel<TituloCSVBean> model) {
 				item.add(new Label(id, model.getObject().getNumeroControleDevedor()));
 			}
 		});
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("DEVEDOR"), "nomeDevedor") {
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("DEVEDOR"), "nomeDevedor") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void populateItem(Item<ICellPopulator<TituloRelatorioCSVBean>> item, String id, IModel<TituloRelatorioCSVBean> model) {
+			public void populateItem(Item<ICellPopulator<TituloCSVBean>> item, String id, IModel<TituloCSVBean> model) {
 				String nomeDevedor = model.getObject().getNomeDevedor();
 				if (nomeDevedor.length() > 25) {
 					nomeDevedor = nomeDevedor.substring(0, 24);
@@ -134,7 +134,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				item.add(new Label(id, nomeDevedor));
 			}
 		});
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("VALOR"), "saldoTitulo") {
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("VALOR"), "saldoTitulo") {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -143,7 +143,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				return "text-right valor";
 			}
 		});
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("REMESSA"), "remessa") {
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("REMESSA"), "remessa") {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -153,7 +153,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 			}
 		});
 		if (relatorioCraPendencias == false) {
-			columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("CONFIR."), "dataConfirmacao") {
+			columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("CONFIR."), "dataConfirmacao") {
 				/***/
 				private static final long serialVersionUID = 1L;
 
@@ -162,7 +162,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 					return "text-center";
 				}
 			});
-			columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("RETORNO"), "retorno") {
+			columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("RETORNO"), "retorno") {
 				/***/
 				private static final long serialVersionUID = 1L;
 
@@ -171,7 +171,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 					return "text-center valor";
 				}
 			});
-			columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("DATA OC."), "dataOcorrencia") {
+			columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("DATA OC."), "dataOcorrencia") {
 				/***/
 				private static final long serialVersionUID = 1L;
 
@@ -181,7 +181,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				}
 			});
 		} else {
-			columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("CONF. LIB."), "dataConfirmacao") {
+			columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("CONF. LIB."), "dataConfirmacao") {
 				/***/
 				private static final long serialVersionUID = 1L;
 
@@ -191,7 +191,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				}
 
 				@Override
-				public void populateItem(Item<ICellPopulator<TituloRelatorioCSVBean>> item, String id, IModel<TituloRelatorioCSVBean> model) {
+				public void populateItem(Item<ICellPopulator<TituloCSVBean>> item, String id, IModel<TituloCSVBean> model) {
 					String confirmacao = StringUtils.EMPTY;
 					if (model.getObject().getTitulo().getConfirmacao() != null) {
 						if (model.getObject().getTitulo().getConfirmacao().getRemessa().getSituacao().equals(true)) {
@@ -204,7 +204,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 					}
 				}
 			});
-			columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("RET. LIB."), "retorno") {
+			columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("RET. LIB."), "retorno") {
 				/***/
 				private static final long serialVersionUID = 1L;
 
@@ -214,7 +214,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				}
 
 				@Override
-				public void populateItem(Item<ICellPopulator<TituloRelatorioCSVBean>> item, String id, IModel<TituloRelatorioCSVBean> model) {
+				public void populateItem(Item<ICellPopulator<TituloCSVBean>> item, String id, IModel<TituloCSVBean> model) {
 					String retorno = StringUtils.EMPTY;
 					if (model.getObject().getTitulo().getRetorno() != null) {
 						if (model.getObject().getTitulo().getRetorno().getRemessa().getSituacao().equals(true)) {
@@ -228,7 +228,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				}
 			});
 		}
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("DP"), "desistencia") {
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("DP"), "desistencia") {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -237,7 +237,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				return "text-center";
 			}
 		});
-		columns.add(new PropertyColumn<TituloRelatorioCSVBean, String>(new Model<String>("SITUAÇÃO"), "situacaoTitulo") {
+		columns.add(new PropertyColumn<TituloCSVBean, String>(new Model<String>("SITUAÇÃO"), "situacaoTitulo") {
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -247,7 +247,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 			}
 
 			@Override
-			public void populateItem(Item<ICellPopulator<TituloRelatorioCSVBean>> item, String componentId, IModel<TituloRelatorioCSVBean> rowModel) {
+			public void populateItem(Item<ICellPopulator<TituloCSVBean>> item, String componentId, IModel<TituloCSVBean> rowModel) {
 				Label label = new Label(componentId, rowModel.getObject().getSituacaoTitulo());
 				label.setMarkupId("info-titulo");
 				label.setOutputMarkupId(true);
@@ -255,8 +255,8 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 			}
 		});
 
-		DataTable<TituloRelatorioCSVBean, String> dataTable = new DefaultDataTable<>("table", columns,
-				new DataProvider<TituloRelatorioCSVBean>(TituloRelatorioCSVBean.parseToListTituloRemessa(titulos)), 10000);
+		DataTable<TituloCSVBean, String> dataTable = new DefaultDataTable<>("table", columns,
+				new DataProvider<TituloCSVBean>(TituloCSVBean.parseToListTituloRemessa(titulos)), 10000);
 		dataTable.addBottomToolbar(new CustomExportToolbar(dataTable, "CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_")));
 		add(dataTable);
 	}

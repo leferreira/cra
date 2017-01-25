@@ -19,7 +19,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.ArquivoFormBean;
+import br.com.ieptbto.cra.beans.ArquivoBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -47,9 +47,9 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 	private Usuario usuario;
 	private Arquivo arquivo;
-	private ArquivoFormBean arquivoFormBean;
+	private ArquivoBean arquivoFormBean;
 
-	public ListaArquivoInstituicaoPage(ArquivoFormBean arquivoFormBean, Usuario usuario) {
+	public ListaArquivoInstituicaoPage(ArquivoBean arquivoFormBean, Usuario usuario) {
 		this.arquivo = new Arquivo();
 		this.arquivoFormBean = arquivoFormBean;
 		this.usuario = getUser();
@@ -89,8 +89,8 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
 				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
-				divInfo.add(new AttributeAppender("id", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
-				divInfo.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()));
+				divInfo.add(new AttributeAppender("id", arquivo.getStatusArquivo().getStatusDownload().getLabel()));
+				divInfo.add(new Label("status", arquivo.getStatusArquivo().getStatusDownload().getLabel().toUpperCase()));
 				item.add(divInfo);
 				item.add(downloadArquivoTXT(arquivo));
 				item.add(relatorioArquivo(arquivo));
@@ -156,7 +156,7 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 			@Override
 			protected List<Arquivo> load() {
-				ArquivoFormBean bean = getArquivoFormBean();
+				ArquivoBean bean = getArquivoFormBean();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 
@@ -172,7 +172,7 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 		};
 	}
 
-	public ArquivoFormBean getArquivoFormBean() {
+	public ArquivoBean getArquivoFormBean() {
 		return arquivoFormBean;
 	}
 

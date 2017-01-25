@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">
+			ARQUIVOS PENDENTES <span class="pull-right"> <a
+				href="HomePage" class="link-voltar"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+			</span>
+		</h4>
+		<br style="clear: both;" />
+		<table id="table"
+			class="table table-responsive table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="col-center">BAIXAR</th>
+					<th class="col-center">ANEXO</th>
+					<th class="col-center">REL.</th>
+					<th>INSTITUIÇÃO</th>
+					<th class="col-center">ARQUIVO</th>
+					<th class="col-center">DATA</th>
+					<th class="col-center">HORA</th>
+					<th>ENVIADO POR</th>
+					<th>DESTINO</th>
+					<th>ATRASO</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="dataTableArquivosPendentes">
+					<td class="col-center"><a href="#" class="link"
+						wicket:id="downloadArquivo"> <img border="0"
+							class="download-ico" title="Download em TXT"
+							src="img/download.jpg">
+					</a></td>
+					<td class="col-center"><a href="#" class="link"
+						wicket:id="downloadAnexos"> <img border="0"
+							class="download-ico" title="Download Anexos" src="img/clipe.png">
+					</a></td>
+					<td class="col-center"><button wicket:id="gerarRelatorio"
+							type="button" style="float: inherit;">
+							<span class="col-center fa fa-print"></span>
+						</button></td>
+					<td wicket:id="instituicao"></td>
+					<td class="col-center"><a target="_blank"
+						wicket:id="linkArquivo"><span class="link"
+							wicket:id="nomeArquivo"></span></a></td>
+					<td class="col-center" wicket:id="dataEnvio"></td>
+					<td class="col-center" wicket:id="horaEnvio"></td>
+					<td wicket:id="envio"></td>
+					<td wicket:id="destino"></td>
+					<td>
+						<small class="text-muted"> 
+				        	<span class="glyphicon glyphicon-time"></span>&nbsp;
+				        	<span wicket:id="dias">[quantidade de dias]</span><span>&nbsp;DIA(S)</span>
+				        </small>
+				    </td>
+					<td class="col-center">
+						<div wicket:id="divInfo">
+							<span wicket:id="status"></span>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</wicket:extend>
+</body>
+</html>

@@ -6,7 +6,7 @@ import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.base.HomePage;
+import br.com.ieptbto.cra.page.home.HomePage;
 
 /**
  * @author Thasso Araújo

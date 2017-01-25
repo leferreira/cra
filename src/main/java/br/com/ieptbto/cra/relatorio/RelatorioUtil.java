@@ -5,21 +5,19 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.TituloTaxaCraBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.enumeration.NivelDetalhamentoRelatorio;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
-import br.com.ieptbto.cra.enumeration.TipoRelatorio;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -28,7 +26,6 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  * @author Thasso Aráujo
@@ -60,15 +57,15 @@ public class RelatorioUtil implements Serializable {
 		this.params.put("ID_REMESSA", Long.parseLong(Integer.toString(remessa.getId())));
 		this.params.put("INSTITUICAO_ENVIO", remessa.getInstituicaoOrigem().getNomeFantasia());
 		this.params.put("NOME_ARQUIVO", remessa.getArquivo().getNomeArquivo());
-		TipoArquivoEnum tipoArquivo = remessa.getArquivo().getTipoArquivo().getTipoArquivo();
+		TipoArquivoFebraban tipoArquivo = remessa.getArquivo().getTipoArquivo().getTipoArquivo();
 		JasperReport jasperReport = null;
 
 		try {
 			this.params.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
 
-			if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
-			} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
-			} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
+			if (tipoArquivo.equals(TipoArquivoFebraban.REMESSA)) {
+			} else if (tipoArquivo.equals(TipoArquivoFebraban.CONFIRMACAO)) {
+			} else if (tipoArquivo.equals(TipoArquivoFebraban.RETORNO)) {
 				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioRetornoCartorio.jrxml"));
 			}
 		} catch (IOException | JRException e) {
@@ -81,7 +78,7 @@ public class RelatorioUtil implements Serializable {
 		return null;
 	}
 
-	public JasperPrint gerarRelatorioArquivos(TipoArquivoEnum tipoArquivo, TipoRelatorio tipoRelatorio, Instituicao instituicao, LocalDate dataInicio,
+	public JasperPrint gerarRelatorioArquivos(TipoArquivoFebraban tipoArquivo, NivelDetalhamentoRelatorio tipoRelatorio, Instituicao instituicao, LocalDate dataInicio,
 			LocalDate dataFim) throws JRException {
 		this.instituicao = instituicao;
 		this.dataInicio = dataInicio;
@@ -90,11 +87,11 @@ public class RelatorioUtil implements Serializable {
 		try {
 			initParams();
 
-			if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
+			if (tipoArquivo.equals(TipoArquivoFebraban.REMESSA)) {
 				return relatorioArquivoRemessa(tipoRelatorio);
-			} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
+			} else if (tipoArquivo.equals(TipoArquivoFebraban.CONFIRMACAO)) {
 				return relatorioArquivoConfirmacao(tipoRelatorio);
-			} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
+			} else if (tipoArquivo.equals(TipoArquivoFebraban.RETORNO)) {
 				return relatorioArquivoRetorno(tipoRelatorio);
 			}
 		} catch (IOException e) {
@@ -112,77 +109,77 @@ public class RelatorioUtil implements Serializable {
 
 		try {
 			initParams();
-			TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
+			TipoInstituicaoSistema tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
 			if (situacaoTitulosRelatorio.equals(SituacaoTituloRelatorio.GERAL)) {
-				if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-						|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+				if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+						|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioTitulosGeral_Instituicao.jrxml"));
-				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 				}
 
 			} else if (situacaoTitulosRelatorio.equals(SituacaoTituloRelatorio.SEM_CONFIRMACAO)) {
-				if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-						|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+				if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+						|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 				}
 
 			} else if (situacaoTitulosRelatorio.equals(SituacaoTituloRelatorio.COM_CONFIRMACAO)) {
-				if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-						|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+				if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+						|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 				}
 
 			} else if (situacaoTitulosRelatorio.equals(SituacaoTituloRelatorio.COM_RETORNO)) {
-				if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-						|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+				if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+						|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 				}
 
 			} else if (situacaoTitulosRelatorio.equals(SituacaoTituloRelatorio.PAGOS)) {
-				if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-						|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+				if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+						|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 				}
 
 			} else if (situacaoTitulosRelatorio.equals(SituacaoTituloRelatorio.PROTESTADOS)) {
-				if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-						|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+				if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+						|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 				}
 
 			} else if (situacaoTitulosRelatorio.equals(SituacaoTituloRelatorio.RETIRADOS_DEVOLVIDOS)) {
-				if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-						|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+				if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+						|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 				}
 
 			} else if (situacaoTitulosRelatorio.equals(SituacaoTituloRelatorio.DESISTÊNCIA_DE_PROTESTO)) {
-				if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-						|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+				if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+						|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 				}
 
 			} else if (situacaoTitulosRelatorio.equals(SituacaoTituloRelatorio.AUTORIZACAO_CANCELAMENTO)) {
-				if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-						|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+				if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+						|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+				} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 					jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 				}
 			}
@@ -193,37 +190,37 @@ public class RelatorioUtil implements Serializable {
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
 	}
 
-	private JasperPrint relatorioArquivoRemessa(TipoRelatorio tipoRelatorio) throws JRException {
+	private JasperPrint relatorioArquivoRemessa(NivelDetalhamentoRelatorio tipoRelatorio) throws JRException {
 
-		if (tipoRelatorio.equals(TipoRelatorio.SINTETICO)) {
+		if (tipoRelatorio.equals(NivelDetalhamentoRelatorio.SINTETICO)) {
 			return relatorioSinteticoRemessa();
-		} else if (tipoRelatorio.equals(TipoRelatorio.ANALITICO)) {
+		} else if (tipoRelatorio.equals(NivelDetalhamentoRelatorio.ANALITICO)) {
 			return relatorioAnaliticoRemessa();
-		} else if (tipoRelatorio.equals(TipoRelatorio.DETALHADO)) {
+		} else if (tipoRelatorio.equals(NivelDetalhamentoRelatorio.DETALHADO)) {
 			return relatorioDetalhadoRemessa();
 		}
 		return null;
 	}
 
-	private JasperPrint relatorioArquivoConfirmacao(TipoRelatorio tipoRelatorio) throws JRException {
+	private JasperPrint relatorioArquivoConfirmacao(NivelDetalhamentoRelatorio tipoRelatorio) throws JRException {
 
-		if (tipoRelatorio.equals(TipoRelatorio.SINTETICO)) {
+		if (tipoRelatorio.equals(NivelDetalhamentoRelatorio.SINTETICO)) {
 			return relatorioSinteticoConfirmacao();
-		} else if (tipoRelatorio.equals(TipoRelatorio.ANALITICO)) {
+		} else if (tipoRelatorio.equals(NivelDetalhamentoRelatorio.ANALITICO)) {
 			return relatorioAnaliticoConfirmacao();
-		} else if (tipoRelatorio.equals(TipoRelatorio.DETALHADO)) {
+		} else if (tipoRelatorio.equals(NivelDetalhamentoRelatorio.DETALHADO)) {
 			return relatorioDetalhadoConfirmacao();
 		}
 		return null;
 	}
 
-	private JasperPrint relatorioArquivoRetorno(TipoRelatorio tipoRelatorio) throws JRException {
+	private JasperPrint relatorioArquivoRetorno(NivelDetalhamentoRelatorio tipoRelatorio) throws JRException {
 
-		if (tipoRelatorio.equals(TipoRelatorio.SINTETICO)) {
+		if (tipoRelatorio.equals(NivelDetalhamentoRelatorio.SINTETICO)) {
 			return relatorioSinteticoRetorno();
-		} else if (tipoRelatorio.equals(TipoRelatorio.ANALITICO)) {
+		} else if (tipoRelatorio.equals(NivelDetalhamentoRelatorio.ANALITICO)) {
 			return relatorioAnaliticoRetorno();
-		} else if (tipoRelatorio.equals(TipoRelatorio.DETALHADO)) {
+		} else if (tipoRelatorio.equals(NivelDetalhamentoRelatorio.DETALHADO)) {
 			return relatorioDetalhadoRetorno();
 		}
 		return null;
@@ -231,12 +228,12 @@ public class RelatorioUtil implements Serializable {
 
 	private JasperPrint relatorioSinteticoRemessa() throws JRException {
 		JasperReport jasperReport = null;
-		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		TipoInstituicaoSistema tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+				|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
@@ -244,12 +241,12 @@ public class RelatorioUtil implements Serializable {
 
 	private JasperPrint relatorioAnaliticoRemessa() throws JRException {
 		JasperReport jasperReport = null;
-		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		TipoInstituicaoSistema tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+				|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
@@ -257,12 +254,12 @@ public class RelatorioUtil implements Serializable {
 
 	private JasperPrint relatorioDetalhadoRemessa() throws JRException {
 		JasperReport jasperReport = null;
-		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		TipoInstituicaoSistema tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+				|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
@@ -270,12 +267,12 @@ public class RelatorioUtil implements Serializable {
 
 	private JasperPrint relatorioSinteticoConfirmacao() throws JRException {
 		JasperReport jasperReport = null;
-		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		TipoInstituicaoSistema tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+				|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
@@ -283,12 +280,12 @@ public class RelatorioUtil implements Serializable {
 
 	private JasperPrint relatorioAnaliticoConfirmacao() throws JRException {
 		JasperReport jasperReport = null;
-		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		TipoInstituicaoSistema tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+				|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
@@ -296,12 +293,12 @@ public class RelatorioUtil implements Serializable {
 
 	private JasperPrint relatorioDetalhadoConfirmacao() throws JRException {
 		JasperReport jasperReport = null;
-		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		TipoInstituicaoSistema tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+				|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
@@ -309,12 +306,12 @@ public class RelatorioUtil implements Serializable {
 
 	private JasperPrint relatorioSinteticoRetorno() throws JRException {
 		JasperReport jasperReport = null;
-		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		TipoInstituicaoSistema tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+				|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
@@ -322,12 +319,12 @@ public class RelatorioUtil implements Serializable {
 
 	private JasperPrint relatorioAnaliticoRetorno() throws JRException {
 		JasperReport jasperReport = null;
-		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		TipoInstituicaoSistema tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+				|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
@@ -336,70 +333,12 @@ public class RelatorioUtil implements Serializable {
 	private JasperPrint relatorioDetalhadoRetorno() throws JRException {
 		JasperReport jasperReport = null;
 
-		TipoInstituicaoCRA tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
-		if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
-				|| tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CONVENIO)) {
+		TipoInstituicaoSistema tipoInstituicaoParametro = getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
+				|| tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CONVENIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoCRA.CARTORIO)) {
+		} else if (tipoInstituicaoParametro.equals(TipoInstituicaoSistema.CARTORIO)) {
 			jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(""));
-		}
-		return JasperFillManager.fillReport(jasperReport, params, getConnection());
-	}
-
-	public JasperPrint gerarRelatorioTaxaCraPagos(List<TituloTaxaCraBean> titulos, Instituicao convenio, Instituicao cartorio, LocalDate dataInicio,
-			LocalDate dataFim) throws JRException {
-		JasperReport jasperReport = null;
-
-		try {
-			this.params = new HashMap<String, Object>();
-			this.params.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
-			this.params.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
-			this.params.put("DATA_INICIO", new java.sql.Date(dataInicio.toDate().getTime()));
-			this.params.put("DATA_FIM", new java.sql.Date(dataFim.toDate().getTime()));
-
-			if (convenio != null && cartorio != null) {
-				this.params.put("CONVENIO", convenio.getNomeFantasia());
-				this.params.put("MUNICIPIO", cartorio.getNomeFantasia());
-				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioPagos.jrxml"));
-
-			} else if (convenio == null && cartorio != null) {
-				this.params.put("MUNICIPIO", cartorio.getNomeFantasia());
-				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioPagosPorMunicipio.jrxml"));
-			}
-		} catch (IOException | JRException ex) {
-			logger.info(ex.getMessage(), ex);
-			throw new InfraException("Não foi possível localizar o arquivo de relatório. Entre em contato com a CRA!");
-		}
-		return JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(titulos));
-	}
-
-	public JasperPrint gerarRelatorioTaxaCraCancelados(Instituicao convenio, Instituicao cartorio, LocalDate dataInicio, LocalDate dataFim)
-			throws JRException {
-		JasperReport jasperReport = null;
-
-		try {
-			this.params = new HashMap<String, Object>();
-			this.params.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
-			this.params.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
-			this.params.put("DATA_INICIO", new java.sql.Date(dataInicio.toDate().getTime()));
-			this.params.put("DATA_FIM", new java.sql.Date(dataFim.toDate().getTime()));
-
-			if (convenio != null && cartorio != null) {
-				this.params.put("CONVENIO", convenio.getNomeFantasia());
-				this.params.put("CODIGO_PORTADOR", convenio.getCodigoCompensacao());
-				this.params.put("MUNICIPIO", cartorio.getMunicipio().getNomeMunicipio());
-				this.params.put("CODIGO_MUNICIPIO", cartorio.getMunicipio().getCodigoIBGE());
-				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioCancelados.jrxml"));
-
-			} else if (convenio == null && cartorio != null) {
-				this.params.put("MUNICIPIO", cartorio.getMunicipio().getNomeMunicipio());
-				this.params.put("CODIGO_MUNICIPIO", cartorio.getMunicipio().getCodigoIBGE());
-				jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioCanceladosPorMunicipio.jrxml"));
-
-			}
-		} catch (IOException | JRException ex) {
-			logger.info(ex.getMessage(), ex);
-			throw new InfraException("Não foi possível localizar o arquivo de relatório. Entre em contato com a CRA!");
 		}
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
 	}

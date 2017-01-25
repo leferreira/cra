@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<h4 class="titulo-top">ACESSO RÁPIDO</h4>
+		<div class="row">
+			<div class="col-lg-3  col-md-6">
+				<a wicket:id="linkArquivo"> 
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-3">
+									<i class="glyphicon glyphicon-send fa-5x"></i>
+								</div>
+								<div class="col-xs-9 text-right">
+									<div class="huge icon-home">ENVIAR ARQUIVO</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel-footer">
+							<span class="pull-left" style="font-size: 15px;">Envio de arquivos</span> <span
+								class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> <span class="clearfix"></span>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-lg-3  col-md-6">
+				<a href="BuscarArquivo">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-3">
+									<img style="width: 3.9em;" src="img/remessa.png" />
+								</div>
+								<div class="col-xs-9 text-right">
+									<div class="huge icon-home">REMESSAS, CONFIRMA&Ccedil;&Otilde;ES E RETORNOS</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel-footer">
+							<span class="pull-left" style="font-size: 15px;">Buscar B, C e R</span> <span
+								class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> <span class="clearfix"></span>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-lg-3  col-md-6">
+				<a href="BuscarDesistenciaCancelamento">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-3">
+									<img style="width: 3.9em;" src="img/dp.png" />
+								</div>
+								<div class="col-xs-9 text-right">
+									<div class="huge icon-home">DESIST&Ecirc;NCIAS E CANCELAMENTOS</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel-footer">
+							<span class="pull-left" style="font-size: 15px;">Buscar DP, CP e AC</span> <span
+								class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> <span class="clearfix"></span>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-lg-3  col-md-6">
+				<a href="MonitorarTitulos">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-3">
+									<img style="width: 3.9em;" src="img/titulo.png" />
+								</div>
+								<div class="col-xs-9 text-right">
+									<div class="huge icon-home">BUSCAR T&Iacute;TULOS</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel-footer">
+							<span class="pull-left" style="font-size: 15px;">Informa&ccedil;&otilde;es do protesto</span>
+							<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> <span
+								class="clearfix"></span>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="row">
+			<div wicket:id="informacoesCraPanel"></div>
+			<div wicket:id="centralAcoesPanel"></div>
+			<div wicket:id="arquivosPendentesPanel"></div>
+		</div>
+	</wicket:extend>
+</body>
+</html>
