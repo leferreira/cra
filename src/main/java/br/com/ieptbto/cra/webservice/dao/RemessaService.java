@@ -24,9 +24,9 @@ import br.com.ieptbto.cra.webservice.receiver.RemessaReceiver;
 public class RemessaService extends CraWebService {
 
 	@Autowired
-	private ArquivoMediator arquivoMediator;
+	ArquivoMediator arquivoMediator;
 	@Autowired
-	private RemessaReceiver remessaReceiver;
+	RemessaReceiver remessaReceiver;
 
 	private MensagemCra mensagemCra;
 	private String resposta;
