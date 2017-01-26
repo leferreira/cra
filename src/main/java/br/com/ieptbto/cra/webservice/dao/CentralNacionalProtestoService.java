@@ -32,6 +32,8 @@ import br.com.ieptbto.cra.webservice.VO.CnpCartorio;
 import br.com.ieptbto.cra.webservice.VO.CnpCartoriosConsultaXml;
 import br.com.ieptbto.cra.webservice.VO.CnpCartoriosConteudo;
 import br.com.ieptbto.cra.webservice.VO.CnpMunicipioCartorio;
+import br.com.ieptbto.cra.webservice.VO.Descricao;
+import br.com.ieptbto.cra.webservice.VO.MensagemXml;
 
 /**
  * @author Thasso Araújo
@@ -45,9 +47,10 @@ public class CentralNacionalProtestoService extends CnpWebService {
 	@Autowired
 	MunicipioMediator municipioMediator;
 
-	public String processar(Usuario usuario) {
+	public String processar(Usuario usuario, String data) {
 		ArquivoCnpVO arquivoCnp = new ArquivoCnpVO();
-
+		LocalDate dataMoviemnto = new LocalDate();
+		
 		try {
 			if (usuario == null) {
 				return usuarioInvalido();
@@ -58,9 +61,21 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			if (centralNacionalProtestoMediator.isLoteLiberadoConsultaPorData(new LocalDate())) {
-				arquivoCnp = centralNacionalProtestoMediator.processarLoteNacionalPorData(new LocalDate());
+			if (StringUtils.isBlank(data)) {
+				return mensagemDataInvalida(usuario);
 			} else {
+				try {
+					dataMoviemnto = DataUtil.stringToLocalDate("yyyy-MM-dd", data);
+				} catch (Exception ex) {
+					logger.error(ex.getMessage());
+					return mensagemDataInvalida(usuario);
+				}
+			}
+			if (centralNacionalProtestoMediator.isLoteLiberadoConsultaPorData(dataMoviemnto)) {
+				arquivoCnp = centralNacionalProtestoMediator.processarLoteNacionalPorData(dataMoviemnto);
+			} else if (!dataMoviemnto.equals(new LocalDate())) {
+				return naoHaMovimentoParaEstaData(usuario, dataMoviemnto);
+			} else if (dataMoviemnto.equals(new LocalDate())) {
 				arquivoCnp = centralNacionalProtestoMediator.processarLoteNacional();
 				if (arquivoCnp.getRemessasCnpVO().isEmpty()) {
 					return naoHaRemessasParaArquivoCnp(usuario);
@@ -77,48 +92,24 @@ public class CentralNacionalProtestoService extends CnpWebService {
 		return gerarMensagem(arquivoCnp, CONSTANTE_CNP_XML);
 	}
 
-	/**
-	 * - * - * @param usuario - * @param data - * @return -
-	 */
-	public String consultaMovimentoPorData(Usuario usuario, String data) {
-		ArquivoCnpVO arquivoCnp = new ArquivoCnpVO();
-		LocalDate dataMoviemnto = new LocalDate();
-		try {
-			if (usuario == null) {
-				return usuarioInvalido();
-			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
-				return mensagemServicoIndisponivel(usuario);
-			}
-			if (StringUtils.isBlank(data)) {
-				logger.error("Data informada <" + data + "> na consulta do movimento é inválida");
-				return mensagemDataInvalida(usuario);
-			} else {
-				try {
-					dataMoviemnto = DataUtil.stringToLocalDate("yyyy-MM-dd", data);
-				} catch (Exception ex) {
-					logger.error(ex.getMessage());
-					return mensagemDataInvalida(usuario);
-				}
-			}
+	private String naoHaMovimentoParaEstaData(Usuario usuario, LocalDate dataMoviemnto) {
+		MensagemXml mensagemXml = new MensagemXml();
+		Descricao descricao = new Descricao();
+		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
+		descricao.setUsuario(usuario.getLogin());
 
-			arquivoCnp = centralNacionalProtestoMediator.processarLoteNacionalPorData(dataMoviemnto);
-
-			if (arquivoCnp == null || arquivoCnp.getRemessasCnpVO().isEmpty()) {
-				return mensagemSemMovimentoNessaData(usuario);
-			}
-			return gerarMensagem(arquivoCnp, CONSTANTE_CNP_XML);
-
-		} catch (Exception ex) {
-			logger.info(ex.getMessage(), ex);
-			return gerarMensagem(gerarMensagemErroProcessamento("Erro ao tentar consultar um movimento por data."),
-					CONSTANTE_RELATORIO_XML);
-		}
-
+		mensagemXml.setDescricao(descricao);
+		mensagemXml.setCodigoFinal(CodigoErro.CNP_NAO_HA_MOVIMENTO_NESSA_DATA.getCodigo());
+		mensagemXml.setDescricaoFinal(CodigoErro.CNP_NAO_HA_MOVIMENTO_NESSA_DATA.getDescricao());
+		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
 	}
 
+	/**
+	 * @param usuario
+	 * @return
+	 */
 	public String consultar(Usuario usuario) {
-
 		try {
 			if (usuario == null) {
 				return usuarioInvalido();

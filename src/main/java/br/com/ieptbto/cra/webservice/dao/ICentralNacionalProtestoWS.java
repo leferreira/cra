@@ -44,21 +44,7 @@ public interface ICentralNacionalProtestoWS {
 	 */
 	@WebMethod(operationName = "centralNacionalProtesto")
 	@GET
-	public String centralNacionalProtesto(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha);
-
-	/**
-	 * Consulta se há uma movimento na data informada.
-	 * 
-	 * @param login
-	 * @param senha
-	 * @param dataProcessamento
-	 *            (formato yyyy-mm-dd)
-	 * 
-	 * @return o movimento da data informada se houver.
-	 */
-	@WebMethod(operationName = "consultaMovimentoPorData")
-	@GET
-	public String consultaMovimentoPorData(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha,
+	public String centralNacionalProtesto(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, 
 			@WebParam(name = "data") String data);
 
 	/**

@@ -65,6 +65,7 @@ public class CnpWebService {
 	}
 
 	protected String mensagemDataInvalida(Usuario usuario) {
+		logger.error("Data informada para CNP na consulta do movimento é inválida");
 		MensagemXml mensagemXml = new MensagemXml();
 		Descricao descricao = new Descricao();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
