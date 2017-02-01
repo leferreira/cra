@@ -20,7 +20,7 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.bean.TituloRelatorioCSVBean;
 import br.com.ieptbto.cra.component.CustomExportToolbar;
-import br.com.ieptbto.cra.dataProvider.DataProvider;
+import br.com.ieptbto.cra.dataProvider.DataProvider2;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
@@ -256,7 +256,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 		});
 
 		DataTable<TituloRelatorioCSVBean, String> dataTable = new DefaultDataTable<>("table", columns,
-				new DataProvider<TituloRelatorioCSVBean>(TituloRelatorioCSVBean.parseToListTituloRemessa(titulos)), 10000);
+				new DataProvider2<TituloRelatorioCSVBean>(TituloRelatorioCSVBean.parseToListTituloRemessa(titulos)), 10000);
 		dataTable.addBottomToolbar(new CustomExportToolbar(dataTable, "CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_")));
 		add(dataTable);
 	}

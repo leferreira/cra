@@ -1,43 +1,41 @@
 package br.com.ieptbto.cra.page.batimento;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.component.CheckboxPanel;
+import br.com.ieptbto.cra.component.CraDataTable;
+import br.com.ieptbto.cra.component.DataTableLinksPanel;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Batimento;
+import br.com.ieptbto.cra.dataProvider.BatimentoProvider;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.ViewBatimento;
 import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.BatimentoMediator;
-import br.com.ieptbto.cra.mediator.RetornoMediator;
-import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
+import br.com.ieptbto.cra.mediator.DepositoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.cra.MensagemPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.util.PeriodoDataUtil;
 
 /**
  * @author Thasso Araújo
@@ -49,32 +47,35 @@ public class BatimentoPage extends BasePage<Remessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(BatimentoPage.class);
 
 	@SpringBean
 	BatimentoMediator batimentoMediator;
 	@SpringBean
-	RetornoMediator retornoMediator;
-
-	private Remessa batimento;
+	DepositoMediator depositoMediator;
+	private Remessa remessa;
 	private List<Deposito> depositos;
-	private ListView<Remessa> remessas;
+	private CheckGroup<ViewBatimento> grupo;
+	private CraDataTable<ViewBatimento> dataTable;
 
 	public BatimentoPage() {
-		this.batimento = new Remessa();
-		this.depositos = batimentoMediator.buscarDepositosExtrato();
-
+		this.remessa = new Remessa();
+		this.depositos = depositoMediator.buscarDepositosNaoIdentificados();
+		adicionarComponentes();
+	}
+	
+	public BatimentoPage(String message) {
+		this.remessa = new Remessa();
+		this.depositos = depositoMediator.buscarDepositosNaoIdentificados();
+		success(message);
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		carregarFormularioBatimento();
-
+		add(formularioBatimento());
 	}
 
-	private void carregarFormularioBatimento() {
-		final CheckGroup<Remessa> grupo = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
+	private Form<Remessa> formularioBatimento() {
 		Form<Remessa> form = new Form<Remessa>("form") {
 
 			/***/
@@ -82,84 +83,140 @@ public class BatimentoPage extends BasePage<Remessa> {
 
 			@Override
 			protected void onSubmit() {
-				List<Remessa> arquivosRetornoSelecionados = (List<Remessa>) grupo.getModelObject();
+				List<ViewBatimento> arquivosSelecionados = (List<ViewBatimento>) grupo.getModelObject();
 
 				try {
-					if (arquivosRetornoSelecionados.isEmpty() || arquivosRetornoSelecionados.size() == 0) {
-						throw new InfraException("Ao menos um retorno deve ser selecionado!");
+					if (arquivosSelecionados.isEmpty()) {
+						throw new InfraException("Ao menos um arquivo de retorno deve ser selecionado para realizar o batimento!");
 					}
-					for (Remessa retorno : arquivosRetornoSelecionados) {
-						if (retorno.getListaDepositos().isEmpty()) {
-							if (!retorno.getInstituicaoDestino().getTipoBatimento().equals(TipoBatimento.LIBERACAO_SEM_IDENTIFICAÇÃO_DE_DEPOSITO)) {
-								throw new InfraException("O arquivo " + retorno.getArquivo().getNomeArquivo() + " do "
-										+ retorno.getInstituicaoOrigem().getNomeFantasia()
-										+ " foi selecionado e não existe depósito vículado! Por favor, selecione novamente o depósito...");
+					for (ViewBatimento batimentoRetorno : arquivosSelecionados) {
+						if (batimentoRetorno.getListaDepositos().isEmpty()) {
+							TipoBatimento tipoBatimento = TipoBatimento.getTipoBatimento(batimentoRetorno.getTipoBatimento_Instituicao());
+							if (!tipoBatimento.equals(TipoBatimento.LIBERACAO_SEM_IDENTIFICAÇÃO_DE_DEPOSITO)) {
+								throw new InfraException("O arquivo " + batimentoRetorno.getNomeArquivo_Arquivo() + " do "
+										+ batimentoRetorno.getNomeFantasia_Cartorio() + " foi selecionado e não existe depósito vículado! Por favor, selecione novamente o depósito...");
 							}
 						}
 					}
-					retornoMediator.salvarBatimentos(arquivosRetornoSelecionados);
-					setResponsePage(
-							new MensagemPage<Batimento>(BatimentoPage.class, "BATIMENTO", "Batimento dos arquivos de retorno salvo com sucesso!"));
+					batimentoMediator.salvarBatimentos(arquivosSelecionados);
+					setResponsePage(new BatimentoPage("O Batimento dos Arquivos de Retorno foi salvo com sucesso!"));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível realizar o batimento! Entre em contato com a CRA.");
+					error("Não foi possível realizar o batimento. Favor entrar em contato com a CRA...");
 				}
 			}
 		};
-
+		form.setOutputMarkupId(true);
+		grupo = new CheckGroup<ViewBatimento>("group", new ArrayList<ViewBatimento>());
 		form.add(grupo);
-		form.add(carregarArquivosRetorno());
+		form.add(tableArquivosRetornoBatimento());
+		grupo.add(dataTable);
 		form.add(carregarExtrato());
-
-		remessas.setReuseItems(true);
-		grupo.add(remessas);
-		add(form);
+		return form;
 	}
-
-	private ListView<Remessa> carregarArquivosRetorno() {
-		return remessas = new ListView<Remessa>("retornos", retornoMediator.buscarRetornosParaBatimento()) {
-
+	
+	private CraDataTable<ViewBatimento> tableArquivosRetornoBatimento() {
+		BatimentoProvider dataProvider = new BatimentoProvider(batimentoMediator.buscarArquivosViewBatimento());
+		List<IColumn<ViewBatimento, String>> columns = new ArrayList<IColumn<ViewBatimento, String>>();
+		columns.add(new PropertyColumn<ViewBatimento, String>(new Model<String>("DATA"), "dataEnvio"){
+			
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<Remessa> item) {
-				final Remessa retorno = item.getModelObject();
-				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
-				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
-				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
-
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						setResponsePage(new TitulosArquivoPage(retorno));
-					}
-				};
-				linkArquivo.add(new Label("arquivo.nomeArquivo", retorno.getArquivo().getNomeArquivo()));
-				item.add(linkArquivo);
-				BigDecimal valorPagos = retornoMediator.buscarValorDeTitulosPagos(retorno);
-				if (valorPagos == null || valorPagos.equals(BigDecimal.ZERO)) {
-					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", BigDecimal.ZERO));
-				} else {
-					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", valorPagos));
-				}
-				ArrayList<Deposito> depositos = new ArrayList<Deposito>();
-				retorno.setListaDepositos(depositos);
-				item.add(new Check<Remessa>("checkbox", item.getModel()));
-				item.add(new ListMultipleChoice<Deposito>("depositos", new Model<ArrayList<Deposito>>(depositos), getDepositos()));
-
-				if (PeriodoDataUtil.diferencaDeDiasEntreData(retorno.getDataRecebimento().toDate(), new Date()) > 9) {
-					item.setOutputMarkupId(true);
-					item.setMarkupId("retornoPendente10Dias");
-				}
+			public void populateItem(Item<ICellPopulator<ViewBatimento>> item, String id, IModel<ViewBatimento> model) {
+				item.add(new Label(id, DataUtil.localDateToString(model.getObject().getDataEnvio_Arquivo())));
 			}
-		};
+
+			@Override
+			public String getCssClass() {
+				return "col-center text-center";
+			}
+		});
+		columns.add(new PropertyColumn<ViewBatimento, String>(new Model<String>("CARTÓRIO"), "nomeFantasia_Cartorio"));
+		columns.add(new PropertyColumn<ViewBatimento, String>(new Model<String>("ARQUIVO"), "nomeArquivo_Arquivo") {
+		
+			/***/
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void populateItem(Item<ICellPopulator<ViewBatimento>> item, String id, IModel<ViewBatimento> model) {
+				item.add(new DataTableLinksPanel(id, model.getObject().getNomeArquivo_Arquivo(), model.getObject().getIdRemessa_Remessa()));
+			}
+
+			@Override
+			public String getCssClass() {
+				return "text-center";
+			}
+		});
+		columns.add(new PropertyColumn<ViewBatimento, String>(new Model<String>(" "), "check"){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void populateItem(Item<ICellPopulator<ViewBatimento>> item, String id, IModel<ViewBatimento> model) {
+				item.add(new CheckboxPanel<ViewBatimento>(id, model, grupo));
+			}
+
+			@Override
+			public String getCssClass() {
+				return "col-center text-center";
+			}
+		});
+		columns.add(new PropertyColumn<ViewBatimento, String>(new Model<String>("CUSTAS CART."), "check"){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void populateItem(Item<ICellPopulator<ViewBatimento>> item, String id, IModel<ViewBatimento> model) {
+				item.add(new LabelValorMonetario<>(id, model.getObject().getTotalCustasCartorio()));
+			}
+
+			@Override
+			public String getCssClass() {
+				return "col-right valor";
+			}
+		});		
+		columns.add(new PropertyColumn<ViewBatimento, String>(new Model<String>("VALOR PAGOS"), "check"){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void populateItem(Item<ICellPopulator<ViewBatimento>> item, String id, IModel<ViewBatimento> model) {
+				item.add(new LabelValorMonetario<>(id, model.getObject().getTotalValorlPagos()));
+			}
+
+			@Override
+			public String getCssClass() {
+				return "col-right valor";
+			}
+		});
+		columns.add(new PropertyColumn<ViewBatimento, String>(new Model<String>("DEPÓSITOS"), "check"){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void populateItem(Item<ICellPopulator<ViewBatimento>> item, String id, IModel<ViewBatimento> model) {
+				item.add(new SelectDepositosBatimentoPanel(id, model, depositos));
+			}
+
+			@Override
+			public String getCssClass() {
+				return "col-center text-center";
+			}
+		});
+		dataTable = new CraDataTable<ViewBatimento>("dataTable", columns, dataProvider, 15);
+		dataTable.setOutputMarkupPlaceholderTag(true);
+		dataTable.setOutputMarkupId(true);
+		return dataTable;
 	}
 
 	private ListView<Deposito> carregarExtrato() {
@@ -189,6 +246,6 @@ public class BatimentoPage extends BasePage<Remessa> {
 
 	@Override
 	protected IModel<Remessa> getModel() {
-		return new CompoundPropertyModel<Remessa>(batimento);
+		return new CompoundPropertyModel<Remessa>(remessa);
 	}
 }

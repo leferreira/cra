@@ -18,7 +18,7 @@ import org.apache.wicket.util.lang.Bytes;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.enumeration.LayoutArquivo;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.BatimentoMediator;
+import br.com.ieptbto.cra.mediator.DepositoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -34,7 +34,7 @@ public class ImportarExtratoPage extends BasePage<Batimento> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private BatimentoMediator batimentoMediator;
+	DepositoMediator depositoMediator;
 	private Batimento batimento;
 	private FileUploadField fileUploadField;
 
@@ -43,13 +43,18 @@ public class ImportarExtratoPage extends BasePage<Batimento> {
 		adicionarComponentes();
 	}
 
+	public ImportarExtratoPage(String message) {
+		this.batimento = new Batimento();
+		success(message);
+		adicionarComponentes();
+	}
+	
 	@Override
 	protected void adicionarComponentes() {
-		formularioImportarExtrato();
-
+		add(formularioImportarExtrato());
 	}
 
-	private void formularioImportarExtrato() {
+	private Form<Batimento> formularioImportarExtrato() {
 		Form<Batimento> form = new Form<Batimento>("form", getModel()) {
 
 			/***/
@@ -61,11 +66,15 @@ public class ImportarExtratoPage extends BasePage<Batimento> {
 
 				try {
 					if (!uploadedFile.getClientFileName().toLowerCase().endsWith(LayoutArquivo.CSV.getExtensao())) {
-						throw new InfraException("Extensão do arquivo não permitida! Verifique se o arquivo tem extensão .CSV ...");
+						throw new InfraException("Extensão do arquivo não permitida! Verifique se o arquivo tem extensão \".CSV\"...");
 					}
-					batimentoMediator.processarExtrato(getUser(), uploadedFile);
-
-					success("Arquivo de Extrato importado com Sucesso !");
+					
+					DepositoMediator depositosExtrato = depositoMediator.processarDepositosExtrato(getUser(), uploadedFile);
+					if (!depositosExtrato.getDepositosConflitados().isEmpty() && !depositosExtrato.getRetornosConflitados().isEmpty()) {
+						setResponsePage(new ConflitoDepositosArquivoRetornoPage(depositosExtrato.getDepositosConflitados(), depositosExtrato.getRetornosConflitados()));
+					} else {
+						success("O arquivo de extrato processado foi importado com sucesso!");
+					}
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					getFeedbackPanel().error(ex.getMessage());
@@ -79,7 +88,7 @@ public class ImportarExtratoPage extends BasePage<Batimento> {
 		form.setMaxSize(Bytes.megabytes(10));
 		form.add(botaoEnviar());
 		form.add(campoArquivo());
-		add(form);
+		return form;
 	}
 
 	private FileUploadField campoArquivo() {

@@ -3,14 +3,12 @@ package br.com.ieptbto.cra.page.base;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.app.IWebApplication;
-import br.com.ieptbto.cra.component.CraLazyLoadPanel;
 import br.com.ieptbto.cra.component.CustomFeedbackPanel;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Usuario;
@@ -107,19 +105,6 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 		}
 		menu.setRenderBodyOnly(true);
 		add(menu);
-	}
-
-	protected AjaxLazyLoadPanel getAjaxLazyLoadPanel(String id) {
-		return new AjaxLazyLoadPanel(id) {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Component getLazyLoadComponent(String id) {
-				return new CraLazyLoadPanel(id);
-			}
-		};
 	}
 
 	protected Component createMenu(String containerId) {

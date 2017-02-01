@@ -63,6 +63,7 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
+import br.com.ieptbto.cra.entidade.ViewBatimento;
 
 /**
  * 
@@ -136,6 +137,8 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(LoteCnp.class);
 		classesHibernate.add(RegistroCnp.class);
 		classesHibernate.add(TaxaCra.class);
+		
+		classesHibernate.add(ViewBatimento.class);
 	}
 
 	/**

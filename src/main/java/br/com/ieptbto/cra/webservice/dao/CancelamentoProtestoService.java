@@ -43,7 +43,6 @@ public class CancelamentoProtestoService extends CraWebService {
 	CancelamentoProtestoMediator cancelamentoProtestoMediator;
 	@Autowired
 	InstituicaoMediator instituicaoMediator;
-
 	private List<Exception> erros;
 	private Object relatorio;
 
@@ -82,7 +81,6 @@ public class CancelamentoProtestoService extends CraWebService {
 			relatorio = gerarResposta(arquivo, usuario);
 			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Cancelamento de Protesto " + nomeArquivo + ", enviado por "
 					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
-
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage(), ex);
 			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex);

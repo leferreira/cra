@@ -1,0 +1,22 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
+	<form id="form-filters" wicket:id="filterForm" class="form-horizontal">
+		<div class="row">
+			<div class="col-md-6">
+			</div>
+			<div class="col-md-6">
+				<div id="example_filter" class="dataTables_filter">
+					<div class="form-group" style="margin-right: -45px;">
+						<label class="col-md-3 control-label">Pesquisar</label>
+						<div class="col-md-6">
+							<input wicket:id="search" class="form-control input-sm input-search" placeholder="" aria-controls="example">
+						</div>
+						<button class="btn btn-sm" type="submit">
+							<span class="fa fa-search"></span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div> 
+	</form>
+	<table class="table table-responsive table-striped table-hover" wicket:id="table"></table>
+</wicket:panel>

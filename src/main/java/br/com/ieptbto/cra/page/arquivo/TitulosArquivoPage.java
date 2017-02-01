@@ -62,7 +62,12 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	private Remessa remessa;
 
 	public TitulosArquivoPage(Remessa remessa) {
-		this.remessa = remessaMediator.carregarRemessaPorId(remessa);
+		this.remessa = remessaMediator.buscarRemessaPorPK(remessa);
+		adicionarComponentes();
+	}
+
+	public TitulosArquivoPage(Integer idRemessa) {
+		this.remessa = remessaMediator.buscarRemessaPorPK(idRemessa);
 		adicionarComponentes();
 	}
 

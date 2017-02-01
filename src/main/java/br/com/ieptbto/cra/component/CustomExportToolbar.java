@@ -14,9 +14,7 @@ import org.apache.wicket.model.Model;
  */
 public class CustomExportToolbar extends ExportToolbar {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	private String nameFileCsv;
@@ -24,7 +22,6 @@ public class CustomExportToolbar extends ExportToolbar {
 	public CustomExportToolbar(DataTable<?, ?> table, String nameFileCsv) {
 		super(table);
 		this.nameFileCsv = nameFileCsv;
-
 		setFileNameModel(getFileNameModel());
 		setMessageModel(getMessageModel());
 		addDataExporter(getCSVDataExporter());

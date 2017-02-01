@@ -14,7 +14,6 @@ import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.TipoSolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
-import br.com.ieptbto.cra.page.cra.MensagemPage;
 
 public class DownloadOficioIrregularidadePage extends WebPage {
 
@@ -24,8 +23,7 @@ public class DownloadOficioIrregularidadePage extends WebPage {
 	private static final String CP = "CP";
 
 	@SpringBean
-	private DownloadMediator downloadMediator;
-
+	DownloadMediator downloadMediator;
 	private String nossoNumero;
 	private String irregularidade;
 	private String tipoSolicitacao;
@@ -42,19 +40,12 @@ public class DownloadOficioIrregularidadePage extends WebPage {
 
 		try {
 			File file = downloadMediator.baixarOficioDesistenciaCancelamento(nossoNumero, getTipoSolicitacao(), getCodigoIrregularidade());
-
 			if (file != null) {
 				IResourceStream resourceStream = new FileResourceStream(file);
 				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
-
-			} else {
-				setResponsePage(new MensagemPage<>("Download Ofício Desistência Cancelamento",
-						"O título não foi encontrado ou não existe ofício para download!"));
 			}
 		} catch (InfraException ex) {
-			setResponsePage(new MensagemPage<>("Download Ofício Desistência Cancelamento", ex.getMessage()));
 		} catch (Exception ex) {
-			setResponsePage(new MensagemPage<>("Download Ofício Desistência Cancelamento", ex.getMessage()));
 		}
 	}
 
@@ -67,13 +58,9 @@ public class DownloadOficioIrregularidadePage extends WebPage {
 			}
 		}
 		if (codigoIrregularidade == null || codigoIrregularidade.equals(CodigoIrregularidade.IRREGULARIDADE_0)) {
-			setResponsePage(new MensagemPage<>("Download Ofício Desistência Cancelamento",
-					"Parâmetros de Código Irregularidade Informado é inválido!"));
 		} else {
 			return codigoIrregularidade;
 		}
-		setResponsePage(new MensagemPage<>("Download Ofício Desistência Cancelamento",
-				"Parâmetros de Código Irregularidade Informado é inválido!"));
 		return null;
 	}
 
@@ -85,8 +72,6 @@ public class DownloadOficioIrregularidadePage extends WebPage {
 				return TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO;
 			}
 		}
-		setResponsePage(
-				new MensagemPage<>("Download Ofício Desistência Cancelamento", "Parâmetros de Tipo de Solicitação Informado é inválido!"));
 		return null;
 	}
 }

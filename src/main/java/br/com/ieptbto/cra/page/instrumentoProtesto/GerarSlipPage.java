@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -58,15 +57,13 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(GerarSlipPage.class);
 
 	@SpringBean
-	private InstrumentoProtestoMediator instrumentoMediator;
+	InstrumentoProtestoMediator instrumentoMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private TituloMediator tituloMediator;
-
+	TituloMediator tituloMediator;
 	private List<Retorno> retornos;
 	private List<InstrumentoProtesto> instrumentosProtesto;
 	private List<EnvelopeSLIP> envelopes;
@@ -76,7 +73,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	public GerarSlipPage() {
 		this.instrumentosProtesto = instrumentoMediator.buscarInstrumentosParaSlip();
 		this.etiquetasNaoGeradas = instrumentoMediator.verificarEtiquetasGeradasNaoConfimadas();
-
 		verificarEtiquetasGeradasNaoConfimadas();
 		adicionarComponentes();
 	}
@@ -121,8 +117,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
-						TituloRemessa tituloRemessa = tituloMediator.carregarTituloRemessa(retorno.getTitulo());
-						setResponsePage(new HistoricoPage(tituloRemessa));
+						setResponsePage(new HistoricoPage(retorno.getTitulo()));
 					}
 				};
 				linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));

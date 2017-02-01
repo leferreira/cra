@@ -17,7 +17,7 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.enumeration.TipoDeposito;
-import br.com.ieptbto.cra.mediator.BatimentoMediator;
+import br.com.ieptbto.cra.mediator.DepositoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -34,32 +34,29 @@ public class ListaDepositoPage extends BasePage<Deposito> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	BatimentoMediator batimentoMediator;
-
+	DepositoMediator depositoMediator;
 	private Deposito deposito;
 	private List<Deposito> depositos;
 
 	public ListaDepositoPage(Deposito deposito, LocalDate dataInicio, LocalDate dataFim) {
 		this.deposito = deposito;
-		this.depositos = batimentoMediator.consultarDepositos(deposito, dataInicio, dataFim);
-
+		this.depositos = depositoMediator.consultarDepositos(deposito, dataInicio, dataFim);
 		adicionarComponentes();
 	}
 
 	public ListaDepositoPage(List<Deposito> depositos) {
 		this.deposito = new Deposito();
 		this.depositos = depositos;
-
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		listaDepositos();
+		add(listaDepositos());
 	}
 
-	private void listaDepositos() {
-		add(new ListView<Deposito>("extrato", getDepositos()) {
+	private ListView<Deposito> listaDepositos() {
+		return new ListView<Deposito>("extrato", getDepositos()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -72,7 +69,6 @@ public class ListaDepositoPage extends BasePage<Deposito> {
 				item.add(new Label("lancamento", deposito.getLancamento().toUpperCase()));
 				item.add(new Label("numeroDocumento", deposito.getNumeroDocumento()));
 				item.add(new Label("valor", "R$ " + deposito.getValorCredito()));
-
 				if (deposito.getTipoDeposito() == null) {
 					item.add(new Label("tipoDeposito", StringUtils.EMPTY));
 				} else if (deposito.getTipoDeposito().equals(TipoDeposito.NAO_INFORMADO)) {
@@ -82,7 +78,6 @@ public class ListaDepositoPage extends BasePage<Deposito> {
 				}
 				item.add(new Label("situacao", deposito.getSituacaoDeposito().getLabel()));
 				item.add(new Label("descricao", deposito.getDescricao()));
-
 				Link<Deposito> editarDeposito = new Link<Deposito>("editarDeposito") {
 
 					/***/
@@ -95,7 +90,7 @@ public class ListaDepositoPage extends BasePage<Deposito> {
 				};
 				item.add(editarDeposito);
 			}
-		});
+		};
 	}
 
 	public List<Deposito> getDepositos() {

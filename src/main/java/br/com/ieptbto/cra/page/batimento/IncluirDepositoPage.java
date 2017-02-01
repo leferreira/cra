@@ -36,7 +36,7 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.enumeration.SituacaoDeposito;
 import br.com.ieptbto.cra.enumeration.TipoDeposito;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.BatimentoMediator;
+import br.com.ieptbto.cra.mediator.DepositoMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -58,10 +58,9 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	BatimentoMediator batimentoMediator;
+	DepositoMediator depositoMediator;
 	@SpringBean
 	RetornoMediator retornoMediator;
-
 	private Deposito deposito;
 	private List<Deposito> depositos;
 
@@ -80,11 +79,11 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 
 	@Override
 	protected void adicionarComponentes() {
-		carregarFormulario();
-		listRetornosVinculados();
+		add(formIncluirDeposito());
+		add(listRetornosVinculados());
 	}
 
-	private void carregarFormulario() {
+	private Form<Deposito> formIncluirDeposito() {
 		Form<Deposito> form = new Form<Deposito>("form", getModel()) {
 
 			/***/
@@ -95,8 +94,8 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 				Deposito deposito = getModelObject();
 
 				try {
-					batimentoMediator.atualizarDeposito(deposito);
-					setResponsePage(new IncluirDepositoPage("Informações do depósito foram atualizadas com sucesso!", getDeposito(), getDepositos()));
+					depositoMediator.atualizarDeposito(deposito);
+					setResponsePage(new IncluirDepositoPage("Informações do depósito foram atualizadas com sucesso!", deposito, depositos));
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
@@ -121,10 +120,10 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 
 			@Override
 			public void onClick() {
-				setResponsePage(new ListaDepositoPage(getDepositos()));
+				setResponsePage(new ListaDepositoPage(depositos));
 			}
 		});
-		add(form);
+		return form;
 	}
 
 	private RadioChoice<SituacaoDeposito> situacaoDeposito() {
@@ -154,20 +153,19 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 	}
 
 	private TextField<String> dataImportacao() {
-		return new TextField<String>("dataImportacao", new Model<String>(DataUtil.localDateToString(getDeposito().getData())));
+		return new TextField<String>("dataImportacao", new Model<String>(DataUtil.localDateToString(deposito.getData())));
 	}
 
 	private TextField<String> data() {
-		TextField<String> textField = new TextField<String>("data", new Model<String>(DataUtil.localDateToString(getDeposito().getData())));
-		return textField;
+		return new TextField<String>("data", new Model<String>(DataUtil.localDateToString(deposito.getData())));
 	}
 
 	private TextArea<String> descricao() {
 		return new TextArea<String>("descricao");
 	}
 
-	public void listRetornosVinculados() {
-		add(new ListView<Remessa>("listRetornosVinculados", buscarRetornos()) {
+	public ListView<Remessa> listRetornosVinculados() {
+		return new ListView<Remessa>("listRetornosVinculados", buscarRetornos()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -175,7 +173,6 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa retorno = item.getModelObject();
-
 				item.add(new Label("arquivo.dataEnvio", DataUtil.localDateToString(retorno.getArquivo().getDataEnvio())));
 				item.add(new Label("instituicaoOrigem.nomeFantasia", retorno.getInstituicaoOrigem().getNomeFantasia()));
 				item.add(new Label("sequencialCabecalho", retorno.getCabecalho().getNumeroSequencialRemessa()));
@@ -197,7 +194,6 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 				} else {
 					item.add(new LabelValorMonetario<BigDecimal>("valorPagos", valorPagos));
 				}
-
 				BigDecimal valorCustas = retornoMediator.buscarValorDeCustasCartorio(retorno);
 				if (valorCustas == null || valorCustas.equals(BigDecimal.ZERO)) {
 					item.add(new LabelValorMonetario<BigDecimal>("valorCustas", BigDecimal.ZERO));
@@ -231,15 +227,7 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 					}
 				};
 			}
-		});
-	}
-
-	public Deposito getDeposito() {
-		return deposito;
-	}
-
-	public List<Deposito> getDepositos() {
-		return depositos;
+		};
 	}
 
 	public IModel<List<Remessa>> buscarRetornos() {
@@ -250,7 +238,7 @@ public class IncluirDepositoPage extends BasePage<Deposito> {
 
 			@Override
 			protected List<Remessa> load() {
-				return batimentoMediator.carregarRetornosVinculados(deposito);
+				return retornoMediator.buscarArquivosRetornosVinculadosPorDeposito(deposito);
 			}
 		};
 	}

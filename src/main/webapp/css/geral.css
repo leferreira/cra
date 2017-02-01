@@ -355,42 +355,6 @@ dd, dt {
 	font-size: 14px;
 }
 
-.first, .prev, .goto, .next, .last {
-	color: #333;
-	background-color: #fff;
-	border-color: #ccc; 
-}
-
-.first, .prev, .goto, .next, .last {
-	color: #337AB7;
-	display: inline-block;
-	padding: 6px 12px;
-	margin-bottom: 0;
-	font-size: 14px;
-	font-weight: 400;
-	line-height: 1.42857143;
-	text-align: center;
-	white-space: nowrap;
-	vertical-align: middle;
-	-ms-touch-action: manipulation;
-	touch-action: manipulation;
-	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	background-image: none;
-	border: 1px solid transparent;
-	border-radius: 4px;
-}
-
-.first, .last {
-	display: none;
-}
-
-.prev:hover, .goto:hover, .next:hover {
-	background-color: #F0F0F0;
-}
 /*
 COMUNICADO MODAL
 **/
@@ -814,3 +778,34 @@ DROPDROWN SUBMENU
                         -ms-filter: alpha(opacity=60);
                         filter: alpha(opacity=60);
                     }
+/***
+DATA TABLE
+*/
+.input-search{
+    width: 110%;
+}
+.navigatorLabel{
+	float: left;
+}
+.navigator{
+	float: right;
+    position: static;
+}
+.first, .prev, .goto, .next, .last {
+	position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.teste {
+	z-index: 2;
+    color: #fff;
+    cursor: default;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}

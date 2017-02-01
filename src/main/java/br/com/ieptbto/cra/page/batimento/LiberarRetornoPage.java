@@ -6,12 +6,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -42,11 +42,11 @@ import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.enumeration.TipoDeposito;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.BatimentoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.cra.MensagemPage;
 import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -63,17 +63,16 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(LiberarRetornoPage.class);
 
 	@SpringBean
 	RetornoMediator retornoMediator;
 	@SpringBean
+	BatimentoMediator batimentoMediator;
+	@SpringBean
 	InstituicaoMediator instituicaoMediator;
-
 	private Retorno retorno;
 	private boolean dataComoDataLimite;
 	private BigDecimal totalNaoSelecionados;
-
 	private List<Remessa> arquivosAguardandoLiberacao;
 	private ListView<Remessa> remessas;
 	private DropDownChoice<Instituicao> campoInstituicao;
@@ -92,24 +91,30 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		adicionarComponentes();
 	}
 
+	public LiberarRetornoPage(String message) {
+		this.retorno = new Retorno();
+		success(message);
+		adicionarComponentes();
+	}
+
 	public LiberarRetornoPage(LocalDate dataBatimento, Instituicao instituicao, boolean dataComoDataLimite) {
 		this.retorno = new Retorno();
 		this.dataBatimento = dataBatimento;
 		this.instituicao = instituicao;
 		this.dataComoDataLimite = dataComoDataLimite;
-		this.arquivosAguardandoLiberacao = retornoMediator.buscarRetornosAguardandoLiberacao(instituicao, dataBatimento, dataComoDataLimite);
+		this.arquivosAguardandoLiberacao = batimentoMediator.buscarRetornosAguardandoLiberacao(instituicao, dataBatimento, dataComoDataLimite);
 		this.totalNaoSelecionados = retornoMediator.buscarSomaValorTitulosPagosRemessas(instituicao, dataBatimento, dataComoDataLimite);
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		formBatimentoLiberacao();
-		divResumoArquivos();
-		listaRetornoLiberacao();
+		add(formBatimentoLiberacao());
+		add(divResumoArquivos());
+		add(formEnviarRetornosLiberados());
 	}
 
-	private void formBatimentoLiberacao() {
+	private Form<Batimento> formBatimentoLiberacao() {
 		Form<Batimento> formFiltros = new Form<Batimento>("formFiltros") {
 
 			/***/
@@ -147,7 +152,7 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		formFiltros.add(campoInstituicao());
 		formFiltros.add(campoDataBatimento());
 		formFiltros.add(checkUsarDataComoDataLimite());
-		add(formFiltros);
+		return formFiltros;
 	}
 
 	private CheckBox checkUsarDataComoDataLimite() {
@@ -177,7 +182,8 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		return campoDataBatimento = new TextField<String>("dataBatimento", new Model<String>());
 	}
 
-	private void divResumoArquivos() {
+	private WebMarkupContainer divResumoArquivos() {
+		WebMarkupContainer divResumoArquivos = new WebMarkupContainer("resumoArquivos");
 		this.labelTotalArquivos = new Label("labelTotalArquivos", getArquivosAguardandoLiberacao().size());
 		this.labelNaoSelecionados = new Label("labelNaoSelecionados", getArquivosAguardandoLiberacao().size());
 		if (totalNaoSelecionados == null) {
@@ -193,14 +199,15 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		labelSelecionados.setOutputMarkupId(true);
 		labelValorSelecionados.setOutputMarkupId(true);
 
-		add(labelTotalArquivos);
-		add(labelNaoSelecionados);
-		add(labelValorNaoSelecionados);
-		add(labelSelecionados);
-		add(labelValorSelecionados);
+		divResumoArquivos.add(labelTotalArquivos);
+		divResumoArquivos.add(labelNaoSelecionados);
+		divResumoArquivos.add(labelValorNaoSelecionados);
+		divResumoArquivos.add(labelSelecionados);
+		divResumoArquivos.add(labelValorSelecionados);
+		return divResumoArquivos;
 	}
 
-	private void listaRetornoLiberacao() {
+	private Form<Retorno> formEnviarRetornosLiberados() {
 		final CheckGroup<Remessa> grupo = new CheckGroup<Remessa>("group", new ArrayList<Remessa>());
 		Form<Retorno> form = new Form<Retorno>("form") {
 
@@ -214,11 +221,9 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 					if (retornoLiberados.isEmpty()) {
 						throw new InfraException("Nenhum arquivo de retorno foi selecionado!");
 					}
-
 					retornoMediator.liberarRetornoBatimentoInstituicao(retornoLiberados);
 					campoDataBatimento.setModelObject(null);
-					setResponsePage(new MensagemPage<Batimento>(LiberarRetornoPage.class, "LIBERAR RETORNO",
-							"Os arquivos de retorno foram" + " liberados para serem gerados ao banco!"));
+					setResponsePage(new LiberarRetornoPage("Os Arquivos de Retorno foram liberados para geração com sucesso!"));
 
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
@@ -233,7 +238,7 @@ public class LiberarRetornoPage extends BasePage<Retorno> {
 		form.add(grupo);
 		remessas.setReuseItems(true);
 		grupo.add(remessas);
-		add(form);
+		return form;
 	}
 
 	private ListView<Remessa> carregarListaRetornos() {

@@ -15,7 +15,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import br.com.ieptbto.cra.dataProvider.DataProvider;
+import br.com.ieptbto.cra.dataProvider.DataProvider2;
 import br.com.ieptbto.cra.entidade.LogCra;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -24,9 +24,9 @@ public class DataTableAcoesPanel extends Panel {
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	private DataProvider<LogCra> dataProvider;
+	private DataProvider2<LogCra> dataProvider;
 
-	public DataTableAcoesPanel(String id, DataProvider<LogCra> dataProvider) {
+	public DataTableAcoesPanel(String id, DataProvider2<LogCra> dataProvider) {
 		super(id);
 		this.dataProvider = dataProvider;
 		adicionarComponentes();
@@ -34,7 +34,6 @@ public class DataTableAcoesPanel extends Panel {
 
 	private void adicionarComponentes() {
 		add(dataTableLogCra());
-
 	}
 
 	private Component dataTableLogCra() {
@@ -97,7 +96,7 @@ public class DataTableAcoesPanel extends Panel {
 			@Override
 			public String getCssClass() {
 				return "col-center text-center col-action";
-			}
+			} 
 		});
 		return new DefaultDataTable<>("table", columns, dataProvider, 10000);
 	}

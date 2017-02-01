@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -34,7 +33,6 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.cra.MensagemPage;
 import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -48,7 +46,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(GerarSlipPage.class);
 
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
@@ -56,38 +53,40 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	InstrumentoProtestoMediator instrumentoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
-
 	private InstrumentoProtesto instrumento;
 	private TextField<String> codigoInstrumento;
 	private TextField<String> protocoloCartorio;
 	private DropDownChoice<Municipio> codigoIbge;
-	private List<Retorno> retornos;
-	private boolean etiquetasNaoGeradas;
+	private ListView<Retorno> retornosSlips;
 
 	public InstrumentoProtestoPage() {
 		this.instrumento = new InstrumentoProtesto();
-		this.etiquetasNaoGeradas = instrumentoMediator.verificarEtiquetasGeradasNaoConfimadas();
-
-		verificarEtiquetasGeradasNaoConfimadas();
 		adicionarComponentes();
 	}
-
+	
+	public InstrumentoProtestoPage(String message) {
+		this.instrumento = new InstrumentoProtesto();
+		success(message);
+		adicionarComponentes();
+	}
+	
 	@Override
 	protected void adicionarComponentes() {
-		adicionarFormularioManual();
-		adicionarFormularioCodigo();
-		listaSlips();
-		botaoSalvarInstrumentos();
-
+		verificarEtiquetasGeradasNaoConfimadas();
+		add(formEntradaManualInstrumentos());
+		add(formCodigoDeBarraInstrumentos());
+		add(listInstrumentosLancados());
+		add(botaoSalvarInstrumentos());
 	}
 
 	private void verificarEtiquetasGeradasNaoConfimadas() {
-		if (etiquetasNaoGeradas) {
+		boolean etiquetasPendentes = instrumentoMediator.verificarEtiquetasGeradasNaoConfimadas();
+		if (etiquetasPendentes == true) {
 			warn("Existem intrumentos com Slips geradas porém não foram confirmados! Por favor vá a página Gerar Slips e em seguida clique em confirmar...");
 		}
 	}
 
-	private void adicionarFormularioManual() {
+	private Form<Retorno> formEntradaManualInstrumentos() {
 		Form<Retorno> formManual = new Form<Retorno>("formManual") {
 
 			/***/
@@ -95,9 +94,10 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
 			@Override
 			protected void onSubmit() {
-
+				boolean etiquetasPendentes = instrumentoMediator.verificarEtiquetasGeradasNaoConfimadas();
+				
 				try {
-					if (etiquetasNaoGeradas) {
+					if (etiquetasPendentes == true) {
 						throw new InfraException("Por favor confirme os instrumentos lançados pois já tiveram Slips geradas...");
 					}
 
@@ -107,8 +107,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					InstrumentoProtesto instrumento = instrumentoMediator.isTituloJaFoiGeradoInstrumento(tituloProtestado);
 					if (tituloProtestado != null) {
 						if (instrumento == null) {
-							if (!getRetornos().contains(tituloProtestado)) {
-								getRetornos().add(0, tituloProtestado);
+							if (!retornosSlips.getModelObject().contains(tituloProtestado)) {
+								retornosSlips.getModelObject().add(0, tituloProtestado);
 							} else {
 								throw new InfraException("O título já existe na lista!");
 							}
@@ -118,7 +118,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					} else {
 						throw new InfraException("O título não foi encontrado ou não foi protestado pelo cartório!");
 					}
-
 					protocoloCartorio.getModel().setObject(StringUtils.EMPTY);
 				} catch (InfraException ex) {
 					error(ex.getMessage());
@@ -130,10 +129,10 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 		formManual.add(codigoIbgeCartorio());
 		formManual.add(numeroProtocoloCartorio());
 		formManual.add(new Button("addManual"));
-		add(formManual);
+		return formManual;
 	}
 
-	private void adicionarFormularioCodigo() {
+	private Form<Retorno> formCodigoDeBarraInstrumentos() {
 		Form<Retorno> formCodigo = new Form<Retorno>("formCodigo") {
 
 			/***/
@@ -141,9 +140,10 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
 			@Override
 			protected void onSubmit() {
-
+				boolean etiquetasPendentes = instrumentoMediator.verificarEtiquetasGeradasNaoConfimadas();
+				
 				try {
-					if (etiquetasNaoGeradas) {
+					if (etiquetasPendentes == true) {
 						throw new InfraException("Por favor confirme os instrumentos lançados pois já tiveram Slips geradas...");
 					}
 
@@ -153,8 +153,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					InstrumentoProtesto instrumento = instrumentoMediator.isTituloJaFoiGeradoInstrumento(tituloProtestado);
 					if (tituloProtestado != null) {
 						if (instrumento == null) {
-							if (!getRetornos().contains(tituloProtestado)) {
-								getRetornos().add(0, tituloProtestado);
+							if (!retornosSlips.getModelObject().contains(tituloProtestado)) {
+								retornosSlips.getModelObject().add(0, tituloProtestado);
 							} else {
 								throw new InfraException("O título já existe na lista!");
 							}
@@ -164,7 +164,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					} else {
 						throw new InfraException("O título não foi encontrado ou não foi protestado pelo cartório!");
 					}
-
 					codigoInstrumento.getModel().setObject(StringUtils.EMPTY);
 				} catch (InfraException ex) {
 					error(ex.getMessage());
@@ -173,11 +172,11 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 		};
 		formCodigo.add(campoCodigoDeBarra());
 		formCodigo.add(new Button("addCodigo"));
-		add(formCodigo);
+		return formCodigo;
 	}
 
-	private void listaSlips() {
-		add(new ListView<Retorno>("instrumentos", getRetornos()) {
+	private ListView<Retorno> listInstrumentosLancados() {
+		return retornosSlips = new ListView<Retorno>("instrumentos", new ArrayList<Retorno>()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -204,8 +203,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 				};
 				linkHistorico.add(new Label("nomeDevedor", retorno.getTitulo().getNomeDevedor()));
 				item.add(linkHistorico);
-				item.add(new Label("portador",
-						instituicaoMediator.getInstituicaoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
+				item.add(new Label("portador", instituicaoMediator.getInstituicaoPorCodigoPortador(retorno.getTitulo().getCodigoPortador()).getNomeFantasia()));
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
 				item.add(new Link<Retorno>("remover") {
@@ -215,28 +213,27 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
 					@Override
 					public void onClick() {
-						getRetornos().remove(retorno);
+						retornosSlips.getModelObject().remove(retorno);
 					}
 				});
 			}
-		});
+		};
 	}
 
-	private void botaoSalvarInstrumentos() {
-		add(new Link<InstrumentoProtesto>("botaoSalvarInstrumentos") {
+	private Link<InstrumentoProtesto> botaoSalvarInstrumentos() {
+		return new Link<InstrumentoProtesto>("botaoSalvarInstrumentos") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick() {
-
+				List<Retorno> retornosGerarSlips = retornosSlips.getModelObject();
+				
 				try {
-					instrumentoMediator.salvarInstrumentoProtesto(getRetornos(), getUser());
-					setRetornos(null);
-					setResponsePage(new MensagemPage<InstrumentoProtesto>(InstrumentoProtestoPage.class,
-							"ENTRADA DE INSTRUMENTO DE PROTESTO", "Entrada dos instrumentos realizada com sucesso!"));
-
+					instrumentoMediator.salvarInstrumentoProtesto(retornosGerarSlips, getUser());
+					retornosSlips.getModelObject().clear();
+					setResponsePage(new InstrumentoProtestoPage("Os Instrumentos de Protesto lançados foram salvos com sucesso!"));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					error(ex.getMessage());
@@ -245,7 +242,7 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					logger.error(ex.getMessage(), ex);
 				}
 			}
-		});
+		};
 	}
 
 	private TextField<String> campoCodigoDeBarra() {
@@ -254,8 +251,8 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
 	private DropDownChoice<Municipio> codigoIbgeCartorio() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		codigoIbge =
-				new DropDownChoice<Municipio>("codigoIbge", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
+		codigoIbge = new DropDownChoice<Municipio>("codigoIbge", new Model<Municipio>(), 
+				municipioMediator.getMunicipiosTocantins(), renderer);
 		codigoIbge.setLabel(new Model<String>("Município"));
 		codigoIbge.setRequired(true);
 		return codigoIbge;
@@ -266,17 +263,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 		protocoloCartorio.setRequired(true);
 		protocoloCartorio.setLabel(new Model<String>("Número de Protocolo"));
 		return protocoloCartorio;
-	}
-
-	public List<Retorno> getRetornos() {
-		if (retornos == null) {
-			retornos = new ArrayList<Retorno>();
-		}
-		return retornos;
-	}
-
-	public void setRetornos(List<Retorno> retornos) {
-		this.retornos = retornos;
 	}
 
 	@Override

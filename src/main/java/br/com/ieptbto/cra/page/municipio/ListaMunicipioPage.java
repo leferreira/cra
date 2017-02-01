@@ -8,8 +8,6 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.link.Link;
@@ -19,7 +17,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.dataProvider.DataProvider;
+import br.com.ieptbto.cra.component.CraDataTable;
+import br.com.ieptbto.cra.dataProvider.MunicipioProvider;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -38,7 +37,6 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 
 	@SpringBean
 	MunicipioMediator municipioMediator;
-
 	private Municipio municipio;
 
 	public ListaMunicipioPage() {
@@ -55,8 +53,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 	@Override
 	protected void adicionarComponentes() {
 		botaoNovoMunicipio();
-		dataTableMunicipio();
-
+		add(dataTableMunicipio());
 	}
 
 	private void botaoNovoMunicipio() {
@@ -71,9 +68,8 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 		});
 	}
 
-	private void dataTableMunicipio() {
-		DataProvider<Municipio> dataProvider = new DataProvider<Municipio>(municipioMediator.listarTodos());
-
+	private CraDataTable<Municipio> dataTableMunicipio() {
+		MunicipioProvider dataProvider = new MunicipioProvider(municipioMediator.listarTodos());
 		List<IColumn<Municipio, String>> columns = new ArrayList<>();
 		columns.add(new AbstractColumn<Municipio, String>(new Model<String>("EDITAR")) {
 
@@ -127,14 +123,11 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				return "text-center";
 			}
 		});
-
-		DataTable<Municipio, String> dataTable = new DefaultDataTable<>("table", columns, dataProvider, 1000);
-		add(dataTable);
+        return new CraDataTable<Municipio>("dataTable", columns, dataProvider, 10);
 	}
 
 	@Override
 	protected IModel<Municipio> getModel() {
 		return new CompoundPropertyModel<Municipio>(municipio);
 	}
-
 }

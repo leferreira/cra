@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.page.cra;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -14,6 +13,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Confirmacao;
@@ -36,51 +36,47 @@ public class GerarConfirmacaoPage extends BasePage<Confirmacao> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(GerarConfirmacaoPage.class);
 
 	@SpringBean
 	ConfirmacaoMediator confirmacaoMediator;
-
 	private Confirmacao confirmacao;
-	private List<Remessa> confirmacoesPendentes;
+	private ListView<Remessa> confirmacoesPendentes;
 
 	public GerarConfirmacaoPage() {
 		this.confirmacao = new Confirmacao();
-		this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
 		adicionarComponentes();
 	}
 
 	public GerarConfirmacaoPage(String message) {
 		this.confirmacao = new Confirmacao();
-		this.confirmacoesPendentes = confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
 		success(message);
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		formGerarConfirmacao();
-
+		add(formGerarConfirmacao());
 	}
 
-	private void formGerarConfirmacao() {
-		Form<Confirmacao> formConfirmacao = new Form<Confirmacao>("formConfirmacao") {
+	private Form<Confirmacao> formGerarConfirmacao() {
+		Form<Confirmacao> form = new Form<Confirmacao>("formConfirmacao") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-
+				List<Remessa> confirmacoes = confirmacoesPendentes.getModelObject();
+				
 				try {
 					if (confirmacaoMediator.verificarArquivoConfirmacaoGeradoCra().equals(true)) {
-						throw new InfraException("Não é possível gerar as confirmações novamente, arquivos já liberados hoje!");
+						throw new InfraException("Não é possível gerar as confirmações novamente, arquivos já liberados na data atual!");
 					}
-					if (getConfirmacoesPendentes().isEmpty()) {
-						throw new InfraException("Não há confirmações pendentes para envio.");
+					if (confirmacoes.isEmpty()) {
+						throw new InfraException("Não há confirmações pendentes para liberação!");
 					}
-					confirmacaoMediator.gerarConfirmacoes(getUser(), getConfirmacoesPendentes());
-					setResponsePage(new MensagemPage<Confirmacao>(GerarConfirmacaoPage.class, "GERAR CONFIRMAÇÃO", "Os arquivos de confirmações foram gerados com sucesso !"));
+					confirmacaoMediator.gerarConfirmacoes(getUser(), confirmacoes);
+					setResponsePage(new GerarConfirmacaoPage("Os arquivos de confirmações foram gerados com sucesso !"));
 
 				} catch (InfraException e) {
 					logger.error(e.getMessage(), e);
@@ -91,13 +87,13 @@ public class GerarConfirmacaoPage extends BasePage<Confirmacao> {
 				}
 			}
 		};
-		formConfirmacao.add(carregarListaConfirmacao());
-		formConfirmacao.add(new Button("botaoConfirmacao"));
-		add(formConfirmacao);
+		form.add(carregarListaConfirmacao());
+		form.add(new Button("botaoConfirmacao"));
+		return form;
 	}
 
 	private ListView<Remessa> carregarListaConfirmacao() {
-		return new ListView<Remessa>("confirmacao", getConfirmacoesPendentes()) {
+		return confirmacoesPendentes = new ListView<Remessa>("confirmacao", buscarConfirmacoesParaLiberacao()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -125,8 +121,17 @@ public class GerarConfirmacaoPage extends BasePage<Confirmacao> {
 		};
 	}
 
-	public List<Remessa> getConfirmacoesPendentes() {
-		return confirmacoesPendentes;
+	public IModel<List<Remessa>> buscarConfirmacoesParaLiberacao() {
+		return new LoadableDetachableModel<List<Remessa>>() {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected List<Remessa> load() {
+				return confirmacaoMediator.buscarConfirmacoesPendentesDeEnvio();
+			}
+		};
 	}
 
 	@Override

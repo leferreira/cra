@@ -17,7 +17,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.dataProvider.DataProvider;
+import br.com.ieptbto.cra.dataProvider.DataProvider2;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.LogCra;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
@@ -175,7 +175,7 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 	}
 
 	private void dataTableAcoes() {
-		add(new DataTableAcoesPanel("panelDataTableAcoes", new DataProvider<LogCra>(buscarLoggs())));
+		add(new DataTableAcoesPanel("panelDataTableAcoes", new DataProvider2<LogCra>(buscarLoggs())));
 	}
 
 	public List<Instituicao> getListaInstituicoes() {

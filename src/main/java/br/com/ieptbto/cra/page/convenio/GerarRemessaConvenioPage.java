@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
@@ -20,7 +21,6 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConvenioMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.cra.MensagemPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -39,36 +39,39 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 	ConvenioMediator convenioMediator;
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
-
 	private TituloFiliado titulo;
-	private List<TituloFiliado> listaTitulosConvenios;
+	private ListView<TituloFiliado> titulos;
 
 	public GerarRemessaConvenioPage() {
 		this.titulo = new TituloFiliado();
-		this.listaTitulosConvenios = convenioMediator.buscarTitulosConvenios();
-
 		adicionarComponentes();
 	}
 
+	public GerarRemessaConvenioPage(String message) {
+		this.titulo = new TituloFiliado();
+		success(message);
+		adicionarComponentes();
+	}
+	
 	@Override
 	protected void adicionarComponentes() {
-		formGerarRemessaConvenio();
-		listaTitulosConvenio();
+		add(formGerarRemessaConvenio());
+		add(listaTitulosConvenio());
 	}
 
-	private void formGerarRemessaConvenio() {
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
+	private Form<TituloFiliado> formGerarRemessaConvenio() {
+		return new Form<TituloFiliado>("form", getModel()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-
+				List<TituloFiliado> titulosFiliados = titulos.getModelObject();
+				
 				try {
-					convenioMediator.gerarRemessas(getUser(), getListaTitulosConvenios());
-					setResponsePage(new MensagemPage<TituloFiliado>(GerarRemessaConvenioPage.class, "REMESSAS CONVÊNIOS",
-							"Os arquivos de remessa dos convênios foram gerados com sucesso!"));
+					convenioMediator.gerarRemessas(getUser(), titulosFiliados);
+					setResponsePage(new GerarRemessaConvenioPage("Os arquivos de remessa dos convênios foram gerados com sucesso!"));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
 					error("Não foi gerar os arquivos de remessa dos convênios ! \n Entre em contato com a CRA ");
@@ -78,11 +81,10 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 				}
 			}
 		};
-		add(form);
 	}
 
-	private void listaTitulosConvenio() {
-		add(new ListView<TituloFiliado>("listViewTitulos", getListaTitulosConvenios()) {
+	private ListView<TituloFiliado> listaTitulosConvenio() {
+		return titulos = new ListView<TituloFiliado>("listViewTitulos", buscarTitulosFiliados()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -90,7 +92,6 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
 				final TituloFiliado tituloLista = item.getModelObject();
-
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
 				item.add(new Label("convenio", tituloLista.getFiliado().getInstituicaoConvenio().getNomeFantasia()));
@@ -98,11 +99,20 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 				item.add(new Label("dataEnvioCRA", DataUtil.localDateToString(new LocalDate(tituloLista.getDataEnvioCRA()))));
 				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
 			}
-		});
+		};
 	}
+	
+	public IModel<List<TituloFiliado>> buscarTitulosFiliados() {
+		return new LoadableDetachableModel<List<TituloFiliado>>() {
 
-	public List<TituloFiliado> getListaTitulosConvenios() {
-		return listaTitulosConvenios;
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected List<TituloFiliado> load() {
+				return convenioMediator.buscarTitulosConveniosGerarRemessa();
+			}
+		};
 	}
 
 	@Override

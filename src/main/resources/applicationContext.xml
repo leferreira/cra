@@ -21,7 +21,7 @@
 	
 	<context:component-scan base-package="br.com.ieptbto.cra.dao, br.com.ieptbto.cra.mediator, br.com.ieptbto.cra.processador,  
 		br.com.ieptbto.cra.conversor, br.com.ieptbto.cra.fabrica, br.com.ieptbto.cra.gerador, br.com.ieptbto.cra.regra, 
-		br.com.ieptbto.cra.webservice, br.com.ieptbto.cra.slip, br.com.ieptbto.cra.logger" />
+		br.com.ieptbto.cra.webservice, br.com.ieptbto.cra.slip, br.com.ieptbto.cra.logger, br.com.ieptbto.cra.dataProvider" />
 	 
 	<bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
