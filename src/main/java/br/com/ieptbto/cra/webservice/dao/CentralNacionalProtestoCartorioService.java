@@ -32,7 +32,7 @@ import br.com.ieptbto.cra.util.XmlFormatterUtil;
 public class CentralNacionalProtestoCartorioService extends CnpWebService {
 
 	@Autowired
-	private CentralNacionalProtestoMediator centralNacionalProtestoMediator;
+	CentralNacionalProtestoMediator centralNacionalProtestoMediator;
 
 	/**
 	 * @param usuario

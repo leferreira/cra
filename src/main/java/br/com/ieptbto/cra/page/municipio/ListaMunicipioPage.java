@@ -17,7 +17,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.component.CraDataTable;
+import br.com.ieptbto.cra.component.dataTable.CraDataTable;
 import br.com.ieptbto.cra.dataProvider.MunicipioProvider;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
@@ -123,7 +123,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				return "text-center";
 			}
 		});
-        return new CraDataTable<Municipio>("dataTable", columns, dataProvider, 10);
+        return new CraDataTable<Municipio>("dataTable", new Model<Municipio>(), columns, dataProvider);
 	}
 
 	@Override

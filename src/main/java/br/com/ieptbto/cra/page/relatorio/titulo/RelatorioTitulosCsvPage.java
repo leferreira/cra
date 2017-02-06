@@ -9,6 +9,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.export.ExportToolbar;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.repeater.Item;
@@ -19,7 +20,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.bean.TituloRelatorioCSVBean;
-import br.com.ieptbto.cra.component.CustomExportToolbar;
 import br.com.ieptbto.cra.dataProvider.DataProvider2;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
@@ -257,7 +257,8 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 
 		DataTable<TituloRelatorioCSVBean, String> dataTable = new DefaultDataTable<>("table", columns,
 				new DataProvider2<TituloRelatorioCSVBean>(TituloRelatorioCSVBean.parseToListTituloRemessa(titulos)), 10000);
-		dataTable.addBottomToolbar(new CustomExportToolbar(dataTable, "CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_")));
+		dataTable.addBottomToolbar(new ExportToolbar(dataTable, new Model<String>("Exportar CSV"),
+				new Model<String>("CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_"))));
 		add(dataTable);
 	}
 

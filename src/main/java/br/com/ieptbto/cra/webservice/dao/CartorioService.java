@@ -78,7 +78,7 @@ public class CartorioService extends CraWebService {
 		if (arquivo.getRemessas() != null && !arquivo.getRemessas().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (Remessa remessa : arquivo.getRemessas()) {
-				nomeArquivos.add(arquivoMediator.carregarArquivoPorId(remessa.getArquivo()).getNomeArquivo());
+				nomeArquivos.add(arquivoMediator.buscarArquivoPorPK(remessa.getArquivo()).getNomeArquivo());
 			}
 			remessaPendentes.setNomeArquivos(nomeArquivos);
 		}

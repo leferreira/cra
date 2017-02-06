@@ -16,30 +16,23 @@ public class CustomExportToolbar extends ExportToolbar {
 
 	/***/
 	private static final long serialVersionUID = 1L;
+	private static final String EXPORTER_MESSAGE_MODEL = "Exportar:";
 
-	private String nameFileCsv;
-
-	public CustomExportToolbar(DataTable<?, ?> table, String nameFileCsv) {
-		super(table);
-		this.nameFileCsv = nameFileCsv;
-		setFileNameModel(getFileNameModel());
+	public CustomExportToolbar(DataTable<?, ?> table, IModel<String> fileNameModel) {
+		super(table, fileNameModel);
+		setFileNameModel(fileNameModel);
 		setMessageModel(getMessageModel());
 		addDataExporter(getCSVDataExporter());
 	}
 
 	private CSVDataExporter getCSVDataExporter() {
 		CSVDataExporter csvDataExporter = new CSVDataExporter();
-		csvDataExporter.setCharacterSet(StandardCharsets.ISO_8859_1.name());
+		csvDataExporter.setCharacterSet(StandardCharsets.UTF_8.name());
 		return csvDataExporter;
 	}
 
 	@Override
-	public IModel<String> getFileNameModel() {
-		return new Model<String>(nameFileCsv);
-	}
-
-	@Override
 	public IModel<String> getMessageModel() {
-		return new Model<String>("");
+		return new Model<String>(EXPORTER_MESSAGE_MODEL);
 	}
 }

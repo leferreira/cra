@@ -50,7 +50,7 @@ public class TitulosArquivoInstituicaoPage extends BasePage<Arquivo> {
 	private Arquivo arquivo;
 
 	public TitulosArquivoInstituicaoPage(Arquivo arquivo) {
-		this.arquivo = arquivoMediator.carregarArquivoPorId(arquivo);
+		this.arquivo = arquivoMediator.buscarArquivoPorPK(arquivo);
 
 		adicionarComponentes();
 	}
