@@ -233,21 +233,6 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "text-center";
 			}
 		});
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("CUSTAS CART."), "check"){
-			
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void populateItem(Item<ICellPopulator<ViewBatimentoRetorno>> item, String id, IModel<ViewBatimentoRetorno> model) {
-				item.add(new LabelValorMonetario<>(id, model.getObject().getTotalCustasCartorio()));
-			}
-
-			@Override
-			public String getCssClass() {
-				return "col-right valor";
-			}
-		});		
 		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("VALOR PAGOS"), "check"){
 			
 			/***/
@@ -263,6 +248,21 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "col-right valor";
 			}
 		});
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("CUSTAS CART."), "check"){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void populateItem(Item<ICellPopulator<ViewBatimentoRetorno>> item, String id, IModel<ViewBatimentoRetorno> model) {
+				item.add(new LabelValorMonetario<>(id, model.getObject().getTotalCustasCartorio()));
+			}
+			
+			@Override
+			public String getCssClass() {
+				return "col-right valor";
+			}
+		});		
 		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("VOLTAR BATIMENTO"), "check"){
 			
 			/***/
