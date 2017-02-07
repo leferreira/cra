@@ -33,6 +33,7 @@ import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.base.SobreCraPage;
 import br.com.ieptbto.cra.page.batimento.BatimentoPage;
 import br.com.ieptbto.cra.page.batimento.BuscarDepositoPage;
+import br.com.ieptbto.cra.page.batimento.ConflitoDepositosArquivoRetornoPage;
 import br.com.ieptbto.cra.page.batimento.ImportarExtratoPage;
 import br.com.ieptbto.cra.page.batimento.IncluirDepositoPage;
 import br.com.ieptbto.cra.page.batimento.LiberarRetornoPage;
@@ -180,6 +181,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		/** Administracao */
 		mountPage("Batimento", BatimentoPage.class);
 		mountPage("ImportarExtrato", ImportarExtratoPage.class);
+		mountPage("ConflitoDepositosArquivoRetorno", ConflitoDepositosArquivoRetornoPage.class);
 		mountPage("BuscarDepositos", BuscarDepositoPage.class);
 		mountPage("LiberarRetornos", LiberarRetornoPage.class);
 		mountPage("RetornosLiberados", RetornosLiberadosPage.class);

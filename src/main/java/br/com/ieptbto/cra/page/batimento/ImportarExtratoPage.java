@@ -58,7 +58,7 @@ public class ImportarExtratoPage extends BasePage<Batimento> {
 		Form<Batimento> form = new Form<Batimento>("form", getModel()) {
 
 			/***/
-			private static final long serialVersionUID = -2389638754033178010L;
+			private static final long serialVersionUID = -1L;
 
 			@Override
 			protected void onSubmit() {
