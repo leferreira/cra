@@ -68,7 +68,6 @@ public class ImportarExtratoPage extends BasePage<Batimento> {
 					if (!uploadedFile.getClientFileName().toLowerCase().endsWith(LayoutArquivo.CSV.getExtensao())) {
 						throw new InfraException("Extensão do arquivo não permitida! Verifique se o arquivo tem extensão \".CSV\"...");
 					}
-					
 					DepositoMediator depositosExtrato = depositoMediator.processarDepositosExtrato(getUser(), uploadedFile);
 					if (!depositosExtrato.getDepositosConflitados().isEmpty() && !depositosExtrato.getRetornosConflitados().isEmpty()) {
 						setResponsePage(new ConflitoDepositosArquivoRetornoPage(depositosExtrato.getDepositosConflitados(), depositosExtrato.getRetornosConflitados()));

@@ -47,12 +47,11 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private RemessaMediator remessaMediator;
+	RemessaMediator remessaMediator;
 	@SpringBean
-	private DownloadMediator downloadMediator;
+	DownloadMediator downloadMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
-
+	InstituicaoMediator instituicaoMediator;
 	private Usuario usuario;
 	private Arquivo arquivo;
 	private ArquivoFormBean arquivoFormBean;

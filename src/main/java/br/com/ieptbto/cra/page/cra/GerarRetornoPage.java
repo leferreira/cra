@@ -115,7 +115,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 	private CraDataTable<ViewBatimentoRetorno> dataTableRetorno() {
 		dataProvider = new BatimentoRetornoProvider(retornoMediator.buscarRetornoConfirmados());
 		List<IColumn<ViewBatimentoRetorno, String>> columns = new ArrayList<IColumn<ViewBatimentoRetorno, String>>();
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("DOWNLOAD"), "check"){
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("DOWNLOAD"), "download"){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -150,7 +150,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "col-center text-center";
 			}
 		});
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("RELATÓRIO"), "check"){
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("RELATÓRIO"), "relatorio"){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -187,7 +187,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "col-center text-center";
 			}
 		});
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("DATA"), "dataEnvio"){
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("DATA"), "dataEnvio_Arquivo"){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -202,7 +202,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "col-center text-center";
 			}
 		});
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("HORA"), "dataEnvio"){
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("HORA"), "horaEnvio_Arquivo"){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -217,8 +217,8 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "col-center text-center";
 			}
 		});
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("INSTITUIÇÃO"), "nomeMunicipio_Municipio"));
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("ARQUIVO"), "arquivo.nomeArquivo") {
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("INSTITUIÇÃO"), "nomeFantasia_Cartorio"));
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("ARQUIVO"), "nomeArquivo_Arquivo") {
 		
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -233,7 +233,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "text-center";
 			}
 		});
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("VALOR PAGOS"), "check"){
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("VALOR PAGOS"), "totalValorlPagos"){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -248,7 +248,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "col-right valor";
 			}
 		});
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("CUSTAS CART."), "check"){
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("CUSTAS CART."), "totalCustasCartorio"){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -263,7 +263,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "col-right valor";
 			}
 		});		
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("VOLTAR BATIMENTO"), "check"){
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("VOLTAR BATIMENTO"), "voltarBatimento"){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
