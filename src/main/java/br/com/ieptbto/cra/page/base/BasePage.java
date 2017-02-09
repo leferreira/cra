@@ -12,6 +12,7 @@ import br.com.ieptbto.cra.app.IWebApplication;
 import br.com.ieptbto.cra.component.CustomFeedbackPanel;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.usuario.PerfilUsuarioPage;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
@@ -31,6 +32,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	protected static final String WID_MENU = "menu";
 	private static final String SAUDACAO = "userGreeting";
 	private static final String URL_LOGOUT = "url_logout";
+	private static final String LINK_ABOUT = "about";
 
 	public BasePage(IModel<?> model) {
 		super(model);
@@ -56,6 +58,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 
 		addFeedbackPanel();
 		addLogout();
+		addSobreCraLink();
 		adicionarMenu();
 		adicionarLinkProfileUser();
 		adicionarTrocaSenha();
@@ -89,6 +92,25 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 				setResponsePage(LoginPage.class);
 			}
 		});
+	}
+	
+	private void addSobreCraLink() {
+		add(new Link<Void>(LINK_ABOUT) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(SobreCraPage.class);
+			}
+		}).setVisible(isVisibleLink());
+	}
+
+	private boolean isVisibleLink() {
+		TipoInstituicaoCRA tipoInstituicao = getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		if (TipoInstituicaoCRA.CRA == tipoInstituicao) {
+			return true;
+		}
+		return false;
 	}
 
 	private void addFeedbackPanel() {

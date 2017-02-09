@@ -1,10 +1,17 @@
 package br.com.ieptbto.cra.page.base;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.springframework.core.io.ClassPathResource;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -27,9 +34,36 @@ public class SobreCraPage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	@Override
 	protected void adicionarComponentes() {
-		add(new Label("versao", "1.0.0"));
-		add(new Label("dataVersao", "19/09/2016"));
+		add(new Label("versao", "1.0.1"));
+		add(new Label("dataVersao", "09/02/2017"));
+		add(textAreaException());
+	}
+	
+	private Label textAreaException() {
+		BufferedReader reader = null;
 
+		String content = StringUtils.EMPTY;
+		try {
+			File changelogFile = new ClassPathResource("CHANGELOG").getFile();
+			if (changelogFile.exists()) {
+				reader = new BufferedReader(new FileReader(changelogFile));
+				String linha = "";
+				while ((linha = reader.readLine()) != null) {
+					content = content.concat(linha) + "<br>";
+				}
+			} else {
+				logger.info("Arquivo de CHANGELOG não encontrado. Favor entrar em contato com a CRA...");
+				error("Arquivo de CHANGELOG não encontrado. Favor entrar em contato com a CRA...");
+			}
+		} catch (IOException ex) {
+			logger.info("Erro ao ler o arquivo de log de mudanças. Favor entrar em contato com a CRA...");
+			error("Erro ao ler o arquivo de log de mudanças. Favor entrar em contato com a CRA...");
+		}
+				
+		Label textArea = new Label("changelog", content);
+		textArea.setEscapeModelStrings(false);
+		textArea.setEnabled(false);
+		return textArea;
 	}
 
 	@Override

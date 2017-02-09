@@ -11,12 +11,12 @@ import br.com.ieptbto.cra.component.CustomFeedbackPanel;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
 
-@SuppressWarnings("serial")
 /**
  * 
  * @author Leandro
  *
  */
+@SuppressWarnings("serial")
 public class LoginPage extends AbstractWebPage<Usuario> {
 
 	private Usuario usuario;
@@ -32,7 +32,6 @@ public class LoginPage extends AbstractWebPage<Usuario> {
 	}
 
 	private void adicionarCampos() {
-		getApplication().getMarkupSettings().getMarkupFactory().getMarkupCache().clear();
 		feedBackPanel = new CustomFeedbackPanel(WID_FEEDBACK);
 		feedBackPanel.setOutputMarkupId(true);
 
