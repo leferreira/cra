@@ -1,0 +1,9 @@
+-------------------- 1.0.1 ------------------
+
+8-Fev-2016 Thasso Araujo
+ # Arquivo de CHANGELOG criado por Thasso Araújo.
+ # Arquivo de Script.sql que irá ter as queries a ser executadas antes de subir uma versão nova.
+ # QUERY 1: "CRIAÇÃO DE CHAVE PRIMARIA COMPOSTA NA TABELA DE REGISTROS CNP".
+ # Implementação de regra de na entidade RegistroCnp, com chave unica de vários campos, afim de impedir a duplicação a nível de banco.
+ # Correção de arquivos marcados como confimados no batimento após importação do extrato.
+ 

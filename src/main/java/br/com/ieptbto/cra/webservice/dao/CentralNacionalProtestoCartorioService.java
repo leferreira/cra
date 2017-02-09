@@ -95,7 +95,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			lote = centralNacionalProtestoMediator.processarLoteDiario(usuario.getInstituicao(), converterStringArquivoCnpVO(dados));
+			lote = centralNacionalProtestoMediator.processarLoteDiario(usuario, converterStringArquivoCnpVO(dados));
 			if (lote == null) {
 				loggerCra.alert(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO, CodigoErro.CNP_LOTE_VAZIO.getDescricao());
 				return mensagemLoteCnpVazioOuNenhumRegistroValido(usuario);

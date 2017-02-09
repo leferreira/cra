@@ -29,7 +29,6 @@ public class LogCraPage extends BasePage<LogCra> {
 
 	public LogCraPage(LogCra logCra) {
 		this.logCra = logCra;
-
 		adicionarComponentes();
 	}
 
