@@ -58,6 +58,7 @@ import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.DownloadOficioIrregularidadePage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.EnviarSolicitacaoDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.SolicitarDesistenciaCancelamentoPage;
+import br.com.ieptbto.cra.page.filiado.AtualizarEmpresasFiliadasPage;
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.instituicao.IncluirInstituicaoPage;
@@ -210,6 +211,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("PerfilUsuario", PerfilUsuarioPage.class);
 		mountPage("EmpresasFiliadas", ListaFiliadoPage.class);
 		mountPage("IncluirEmpresaFiliada", IncluirFiliadoPage.class);
+		mountPage("AtualizarEmpresasFiliadas", AtualizarEmpresasFiliadasPage.class);
 
 		/** Arquivo */
 		mountPage("EnviarArquivo", EnviarArquivoPage.class);

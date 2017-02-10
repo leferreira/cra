@@ -29,9 +29,7 @@ import br.com.ieptbto.cra.validador.EmailValidator;
 
 public class InstituicaoInputPanel extends Panel {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
@@ -41,11 +39,6 @@ public class InstituicaoInputPanel extends Panel {
 
 	public InstituicaoInputPanel(String id, IModel<Instituicao> model) {
 		super(id, model);
-
-		adicionarCampos();
-	}
-
-	private void adicionarCampos() {
 		add(campoNomeFantasia());
 		add(campoRazaoSocial());
 		add(comboTipoInstituicao());

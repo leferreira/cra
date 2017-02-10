@@ -29,7 +29,6 @@ public class ListaFiliadoPage extends BasePage<Filiado> {
 
 	@SpringBean
 	FiliadoMediator filiadoMediator;
-
 	private Filiado filiado;
 
 	public ListaFiliadoPage() {
@@ -45,13 +44,14 @@ public class ListaFiliadoPage extends BasePage<Filiado> {
 
 	@Override
 	protected void adicionarComponentes() {
-		botaoNovoFiliado();
-		listaFiliados();
+		add(botaoNovoFiliado());
+		add(botaoAtualizarFiliados());
+		add(listaFiliados());
 
 	}
 
-	private void botaoNovoFiliado() {
-		add(new Link<Void>("botaoNovo") {
+	private Link<Void> botaoNovoFiliado() {
+		return new Link<Void>("botaoNovo") {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -59,11 +59,23 @@ public class ListaFiliadoPage extends BasePage<Filiado> {
 			public void onClick() {
 				setResponsePage(new IncluirFiliadoPage());
 			}
-		});
+		};
+	}
+	
+	private Link<Void> botaoAtualizarFiliados() {
+		return new Link<Void>("botaoAtualizarFiliados") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			public void onClick() {
+				setResponsePage(new AtualizarEmpresasFiliadasPage());
+			}
+		};
 	}
 
-	private void listaFiliados() {
-		add(new ListView<Filiado>("listViewFiliado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao())) {
+	private ListView<Filiado> listaFiliados() {
+		return new ListView<Filiado>("listViewFiliado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao())) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -89,7 +101,7 @@ public class ListaFiliadoPage extends BasePage<Filiado> {
 				item.add(new Label("uf", filiado.getUf()));
 				item.add(new Label("ativo", verificarSituacao(filiado.isAtivo())));
 			}
-		});
+		};
 	}
 
 	private String verificarSituacao(Boolean ativo) {

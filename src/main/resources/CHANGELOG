@@ -7,6 +7,7 @@
  # Correção de arquivos marcados como confimados no batimento após importação do extrato.
  # Download Ofício Irregularidade ajustes.
  # Correção de verificação ao atualizar títulos do convênio.
+ # Funcionalidade para importação de arquivos filiados de convênios.
   
 -------------------- 1.0.0 ------------------
 

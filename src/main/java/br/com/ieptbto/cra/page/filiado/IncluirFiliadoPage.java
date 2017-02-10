@@ -36,7 +36,6 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 
 	@SpringBean
 	FiliadoMediator filiadoMediator;
-
 	private Filiado filiado;
 	private List<SetorFiliado> setoresFiliado;
 
@@ -44,7 +43,6 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 		this.filiado = new Filiado();
 		this.filiado.setSetoresFiliado(getSetoresFiliado());
 		getSetoresFiliado().add(getSetorPadraoCra());
-
 		adicionarComponentes();
 	}
 
@@ -52,7 +50,6 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 		this.filiado = filiado;
 		this.setoresFiliado = filiadoMediator.buscarSetoresFiliado(filiado);
 		this.filiado.setSetoresFiliado(setoresFiliado);
-
 		adicionarComponentes();
 	}
 
