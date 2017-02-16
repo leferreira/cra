@@ -7,7 +7,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -19,7 +18,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
-import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.enumeration.TipoCampo51;
@@ -56,19 +54,17 @@ public class InstituicaoInputPanel extends Panel {
 		add(comboTipoCampo51());
 		add(comboTipoBatimento());
 		add(comboPadraoLayoutXML());
-		add(campoPermitidoSetores());
+		add(checkboxPermitidoSetores());
 		add(checkSeloDiferido());
 		add(checkTaxaCra());
 		add(checkVerificacaoManual());
 	}
 
-	private DropDownChoice<EnumerationSimNao> campoPermitidoSetores() {
-		IChoiceRenderer<EnumerationSimNao> renderer = new ChoiceRenderer<EnumerationSimNao>("label");
-		DropDownChoice<EnumerationSimNao> dropDown =
-				new DropDownChoice<EnumerationSimNao>("permitidoSetoresConvenio", Arrays.asList(EnumerationSimNao.values()), renderer);
-		dropDown.setLabel(new Model<String>("Permitido Setores Convênios"));
-		dropDown.setRequired(true);
-		return dropDown;
+	private CheckBox checkboxPermitidoSetores() {
+		CheckBox checkbox = new CheckBox("setoresConvenio");
+		checkbox.setLabel(new Model<String>("Setores Convênios"));
+		checkbox.setRequired(true);
+		return checkbox;
 	}
 
 	private TextField<String> campoNomeFantasia() {

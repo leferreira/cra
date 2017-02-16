@@ -18,8 +18,8 @@ import org.apache.wicket.model.Model;
 
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.MotivoSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
 
 /**
  * @author Thasso Araújo
@@ -27,7 +27,6 @@ import br.com.ieptbto.cra.enumeration.MotivoSolicitacaoDesistenciaCancelamento;
  */
 public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	private TituloRemessa titulo;
@@ -41,7 +40,6 @@ public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 		this.titulo = titulo;
 		this.fileUploadField = fileUpload;
 		this.radioMotivoSolicitacao = radioMotivo;
-
 		add(fileUploadAnexo());
 		add(tipoSolicitacao());
 		add(dropDownIrregularidade());
@@ -53,7 +51,7 @@ public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 
 	private RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> tipoSolicitacao() {
 		radioMotivoSolicitacao.add(new AjaxFormChoiceComponentUpdatingBehavior() {
-			/***/
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -63,19 +61,15 @@ public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 					if (MotivoSolicitacaoDesistenciaCancelamento.IRREGULARIDADE_NO_TITULO_APRESENTADO.equals(motivo)) {
 						dropDownMotivoCancelamento.setEnabled(true);
 						dropDownMotivoCancelamento.setRequired(true);
-						fileUploadField.setEnabled(true);
 						fileUploadField.setRequired(true);
 					} else {
 						dropDownMotivoCancelamento.setDefaultModelObject(null);
 						dropDownMotivoCancelamento.setEnabled(false);
 						dropDownMotivoCancelamento.setRequired(false);
-						fileUploadField.setDefaultModelObject(null);
-						fileUploadField.setEnabled(false);
 						fileUploadField.setRequired(false);
 					}
-					target.add(dropDownMotivoCancelamento);
 					target.add(fileUploadField);
-
+					target.add(dropDownMotivoCancelamento);
 				}
 			}
 		});
@@ -110,7 +104,7 @@ public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 
 	private FileUploadField fileUploadAnexo() {
 		this.fileUploadField.setOutputMarkupId(true);
-		this.fileUploadField.setEnabled(false);
+		this.fileUploadField.setEnabled(true);
 		return fileUploadField;
 	}
 }

@@ -8,7 +8,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.bean.TituloFormBean;
+import br.com.ieptbto.cra.beans.TituloBean;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -29,12 +29,11 @@ public class SolicitarDesistenciaCancelamentoPage extends BasePage<TituloRemessa
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
-
+	InstituicaoMediator instituicaoMediator;
 	private TituloRemessa titulo;
-	private Form<TituloFormBean> form;
+	private Form<TituloBean> form;
 
 	public SolicitarDesistenciaCancelamentoPage() {
 		this.titulo = new TituloRemessa();
@@ -48,15 +47,15 @@ public class SolicitarDesistenciaCancelamentoPage extends BasePage<TituloRemessa
 	}
 
 	private void setForm() {
-		TituloFormBean beanForm = new TituloFormBean();
-		this.form = new Form<TituloFormBean>("form", new CompoundPropertyModel<TituloFormBean>(beanForm)) {
+		TituloBean beanForm = new TituloBean();
+		this.form = new Form<TituloBean>("form", new CompoundPropertyModel<TituloBean>(beanForm)) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				TituloFormBean tituloBean = getModelObject();
+				TituloBean tituloBean = getModelObject();
 
 				try {
 					if (tituloBean.isTodosCamposEmBranco()) {
@@ -73,7 +72,7 @@ public class SolicitarDesistenciaCancelamentoPage extends BasePage<TituloRemessa
 				}
 			}
 		};
-		form.add(new BuscarTitulosInputPanel("buscarTitulosInputPanel", new CompoundPropertyModel<TituloFormBean>(beanForm), getUser()));
+		form.add(new BuscarTitulosInputPanel("buscarTitulosInputPanel", new CompoundPropertyModel<TituloBean>(beanForm), getUser()));
 		add(form);
 	}
 

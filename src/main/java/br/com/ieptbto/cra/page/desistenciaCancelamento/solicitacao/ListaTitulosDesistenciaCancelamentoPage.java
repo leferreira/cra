@@ -16,7 +16,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.TituloFormBean;
+import br.com.ieptbto.cra.beans.TituloBean;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
@@ -35,21 +35,19 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloRemessa> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	CancelamentoProtestoMediator cancelamentoProtestoMediator;
 	@SpringBean
-	private TituloMediator tituloMediator;
+	TituloMediator tituloMediator;
 
-	private TituloFormBean tituloBean;
+	private TituloBean tituloBean;
 	private Usuario usuario;
 
-	public ListaTitulosDesistenciaCancelamentoPage(TituloFormBean tituloBean) {
+	public ListaTitulosDesistenciaCancelamentoPage(TituloBean tituloBean) {
 		this.tituloBean = tituloBean;
 		this.usuario = getUser();
-
 		adicionarComponentes();
 	}
 
@@ -61,7 +59,6 @@ public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloReme
 	private ListView<TituloRemessa> listaTitulosCancelamento() {
 		return new ListView<TituloRemessa>("listViewTitulos", buscarTitulos()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -135,7 +132,7 @@ public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloReme
 
 			@Override
 			protected List<TituloRemessa> load() {
-				TituloFormBean bean = tituloBean;
+				TituloBean bean = tituloBean;
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 

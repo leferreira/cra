@@ -21,7 +21,7 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.AdministracaoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -52,11 +52,11 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	private DropDownChoice<Municipio> comboMunicipio;
-	private ArrayList<TipoArquivoEnum> tiposArquivo;
+	private ArrayList<TipoArquivoFebraban> tiposArquivo;
 
 	public RemoverArquivoPage() {
 		this.arquivo = new Arquivo();
-		this.tiposArquivo = new ArrayList<TipoArquivoEnum>();
+		this.tiposArquivo = new ArrayList<TipoArquivoFebraban>();
 		adicionarComponentes();
 	}
 
@@ -102,7 +102,7 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 					}
 
 					List<Arquivo> arquivos =
-							administracaoMediator.buscarArquivosParaRemover(arquivo, municipio, dataInicio, dataFim, getTiposArquivo());
+							administracaoMediator.consultarArquivosParaRemover(arquivo, municipio, dataInicio, dataFim, getTiposArquivo());
 					setResponsePage(new ListaRemoverArquivoPage(arquivos));
 				} catch (InfraException ex) {
 					logger.info(ex.getMessage(), ex);
@@ -126,13 +126,13 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 		return new TextField<String>("nomeArquivo");
 	}
 
-	private CheckBoxMultipleChoice<TipoArquivoEnum> comboTipoArquivos() {
-		List<TipoArquivoEnum> listaTipos = new ArrayList<TipoArquivoEnum>();
-		listaTipos.add(TipoArquivoEnum.REMESSA);
-		listaTipos.add(TipoArquivoEnum.CONFIRMACAO);
-		listaTipos.add(TipoArquivoEnum.RETORNO);
-		CheckBoxMultipleChoice<TipoArquivoEnum> tipos =
-				new CheckBoxMultipleChoice<TipoArquivoEnum>("tipoArquivos", new Model<ArrayList<TipoArquivoEnum>>(tiposArquivo), listaTipos);
+	private CheckBoxMultipleChoice<TipoArquivoFebraban> comboTipoArquivos() {
+		List<TipoArquivoFebraban> listaTipos = new ArrayList<TipoArquivoFebraban>();
+		listaTipos.add(TipoArquivoFebraban.REMESSA);
+		listaTipos.add(TipoArquivoFebraban.CONFIRMACAO);
+		listaTipos.add(TipoArquivoFebraban.RETORNO);
+		CheckBoxMultipleChoice<TipoArquivoFebraban> tipos =
+				new CheckBoxMultipleChoice<TipoArquivoFebraban>("tipoArquivos", new Model<ArrayList<TipoArquivoFebraban>>(tiposArquivo), listaTipos);
 		tipos.setLabel(new Model<String>("Tipo do Arquivo"));
 		return tipos;
 	}
@@ -160,7 +160,7 @@ public class RemoverArquivoPage extends BasePage<Arquivo> {
 		return comboMunicipio;
 	}
 
-	public ArrayList<TipoArquivoEnum> getTiposArquivo() {
+	public ArrayList<TipoArquivoFebraban> getTiposArquivo() {
 		return tiposArquivo;
 	}
 

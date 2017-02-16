@@ -20,7 +20,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.ArquivoFormBean;
+import br.com.ieptbto.cra.beans.ArquivoBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -48,9 +48,9 @@ public class ListaDesistenciaCancelamentoInstituicaoPage extends BasePage<Arquiv
 	private ArquivoMediator arquivoMediator;
 
 	private Usuario user;
-	private ArquivoFormBean arquivoFormBean;
+	private ArquivoBean arquivoFormBean;
 
-	public ListaDesistenciaCancelamentoInstituicaoPage(ArquivoFormBean arquivoFormBean, Usuario usuario) {
+	public ListaDesistenciaCancelamentoInstituicaoPage(ArquivoBean arquivoFormBean, Usuario usuario) {
 		this.user = usuario;
 		this.arquivoFormBean = arquivoFormBean;
 
@@ -89,8 +89,8 @@ public class ListaDesistenciaCancelamentoInstituicaoPage extends BasePage<Arquiv
 				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
 				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
-				divInfo.add(new AttributeAppender("id", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
-				divInfo.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()));
+				divInfo.add(new AttributeAppender("id", arquivo.getStatusArquivo().getStatusDownload().getLabel()));
+				divInfo.add(new Label("status", arquivo.getStatusArquivo().getStatusDownload().getLabel().toUpperCase()));
 				item.add(divInfo);
 				item.add(downloadArquivoTXT(arquivo));
 				item.add(relatorioArquivo(arquivo));
@@ -143,7 +143,7 @@ public class ListaDesistenciaCancelamentoInstituicaoPage extends BasePage<Arquiv
 
 			@Override
 			protected List<Arquivo> load() {
-				ArquivoFormBean bean = getArquivoFormBean();
+				ArquivoBean bean = getArquivoBean();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 
@@ -159,7 +159,7 @@ public class ListaDesistenciaCancelamentoInstituicaoPage extends BasePage<Arquiv
 		};
 	}
 
-	public ArquivoFormBean getArquivoFormBean() {
+	public ArquivoBean getArquivoBean() {
 		return this.arquivoFormBean;
 	}
 

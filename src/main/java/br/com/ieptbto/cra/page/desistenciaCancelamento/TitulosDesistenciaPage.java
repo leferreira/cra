@@ -27,9 +27,12 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -45,25 +48,31 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	DesistenciaProtestoMediator desistenciaProtestoMediator;
+	DesistenciaProtestoMediator desistenciaMediator;
 	@SpringBean
 	DownloadMediator downloadMediator;
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	TituloMediator tituloMediator;
+	@SpringBean
+	ConfirmacaoMediator confirmacaoMediator;
+	@SpringBean
+	RetornoMediator retornoMediator;
 
 	private DesistenciaProtesto desistenciaProtesto;
-	private Instituicao cartorioDestino;
+	private Instituicao instituicaoDestino;
 
 	public TitulosDesistenciaPage(DesistenciaProtesto deistenciaProtesto) {
 		this.desistenciaProtesto = deistenciaProtesto;
-		this.cartorioDestino = instituicaoMediator.getCartorioPorCodigoIBGE(getDesistenciaProtesto().getCabecalhoCartorio().getCodigoMunicipio());
-
+		adicionarComponentes();
+	}
+	
+	public TitulosDesistenciaPage(Integer idDesistencia) {
+		this.desistenciaProtesto =  desistenciaMediator.buscarDesistenciaPorPK(idDesistencia);
 		adicionarComponentes();
 	}
 
@@ -72,7 +81,6 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 		linkDownloadArquivo();
 		informacoesArquivoDesistencia();
 		listaPedidosDesistencia();
-
 	}
 
 	private void linkDownloadArquivo() {
@@ -83,19 +91,27 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 
 			@Override
 			public void onClick() {
-				File file = downloadMediator.baixarDesistenciaTXT(getUser(), getDesistenciaProtesto());
-				IResourceStream resourceStream = new FileResourceStream(file);
-				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
-						getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+			
+				try {
+					File file = downloadMediator.baixarDesistenciaTXT(getUser(), desistenciaProtesto);
+					IResourceStream resourceStream = new FileResourceStream(file);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, 
+							desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				} catch (Exception e) {
+					logger.info(e.getMessage(), e);
+					error("Não foi possível baixar o arquivo! Favor entrar em contato com a CRA...");
+				}
 			}
 		});
 	}
 
 	private void informacoesArquivoDesistencia() {
-		add(new Label("nomeArquivo", getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
-		add(new Label("dataEnvio", DataUtil.localDateToString(getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getDataEnvio())));
-		add(new Label("enviadoPor", getDesistenciaProtesto().getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
-		add(new Label("destino", cartorioDestino.getNomeFantasia()));
+		add(new Label("nomeArquivo", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo()));
+		add(new Label("dataEnvio", DataUtil.localDateToString(desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getDataEnvio())));
+		add(new Label("enviadoPor", desistenciaProtesto.getRemessaDesistenciaProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+		add(new Label("destino", getInstituicaoDestino().getNomeFantasia()));
 	}
 
 	private void listaPedidosDesistencia() {
@@ -107,8 +123,8 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 			@Override
 			protected void populateItem(ListItem<PedidoDesistencia> item) {
 				final PedidoDesistencia pedidoDesistencia = item.getModelObject();
-				pedidoDesistencia.getTitulo().setConfirmacao(tituloMediator.buscarConfirmacao(pedidoDesistencia.getTitulo()));
-				pedidoDesistencia.getTitulo().setRetorno(tituloMediator.buscarRetorno(pedidoDesistencia.getTitulo()));
+				pedidoDesistencia.getTitulo().setConfirmacao(confirmacaoMediator.buscarConfirmacaoPorTitulo(pedidoDesistencia.getTitulo()));
+				pedidoDesistencia.getTitulo().setRetorno(retornoMediator.buscarRetornoPorTitulo(pedidoDesistencia.getTitulo()));
 
 				final TituloRemessa tituloRemessa = pedidoDesistencia.getTitulo();
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloRemessa.getSaldoTitulo()));
@@ -234,13 +250,16 @@ public class TitulosDesistenciaPage extends BasePage<DesistenciaProtesto> {
 
 			@Override
 			protected List<PedidoDesistencia> load() {
-				return desistenciaProtestoMediator.buscarPedidosDesistenciaProtesto(desistenciaProtesto);
+				return desistenciaMediator.buscarPedidosDesistenciaProtesto(desistenciaProtesto);
 			}
 		};
 	}
 
-	public DesistenciaProtesto getDesistenciaProtesto() {
-		return desistenciaProtesto;
+	public Instituicao getInstituicaoDestino() {
+		if (this.instituicaoDestino == null) {
+			this.instituicaoDestino = instituicaoMediator.getCartorioPorCodigoIBGE(desistenciaProtesto.getCabecalhoCartorio().getCodigoMunicipio());
+		}
+		return instituicaoDestino;
 	}
 
 	@Override

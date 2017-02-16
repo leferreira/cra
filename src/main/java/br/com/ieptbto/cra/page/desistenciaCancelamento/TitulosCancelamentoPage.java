@@ -28,9 +28,12 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.PedidoCancelamento;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -46,7 +49,6 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
@@ -54,16 +56,24 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 	@SpringBean
 	DownloadMediator downloadMediator;
 	@SpringBean
-	CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	CancelamentoProtestoMediator cancelamentoMediator;
 	@SpringBean
 	TituloMediator tituloMediator;
+	@SpringBean
+	ConfirmacaoMediator confirmacaoMediator;
+	@SpringBean
+	RetornoMediator retornoMediator;
 
 	private CancelamentoProtesto cancelamentoProtesto;
-	private Instituicao cartorioDestino;
+	private Instituicao instituicaoDestino;
 
 	public TitulosCancelamentoPage(CancelamentoProtesto cancelamentoProtesto) {
 		this.cancelamentoProtesto = cancelamentoProtesto;
-		this.cartorioDestino = instituicaoMediator.getCartorioPorCodigoIBGE(cancelamentoProtesto.getCabecalhoCartorio().getCodigoMunicipio());
+		adicionarComponentes();
+	}
+	
+	public TitulosCancelamentoPage(Integer idCancelamentoProtesto) {
+		this.cancelamentoProtesto = cancelamentoMediator.buscarCancelamentoPorPK(idCancelamentoProtesto);
 		adicionarComponentes();
 	}
 
@@ -72,36 +82,41 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 		linkDownloadArquivo();
 		informacoesArquivoCancelamento();
 		listaPedidosCancelamentos();
-
 	}
 
 	private void linkDownloadArquivo() {
 		add(new Link<CancelamentoProtesto>("downloadArquivo") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick() {
-				File file = downloadMediator.baixarCancelamentoTXT(getUser(), getCancelamentoProtesto());
-				IResourceStream resourceStream = new FileResourceStream(file);
-				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
-						getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+					
+				try {
+					File file = downloadMediator.baixarCancelamentoTXT(getUser(), cancelamentoProtesto);
+					IResourceStream resourceStream = new FileResourceStream(file);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+							cancelamentoProtesto.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				} catch (Exception e) {
+					logger.info(e.getMessage(), e);
+					error("Não foi possível baixar o arquivo! Favor entrar em contato com a CRA...");
+				}
 			}
 		});
 	}
 
 	private void informacoesArquivoCancelamento() {
-		add(new Label("nomeArquivo", getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
-		add(new Label("dataEnvio", DataUtil.localDateToString(getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getDataEnvio())));
-		add(new Label("enviadoPor", getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
-		add(new Label("destino", cartorioDestino.getNomeFantasia()));
+		add(new Label("nomeArquivo", cancelamentoProtesto.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+		add(new Label("dataEnvio", DataUtil.localDateToString(cancelamentoProtesto.getRemessaCancelamentoProtesto().getArquivo().getDataEnvio())));
+		add(new Label("enviadoPor", cancelamentoProtesto.getRemessaCancelamentoProtesto().getArquivo().getInstituicaoEnvio().getNomeFantasia()));
+		add(new Label("destino", getInstituicaoDestino().getNomeFantasia()));
 	}
 
 	private void listaPedidosCancelamentos() {
 		add(new ListView<PedidoCancelamento>("pedidosCancelamento", carregarPedidosCancelamento()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -112,7 +127,7 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 					item.add(new Label("nossoNumerno", pedidoCancelamento.getCarteiraNossoNumero()));
 					item.add(new Label("numeroTitulo", pedidoCancelamento.getNumeroTitulo()));
 					item.add(new Label("protocolo", pedidoCancelamento.getNumeroProtocolo()));
-					item.add(new Label("pracaProtesto", cartorioDestino.getMunicipio().getNomeMunicipio().toUpperCase()));
+					item.add(new Label("pracaProtesto", instituicaoDestino.getMunicipio().getNomeMunicipio().toUpperCase()));
 					item.add(new Label("numeroControleDevedor", 1));
 					item.add(new LabelValorMonetario<BigDecimal>("valor", pedidoCancelamento.getValorTitulo()));
 
@@ -130,8 +145,8 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 					item.add(new Label("situacaoTitulo", "TÍTULO ANTIGO"));
 
 				} else {
-					pedidoCancelamento.getTitulo().setConfirmacao(tituloMediator.buscarConfirmacao(pedidoCancelamento.getTitulo()));
-					pedidoCancelamento.getTitulo().setRetorno(tituloMediator.buscarRetorno(pedidoCancelamento.getTitulo()));
+					pedidoCancelamento.getTitulo().setConfirmacao(confirmacaoMediator.buscarConfirmacaoPorTitulo(pedidoCancelamento.getTitulo()));
+					pedidoCancelamento.getTitulo().setRetorno(retornoMediator.buscarRetornoPorTitulo(pedidoCancelamento.getTitulo()));
 
 					final TituloRemessa tituloRemessa = pedidoCancelamento.getTitulo();
 					item.add(new LabelValorMonetario<BigDecimal>("valor", tituloRemessa.getSaldoTitulo()));
@@ -258,15 +273,18 @@ public class TitulosCancelamentoPage extends BasePage<CancelamentoProtesto> {
 
 			@Override
 			protected List<PedidoCancelamento> load() {
-				return cancelamentoProtestoMediator.buscarPedidosCancelamentoProtesto(cancelamentoProtesto);
+				return cancelamentoMediator.buscarPedidosCancelamentoProtesto(cancelamentoProtesto);
 			}
 		};
 	}
 
-	public CancelamentoProtesto getCancelamentoProtesto() {
-		return cancelamentoProtesto;
+	public Instituicao getInstituicaoDestino() {
+		if (instituicaoDestino == null) {
+			this.instituicaoDestino = instituicaoMediator.getCartorioPorCodigoIBGE(cancelamentoProtesto.getCabecalhoCartorio().getCodigoMunicipio());
+		}
+		return instituicaoDestino;
 	}
-
+	
 	@Override
 	protected IModel<CancelamentoProtesto> getModel() {
 		return new CompoundPropertyModel<CancelamentoProtesto>(cancelamentoProtesto);

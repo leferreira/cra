@@ -13,28 +13,32 @@ import org.springframework.stereotype.Service;
 import br.com.ieptbto.cra.conversor.CampoArquivo;
 import br.com.ieptbto.cra.conversor.arquivo.FabricaConversor;
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
-import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.entidade.view.AutorizacaoPendente;
+import br.com.ieptbto.cra.entidade.view.CancelamentoPendente;
+import br.com.ieptbto.cra.entidade.view.DesistenciaPendente;
+import br.com.ieptbto.cra.entidade.view.RemessaPendente;
+import br.com.ieptbto.cra.entidade.view.ViewArquivoPendente;
 import br.com.ieptbto.cra.entidade.vo.InstituicaoVO;
-import br.com.ieptbto.cra.enumeration.CraServiceEnum;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
+import br.com.ieptbto.cra.enumeration.CraServices;
 import br.com.ieptbto.cra.enumeration.TipoCampo51;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
+import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
-import br.com.ieptbto.cra.webservice.VO.AutorizaCancelamentoPendente;
-import br.com.ieptbto.cra.webservice.VO.CancelamentoPendente;
-import br.com.ieptbto.cra.webservice.VO.DesistenciaPendente;
-import br.com.ieptbto.cra.webservice.VO.RelatorioArquivosPendentes;
-import br.com.ieptbto.cra.webservice.VO.RemessaPendente;
+import br.com.ieptbto.cra.webservice.vo.RelatorioAutorizacaoPendenteVO;
+import br.com.ieptbto.cra.webservice.vo.RelatorioCancelamentoPendenteVO;
+import br.com.ieptbto.cra.webservice.vo.RelatorioDesistenciaPendenteVO;
+import br.com.ieptbto.cra.webservice.vo.RelatorioPendentesVO;
+import br.com.ieptbto.cra.webservice.vo.RelatorioRemessaPendenteVO;
 
 /**
  * @author Thasso Aráujo
@@ -49,70 +53,82 @@ public class CartorioService extends CraWebService {
 	ArquivoMediator arquivoMediator;
 	@Autowired
 	DesistenciaProtestoMediator desistenciaMediator;
+	@Autowired
+	CancelamentoProtestoMediator cancelamentoMediator;
+	@Autowired
+	AutorizacaoCancelamentoMediator autorizacaoMediator;
 
 	public String buscarArquivosPendentesCartorio(Usuario usuario) {
-		Arquivo arquivo = null;
+		List<ViewArquivoPendente> arquivosPendentes = new ArrayList<>();
+		
 		try {
 			if (usuario == null) {
 				return setRespostaUsuarioInvalido();
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ARQUIVOS_PENDENTES_CARTORIO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			arquivo = arquivoMediator.arquivosPendentes(usuario.getInstituicao());
-			if (arquivo.getRemessas().isEmpty() && arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()
-					&& arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()
-					&& arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
+			arquivosPendentes = arquivoMediator.consultarViewArquivosPendentes(usuario.getInstituicao());
+			if (arquivosPendentes.isEmpty()) {
 				return gerarMensagemNaoHaArquivosPendentes();
 			}
+			
 		} catch (Exception e) {
-			logger.info(e.getCause(), e);
+			logger.info(e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(usuario, "");
 		}
-		return gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivo), CONSTANTE_RELATORIO_XML);
+		return gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivosPendentes), CONSTANTE_RELATORIO_XML);
 	}
 
-	private RelatorioArquivosPendentes converterArquivoParaRelatorioArquivosPendentes(Arquivo arquivo) {
-		RelatorioArquivosPendentes relatorioArquivosPendentes = new RelatorioArquivosPendentes();
-		RemessaPendente remessaPendentes = new RemessaPendente();
-		if (arquivo.getRemessas() != null && !arquivo.getRemessas().isEmpty()) {
-			List<String> nomeArquivos = new ArrayList<String>();
-			for (Remessa remessa : arquivo.getRemessas()) {
-				nomeArquivos.add(arquivoMediator.buscarArquivoPorPK(remessa.getArquivo()).getNomeArquivo());
+	private RelatorioPendentesVO converterArquivoParaRelatorioArquivosPendentes(List<ViewArquivoPendente> arquivosPendentes) {
+		RelatorioPendentesVO relatorioArquivosPendentes = new RelatorioPendentesVO();
+		
+		RelatorioRemessaPendenteVO remessas = new RelatorioRemessaPendenteVO();
+		remessas.setNomeArquivos(new ArrayList<String>());
+		relatorioArquivosPendentes.setRemessas(remessas);
+		RelatorioDesistenciaPendenteVO desistencias = new RelatorioDesistenciaPendenteVO();
+		desistencias.setArquivos(new ArrayList<String>());
+		relatorioArquivosPendentes.setDesistencias(desistencias);
+		RelatorioCancelamentoPendenteVO cancelamentos = new RelatorioCancelamentoPendenteVO();
+		cancelamentos.setArquivos(new ArrayList<String>());
+		relatorioArquivosPendentes.setCancelamentos(cancelamentos);
+		RelatorioAutorizacaoPendenteVO autorizacoes = new RelatorioAutorizacaoPendenteVO();
+		autorizacoes.setArquivos(new ArrayList<String>());
+		relatorioArquivosPendentes.setAutorizaCancelamentos(autorizacoes);
+		
+		for (ViewArquivoPendente object : arquivosPendentes) {
+			if (RemessaPendente.class.isInstance(object)) {
+				RemessaPendente arquivo = RemessaPendente.class.cast(object);
+				remessas.getNomeArquivos().add(arquivo.getNomeArquivo_Arquivo());
+			} else if (DesistenciaPendente.class.isInstance(object)) {
+				DesistenciaPendente arquivo = DesistenciaPendente.class.cast(object);
+				desistencias.getArquivos().add(arquivo.getNomeArquivo_Arquivo());
+			} else if (CancelamentoPendente.class.isInstance(object)) {
+				CancelamentoPendente arquivo = CancelamentoPendente.class.cast(object);
+				cancelamentos.getArquivos().add(arquivo.getNomeArquivo_Arquivo());
+			} else if (AutorizacaoPendente.class.isInstance(object)) {
+				AutorizacaoPendente arquivo = AutorizacaoPendente.class.cast(object);
+				autorizacoes.getArquivos().add(arquivo.getNomeArquivo_Arquivo());
 			}
-			remessaPendentes.setNomeArquivos(nomeArquivos);
 		}
-		CancelamentoPendente cancelamentoPendentes = new CancelamentoPendente();
-		if (arquivo.getRemessaCancelamentoProtesto() != null
-				&& !arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto().isEmpty()) {
-			List<String> nomeArquivos = new ArrayList<String>();
-			for (CancelamentoProtesto cancelamento : arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
-				cancelamento.setRemessaCancelamentoProtesto(
-						desistenciaMediator.carregarRemessaCancelamentoPorId(cancelamento.getRemessaCancelamentoProtesto()));
-				nomeArquivos.add(cancelamento.getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo());
-			}
-			cancelamentoPendentes.setArquivos(nomeArquivos);
-		}
-		DesistenciaPendente desistenciaPendentes = new DesistenciaPendente();
+		return relatorioArquivosPendentes;
+	}
+
+	private RelatorioPendentesVO converterArquivoParaRelatorioArquivosPendentes(Arquivo arquivo) {
+		RelatorioPendentesVO relatorioArquivosPendentes = new RelatorioPendentesVO();
+
+		RelatorioRemessaPendenteVO remessaPendentes = new RelatorioRemessaPendenteVO();
+		RelatorioDesistenciaPendenteVO desistenciaPendentes = new RelatorioDesistenciaPendenteVO();
+		RelatorioCancelamentoPendenteVO cancelamentoPendentes = new RelatorioCancelamentoPendenteVO();
+		RelatorioAutorizacaoPendenteVO autorizaCancelamentoPendentes = new RelatorioAutorizacaoPendenteVO();
 		if (arquivo.getRemessaDesistenciaProtesto() != null
 				&& !arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto().isEmpty()) {
 			List<String> nomeArquivos = new ArrayList<String>();
 			for (DesistenciaProtesto desistencia : arquivo.getRemessaDesistenciaProtesto().getDesistenciaProtesto()) {
-				desistencia.setRemessaDesistenciaProtesto(
-						desistenciaMediator.carregarRemessaDesistenciaPorId(desistencia.getRemessaDesistenciaProtesto()));
+				desistencia.setRemessaDesistenciaProtesto(desistenciaMediator.buscarRemessaDesistenciaPorPK(desistencia.getRemessaDesistenciaProtesto()));
 				nomeArquivos.add(desistencia.getRemessaDesistenciaProtesto().getArquivo().getNomeArquivo());
 			}
 			desistenciaPendentes.setArquivos(nomeArquivos);
-		}
-		AutorizaCancelamentoPendente autorizaCancelamentoPendentes = new AutorizaCancelamentoPendente();
-		if (arquivo.getRemessaAutorizacao() != null && !arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento().isEmpty()) {
-			List<String> nomeArquivos = new ArrayList<String>();
-			for (AutorizacaoCancelamento ac : arquivo.getRemessaAutorizacao().getAutorizacaoCancelamento()) {
-				ac.setRemessaAutorizacaoCancelamento(
-						desistenciaMediator.carregarRemessaAutorizacaoPorId(ac.getRemessaAutorizacaoCancelamento()));
-				nomeArquivos.add(ac.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo());
-			}
-			autorizaCancelamentoPendentes.setArquivos(nomeArquivos);
 		}
 		relatorioArquivosPendentes.setRemessas(remessaPendentes);
 		relatorioArquivosPendentes.setCancelamentos(cancelamentoPendentes);
@@ -132,7 +148,7 @@ public class CartorioService extends CraWebService {
 			if (usuario == null) {
 				return setRespostaUsuarioInvalido();
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ARQUIVOS_PENDENTES_CARTORIO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ARQUIVOS_PENDENTES_CARTORIO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			arquivo = arquivoMediator.desistenciaPendentes(usuario.getInstituicao());
@@ -166,7 +182,7 @@ public class CartorioService extends CraWebService {
 
 	private String gerarMensagemEnvioSucesso(Usuario usuario, Arquivo arquivo) {
 		String constanteTipoAcao = "XML_UPLOAD_CONFIRMACAO";
-		if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.RETORNO)) {
+		if (arquivo.getTipoArquivo().getTipoArquivo().equals(TipoArquivoFebraban.RETORNO)) {
 			constanteTipoAcao = "XML_UPLOAD_RETORNO";
 		}
 		StringBuffer mensagem = new StringBuffer();

@@ -8,19 +8,26 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.dataProvider.DataProvider2;
+import br.com.ieptbto.cra.component.dataTable.CraDataTable;
+import br.com.ieptbto.cra.dataProvider.LogCraProvider;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.LogCra;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.LoggerMediator;
@@ -91,17 +98,17 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
 							if (!dataInicio.isBefore(dataFim))
 								if (!dataInicio.isEqual(dataFim))
-									throw new InfraException("A data de início deve ser antes da data fim.");
+									throw new InfraException("A data de início deve ser antes da data fim...");
 						} else
-							throw new InfraException("As duas datas devem ser preenchidas.");
+							throw new InfraException("As duas datas devem ser preenchidas...");
 					}
 					setResponsePage(new CentralDeAcoesPage(dataInicio, dataFim, instituicao));
 
 				} catch (InfraException ex) {
 					error(ex.getMessage());
 				} catch (Exception e) {
-					error("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
-					e.printStackTrace();
+					error("Não foi possível consultar os logs de ações. Favor entrar em contato com a CRA...");
+					logger.info(e.getMessage(), e);
 				}
 			}
 		};
@@ -120,13 +127,13 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 		return dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataFim)));
 	}
 
-	private DropDownChoice<TipoInstituicaoCRA> textFieldTipoInstituicao() {
-		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
-		choices.add(TipoInstituicaoCRA.CARTORIO);
-		choices.add(TipoInstituicaoCRA.CONVENIO);
-		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao",
-				new Model<TipoInstituicaoCRA>(), choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
+	private DropDownChoice<TipoInstituicaoSistema> textFieldTipoInstituicao() {
+		List<TipoInstituicaoSistema> choices = new ArrayList<TipoInstituicaoSistema>();
+		choices.add(TipoInstituicaoSistema.CARTORIO);
+		choices.add(TipoInstituicaoSistema.CONVENIO);
+		choices.add(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA);
+		final DropDownChoice<TipoInstituicaoSistema> tipoInstituicao = new DropDownChoice<TipoInstituicaoSistema>("tipoInstituicao",
+				new Model<TipoInstituicaoSistema>(), choices, new ChoiceRenderer<TipoInstituicaoSistema>("label"));
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -134,19 +141,19 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				TipoInstituicaoCRA tipo = tipoInstituicao.getModelObject();
+				TipoInstituicaoSistema tipo = tipoInstituicao.getModelObject();
 
 				if (tipoInstituicao.getModelObject() != null) {
-					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
+					if (tipo.equals(TipoInstituicaoSistema.CONVENIO)) {
 						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
-					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					} else if (tipo.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
 						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
-					} else if (tipo.equals(TipoInstituicaoCRA.CARTORIO)) {
-						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio"));
+					} else if (tipo.equals(TipoInstituicaoSistema.CARTORIO)) {
+						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getCartorios());
 					}
@@ -175,7 +182,69 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 	}
 
 	private void dataTableAcoes() {
-		add(new DataTableAcoesPanel("panelDataTableAcoes", new DataProvider2<LogCra>(buscarLoggs())));
+		List<IColumn<LogCra, String>> columns = new ArrayList<>();
+		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("DATA E HORA"), "data") {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void populateItem(Item<ICellPopulator<LogCra>> item, String id, IModel<LogCra> model) {
+				item.add(new Label(id, DataUtil.localDateToString(model.getObject().getData()) + " ás "
+						+ DataUtil.localTimeToString("HH:mm:ss", model.getObject().getHora())));
+			}
+		});
+		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("AÇÃO"), "acao.label"));
+		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("INSTITUIÇÃO"), "instituicao"));
+		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("DESCRIÇÃO"), "descricao") {
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void populateItem(Item<ICellPopulator<LogCra>> item, String id, IModel<LogCra> rowModel) {
+				if (rowModel.getObject().getDescricao() == null) {
+					item.add(new Label(id, "Sem Descrição"));
+				} else if (rowModel.getObject().getDescricao().length() > 80) {
+					item.add(new Label(id, rowModel.getObject().getDescricao().substring(0, 79)).setEscapeModelStrings(false));
+				} else {
+					item.add(new Label(id, rowModel.getObject().getDescricao()));
+				}
+			}
+		});
+		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("OCORRÊNCIA"), "ocorrencia") {
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getCssClass() {
+				return "text-center";
+			}
+
+			@Override
+			public void populateItem(Item<ICellPopulator<LogCra>> item, String componentId, IModel<LogCra> rowModel) {
+				Label label = new Label(componentId, rowModel.getObject().getTipoLog().getLabel());
+				label.setMarkupId(rowModel.getObject().getTipoLog().getIdHtml());
+				label.setOutputMarkupId(true);
+				item.add(label);
+			}
+		});
+		columns.add(new AbstractColumn<LogCra, String>(new Model<String>("AÇÕES")) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void populateItem(Item<ICellPopulator<LogCra>> cellItem, String id, IModel<LogCra> model) {
+				cellItem.add(new LogCraActionPanel(id, model));
+			}
+
+			@Override
+			public String getCssClass() {
+				return "col-center text-center col-action";
+			} 
+		});
+		LogCraProvider provider = new LogCraProvider(buscarLoggs());
+		add(new CraDataTable<LogCra>("panelDataTableAcoes", new Model<LogCra>(), columns, provider, true));
 	}
 
 	public List<Instituicao> getListaInstituicoes() {

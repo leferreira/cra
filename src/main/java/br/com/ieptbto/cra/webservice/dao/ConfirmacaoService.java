@@ -20,7 +20,7 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
-import br.com.ieptbto.cra.enumeration.CraServiceEnum;
+import br.com.ieptbto.cra.enumeration.CraServices;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.ArquivoException;
@@ -28,8 +28,8 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
-import br.com.ieptbto.cra.webservice.VO.MensagemCra;
 import br.com.ieptbto.cra.webservice.receiver.ConfirmacaoReceiver;
+import br.com.ieptbto.cra.webservice.vo.AbstractMensagemVO;
 
 /**
  * 
@@ -44,7 +44,7 @@ public class ConfirmacaoService extends CraWebService {
 	@Autowired
 	private ConfirmacaoReceiver confirmacaoReceiver;
 
-	private MensagemCra mensagemCra;
+	private AbstractMensagemVO mensagemCra;
 	private String resposta;
 
 	/**
@@ -67,7 +67,7 @@ public class ConfirmacaoService extends CraWebService {
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_CONFIRMACAO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.DOWNLOAD_ARQUIVO_CONFIRMACAO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
@@ -132,7 +132,7 @@ public class ConfirmacaoService extends CraWebService {
 			if (usuario == null) {
 				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_CONFIRMACAO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_CONFIRMACAO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {

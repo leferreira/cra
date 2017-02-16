@@ -24,7 +24,7 @@ import br.com.ieptbto.cra.component.dataTable.CraLinksPanel;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.ViewBatimentoRetorno;
+import br.com.ieptbto.cra.entidade.view.ViewBatimentoRetorno;
 import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.BatimentoMediator;

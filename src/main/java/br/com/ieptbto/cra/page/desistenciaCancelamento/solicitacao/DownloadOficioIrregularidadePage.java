@@ -16,9 +16,9 @@ import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.component.CustomFeedbackPanel;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
@@ -75,13 +75,12 @@ public class DownloadOficioIrregularidadePage extends AbstractWebPage<Usuario> {
 
 	private CodigoIrregularidade getCodigoIrregularidade() {
 		String irregularidade = this.requestParams.getParameterValue("irregularidade").toString();
-
 		if (irregularidade != null) {
 			if (StringUtils.isNotBlank(irregularidade)) {
 				return CodigoIrregularidade.getIrregularidade(irregularidade);
 			}
-		} 
-		throw new InfraException("O Código Irregularidade informado é inválido, ou não existe. Favor entrar em contato com a CRA...");
+		}
+		return CodigoIrregularidade.IRREGULARIDADE_0;
 	}
 
 	private TipoSolicitacaoDesistenciaCancelamento getTipoSolicitacao() {
@@ -89,12 +88,17 @@ public class DownloadOficioIrregularidadePage extends AbstractWebPage<Usuario> {
 		
 		try {
 			if (StringUtils.isNotBlank(tipoSolicitacao)) {
-				TipoArquivoEnum tipoArquivo = TipoArquivoEnum.getTipoArquivoEnum(tipoSolicitacao.toUpperCase().trim());
+				TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.getTipoArquivoFebraban(tipoSolicitacao.toUpperCase().trim());
 				
-				if (tipoArquivo.equals(TipoArquivoEnum.DEVOLUCAO_DE_PROTESTO)) {
+				if (tipoArquivo.equals(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO)) {
+					if (getCodigoIrregularidade() == CodigoIrregularidade.IRREGULARIDADE_0) {
+						return TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_DESISTENCIA_PROTESTO;
+					}
 					return TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_DESISTENCIA_PROTESTO_IRREGULARIDADE;
-				} else if (tipoArquivo.equals(TipoArquivoEnum.CANCELAMENTO_DE_PROTESTO)) {
+				} else if (tipoArquivo.equals(TipoArquivoFebraban.CANCELAMENTO_DE_PROTESTO)) {
 					return TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO;
+				} else if (tipoArquivo.equals(TipoArquivoFebraban.AUTORIZACAO_DE_CANCELAMENTO)) {
+					return TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO;
 				} else {
 					throw new InfraException("O Tipo da Solicitação informado é inválido, ou não existe. Favor entrar em contato com a CRA...");
 				}
@@ -109,7 +113,6 @@ public class DownloadOficioIrregularidadePage extends AbstractWebPage<Usuario> {
 	
 	private String getNossoNumero() {
 		String nossoNumero = this.requestParams.getParameterValue("nossoNumero").toString();
-		
 		if (StringUtils.isBlank(nossoNumero)) {
 			return StringUtils.EMPTY;
 		}

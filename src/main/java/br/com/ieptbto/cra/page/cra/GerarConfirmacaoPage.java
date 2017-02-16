@@ -69,7 +69,7 @@ public class GerarConfirmacaoPage extends BasePage<Confirmacao> {
 				List<Remessa> confirmacoes = confirmacoesPendentes.getModelObject();
 				
 				try {
-					if (confirmacaoMediator.verificarArquivoConfirmacaoGeradoCra().equals(true)) {
+					if (confirmacaoMediator.verificarArquivoConfirmacaoCra().equals(true)) {
 						throw new InfraException("Não é possível gerar as confirmações novamente, arquivos já liberados na data atual!");
 					}
 					if (confirmacoes.isEmpty()) {

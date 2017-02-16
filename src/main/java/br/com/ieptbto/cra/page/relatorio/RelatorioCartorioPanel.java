@@ -24,8 +24,8 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -168,12 +168,12 @@ public class RelatorioCartorioPanel extends Panel  {
 		return tipoRelatorio;
 	}
 	
-	private DropDownChoice<TipoInstituicaoCRA> tipoInstituicao() {
-		IChoiceRenderer<TipoInstituicaoCRA> renderer = new ChoiceRenderer<TipoInstituicaoCRA>("label");
-		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
-		choices.add(TipoInstituicaoCRA.CONVENIO);
-		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", new Model<TipoInstituicaoCRA>(), choices, renderer);
+	private DropDownChoice<TipoInstituicaoSistema> tipoInstituicao() {
+		IChoiceRenderer<TipoInstituicaoSistema> renderer = new ChoiceRenderer<TipoInstituicaoSistema>("label");
+		List<TipoInstituicaoSistema> choices = new ArrayList<TipoInstituicaoSistema>();
+		choices.add(TipoInstituicaoSistema.CONVENIO);
+		choices.add(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA);
+		final DropDownChoice<TipoInstituicaoSistema> tipoInstituicao = new DropDownChoice<TipoInstituicaoSistema>("tipoInstituicao", new Model<TipoInstituicaoSistema>(), choices, renderer);
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 			
 			/***/
@@ -181,13 +181,13 @@ public class RelatorioCartorioPanel extends Panel  {
 			
 			@Override
             protected void onUpdate(AjaxRequestTarget target){
-				TipoInstituicaoCRA tipo = tipoInstituicao.getModelObject();
+				TipoInstituicaoSistema tipoInstituicaoSistema = tipoInstituicao.getModelObject();
 				
 				if (tipoInstituicao.getModelObject() != null) {
-					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
+					if (tipoInstituicaoSistema.equals(TipoInstituicaoSistema.CONVENIO)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
-					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					} else if (tipoInstituicaoSistema.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
 					}

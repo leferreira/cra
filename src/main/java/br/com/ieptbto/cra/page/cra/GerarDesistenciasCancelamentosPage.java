@@ -17,8 +17,8 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.ConvenioMediator;
+import br.com.ieptbto.cra.mediator.SolicitacaoDesistenciaCancelamentoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -30,13 +30,12 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesistenciaCancelamento> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private ConvenioMediator convenioMediator;
+	ConvenioMediator convenioMediator;
 	@SpringBean
-	private CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	SolicitacaoDesistenciaCancelamentoMediator solicitacaoDesistenciaCancelamentoMediator;
 
 	private List<SolicitacaoDesistenciaCancelamento> solicitacoesDesistenciasCancelamentos;
 	private Usuario usuario;
@@ -79,8 +78,7 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 	}
 
 	private void listaSolicitacoesDesistenciasCancelamento() {
-		add(new ListView<SolicitacaoDesistenciaCancelamento>("listaDesistenciasCancelamento",
-				buscarTitulosDesistenciasCancelamentosPendetes()) {
+		add(new ListView<SolicitacaoDesistenciaCancelamento>("listaDesistenciasCancelamento", buscarTitulosDesistenciasCancelamentosPendetes()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -107,7 +105,7 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 
 			@Override
 			protected List<SolicitacaoDesistenciaCancelamento> load() {
-				solicitacoesDesistenciasCancelamentos = cancelamentoProtestoMediator.buscarSolicitacoesDesistenciasCancelamentos();
+				solicitacoesDesistenciasCancelamentos = solicitacaoDesistenciaCancelamentoMediator.buscarSolicitacoesDesistenciasCancelamentos();
 				return solicitacoesDesistenciasCancelamentos;
 			}
 		};

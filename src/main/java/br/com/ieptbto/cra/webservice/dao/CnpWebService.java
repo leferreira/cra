@@ -22,11 +22,11 @@ import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
-import br.com.ieptbto.cra.mediator.CraServiceMediator;
-import br.com.ieptbto.cra.webservice.VO.Descricao;
-import br.com.ieptbto.cra.webservice.VO.Detalhamento;
-import br.com.ieptbto.cra.webservice.VO.Mensagem;
-import br.com.ieptbto.cra.webservice.VO.MensagemXml;
+import br.com.ieptbto.cra.mediator.CraMediator;
+import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
+import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
 
 /**
  * @author Thasso Araújo
@@ -44,7 +44,7 @@ public class CnpWebService {
 	public static final String HORA_FIM_ENVIO = "23:59:59";
 
 	@Autowired
-	protected CraServiceMediator craServiceMediator;
+	protected CraMediator craServiceMediator;
 	@Autowired
 	protected LoggerCra loggerCra;
 
@@ -52,8 +52,8 @@ public class CnpWebService {
 	protected LocalTime horaFimServico;
 
 	protected String mensagemServicoIndisponivel(Usuario usuario) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -66,8 +66,8 @@ public class CnpWebService {
 
 	protected String mensagemDataInvalida(Usuario usuario) {
 		logger.error("Data informada para CNP na consulta do movimento é inválida");
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -79,8 +79,8 @@ public class CnpWebService {
 	}
 
 	protected String mensagemSemMovimentoNessaData(Usuario usuario) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -92,9 +92,9 @@ public class CnpWebService {
 	}
 
 	protected String usuarioInvalido() {
-		MensagemXml mensagemXml = new MensagemXml();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
 
-		Descricao descricao = new Descricao();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 
@@ -105,9 +105,9 @@ public class CnpWebService {
 	}
 
 	protected String usuarioNaoPermitidoConsultaArquivoCNP() {
-		MensagemXml mensagemXml = new MensagemXml();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
 
-		Descricao descricao = new Descricao();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 
@@ -118,8 +118,8 @@ public class CnpWebService {
 	}
 
 	protected String dadosArquivoCnpEmBranco(Usuario usuario) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -131,8 +131,8 @@ public class CnpWebService {
 	}
 
 	protected String servicoNaoDisponivelForaDoHorarioEnvio(Usuario usuario) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -144,8 +144,8 @@ public class CnpWebService {
 	}
 
 	protected String mensagemLoteCnpVazioOuNenhumRegistroValido(Usuario usuario) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -157,8 +157,8 @@ public class CnpWebService {
 	}
 
 	protected String servicoNaoDisponivelForaDoHorarioConsulta(Usuario usuario) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -170,8 +170,8 @@ public class CnpWebService {
 	}
 
 	protected String naoHaRemessasParaArquivoCnp(Usuario usuario) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -183,8 +183,8 @@ public class CnpWebService {
 	}
 
 	protected String arquivoCnpJaEnviadoHoje(Usuario usuario) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -196,8 +196,8 @@ public class CnpWebService {
 	}
 
 	protected String envio5anosSucesso(Usuario usuario) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -235,16 +235,16 @@ public class CnpWebService {
 		return null;
 	}
 
-	protected MensagemXml gerarMensagemSucesso(Usuario usuario, LoteCnp loteCnp) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+	protected MensagemXmlVO gerarMensagemSucesso(Usuario usuario, LoteCnp loteCnp) {
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
 
-		Detalhamento detalhamento = new Detalhamento();
-		detalhamento.setMensagem(new ArrayList<Mensagem>());
-		Mensagem mensagem = new Mensagem();
+		DetalhamentoVO detalhamento = new DetalhamentoVO();
+		detalhamento.setMensagem(new ArrayList<MensagemVO>());
+		MensagemVO mensagem = new MensagemVO();
 		mensagem.setDescricao("Foram enviados " + loteCnp.getRegistrosCnp().size() + " registros para CNP.");
 		detalhamento.getMensagem().add(mensagem);
 
@@ -255,9 +255,9 @@ public class CnpWebService {
 		return mensagemXml;
 	}
 
-	protected MensagemXml gerarMensagemErroProcessamento() {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+	protected MensagemXmlVO gerarMensagemErroProcessamento() {
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 
@@ -267,9 +267,9 @@ public class CnpWebService {
 		return mensagemXml;
 	}
 
-	protected MensagemXml gerarMensagemErroProcessamento(String descricaoFinal) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+	protected MensagemXmlVO gerarMensagemErroProcessamento(String descricaoFinal) {
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 

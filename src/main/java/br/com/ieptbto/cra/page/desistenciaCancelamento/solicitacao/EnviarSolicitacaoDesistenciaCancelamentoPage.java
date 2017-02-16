@@ -25,11 +25,12 @@ import org.joda.time.LocalTime;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.MotivoSolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.enumeration.TipoSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
+import br.com.ieptbto.cra.enumeration.regra.TipoOcorrencia;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.SolicitacaoDesistenciaCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -42,14 +43,13 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<SolicitacaoDesistenciaCancelamento> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private TituloMediator tituloMediator;
+	TituloMediator tituloMediator;
 	@SpringBean
-	private CancelamentoProtestoMediator cancelamentoProtestoMediator;
-
+	SolicitacaoDesistenciaCancelamentoMediator cancelamentoProtestoMediator;
+	
 	private TituloRemessa titulo;
 	private SolicitacaoDesistenciaCancelamento solicitacao;
 	private FileUploadField fileUploadField;
@@ -58,7 +58,6 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	public EnviarSolicitacaoDesistenciaCancelamentoPage(TituloRemessa titulo) {
 		this.solicitacao = new SolicitacaoDesistenciaCancelamento();
 		this.titulo = titulo;
-
 		adicionarComponentes();
 	}
 
@@ -73,7 +72,6 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	private void formularioSolicitacao() {
 		Form<SolicitacaoDesistenciaCancelamento> form = new Form<SolicitacaoDesistenciaCancelamento>("form", getModel()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -88,9 +86,9 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 				try {
 					MotivoSolicitacaoDesistenciaCancelamento motivo = radioMotivo.getModelObject();
 					if (MotivoSolicitacaoDesistenciaCancelamento.PAGAMENTO_AO_CREDOR.equals(motivo)) {
-						if (titulo.getSituacaoTitulo().equals("ABERTO")) {
+						if (titulo.getSituacaoTitulo().equals(TipoOcorrencia.ABERTO.getLabel())) {
 							solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_DESISTENCIA_PROTESTO);
-						} else if (titulo.getSituacaoTitulo().equals("PROTESTADO")) {
+						} else if (titulo.getSituacaoTitulo().equals(TipoOcorrencia.PROTESTADO.getLabel())) {
 							solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
 						}
 					}
@@ -98,8 +96,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 					if (MotivoSolicitacaoDesistenciaCancelamento.IRREGULARIDADE_NO_TITULO_APRESENTADO.equals(motivo)) {
 						if (solicitacao.getCodigoIrregularidade().equals(CodigoIrregularidade.IRREGULARIDADE_0)
 								|| solicitacao.getCodigoIrregularidade().equals(CodigoIrregularidade.IRREGULARIDADE_CONVENIO)) {
-							throw new InfraException(
-									"A irregularidade informada não pode ser aplicada. Por favor informe uma outra irregularidade!");
+							throw new InfraException("A irregularidade informada não pode ser aplicada. Por favor informe uma outra irregularidade!");
 						}
 						if (fileUploadField.getFileUpload() != null) {
 							if (!fileUploadField.getFileUpload().getClientFileName().toUpperCase().contains(".ZIP")) {
@@ -109,10 +106,11 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 								throw new InfraException("Tamanho do arquivo anexo excedido. Limite máximo de 5 MB.");
 							}
 						}
-						if (titulo.getSituacaoTitulo().equals("ABERTO")) {
+						if (titulo.getSituacaoTitulo().equals(TipoOcorrencia.ABERTO.getLabel())) {
 							solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_DESISTENCIA_PROTESTO_IRREGULARIDADE);
-						} else if (titulo.getSituacaoTitulo().equals("PROTESTADO")) {
-							solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
+							if (titulo.getSituacaoTitulo().equals(TipoOcorrencia.PROTESTADO.getLabel())) {
+								solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
+							}
 						}
 					}
 
@@ -140,7 +138,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 
 	private void criarCampoAnexoOficio() {
 		this.fileUploadField = new FileUploadField("anexoDesistencia", new ListModel<FileUpload>());
-		this.fileUploadField.setLabel(new Model<String>("Anexo de Ofício"));
+		this.fileUploadField.setLabel(new Model<String>("Anexo de Ofício/Carta Anuência"));
 	}
 	
 	private void criarRadioMotivo() {

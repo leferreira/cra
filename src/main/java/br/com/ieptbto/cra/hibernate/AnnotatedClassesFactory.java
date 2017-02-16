@@ -63,7 +63,12 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
-import br.com.ieptbto.cra.entidade.ViewBatimentoRetorno;
+import br.com.ieptbto.cra.entidade.view.AutorizacaoPendente;
+import br.com.ieptbto.cra.entidade.view.CancelamentoPendente;
+import br.com.ieptbto.cra.entidade.view.DesistenciaPendente;
+import br.com.ieptbto.cra.entidade.view.RemessaPendente;
+import br.com.ieptbto.cra.entidade.view.ViewBatimentoRetorno;
+import br.com.ieptbto.cra.entidade.view.ViewTitulo;
 
 /**
  * 
@@ -139,6 +144,11 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(TaxaCra.class);
 		
 		classesHibernate.add(ViewBatimentoRetorno.class);
+		classesHibernate.add(ViewTitulo.class);
+		classesHibernate.add(RemessaPendente.class);
+		classesHibernate.add(DesistenciaPendente.class);
+		classesHibernate.add(CancelamentoPendente.class);
+		classesHibernate.add(AutorizacaoPendente.class);
 	}
 
 	/**

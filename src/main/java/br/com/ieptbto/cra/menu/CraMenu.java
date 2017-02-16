@@ -6,7 +6,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.PermissaoUsuario;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -54,7 +54,7 @@ public class CraMenu extends Panel {
 		MenuItem itemCentralProtesto = new MenuItem("CentralProtestosCartorio");
 		itemCentralProtesto.authorize(rolesPesquisar);
 		itemCentralProtesto.setVisible(false);
-		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoSistema.CARTORIO)) {
 			itemCentralProtesto.setVisible(true);
 		}
 
@@ -74,7 +74,7 @@ public class CraMenu extends Panel {
 
 		/** Relatorio Padrão */
 		MenuItem menuRelatorioPadrao = menu.addItem("menuRelatorioPadrao", rolesPesquisar);
-		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoSistema.CRA)) {
 			menuRelatorioPadrao.setVisible(false);
 		} else {
 			menuRelatorioPadrao.setVisible(true);
@@ -83,7 +83,7 @@ public class CraMenu extends Panel {
 
 		/** Relatorio Cra */
 		MenuItem menuRelatorioCra = menu.addItem("menuRelatorioCra", rolesPesquisar);
-		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoSistema.CRA)) {
 			menuRelatorioCra.setVisible(true);
 		} else {
 			menuRelatorioCra.setVisible(false);

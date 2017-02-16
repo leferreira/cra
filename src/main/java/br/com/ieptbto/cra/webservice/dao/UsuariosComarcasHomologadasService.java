@@ -22,9 +22,9 @@ import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
-import br.com.ieptbto.cra.webservice.VO.Descricao;
-import br.com.ieptbto.cra.webservice.VO.Detalhamento;
-import br.com.ieptbto.cra.webservice.VO.MensagemXml;
+import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
+import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
 
 /**
  * @author Thasso Araújo
@@ -46,10 +46,10 @@ public class UsuariosComarcasHomologadasService extends CraWebService {
 	}
 
 	protected String getMensagemFalhaAutenticao() {
-		MensagemXml msgRetorno = new MensagemXml();
+		MensagemXmlVO msgRetorno = new MensagemXmlVO();
 
-		msgRetorno.setDescricao(new Descricao());
-		msgRetorno.setDetalhamento(new Detalhamento());
+		msgRetorno.setDescricao(new DescricaoVO());
+		msgRetorno.setDetalhamento(new DetalhamentoVO());
 
 		msgRetorno.setCodigoFinal(CodigoErro.SERPRO_FALHA_NA_AUTENTICACAO.getCodigo());
 		msgRetorno.setDescricaoFinal(CodigoErro.SERPRO_FALHA_NA_AUTENTICACAO.getDescricao());

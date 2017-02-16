@@ -20,13 +20,13 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.ArquivoFormBean;
+import br.com.ieptbto.cra.beans.ArquivoBean;
 import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.enumeration.TipoCampo51;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -47,16 +47,17 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private RemessaMediator remessaMediator;
 	@SpringBean
-	DownloadMediator downloadMediator;
+	private DownloadMediator downloadMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
+
 	private Usuario usuario;
 	private Arquivo arquivo;
-	private ArquivoFormBean arquivoFormBean;
+	private ArquivoBean arquivoFormBean;
 
-	public ListaArquivoCartorioPage(ArquivoFormBean arquivoFormBean, Usuario usuario) {
+	public ListaArquivoCartorioPage(ArquivoBean arquivoFormBean, Usuario usuario) {
 		this.arquivo = new Arquivo();
 		this.arquivoFormBean = arquivoFormBean;
 		this.usuario = getUser();
@@ -96,7 +97,7 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 				item.add(linkArquivo);
 				item.add(new Label("dataEnvio", DataUtil.localDateToString(remessa.getArquivo().getDataEnvio())));
 
-				if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoEnum.REMESSA)) {
+				if (remessa.getArquivo().getTipoArquivo().getTipoArquivo().equals(TipoArquivoFebraban.REMESSA)) {
 					String instituicao = remessa.getInstituicaoOrigem().getNomeFantasia();
 					item.add(new Label("instituicao", instituicao));
 					item.add(new Label("envio", remessa.getArquivo().getInstituicaoRecebe().getNomeFantasia()));
@@ -111,8 +112,8 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 				}
 				item.add(new Label("horaEnvio", DataUtil.localTimeToString(remessa.getArquivo().getHoraEnvio())));
 				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
-				divInfo.add(new AttributeAppender("id", remessa.getStatusRemessa().getLabel()));
-				divInfo.add(new Label("status", remessa.getStatusRemessa().getLabel().toUpperCase()));
+				divInfo.add(new AttributeAppender("id", remessa.getStatusDownload().getLabel()));
+				divInfo.add(new Label("status", remessa.getStatusDownload().getLabel().toUpperCase()));
 				item.add(divInfo);
 			}
 
@@ -127,9 +128,7 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 						try {
 							File file = downloadMediator.baixarRemessaTXT(getUser(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
-
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-									new ResourceStreamRequestHandler(resourceStream, remessa.getArquivo().getNomeArquivo()));
+							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
 						} catch (Exception e) {
@@ -157,7 +156,6 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 						try {
 							File file = remessaMediator.processarArquivosAnexos(getUser(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
-
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
 						} catch (InfraException ex) {
 							getFeedbackPanel().error(ex.getMessage());
@@ -211,7 +209,7 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 
 			@Override
 			protected List<Remessa> load() {
-				ArquivoFormBean bean = getArquivoFormBean();
+				ArquivoBean bean = getArquivoFormBean();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 
@@ -227,7 +225,7 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 		};
 	}
 
-	public ArquivoFormBean getArquivoFormBean() {
+	public ArquivoBean getArquivoFormBean() {
 		return arquivoFormBean;
 	}
 

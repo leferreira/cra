@@ -17,11 +17,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.bean.RelatorioFormBean;
+import br.com.ieptbto.cra.beans.RelatorioBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
 import br.com.ieptbto.cra.enumeration.TipoExportacaoRelatorio;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 
 public class RelatorioTitulosInputPanel extends Panel {
@@ -36,7 +36,7 @@ public class RelatorioTitulosInputPanel extends Panel {
 	private List<Instituicao> listaInstituicoes;
 	private DropDownChoice<Instituicao> dropDownInstituicao;
 
-	public RelatorioTitulosInputPanel(String id, IModel<RelatorioFormBean> model, FileUploadField fileUploadField) {
+	public RelatorioTitulosInputPanel(String id, IModel<RelatorioBean> model, FileUploadField fileUploadField) {
 		super(id, model);
 		this.fileUploadField = fileUploadField;
 
@@ -116,12 +116,12 @@ public class RelatorioTitulosInputPanel extends Panel {
 		return dropDownInstituicao;
 	}
 
-	private DropDownChoice<TipoInstituicaoCRA> dropDownTipoInstituicao() {
-		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
-		choices.add(TipoInstituicaoCRA.CONVENIO);
-		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao =
-				new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
+	private DropDownChoice<TipoInstituicaoSistema> dropDownTipoInstituicao() {
+		List<TipoInstituicaoSistema> choices = new ArrayList<TipoInstituicaoSistema>();
+		choices.add(TipoInstituicaoSistema.CONVENIO);
+		choices.add(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA);
+		final DropDownChoice<TipoInstituicaoSistema> tipoInstituicao =
+				new DropDownChoice<TipoInstituicaoSistema>("tipoInstituicao", choices, new ChoiceRenderer<TipoInstituicaoSistema>("label"));
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -129,13 +129,13 @@ public class RelatorioTitulosInputPanel extends Panel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				TipoInstituicaoCRA tipo = tipoInstituicao.getModelObject();
+				TipoInstituicaoSistema tipo = tipoInstituicao.getModelObject();
 
 				if (tipoInstituicao.getModelObject() != null) {
-					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
+					if (tipo.equals(TipoInstituicaoSistema.CONVENIO)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
-					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					} else if (tipo.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
 					}

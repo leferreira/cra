@@ -31,7 +31,7 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.dataProvider.BatimentoRetornoProvider;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
-import br.com.ieptbto.cra.entidade.ViewBatimentoRetorno;
+import br.com.ieptbto.cra.entidade.view.ViewBatimentoRetorno;
 import br.com.ieptbto.cra.enumeration.TipoBatimento;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
@@ -187,6 +187,22 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "col-center text-center";
 			}
 		});
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("INSTITUIÇÃO"), "nomeFantasia_Instituicao"));
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("ARQUIVO"), "nomeArquivo_Arquivo") {
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void populateItem(Item<ICellPopulator<ViewBatimentoRetorno>> item, String id, IModel<ViewBatimentoRetorno> model) {
+				item.add(new CraLinksPanel(id, model.getObject().getNomeArquivo_Arquivo(), model.getObject().getIdArquivo_Arquivo()));
+			}
+			
+			@Override
+			public String getCssClass() {
+				return "text-center";
+			}
+		});
 		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("DATA"), "dataEnvio_Arquivo"){
 			
 			/***/
@@ -217,22 +233,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "col-center text-center";
 			}
 		});
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("INSTITUIÇÃO"), "nomeFantasia_Cartorio"));
-		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("ARQUIVO"), "nomeArquivo_Arquivo") {
-		
-			/***/
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public void populateItem(Item<ICellPopulator<ViewBatimentoRetorno>> item, String id, IModel<ViewBatimentoRetorno> model) {
-				item.add(new CraLinksPanel(id, model.getObject().getNomeArquivo_Arquivo(), model.getObject().getIdArquivo_Arquivo()));
-			}
-
-			@Override
-			public String getCssClass() {
-				return "text-center";
-			}
-		});
+		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("ENVIADO POR"), "nomeFantasia_Cartorio"));
 		columns.add(new PropertyColumn<ViewBatimentoRetorno, String>(new Model<String>("VALOR PAGOS"), "totalValorlPagos"){
 			
 			/***/

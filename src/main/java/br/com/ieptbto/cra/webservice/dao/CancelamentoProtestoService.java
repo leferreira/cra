@@ -17,7 +17,7 @@ import br.com.ieptbto.cra.entidade.PedidoCancelamento;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
-import br.com.ieptbto.cra.enumeration.CraServiceEnum;
+import br.com.ieptbto.cra.enumeration.CraServices;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
@@ -25,12 +25,12 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.webservice.VO.Descricao;
-import br.com.ieptbto.cra.webservice.VO.Detalhamento;
-import br.com.ieptbto.cra.webservice.VO.Mensagem;
-import br.com.ieptbto.cra.webservice.VO.MensagemXml;
-import br.com.ieptbto.cra.webservice.VO.MensagemXmlDesistenciaCancelamentoSerpro;
-import br.com.ieptbto.cra.webservice.VO.TituloDetalhamentoSerpro;
+import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
+import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemXmlDesistenciaCancelamentoSerproVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
+import br.com.ieptbto.cra.webservice.vo.TituloDetalhamentoSerproVO;
 
 /**
  * @author Thasso Araújo
@@ -65,7 +65,7 @@ public class CancelamentoProtestoService extends CraWebService {
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_CANCELAMENTO_PROTESTO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_CANCELAMENTO_PROTESTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
@@ -94,11 +94,11 @@ public class CancelamentoProtestoService extends CraWebService {
 		return gerarMensagem(relatorio, CONSTANTE_RELATORIO_XML);
 	}
 
-	private MensagemXml gerarResposta(Arquivo arquivo, Usuario usuario) {
-		List<Mensagem> mensagens = new ArrayList<Mensagem>();
-		MensagemXml mensagemRetorno = new MensagemXml();
-		Descricao desc = new Descricao();
-		Detalhamento detal = new Detalhamento();
+	private MensagemXmlVO gerarResposta(Arquivo arquivo, Usuario usuario) {
+		List<MensagemVO> mensagens = new ArrayList<MensagemVO>();
+		MensagemXmlVO mensagemRetorno = new MensagemXmlVO();
+		DescricaoVO desc = new DescricaoVO();
+		DetalhamentoVO detal = new DetalhamentoVO();
 		detal.setMensagem(mensagens);
 
 		mensagemRetorno.setDescricao(desc);
@@ -107,14 +107,14 @@ public class CancelamentoProtestoService extends CraWebService {
 		mensagemRetorno.setDescricaoFinal(CodigoErro.CRA_SUCESSO.getDescricao());
 
 		desc.setDataEnvio(LocalDateTime.now().toString(DataUtil.PADRAO_FORMATACAO_DATAHORASEG));
-		desc.setTipoArquivo(Descricao.XML_UPLOAD_SUSTACAO);
+		desc.setTipoArquivo(DescricaoVO.XML_UPLOAD_SUSTACAO);
 		desc.setDataMovimento(arquivo.getDataEnvio().toString(DataUtil.PADRAO_FORMATACAO_DATA));
 		desc.setPortador(arquivo.getInstituicaoEnvio().getCodigoCompensacao());
 		desc.setUsuario(usuario.getNome());
 		desc.setNomeArquivo(nomeArquivo);
 
 		for (CancelamentoProtesto cp : arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
-			Mensagem mensagem = new Mensagem();
+			MensagemVO mensagem = new MensagemVO();
 			mensagem.setCodigo("0000");
 			mensagem.setMunicipio(cp.getCabecalhoCartorio().getCodigoMunicipio());
 			mensagem.setDescricao(formatarMensagemRetorno(cp));
@@ -123,7 +123,7 @@ public class CancelamentoProtestoService extends CraWebService {
 
 		for (Exception ex : getErros()) {
 			DesistenciaCancelamentoException exception = DesistenciaCancelamentoException.class.cast(ex);
-			Mensagem mensagem = new Mensagem();
+			MensagemVO mensagem = new MensagemVO();
 			mensagem.setDescricao(exception.getDescricao());
 			mensagem.setMunicipio(exception.getMunicipio());
 			mensagem.setCodigo(exception.getCodigoErro().getCodigo());
@@ -139,13 +139,13 @@ public class CancelamentoProtestoService extends CraWebService {
 	}
 
 	private String gerarMensagemSerpro(Arquivo arquivo, String constanteRelatorioXml) {
-		MensagemXmlDesistenciaCancelamentoSerpro mensagemCancelamento = new MensagemXmlDesistenciaCancelamentoSerpro();
+		MensagemXmlDesistenciaCancelamentoSerproVO mensagemCancelamento = new MensagemXmlDesistenciaCancelamentoSerproVO();
 		mensagemCancelamento.setNomeArquivo(arquivo.getNomeArquivo());
-		mensagemCancelamento.setTitulosDetalhamento(new ArrayList<TituloDetalhamentoSerpro>());
+		mensagemCancelamento.setTitulosDetalhamento(new ArrayList<TituloDetalhamentoSerproVO>());
 
 		for (CancelamentoProtesto cp : arquivo.getRemessaCancelamentoProtesto().getCancelamentoProtesto()) {
 			for (PedidoCancelamento pedidoCancelamento : cp.getCancelamentos()) {
-				TituloDetalhamentoSerpro titulo = new TituloDetalhamentoSerpro();
+				TituloDetalhamentoSerproVO titulo = new TituloDetalhamentoSerproVO();
 				titulo.setDataHora(DataUtil.localDateToStringddMMyyyy(new LocalDate()) + DataUtil.localTimeToStringMMmm(new LocalTime()));
 				titulo.setCodigoCartorio(pedidoCancelamento.getCancelamentoProtesto().getCabecalhoCartorio().getCodigoCartorio());
 				titulo.setNumeroTitulo(pedidoCancelamento.getNumeroTitulo());

@@ -16,10 +16,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.bean.TituloFormBean;
+import br.com.ieptbto.cra.beans.TituloBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 
@@ -33,17 +33,17 @@ public class BuscarTitulosInputPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
 
 	private List<Instituicao> listaInstituicoes;
 	private DropDownChoice<Instituicao> dropDownInstituicao;
 	private Label labelMunicipio;
 	private DropDownChoice<Instituicao> dropDownCartorio;
-	private TipoInstituicaoCRA tipoInstituicao;
+	private TipoInstituicaoSistema tipoInstituicao;
 
-	public BuscarTitulosInputPanel(String id, IModel<TituloFormBean> model, Usuario user) {
+	public BuscarTitulosInputPanel(String id, IModel<TituloBean> model, Usuario user) {
 		super(id, model);
 		this.tipoInstituicao = user.getInstituicao().getTipoInstituicao().getTipoInstituicao();
 
@@ -111,7 +111,7 @@ public class BuscarTitulosInputPanel extends Panel {
 	private Label labelBancoCovenio() {
 		Label labelBancoCovenio = new Label("labelBancoCovenio", "Banco/Convênio");
 		labelBancoCovenio.setOutputMarkupId(true);
-		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
 			labelBancoCovenio.setVisible(false);
 		}
 		return labelBancoCovenio;
@@ -122,19 +122,19 @@ public class BuscarTitulosInputPanel extends Panel {
 		dropDownInstituicao = new DropDownChoice<Instituicao>("bancoConvenio", getListaInstituicoes(), renderer);
 		dropDownInstituicao.setLabel(new Model<String>("Banco/Convênio"));
 		dropDownInstituicao.setOutputMarkupId(true);
-		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
 			dropDownInstituicao.setVisible(false);
 		}
 		return dropDownInstituicao;
 	}
 
-	private DropDownChoice<TipoInstituicaoCRA> dropDownTipoInstituicao() {
-		IChoiceRenderer<TipoInstituicaoCRA> renderer = new ChoiceRenderer<TipoInstituicaoCRA>("label");
-		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
-		choices.add(TipoInstituicaoCRA.CONVENIO);
-		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoCRA> dropDowntipoInstituicao =
-				new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, renderer);
+	private DropDownChoice<TipoInstituicaoSistema> dropDownTipoInstituicao() {
+		IChoiceRenderer<TipoInstituicaoSistema> renderer = new ChoiceRenderer<TipoInstituicaoSistema>("label");
+		List<TipoInstituicaoSistema> choices = new ArrayList<TipoInstituicaoSistema>();
+		choices.add(TipoInstituicaoSistema.CONVENIO);
+		choices.add(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA);
+		final DropDownChoice<TipoInstituicaoSistema> dropDowntipoInstituicao =
+				new DropDownChoice<TipoInstituicaoSistema>("tipoInstituicao", choices, renderer);
 		dropDowntipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -142,13 +142,13 @@ public class BuscarTitulosInputPanel extends Panel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				TipoInstituicaoCRA tipo = dropDowntipoInstituicao.getModelObject();
+				TipoInstituicaoSistema tipo = dropDowntipoInstituicao.getModelObject();
 
 				if (dropDowntipoInstituicao.getModelObject() != null) {
-					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
+					if (tipo.equals(TipoInstituicaoSistema.CONVENIO)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
-					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
+					} else if (tipo.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
 					}
@@ -160,7 +160,7 @@ public class BuscarTitulosInputPanel extends Panel {
 				target.add(dropDownInstituicao);
 			}
 		});
-		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
 			dropDowntipoInstituicao.setVisible(false);
 		}
 		dropDowntipoInstituicao.setLabel(new Model<String>("Tipo Instituição"));
@@ -170,7 +170,7 @@ public class BuscarTitulosInputPanel extends Panel {
 	private Label labelMunicipio() {
 		labelMunicipio = new Label("labelMunicipio", "Município");
 		labelMunicipio.setOutputMarkupId(true);
-		if (TipoInstituicaoCRA.CARTORIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoSistema.CARTORIO.equals(tipoInstituicao)) {
 			labelMunicipio.setVisible(false);
 		}
 		return labelMunicipio;
@@ -180,7 +180,7 @@ public class BuscarTitulosInputPanel extends Panel {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio");
 		dropDownCartorio = new DropDownChoice<Instituicao>("cartorio", instituicaoMediator.getCartorios(), renderer);
 		dropDownCartorio.setOutputMarkupId(true);
-		if (TipoInstituicaoCRA.CARTORIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoSistema.CARTORIO.equals(tipoInstituicao)) {
 			dropDownCartorio.setVisible(false);
 		}
 		return dropDownCartorio;

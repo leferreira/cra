@@ -8,7 +8,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.TituloFormBean;
+import br.com.ieptbto.cra.beans.TituloBean;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -26,7 +26,7 @@ public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 	private static final long serialVersionUID = 1L;
 
 	private TituloRemessa titulo;
-	private Form<TituloFormBean> form;
+	private Form<TituloBean> form;
 
 	public BuscarTitulosPage() {
 		this.titulo = new TituloRemessa();
@@ -40,15 +40,15 @@ public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 	}
 
 	private void setForm() {
-		TituloFormBean beanForm = new TituloFormBean();
-		this.form = new Form<TituloFormBean>("form", new CompoundPropertyModel<TituloFormBean>(beanForm)) {
+		TituloBean beanForm = new TituloBean();
+		this.form = new Form<TituloBean>("form", new CompoundPropertyModel<TituloBean>(beanForm)) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				TituloFormBean tituloFormBean = getModelObject();
+				TituloBean tituloFormBean = getModelObject();
 
 				try {
 					if (tituloFormBean.getDataInicio() != null) {
@@ -76,7 +76,7 @@ public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 				}
 			}
 		};
-		form.add(new BuscarTitulosInputPanel("buscarTitulosInputPanel", new CompoundPropertyModel<TituloFormBean>(beanForm), getUser()));
+		form.add(new BuscarTitulosInputPanel("buscarTitulosInputPanel", new CompoundPropertyModel<TituloBean>(beanForm), getUser()));
 		add(form);
 	}
 

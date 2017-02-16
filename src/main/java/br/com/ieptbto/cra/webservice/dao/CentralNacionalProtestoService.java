@@ -21,19 +21,19 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoCnpVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
-import br.com.ieptbto.cra.enumeration.CraServiceEnum;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.CraServices;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.webservice.VO.CnpCartorio;
-import br.com.ieptbto.cra.webservice.VO.CnpCartoriosConsultaXml;
-import br.com.ieptbto.cra.webservice.VO.CnpCartoriosConteudo;
-import br.com.ieptbto.cra.webservice.VO.CnpMunicipioCartorio;
-import br.com.ieptbto.cra.webservice.VO.Descricao;
-import br.com.ieptbto.cra.webservice.VO.MensagemXml;
+import br.com.ieptbto.cra.webservice.vo.CnpCartorioVO;
+import br.com.ieptbto.cra.webservice.vo.CnpCartoriosConsultaXmlVO;
+import br.com.ieptbto.cra.webservice.vo.CnpCartoriosConteudoVO;
+import br.com.ieptbto.cra.webservice.vo.CnpMunicipioCartorioVO;
+import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
 
 /**
  * @author Thasso Araújo
@@ -55,10 +55,10 @@ public class CentralNacionalProtestoService extends CnpWebService {
 			if (usuario == null) {
 				return usuarioInvalido();
 			}
-			if (!usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			if (!usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoSistema.CRA)) {
 				return usuarioNaoPermitidoConsultaArquivoCNP();
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			if (StringUtils.isBlank(data)) {
@@ -93,8 +93,8 @@ public class CentralNacionalProtestoService extends CnpWebService {
 	}
 
 	private String naoHaMovimentoParaEstaData(Usuario usuario, LocalDate dataMoviemnto) {
-		MensagemXml mensagemXml = new MensagemXml();
-		Descricao descricao = new Descricao();
+		MensagemXmlVO mensagemXml = new MensagemXmlVO();
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
@@ -126,15 +126,15 @@ public class CentralNacionalProtestoService extends CnpWebService {
 	}
 
 	private String gerarXmlConsultaCartoriosCnp(List<Instituicao> cartorios) {
-		CnpCartoriosConteudo conteudo = new CnpCartoriosConteudo();
-		conteudo.setCartorios(new ArrayList<CnpCartorio>());
+		CnpCartoriosConteudoVO conteudo = new CnpCartoriosConteudoVO();
+		conteudo.setCartorios(new ArrayList<CnpCartorioVO>());
 
 		Writer writer = new StringWriter();
 		JAXBContext context;
 		try {
 			for (Instituicao cartorio : cartorios) {
 				cartorio.setMunicipio(municipioMediator.carregarMunicipio(cartorio.getMunicipio()));
-				CnpCartorio cartorioCnp = new CnpCartorio();
+				CnpCartorioVO cartorioCnp = new CnpCartorioVO();
 				cartorioCnp.setCodigo("01");
 				cartorioCnp.setNomeFantasia(cartorio.getNomeFantasia());
 				cartorioCnp.setTabeliao(cartorio.getTabeliao());
@@ -147,14 +147,14 @@ public class CentralNacionalProtestoService extends CnpWebService {
 				cartorioCnp.setParticipante("1");
 				cartorioCnp.setUltimoEnvio(DataUtil.localDateToString(new LocalDate().minusDays(1)));
 
-				CnpMunicipioCartorio municipio = new CnpMunicipioCartorio();
+				CnpMunicipioCartorioVO municipio = new CnpMunicipioCartorioVO();
 				municipio.setNome(cartorio.getMunicipio().getNomeMunicipio());
 				municipio.setCodigo(cartorio.getMunicipio().getCodigoIBGE());
 				cartorioCnp.setMunicipio(municipio);
 
 				conteudo.getCartorios().add(cartorioCnp);
 			}
-			CnpCartoriosConsultaXml xml = new CnpCartoriosConsultaXml();
+			CnpCartoriosConsultaXmlVO xml = new CnpCartoriosConsultaXmlVO();
 			xml.setConteudo(conteudo);
 
 			context = JAXBContext.newInstance(xml.getClass());

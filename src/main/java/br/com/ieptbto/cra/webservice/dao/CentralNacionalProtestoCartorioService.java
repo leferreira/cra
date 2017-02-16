@@ -18,7 +18,7 @@ import br.com.ieptbto.cra.entidade.LoteCnp;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoCnpVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
-import br.com.ieptbto.cra.enumeration.CraServiceEnum;
+import br.com.ieptbto.cra.enumeration.CraServices;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
@@ -49,7 +49,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (StringUtils.isBlank(dados)) {
 				return dadosArquivoCnpEmBranco(usuario);
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_CNP_5_ANOS)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_CNP_5_ANOS)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			if (centralNacionalProtestoMediator.instituicaoEnviouLote5anos(usuario.getInstituicao())) {
@@ -92,7 +92,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			if (StringUtils.isBlank(dados)) {
 				return dadosArquivoCnpEmBranco(usuario);
 			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServiceEnum.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
+			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
 			lote = centralNacionalProtestoMediator.processarLoteDiario(usuario, converterStringArquivoCnpVO(dados));

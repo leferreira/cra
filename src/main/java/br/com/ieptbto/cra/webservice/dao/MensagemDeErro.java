@@ -10,12 +10,12 @@ import org.joda.time.LocalTime;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.webservice.VO.ComarcaDetalhamentoSerpro;
-import br.com.ieptbto.cra.webservice.VO.Descricao;
-import br.com.ieptbto.cra.webservice.VO.Detalhamento;
-import br.com.ieptbto.cra.webservice.VO.Mensagem;
-import br.com.ieptbto.cra.webservice.VO.MensagemXml;
-import br.com.ieptbto.cra.webservice.VO.MensagemXmlSerpro;
+import br.com.ieptbto.cra.webservice.vo.ComarcaDetalhamentoSerproVO;
+import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
+import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemXmlSerproVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
 
 /**
  * 
@@ -48,16 +48,16 @@ public class MensagemDeErro {
 		this.codigoCompensacao = codigoApresentante;
 	}
 
-	public MensagemXml getMensagemErro() {
-		MensagemXml mensagemXML = new MensagemXml();
-		Descricao descricao = getDescricao();
+	public MensagemXmlVO getMensagemErro() {
+		MensagemXmlVO mensagemXML = new MensagemXmlVO();
+		DescricaoVO descricao = getDescricao();
 
 		mensagemXML.setDescricao(descricao);
 
-		Detalhamento detalhamento = new Detalhamento();
+		DetalhamentoVO detalhamento = new DetalhamentoVO();
 
-		List<Mensagem> listaMensagens = new ArrayList<Mensagem>();
-		Mensagem mensagem = new Mensagem();
+		List<MensagemVO> listaMensagens = new ArrayList<MensagemVO>();
+		MensagemVO mensagem = new MensagemVO();
 		mensagem.setCodigo(getErro().getCodigo());
 		mensagem.setDescricao(getErro().getDescricao());
 		if (getDescricaoErro() != null) {
@@ -81,12 +81,12 @@ public class MensagemDeErro {
 		return mensagemXML;
 	}
 
-	public MensagemXmlSerpro getMensagemErroSerpro() {
-		MensagemXmlSerpro msgSucesso = new MensagemXmlSerpro();
+	public MensagemXmlSerproVO getMensagemErroSerpro() {
+		MensagemXmlSerproVO msgSucesso = new MensagemXmlSerproVO();
 		msgSucesso.setNomeArquivo(getNomeArquivo());
 
-		List<ComarcaDetalhamentoSerpro> listaComarcas = new ArrayList<ComarcaDetalhamentoSerpro>();
-		ComarcaDetalhamentoSerpro comarcaDetalhamento = new ComarcaDetalhamentoSerpro();
+		List<ComarcaDetalhamentoSerproVO> listaComarcas = new ArrayList<ComarcaDetalhamentoSerproVO>();
+		ComarcaDetalhamentoSerproVO comarcaDetalhamento = new ComarcaDetalhamentoSerproVO();
 		comarcaDetalhamento.setCodigoMunicipio(StringUtils.EMPTY);
 		comarcaDetalhamento.setDataHora(DataUtil.localDateToStringddMMyyyy(new LocalDate()) + DataUtil.localTimeToStringMMmm(new LocalTime()));
 		comarcaDetalhamento.setRegistro(StringUtils.EMPTY);
@@ -99,8 +99,8 @@ public class MensagemDeErro {
 		return msgSucesso;
 	}
 
-	private Descricao getDescricao() {
-		Descricao descricao = new Descricao();
+	private DescricaoVO getDescricao() {
+		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.getDataAtual() + " " + DataUtil.getHoraAtual());
 		if (nomeArquivo.contains("B")) {
 			descricao.setTipoArquivo("XML_UPLOAD_REMESSA");

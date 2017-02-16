@@ -68,8 +68,8 @@ public class ListaRemoverArquivoPage extends BasePage<Arquivo> {
 				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
 				item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
 				WebMarkupContainer divInfo = new WebMarkupContainer("divInfo");
-				divInfo.add(new AttributeAppender("id", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
-				divInfo.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()));
+				divInfo.add(new AttributeAppender("id", arquivo.getStatusArquivo().getStatusDownload().getLabel()));
+				divInfo.add(new Label("status", arquivo.getStatusArquivo().getStatusDownload().getLabel().toUpperCase()));
 				item.add(divInfo);
 				item.add(remover(arquivo));
 			}

@@ -16,7 +16,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.bean.TituloFormBean;
+import br.com.ieptbto.cra.beans.TituloBean;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Retorno;
@@ -43,10 +43,10 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 	@SpringBean
 	private TituloMediator tituloMediator;
 
-	private TituloFormBean tituloBean;
+	private TituloBean tituloBean;
 	private Usuario usuario;
 
-	public ListaTitulosPage(TituloFormBean tituloBean) {
+	public ListaTitulosPage(TituloBean tituloBean) {
 		this.tituloBean = tituloBean;
 		this.usuario = getUser();
 
@@ -191,7 +191,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 			@Override
 			protected List<TituloRemessa> load() {
-				TituloFormBean bean = getTituloBean();
+				TituloBean bean = getTituloBean();
 
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
@@ -207,7 +207,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		};
 	}
 
-	public TituloFormBean getTituloBean() {
+	public TituloBean getTituloBean() {
 		return tituloBean;
 	}
 
