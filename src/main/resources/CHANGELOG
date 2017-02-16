@@ -1,6 +1,16 @@
+-------------------- 1.0.2 ------------------
+
+16-Fev-2017 Thasso Araujo
+ # Otimização dos Relatórios de Títulos com a criação de views.
+ # Criação da View de Arquivos Pendentes para diminuir a carga de processamento.
+ # Ajuste na emissão de Desistências e Cancelamentos tornando o campo de anexo de carta de anuência opcional 
+ 	e deixando o campo de anexo de ofício obratório.
+ # Informação do código irregularidade 60, no campo de nome "Reservado", para os arquivos de CP da PGFN.
+ # Correção de Anexo de Documentos no Convênio.
+  
 -------------------- 1.0.1 ------------------
 
-8-Fev-2016 Thasso Araujo
+8-Fev-2017 Thasso Araujo
  # Arquivo de Script.sql que irá ter as queries a ser executadas antes de subir uma versão nova.
  # QUERY 1: "CRIAÇÃO DE CHAVE PRIMARIA COMPOSTA NA TABELA DE REGISTROS CNP".
  # Implementação de regra de na entidade RegistroCnp, com chave unica de vários campos, afim de impedir a duplicação a nível de banco.
