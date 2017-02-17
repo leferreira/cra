@@ -27,7 +27,7 @@ import br.com.ieptbto.cra.component.dataTable.CraDataTable;
 import br.com.ieptbto.cra.dataProvider.LogCraProvider;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.LogCra;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.LoggerMediator;
@@ -43,7 +43,6 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class CentralDeAcoesPage extends BasePage<LogCra> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
@@ -127,13 +126,13 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 		return dataEnvioFinal = new TextField<String>("dataEnvioFinal", new Model<String>(DataUtil.localDateToString(dataFim)));
 	}
 
-	private DropDownChoice<TipoInstituicaoSistema> textFieldTipoInstituicao() {
-		List<TipoInstituicaoSistema> choices = new ArrayList<TipoInstituicaoSistema>();
-		choices.add(TipoInstituicaoSistema.CARTORIO);
-		choices.add(TipoInstituicaoSistema.CONVENIO);
-		choices.add(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoSistema> tipoInstituicao = new DropDownChoice<TipoInstituicaoSistema>("tipoInstituicao",
-				new Model<TipoInstituicaoSistema>(), choices, new ChoiceRenderer<TipoInstituicaoSistema>("label"));
+	private DropDownChoice<TipoInstituicaoCRA> textFieldTipoInstituicao() {
+		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
+		choices.add(TipoInstituicaoCRA.CARTORIO);
+		choices.add(TipoInstituicaoCRA.CONVENIO);
+		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
+		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao",
+				new Model<TipoInstituicaoCRA>(), choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -141,18 +140,18 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				TipoInstituicaoSistema tipo = tipoInstituicao.getModelObject();
+				TipoInstituicaoCRA tipo = tipoInstituicao.getModelObject();
 
 				if (tipoInstituicao.getModelObject() != null) {
-					if (tipo.equals(TipoInstituicaoSistema.CONVENIO)) {
+					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
 						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
-					} else if (tipo.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
+					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
-					} else if (tipo.equals(TipoInstituicaoSistema.CARTORIO)) {
+					} else if (tipo.equals(TipoInstituicaoCRA.CARTORIO)) {
 						dropDownBancosConveniosCartorios.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getCartorios());
@@ -185,7 +184,6 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 		List<IColumn<LogCra, String>> columns = new ArrayList<>();
 		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("DATA E HORA"), "data") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -197,7 +195,7 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("AÇÃO"), "acao.label"));
 		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("INSTITUIÇÃO"), "instituicao"));
 		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("DESCRIÇÃO"), "descricao") {
-			/***/
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -212,7 +210,7 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 			}
 		});
 		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("OCORRÊNCIA"), "ocorrencia") {
-			/***/
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -230,7 +228,6 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 		});
 		columns.add(new AbstractColumn<LogCra, String>(new Model<String>("AÇÕES")) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -244,7 +241,7 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 			} 
 		});
 		LogCraProvider provider = new LogCraProvider(buscarLoggs());
-		add(new CraDataTable<LogCra>("panelDataTableAcoes", new Model<LogCra>(), columns, provider, true));
+		add(new CraDataTable<LogCra>("panelDataTableAcoes", new Model<LogCra>(), columns, provider));
 	}
 
 	public List<Instituicao> getListaInstituicoes() {

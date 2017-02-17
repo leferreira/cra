@@ -22,10 +22,11 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class HistoricoPage extends BasePage<TituloRemessa> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
+
 	@SpringBean
 	TituloMediator tituloMediator;
+	
 	private TituloRemessa tituloRemessa;
 
 	public HistoricoPage(TituloRemessa titulo) {

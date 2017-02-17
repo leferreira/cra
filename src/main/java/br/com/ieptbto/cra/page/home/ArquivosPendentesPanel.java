@@ -27,8 +27,8 @@ import br.com.ieptbto.cra.entidade.view.CancelamentoPendente;
 import br.com.ieptbto.cra.entidade.view.DesistenciaPendente;
 import br.com.ieptbto.cra.entidade.view.RemessaPendente;
 import br.com.ieptbto.cra.entidade.view.ViewArquivoPendente;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
@@ -111,11 +111,11 @@ public class ArquivosPendentesPanel extends Panel {
 				linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo_Arquivo()));
 				item.add(linkArquivo);
 
-				TipoInstituicaoSistema tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
-				if (tipoInstituicao.equals(TipoInstituicaoSistema.CARTORIO)) {
+				TipoInstituicaoCRA tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
+				if (tipoInstituicao.equals(TipoInstituicaoCRA.CARTORIO)) {
 					item.add(new Label("instituicao", arquivo.getNomeFantasia_Instituicao()));
-				} else if (tipoInstituicao.equals(TipoInstituicaoSistema.CRA) || tipoInstituicao.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
-							|| tipoInstituicao.equals(TipoInstituicaoSistema.CONVENIO)) {
+				} else if (tipoInstituicao.equals(TipoInstituicaoCRA.CRA) || tipoInstituicao.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
+							|| tipoInstituicao.equals(TipoInstituicaoCRA.CONVENIO)) {
 					String municipio = arquivo.getNomeMunicipio_Municipio();
 					if (municipio.length() > 20) {
 						municipio = municipio.substring(0, 19);
@@ -307,15 +307,15 @@ public class ArquivosPendentesPanel extends Panel {
 						}
 					});
 				}
-				TipoInstituicaoSistema tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
-				if (tipoInstituicao.equals(TipoInstituicaoSistema.CRA) || tipoInstituicao.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)
-						|| tipoInstituicao.equals(TipoInstituicaoSistema.CONVENIO)) {
+				TipoInstituicaoCRA tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
+				if (tipoInstituicao.equals(TipoInstituicaoCRA.CRA) || tipoInstituicao.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)
+						|| tipoInstituicao.equals(TipoInstituicaoCRA.CONVENIO)) {
 					String municipio = object.getNomeMunicipio_Municipio();
 					if (municipio.length() > 20) {
 						municipio = municipio.substring(0, 19);
 					}
 					item.add(new Label("instituicao", municipio.toUpperCase()));
-				} else if (tipoInstituicao.equals(TipoInstituicaoSistema.CARTORIO)) {
+				} else if (tipoInstituicao.equals(TipoInstituicaoCRA.CARTORIO)) {
 					item.add(new Label("instituicao", object.getNomeFantasia_Instituicao()));
 				}
 				item.add(new Label("dias", PeriodoDataUtil.diferencaDeDiasEntreData(object.getDataRecebimento_Arquivo(), new Date())));

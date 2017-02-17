@@ -10,7 +10,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.LogCra;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.mediator.LoggerMediator;
 import br.com.ieptbto.cra.page.centralDeAcoes.LogCraPage;
 
@@ -68,8 +68,8 @@ public class CentralAcoesPanel extends Panel {
 	}
 
 	private void verificarVisibilidade() {
-		TipoInstituicaoSistema tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
-		if (!tipoInstituicao.equals(TipoInstituicaoSistema.CRA)) {
+		TipoInstituicaoCRA tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		if (!tipoInstituicao.equals(TipoInstituicaoCRA.CRA)) {
 			this.setOutputMarkupId(true);
 			this.setVisible(false);
 		}

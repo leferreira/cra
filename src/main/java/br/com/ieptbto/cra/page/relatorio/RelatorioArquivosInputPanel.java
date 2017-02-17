@@ -18,8 +18,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.beans.ArquivoBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.NivelDetalhamentoRelatorio;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 
 public class RelatorioArquivosInputPanel extends Panel {
@@ -80,13 +80,13 @@ public class RelatorioArquivosInputPanel extends Panel {
 		return radioTipoRelatorio;
 	}
 
-	private DropDownChoice<TipoInstituicaoSistema> tipoInstituicao() {
-		List<TipoInstituicaoSistema> choices = new ArrayList<TipoInstituicaoSistema>();
-		choices.add(TipoInstituicaoSistema.CARTORIO);
-		choices.add(TipoInstituicaoSistema.CONVENIO);
-		choices.add(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoSistema> tipoInstituicao = new DropDownChoice<TipoInstituicaoSistema>("tipoInstituicao",
-				new Model<TipoInstituicaoSistema>(), choices, new ChoiceRenderer<TipoInstituicaoSistema>("label"));
+	private DropDownChoice<TipoInstituicaoCRA> tipoInstituicao() {
+		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
+		choices.add(TipoInstituicaoCRA.CARTORIO);
+		choices.add(TipoInstituicaoCRA.CONVENIO);
+		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
+		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao",
+				new Model<TipoInstituicaoCRA>(), choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -94,18 +94,18 @@ public class RelatorioArquivosInputPanel extends Panel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				TipoInstituicaoSistema tipo = tipoInstituicao.getModelObject();
+				TipoInstituicaoCRA tipo = tipoInstituicao.getModelObject();
 
 				if (tipoInstituicao.getModelObject() != null) {
-					if (tipo.equals(TipoInstituicaoSistema.CONVENIO)) {
+					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
 						comboInstituicao.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
-					} else if (tipo.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
+					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 						comboInstituicao.setChoiceRenderer(new ChoiceRenderer<Instituicao>("nomeFantasia"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
-					} else if (tipo.equals(TipoInstituicaoSistema.CARTORIO)) {
+					} else if (tipo.equals(TipoInstituicaoCRA.CARTORIO)) {
 						comboInstituicao.setChoiceRenderer(new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio"));
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getCartorios());

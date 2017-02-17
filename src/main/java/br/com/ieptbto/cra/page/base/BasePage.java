@@ -12,7 +12,7 @@ import br.com.ieptbto.cra.app.IWebApplication;
 import br.com.ieptbto.cra.component.CustomFeedbackPanel;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.usuario.PerfilUsuarioPage;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
@@ -108,8 +108,8 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	}
 
 	private boolean isVisibleLink() {
-		TipoInstituicaoSistema tipoInstituicao = getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao();
-		if (TipoInstituicaoSistema.CRA == tipoInstituicao) {
+		TipoInstituicaoCRA tipoInstituicao = getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		if (TipoInstituicaoCRA.CRA == tipoInstituicao) {
 			return true;
 		}
 		return false;

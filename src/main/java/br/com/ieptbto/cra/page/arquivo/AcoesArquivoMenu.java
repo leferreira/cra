@@ -8,8 +8,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 
@@ -77,8 +77,8 @@ public class AcoesArquivoMenu extends Panel {
 	}
 
 	private void verificarPermissaoUsuario() {
-		TipoInstituicaoSistema tipoInstituicaoUsuario = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
-		if (tipoInstituicaoUsuario.equals(TipoInstituicaoSistema.CRA)) {
+		TipoInstituicaoCRA tipoInstituicaoUsuario = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		if (tipoInstituicaoUsuario.equals(TipoInstituicaoCRA.CRA)) {
 			this.setVisible(true);
 		} else {
 			this.setVisible(false);

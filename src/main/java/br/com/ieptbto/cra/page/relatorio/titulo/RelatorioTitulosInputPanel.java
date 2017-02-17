@@ -21,7 +21,7 @@ import br.com.ieptbto.cra.beans.RelatorioBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
 import br.com.ieptbto.cra.enumeration.TipoExportacaoRelatorio;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 
 public class RelatorioTitulosInputPanel extends Panel {
@@ -116,12 +116,12 @@ public class RelatorioTitulosInputPanel extends Panel {
 		return dropDownInstituicao;
 	}
 
-	private DropDownChoice<TipoInstituicaoSistema> dropDownTipoInstituicao() {
-		List<TipoInstituicaoSistema> choices = new ArrayList<TipoInstituicaoSistema>();
-		choices.add(TipoInstituicaoSistema.CONVENIO);
-		choices.add(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoSistema> tipoInstituicao =
-				new DropDownChoice<TipoInstituicaoSistema>("tipoInstituicao", choices, new ChoiceRenderer<TipoInstituicaoSistema>("label"));
+	private DropDownChoice<TipoInstituicaoCRA> dropDownTipoInstituicao() {
+		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
+		choices.add(TipoInstituicaoCRA.CONVENIO);
+		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
+		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao =
+				new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -129,13 +129,13 @@ public class RelatorioTitulosInputPanel extends Panel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				TipoInstituicaoSistema tipo = tipoInstituicao.getModelObject();
+				TipoInstituicaoCRA tipo = tipoInstituicao.getModelObject();
 
 				if (tipoInstituicao.getModelObject() != null) {
-					if (tipo.equals(TipoInstituicaoSistema.CONVENIO)) {
+					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
-					} else if (tipo.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
+					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
 					}

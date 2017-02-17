@@ -3,7 +3,7 @@ package br.com.ieptbto.cra.page.home;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 
 public class InformacoesCraPanel extends Panel {
 
@@ -20,8 +20,8 @@ public class InformacoesCraPanel extends Panel {
 	}
 
 	private void verificarVisibilidade() {
-		TipoInstituicaoSistema tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
-		if (tipoInstituicao.equals(TipoInstituicaoSistema.CRA)) {
+		TipoInstituicaoCRA tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		if (tipoInstituicao.equals(TipoInstituicaoCRA.CRA)) {
 			this.setOutputMarkupId(true);
 			this.setVisible(false);
 		}

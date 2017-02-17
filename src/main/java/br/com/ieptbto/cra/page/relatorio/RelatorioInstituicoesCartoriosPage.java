@@ -7,7 +7,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -35,9 +35,9 @@ public class RelatorioInstituicoesCartoriosPage extends BasePage<Arquivo> {
 	}
 
 	private void carregarPanelInstituicaoCartorio() {
-		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoSistema.CARTORIO)) {
+		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 			add(new RelatorioCartorioPanel("relatorioInstituicoesCartorioPanel", getModel(), getUser()));
-		} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
+		} else if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 			add(new RelatorioInstituicaoPanel("relatorioInstituicoesCartorioPanel", getModel(), getUser()));
 		}
 	}

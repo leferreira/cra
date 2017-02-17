@@ -23,8 +23,8 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.ArquivoException;
 import br.com.ieptbto.cra.exception.CabecalhoRodapeException;
@@ -83,7 +83,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 				FileUpload uploadedFile = fileUploadField.getFileUpload();
 				List<Exception> erros = new ArrayList<Exception>();
 
-				arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoSistema.CRA.toString()));
+				arquivo.setInstituicaoRecebe(instituicaoMediator.buscarInstituicaoIncial(TipoInstituicaoCRA.CRA.toString()));
 				arquivo.setNomeArquivo(uploadedFile.getClientFileName());
 				arquivo.setDataRecebimento(new LocalDate().toDate());
 				arquivo.setRemessas(new ArrayList<Remessa>());

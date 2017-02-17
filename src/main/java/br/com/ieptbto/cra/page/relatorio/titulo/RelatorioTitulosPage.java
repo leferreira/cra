@@ -23,9 +23,7 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
-
 	private TituloRemessa titulo;
 	private FileUploadField fileUploadField;
 

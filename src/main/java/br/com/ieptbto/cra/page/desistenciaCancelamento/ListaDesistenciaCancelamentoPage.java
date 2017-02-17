@@ -27,8 +27,8 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.StatusDownload;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
@@ -197,7 +197,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 			private StatusDownload verificaDownload(Boolean download) {
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao()
-						.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
+						.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 					return StatusDownload.ENVIADO;
 				}
 				if (download.equals(false)) {

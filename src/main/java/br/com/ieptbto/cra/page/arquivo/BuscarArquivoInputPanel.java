@@ -24,9 +24,9 @@ import br.com.ieptbto.cra.beans.ArquivoBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.StatusDownload;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.enumeration.TipoVisualizacaoArquivos;
 import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 
 /**
@@ -46,7 +46,7 @@ public class BuscarArquivoInputPanel extends Panel {
 	private TipoVisualizacaoArquivos tipoVisualizacaoAtual;
 	private Label labelMunicipio;
 	private DropDownChoice<Instituicao> dropDownCartorio;
-	private TipoInstituicaoSistema tipoInstituicao;
+	private TipoInstituicaoCRA tipoInstituicao;
 
 	public BuscarArquivoInputPanel(String id, IModel<ArquivoBean> model, Usuario usuario) {
 		super(id, model);
@@ -74,11 +74,11 @@ public class BuscarArquivoInputPanel extends Panel {
 		final RadioChoice<TipoVisualizacaoArquivos> radioVisualizacao = new RadioChoice<TipoVisualizacaoArquivos>("tipoVisualizacaoArquivos",
 				new Model<TipoVisualizacaoArquivos>(), Arrays.asList(TipoVisualizacaoArquivos.values()), renderer);
 
-		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
 			tipoVisualizacaoAtual = TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS;
 			ArquivoBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS);
 			radioVisualizacao.setVisible(false);
-		} else if (TipoInstituicaoSistema.CARTORIO.equals(tipoInstituicao)) {
+		} else if (TipoInstituicaoCRA.CARTORIO.equals(tipoInstituicao)) {
 			tipoVisualizacaoAtual = TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS;
 			ArquivoBean.class.cast(getDefaultModel().getObject()).setTipoVisualizacaoArquivos(TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS);
 			radioVisualizacao.setVisible(false);
@@ -153,7 +153,7 @@ public class BuscarArquivoInputPanel extends Panel {
 	private Label labelBancoCovenio() {
 		Label labelBancoCovenio = new Label("labelBancoCovenio", "Banco/Convênio");
 		labelBancoCovenio.setOutputMarkupId(true);
-		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
 			labelBancoCovenio.setVisible(false);
 		}
 		return labelBancoCovenio;
@@ -164,18 +164,18 @@ public class BuscarArquivoInputPanel extends Panel {
 		dropDownInstituicao = new DropDownChoice<Instituicao>("bancoConvenio", getListaInstituicoes(), renderer);
 		dropDownInstituicao.setLabel(new Model<String>("Banco/Convênio"));
 		dropDownInstituicao.setOutputMarkupId(true);
-		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
 			dropDownInstituicao.setVisible(false);
 		}
 		return dropDownInstituicao;
 	}
 
-	private DropDownChoice<TipoInstituicaoSistema> dropDownTipoInstituicao() {
-		IChoiceRenderer<TipoInstituicaoSistema> renderer = new ChoiceRenderer<TipoInstituicaoSistema>("label");
-		List<TipoInstituicaoSistema> choices = new ArrayList<TipoInstituicaoSistema>();
-		choices.add(TipoInstituicaoSistema.CONVENIO);
-		choices.add(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoSistema> dropDowntipoInstituicao = new DropDownChoice<TipoInstituicaoSistema>("tipoInstituicao", choices, renderer);
+	private DropDownChoice<TipoInstituicaoCRA> dropDownTipoInstituicao() {
+		IChoiceRenderer<TipoInstituicaoCRA> renderer = new ChoiceRenderer<TipoInstituicaoCRA>("label");
+		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
+		choices.add(TipoInstituicaoCRA.CONVENIO);
+		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
+		final DropDownChoice<TipoInstituicaoCRA> dropDowntipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, renderer);
 		dropDowntipoInstituicao.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -183,13 +183,13 @@ public class BuscarArquivoInputPanel extends Panel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				TipoInstituicaoSistema tipo = dropDowntipoInstituicao.getModelObject();
+				TipoInstituicaoCRA tipo = dropDowntipoInstituicao.getModelObject();
 
 				if (dropDowntipoInstituicao.getModelObject() != null) {
-					if (tipo.equals(TipoInstituicaoSistema.CONVENIO)) {
+					if (tipo.equals(TipoInstituicaoCRA.CONVENIO)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getConvenios());
-					} else if (tipo.equals(TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA)) {
+					} else if (tipo.equals(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA)) {
 						getListaInstituicoes().clear();
 						getListaInstituicoes().addAll(instituicaoMediator.getInstituicoesFinanceiras());
 					}
@@ -201,7 +201,7 @@ public class BuscarArquivoInputPanel extends Panel {
 				target.add(dropDownInstituicao);
 			}
 		});
-		if (TipoInstituicaoSistema.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoSistema.CONVENIO.equals(tipoInstituicao)) {
+		if (TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA.equals(tipoInstituicao) || TipoInstituicaoCRA.CONVENIO.equals(tipoInstituicao)) {
 			dropDowntipoInstituicao.setVisible(false);
 		}
 		dropDowntipoInstituicao.setLabel(new Model<String>("Tipo Instituição"));
@@ -211,7 +211,7 @@ public class BuscarArquivoInputPanel extends Panel {
 	private Label labelMunicipio() {
 		labelMunicipio = new Label("labelMunicipio", "Município");
 		labelMunicipio.setOutputMarkupId(true);
-		if (!TipoInstituicaoSistema.CRA.equals(tipoInstituicao)) {
+		if (!TipoInstituicaoCRA.CRA.equals(tipoInstituicao)) {
 			labelMunicipio.setVisible(false);
 		}
 		return labelMunicipio;
@@ -221,7 +221,7 @@ public class BuscarArquivoInputPanel extends Panel {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio");
 		dropDownCartorio = new DropDownChoice<Instituicao>("cartorio", instituicaoMediator.getCartorios(), renderer);
 		dropDownCartorio.setOutputMarkupId(true);
-		if (!TipoInstituicaoSistema.CRA.equals(tipoInstituicao)) {
+		if (!TipoInstituicaoCRA.CRA.equals(tipoInstituicao)) {
 			dropDownCartorio.setVisible(false);
 		}
 		return dropDownCartorio;
