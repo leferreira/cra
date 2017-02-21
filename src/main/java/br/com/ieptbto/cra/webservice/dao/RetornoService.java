@@ -176,7 +176,7 @@ public class RetornoService extends CraWebService {
 			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, object);
 			marshaller.marshal(element, writer);
 			msg = writer.toString();
-			msg = msg.replace("<retorno xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<relatorio>");
+			msg = msg.replace("<retorno xsi:type=\"mensagemXmlVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<relatorio>");
 			msg = msg.replace("</retorno>", "</relatorio>");
 			writer.close();
 

@@ -176,8 +176,7 @@ public class ConfirmacaoService extends CraWebService {
 			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, object);
 			marshaller.marshal(element, writer);
 			msg = writer.toString();
-			msg = msg.replace("<confirmacao xsi:type=\"mensagemXml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">",
-					"<relatorio>");
+			msg = msg.replace("<confirmacao xsi:type=\"mensagemXmlVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<relatorio>");
 			msg = msg.replace("</confirmacao>", "</relatorio>");
 			writer.close();
 
