@@ -8,6 +8,7 @@ import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.security.UserSession;
 
 /**
@@ -65,7 +66,12 @@ public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends Web
 	 * @return {@link Colaborador}
 	 */
 	public Usuario getUser() {
-		return getSession().getUser();
+		Usuario userSession = getSession().getUser();
+		if (userSession == null) {
+			getSession().invalidateNow();
+			setResponsePage(LoginPage.class);
+		}
+		return userSession;
 	}
 
 	/**
