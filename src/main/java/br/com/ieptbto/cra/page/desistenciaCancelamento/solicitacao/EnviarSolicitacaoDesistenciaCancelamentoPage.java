@@ -117,7 +117,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 					cancelamentoProtestoMediator.salvarSolicitacaoDesistenciaCancelamento(solicitacao, fileUploadField.getFileUpload());
 					if (MotivoSolicitacaoDesistenciaCancelamento.PAGAMENTO_AO_CREDOR.equals(motivo)) {
 						success("A solicitação por meio de Carta de Anuência Eletrônica foi enviada com sucesso! "
-								+ "O devedor deverá comparecer em cartório para <span class=\"alert-link\">quitação das custas</span>! ");
+								+ "O devedor deverá comparecer em cartório para <span class=\"alert-link\">quitação das custas</span> em um prazo de 24 horas! ");
 					} else if (MotivoSolicitacaoDesistenciaCancelamento.IRREGULARIDADE_NO_TITULO_APRESENTADO.equals(motivo)) {
 						success("A solicitação Desistência/Cancelamento pela Irregularidade "
 								+ solicitacao.getCodigoIrregularidade().getMotivo() + ",foi enviada com sucesso!");
