@@ -38,7 +38,7 @@ public class MunicipioForm extends BaseForm<Municipio> {
 				if (!municipio.isSituacao()) {
 					municipio.setSituacao(true);
 				}
-				Municipio municipioSalvo = municipioMediator.adicionarMunicipio(municipio);
+				Municipio municipioSalvo = municipioMediator.salvarMunicipio(municipio);
 				if (municipioSalvo != null) {
 					setResponsePage(new ListaMunicipioPage("Os dados do município foram salvos com sucesso!"));
 				} else {

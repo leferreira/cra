@@ -15,7 +15,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.beans.TituloCsvBean;
-import br.com.ieptbto.cra.component.dataTable.CraDataTable;
+import br.com.ieptbto.cra.component.dataTable.CustomCraDataTable;
 import br.com.ieptbto.cra.dataProvider.TituloCsvProvider;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
@@ -60,7 +60,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 		add(tableTitulos());
 	}
 
-	private CraDataTable<TituloCsvBean> tableTitulos() {
+	private CustomCraDataTable<TituloCsvBean> tableTitulos() {
 		List<IColumn<TituloCsvBean, String>> columns = new ArrayList<IColumn<TituloCsvBean, String>>();
 		columns.add(new PropertyColumn<TituloCsvBean, String>(new Model<String>("BCO/CONV."), "apresentante"));
 		columns.add(new PropertyColumn<TituloCsvBean, String>(new Model<String>("NOSSO N."), "nossoNumero") {
@@ -186,7 +186,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 			}
 		});
 		TituloCsvProvider dataProvider = new TituloCsvProvider(TituloCsvBean.parseToListViewTitulo(titulos));
-		return new CraDataTable<TituloCsvBean>("table", new Model<TituloCsvBean>(), columns, dataProvider , true);
+		return new CustomCraDataTable<TituloCsvBean>("table", columns, dataProvider , true);
 	}
 
 	@Override

@@ -23,7 +23,7 @@
 	</context-param>
 	<context-param>
 		<param-name>connectionTimeout</param-name>
-		<param-value>600000</param-value>
+		<param-value>800000</param-value>
 	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

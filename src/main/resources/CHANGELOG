@@ -1,4 +1,22 @@
+-------------------- 1.0.3 ------------------
+
+16-Mar-2017 Thasso Araujo
+ # Código do Cartório 01 para o apresentante Bancoob (756).
+
+09-Mar-2017 Thasso Araujo
+ # Ajuste no download de arquivos da CNP pelo IEPTB-BR.
+
+08-Mar-2017 Thasso Araujo
+ # Ajustes nos relatórios de instituições financeiras e convênios via CRA.
+ # Ajuste de bug em consulta de títulos e codificação de relatórios em CSV de UFT8 para ISO.
+ # Correção no ordenamento das tabelas de títulos e arquivos.
+ # Criação da espécie de documento IPC - Instrumento Particular de Confissão de Dívidas e liberação 
+ 	para entrada manual no convênio. 
+
 -------------------- 1.0.2 ------------------
+
+02-Mar-2017 Thasso Araujo
+ # Correção na Busca de Desistencias e Cancelamentos.
 
 16-Fev-2017 Thasso Araujo
  # Otimização dos Relatórios de Títulos com a criação de views.
@@ -7,7 +25,7 @@
  	e deixando o campo de anexo de ofício obratório.
  # Informação do código irregularidade 60, no campo de nome "Reservado", para os arquivos de CP da PGFN.
  # Correção de Anexo de Documentos no Convênio.
-  
+ 
 -------------------- 1.0.1 ------------------
 
 8-Fev-2017 Thasso Araujo

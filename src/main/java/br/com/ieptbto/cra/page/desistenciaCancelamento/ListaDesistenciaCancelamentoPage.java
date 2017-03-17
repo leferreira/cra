@@ -45,21 +45,19 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private DownloadMediator downloadMediator;
+	DownloadMediator downloadMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private DesistenciaProtestoMediator desistenciaMediator;
+	DesistenciaProtestoMediator desistenciaMediator;
 	@SpringBean
-	private CancelamentoProtestoMediator cancelamentoMediator;
+	CancelamentoProtestoMediator cancelamentoMediator;
 	@SpringBean
-	private AutorizacaoCancelamentoMediator autorizacaoMediator;
+	AutorizacaoCancelamentoMediator autorizacaoMediator;
 
-	private Usuario user;
 	private List<DesistenciaCancelamentoBean> arquivosDesistenciasCancelamentos;
 	private List<DesistenciaProtesto> desistencias;
 	private List<CancelamentoProtesto> cancelamentos;
@@ -67,27 +65,22 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 
 	public ListaDesistenciaCancelamentoPage(String nomeArquivo, Instituicao bancoConvenio, List<TipoArquivoFebraban> tiposArquivo,
 			Instituicao cartorio, LocalDate dataInicio, LocalDate dataFim) {
-		this.user = getUser();
-		this.desistencias = desistenciaMediator.buscarDesistenciaProtesto(nomeArquivo, bancoConvenio, cartorio, dataInicio, dataFim,
-				tiposArquivo, user);
-		this.cancelamentos = cancelamentoMediator.buscarCancelamentoProtesto(nomeArquivo, bancoConvenio, cartorio, dataInicio, dataFim,
-				tiposArquivo, user);
-		this.autorizacoes = autorizacaoMediator.buscarAutorizacaoCancelamento(nomeArquivo, bancoConvenio, cartorio, dataInicio, dataFim,
-				tiposArquivo, user);
-
+		Usuario user = getUser();
+		this.desistencias = desistenciaMediator.consultarDesistencias(nomeArquivo, bancoConvenio, cartorio, dataInicio, dataFim, tiposArquivo, user);
+		this.cancelamentos = cancelamentoMediator.consultarCancelamentos(nomeArquivo, bancoConvenio, cartorio, dataInicio, dataFim, tiposArquivo, user);
+		this.autorizacoes = autorizacaoMediator.consultarAutorizacoes(nomeArquivo, bancoConvenio, cartorio, dataInicio, dataFim, tiposArquivo, user);
 		converterDesistenciasCancelamentos();
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		listaArquivosDevolucaoCancelamento();
+		add(listaArquivosDesistenciasCancelamento());
 	}
 
-	private void listaArquivosDevolucaoCancelamento() {
-		add(new ListView<DesistenciaCancelamentoBean>("dataTableRemessa", getArquivosDesistenciasCancelamentos()) {
+	private ListView<DesistenciaCancelamentoBean> listaArquivosDesistenciasCancelamento() {
+		return new ListView<DesistenciaCancelamentoBean>("dataTableRemessa", getArquivosDesistenciasCancelamentos()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -98,7 +91,6 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 					item.add(downloadArquivoTXT(arquivo.getDesistenciaProtesto()));
 					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -112,7 +104,6 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 					item.add(downloadArquivoTXT(arquivo.getCancelamentoProtesto()));
 					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -126,7 +117,6 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 					item.add(downloadArquivoTXT(arquivo.getAutorizacaoCancelamento()));
 					Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -150,7 +140,6 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 			private Link<DesistenciaProtesto> downloadArquivoTXT(final DesistenciaProtesto remessa) {
 				return new Link<DesistenciaProtesto>("downloadArquivo") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -166,7 +155,6 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 			private Link<CancelamentoProtesto> downloadArquivoTXT(final CancelamentoProtesto remessa) {
 				return new Link<CancelamentoProtesto>("downloadArquivo") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -182,7 +170,6 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 			private Link<Remessa> downloadArquivoTXT(final AutorizacaoCancelamento remessa) {
 				return new Link<Remessa>("downloadArquivo") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -205,7 +192,7 @@ public class ListaDesistenciaCancelamentoPage extends BasePage<Arquivo> {
 				}
 				return StatusDownload.RECEBIDO;
 			}
-		});
+		};
 	}
 
 	private void converterDesistenciasCancelamentos() {

@@ -12,6 +12,8 @@ import org.apache.wicket.model.util.ListModel;
 
 import br.com.ieptbto.cra.beans.RelatorioBean;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -24,11 +26,14 @@ import br.com.ieptbto.cra.security.CraRoles;
 public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 
 	private static final long serialVersionUID = 1L;
+	
+	private Usuario usuario;
 	private TituloRemessa titulo;
 	private FileUploadField fileUploadField;
 
 	public RelatorioTitulosPage() {
 		this.titulo = new TituloRemessa();
+		this.usuario = getUser();
 		adicionarComponentes();
 	}
 
@@ -41,14 +46,19 @@ public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 	private void carregarFormulario() {
 		RelatorioBean relatorioTitulosBean = new RelatorioBean();
 		RelatorioTitulosForm form = new RelatorioTitulosForm("form", new CompoundPropertyModel<RelatorioBean>(relatorioTitulosBean), fileUploadField);
-		form.add(new RelatorioTitulosInputPanel("relatorioTitulosInputPanel",
-				new CompoundPropertyModel<RelatorioBean>(relatorioTitulosBean), fileUploadField));
+		form.add(new RelatorioTitulosInputPanel("relatorioTitulosInputPanel", new CompoundPropertyModel<RelatorioBean>(relatorioTitulosBean), 
+				fileUploadField, usuario));
 		add(form);
 	}
 
 	private FileUploadField fileUploadPlanilhaPendenciasCra() {
 		fileUploadField = new FileUploadField("planilhaPendenciaCra", new ListModel<FileUpload>());
 		fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
+
+		TipoInstituicaoCRA tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		if (tipoInstituicao != TipoInstituicaoCRA.CRA) {
+			fileUploadField.setEnabled(false);
+		}
 		return fileUploadField;
 	}
 

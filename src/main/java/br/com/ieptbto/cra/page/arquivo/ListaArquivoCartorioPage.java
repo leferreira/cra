@@ -43,23 +43,22 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private RemessaMediator remessaMediator;
+	RemessaMediator remessaMediator;
 	@SpringBean
-	private DownloadMediator downloadMediator;
+	DownloadMediator downloadMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 
 	private Usuario usuario;
 	private Arquivo arquivo;
-	private ArquivoBean arquivoFormBean;
+	private ArquivoBean arquivoBean;
 
-	public ListaArquivoCartorioPage(ArquivoBean arquivoFormBean, Usuario usuario) {
+	public ListaArquivoCartorioPage(ArquivoBean arquivoBean, Usuario usuario) {
 		this.arquivo = new Arquivo();
-		this.arquivoFormBean = arquivoFormBean;
+		this.arquivoBean = arquivoBean;
 		this.usuario = getUser();
 
 		adicionarComponentes();
@@ -226,7 +225,7 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 	}
 
 	public ArquivoBean getArquivoFormBean() {
-		return arquivoFormBean;
+		return arquivoBean;
 	}
 
 	@Override

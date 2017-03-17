@@ -108,6 +108,12 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	}
 
 	private boolean isVisibleLink() {
+		Usuario usuario = getUser();
+		if (usuario == null) {
+			getSession().invalidateNow();
+			setResponsePage(LoginPage.class);
+		}
+		
 		TipoInstituicaoCRA tipoInstituicao = getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao();
 		if (TipoInstituicaoCRA.CRA == tipoInstituicao) {
 			return true;

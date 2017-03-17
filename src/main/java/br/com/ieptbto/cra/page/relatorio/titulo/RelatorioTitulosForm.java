@@ -53,8 +53,7 @@ public class RelatorioTitulosForm extends BaseForm<RelatorioBean> {
 			}
 
 			if (bean.getTipoExportacao().equals(TipoExportacaoRelatorio.PDF.toString())) {
-				JasperPrint jasperPrint =
-						new RelatorioUtil().gerarRelatorioTitulosPorSituacao(bean.getSituacaoTituloRelatorio(), bean.getBancoConvenio(), dataInicio, dataFim);
+				JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosPorSituacao(bean.getSituacaoTituloRelatorio(), bean.getBancoConvenio(), dataInicio, dataFim);
 				File pdf = File.createTempFile("report", ".pdf");
 				JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 				IResourceStream resourceStream = new FileResourceStream(pdf);

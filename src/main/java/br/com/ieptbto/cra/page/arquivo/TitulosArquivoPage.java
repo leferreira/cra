@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
@@ -61,9 +60,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	}
 
 	public TitulosArquivoPage(Integer idRemessa) {
-		this.remessa = new Remessa();
-		this.remessa.setId(idRemessa);
-		this.remessa = remessaMediator.buscarRemessaPorPK(remessa);
+		this.remessa = remessaMediator.buscarRemessaPorPK(idRemessa);
 		adicionarComponentes();
 	}
 
@@ -77,7 +74,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	private CraDataTable<ViewTitulo> dataTableTitulos() {
 		TituloProvider dataProvider = new TituloProvider(tituloMediator.consultarViewTitulosPorRemessa(remessa));
 		List<IColumn<ViewTitulo, String>> columns = TituloViewColumns.generateDataTableColumnsFromTituloView();
-		return new CraDataTable<ViewTitulo>("table", new Model<ViewTitulo>(), columns, dataProvider);
+		return new CraDataTable<ViewTitulo>("table", columns, dataProvider);
 	}
 
 	private WebMarkupContainer divInformacoesArquivo() {

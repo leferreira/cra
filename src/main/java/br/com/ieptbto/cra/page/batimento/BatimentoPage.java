@@ -117,7 +117,6 @@ public class BatimentoPage extends BasePage<Remessa> {
 	private ListView<ViewBatimentoRetorno> carregarArquivosRetorno() {
 		return remessas = new ListView<ViewBatimentoRetorno>("retornos", batimentoMediator.buscarRetornoBatimentoNaoConfimados()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -146,7 +145,6 @@ public class BatimentoPage extends BasePage<Remessa> {
 	private ListView<Deposito> carregarExtrato() {
 		return new ListView<Deposito>("extrato", getDepositos()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

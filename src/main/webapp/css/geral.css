@@ -318,6 +318,10 @@ dd, dt {
 	width: 100%;
 }
 
+.col-info-titulo{
+	width: 110px;
+}
+
 #info-titulo {
 	background: #6D95B7 none repeat scroll 0% 0%;
 	color: #FFF;
@@ -778,34 +782,3 @@ DROPDROWN SUBMENU
                         -ms-filter: alpha(opacity=60);
                         filter: alpha(opacity=60);
                     }
-/***
-DATA TABLE
-*/
-.input-search{
-    width: 110%;
-}
-.navigatorLabel{
-	float: left;
-}
-.navigator{
-	float: right;
-    position: static;
-}
-.first, .prev, .goto, .next, .last {
-	position: relative;
-    float: left;
-    padding: 6px 12px;
-    margin-left: -1px;
-    line-height: 1.42857143;
-    color: #337ab7;
-    text-decoration: none;
-    background-color: #fff;
-    border: 1px solid #ddd;
-}
-.teste {
-	z-index: 2;
-    color: #fff;
-    cursor: default;
-    background-color: #337ab7;
-    border-color: #337ab7;
-}

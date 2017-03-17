@@ -74,7 +74,6 @@ import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.municipio.IncluirMunicipioPage;
 import br.com.ieptbto.cra.page.municipio.ListaMunicipioPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosPage;
-import br.com.ieptbto.cra.page.relatorio.RelatorioInstituicoesCartoriosPage;
 import br.com.ieptbto.cra.page.relatorio.titulo.RelatorioTitulosPage;
 import br.com.ieptbto.cra.page.tipoArquivo.IncluirTipoArquivoPage;
 import br.com.ieptbto.cra.page.tipoArquivo.ListaTipoArquivoPage;
@@ -237,9 +236,6 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("MonitorarTitulos", BuscarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
 		mountPage("Historico", HistoricoPage.class);
-
-		/** Relatorios Padrão */
-		mountPage("RelatorioArquivosInstituicoesCartorios", RelatorioInstituicoesCartoriosPage.class);
 
 		/** Relatorios CRA */
 		mountPage("Relatorio", RelatorioArquivosPage.class);

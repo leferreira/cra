@@ -123,7 +123,7 @@ public class ListaMunicipioPage extends BasePage<Municipio> {
 				return "text-center";
 			}
 		});
-        return new CraDataTable<Municipio>("dataTable", new Model<Municipio>(), columns, dataProvider);
+        return new CraDataTable<Municipio>("dataTable", columns, dataProvider);
 	}
 
 	@Override

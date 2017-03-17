@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -24,7 +25,6 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 
 public class RelatorioArquivosInputPanel extends Panel {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
@@ -35,11 +35,6 @@ public class RelatorioArquivosInputPanel extends Panel {
 
 	public RelatorioArquivosInputPanel(String id, IModel<ArquivoBean> model) {
 		super(id, model);
-
-		adicionarCampos();
-	}
-
-	private void adicionarCampos() {
 		add(dateFieldDataInicio());
 		add(dateFieldDataFinal());
 		add(tipoRelatorio());
@@ -89,7 +84,6 @@ public class RelatorioArquivosInputPanel extends Panel {
 				new Model<TipoInstituicaoCRA>(), choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -126,8 +120,8 @@ public class RelatorioArquivosInputPanel extends Panel {
 	}
 
 	private DropDownChoice<Instituicao> instituicaoCartorio() {
-		comboInstituicao =
-				new DropDownChoice<Instituicao>("instituicao", getListaInstituicoes(), new ChoiceRenderer<Instituicao>("nomeFantasia"));
+		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
+		comboInstituicao = new DropDownChoice<Instituicao>("instituicao", getListaInstituicoes(), renderer);
 		comboInstituicao.setLabel(new Model<String>("Instituição"));
 		comboInstituicao.setOutputMarkupId(true);
 		comboInstituicao.setEnabled(false);

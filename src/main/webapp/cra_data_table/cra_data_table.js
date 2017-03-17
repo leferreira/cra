@@ -5,7 +5,7 @@
  function initCraDatatable() {
 	$('.navigatorLabel>div').each(function() {
         var text = $(this).text();
-        text = text.replace('Showing', 'Exibindo');
+        text = text.replace('Showing', 'Mostrando');
         text = text.replace('to', 'até');
 		text = text.replace('of', 'de');
 		text = text.concat(' registros');

@@ -27,7 +27,7 @@ public class CustomExportToolbar extends ExportToolbar {
 
 	private CSVDataExporter getCSVDataExporter() {
 		CSVDataExporter csvDataExporter = new CSVDataExporter();
-		csvDataExporter.setCharacterSet(StandardCharsets.UTF_8.name());
+		csvDataExporter.setCharacterSet(StandardCharsets.ISO_8859_1.name());
 		return csvDataExporter;
 	}
 

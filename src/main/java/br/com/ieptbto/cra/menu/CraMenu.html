@@ -10,32 +10,20 @@
 	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Buscar Arquivos<span class="caret"></span></a>
 	          <ul class="dropdown-menu">
 	            <li><a href="BuscarArquivo" wicket:id="BuscarArquivo">Buscar B, C e R</a></li>
-				<li><a wicket:id="BuscarDesistenciaCancelamento" href="BuscarDesistenciaCancelamento">Buscar Desistências<br>e Cancelamentos</a></li>
+				<li><a wicket:id="BuscarDesistenciaCancelamento" href="BuscarDesistenciaCancelamento">Buscar Desist&egrave;ncias<br>e Cancelamentos</a></li>
 			  </ul>
 	        </li>  
 	        <li><a wicket:id="MonitorarTitulos" href="MonitorarTitulos" >Buscar T&iacute;tulos</a></li>  
-	        <li><a href="SolicitarDesistenciaCancelamento" wicket:id="SolicitarDesistenciaCancelamento">Solicitar Desistências e Cancelamentos</a></li>
+	        <li><a href="SolicitarDesistenciaCancelamento" wicket:id="SolicitarDesistenciaCancelamento">Solicitar Desist&egrave;ncias e Cancelamentos</a></li>
 	      </ul>
 		</div>
-		<div wicket:id="menuRelatorioPadrao">
+		<div wicket:id="menuRelatorio">
 		 <ul class="nav navbar-nav">
 	      	<li class="dropdown">
 	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relat&oacute;rios<span class="caret"></span></a>
 	          <ul class="dropdown-menu">
-			 	<li><a href="RelatorioArquivosInstituicoesCartorios" wicket:id="RelatorioArquivosInstituicoesCartorios" class="font-menu">Anal&iacute;tico de T&iacute;tulos</a></li>
-			  </ul>
-	        </li>
-		 </ul>
-		</div>
-		<div wicket:id="menuRelatorioCra">
-		 <ul class="nav navbar-nav">
-	      	<li class="dropdown">
-	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relat&oacute;rios<span class="caret"></span></a>
-	          <ul class="dropdown-menu">
-			 	<li><a href="Relatorio" wicket:id="Relatorio" class="font-menu">Remessa, Confirma&ccedil;&atilde;o e Retorno</a></li>
+<!-- 			 	<li><a href="Relatorio" wicket:id="Relatorio" class="font-menu">Remessa, Confirma&ccedil;&atilde;o e Retorno</a></li> -->
 			 	<li><a href="RelatorioTitulos" wicket:id="RelatorioTitulos" class="font-menu">T&iacute;tulos: Detalhados por Situa&ccedil;&atilde;o</a></li>
-				<li role="separator" class="divider"></li> 
-			 	<li><a href="RelatorioTaxaCra" wicket:id="RelatorioTaxaCra" class="font-menu">Taxa CRA</a></li>  
 			  </ul>
 	        </li> 
 		 </ul> 
@@ -46,7 +34,7 @@
 	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Batimento<span class="caret"></span></a>
 	          <ul class="dropdown-menu">
 			 	<li><a wicket:id="ImportarExtrato" href="ImportarExtrato" class="font-menu">Importar Extrato</a></li>
-			 	<li><a wicket:id="BuscarDepositos" href="BuscarDepositos" class="font-menu">Buscar Depósitos</a></li>
+			 	<li><a wicket:id="BuscarDepositos" href="BuscarDepositos" class="font-menu">Buscar Dep&oacute;sitos</a></li>
 			 	<li role="separator" class="divider"></li> 
 			 	<li><a wicket:id="Batimento" href="Batimento" class="font-menu">Batimento</a></li>
 			 	<li><a wicket:id="LiberarRetornos" href="LiberarRetornos" class="font-menu">Liberar Retornos</a></li> 
@@ -72,7 +60,7 @@
 				<li><a wicket:id="GerarRemessasConvenio" href="GerarRemessasConvenio" class="font-menu">Gerar Remessas Conv&ecirc;nios</a></li>
 				<li><a wicket:id="GerarConfirmacao" href="GerarConfirmacao" class="font-menu">Gerar Confirma&ccedil;&otilde;es</a></li>
 				<li><a wicket:id="GerarRetorno" href="GerarRetorno" class="font-menu">Gerar Retornos</a></li>
-				<li><a wicket:id="GerarDesistenciasCancelamentos" href="GerarDesistenciasCancelamentos" class="font-menu">Gerar Desistências<br> e Cancelamentos</a></li>
+				<li><a wicket:id="GerarDesistenciasCancelamentos" href="GerarDesistenciasCancelamentos" class="font-menu">Gerar Desist&egrave;ncias<br> e Cancelamentos</a></li>
 			  	<li role="separator" class="divider"></li> 
 			  	<li><a href="Instituicoes" wicket:id="Instituicoes" class="font-menu">Bancos e Conv&ecirc;nios</a></li>
 				<li><a wicket:id="CartoriosProtesto" href="Cartorios" class="font-menu">Cart&oacute;rios de Protesto</a></li>
@@ -89,7 +77,7 @@
 		<div wicket:id="menuSuper">
 			<ul class="nav navbar-nav">
 	        	<li class="dropdown">
-		          	<a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Área Restrita<span class="caret"></span></a>
+		          	<a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">&Aacute;rea Restrita<span class="caret"></span></a>
 				 	<ul class="dropdown-menu">
 			       		<li class="dropdown-submenu">
 			                <a tabindex="-1" href="#" class="font-menu">Arquivos</a>
@@ -105,9 +93,9 @@
 		                </li>
 				 		<li><a wicket:id="IncluirTaxaCra" href="IncluirTaxaCra" class="font-menu">Taxa CRA</a></li>  
 				 		<li class="dropdown-submenu">
-			                <a tabindex="-1" href="#" class="font-menu">Parâmetros de Serviços</a> 
+			                <a tabindex="-1" href="#" class="font-menu">Par&agrave;metros de Servi&ccedil;os</a> 
 			                <ul class="dropdown-menu">
-			                  <li><a wicket:id="WebServiceConfiguracao" href="WebServiceConfiguracao">Configurações</a></li>
+			                  <li><a wicket:id="WebServiceConfiguracao" href="WebServiceConfiguracao">Configura&ccedil;&otilde;es</a></li>
 			                </ul>
 		                </li>
 				 	</ul>

@@ -195,7 +195,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 			
 			@Override
 			public void populateItem(Item<ICellPopulator<ViewBatimentoRetorno>> item, String id, IModel<ViewBatimentoRetorno> model) {
-				item.add(new CraLinksPanel(id, model.getObject().getNomeArquivo_Arquivo(), model.getObject().getIdArquivo_Arquivo()));
+				item.add(new CraLinksPanel(id, model.getObject().getNomeArquivo_Arquivo(), model.getObject().getIdRemessa_Remessa()));
 			}
 			
 			@Override
@@ -306,7 +306,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 				return "col-center text-center";
 			}
 		});
-		CraDataTable<ViewBatimentoRetorno> dataTable = new CraDataTable<ViewBatimentoRetorno>("dataTable", new Model<ViewBatimentoRetorno>(), columns, dataProvider);
+		CraDataTable<ViewBatimentoRetorno> dataTable = new CraDataTable<ViewBatimentoRetorno>("dataTable", columns, dataProvider);
 		dataTable.setOutputMarkupPlaceholderTag(true);
 		dataTable.setOutputMarkupId(true);
 		return dataTable;

@@ -15,9 +15,9 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Lefer
  *
  */
+@SuppressWarnings("serial")
 public class CraMenu extends Panel {
 
-	private static final long serialVersionUID = 1L;
 	@SpringBean
 	private UsuarioMediator usuarioMediator;
 	private Usuario usuario;
@@ -72,25 +72,9 @@ public class CraMenu extends Panel {
 		menuPadrao.addItem("BuscarDesistenciaCancelamento", rolesPesquisar);
 		menuPadrao.addItem("MonitorarTitulos", rolesPesquisar);
 
-		/** Relatorio Padrão */
-		MenuItem menuRelatorioPadrao = menu.addItem("menuRelatorioPadrao", rolesPesquisar);
-		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
-			menuRelatorioPadrao.setVisible(false);
-		} else {
-			menuRelatorioPadrao.setVisible(true);
-		}
-		menuRelatorioPadrao.addItem("RelatorioArquivosInstituicoesCartorios", rolesPesquisar);
-
-		/** Relatorio Cra */
-		MenuItem menuRelatorioCra = menu.addItem("menuRelatorioCra", rolesPesquisar);
-		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
-			menuRelatorioCra.setVisible(true);
-		} else {
-			menuRelatorioCra.setVisible(false);
-		}
-		menuRelatorioCra.addItem("Relatorio", rolesIncluir);
-		menuRelatorioCra.addItem("RelatorioTitulos", rolesIncluir);
-		menuRelatorioCra.addItem("RelatorioTaxaCra", rolesIncluir);
+		/** Relatorio */
+		MenuItem menuRelatorio = menu.addItem("menuRelatorio", rolesPesquisar);
+		menuRelatorio.addItem("RelatorioTitulos", rolesPesquisar);
 
 		/** Menus Administrador */
 		MenuItem menuAdministrador = menu.addItem("menuAdministrador", rolesIncluir);

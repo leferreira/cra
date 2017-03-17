@@ -241,7 +241,7 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 			} 
 		});
 		LogCraProvider provider = new LogCraProvider(buscarLoggs());
-		add(new CraDataTable<LogCra>("panelDataTableAcoes", new Model<LogCra>(), columns, provider));
+		add(new CraDataTable<LogCra>("panelDataTableAcoes", columns, provider));
 	}
 
 	public List<Instituicao> getListaInstituicoes() {
