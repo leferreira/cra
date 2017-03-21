@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
@@ -35,14 +34,14 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 	@SpringBean
 	ConvenioMediator convenioMediator;
 	@SpringBean
-	SolicitacaoDesistenciaCancelamentoMediator solicitacaoDesistenciaCancelamentoMediator;
+	SolicitacaoDesistenciaCancelamentoMediator solicitacaoMediator;
 
-	private List<SolicitacaoDesistenciaCancelamento> solicitacoesDesistenciasCancelamentos;
+	private List<SolicitacaoDesistenciaCancelamento> solicitacoes;
 	private Usuario usuario;
 
 	public GerarDesistenciasCancelamentosPage() {
 		this.usuario = getUser();
-
+		this.solicitacoes = solicitacaoMediator.buscarSolicitacoesDesistenciasCancelamentos();
 		adicionarComponentes();
 	}
 
@@ -55,14 +54,13 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 	private void formGerarDesistenciasCancelamentos() {
 		Form<SolicitacaoDesistenciaCancelamento> form = new Form<SolicitacaoDesistenciaCancelamento>("form", getModel()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
 
 				try {
-					convenioMediator.gerarDesistenciasCancelamentosConvenio(usuario, solicitacoesDesistenciasCancelamentos);
+					convenioMediator.gerarDesistenciasCancelamentosConvenio(usuario, solicitacoes);
 					success("Os arquivos de desistências e cancelamentos de protesto foram gerados com sucesso!");
 
 				} catch (InfraException ex) {
@@ -78,9 +76,8 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 	}
 
 	private void listaSolicitacoesDesistenciasCancelamento() {
-		add(new ListView<SolicitacaoDesistenciaCancelamento>("listaDesistenciasCancelamento", buscarTitulosDesistenciasCancelamentosPendetes()) {
+		add(new ListView<SolicitacaoDesistenciaCancelamento>("listaDesistenciasCancelamento", solicitacoes) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -95,20 +92,6 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 			}
 		});
 
-	}
-
-	private IModel<List<SolicitacaoDesistenciaCancelamento>> buscarTitulosDesistenciasCancelamentosPendetes() {
-		return new LoadableDetachableModel<List<SolicitacaoDesistenciaCancelamento>>() {
-
-			/**/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected List<SolicitacaoDesistenciaCancelamento> load() {
-				solicitacoesDesistenciasCancelamentos = solicitacaoDesistenciaCancelamentoMediator.buscarSolicitacoesDesistenciasCancelamentos();
-				return solicitacoesDesistenciasCancelamentos;
-			}
-		};
 	}
 
 	@Override
