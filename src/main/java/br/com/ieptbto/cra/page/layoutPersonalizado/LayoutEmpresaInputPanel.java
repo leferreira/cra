@@ -259,8 +259,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 
 	private DropDownChoice<Instituicao> getComboEmpresas() {
 		ChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("razaoSocial");
-		comboEmpresas = new DropDownChoice<Instituicao>("empresa", instituicaoMediator.getInstituicoesFinanceiras(),
-				renderer);
+		comboEmpresas = new DropDownChoice<Instituicao>("empresa", instituicaoMediator.getInstituicoesLayoutPersonalizado(), renderer);
 		comboEmpresas.setLabel(new Model<String>("Empresa"));
 		comboEmpresas.setOutputMarkupId(true);
 		comboEmpresas.setRequired(true);
