@@ -18,9 +18,6 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class IncluirUsuarioPage extends BasePage<Usuario> {
 
-	/**
-	 * 
-	 **/
 	private static final long serialVersionUID = 1L;
 
 	private Usuario usuario;
