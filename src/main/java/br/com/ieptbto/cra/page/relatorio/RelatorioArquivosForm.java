@@ -15,7 +15,7 @@ import br.com.ieptbto.cra.enumeration.NivelDetalhamentoRelatorio;
 import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.page.base.BaseForm;
-import br.com.ieptbto.cra.relatorio.RelatorioUtil;
+import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;

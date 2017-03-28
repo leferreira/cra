@@ -16,10 +16,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.CustomFeedbackPanel;
-import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.RegistroCnp;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo

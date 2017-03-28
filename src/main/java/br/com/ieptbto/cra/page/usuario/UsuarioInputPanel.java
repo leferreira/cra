@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
@@ -24,9 +25,6 @@ import br.com.ieptbto.cra.validador.EmailValidator;
 
 public class UsuarioInputPanel extends Panel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
@@ -106,8 +104,8 @@ public class UsuarioInputPanel extends Panel {
 	}
 
 	private DropDownChoice<Instituicao> comboInstituicao() {
-		DropDownChoice<Instituicao> comboInstituicao =
-				new DropDownChoice<Instituicao>("instituicao", instituicaoMediator.listarTodas(), new ChoiceRenderer<Instituicao>("nomeFantasia"));
+		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
+		DropDownChoice<Instituicao> comboInstituicao = new DropDownChoice<Instituicao>("instituicao", instituicaoMediator.listarTodas(), renderer);
 		comboInstituicao.setLabel(new Model<String>("Instituição"));
 		comboInstituicao.setRequired(true);
 		return comboInstituicao;
@@ -121,8 +119,8 @@ public class UsuarioInputPanel extends Panel {
 			}
 		}
 
-		DropDownChoice<GrupoUsuario> comboGrupoUsuario =
-				new DropDownChoice<GrupoUsuario>("grupoUsuario", grupoUsuarioPermitido, new ChoiceRenderer<GrupoUsuario>("grupo"));
+		IChoiceRenderer<GrupoUsuario> renderer = new ChoiceRenderer<GrupoUsuario>("grupo");
+		DropDownChoice<GrupoUsuario> comboGrupoUsuario = new DropDownChoice<GrupoUsuario>("grupoUsuario", grupoUsuarioPermitido, renderer);
 		comboGrupoUsuario.setLabel(new Model<String>("Grupo Usuário"));
 		comboGrupoUsuario.setRequired(true);
 		return comboGrupoUsuario;

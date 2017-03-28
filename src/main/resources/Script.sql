@@ -1,4 +1,19 @@
 ==================================================================================================================================
+cod:3
+descricao:CORREÇÃO PARA ENTRADA MANUAL E LAYOUT PERSONALIZADO
+dependencia:0
+
+UPDATE tb_instituicao as ins
+SET layout_padrao_xml='ENTRADA_MANUAL_LAYOUT_PERSONALIZADO'
+WHERE ins.layout_padrao_xml = 'LAYOUT_PERSONALIZADO_CONVENIOS' 
+	OR ins.layout_padrao_xml = 'ENTRADA_MANUAL';
+
+UPDATE tb_instituicao as ins SET administrar_empresas_filiadas=true WHERE ins.tipo_instituicao_id=4;
+UPDATE tb_instituicao as ins SET administrar_empresas_filiadas=false WHERE ins.tipo_instituicao_id=3;
+
+UPDATE tb_instituicao as ins SET layout_retorno_recebimento_empresa=false;
+
+==================================================================================================================================
 
 cod:2
 descricao:AJUSTES DE CAMPOS DOWNLOAD REMESSA

@@ -26,7 +26,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
 import br.com.ieptbto.cra.entidade.EtiquetaSLIP;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;

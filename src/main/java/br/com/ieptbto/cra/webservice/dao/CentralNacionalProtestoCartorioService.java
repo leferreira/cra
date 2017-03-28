@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
@@ -67,7 +68,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			logger.info(ex.getMessage(), ex);
 			loggerCra.error(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Erro no processamento do arquivo da CNP de " + usuario.getInstituicao().getNomeFantasia() + "!", ex);
-			return gerarMensagem(gerarMensagemErroProcessamento(ex.getMessage()), CONSTANTE_RELATORIO_XML);
+			return gerarMensagem(gerarMensagemErroProcessamento(ex.getMessage(), new LocalDate()), CONSTANTE_RELATORIO_XML);
 		} catch (Exception ex) {
 			logger.info(ex.getMessage(), ex);
 			loggerCra.error(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
@@ -107,7 +108,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 			logger.info(ex.getMessage(), ex);
 			loggerCra.error(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
 					"Erro no processamento do arquivo da CNP de " + usuario.getInstituicao().getNomeFantasia() + "!", ex);
-			return gerarMensagem(gerarMensagemErroProcessamento(ex.getMessage()), CONSTANTE_RELATORIO_XML);
+			return gerarMensagem(gerarMensagemErroProcessamento(ex.getMessage(), new LocalDate()), CONSTANTE_RELATORIO_XML);
 		} catch (Exception ex) {
 			logger.info(ex.getMessage(), ex);
 			loggerCra.error(usuario, CraAcao.ENVIO_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,

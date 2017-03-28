@@ -32,7 +32,7 @@ import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.relatorio.RelatorioUtil;
+import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -43,8 +43,6 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
 	RemessaMediator remessaMediator;
 	@SpringBean
@@ -52,6 +50,7 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 
+	private static final long serialVersionUID = 1L;
 	private Usuario usuario;
 	private Arquivo arquivo;
 	private ArquivoBean arquivoBean;
@@ -60,7 +59,6 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 		this.arquivo = new Arquivo();
 		this.arquivoBean = arquivoBean;
 		this.usuario = getUser();
-
 		adicionarComponentes();
 	}
 
@@ -72,7 +70,6 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 	private void listaArquivos() {
 		add(new ListView<Remessa>("dataTableRemessa", buscarArquivos()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -84,7 +81,6 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 				item.add(new Label("sequencialCabecalho", remessa.getCabecalho().getNumeroSequencialRemessa()));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -119,7 +115,6 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
 				return new Link<Remessa>("downloadArquivo") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -146,7 +141,6 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 
 				Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -175,7 +169,6 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 			private Link<Remessa> relatorioArquivo(final Remessa remessa) {
 				return new Link<Remessa>("gerarRelatorio") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -203,7 +196,6 @@ public class ListaArquivoCartorioPage extends BasePage<Arquivo> {
 	public IModel<List<Remessa>> buscarArquivos() {
 		return new LoadableDetachableModel<List<Remessa>>() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

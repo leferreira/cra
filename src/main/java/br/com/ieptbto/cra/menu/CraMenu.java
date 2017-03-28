@@ -4,9 +4,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.PermissaoUsuario;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -38,39 +36,9 @@ public class CraMenu extends Panel {
 		/** Menus Padrão */
 		MenuItem menuPadrao = menu.addItem("menuPadrao", rolesPesquisar);
 		menuPadrao.addItem("BuscarArquivo", rolesPesquisar);
-
-		MenuItem itemArquivoEmpresa = new MenuItem("EnviarArquivoEmpresa");
-		itemArquivoEmpresa.authorize(rolesPesquisar);
-		itemArquivoEmpresa.setVisible(false);
-
-		MenuItem itemSolicitarCancelamento = new MenuItem("SolicitarDesistenciaCancelamento");
-		itemSolicitarCancelamento.authorize(rolesPesquisar);
-		itemSolicitarCancelamento.setVisible(false);
-
-		MenuItem itemArquivo = new MenuItem("EnviarArquivo");
-		itemArquivo.authorize(rolesPesquisar);
-		itemArquivo.setVisible(false);
-
-		MenuItem itemCentralProtesto = new MenuItem("CentralProtestosCartorio");
-		itemCentralProtesto.authorize(rolesPesquisar);
-		itemCentralProtesto.setVisible(false);
-		if (usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-			itemCentralProtesto.setVisible(true);
-		}
-
-		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.LAYOUT_PERSONALIZADO_CONVENIOS)) {
-			itemArquivoEmpresa.setVisible(true);
-			itemSolicitarCancelamento.setVisible(true);
-		} else {
-			itemArquivo.setVisible(true);
-		}
-		menuPadrao.add(itemArquivo);
-		menuPadrao.add(itemArquivoEmpresa);
-		menuPadrao.add(itemSolicitarCancelamento);
-		menuPadrao.add(itemCentralProtesto);
-
 		menuPadrao.addItem("BuscarDesistenciaCancelamento", rolesPesquisar);
-		menuPadrao.addItem("MonitorarTitulos", rolesPesquisar);
+		menuPadrao.addItem("BuscarTitulos", rolesPesquisar);
+		menuPadrao.addItem("EnviarArquivo");
 
 		/** Relatorio */
 		MenuItem menuRelatorio = menu.addItem("menuRelatorio", rolesPesquisar);
@@ -102,17 +70,17 @@ public class CraMenu extends Panel {
 		menuAdministrador.addItem("InstrumentoDeProtesto", rolesIncluir);
 		menuAdministrador.addItem("GerarSlip", rolesIncluir);
 		menuAdministrador.addItem("ImportarArquivoDePara", rolesIncluir);
-
 		menuAdministrador.addItem("CentralDeAcoes", rolesIncluir);
 
 		MenuItem menuSuper = menu.addItem("menuSuper", rolesIncluir);
-		if (!usuario.getGrupoUsuario().getGrupo().equals(PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel())) {
-			menuSuper.setVisible(false);
-		}
 		menuSuper.addItem("WebServiceConfiguracao", rolesIncluir);
 		menuSuper.addItem("ImportarArquivo5Anos", rolesIncluir);
 		menuSuper.addItem("RemoverArquivo", rolesIncluir);
 		menuSuper.addItem("IncluirTaxaCra", rolesIncluir);
+		String grupoUsuario = usuario.getGrupoUsuario().getGrupo();
+		if (grupoUsuario == PermissaoUsuario.SUPER_ADMINISTRADOR.getLabel()) {
+			menuSuper.setVisible(false);
+		}
 	}
 
 	private boolean verificaPermissao(Usuario user) {

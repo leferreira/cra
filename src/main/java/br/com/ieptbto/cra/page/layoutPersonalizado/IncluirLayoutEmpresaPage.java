@@ -26,7 +26,8 @@ import br.com.ieptbto.cra.security.CraRoles;
 public class IncluirLayoutEmpresaPage extends BasePage<LayoutFiliado> {
 
 	@SpringBean
-	private LayoutFiliadoMediator layoutFiliadoMediator;
+	LayoutFiliadoMediator layoutFiliadoMediator;
+	
 	private LayoutFiliado layoutEmpresa;
 	private LayoutEmpresaInputPanel inputPanel;
 

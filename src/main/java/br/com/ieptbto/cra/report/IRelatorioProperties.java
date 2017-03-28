@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.relatorio;
+package br.com.ieptbto.cra.report;
 
 public interface IRelatorioProperties {
 

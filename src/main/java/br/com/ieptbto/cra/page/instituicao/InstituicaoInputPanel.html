@@ -15,22 +15,6 @@
 						<div class="form-group">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label>Código Compensação</label> <input wicket:id="codigoCompensacao" maxlength="3"
-										class="form-control">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label>Agência Centralizadora</label> <input wicket:id="agenciaCentralizadora"
-										maxlength="6" class="form-control">
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group">
-							<div class="col-md-6">
-								<div class="form-group">
 									<label>CPF/CNPJ</label> <input wicket:id="cnpj"
 										onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
 										onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" class="form-control"
@@ -44,27 +28,6 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="form-group">
-						<label>Valor Confirmação</label>
-						<div class="form-group input-group">
-							<span class="input-group-addon">R$</span> <input wicket:id="valorConfirmacao"
-								onkeypress="FormataValor(this.id, 12, event);" maxlength="15" class="form-control">
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="row">
-				<div class="col-md-10">
-					<div class="form-group">
-						<label>Situação</label> <label class="radio-inline inline" wicket:id="status"> </label>
-					</div>
-					<div class="form-group">
-						<label>Tipo Instituição</label> <select wicket:id="tipoInstituicao" class="form-control">
-						</select>
 					</div>
 					<div class="row">
 						<div class="form-group">
@@ -104,59 +67,127 @@
 				</div>
 			</div>
 		</div>
-	</div>
-		<div class="row">
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-10">
-						<fieldset>
-							<legend>CONFIGURAÇÕES DE TRAMITAÇÃO NA CRA</legend>
-							<div class="form-group">
-								<label>Layout de Transmissão</label> 
-								<select wicket:id="layoutPadraoXML" class="form-control"></select>
-							</div>
-							<div class="form-group">
-								<label>Campo Complemento Registro</label> 
-								<select wicket:id="tipoCampo51"	class="form-control"></select>
-							</div>
-							<div class="form-group">
-								<label for="tipo">Batimento</label> 
-								<select wicket:id="tipoBatimento" class="form-control"></select>
-							</div>
-							<div class="form-group">
-								<label>Setores&nbsp;(Convênios)</label>
-								<input type="checkbox" wicket:id="setoresConvenio" class="form-control">
-							</div>
-						</fieldset>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="form-group">
+						<label>Situação</label> <label class="radio-inline inline" wicket:id="status"> </label>
 					</div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-10">
-						<fieldset>
-							<legend>CONFIGURAÇÕES SISTEMA DE PROTESTO</legend>
-							<div class="form-group">
-								<label>Verificação de Título Manual</label>&nbsp;
-								<input type="checkbox" wicket:id="verificacaoManual">
+					<div class="form-group">
+						<label>Tipo Instituição</label> <select wicket:id="tipoInstituicao" class="form-control">
+						</select>
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Código Compensação</label> <input wicket:id="codigoCompensacao" maxlength="3"
+										class="form-control">
+								</div>
 							</div>
-							<div class="form-group">
-								<label>Selo Diferido</label>&nbsp;
-								<input type="checkbox" wicket:id="seloDiferido">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Agência Centralizadora</label> <input wicket:id="agenciaCentralizadora"
+										maxlength="6" class="form-control">
+								</div>
 							</div>
-							<div class="form-group">
-								<label>Processamento CRA</label>&nbsp;
-								<input type="checkbox" wicket:id="taxaCra">
-							</div>
-							<div class="form-group">
-								<label></label>
-								<button type="submit" class="btn btn-primary pull-right">
-									<span class="fa fa-save"></span>&nbsp;Salvar
-								</button>
-							</div>
-						</fieldset>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Valor Confirmação</label>
+						<div class="form-group input-group">
+							<span class="input-group-addon">R$</span> <input wicket:id="valorConfirmacao"
+								onkeypress="FormataValor(this.id, 12, event);" maxlength="15" class="form-control">
+						</div>
+					</div>
+					<fieldset>
+						<legend>CONFIGURAÇÕES</legend>
+						<div class="panel-group" id="accordion">
+					         <div class="panel panel-primary">
+					             <div class="panel-heading">
+					                 <h4 class="panel-title">
+					                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="collapsed in">Tramitação na CRA</a>
+					                 </h4>
+					             </div>
+					             <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+					                 <div class="panel-body">
+					                     <div class="form-group">
+											<label>Layout de Transmissão</label> 
+											<select wicket:id="layoutPadraoXML" class="form-control"></select>
+										</div>
+										<div class="form-group">
+											<label>Campo Complemento Registro</label> 
+											<select wicket:id="tipoCampo51"	class="form-control"></select>
+										</div>
+										<div class="form-group">
+											<label for="tipo">Batimento</label> 
+											<select wicket:id="tipoBatimento" class="form-control"></select>
+										</div>
+									</div>
+					             </div>
+					         </div>
+					         <div class="panel panel-primary">
+					             <div class="panel-heading">
+					                 <h4 class="panel-title">
+					                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed" aria-expanded="false">Convênios</a>
+					                 </h4>
+					             </div>
+					             <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false">
+					                 <div class="panel-body">
+					                 	<div class="form-group">
+											<label>Retorno Recebimento Empresa&nbsp;&nbsp;</label>
+											<input type="checkbox" wicket:id="layoutRetornoRecebimentoEmpresa">
+											<p>Disponibilizar o Download de Retorno de acordo com o Layout Padrão de 
+												Arrecadação/Recebimento  com Utilização do Código de Barras - VERSÃO 04</p>
+										</div>
+							           	<div class="form-group">
+											<label>Administrar Filiadas&nbsp;&nbsp;</label>
+											<input type="checkbox" wicket:id="administrarEmpresasFiliadas">
+											<p>Permitir que o convênio cadastre e controle empresas (filiadas) e usuários associados a ele 
+											para envio de títulos manuais.</p>
+										</div>
+										<div class="form-group">
+											<label>Permitir Setores&nbsp;&nbsp;</label>
+											<input type="checkbox" wicket:id="setoresConvenio">
+											<p>Permitir divisões de setores de empresas filiadas a um convênio.</p>
+										</div>
+					                 </div>
+					             </div>
+					         </div>
+					         <div class="panel panel-primary">
+					             <div class="panel-heading">
+					                 <h4 class="panel-title">
+					                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="collapsed" aria-expanded="false">Sistema de Protesto</a>
+					                 </h4>
+					             </div>
+					             <div id="collapseThree" class="panel-collapse collapse" aria-expanded="false">
+					                 <div class="panel-body">
+					                 	<div class="form-group">
+											<label>Verificação de Título Manual</label>&nbsp;&nbsp;
+											<input type="checkbox" wicket:id="verificacaoManual">
+										</div>
+										<div class="form-group">
+											<label>Selo Diferido</label>&nbsp;&nbsp;
+											<input type="checkbox" wicket:id="seloDiferido">
+										</div>
+										<div class="form-group">
+											<label>Processamento CRA</label>&nbsp;&nbsp;
+											<input type="checkbox" wicket:id="taxaCra">
+										</div>
+					                 </div>
+					             </div>
+					         </div>
+						</div>
+					</fieldset>
+					<div class="form-group">
+						<label></label>
+						<button type="submit" class="btn btn-primary pull-right">
+							<span class="fa fa-save"></span>&nbsp;Salvar
+						</button>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	<br class="clear">
 </wicket:panel>

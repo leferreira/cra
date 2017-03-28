@@ -24,16 +24,13 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class BuscarArquivoPage extends BasePage<Arquivo> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
-
 	private Arquivo arquivo;
 	private Usuario usuario;
 
 	public BuscarArquivoPage() {
 		this.arquivo = new Arquivo();
 		this.usuario = getUser();
-
 		adicionarComponentes();
 	}
 
@@ -46,7 +43,6 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 		ArquivoBean arquivoFormBean = new ArquivoBean();
 		Form<ArquivoBean> form = new Form<ArquivoBean>("form", new CompoundPropertyModel<ArquivoBean>(arquivoFormBean)) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

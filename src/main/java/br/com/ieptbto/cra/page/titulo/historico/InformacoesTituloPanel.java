@@ -16,8 +16,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.component.label.DataUtil;
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
@@ -28,15 +27,13 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
  *
  */
 public class InformacoesTituloPanel extends Panel {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	RemessaMediator remessaMediator;
@@ -45,6 +42,7 @@ public class InformacoesTituloPanel extends Panel {
 	@SpringBean
 	MunicipioMediator municipioMediator;
 
+	private static final long serialVersionUID = 1L;
 	private TituloRemessa tituloRemessa;
 	private Anexo anexo;
 	private Usuario usuario;
@@ -53,7 +51,6 @@ public class InformacoesTituloPanel extends Panel {
 		super(id, model);
 		this.tituloRemessa = model.getObject();
 		this.anexo = tituloMediator.buscarAnexo(tituloRemessa);
-
 		add(numeroProtocoloCartorio());
 		add(dataProtocolo());
 		add(codigoCartorio());

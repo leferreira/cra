@@ -33,7 +33,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Batimento;
 import br.com.ieptbto.cra.entidade.BatimentoDeposito;
@@ -47,7 +47,7 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.RetornoMediator;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.relatorio.RelatorioUtil;
+import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;

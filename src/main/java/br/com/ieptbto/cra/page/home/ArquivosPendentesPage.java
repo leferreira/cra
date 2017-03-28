@@ -42,7 +42,7 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
-import br.com.ieptbto.cra.relatorio.RelatorioUtil;
+import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;

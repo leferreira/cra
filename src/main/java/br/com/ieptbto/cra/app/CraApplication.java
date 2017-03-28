@@ -42,7 +42,6 @@ import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.page.centralDeAcoes.CentralDeAcoesPage;
 import br.com.ieptbto.cra.page.cnp.CentralNacionalProtestoPage;
-import br.com.ieptbto.cra.page.cnp.CentralProtestosCartorioPage;
 import br.com.ieptbto.cra.page.cnp.Importar5AnosCartorioPage;
 import br.com.ieptbto.cra.page.convenio.GerarRemessaConvenioPage;
 import br.com.ieptbto.cra.page.cra.GerarConfirmacaoPage;
@@ -67,7 +66,6 @@ import br.com.ieptbto.cra.page.instrumentoProtesto.BuscarInstrumentoProtestoPage
 import br.com.ieptbto.cra.page.instrumentoProtesto.GerarSlipPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.ImportarArquivoDeParaPage;
 import br.com.ieptbto.cra.page.instrumentoProtesto.InstrumentoProtestoPage;
-import br.com.ieptbto.cra.page.layoutPersonalizado.EnviarArquivoEmpresaPage;
 import br.com.ieptbto.cra.page.layoutPersonalizado.IncluirLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.layoutPersonalizado.ListaLayoutEmpresaPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
@@ -169,15 +167,11 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("CentralDeAcoes", CentralDeAcoesPage.class);
 		mountPage("CentralNacionalProtesto", CentralNacionalProtestoPage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
-
-		/** SUPER CRA */
 		mountPage("RemoverArquivo", RemoverArquivoPage.class);
 		mountPage("ListaArquivosRemover", ListaRemoverArquivoPage.class);
 		mountPage("WebServiceConfiguracao", WebServiceConfiguracaoPage.class);
 		mountPage("ImportarArquivo5Anos", Importar5AnosCartorioPage.class);
 		mountPage("IncluirTaxaCra", IncluirTaxaCraPage.class);
-
-		/** Administracao */
 		mountPage("Batimento", BatimentoPage.class);
 		mountPage("ImportarExtrato", ImportarExtratoPage.class);
 		mountPage("ConflitoDepositosArquivoRetorno", ConflitoDepositosArquivoRetornoPage.class);
@@ -186,12 +180,10 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("RetornosLiberados", RetornosLiberadosPage.class);
 		mountPage("ListaDepositos", ListaDepositoPage.class);
 		mountPage("Deposito", IncluirDepositoPage.class);
-
 		mountPage("GerarRemessasConvenio", GerarRemessaConvenioPage.class);
 		mountPage("GerarConfirmacao", GerarConfirmacaoPage.class);
 		mountPage("GerarRetorno", GerarRetornoPage.class);
 		mountPage("GerarDesistenciasCancelamentos", GerarDesistenciasCancelamentosPage.class);
-
 		mountPage("Instituicoes", ListaInstituicaoPage.class);
 		mountPage("IncluirInstituicao", IncluirInstituicaoPage.class);
 		mountPage("Cartorios", ListaCartorioPage.class);
@@ -210,39 +202,26 @@ public class CraApplication extends WebApplication implements ISecureApplication
 		mountPage("EmpresasFiliadas", ListaFiliadoPage.class);
 		mountPage("IncluirEmpresaFiliada", IncluirFiliadoPage.class);
 		mountPage("AtualizarEmpresasFiliadas", AtualizarEmpresasFiliadasPage.class);
-
-		/** Arquivo */
 		mountPage("EnviarArquivo", EnviarArquivoPage.class);
-		mountPage("EnviarArquivoEmpresa", EnviarArquivoEmpresaPage.class);
-		mountPage("CentralProtestosCartorio", CentralProtestosCartorioPage.class);
-
 		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 		mountPage("ListaArquivo", ListaArquivoCartorioPage.class);
 		mountPage("TitulosArquivo", TitulosArquivoPage.class);
-
 		mountPage("ListaArquivoInstituicao", ListaArquivoInstituicaoPage.class);
 		mountPage("TitulosArquivoInstituicao", TitulosArquivoInstituicaoPage.class);
-
 		mountPage("BuscarDesistenciaCancelamento", BuscarDesistenciaCancelamentoPage.class);
 		mountPage("ListaDesistenciaCancelamento", ListaDesistenciaCancelamentoPage.class);
 		mountPage("TitulosDesistencia", TitulosDesistenciaPage.class);
 		mountPage("TitulosCancelamento", TitulosCancelamentoPage.class);
 		mountPage("TitulosAutorizacaoCancelamento", TitulosAutorizacaoCancelamentoPage.class);
-
 		mountPage("SolicitarDesistenciaCancelamento", SolicitarDesistenciaCancelamentoPage.class);
 		mountPage("EnviarSolicitacaoDesistenciaCancelamento", EnviarSolicitacaoDesistenciaCancelamentoPage.class);
 		mountPage("DownloadOficioIrregularidade", DownloadOficioIrregularidadePage.class);
-
 		mountPage("MonitorarTitulos", BuscarTitulosPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
 		mountPage("Historico", HistoricoPage.class);
-
-		/** Relatorios CRA */
 		mountPage("Relatorio", RelatorioArquivosPage.class);
 		mountPage("RelatorioTitulos", RelatorioTitulosPage.class);
 		mountPage("RelatorioRetorno", RelatorioRetornoPage.class);
-
-		/** Slip */
 		mountPage("InstrumentoDeProtesto", InstrumentoProtestoPage.class);
 		mountPage("GerarSlip", GerarSlipPage.class);
 		mountPage("BuscarInstrumentoProtesto", BuscarInstrumentoProtestoPage.class);

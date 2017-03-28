@@ -11,10 +11,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.layoutPersonalizado.EnviarArquivoEmpresaPage;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
@@ -27,19 +25,16 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 	private Usuario usuario;
 
 	public HomePage() {
 		this.usuario = getUser();
-
 		adicionarComponentes();
 	}
 
 	public HomePage(PageParameters parameters) {
 		this.usuario = getUser();
-
 		error(parameters.get("error"));
 		adicionarComponentes();
 	}
@@ -65,31 +60,15 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	}
 
 	private Link<Remessa> linkEnviarArquivo() {
-		Link<Remessa> linkEnviarArquivo = null;
-		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.LAYOUT_PERSONALIZADO_CONVENIOS)) {
-			linkEnviarArquivo = new Link<Remessa>("linkArquivo") {
+		return new Link<Remessa>("linkArquivo") {
 
-				/***/
-				private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
-				@Override
-				public void onClick() {
-					setResponsePage(new EnviarArquivoEmpresaPage());
-				}
-			};
-		} else {
-			linkEnviarArquivo = new Link<Remessa>("linkArquivo") {
-
-				/***/
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClick() {
-					setResponsePage(new EnviarArquivoPage());
-				}
-			};
-		}
-		return linkEnviarArquivo;
+			@Override
+			public void onClick() {
+				setResponsePage(new EnviarArquivoPage());
+			}
+		};
 	}
 
 	/**

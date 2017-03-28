@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
@@ -81,7 +82,6 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 	private void formularioConsultaAcoes() {
 		Form<LogCra> form = new Form<LogCra>("form") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -127,15 +127,16 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 	}
 
 	private DropDownChoice<TipoInstituicaoCRA> textFieldTipoInstituicao() {
+		IChoiceRenderer<TipoInstituicaoCRA> renderer = new ChoiceRenderer<TipoInstituicaoCRA>("label");
 		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
 		choices.add(TipoInstituicaoCRA.CARTORIO);
 		choices.add(TipoInstituicaoCRA.CONVENIO);
 		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao",
-				new Model<TipoInstituicaoCRA>(), choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
+		
+		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao = 
+				new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", new Model<TipoInstituicaoCRA>(), choices, renderer);
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

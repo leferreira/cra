@@ -17,7 +17,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.beans.TituloBean;
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;

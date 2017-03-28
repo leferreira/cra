@@ -35,12 +35,10 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
  */
 public class BuscarArquivoInputPanel extends Panel {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 
+	private static final long serialVersionUID = 1L;
 	private List<Instituicao> listaInstituicoes;
 	private DropDownChoice<Instituicao> dropDownInstituicao;
 	private TipoVisualizacaoArquivos tipoVisualizacaoAtual;
@@ -51,7 +49,6 @@ public class BuscarArquivoInputPanel extends Panel {
 	public BuscarArquivoInputPanel(String id, IModel<ArquivoBean> model, Usuario usuario) {
 		super(id, model);
 		this.tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
-
 		adicionarCampos();
 	}
 
@@ -91,7 +88,6 @@ public class BuscarArquivoInputPanel extends Panel {
 		radioVisualizacao.setOutputMarkupId(true);
 		radioVisualizacao.add(new AjaxEventBehavior("onchange") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -178,7 +174,6 @@ public class BuscarArquivoInputPanel extends Panel {
 		final DropDownChoice<TipoInstituicaoCRA> dropDowntipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, renderer);
 		dropDowntipoInstituicao.add(new OnChangeAjaxBehavior() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

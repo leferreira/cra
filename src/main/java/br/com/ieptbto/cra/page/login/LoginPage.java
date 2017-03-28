@@ -33,6 +33,7 @@ public class LoginPage extends AbstractWebPage<Usuario> {
 
 	private void adicionarCampos() {
 		feedBackPanel = new CustomFeedbackPanel(WID_FEEDBACK);
+		feedBackPanel.setEscapeModelStrings(false);
 		feedBackPanel.setOutputMarkupId(true);
 
 		LoginForm loginForm = new LoginForm("loginForm", getModel());

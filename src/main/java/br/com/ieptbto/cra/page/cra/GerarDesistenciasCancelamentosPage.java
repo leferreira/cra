@@ -12,7 +12,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;

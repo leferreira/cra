@@ -49,7 +49,7 @@ public class CentralNacionalProtestoService extends CnpWebService {
 
 	public String processar(Usuario usuario, String data) {
 		ArquivoCnpVO arquivoCnp = new ArquivoCnpVO();
-		LocalDate dataMoviemnto = new LocalDate();
+		LocalDate dataMoviemento = new LocalDate();
 		
 		try {
 			if (usuario == null) {
@@ -65,29 +65,29 @@ public class CentralNacionalProtestoService extends CnpWebService {
 				return mensagemDataInvalida(usuario);
 			} else {
 				try {
-					dataMoviemnto = DataUtil.stringToLocalDate("yyyy-MM-dd", data);
+					dataMoviemento = DataUtil.stringToLocalDate("yyyy-MM-dd", data);
 				} catch (Exception ex) {
 					logger.error(ex.getMessage());
 					return mensagemDataInvalida(usuario);
 				}
 			}
-			if (centralNacionalProtestoMediator.isLoteLiberadoConsultaPorData(dataMoviemnto)) {
-				arquivoCnp = centralNacionalProtestoMediator.processarLoteNacionalPorData(dataMoviemnto);
-			} else if (!dataMoviemnto.equals(new LocalDate())) {
-				return naoHaMovimentoParaEstaData(usuario, dataMoviemnto);
-			} else if (dataMoviemnto.equals(new LocalDate())) {
+			if (centralNacionalProtestoMediator.isLoteLiberadoConsultaPorData(dataMoviemento)) {
+				arquivoCnp = centralNacionalProtestoMediator.processarLoteNacionalPorData(dataMoviemento);
+			} else if (!dataMoviemento.equals(new LocalDate())) {
+				return naoHaMovimentoParaEstaData(usuario, dataMoviemento);
+			} else if (dataMoviemento.equals(new LocalDate())) {
 				arquivoCnp = centralNacionalProtestoMediator.processarLoteNacional();
 				if (arquivoCnp.getRemessasCnpVO().isEmpty()) {
 					return naoHaRemessasParaArquivoCnp(usuario);
 				}
 			}
 			loggerCra.sucess(usuario, CraAcao.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
-					"Arquivo CNP do dia " + DataUtil.localDateToString(new LocalDate()) + ", enviado com sucesso para o IEPTB nacional.");
+					"Arquivo CNP do dia " + DataUtil.localDateToString(dataMoviemento) + ", enviado com sucesso para o IEPTB nacional.");
 		} catch (Exception ex) {
 			logger.info(ex.getMessage(), ex.getCause());
 			loggerCra.error(usuario, CraAcao.DOWNLOAD_ARQUIVO_CENTRAL_NACIONAL_PROTESTO,
-					"Erro interno ao construir o arquivo da CNP do dia " + DataUtil.localDateToString(new LocalDate()) + ".", ex);
-			return gerarMensagem(gerarMensagemErroProcessamento(), CONSTANTE_RELATORIO_XML);
+					"Erro interno ao construir o arquivo da CNP do dia " + DataUtil.localDateToString(dataMoviemento) + ".", ex);
+			return gerarMensagem(gerarMensagemErroProcessamento(ex.getMessage(), dataMoviemento), CONSTANTE_RELATORIO_XML);
 		}
 		return gerarMensagem(arquivoCnp, CONSTANTE_CNP_XML);
 	}
@@ -95,7 +95,7 @@ public class CentralNacionalProtestoService extends CnpWebService {
 	private String naoHaMovimentoParaEstaData(Usuario usuario, LocalDate dataMoviemnto) {
 		MensagemXmlVO mensagemXml = new MensagemXmlVO();
 		DescricaoVO descricao = new DescricaoVO();
-		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setDataEnvio(DataUtil.localDateToString(dataMoviemnto));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 		descricao.setUsuario(usuario.getLogin());
 

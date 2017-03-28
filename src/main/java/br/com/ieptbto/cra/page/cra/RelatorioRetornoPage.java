@@ -26,7 +26,7 @@ import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.relatorio.RelatorioUtil;
+import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperCompileManager;

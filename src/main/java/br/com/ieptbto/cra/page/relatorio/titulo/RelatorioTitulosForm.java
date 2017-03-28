@@ -14,16 +14,14 @@ import br.com.ieptbto.cra.beans.RelatorioBean;
 import br.com.ieptbto.cra.enumeration.TipoExportacaoRelatorio;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.page.base.BaseForm;
-import br.com.ieptbto.cra.relatorio.RelatorioUtil;
+import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 public class RelatorioTitulosForm extends BaseForm<RelatorioBean> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
-
 	private FileUploadField fileUploadField;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;

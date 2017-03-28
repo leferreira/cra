@@ -26,7 +26,7 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.relatorio.RelatorioUtil;
+import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -37,14 +37,12 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
 	@SpringBean
 	private DownloadMediator downloadMediator;
 
+	private static final long serialVersionUID = 1L;
 	private Usuario usuario;
 	private Arquivo arquivo;
 	private ArquivoBean arquivoFormBean;
@@ -53,7 +51,6 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 		this.arquivo = new Arquivo();
 		this.arquivoFormBean = arquivoFormBean;
 		this.usuario = getUser();
-
 		adicionarComponentes();
 	}
 
@@ -65,7 +62,6 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 	private void listaArquivos() {
 		add(new ListView<Arquivo>("dataTableArquivo", buscarArquivos()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -74,7 +70,6 @@ public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 				item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override

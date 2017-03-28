@@ -15,7 +15,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.component.label.DateTextField;
+import br.com.ieptbto.cra.component.DateTextField;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.exception.InfraException;

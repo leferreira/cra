@@ -16,13 +16,13 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.LoteCnp;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
 import br.com.ieptbto.cra.mediator.CraMediator;
+import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
 import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
 import br.com.ieptbto.cra.webservice.vo.MensagemVO;
@@ -47,7 +47,6 @@ public class CnpWebService {
 	protected CraMediator craServiceMediator;
 	@Autowired
 	protected LoggerCra loggerCra;
-
 	protected LocalTime horaInicioServico;
 	protected LocalTime horaFimServico;
 
@@ -266,11 +265,11 @@ public class CnpWebService {
 		mensagemXml.setDescricaoFinal(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao());
 		return mensagemXml;
 	}
-
-	protected MensagemXmlVO gerarMensagemErroProcessamento(String descricaoFinal) {
+	
+	protected MensagemXmlVO gerarMensagemErroProcessamento(String descricaoFinal, LocalDate dataMovimento) {
 		MensagemXmlVO mensagemXml = new MensagemXmlVO();
 		DescricaoVO descricao = new DescricaoVO();
-		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
+		descricao.setDataEnvio(DataUtil.localDateToString(dataMovimento));
 		descricao.setTipoArquivo(TIPO_ARQUIVO_CNP);
 
 		mensagemXml.setDescricao(descricao);

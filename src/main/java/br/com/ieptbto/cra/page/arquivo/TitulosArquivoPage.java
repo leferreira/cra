@@ -18,8 +18,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
-import br.com.ieptbto.cra.component.TituloViewColumns;
 import br.com.ieptbto.cra.component.dataTable.CraDataTable;
+import br.com.ieptbto.cra.component.dataTable.TituloViewColumns;
 import br.com.ieptbto.cra.dataProvider.TituloProvider;
 import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Remessa;
@@ -30,7 +30,7 @@ import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.relatorio.RelatorioUtil;
+import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -44,14 +44,14 @@ import net.sf.jasperreports.engine.JasperPrint;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class TitulosArquivoPage extends BasePage<Remessa> {
 
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
 	RemessaMediator remessaMediator;
 	@SpringBean
 	DownloadMediator downloadMediator;
 	@SpringBean
 	TituloMediator tituloMediator;
+
+	private static final long serialVersionUID = 1L;
 	private Remessa remessa;
 
 	public TitulosArquivoPage(Remessa remessa) {

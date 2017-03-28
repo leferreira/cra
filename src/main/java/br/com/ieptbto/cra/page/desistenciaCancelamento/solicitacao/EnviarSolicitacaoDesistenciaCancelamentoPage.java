@@ -22,7 +22,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 import org.joda.time.LocalTime;
 
-import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.MotivoSolicitacaoDesistenciaCancelamento;
@@ -34,6 +33,7 @@ import br.com.ieptbto.cra.mediator.SolicitacaoDesistenciaCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
@@ -43,13 +43,12 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<SolicitacaoDesistenciaCancelamento> {
 
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
 	TituloMediator tituloMediator;
 	@SpringBean
 	SolicitacaoDesistenciaCancelamentoMediator cancelamentoProtestoMediator;
 	
+	private static final long serialVersionUID = 1L;
 	private TituloRemessa titulo;
 	private SolicitacaoDesistenciaCancelamento solicitacao;
 	private FileUploadField fileUploadField;

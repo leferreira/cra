@@ -7,6 +7,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -27,13 +28,11 @@ import br.com.ieptbto.cra.validador.EmailValidator;
 
 public class InstituicaoInputPanel extends Panel {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	@SpringBean
 	TipoInstituicaoMediator tipoMediator;
+	private static final long serialVersionUID = 1L;
 
 	public InstituicaoInputPanel(String id, IModel<Instituicao> model) {
 		super(id, model);
@@ -55,14 +54,30 @@ public class InstituicaoInputPanel extends Panel {
 		add(comboTipoBatimento());
 		add(comboPadraoLayoutXML());
 		add(checkboxPermitidoSetores());
+		add(checkAdministrarEmpresasFiliadas());
+		add(checkLayoutCnab240());
 		add(checkSeloDiferido());
 		add(checkTaxaCra());
 		add(checkVerificacaoManual());
 	}
 
+	private CheckBox checkLayoutCnab240() {
+		CheckBox checkbox = new CheckBox("layoutRetornoRecebimentoEmpresa");
+		checkbox.setLabel(new Model<String>("Layout de Retorno Recebimento Empresa"));
+		checkbox.setRequired(true);
+		return checkbox;
+	}
+
+	private CheckBox checkAdministrarEmpresasFiliadas() {
+		CheckBox checkbox = new CheckBox("administrarEmpresasFiliadas");
+		checkbox.setLabel(new Model<String>("Administrar Empresas Filiadas"));
+		checkbox.setRequired(true);
+		return checkbox;
+	}
+
 	private CheckBox checkboxPermitidoSetores() {
 		CheckBox checkbox = new CheckBox("setoresConvenio");
-		checkbox.setLabel(new Model<String>("Setores Convênios"));
+		checkbox.setLabel(new Model<String>("Permitir Setores Filiados"));
 		checkbox.setRequired(true);
 		return checkbox;
 	}
@@ -184,14 +199,14 @@ public class InstituicaoInputPanel extends Panel {
 	}
 
 	private Component comboMunicipios() {
-		DropDownChoice<Municipio> combo =
-				new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), new ChoiceRenderer<Municipio>("nomeMunicipio"));
+		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
+		DropDownChoice<Municipio> combo = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);
 		combo.setLabel(new Model<String>("Município"));
 		combo.setOutputMarkupId(true);
 		combo.setRequired(true);
 		return combo;
 	}
-
+	
 	private CheckBox checkSeloDiferido() {
 		CheckBox checkbox = new CheckBox("seloDiferido");
 		checkbox.setLabel(new Model<String>("Selo Diferido"));

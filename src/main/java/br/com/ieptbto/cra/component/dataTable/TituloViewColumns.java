@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.component;
+package br.com.ieptbto.cra.component.dataTable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.component.LabelValorMonetario;
 import br.com.ieptbto.cra.component.dataTable.CraLinksPanel;
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.view.ViewTitulo;
 import br.com.ieptbto.cra.util.DataUtil;
 

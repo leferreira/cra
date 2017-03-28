@@ -75,7 +75,6 @@ public class ArquivosPendentesPanel extends Panel {
 	private Link<Remessa> linkArquivosPendentes() {
 		return new Link<Remessa>("arquivosPendentes") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -91,7 +90,6 @@ public class ArquivosPendentesPanel extends Panel {
 
 		return new ListView<ViewArquivoPendente>("listaRemessas", remessas) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -100,7 +98,6 @@ public class ArquivosPendentesPanel extends Panel {
 				
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -131,7 +128,6 @@ public class ArquivosPendentesPanel extends Panel {
 			private Link<Remessa> downloadArquivoTXT(final RemessaPendente arquivo) {
 				return new Link<Remessa>("downloadArquivo") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -155,7 +151,6 @@ public class ArquivosPendentesPanel extends Panel {
 			private Link<Remessa> downloadAnexos(final RemessaPendente arquivo) {
 				Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -189,7 +184,6 @@ public class ArquivosPendentesPanel extends Panel {
 
 		return new ListView<ViewArquivoPendente>("listaDesistenciasCancelamentos", desistenciasCancelamentos) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -211,7 +205,6 @@ public class ArquivosPendentesPanel extends Panel {
 					item.add(linkArquivo);
 					item.add(new Link<Remessa>("downloadArquivo") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -248,7 +241,6 @@ public class ArquivosPendentesPanel extends Panel {
 					item.add(linkArquivo);
 					item.add(new Link<Remessa>("downloadArquivo") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -285,7 +277,6 @@ public class ArquivosPendentesPanel extends Panel {
 					item.add(linkArquivo);
 					item.add(new Link<Remessa>("downloadArquivo") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override

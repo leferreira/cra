@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.relatorio;
+package br.com.ieptbto.cra.report;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -33,10 +33,8 @@ import net.sf.jasperreports.engine.JasperReport;
  */
 public class RelatorioUtil implements Serializable {
 
-	/***/
-	private static final long serialVersionUID = 1L;
 	protected static final Logger logger = Logger.getLogger(BasePage.class);
-
+	private static final long serialVersionUID = 1L;
 	private HashMap<String, Object> params;
 	private Instituicao instituicao;
 	private LocalDate dataInicio;

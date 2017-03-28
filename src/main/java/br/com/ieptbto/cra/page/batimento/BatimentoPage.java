@@ -19,9 +19,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.component.CheckboxPanel;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
 import br.com.ieptbto.cra.component.MultipleChoiceDepositosBatimentoPanel;
 import br.com.ieptbto.cra.component.dataTable.CraLinksPanel;
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.view.ViewBatimentoRetorno;
