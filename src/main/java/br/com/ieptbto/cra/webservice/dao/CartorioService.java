@@ -1,8 +1,17 @@
 package br.com.ieptbto.cra.webservice.dao;
 
 import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.BeanWrapper;
@@ -27,9 +36,8 @@ import br.com.ieptbto.cra.enumeration.CraServices;
 import br.com.ieptbto.cra.enumeration.TipoCampo51;
 import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.error.CodigoErro;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
-import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
-import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -48,15 +56,11 @@ import br.com.ieptbto.cra.webservice.vo.RelatorioRemessaPendenteVO;
 public class CartorioService extends CraWebService {
 
 	@Autowired
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	@Autowired
-	ArquivoMediator arquivoMediator;
+	private ArquivoMediator arquivoMediator;
 	@Autowired
-	DesistenciaProtestoMediator desistenciaMediator;
-	@Autowired
-	CancelamentoProtestoMediator cancelamentoMediator;
-	@Autowired
-	AutorizacaoCancelamentoMediator autorizacaoMediator;
+	private DesistenciaProtestoMediator desistenciaMediator;
 
 	public String buscarArquivosPendentesCartorio(Usuario usuario) {
 		List<ViewArquivoPendente> arquivosPendentes = new ArrayList<>();
@@ -77,7 +81,7 @@ public class CartorioService extends CraWebService {
 			logger.info(e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(usuario, "");
 		}
-		return gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivosPendentes), CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(converterArquivoParaRelatorioArquivosPendentes(arquivosPendentes));
 	}
 
 	private RelatorioPendentesVO converterArquivoParaRelatorioArquivosPendentes(List<ViewArquivoPendente> arquivosPendentes) {
@@ -159,7 +163,7 @@ public class CartorioService extends CraWebService {
 			logger.info(e.getCause(), e);
 			return setRespostaErroInternoNoProcessamento(usuario, "Erro interno no processamento.");
 		}
-		return gerarMensagem(converterArquivoParaRelatorioArquivosPendentes(arquivo), CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(converterArquivoParaRelatorioArquivosPendentes(arquivo));
 	}
 
 	public String confirmarEnvioConfirmacaoRetorno(String nomeArquivo, Usuario usuario) {
@@ -301,7 +305,7 @@ public class CartorioService extends CraWebService {
 				propertyAccessEntidadeVO.setPropertyValue(propertyName, valor);
 			}
 		}
-		return gerarMensagem(instituicaoVO, CONSTANTE_APRESENTANTE_XML);
+		return gerarMensagemRelatorio(instituicaoVO);
 	}
 
 	protected String converterValor(Object propriedade, CampoArquivo campo) {
@@ -309,5 +313,45 @@ public class CartorioService extends CraWebService {
 			return "";
 		}
 		return FabricaConversor.getValorConvertidoParaString(campo, propriedade.getClass(), propriedade).trim();
+	}
+
+	@Override
+	protected String gerarMensagemRelatorio(Object object) {
+		Writer writer = new StringWriter();
+		try {
+			JAXBContext context = JAXBContext.newInstance(object.getClass());
+
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
+			JAXBElement<Object> element = new JAXBElement<Object>(new QName(CONSTANTE_RELATORIO_XML), Object.class, object);
+			marshaller.marshal(element, writer);
+			String msg = writer.toString();
+			msg = msg.replace(" xsi:type=\"mensagemXmlSerproVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerproVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"mensagemXmlVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"arquivoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"instituicaoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			writer.close();
+			return msg;
+
+		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e);
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		}
+		return null;
+	}
+
+	@Override
+	protected String gerarRespostaArquivo(Object object, String nomeArquivo, String nameNode) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

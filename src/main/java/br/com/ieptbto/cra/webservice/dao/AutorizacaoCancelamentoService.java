@@ -1,7 +1,16 @@
 package br.com.ieptbto.cra.webservice.dao;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
@@ -43,9 +52,7 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 	private AutorizacaoCancelamentoMediator autorizacaoCancelamentoMediator;
 	@Autowired
 	private InstituicaoMediator instituicaoMediator;
-
 	private List<Exception> erros;
-	private Object relatorio;
 
 	/**
 	 * @param nomeArquivo
@@ -58,13 +65,12 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 		this.nomeArquivo = nomeArquivo;
 
 		Arquivo arquivo = new Arquivo();
-		ArquivoGenericoVO arquivoVO = new ArquivoGenericoVO();
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_AUTORIZACAO_CANCELAMENTO)) {
 				return mensagemServicoIndisponivel(usuario);
@@ -80,7 +86,8 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 			}
-			relatorio = gerarResposta(arquivo, usuario);
+			MensagemXmlVO relatorio = gerarResposta(arquivo, usuario);
+			return gerarMensagemRelatorio(relatorio);
 
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage(), ex);
@@ -92,7 +99,6 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 					"Erro interno no processamento do arquivo de Autorização de Cancelamento " + nomeArquivo + "." + e.getMessage(), e);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return gerarMensagem(relatorio, CONSTANTE_RELATORIO_XML);
 	}
 
 	private MensagemXmlVO gerarResposta(Arquivo arquivo, Usuario usuario) {
@@ -158,9 +164,49 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 				mensagemAC.getTitulosDetalhamento().add(titulo);
 			}
 		}
-		return gerarMensagem(mensagemAC, constanteRelatorioXml);
+		return gerarMensagemRelatorio(mensagemAC);
 	}
 
+	@Override
+	protected String gerarMensagemRelatorio(Object object) {
+		Writer writer = new StringWriter();
+		
+		try {
+			JAXBContext context = JAXBContext.newInstance(object.getClass());
+
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
+			JAXBElement<Object> element = new JAXBElement<Object>(new QName(CONSTANTE_RELATORIO_XML), Object.class, object);
+			marshaller.marshal(element, writer);
+			String msg = writer.toString();
+			msg = msg.replace(" xsi:type=\"mensagemXmlSerproVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerproVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"mensagemXmlVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"arquivoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"instituicaoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			writer.close();
+			return msg;
+
+		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e);
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		}
+		return null;
+	}
+
+	@Override
+	protected String gerarRespostaArquivo(Object object, String nomeArquivo, String nameNode) {
+		return null;
+	}
+	
 	public List<Exception> getErros() {
 		if (erros == null) {
 			erros = new ArrayList<Exception>();

@@ -43,8 +43,6 @@ public class ConfirmacaoService extends CraWebService {
 	private ArquivoMediator arquivoMediator;
 	@Autowired
 	private ConfirmacaoReceiver confirmacaoReceiver;
-	private AbstractMensagemVO mensagemCra;
-	private String resposta;
 
 	/**
 	 * Métodos de consulta de confirmação pelos bancos/convênios
@@ -56,15 +54,14 @@ public class ConfirmacaoService extends CraWebService {
 	public String processar(String nomeArquivo, Usuario usuario) {
 		this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CONFIRMACAO;
 		this.nomeArquivo = nomeArquivo;
-		this.resposta = null;
 
 		ArquivoGenericoVO arquivoVO = null;
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+				return setResposta(usuario, arquivoVO, nomeArquivo);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-				return setResposta(usuario, arquivoVO, nomeArquivo, CONSTANTE_RELATORIO_XML);
+				return setResposta(usuario, arquivoVO, nomeArquivo);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.DOWNLOAD_ARQUIVO_CONFIRMACAO)) {
 				return mensagemServicoIndisponivel(usuario);
@@ -76,17 +73,17 @@ public class ConfirmacaoService extends CraWebService {
 			if (remessas.isEmpty()) {
 				return setRespostaArquivoEmProcessamento(usuario, nomeArquivo);
 			}
-			resposta = gerarResposta(usuario, remessas, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
-
+			String resposta = gerarResposta(usuario, remessas, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
 			loggerCra.sucess(usuario, getCraAcao(), "Arquivo de Confirmação " + nomeArquivo + " recebido com sucesso por "
 					+ usuario.getInstituicao().getNomeFantasia() + ".");
+			return resposta;
+		
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo de Confirmação " + nomeArquivo + " recebido por "
 					+ usuario.getInstituicao().getNomeFantasia() + ".", e);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return resposta;
 	}
 
 	private String gerarResposta(Usuario usuario, List<RemessaVO> remessas, String nomeArquivo, String constanteConfirmacaoXml) {
@@ -100,12 +97,14 @@ public class ConfirmacaoService extends CraWebService {
 		for (RemessaVO remessaVO : remessas) {
 			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 				conteudo.append("<comarca CodMun=\"" + remessaVO.getCabecalho().getCodigoMunicipio() + "\">\r\n");
-				String msg = gerarMensagem(remessaVO, CONSTANTE_CONFIRMACAO_XML).replace("<confirmacao>", "").replace("</confirmacao>", "");
+				String msg = gerarRespostaArquivo(remessaVO, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
+				msg = msg.replace("<confirmacao>", "").replace("</confirmacao>", "");
 				msg = msg.replace(xml, "");
 				conteudo.append(msg);
 				conteudo.append("</comarca>\r\n");
 			} else {
-				String msg = gerarMensagem(remessaVO, CONSTANTE_CONFIRMACAO_XML).replace("<confirmacao>", "").replace("</confirmacao>", "");
+				String msg = gerarRespostaArquivo(remessaVO, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
+				msg = msg.replace("<confirmacao>", "").replace("</confirmacao>", "");
 				msg = msg.replace(xml, "");
 				conteudo.append(msg);
 			}
@@ -125,11 +124,10 @@ public class ConfirmacaoService extends CraWebService {
 	public String enviarConfirmacao(String nomeArquivo, Usuario usuario, String dados) {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_CONFIRMACAO;
 		this.nomeArquivo = nomeArquivo;
-		this.mensagemCra = null;
 
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo, CONSTANTE_RELATORIO_XML);
+				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_CONFIRMACAO)) {
 				return mensagemServicoIndisponivel(usuario);
@@ -141,8 +139,12 @@ public class ConfirmacaoService extends CraWebService {
 			if (arquivoJaEnviado != null) {
 				return setRespostaArquivoJaEnviadoCartorio(usuario, nomeArquivo, arquivoJaEnviado);
 			}
-			mensagemCra = confirmacaoReceiver.receber(usuario, nomeArquivo, dados);
-
+			AbstractMensagemVO mensagemCra = confirmacaoReceiver.receber(usuario, nomeArquivo, dados);
+			String resposta = gerarMensagemRelatorio(mensagemCra);
+			loggerCra.sucess(usuario, CraAcao.ENVIO_ARQUIVO_CONFIRMACAO, resposta,
+					"Arquivo " + nomeArquivo + ", enviado por " + usuario.getInstituicao().getNomeFantasia() + ", recebido com sucesso.");
+			return resposta;
+			
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex);
 			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex, dados);
@@ -160,32 +162,64 @@ public class ConfirmacaoService extends CraWebService {
 			loggerCra.error(usuario, getCraAcao(), e.getMessage(), e, dados);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
-		return gerarMensagemEnvioConfirmacao(mensagemCra, CONSTANTE_CONFIRMACAO_XML);
 	}
 
-	private String gerarMensagemEnvioConfirmacao(Object object, String nomeNo) {
-		String msg = "";
+	@Override
+	protected String gerarMensagemRelatorio(Object object) {
 		Writer writer = new StringWriter();
+		
 		try {
 			JAXBContext context = JAXBContext.newInstance(object.getClass());
-
+			
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
-			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, object);
+			JAXBElement<Object> element = new JAXBElement<Object>(new QName(CONSTANTE_RELATORIO_XML), Object.class, object);
 			marshaller.marshal(element, writer);
-			msg = writer.toString();
+			String msg = writer.toString();
 			msg = msg.replace("<confirmacao xsi:type=\"mensagemXmlVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<relatorio>");
 			msg = msg.replace("</confirmacao>", "</relatorio>");
 			writer.close();
-
+			return msg;
+			
 		} catch (JAXBException e) {
 			logger.error(e.getMessage(), e.getCause());
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e.getCause());
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
-		return msg;
+		return null;
+	}
+	
+	@Override
+	protected String gerarRespostaArquivo(Object object, String nomeArquivo, String nameNode) {
+		Writer writer = new StringWriter();
+		
+		try {
+			JAXBContext context = JAXBContext.newInstance(object.getClass());
+			
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
+			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nameNode), Object.class, object);
+			marshaller.marshal(element, writer);
+			writer.close();
+			return writer.toString();
+			
+		} catch (JAXBException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e.getCause());
+			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+		}
+		return null;
 	}
 }

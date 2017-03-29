@@ -47,26 +47,26 @@ public class UsuariosComarcasHomologadasService extends CraWebService {
 
 	protected String getMensagemFalhaAutenticao() {
 		MensagemXmlVO msgRetorno = new MensagemXmlVO();
-
 		msgRetorno.setDescricao(new DescricaoVO());
 		msgRetorno.setDetalhamento(new DetalhamentoVO());
 
 		msgRetorno.setCodigoFinal(CodigoErro.SERPRO_FALHA_NA_AUTENTICACAO.getCodigo());
 		msgRetorno.setDescricaoFinal(CodigoErro.SERPRO_FALHA_NA_AUTENTICACAO.getDescricao());
-		return gerarMensagem(msgRetorno, CONSTANTE_COMARCA_XML);
+		return gerarMensagemRelatorio(msgRetorno);
 	}
 
-	protected String gerarMensagem(Object mensagem, String nomeNo) {
+	@Override
+	protected String gerarMensagemRelatorio(Object object) {
 		Writer writer = new StringWriter();
 		JAXBContext context;
 		try {
-			context = JAXBContext.newInstance(mensagem.getClass());
+			context = JAXBContext.newInstance(object.getClass());
 
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
 			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, mensagem);
+			JAXBElement<Object> element = new JAXBElement<Object>(new QName(CONSTANTE_COMARCA_XML), Object.class, object);
 			marshaller.marshal(element, writer);
 			String msg = writer.toString();
 			writer.close();
@@ -112,5 +112,11 @@ public class UsuariosComarcasHomologadasService extends CraWebService {
 					"Acesso à CRA via WebServices liberado com sucesso para o usuário " + usuario.getNome() + ".");
 		}
 		return XmlFormatterUtil.format(xml);
+	}
+
+	@Override
+	protected String gerarRespostaArquivo(Object object, String nomeArquivo, String nameNode) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

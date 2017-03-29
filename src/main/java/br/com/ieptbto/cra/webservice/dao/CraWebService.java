@@ -1,18 +1,8 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-
-import br.com.ieptbto.cra.webservice.vo.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
@@ -20,21 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
+import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.error.CodigoErro;
-import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
 import br.com.ieptbto.cra.mediator.CraMediator;
 import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
+import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
+import br.com.ieptbto.cra.webservice.vo.ErroVO;
+import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
 
 /**
  * @author Thasso Araújo
  *
  */
-public class CraWebService {
+public abstract class CraWebService {
 
 	protected static final Logger logger = Logger.getLogger(CraWebService.class);
 	public static final String CONSTANTE_RELATORIO_XML = "relatorio";
@@ -53,7 +46,11 @@ public class CraWebService {
 	protected CraAcao craAcao;
 	protected String nomeArquivo;
 
-	protected AbstractMensagemVO mensagemServicoIndisponivel(Usuario usuario) {
+	protected abstract String gerarMensagemRelatorio(Object object);
+	
+	protected abstract String gerarRespostaArquivo(Object object, String nomeArquivo, String nameNode);
+	
+	protected String mensagemServicoIndisponivel(Usuario usuario) {
 		MensagemXmlVO mensagemXml = new MensagemXmlVO();
 		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
@@ -63,24 +60,21 @@ public class CraWebService {
 		mensagemXml.setDescricao(descricao);
 		mensagemXml.setCodigoFinal(CodigoErro.CRA_SERVICO_INDISPONIVEL.getCodigo());
 		mensagemXml.setDescricaoFinal(CodigoErro.CRA_SERVICO_INDISPONIVEL.getDescricao());
-		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(mensagemXml);
 	}
 
-	protected AbstractMensagemVO setResposta(Usuario usuario, ArquivoGenericoVO arquivo, String nomeArquivo, String nomeNode) {
-		if (usuario == null) {
-			return setRespostaUsuarioInvalido(nomeArquivo);
-		}
-		if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+	protected String setResposta(Usuario usuario, AbstractArquivoVO arquivo, String nomeArquivo) {
+		if (usuario != null && nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 			return setRespostaNomeArquivoInvalido(usuario, nomeArquivo);
 		}
-		return gerarMensagem(arquivo, nomeNode);
+		return setRespostaUsuarioInvalido(nomeArquivo);
 	}
 
 	private String setRespostaUsuarioInvalido(String nomeArquivo) {
 		logger.error("Erro WS : Dados do usuário inválidos. Falha na autenticação.");
 		loggerCra.error(getCraAcao(), "Dados do usuário inválidos. Falha na autenticação.");
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), CodigoErro.CRA_FALHA_NA_AUTENTICACAO);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(msg.getMensagemErro());
 	}
 
 	private String setRespostaNomeArquivoInvalido(Usuario usuario, String nomeArquivo) {
@@ -89,85 +83,85 @@ public class CraWebService {
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			CodigoErro codigoErro = getCodigoErroNomeInvalidoSerpro(nomeArquivo);
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, codigoErro);
-			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+			return gerarMensagemRelatorio(msg.getMensagemErroSerpro());
 		}
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_NOME_DO_ARQUIVO_INVALIDO);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(msg.getMensagemErro());
 	}
 
-	protected AbstractMensagemVO setRespostaPadrao(Usuario usuario, String nomeArquivo, CodigoErro codigoErro) {
+	protected String setRespostaPadrao(Usuario usuario, String nomeArquivo, CodigoErro codigoErro) {
 		logger.error("Erro WS: " + nomeArquivo + " ==== " + codigoErro.getDescricao());
 		loggerCra.error(usuario, getCraAcao(), codigoErro.getDescricao());
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), codigoErro);
-			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+			return gerarMensagemRelatorio(msg.getMensagemErroSerpro());
 		}
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), codigoErro);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(msg.getMensagemErro());
 	}
 
-	protected AbstractMensagemVO setRespostaErrosServicosCartorios(Usuario usuario, String nomeArquivo, String descricao) {
+	protected String setRespostaErrosServicosCartorios(Usuario usuario, String nomeArquivo, String descricao) {
 		logger.error("Erro WS: " + nomeArquivo + " : " + descricao);
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, descricao);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(msg.getMensagemErro());
 	}
 
-	protected AbstractMensagemVO setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(Usuario usuario, String nomeArquivo) {
+	protected String setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS: Este usuário não pode enviar o arquivo desta instituição. " + nomeArquivo);
 		loggerCra.error(usuario, getCraAcao(),
 				"Este usuário não pode enviar o arquivo desta instituição. O Código do Portador informado no arquivo difere da instituição "
 						+ usuario.getInstituicao().getNomeFantasia() + ".");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_USUARIO_INSTITUICAO_DIFERENTE_ARQUIVO);
-			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+			return gerarMensagemRelatorio(msg.getMensagemErroSerpro());
 		}
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_USUARIO_INSTITUICAO_DIFERENTE_ARQUIVO);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(msg.getMensagemErro());
 	}
 
-	protected AbstractMensagemVO setRespostaArquivoEmBranco(Usuario usuario, String nomeArquivo) {
+	protected String setRespostaArquivoEmBranco(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS: Dados do arquivo enviados em branco " + nomeArquivo);
 		loggerCra.error(usuario, getCraAcao(), "Os dados do arquivo " + nomeArquivo + " da instituição "
 				+ usuario.getInstituicao().getNomeFantasia() + " foram enviados em branco ou estão corrimpidos.");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg =
 					new MensagemDeErro(nomeArquivo, usuario, CodigoErro.SERPRO_ARQUIVO_INVALIDO_REMESSA_DESISTENCIA_CANCELAMENTO);
-			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+			return gerarMensagemRelatorio(msg.getMensagemErroSerpro());
 		}
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_DADOS_DE_ENVIO_INVALIDOS);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(msg.getMensagemErro());
 	}
 
-	protected AbstractMensagemVO setRespostaArquivoEmProcessamento(Usuario usuario, String nomeArquivo) {
+	protected String setRespostaArquivoEmProcessamento(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS: O arquivo ainda não foi gerado, ou ainda está em processamento.");
 		loggerCra.alert(usuario, getCraAcao(), "O arquivo " + nomeArquivo + " não foi gerado, ou ainda está em processamento.");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			CodigoErro codigoErro = getCodigoErroEmProcessamentoSerpro(nomeArquivo);
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, codigoErro);
-			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+			return gerarMensagemRelatorio(msg.getMensagemErroSerpro());
 		}
 		CodigoErro codigoErro = getCodigoErroEmProcessamentoCra(nomeArquivo);
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, codigoErro);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(msg.getMensagemErro());
 	}
 
-	protected AbstractMensagemVO setRespostaErroInternoNoProcessamento(Usuario usuario, String nomeArquivo) {
+	protected String setRespostaErroInternoNoProcessamento(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS: Erro interno no processamento.");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
-			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+			return gerarMensagemRelatorio(msg.getMensagemErroSerpro());
 		}
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
-		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(msg.getMensagemErro());
 	}
 
-	protected AbstractMensagemVO setRespostaArquivoJaEnviadoAnteriormente(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
+	protected String setRespostaArquivoJaEnviadoAnteriormente(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
 		logger.error("Erro WS: Arquivo já enviado anteriormente.");
 		loggerCra.alert(usuario, getCraAcao(), "Arquivo " + nomeArquivo + " já enviado anteriormente em "
 				+ DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()) + ".");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
-			return gerarMensagem(msg.getMensagemErroSerpro(), CONSTANTE_RELATORIO_XML);
+			return gerarMensagemRelatorio(msg.getMensagemErroSerpro());
 		}
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
 		MensagemXmlVO mensagem = msg.getMensagemErro();
@@ -180,10 +174,10 @@ public class CraWebService {
 		erros.add(erro);
 		detalhamento.setErro(erros);
 		mensagem.setDetalhamento(detalhamento);
-		return gerarMensagem(mensagem, CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(mensagem);
 	}
 
-	protected AbstractMensagemVO setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
+	protected String setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
 		logger.error("Erro WS: Arquivo já enviado anteriormente.");
 		loggerCra.error(usuario, getCraAcao(), "Arquivo " + nomeArquivo + " já enviado anteriormente em "
 				+ DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()) + ".");
@@ -198,10 +192,10 @@ public class CraWebService {
 		erros.add(erro);
 		detalhamento.setErro(erros);
 		mensagem.setDetalhamento(detalhamento);
-		return gerarMensagem(mensagem, CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(mensagem);
 	}
 
-	protected AbstractMensagemVO setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, LocalDate dataEnvio) {
+	protected String setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, LocalDate dataEnvio) {
 		logger.error("Erro WS: Arquivo já enviado anteriormente.");
 		loggerCra.error(usuario, getCraAcao(),
 				"Arquivo " + nomeArquivo + " já enviado anteriormente em " + DataUtil.localDateToString(dataEnvio) + ".");
@@ -216,7 +210,7 @@ public class CraWebService {
 		erros.add(erro);
 		detalhamento.setErro(erros);
 		mensagem.setDetalhamento(detalhamento);
-		return gerarMensagem(mensagem, CONSTANTE_RELATORIO_XML);
+		return gerarMensagemRelatorio(mensagem);
 	}
 
 	private CodigoErro getCodigoErroEmProcessamentoSerpro(String nomeArquivo) {
@@ -260,36 +254,6 @@ public class CraWebService {
 			codigoErro = CodigoErro.CRA_NOME_DO_ARQUIVO_INVALIDO;
 		}
 		return codigoErro;
-	}
-
-	protected AbstractMensagemVO gerarMensagem(Object object, String nomeNo) {
-		String msg = "";
-		Writer writer = new StringWriter();
-		try {
-			JAXBContext context = JAXBContext.newInstance(object.getClass());
-
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
-			JAXBElement<Object> element = new JAXBElement<Object>(new QName(nomeNo), Object.class, object);
-			marshaller.marshal(element, writer);
-			msg = writer.toString();
-			msg = msg.replace(" xsi:type=\"mensagemXmlSerproVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-			msg = msg.replace(" xsi:type=\"mensagemXmlDesistenciaCancelamentoSerproVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-			msg = msg.replace(" xsi:type=\"mensagemXmlVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-			msg = msg.replace("<confirmacao xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
-			msg = msg.replace("<retorno xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "");
-			msg = msg.replace(" xsi:type=\"instituicaoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-			writer.close();
-
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		}
-		return msg;
 	}
 
 	public String getNomeArquivo() {
