@@ -44,18 +44,16 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class CentralDeAcoesPage extends BasePage<LogCra> {
 
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	LoggerMediator loggerMediator;
 
+	private static final long serialVersionUID = 1L;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private Instituicao instituicao;
 	private List<Instituicao> listaInstituicoes;
-
 	private TextField<String> dataEnvioInicio;
 	private TextField<String> dataEnvioFinal;
 	private DropDownChoice<Instituicao> dropDownBancosConveniosCartorios;

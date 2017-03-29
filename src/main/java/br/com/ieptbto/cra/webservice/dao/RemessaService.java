@@ -27,7 +27,6 @@ public class RemessaService extends CraWebService {
 	private ArquivoMediator arquivoMediator;
 	@Autowired
 	private RemessaReceiver remessaReceiver;
-
 	private AbstractMensagemVO mensagemCra;
 	private String resposta;
 
@@ -106,8 +105,8 @@ public class RemessaService extends CraWebService {
 				return setRespostaPadrao(usuario, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 			}
 			resposta = gerarResposta(remessaVO, nomeArquivo, CONSTANTE_REMESSA_XML);
-			loggerCra.sucess(usuario, getCraAcao(),
-					"Arquivo de Remessa " + nomeArquivo + " recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
+			loggerCra.sucess(usuario, getCraAcao(), "Arquivo de Remessa " + nomeArquivo +
+                    " recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo de Remessa " + nomeArquivo + 

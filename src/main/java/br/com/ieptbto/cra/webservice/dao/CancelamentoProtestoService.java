@@ -79,16 +79,14 @@ public class CancelamentoProtestoService extends CraWebService {
 				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 			}
 			relatorio = gerarResposta(arquivo, usuario);
-			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Cancelamento de Protesto " + nomeArquivo + ", enviado por "
-					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
+
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage(), ex);
 			loggerCra.error(usuario, getCraAcao(), ex.getMessage(), ex);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
-			loggerCra.error(usuario, getCraAcao(),
-					"Erro interno no processamento do arquivo de Cancelamento de Protesto " + nomeArquivo + "." + ex.getMessage(), ex);
+			loggerCra.error(usuario, getCraAcao(), "Erro interno no processamento do arquivo de Cancelamento de Protesto " + nomeArquivo + "." + ex.getMessage(), ex);
 			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
 		}
 		return gerarMensagem(relatorio, CONSTANTE_RELATORIO_XML);

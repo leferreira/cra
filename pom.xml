@@ -252,6 +252,7 @@
 		</dependency>
 	</dependencies>
 	<build>
+        <finalName>cra</finalName>
 		<resources>
 			<resource>
 				<filtering>false</filtering>
@@ -311,7 +312,7 @@
 					<wtpversion>${wtp.version}</wtpversion>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.codehaus.enunciate</groupId>
 				<artifactId>maven-enunciate-spring-plugin</artifactId>

@@ -81,8 +81,6 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 			}
 			relatorio = gerarResposta(arquivo, usuario);
-			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Autorização de Cancelamento " + nomeArquivo + ", enviado por "
-					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
 
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage(), ex);

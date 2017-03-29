@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
+import br.com.ieptbto.cra.webservice.vo.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
@@ -28,10 +29,6 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.logger.LoggerCra;
 import br.com.ieptbto.cra.mediator.CraMediator;
 import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
-import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
-import br.com.ieptbto.cra.webservice.vo.ErroVO;
-import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
 
 /**
  * @author Thasso Araújo
@@ -53,11 +50,10 @@ public class CraWebService {
 	protected CraMediator craServiceMediator;
 	@Autowired
 	protected LoggerCra loggerCra;
-
 	protected CraAcao craAcao;
 	protected String nomeArquivo;
 
-	protected String mensagemServicoIndisponivel(Usuario usuario) {
+	protected AbstractMensagemVO mensagemServicoIndisponivel(Usuario usuario) {
 		MensagemXmlVO mensagemXml = new MensagemXmlVO();
 		DescricaoVO descricao = new DescricaoVO();
 		descricao.setDataEnvio(DataUtil.localDateToString(new LocalDate()));
@@ -70,7 +66,7 @@ public class CraWebService {
 		return gerarMensagem(mensagemXml, CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setResposta(Usuario usuario, ArquivoGenericoVO arquivo, String nomeArquivo, String nomeNode) {
+	protected AbstractMensagemVO setResposta(Usuario usuario, ArquivoGenericoVO arquivo, String nomeArquivo, String nomeNode) {
 		if (usuario == null) {
 			return setRespostaUsuarioInvalido(nomeArquivo);
 		}
@@ -99,7 +95,7 @@ public class CraWebService {
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setRespostaPadrao(Usuario usuario, String nomeArquivo, CodigoErro codigoErro) {
+	protected AbstractMensagemVO setRespostaPadrao(Usuario usuario, String nomeArquivo, CodigoErro codigoErro) {
 		logger.error("Erro WS: " + nomeArquivo + " ==== " + codigoErro.getDescricao());
 		loggerCra.error(usuario, getCraAcao(), codigoErro.getDescricao());
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
@@ -110,13 +106,13 @@ public class CraWebService {
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setRespostaErrosServicosCartorios(Usuario usuario, String nomeArquivo, String descricao) {
+	protected AbstractMensagemVO setRespostaErrosServicosCartorios(Usuario usuario, String nomeArquivo, String descricao) {
 		logger.error("Erro WS: " + nomeArquivo + " : " + descricao);
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, descricao);
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(Usuario usuario, String nomeArquivo) {
+	protected AbstractMensagemVO setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS: Este usuário não pode enviar o arquivo desta instituição. " + nomeArquivo);
 		loggerCra.error(usuario, getCraAcao(),
 				"Este usuário não pode enviar o arquivo desta instituição. O Código do Portador informado no arquivo difere da instituição "
@@ -129,7 +125,7 @@ public class CraWebService {
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setRespostaArquivoEmBranco(Usuario usuario, String nomeArquivo) {
+	protected AbstractMensagemVO setRespostaArquivoEmBranco(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS: Dados do arquivo enviados em branco " + nomeArquivo);
 		loggerCra.error(usuario, getCraAcao(), "Os dados do arquivo " + nomeArquivo + " da instituição "
 				+ usuario.getInstituicao().getNomeFantasia() + " foram enviados em branco ou estão corrimpidos.");
@@ -142,7 +138,7 @@ public class CraWebService {
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setRespostaArquivoEmProcessamento(Usuario usuario, String nomeArquivo) {
+	protected AbstractMensagemVO setRespostaArquivoEmProcessamento(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS: O arquivo ainda não foi gerado, ou ainda está em processamento.");
 		loggerCra.alert(usuario, getCraAcao(), "O arquivo " + nomeArquivo + " não foi gerado, ou ainda está em processamento.");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
@@ -155,7 +151,7 @@ public class CraWebService {
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setRespostaErroInternoNoProcessamento(Usuario usuario, String nomeArquivo) {
+	protected AbstractMensagemVO setRespostaErroInternoNoProcessamento(Usuario usuario, String nomeArquivo) {
 		logger.error("Erro WS: Erro interno no processamento.");
 		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 			MensagemDeErro msg = new MensagemDeErro(nomeArquivo, usuario, CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO);
@@ -165,7 +161,7 @@ public class CraWebService {
 		return gerarMensagem(msg.getMensagemErro(), CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setRespostaArquivoJaEnviadoAnteriormente(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
+	protected AbstractMensagemVO setRespostaArquivoJaEnviadoAnteriormente(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
 		logger.error("Erro WS: Arquivo já enviado anteriormente.");
 		loggerCra.alert(usuario, getCraAcao(), "Arquivo " + nomeArquivo + " já enviado anteriormente em "
 				+ DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()) + ".");
@@ -187,7 +183,7 @@ public class CraWebService {
 		return gerarMensagem(mensagem, CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
+	protected AbstractMensagemVO setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, Arquivo arquivoJaEnviado) {
 		logger.error("Erro WS: Arquivo já enviado anteriormente.");
 		loggerCra.error(usuario, getCraAcao(), "Arquivo " + nomeArquivo + " já enviado anteriormente em "
 				+ DataUtil.localDateToString(arquivoJaEnviado.getDataEnvio()) + ".");
@@ -205,7 +201,7 @@ public class CraWebService {
 		return gerarMensagem(mensagem, CONSTANTE_RELATORIO_XML);
 	}
 
-	protected String setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, LocalDate dataEnvio) {
+	protected AbstractMensagemVO setRespostaArquivoJaEnviadoCartorio(Usuario usuario, String nomeArquivo, LocalDate dataEnvio) {
 		logger.error("Erro WS: Arquivo já enviado anteriormente.");
 		loggerCra.error(usuario, getCraAcao(),
 				"Arquivo " + nomeArquivo + " já enviado anteriormente em " + DataUtil.localDateToString(dataEnvio) + ".");
@@ -266,7 +262,7 @@ public class CraWebService {
 		return codigoErro;
 	}
 
-	protected String gerarMensagem(Object object, String nomeNo) {
+	protected AbstractMensagemVO gerarMensagem(Object object, String nomeNo) {
 		String msg = "";
 		Writer writer = new StringWriter();
 		try {

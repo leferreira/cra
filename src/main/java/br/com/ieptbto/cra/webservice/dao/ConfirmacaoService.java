@@ -43,7 +43,6 @@ public class ConfirmacaoService extends CraWebService {
 	private ArquivoMediator arquivoMediator;
 	@Autowired
 	private ConfirmacaoReceiver confirmacaoReceiver;
-
 	private AbstractMensagemVO mensagemCra;
 	private String resposta;
 
@@ -77,8 +76,8 @@ public class ConfirmacaoService extends CraWebService {
 			if (remessas.isEmpty()) {
 				return setRespostaArquivoEmProcessamento(usuario, nomeArquivo);
 			}
-
 			resposta = gerarResposta(usuario, remessas, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
+
 			loggerCra.sucess(usuario, getCraAcao(), "Arquivo de Confirmação " + nomeArquivo + " recebido com sucesso por "
 					+ usuario.getInstituicao().getNomeFantasia() + ".");
 		} catch (Exception e) {
