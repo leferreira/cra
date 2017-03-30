@@ -31,21 +31,16 @@ public class IncluirLayoutEmpresaPage extends BasePage<LayoutFiliado> {
 	private LayoutEmpresaInputPanel inputPanel;
 
 	public IncluirLayoutEmpresaPage() {
-		setComponent();
+		adicionarComponentes();
 	}
 
 	public IncluirLayoutEmpresaPage(String string) {
 		info(string);
-		setComponent();
+		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void setComponent() {
 		layoutEmpresa = new LayoutFiliado();
 		inputPanel = new LayoutEmpresaInputPanel("layoutEmpresaInputPanel", getModel());
 		LayoutEmpresaForm form = new LayoutEmpresaForm("form", getModel(), inputPanel);

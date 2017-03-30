@@ -215,9 +215,7 @@ public class LayoutEmpresaInputPanel extends Panel {
 		ChoiceRenderer<CampoLayoutPersonalizado> renderer = new ChoiceRenderer<CampoLayoutPersonalizado>("label");
 		if (comboCampos == null) {
 			comboCampos = new DropDownChoice<CampoLayoutPersonalizado>("campo", getCamposLayout(), renderer);
-			comboCampos.setLabel(new Model<String>("Campo"));
 			comboCampos.setOutputMarkupId(true);
-			comboCampos.setRequired(true);
 		}
 		return comboCampos;
 	}
