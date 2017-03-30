@@ -26,44 +26,44 @@ import br.com.ieptbto.cra.security.CraRoles;
 public class RelatorioTitulosPage extends BasePage<TituloRemessa> {
 
 	private static final long serialVersionUID = 1L;
-	
 	private Usuario usuario;
-	private TituloRemessa titulo;
-	private FileUploadField fileUploadField;
+	private RelatorioBean relatorioTitulosBean;
 
 	public RelatorioTitulosPage() {
-		this.titulo = new TituloRemessa();
+		this.relatorioTitulosBean = new RelatorioBean();
 		this.usuario = getUser();
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		fileUploadPlanilhaPendenciasCra();
-		carregarFormulario();
+		add(carregarFormulario());
 	}
 
-	private void carregarFormulario() {
-		RelatorioBean relatorioTitulosBean = new RelatorioBean();
-		RelatorioTitulosForm form = new RelatorioTitulosForm("form", new CompoundPropertyModel<RelatorioBean>(relatorioTitulosBean), fileUploadField);
-		form.add(new RelatorioTitulosInputPanel("relatorioTitulosInputPanel", new CompoundPropertyModel<RelatorioBean>(relatorioTitulosBean), 
-				fileUploadField, usuario));
-		add(form);
-	}
-
-	private FileUploadField fileUploadPlanilhaPendenciasCra() {
-		fileUploadField = new FileUploadField("planilhaPendenciaCra", new ListModel<FileUpload>());
+	private RelatorioTitulosForm carregarFormulario() {
+		FileUploadField fileUploadField = new FileUploadField("planilhaPendenciaCra", new ListModel<FileUpload>());
 		fileUploadField.setLabel(new Model<String>("Anexo de Arquivo"));
+		fileUploadField.setEnabled(false);
 
 		TipoInstituicaoCRA tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
-		if (tipoInstituicao != TipoInstituicaoCRA.CRA) {
-			fileUploadField.setEnabled(false);
+		if (tipoInstituicao == TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA || 
+				tipoInstituicao == TipoInstituicaoCRA.CONVENIO) {
+			this.relatorioTitulosBean.setTipoInstituicao(tipoInstituicao);
+			this.relatorioTitulosBean.setBancoConvenio(usuario.getInstituicao());
+		} else if (tipoInstituicao == TipoInstituicaoCRA.CARTORIO) {
+			this.relatorioTitulosBean.setCartorio(usuario.getInstituicao());
+		} else {
+			fileUploadField.setEnabled(true);
 		}
-		return fileUploadField;
+		
+		IModel<RelatorioBean> model = new CompoundPropertyModel<RelatorioBean>(relatorioTitulosBean);
+		RelatorioTitulosForm form = new RelatorioTitulosForm("form", model, fileUploadField);
+		form.add(new RelatorioTitulosInputPanel("relatorioTitulosInputPanel", model, fileUploadField, usuario));
+		return form;
 	}
 
 	@Override
 	protected IModel<TituloRemessa> getModel() {
-		return new CompoundPropertyModel<TituloRemessa>(titulo);
+		return null;
 	}
 }
