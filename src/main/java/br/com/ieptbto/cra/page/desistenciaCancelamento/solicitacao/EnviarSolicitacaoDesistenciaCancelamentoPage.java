@@ -108,9 +108,8 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 						}
 						if (titulo.getSituacaoTitulo().equals(TipoOcorrencia.ABERTO.getLabel())) {
 							solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_DESISTENCIA_PROTESTO_IRREGULARIDADE);
-							if (titulo.getSituacaoTitulo().equals(TipoOcorrencia.PROTESTADO.getLabel())) {
-								solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
-							}
+						} else if (titulo.getSituacaoTitulo().equals(TipoOcorrencia.PROTESTADO.getLabel())) {
+							solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
 						}
 					}
 
