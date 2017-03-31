@@ -1,5 +1,9 @@
 -------------------- 1.0.4 ------------------
 
+30-Mar-2017 Thasso Araujo
+ # Correçaõ em emissão de Cancelamento de Protesto via CRA e IEPTB - Convênio. 
+ # Importação do arquivo para geração de Listagens de SLIPS corrigido.
+
 29-Mar-2017 Thasso Araujo
  # Ajuste em relatório Tribunal de Justiça
  # Correção para importação de arquivo de layout personalizado para OAB-TO.
