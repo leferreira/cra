@@ -1,6 +1,7 @@
 package br.com.ieptbto.cra.page.relatorio.titulo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,11 +28,10 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 
 public class RelatorioTitulosInputPanel extends Panel {
 
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-
+	private InstituicaoMediator instituicaoMediator;
+	
+	private static final long serialVersionUID = 1L;
 	private Usuario usuario;
 	private FileUploadField fileUploadField;
 	private List<Instituicao> listaInstituicoes;
@@ -97,31 +97,25 @@ public class RelatorioTitulosInputPanel extends Panel {
 	private DropDownChoice<Instituicao> dropDownBancoConvenios() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("nomeFantasia");
 		dropDownInstituicao = new DropDownChoice<Instituicao>("bancoConvenio", getListaInstituicoes(), renderer);
-		dropDownInstituicao.setLabel(new Model<String>("Portador"));
-		dropDownInstituicao.setOutputMarkupId(true);
-		dropDownInstituicao.setEnabled(false);
 		
-		TipoInstituicaoCRA tipoInstituicaoUsuario = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
-		if (tipoInstituicaoUsuario == TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA 
-				|| tipoInstituicaoUsuario == TipoInstituicaoCRA.CONVENIO) {
-			ArrayList<Instituicao> instituicoes = new ArrayList<Instituicao>();
-			instituicoes.add(usuario.getInstituicao());
-			dropDownInstituicao = new DropDownChoice<Instituicao>("bancoConvenio", instituicoes, renderer);
-			dropDownInstituicao.setModel(new Model<Instituicao>(usuario.getInstituicao()));
+		TipoInstituicaoCRA tipoInstituicao = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
+		if (tipoInstituicao == TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA || tipoInstituicao == TipoInstituicaoCRA.CONVENIO) {
+			dropDownInstituicao = new DropDownChoice<Instituicao>("bancoConvenio", instituicaoMediator.getInstituicoesFinanceirasEConvenios(), renderer);
 			dropDownInstituicao.setEnabled(false);
 		}
+		dropDownInstituicao.setLabel(new Model<String>("Portador"));
+		dropDownInstituicao.setOutputMarkupId(true);
 		return dropDownInstituicao;
 	}
 
 	private DropDownChoice<TipoInstituicaoCRA> dropDownTipoInstituicao() {
-		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>();
-		choices.add(TipoInstituicaoCRA.CONVENIO);
-		choices.add(TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA);
-		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao =
-				new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, new ChoiceRenderer<TipoInstituicaoCRA>("label"));
+		IChoiceRenderer<TipoInstituicaoCRA> renderer = new ChoiceRenderer<TipoInstituicaoCRA>("label");
+		List<TipoInstituicaoCRA> choices = new ArrayList<TipoInstituicaoCRA>(
+				Arrays.asList(TipoInstituicaoCRA.CONVENIO, TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA));
+		final DropDownChoice<TipoInstituicaoCRA> tipoInstituicao = new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, renderer);
+		tipoInstituicao.setLabel(new Model<String>("Tipo Instituição"));
 		tipoInstituicao.add(new OnChangeAjaxBehavior() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -144,12 +138,9 @@ public class RelatorioTitulosInputPanel extends Panel {
 				target.add(dropDownInstituicao);
 			}
 		});
-		tipoInstituicao.setLabel(new Model<String>("Tipo Instituição"));
 		TipoInstituicaoCRA tipoInstituicaoUsuario = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
 		if (tipoInstituicaoUsuario == TipoInstituicaoCRA.INSTITUICAO_FINANCEIRA 
 				|| tipoInstituicaoUsuario == TipoInstituicaoCRA.CONVENIO) {
-			tipoInstituicao.setModel(new Model<TipoInstituicaoCRA>());
-			tipoInstituicao.setModelObject(tipoInstituicaoUsuario);
 			tipoInstituicao.setEnabled(false);
 		}
 		return tipoInstituicao;
@@ -158,11 +149,8 @@ public class RelatorioTitulosInputPanel extends Panel {
 	private DropDownChoice<Instituicao> dropDownCartorio() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio");
 		DropDownChoice<Instituicao> dropDownCartorio = new DropDownChoice<Instituicao>("cartorio", instituicaoMediator.getCartorios(), renderer);
-		dropDownCartorio.setOutputMarkupId(true);
 		TipoInstituicaoCRA tipoInstituicaoUsuario = usuario.getInstituicao().getTipoInstituicao().getTipoInstituicao();
 		if (tipoInstituicaoUsuario == TipoInstituicaoCRA.CARTORIO) {
-			dropDownCartorio.setModel(new Model<Instituicao>());
-			dropDownCartorio.setModelObject(usuario.getInstituicao());
 			dropDownCartorio.setEnabled(false);
 		}
 		return dropDownCartorio;
