@@ -91,18 +91,19 @@ public class ConfirmacaoService extends CraWebService {
 		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
 
 		conteudo.append("<confirmacao>\r\n");
-		if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
+		LayoutPadraoXML layoutTranmissao = usuario.getInstituicao().getLayoutPadraoXML();
+		if (layoutTranmissao == LayoutPadraoXML.SERPRO) {
 			conteudo.append("<nome_arquivo>" + nomeArquivo + "</nome_arquivo>\r\n");
 		}
 		for (RemessaVO remessaVO : remessas) {
-			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
+			if (layoutTranmissao == LayoutPadraoXML.SERPRO) {
 				conteudo.append("<comarca CodMun=\"" + remessaVO.getCabecalho().getCodigoMunicipio() + "\">\r\n");
 				String msg = gerarRespostaArquivo(remessaVO, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
 				msg = msg.replace("<confirmacao>", "").replace("</confirmacao>", "");
 				msg = msg.replace(xml, "");
 				conteudo.append(msg);
 				conteudo.append("</comarca>\r\n");
-			} else {
+			} else if (layoutTranmissao == LayoutPadraoXML.CRA_NACIONAL) {
 				String msg = gerarRespostaArquivo(remessaVO, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
 				msg = msg.replace("<confirmacao>", "").replace("</confirmacao>", "");
 				msg = msg.replace(xml, "");
