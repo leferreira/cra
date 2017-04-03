@@ -10,6 +10,7 @@ import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServices;
+import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.error.CodigoErro;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.webservice.receiver.RemessaReceiver;
@@ -57,7 +58,7 @@ public class RemessaService extends CraWebService {
 			}
 			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
-				if (!arquivoJaEnviado.getInstituicaoEnvio().getCodigoCompensacao().trim().equals("582")) {
+				if (arquivoJaEnviado.getInstituicaoEnvio().getLayoutPadraoXML() == LayoutPadraoXML.SERPRO) {
 					return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
 				}
 			}
