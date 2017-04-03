@@ -99,19 +99,19 @@ public class ConfirmacaoService extends CraWebService {
 			if (layoutTranmissao == LayoutPadraoXML.SERPRO) {
 				conteudo.append("<comarca CodMun=\"" + remessaVO.getCabecalho().getCodigoMunicipio() + "\">\r\n");
 				String msg = gerarRespostaArquivo(remessaVO, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
-				msg = msg.replace("<confirmacao>", "").replace("</confirmacao>", "");
+				msg = msg.replace("<confirmacao xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "").replace("</confirmacao>", "");
 				msg = msg.replace(xml, "");
 				conteudo.append(msg);
 				conteudo.append("</comarca>\r\n");
 			} else if (layoutTranmissao == LayoutPadraoXML.CRA_NACIONAL) {
 				String msg = gerarRespostaArquivo(remessaVO, nomeArquivo, CONSTANTE_CONFIRMACAO_XML);
-				msg = msg.replace("<confirmacao>", "").replace("</confirmacao>", "");
+				msg = msg.replace("<confirmacao xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "").replace("</confirmacao>", "");
 				msg = msg.replace(xml, "");
 				conteudo.append(msg);
 			}
 		}
 		conteudo.append("</confirmacao>\r\n");
-		return XmlFormatterUtil.format(conteudo.toString());
+		return XmlFormatterUtil.format(xml + conteudo.toString());
 	}
 
 	/**
