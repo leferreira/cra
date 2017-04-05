@@ -8,8 +8,11 @@ SET layout_padrao_xml='ENTRADA_MANUAL_LAYOUT_PERSONALIZADO'
 WHERE ins.layout_padrao_xml = 'LAYOUT_PERSONALIZADO_CONVENIOS' 
 	OR ins.layout_padrao_xml = 'ENTRADA_MANUAL';
 
+UPDATE tb_instituicao as ins SET administrar_empresas_filiadas=false;
 UPDATE tb_instituicao as ins SET administrar_empresas_filiadas=true WHERE ins.tipo_instituicao_id=4;
-UPDATE tb_instituicao as ins SET administrar_empresas_filiadas=false WHERE ins.tipo_instituicao_id=3;
+
+UPDATE tb_instituicao as ins SET oficio_desistencia_cancelamento_obrigatorio=false;
+UPDATE tb_instituicao as ins SET oficio_desistencia_cancelamento_obrigatorio=true WHERE ins.tipo_instituicao_id=4;
 
 UPDATE tb_instituicao as ins SET layout_retorno_recebimento_empresa=false;
 

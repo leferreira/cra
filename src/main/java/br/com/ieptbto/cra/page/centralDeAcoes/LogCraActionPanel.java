@@ -12,9 +12,7 @@ import br.com.ieptbto.cra.entidade.LogCra;
  */
 public class LogCraActionPanel extends Panel {
 
-	/***/
 	private static final long serialVersionUID = 1L;
-
 	private LogCra logCra;
 
 	public LogCraActionPanel(String id, IModel<LogCra> model) {
@@ -22,7 +20,6 @@ public class LogCraActionPanel extends Panel {
 		this.logCra = model.getObject();
 		add(new Link<LogCra>("descricaoGeral") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

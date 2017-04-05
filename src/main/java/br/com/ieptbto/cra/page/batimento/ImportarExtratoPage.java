@@ -30,11 +30,10 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ImportarExtratoPage extends BasePage<Batimento> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
-	DepositoMediator depositoMediator;
+	private DepositoMediator depositoMediator;
+	
+	private static final long serialVersionUID = 1L;
 	private Batimento batimento;
 	private FileUploadField fileUploadField;
 

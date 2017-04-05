@@ -16,34 +16,29 @@ import br.com.ieptbto.cra.page.centralDeAcoes.LogCraPage;
 
 public class CentralAcoesPanel extends Panel {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
-	LoggerMediator loggerMediator;
+	private LoggerMediator loggerMediator;
 
+	private static final long serialVersionUID = 1L;
 	private Usuario usuario;
 
 	public CentralAcoesPanel(String id, Usuario usuario) {
 		super(id);
 		this.usuario = usuario;
-
 		verificarVisibilidade();
 		add(listaUltimasAcoesErros());
 	}
 
 	private ListView<LogCra> listaUltimasAcoesErros() {
 		return new ListView<LogCra>("listUltimosErrosLog", loggerMediator.buscarUltimosLogDeErros()) {
-			/***/
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<LogCra> item) {
 				final LogCra log = item.getModelObject();
 				item.add(new Label("instituicao", log.getInstituicao()));
-				item.add(new Label("tipoLog", log.getTipoLog().getLabel()).setOutputMarkupId(true)
-								.setMarkupId(log.getTipoLog().getIdHtml()));
-
+				item.add(new Label("tipoLog", log.getTipoLog().getLabel()).setOutputMarkupId(true).setMarkupId(log.getTipoLog().getIdHtml()));
 				if (log.getDescricao() != null) {
 					if (log.getDescricao().length() > 80) {
 						item.add(new Label("descricao", log.getDescricao().substring(0, 79)).setEscapeModelStrings(false));
@@ -55,7 +50,6 @@ public class CentralAcoesPanel extends Panel {
 				}
 				item.add(new Link<LogCra>("descricaoGeral") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override

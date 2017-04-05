@@ -29,9 +29,10 @@ import br.com.ieptbto.cra.validador.EmailValidator;
 public class InstituicaoInputPanel extends Panel {
 
 	@SpringBean
-	MunicipioMediator municipioMediator;
+	private MunicipioMediator municipioMediator;
 	@SpringBean
-	TipoInstituicaoMediator tipoMediator;
+	private TipoInstituicaoMediator tipoMediator;
+	
 	private static final long serialVersionUID = 1L;
 
 	public InstituicaoInputPanel(String id, IModel<Instituicao> model) {
@@ -58,9 +59,17 @@ public class InstituicaoInputPanel extends Panel {
 		add(checkLayoutCnab240());
 		add(checkSeloDiferido());
 		add(checkTaxaCra());
+		add(checkOficioDesistenciaCancelamentoObrigatorio());
 		add(checkVerificacaoManual());
 	}
 
+	private CheckBox checkOficioDesistenciaCancelamentoObrigatorio() {
+		CheckBox checkbox = new CheckBox("oficioDesistenciaCancelamentoObrigatorio");
+		checkbox.setLabel(new Model<String>("Ofício Desistência e Cancelamento Obrigatório"));
+		checkbox.setRequired(true);
+		return checkbox;
+	}
+	
 	private CheckBox checkLayoutCnab240() {
 		CheckBox checkbox = new CheckBox("layoutRetornoRecebimentoEmpresa");
 		checkbox.setLabel(new Model<String>("Layout de Retorno Recebimento Empresa"));
