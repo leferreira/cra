@@ -46,6 +46,10 @@ public abstract class CraWebService {
 	protected CraAcao craAcao;
 	protected String nomeArquivo;
 
+	/**
+	 * @param object
+	 * @return
+	 */
 	protected abstract String gerarMensagemRelatorio(Object object);
 	
 	protected abstract String gerarRespostaArquivo(Object object, String nomeArquivo, String nameNode);
@@ -72,8 +76,8 @@ public abstract class CraWebService {
 
 	private String setRespostaUsuarioInvalido(String nomeArquivo) {
 		logger.error("Erro WS : Dados do usuário inválidos. Falha na autenticação.");
-		loggerCra.error(getCraAcao(), "Dados do usuário inválidos. Falha na autenticação.");
 		MensagemDeErro msg = new MensagemDeErro(nomeArquivo, new Usuario(), CodigoErro.CRA_FALHA_NA_AUTENTICACAO);
+		loggerCra.error(getCraAcao(), "Dados do usuário inválidos. Falha na autenticação.");
 		return gerarMensagemRelatorio(msg.getMensagemErro());
 	}
 

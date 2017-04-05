@@ -5,49 +5,31 @@
 </head>
 <body>
 	<wicket:extend>
-	<h4 class="titulo-top">DETALHE DO LOG
-		<span class="pull-right">
-			<a href="CentralDeAcoes" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
-		</span>   
-	</h4>
+		<h4 class="titulo-top">DETALHE DO LOG
+			<span class="pull-right">
+				<a href="CentralDeAcoes" class="link" style="font-size: 14px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+			</span>   
+		</h4>
 		<div class="row">
-			<div class="col-lg-3">
-				<div class="form-group">
-				  <label>Ação</label>
-				  <input wicket:id="acao" class="form-control">
-				</div>
+			<div class="col-lg-6">
+			 <p>
+			  <strong>Ação:&nbsp;</strong><span wicket:id="acao"></span><br/>
+			  <strong>Instituição:&nbsp;</strong><span wicket:id="instituicao"></span><br/>
+			  <strong>Nome do Usuário:&nbsp;</strong><span wicket:id="usuario"></span><br/>
+			  <strong>Data e Hora:&nbsp;</strong><span wicket:id="dataHora"></span><br/>
+			  <strong>Resposta:&nbsp;</strong><a wicket:id="buttonDownloadRelatorio" class="link">Download</a>
+			 </p>
 			</div>
-			<div class="col-lg-3">
-				<div class="form-group">
-				  <label>Instituição</label>
-				  <input wicket:id="instituicao" class="form-control">
-				</div>
-			</div>
-			<div class="col-lg-3">
-				<div class="form-group">
-				  <label>Nome do Usuário</label>
-				  <input wicket:id="usuario" class="form-control">
-				</div>
-			</div>
-			<div class="col-lg-2">
-				<div class="form-group">
-				  <label>Data e Hora</label>
-				  <input wicket:id="dataHora" class="form-control">
-				</div>
-			</div>
-			<div class="col-lg-1">
-				<div class="form-group">
-				  <label>Ocorrência</label>
-				  <div wicket:id="divTipoOcorrencia" class="text-center">
-					  <span wicket:id="tipoLog.label"></span>
-				  </div>
-				</div>
+			<div class="col-lg-2 pull-right">
+			  <div wicket:id="divTipoOcorrencia" class="text-center">
+				  <p wicket:id="tipoLog.label"></p>
+			  </div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-lg-8">
 				<div class="form-group">
-				  <label>Descrição</label><br>
+				  <strong>Descrição</strong><br>
 				  <span wicket:id="descricao" class="destaque">
 				  </span>
 				</div>
@@ -56,9 +38,11 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="form-group">
-				  <label>Exceção</label>
-				  <textarea wicket:id="exception" class="form-control" rows="15" cols="10">
-				  </textarea>
+				  <strong>Exceção</strong>
+				  <pre>
+				  	<span wicket:id="exception"></span>
+				  	<br class="clear"/>
+				  </pre>
 				</div>
 			</div>
 		</div>

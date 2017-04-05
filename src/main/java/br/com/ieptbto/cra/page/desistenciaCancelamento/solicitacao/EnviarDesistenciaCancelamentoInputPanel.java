@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.MotivoSolicitacaoDesistenciaCancelamento;
@@ -28,8 +29,8 @@ import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
 public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
-
 	private TituloRemessa titulo;
+	private Instituicao instituicao;
 	private RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> radioMotivoSolicitacao;
 	private DropDownChoice<CodigoIrregularidade> dropDownMotivoCancelamento;
 	private FileUploadField fileUploadField;
@@ -38,6 +39,7 @@ public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 			FileUploadField fileUpload, RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> radioMotivo) {
 		super(id, model);
 		this.titulo = titulo;
+		this.instituicao = titulo.getRemessa().getInstituicaoOrigem();
 		this.fileUploadField = fileUpload;
 		this.radioMotivoSolicitacao = radioMotivo;
 		add(fileUploadAnexo());
@@ -61,7 +63,7 @@ public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 					if (MotivoSolicitacaoDesistenciaCancelamento.IRREGULARIDADE_NO_TITULO_APRESENTADO.equals(motivo)) {
 						dropDownMotivoCancelamento.setEnabled(true);
 						dropDownMotivoCancelamento.setRequired(true);
-						fileUploadField.setRequired(true);
+						fileUploadField.setRequired(instituicao.isOficioDesistenciaCancelamentoObrigatorio());
 					} else {
 						dropDownMotivoCancelamento.setDefaultModelObject(null);
 						dropDownMotivoCancelamento.setEnabled(false);

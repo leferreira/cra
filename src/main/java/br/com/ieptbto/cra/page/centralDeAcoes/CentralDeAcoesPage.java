@@ -45,9 +45,9 @@ import br.com.ieptbto.cra.util.DataUtil;
 public class CentralDeAcoesPage extends BasePage<LogCra> {
 
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	LoggerMediator loggerMediator;
+	private LoggerMediator loggerMediator;
 
 	private static final long serialVersionUID = 1L;
 	private LocalDate dataInicio;
@@ -73,11 +73,11 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 
 	@Override
 	protected void adicionarComponentes() {
-		formularioConsultaAcoes();
-		dataTableAcoes();
+		add(formularioConsultaAcoes());
+		add(dataTableAcoes());
 	}
 
-	private void formularioConsultaAcoes() {
+	private Form<LogCra> formularioConsultaAcoes() {
 		Form<LogCra> form = new Form<LogCra>("form") {
 
 			private static final long serialVersionUID = 1L;
@@ -113,7 +113,7 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 		form.add(textFieldDataEnvioFinal());
 		form.add(textFieldTipoInstituicao());
 		form.add(dropDownInstituicaoBancosConvenios());
-		add(form);
+		return form;
 	}
 
 	private TextField<String> textFieldDataEnvioInicio() {
@@ -179,7 +179,7 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 		return dropDownBancosConveniosCartorios;
 	}
 
-	private void dataTableAcoes() {
+	private CraDataTable<LogCra> dataTableAcoes() {
 		List<IColumn<LogCra, String>> columns = new ArrayList<>();
 		columns.add(new PropertyColumn<LogCra, String>(new Model<String>("DATA E HORA"), "data") {
 
@@ -240,7 +240,7 @@ public class CentralDeAcoesPage extends BasePage<LogCra> {
 			} 
 		});
 		LogCraProvider provider = new LogCraProvider(buscarLoggs());
-		add(new CraDataTable<LogCra>("panelDataTableAcoes", columns, provider));
+		return new CraDataTable<LogCra>("panelDataTableAcoes", columns, provider);
 	}
 
 	public List<Instituicao> getListaInstituicoes() {
