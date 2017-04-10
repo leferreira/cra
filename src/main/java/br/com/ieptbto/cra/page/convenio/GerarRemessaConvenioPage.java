@@ -32,13 +32,12 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.SUPER, CraRoles.ADMIN })
 public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 
-	/***/
+	@SpringBean
+	private ConvenioMediator convenioMediator;
+	@SpringBean
+	private TituloFiliadoMediator tituloFiliadoMediator;
+	
 	private static final long serialVersionUID = 1L;
-
-	@SpringBean
-	ConvenioMediator convenioMediator;
-	@SpringBean
-	TituloFiliadoMediator tituloFiliadoMediator;
 	private TituloFiliado titulo;
 	private ListView<TituloFiliado> titulos;
 
@@ -62,7 +61,6 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 	private Form<TituloFiliado> formGerarRemessaConvenio() {
 		return new Form<TituloFiliado>("form", getModel()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -86,7 +84,6 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 	private ListView<TituloFiliado> listaTitulosConvenio() {
 		return titulos = new ListView<TituloFiliado>("listViewTitulos", buscarTitulosFiliados()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -105,7 +102,6 @@ public class GerarRemessaConvenioPage extends BasePage<TituloFiliado> {
 	public IModel<List<TituloFiliado>> buscarTitulosFiliados() {
 		return new LoadableDetachableModel<List<TituloFiliado>>() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

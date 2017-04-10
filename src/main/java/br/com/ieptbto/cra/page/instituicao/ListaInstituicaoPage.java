@@ -31,7 +31,7 @@ import br.com.ieptbto.cra.security.CraRoles;
 public class ListaInstituicaoPage extends BasePage<Instituicao> {
 
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 
 	private Instituicao instituicao;
 
@@ -50,7 +50,6 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 	protected void adicionarComponentes() {
 		botaoNovaInstituicao();
 		listaInstituicoes();
-
 	}
 
 	private void botaoNovaInstituicao() {
@@ -82,7 +81,7 @@ public class ListaInstituicaoPage extends BasePage<Instituicao> {
 				item.add(new Label("responsavel", instituicaoLista.getResponsavel()));
 				item.add(new Label("email", instituicaoLista.getEmail()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorConfirmacao", instituicaoLista.getValorConfirmacao()));
-				if (instituicaoLista.isSituacao()) {
+				if (instituicaoLista.getSituacao()) {
 					item.add(new Label("situacao", "Sim"));
 				} else {
 					item.add(new Label("situacao", "Não"));

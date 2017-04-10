@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -33,10 +33,10 @@ public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 	private Instituicao instituicao;
 	private RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> radioMotivoSolicitacao;
 	private DropDownChoice<CodigoIrregularidade> dropDownMotivoCancelamento;
-	private FileUploadField fileUploadField;
+	private MultiFileUploadField fileUploadField;
 
 	public EnviarDesistenciaCancelamentoInputPanel(String id, IModel<SolicitacaoDesistenciaCancelamento> model, TituloRemessa titulo,
-			FileUploadField fileUpload, RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> radioMotivo) {
+			MultiFileUploadField fileUpload, RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> radioMotivo) {
 		super(id, model);
 		this.titulo = titulo;
 		this.instituicao = titulo.getRemessa().getInstituicaoOrigem();
@@ -63,7 +63,7 @@ public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 					if (MotivoSolicitacaoDesistenciaCancelamento.IRREGULARIDADE_NO_TITULO_APRESENTADO.equals(motivo)) {
 						dropDownMotivoCancelamento.setEnabled(true);
 						dropDownMotivoCancelamento.setRequired(true);
-						fileUploadField.setRequired(instituicao.isOficioDesistenciaCancelamentoObrigatorio());
+						fileUploadField.setRequired(instituicao.getOficioDesistenciaCancelamentoObrigatorio());
 					} else {
 						dropDownMotivoCancelamento.setDefaultModelObject(null);
 						dropDownMotivoCancelamento.setEnabled(false);
@@ -104,9 +104,7 @@ public class EnviarDesistenciaCancelamentoInputPanel extends Panel {
 		return new Label("nomeDevedorModal", new Model<String>(titulo.getNomeDevedor()));
 	}
 
-	private FileUploadField fileUploadAnexo() {
-		this.fileUploadField.setOutputMarkupId(true);
-		this.fileUploadField.setEnabled(true);
+	private MultiFileUploadField fileUploadAnexo() {
 		return fileUploadField;
 	}
 }

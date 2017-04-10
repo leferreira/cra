@@ -27,12 +27,10 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaCartorioPage extends BasePage<Instituicao> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 
+	private static final long serialVersionUID = 1L;
 	private Instituicao cartorio;
 
 	public ListaCartorioPage() {
@@ -43,20 +41,17 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 	public ListaCartorioPage(String mensagem) {
 		this.cartorio = new Instituicao();
 		adicionarComponentes();
-
 		success(mensagem);
 	}
 
 	@Override
 	protected void adicionarComponentes() {
 		listaMunicipioPage();
-
 	}
 
 	private void listaMunicipioPage() {
 		add(new Link<Instituicao>("botaoNovo") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			public void onClick() {
@@ -69,7 +64,6 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 	private ListView<Instituicao> carregarListaCartorios() {
 		return new ListView<Instituicao>("listViewCartorio", listInstituicoes()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -78,7 +72,6 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 
 				Link<Instituicao> linkAlterar = new Link<Instituicao>("linkAlterar") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
@@ -93,7 +86,7 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 				item.add(new Label("contato", instituicaoLista.getContato()));
 				item.add(new Label("codigoCartorio", instituicaoLista.getCodigoCartorio()));
 
-				if (instituicaoLista.isSituacao() == true) {
+				if (instituicaoLista.getSituacao()) {
 					item.add(new Label("situacao", "Sim"));
 				} else {
 					item.add(new Label("situacao", "Não"));
@@ -105,7 +98,6 @@ public class ListaCartorioPage extends BasePage<Instituicao> {
 	public IModel<List<Instituicao>> listInstituicoes() {
 		return new LoadableDetachableModel<List<Instituicao>>() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
