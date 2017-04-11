@@ -47,13 +47,12 @@ import net.sf.jasperreports.engine.JasperPrint;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class RetornosLiberadosPage extends BasePage<Retorno> {
 
-	/***/
+	@SpringBean
+	private RetornoMediator retornoMediator;
+	@SpringBean
+	private BatimentoMediator batimentoMediator;
+	
 	private static final long serialVersionUID = 1L;
-
-	@SpringBean
-	RetornoMediator retornoMediator;
-	@SpringBean
-	BatimentoMediator batimentoMediator;
 	private Retorno retorno;
 	private TextField<String> textFieldDataBatimento;
 	private LocalDate dataBatimento;
@@ -78,7 +77,6 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 	private Form<Batimento> formBatimentoLiberacao() {
 		Form<Batimento> formFiltros = new Form<Batimento>("formFiltros") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -116,7 +114,6 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 	private ListView<Remessa> carregarListaRetornos() {
 		return new ListView<Remessa>("retornos", buscarRetornosAguardandoLiberacao()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -152,7 +149,6 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 			private Link<Remessa> botaoGerarRelatorio(final Remessa retorno) {
 				return new Link<Remessa>("gerarRelatorio") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -180,7 +176,6 @@ public class RetornosLiberadosPage extends BasePage<Retorno> {
 	public IModel<List<Remessa>> buscarRetornosAguardandoLiberacao() {
 		return new LoadableDetachableModel<List<Remessa>>() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

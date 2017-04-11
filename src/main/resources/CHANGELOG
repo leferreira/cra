@@ -1,3 +1,13 @@
+-------------------- 1.0.6 ------------------
+
+11-Abr-2017 Thasso Araújo
+ # Configuração para recebimento de retorno de cancelamento.
+ # Correção para envio de AC e CP da Serpro que estavam sendo enviadas com código da comarca diferente.
+ # Correção para envio de DP caso tenha título com protocolo 0.
+ # Nova arquitetura de convênios para envio de documentos anexos em entrada manual 
+ 	e em ofício de cancelamento/desistência por irregularidade.
+ # Configuração para deixar opcional o anexo de ofício de cancelamento e desistência por irregularidade.
+ 
 -------------------- 1.0.4 ------------------
 
 03-Abr-2017 Thasso Araújo

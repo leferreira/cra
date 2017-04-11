@@ -82,7 +82,7 @@ public class CancelamentoProtestoService extends CraWebService {
 				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
 			arquivo = cancelamentoProtestoMediator.processarCancelamento(nomeArquivo, dados, getErros(), usuario);
-			if (usuario.equals(LayoutPadraoXML.SERPRO)) {
+			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
 			}
 			MensagemXmlVO relatorio = gerarResposta(arquivo, usuario);
