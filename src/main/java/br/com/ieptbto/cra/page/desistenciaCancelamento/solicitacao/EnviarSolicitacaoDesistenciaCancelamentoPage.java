@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -44,14 +45,14 @@ import br.com.ieptbto.cra.util.DataUtil;
 public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<SolicitacaoDesistenciaCancelamento> {
 
 	@SpringBean
-	TituloMediator tituloMediator;
+	private TituloMediator tituloMediator;
 	@SpringBean
-	SolicitacaoDesistenciaCancelamentoMediator cancelamentoProtestoMediator;
+	private SolicitacaoDesistenciaCancelamentoMediator cancelamentoProtestoMediator;
 	
 	private static final long serialVersionUID = 1L;
 	private TituloRemessa titulo;
 	private SolicitacaoDesistenciaCancelamento solicitacao;
-	private FileUploadField fileUploadField;
+	private MultiFileUploadField fileUploadField;
 	private RadioChoice<MotivoSolicitacaoDesistenciaCancelamento> radioMotivo;
 
 	public EnviarSolicitacaoDesistenciaCancelamentoPage(TituloRemessa titulo) {
@@ -73,9 +74,11 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 
 			private static final long serialVersionUID = 1L;
 
+			@SuppressWarnings("unchecked")
 			@Override
 			protected void onSubmit() {
 				SolicitacaoDesistenciaCancelamento solicitacao = getModelObject();
+				ListModel<FileUpload> uploadFiles = null;
 				solicitacao.setDataSolicitacao(new Date());
 				solicitacao.setHoraSolicitacao(new LocalTime());
 				solicitacao.setUsuario(getUser());
@@ -93,17 +96,13 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 					}
 
 					if (MotivoSolicitacaoDesistenciaCancelamento.IRREGULARIDADE_NO_TITULO_APRESENTADO.equals(motivo)) {
+						if (fileUploadField.getDefaultModel() != null) {
+							uploadFiles = (ListModel<FileUpload>) fileUploadField.getDefaultModel();
+						}
+						
 						if (solicitacao.getCodigoIrregularidade().equals(CodigoIrregularidade.IRREGULARIDADE_0)
 								|| solicitacao.getCodigoIrregularidade().equals(CodigoIrregularidade.IRREGULARIDADE_CONVENIO)) {
 							throw new InfraException("A irregularidade informada não pode ser aplicada. Por favor informe uma outra irregularidade!");
-						}
-						if (fileUploadField.getFileUpload() != null) {
-							if (!fileUploadField.getFileUpload().getClientFileName().toUpperCase().contains(".ZIP")) {
-								throw new InfraException("O anexo do documento devem estar compactados em formato ZIP.");
-							}
-							if (!Bytes.megabytes(5).greaterThan(fileUploadField.getFileUpload().getSize())) {
-								throw new InfraException("Tamanho do arquivo anexo excedido. Limite máximo de 5 MB.");
-							}
 						}
 						if (titulo.getSituacaoTitulo().equals(TipoOcorrencia.ABERTO.getLabel())) {
 							solicitacao.setTipoSolicitacao(TipoSolicitacaoDesistenciaCancelamento.SOLICITACAO_DESISTENCIA_PROTESTO_IRREGULARIDADE);
@@ -112,7 +111,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 						}
 					}
 
-					cancelamentoProtestoMediator.salvarSolicitacaoDesistenciaCancelamento(solicitacao, fileUploadField.getFileUpload());
+					cancelamentoProtestoMediator.salvarSolicitacaoDesistenciaCancelamento(solicitacao, uploadFiles);
 					if (MotivoSolicitacaoDesistenciaCancelamento.PAGAMENTO_AO_CREDOR.equals(motivo)) {
 						success("A solicitação por meio de Carta de Anuência Eletrônica foi enviada com sucesso! "
 								+ "O devedor deverá comparecer em cartório para <span class=\"alert-link\">quitação das custas</span> em um prazo de 24 horas! ");
@@ -131,12 +130,15 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 		};
 		form.add(new EnviarDesistenciaCancelamentoInputPanel("solicitacaoInputPanel", getModel(), titulo, fileUploadField, radioMotivo));
 		form.setMultiPart(true);
+		form.setMaxSize(Bytes.megabytes(5));
 		add(form);
 	}
 
 	private void criarCampoAnexoOficio() {
-		this.fileUploadField = new FileUploadField("anexoDesistencia", new ListModel<FileUpload>());
+		this.fileUploadField = new MultiFileUploadField("anexoDesistencia");
 		this.fileUploadField.setLabel(new Model<String>("Anexo de Ofício/Carta Anuência"));
+		this.fileUploadField.setOutputMarkupId(true);
+		this.fileUploadField.setDefaultModel(new ListModel<FileUpload>(new ArrayList<FileUpload>()));
 	}
 	
 	private void criarRadioMotivo() {

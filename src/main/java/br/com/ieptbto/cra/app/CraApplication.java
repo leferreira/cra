@@ -216,7 +216,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
         mountPage("SolicitarDesistenciaCancelamento", SolicitarDesistenciaCancelamentoPage.class);
         mountPage("EnviarSolicitacaoDesistenciaCancelamento", EnviarSolicitacaoDesistenciaCancelamentoPage.class);
         mountPage("DownloadOficioIrregularidade", DownloadOficioIrregularidadePage.class);
-        mountPage("MonitorarTitulos", BuscarTitulosPage.class);
+        mountPage("BuscarTitulos", BuscarTitulosPage.class);
         mountPage("ListaTitulos", ListaTitulosPage.class);
         mountPage("Historico", HistoricoPage.class);
         mountPage("Relatorio", RelatorioArquivosPage.class);

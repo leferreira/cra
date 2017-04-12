@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.CompoundValidator;
 
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
@@ -28,212 +29,131 @@ import br.com.ieptbto.cra.validador.EmailValidator;
 
 public class InstituicaoInputPanel extends Panel {
 
-	@SpringBean
-	private MunicipioMediator municipioMediator;
-	@SpringBean
-	private TipoInstituicaoMediator tipoMediator;
-	
-	private static final long serialVersionUID = 1L;
+    @SpringBean
+    private MunicipioMediator municipioMediator;
+    @SpringBean
+    private TipoInstituicaoMediator tipoMediator;
 
-	public InstituicaoInputPanel(String id, IModel<Instituicao> model) {
-		super(id, model);
-		add(campoNomeFantasia());
-		add(campoRazaoSocial());
-		add(comboTipoInstituicao());
-		add(campoCnpj());
-		add(campoCodigoCompensacao());
-		add(campoEmail());
-		add(campoContato());
-		add(campoValorConfirmacao());
-		add(campoEndereco());
-		add(campoBairro());
-		add(campoResponsavel());
-		add(campoAgenciaCentralizadora());
-		add(campoStatus());
-		add(comboMunicipios());
-		add(comboTipoCampo51());
-		add(comboTipoBatimento());
-		add(comboPadraoLayoutXML());
-		add(checkboxPermitidoSetores());
-		add(checkAdministrarEmpresasFiliadas());
-		add(checkLayoutCnab240());
-		add(checkSeloDiferido());
-		add(checkTaxaCra());
-		add(checkOficioDesistenciaCancelamentoObrigatorio());
-		add(checkVerificacaoManual());
-	}
+    private static final long serialVersionUID = 1L;
 
-	private CheckBox checkOficioDesistenciaCancelamentoObrigatorio() {
-		CheckBox checkbox = new CheckBox("oficioDesistenciaCancelamentoObrigatorio");
-		checkbox.setLabel(new Model<String>("Ofício Desistência e Cancelamento Obrigatório"));
-		checkbox.setRequired(true);
-		return checkbox;
-	}
-	
-	private CheckBox checkLayoutCnab240() {
-		CheckBox checkbox = new CheckBox("layoutRetornoRecebimentoEmpresa");
-		checkbox.setLabel(new Model<String>("Layout de Retorno Recebimento Empresa"));
-		checkbox.setRequired(true);
-		return checkbox;
-	}
+    public InstituicaoInputPanel(String id, IModel<Instituicao> model) {
+        super(id, model);
+        add(comboTipoInstituicao());
+        add(campoStatus());
+        add(comboMunicipios());
+        add(comboTipoCampo51());
+        add(comboTipoBatimento());
+        add(comboPadraoLayoutXML());
 
-	private CheckBox checkAdministrarEmpresasFiliadas() {
-		CheckBox checkbox = new CheckBox("administrarEmpresasFiliadas");
-		checkbox.setLabel(new Model<String>("Administrar Empresas Filiadas"));
-		checkbox.setRequired(true);
-		return checkbox;
-	}
+        add(addCheckBox("oficioDesistenciaCancelamentoObrigatorio", "Ofício Desistência e Cancelamento Obrigatório", true));
+        add(addCheckBox("layoutRetornoRecebimentoEmpresa", "Layout de Retorno Recebimento Empresa", true));
+        add(addCheckBox("administrarEmpresasFiliadas", "Administrar Empresas Filiadas", true));
+        add(addCheckBox("setoresConvenio", "Permitir Setores Filiados", true));
+        add(addCheckBox("seloDiferido", "Selo Diferido", true));
+        add(addCheckBox("verificacaoManual", "Verificação Manual", true));
+        add(addCheckBox("taxaCra", "Taxa Cra", true));
+        add(addCheckBox("retornoCancelamento", "Retorno de Cancelamento (CP, AC)", false));
 
-	private CheckBox checkboxPermitidoSetores() {
-		CheckBox checkbox = new CheckBox("setoresConvenio");
-		checkbox.setLabel(new Model<String>("Permitir Setores Filiados"));
-		checkbox.setRequired(true);
-		return checkbox;
-	}
+        add(addTextField("nomeFantasia", "Nome Fantasia", true));
+        add(addTextField("razaoSocial", "Razão Social"));
+        add(addTextField("cnpj", "CNPJ"));
+        add(addTextField("codigoCompensacao", "Código Compensação"));
+        add(addTextField("email", "Email", new EmailValidator()));
+        add(addTextField("contato", "Contato"));
+        add(addTextField("bairro", "Bairro"));
+        add(addTextField("valorConfirmacao", "Valor Confirmação"));
+        add(addTextField("responsavel", "Resposável"));
+        add(addTextField("agenciaCentralizadora", "Agência Centralizadora"));
 
-	private TextField<String> campoNomeFantasia() {
-		TextField<String> textField = new TextField<String>("nomeFantasia");
-		textField.setLabel(new Model<String>("Nome Fantasia"));
-		textField.setRequired(true);
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
+        add(addTextArea("endereco", "Endereço"));
+    }
 
-	private TextField<String> campoRazaoSocial() {
-		TextField<String> textField = new TextField<String>("razaoSocial");
-		textField.setLabel(new Model<String>("Razão Social"));
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
+    private CheckBox addCheckBox(String id, String label, boolean required) {
+        CheckBox checkbox = new CheckBox(id);
+        checkbox.setLabel(new Model<String>(label));
+        checkbox.setRequired(required);
+        return checkbox;
+    }
 
-	private TextField<String> campoCnpj() {
-		TextField<String> textField = new TextField<String>("cnpj");
-		textField.setLabel(new Model<String>("CNPJ"));
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
+    private TextArea<String> addTextArea(String id, String label) {
+        TextArea<String> text = new TextArea<String>(id);
+        text.setLabel(new Model<String>(label));
+        return text;
+    }
 
-	private TextField<String> campoCodigoCompensacao() {
-		TextField<String> textField = new TextField<String>("codigoCompensacao");
-		textField.setLabel(new Model<String>("Código Compensação"));
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
+    private TextField<String> addTextField(String id, String label, CompoundValidator<String> validador) {
+        return addTextField(id, label, false, validador);
+    }
 
-	private TextField<String> campoEmail() {
-		TextField<String> textField = new TextField<String>("email");
-		textField.setLabel(new Model<String>("Email"));
-		textField.add(new EmailValidator());
-		return textField;
-	}
+    private TextField<String> addTextField(String id, String label) {
+        return addTextField(id, label, false);
+    }
 
-	private TextField<String> campoContato() {
-		TextField<String> textField = new TextField<String>("contato");
-		textField.setLabel(new Model<String>("Contato"));
-		textField.setMarkupId("telefone");
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
+    private TextField<String> addTextField(String id, String label, boolean required) {
+        TextField<String> textField = new TextField<String>(id);
+        textField.setLabel(new Model<String>(label));
+        textField.setRequired(required);
+        textField.setOutputMarkupId(true);
+        return textField;
+    }
 
-	private TextField<String> campoBairro() {
-		TextField<String> textField = new TextField<String>("bairro");
-		textField.setLabel(new Model<String>("Bairro"));
-		return textField;
-	}
+    private TextField<String> addTextField(String id, String label, boolean required, CompoundValidator<String> validador) {
+        TextField<String> textField = new TextField<String>(id);
+        textField.setLabel(new Model<String>(label));
+        textField.setRequired(required);
+        textField.add(validador);
+        textField.setOutputMarkupId(true);
+        return textField;
+    }
 
-	private TextField<String> campoValorConfirmacao() {
-		TextField<String> textField = new TextField<String>("valorConfirmacao");
-		textField.setLabel(new Model<String>("Valor Confirmação"));
-		textField.setOutputMarkupId(true);
-		return textField;
-	}
+    private Component campoStatus() {
+        List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
+        return new RadioChoice<String>("status", status);
+    }
 
-	private TextArea<String> campoEndereco() {
-		TextArea<String> text = new TextArea<String>("endereco");
-		text.setLabel(new Model<String>("Endereço"));
-		return text;
-	}
+    private DropDownChoice<TipoInstituicao> comboTipoInstituicao() {
+        DropDownChoice<TipoInstituicao> combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao", tipoMediator.listaTipoInstituicao(),
+                new ChoiceRenderer<TipoInstituicao>("tipoInstituicao.label"));
+        combo.setLabel(new Model<String>("Tipo Instituição"));
+        combo.setOutputMarkupId(true);
+        combo.setRequired(true);
+        return combo;
+    }
 
-	private TextField<String> campoResponsavel() {
-		TextField<String> text = new TextField<String>("responsavel");
-		text.setLabel(new Model<String>("Resposável"));
-		return text;
-	}
+    private DropDownChoice<TipoCampo51> comboTipoCampo51() {
+        DropDownChoice<TipoCampo51> combo = new DropDownChoice<TipoCampo51>("tipoCampo51", Arrays.asList(TipoCampo51.values()),
+                new ChoiceRenderer<TipoCampo51>("label"));
+        combo.setLabel(new Model<String>("Tipo de Informação Campo 51"));
+        combo.setOutputMarkupId(true);
+        combo.setRequired(true);
+        return combo;
+    }
 
-	private TextField<String> campoAgenciaCentralizadora() {
-		TextField<String> text = new TextField<String>("agenciaCentralizadora");
-		text.setLabel(new Model<String>("Agência Centralizadora"));
-		return text;
-	}
+    private DropDownChoice<TipoBatimento> comboTipoBatimento() {
+        DropDownChoice<TipoBatimento> combo = new DropDownChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()),
+                new ChoiceRenderer<TipoBatimento>("label"));
+        combo.setLabel(new Model<String>("Tipo Batimento"));
+        combo.setOutputMarkupId(true);
+        combo.setRequired(true);
+        return combo;
+    }
 
-	private Component campoStatus() {
-		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
-		return new RadioChoice<String>("status", status);
-	}
+    private DropDownChoice<LayoutPadraoXML> comboPadraoLayoutXML() {
+        DropDownChoice<LayoutPadraoXML> combo = new DropDownChoice<LayoutPadraoXML>("layoutPadraoXML",
+                Arrays.asList(LayoutPadraoXML.values()), new ChoiceRenderer<LayoutPadraoXML>("label"));
+        combo.setLabel(new Model<String>("Layout padrão XML"));
+        combo.setOutputMarkupId(true);
+        combo.setRequired(true);
+        return combo;
+    }
 
-	private DropDownChoice<TipoInstituicao> comboTipoInstituicao() {
-		DropDownChoice<TipoInstituicao> combo = new DropDownChoice<TipoInstituicao>("tipoInstituicao", tipoMediator.listaTipoInstituicao(),
-				new ChoiceRenderer<TipoInstituicao>("tipoInstituicao.label"));
-		combo.setLabel(new Model<String>("Tipo Instituição"));
-		combo.setOutputMarkupId(true);
-		combo.setRequired(true);
-		return combo;
-	}
+    private Component comboMunicipios() {
+        IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
+        DropDownChoice<Municipio> combo = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);
+        combo.setLabel(new Model<String>("Município"));
+        combo.setOutputMarkupId(true);
+        combo.setRequired(true);
+        return combo;
+    }
 
-	private DropDownChoice<TipoCampo51> comboTipoCampo51() {
-		DropDownChoice<TipoCampo51> combo = new DropDownChoice<TipoCampo51>("tipoCampo51", Arrays.asList(TipoCampo51.values()),
-				new ChoiceRenderer<TipoCampo51>("label"));
-		combo.setLabel(new Model<String>("Tipo de Informação Campo 51"));
-		combo.setOutputMarkupId(true);
-		combo.setRequired(true);
-		return combo;
-	}
-
-	private DropDownChoice<TipoBatimento> comboTipoBatimento() {
-		DropDownChoice<TipoBatimento> combo = new DropDownChoice<TipoBatimento>("tipoBatimento", Arrays.asList(TipoBatimento.values()),
-				new ChoiceRenderer<TipoBatimento>("label"));
-		combo.setLabel(new Model<String>("Tipo Batimento"));
-		combo.setOutputMarkupId(true);
-		combo.setRequired(true);
-		return combo;
-	}
-
-	private DropDownChoice<LayoutPadraoXML> comboPadraoLayoutXML() {
-		DropDownChoice<LayoutPadraoXML> combo = new DropDownChoice<LayoutPadraoXML>("layoutPadraoXML",
-				Arrays.asList(LayoutPadraoXML.values()), new ChoiceRenderer<LayoutPadraoXML>("label"));
-		combo.setLabel(new Model<String>("Layout padrão XML"));
-		combo.setOutputMarkupId(true);
-		combo.setRequired(true);
-		return combo;
-	}
-
-	private Component comboMunicipios() {
-		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> combo = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);
-		combo.setLabel(new Model<String>("Município"));
-		combo.setOutputMarkupId(true);
-		combo.setRequired(true);
-		return combo;
-	}
-	
-	private CheckBox checkSeloDiferido() {
-		CheckBox checkbox = new CheckBox("seloDiferido");
-		checkbox.setLabel(new Model<String>("Selo Diferido"));
-		checkbox.setRequired(true);
-		return checkbox;
-	}
-
-	private CheckBox checkVerificacaoManual() {
-		CheckBox checkbox = new CheckBox("verificacaoManual");
-		checkbox.setLabel(new Model<String>("Verificação Manual"));
-		checkbox.setRequired(true);
-		return checkbox;
-	}
-
-	private CheckBox checkTaxaCra() {
-		CheckBox checkbox = new CheckBox("taxaCra");
-		checkbox.setLabel(new Model<String>("Taxa Cra"));
-		checkbox.setRequired(true);
-		return checkbox;
-	}
 }

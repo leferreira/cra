@@ -140,6 +140,7 @@ public class RemessaService extends CraWebService {
 			marshaller.marshal(element, writer);
 			String msg = writer.toString();
 			msg = msg.replace(" xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"arquivoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			writer.close();
 			return msg;
 

@@ -69,7 +69,7 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 			if (usuario == null) {
 				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
 			}
-			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+			if (nomeArquivo == null || StringUtils.isBlank(nomeArquivo)) {
 				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_AUTORIZACAO_CANCELAMENTO)) {
@@ -78,10 +78,9 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
 			}
-			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+			if (dados == null || StringUtils.isBlank(dados)) {
 				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
-
 			arquivo = autorizacaoCancelamentoMediator.processarAutorizacaoCancelamento(nomeArquivo, dados, getErros(), usuario);
 			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
 				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);

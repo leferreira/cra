@@ -29,13 +29,12 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesistenciaCancelamento> {
 
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
-	ConvenioMediator convenioMediator;
+	private ConvenioMediator convenioMediator;
 	@SpringBean
-	SolicitacaoDesistenciaCancelamentoMediator solicitacaoMediator;
+	private SolicitacaoDesistenciaCancelamentoMediator solicitacaoMediator;
 
+	static final long serialVersionUID = 1L;
 	private List<SolicitacaoDesistenciaCancelamento> solicitacoes;
 	private Usuario usuario;
 
@@ -61,6 +60,7 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 
 				try {
 					convenioMediator.gerarDesistenciasCancelamentosConvenio(usuario, solicitacoes);
+					solicitacoes.clear();
 					success("Os arquivos de desistências e cancelamentos de protesto foram gerados com sucesso!");
 
 				} catch (InfraException ex) {
@@ -91,7 +91,6 @@ public class GerarDesistenciasCancelamentosPage extends BasePage<SolicitacaoDesi
 				item.add(new Label("tipoSolicitacao", solicitacaoCancelamento.getTipoSolicitacao().getDescricao()));
 			}
 		});
-
 	}
 
 	@Override

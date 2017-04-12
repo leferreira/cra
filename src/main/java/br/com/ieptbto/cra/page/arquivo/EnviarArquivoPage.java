@@ -45,14 +45,12 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class EnviarArquivoPage extends BasePage<Arquivo> {
 
-	/****/
-	private static final long serialVersionUID = 852632145;
-
 	@SpringBean
 	private ArquivoMediator arquivoMediator;
 	@SpringBean
 	private InstituicaoMediator instituicaoMediator;
 
+	private static final long serialVersionUID = 852632145;
 	private Usuario usuario;
 	private Arquivo arquivo;
 	private Form<Arquivo> form;
@@ -72,7 +70,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	private void formularioEnvioArquivo() {
 		form = new Form<Arquivo>("form", getModel()) {
 
-			/****/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -178,7 +175,6 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 	private AjaxButton botaoEnviar() {
 		return new AjaxButton("enviarArquivo") {
 
-			/****/
 			private static final long serialVersionUID = 1L;
 
 			@Override

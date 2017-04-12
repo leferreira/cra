@@ -29,14 +29,12 @@ import br.com.ieptbto.cra.mediator.MunicipioMediator;
  */
 public class BuscarTitulosInputPanel extends Panel {
 
-	/***/
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	private MunicipioMediator municipioMediator;
+
 	private static final long serialVersionUID = 1L;
-
-	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	MunicipioMediator municipioMediator;
-
 	private List<Instituicao> listaInstituicoes;
 	private DropDownChoice<Instituicao> dropDownInstituicao;
 	private Label labelMunicipio;
@@ -46,7 +44,6 @@ public class BuscarTitulosInputPanel extends Panel {
 	public BuscarTitulosInputPanel(String id, IModel<TituloBean> model, Usuario user) {
 		super(id, model);
 		this.tipoInstituicao = user.getInstituicao().getTipoInstituicao().getTipoInstituicao();
-
 		adicionarCampos();
 	}
 
@@ -137,7 +134,6 @@ public class BuscarTitulosInputPanel extends Panel {
 				new DropDownChoice<TipoInstituicaoCRA>("tipoInstituicao", choices, renderer);
 		dropDowntipoInstituicao.add(new OnChangeAjaxBehavior() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

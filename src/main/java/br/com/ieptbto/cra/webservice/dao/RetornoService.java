@@ -178,6 +178,7 @@ public class RetornoService extends CraWebService {
 			String msg = writer.toString();
 			msg = msg.replace("<retorno xsi:type=\"mensagemXmlVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">", "<relatorio>");
 			msg = msg.replace("</retorno>", "</relatorio>");
+			msg = msg.replace(" xsi:type=\"mensagemXmlVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			writer.close();
 			return msg;
 			
