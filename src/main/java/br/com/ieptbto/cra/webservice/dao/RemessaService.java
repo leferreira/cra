@@ -63,7 +63,7 @@ public class RemessaService extends CraWebService {
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_REMESSA)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
+			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoPorNomeInstituicaoEnvio(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
 				if (arquivoJaEnviado.getInstituicaoEnvio().getLayoutPadraoXML() != LayoutPadraoXML.SERPRO) {
 					return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
@@ -189,5 +189,41 @@ public class RemessaService extends CraWebService {
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
 		return null;
+	}
+
+	/**
+	 * Envio de remessas pelos convênios com layouts personalizados
+	 * 
+	 * @param usuario
+	 * @param dados
+	 * @return
+	 */
+	public String processarRemessaConvenio(Usuario usuario, String dados) {
+		this.craAcao = CraAcao.ENVIO_ARQUIVO_REMESSA;
+		this.nomeArquivo = CONSTANTE_CONVENIO;
+
+		ArquivoGenericoVO arquivoVO = new ArquivoGenericoVO();
+		try {
+			if (usuario == null) {
+				return setResposta(usuario, arquivoVO, nomeArquivo);
+			}
+			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviadoConvenio(usuario);
+			if (arquivoJaEnviado != null) {
+				return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
+			}
+			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
+			}
+			AbstractMensagemVO mensagemCra = remessaReceiver.receberRemessaConvenio(usuario, nomeArquivo, dados);
+			String resposta =  gerarMensagemRelatorio(mensagemCra);
+			loggerCra.sucess(usuario, CraAcao.ENVIO_ARQUIVO_REMESSA, resposta,
+		               "Arquivo de Remessa Convênio enviado por " + usuario.getInstituicao().getNomeFantasia() + ", recebido com sucesso.");
+			return resposta;
+			 
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			loggerCra.error(usuario, getCraAcao(), "Erro interno no processamento do arquivo de Remessa " + nomeArquivo + ".", ex);
+			return setRespostaErroInternoNoProcessamento(usuario, nomeArquivo);
+		}
 	}
 }

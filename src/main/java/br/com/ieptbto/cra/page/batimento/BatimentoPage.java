@@ -42,13 +42,12 @@ import br.com.ieptbto.cra.util.PeriodoDataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class BatimentoPage extends BasePage<Remessa> {
 
-	private static final long serialVersionUID = 1L;
-	
 	@SpringBean
 	BatimentoMediator batimentoMediator;
 	@SpringBean
 	DepositoMediator depositoMediator;
 	
+	private static final long serialVersionUID = 1L;
 	private Remessa remessa;
 	private List<Deposito> depositos;
 	private CheckGroup<ViewBatimentoRetorno> grupo;

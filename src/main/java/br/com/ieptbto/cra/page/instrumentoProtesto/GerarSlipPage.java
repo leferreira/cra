@@ -55,15 +55,14 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 
-	/***/
+	@SpringBean
+	private InstrumentoProtestoMediator instrumentoMediator;
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	private	TituloMediator tituloMediator;
+	
 	private static final long serialVersionUID = 1L;
-
-	@SpringBean
-	InstrumentoProtestoMediator instrumentoMediator;
-	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	TituloMediator tituloMediator;
 	private List<Retorno> retornos;
 	private List<InstrumentoProtesto> instrumentosProtesto;
 	private List<EnvelopeSLIP> envelopes;
@@ -88,14 +87,13 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 
 	private void verificarEtiquetasGeradasNaoConfimadas() {
 		if (etiquetasNaoGeradas) {
-			warn("Existem intrumentos já tiveram Slips geradas porém não foram confirmados!");
+			warn("Existem intrumentos que já tiveram Slips geradas porém não foram confirmados!");
 		}
 	}
 
 	private void carregarListaSlips() {
 		add(new ListView<InstrumentoProtesto>("instrumentos", getInstrumentosProtesto()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -113,7 +111,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				item.add(new Label("pracaProtesto", municipio.toUpperCase()));
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
@@ -127,7 +124,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 				item.add(new Label("especie", retorno.getTitulo().getEspecieTitulo()));
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", retorno.getTitulo().getValorTitulo()));
 				item.add(new Link<InstrumentoProtesto>("buttonRemoverInstrumento") {
-					/***/
+
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -152,7 +149,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private void botaoGerarEtiquetas() {
 		add(new Link<InstrumentoProtesto>("botaoSlip") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -172,7 +168,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					HashMap<String, Object> parametros = new HashMap<String, Object>();
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(instrumento.getEtiquetas());
 					JasperReport jasperReport =
-							JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEtiqueta.jrxml"));
+							JasperCompileManager.compileReport(getClass().getResourceAsStream("../../report/SlipEtiqueta.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 
 					File pdf = File.createTempFile("report", ".pdf");
@@ -195,7 +191,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private void botaoGerarEnvelopes() {
 		add(new Link<InstrumentoProtesto>("botaoEnvelope") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -210,7 +205,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					HashMap<String, Object> parametros = new HashMap<String, Object>();
 					JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(getEnvelopes());
 					JasperReport jasperReport =
-							JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/SlipEnvelope.jrxml"));
+							JasperCompileManager.compileReport(getClass().getResourceAsStream("../../report/SlipEnvelope.jrxml"));
 					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 
 					File pdf = File.createTempFile("report", ".pdf");
@@ -233,7 +228,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private void botaoGerarListagem() {
 		add(new Link<InstrumentoProtesto>("botaoListagem") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -250,7 +244,7 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
 					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
 
-					String urlJasper = "../../relatorio/ListagemInstrumentosBancos.jrxml";
+					String urlJasper = "../../report/ListagemInstrumentosBancos.jrxml";
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(urlJasper));
 					jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, connection);
 
@@ -274,7 +268,6 @@ public class GerarSlipPage extends BasePage<InstrumentoProtesto> {
 	private void botaoConfirmarGeracaoSlips() {
 		add(new Link<InstrumentoProtesto>("botaoConfirmar") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

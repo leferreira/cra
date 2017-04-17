@@ -49,6 +49,15 @@ public class RemessaServiceImpl implements IRemessaWS {
 		Usuario usuario = init(login, senha, "remessa");
 		return remessaService.processar(nomeArquivo, usuario, dados);
 	}
+	
+	@Override
+	@WebMethod(operationName = "remessaConvenio")
+	@GET
+	public String remessaConvenio(@WebParam(name = "user_code") String login, @WebParam(name = "user_pass") String senha, 
+			@WebParam(name = "user_dados") String dados){
+		Usuario usuario = init(login, senha, "remessaConvenio");
+		return remessaService.processarRemessaConvenio(usuario, dados);
+	}
 
 	@Override
 	@WebMethod(operationName = "buscarRemessa")

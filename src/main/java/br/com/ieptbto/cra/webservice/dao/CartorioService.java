@@ -172,7 +172,7 @@ public class CartorioService extends CraWebService {
 			if (usuario == null) {
 				return setRespostaUsuarioInvalido();
 			}
-			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
+			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoPorNomeInstituicaoEnvio(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
 				return gerarMensagemEnvioSucesso(usuario, arquivoJaEnviado);
 			}

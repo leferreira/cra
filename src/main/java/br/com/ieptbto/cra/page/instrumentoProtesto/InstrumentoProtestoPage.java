@@ -44,15 +44,14 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	private InstrumentoProtestoMediator instrumentoMediator;
+	@SpringBean
+	private MunicipioMediator municipioMediator;
 
-	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	InstrumentoProtestoMediator instrumentoMediator;
-	@SpringBean
-	MunicipioMediator municipioMediator;
+	private static final long serialVersionUID = 1L;
 	private InstrumentoProtesto instrumento;
 	private TextField<String> codigoInstrumento;
 	private TextField<String> protocoloCartorio;
@@ -89,7 +88,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	private Form<Retorno> formEntradaManualInstrumentos() {
 		Form<Retorno> formManual = new Form<Retorno>("formManual") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -100,7 +98,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 					if (etiquetasPendentes == true) {
 						throw new InfraException("Por favor confirme os instrumentos lançados pois já tiveram Slips geradas...");
 					}
-
 					String numeroProtocolo = protocoloCartorio.getModelObject();
 					String codigoIBGE = Municipio.class.cast(codigoIbge.getDefaultModelObject()).getCodigoIBGE();
 					Retorno tituloProtestado = instrumentoMediator.buscarTituloProtestado(numeroProtocolo, codigoIBGE);
@@ -135,7 +132,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	private Form<Retorno> formCodigoDeBarraInstrumentos() {
 		Form<Retorno> formCodigo = new Form<Retorno>("formCodigo") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -178,7 +174,6 @@ public class InstrumentoProtestoPage extends BasePage<InstrumentoProtesto> {
 	private ListView<Retorno> listInstrumentosLancados() {
 		return retornosSlips = new ListView<Retorno>("instrumentos", new ArrayList<Retorno>()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

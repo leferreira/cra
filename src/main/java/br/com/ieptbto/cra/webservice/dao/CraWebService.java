@@ -30,6 +30,7 @@ import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
 public abstract class CraWebService {
 
 	protected static final Logger logger = Logger.getLogger(CraWebService.class);
+	public static final String CONSTANTE_CONVENIO = "CONVENIO_REMESSA";
 	public static final String CONSTANTE_RELATORIO_XML = "relatorio";
 	public static final String CONSTANTE_COMARCA_XML = "comarcas";
 	public static final String CONSTANTE_APRESENTANTE_XML = "apresentante";

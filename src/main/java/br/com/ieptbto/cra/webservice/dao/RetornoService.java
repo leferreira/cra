@@ -135,7 +135,7 @@ public class RetornoService extends CraWebService {
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_RETORNO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}
-			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
+			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoPorNomeInstituicaoEnvio(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
 				return setRespostaArquivoJaEnviadoCartorio(usuario, nomeArquivo, arquivoJaEnviado);
 			}

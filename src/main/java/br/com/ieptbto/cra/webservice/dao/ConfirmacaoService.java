@@ -136,7 +136,7 @@ public class ConfirmacaoService extends CraWebService {
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
-			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviado(usuario, nomeArquivo);
+			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoPorNomeInstituicaoEnvio(usuario, nomeArquivo);
 			if (arquivoJaEnviado != null) {
 				return setRespostaArquivoJaEnviadoCartorio(usuario, nomeArquivo, arquivoJaEnviado);
 			}
