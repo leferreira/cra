@@ -333,6 +333,8 @@ public class CartorioService extends CraWebService {
 			msg = msg.replace(" xsi:type=\"remessaVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace(" xsi:type=\"arquivoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
 			msg = msg.replace(" xsi:type=\"instituicaoVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			msg = msg.replace(" xsi:type=\"relatorioPendentesVO\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+			
 			writer.close();
 			return msg;
 
