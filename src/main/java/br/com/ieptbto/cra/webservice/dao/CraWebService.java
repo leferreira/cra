@@ -68,7 +68,7 @@ public abstract class CraWebService {
 		return gerarMensagemRelatorio(mensagemXml);
 	}
 
-	protected String setResposta(Usuario usuario, AbstractArquivoVO arquivo, String nomeArquivo) {
+	protected String setResposta(Usuario usuario, String nomeArquivo) {
 		if (usuario != null && nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
 			return setRespostaNomeArquivoInvalido(usuario, nomeArquivo);
 		}

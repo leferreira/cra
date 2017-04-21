@@ -55,13 +55,12 @@ public class ConfirmacaoService extends CraWebService {
 		this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CONFIRMACAO;
 		this.nomeArquivo = nomeArquivo;
 
-		ArquivoGenericoVO arquivoVO = null;
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, arquivoVO, nomeArquivo);
+				return setResposta(null, nomeArquivo);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-				return setResposta(usuario, arquivoVO, nomeArquivo);
+				return setResposta(usuario, nomeArquivo);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.DOWNLOAD_ARQUIVO_CONFIRMACAO)) {
 				return mensagemServicoIndisponivel(usuario);
@@ -87,7 +86,7 @@ public class ConfirmacaoService extends CraWebService {
 	}
 
 	private String gerarResposta(Usuario usuario, List<RemessaVO> remessas, String nomeArquivo, String constanteConfirmacaoXml) {
-		StringBuffer conteudo = new StringBuffer();
+		StringBuilder conteudo = new StringBuilder();
 		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
 
 		conteudo.append("<confirmacao>\r\n");
@@ -128,7 +127,7 @@ public class ConfirmacaoService extends CraWebService {
 
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
+				return setResposta(null, nomeArquivo);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_CONFIRMACAO)) {
 				return mensagemServicoIndisponivel(usuario);
@@ -141,10 +140,7 @@ public class ConfirmacaoService extends CraWebService {
 				return setRespostaArquivoJaEnviadoCartorio(usuario, nomeArquivo, arquivoJaEnviado);
 			}
 			AbstractMensagemVO mensagemCra = confirmacaoReceiver.receber(usuario, nomeArquivo, dados);
-			String resposta = gerarMensagemRelatorio(mensagemCra);
-			loggerCra.sucess(usuario, CraAcao.ENVIO_ARQUIVO_CONFIRMACAO, resposta,
-					"Arquivo " + nomeArquivo + ", enviado por " + usuario.getInstituicao().getNomeFantasia() + ", recebido com sucesso.");
-			return resposta;
+			return gerarMensagemRelatorio(mensagemCra);
 			
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex);
@@ -171,7 +167,6 @@ public class ConfirmacaoService extends CraWebService {
 		
 		try {
 			JAXBContext context = JAXBContext.newInstance(object.getClass());
-			
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
@@ -184,12 +179,6 @@ public class ConfirmacaoService extends CraWebService {
 			writer.close();
 			return msg;
 			
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e.getCause());
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
@@ -203,7 +192,6 @@ public class ConfirmacaoService extends CraWebService {
 		
 		try {
 			JAXBContext context = JAXBContext.newInstance(object.getClass());
-			
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
@@ -212,12 +200,6 @@ public class ConfirmacaoService extends CraWebService {
 			writer.close();
 			return writer.toString();
 			
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e.getCause());
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());

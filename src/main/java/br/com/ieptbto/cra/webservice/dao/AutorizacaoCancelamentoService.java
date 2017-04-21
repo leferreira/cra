@@ -66,12 +66,12 @@ public class AutorizacaoCancelamentoService extends CraWebService {
 
 		Arquivo arquivo = new Arquivo();
 		try {
-			if (usuario == null) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
-			}
-			if (nomeArquivo == null || StringUtils.isBlank(nomeArquivo)) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
-			}
+            if (usuario == null) {
+                return setResposta(null, nomeArquivo);
+            }
+            if (nomeArquivo == null || StringUtils.isBlank(nomeArquivo)) {
+                return setResposta(usuario, nomeArquivo);
+            }
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_AUTORIZACAO_CANCELAMENTO)) {
 				return mensagemServicoIndisponivel(usuario);
 			}

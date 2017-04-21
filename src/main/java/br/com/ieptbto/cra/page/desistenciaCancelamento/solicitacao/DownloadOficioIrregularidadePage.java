@@ -31,7 +31,8 @@ public class DownloadOficioIrregularidadePage extends AbstractWebPage<Usuario> {
 	// Url: DownloadOficioIrregularidade?nossoNumero=MWR6523&tipoSolicitacao=dp&irregularidade=
 
 	@SpringBean
-	DownloadMediator downloadMediator;
+	private DownloadMediator downloadMediator;
+
 	private Usuario usuario;
 	private CustomFeedbackPanel feedBackPanel;
 	private IRequestParameters requestParams;

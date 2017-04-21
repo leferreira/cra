@@ -52,13 +52,12 @@ public class RemessaService extends CraWebService {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_REMESSA;
 		this.nomeArquivo = nomeArquivo;
 
-		ArquivoGenericoVO arquivoVO = new ArquivoGenericoVO();
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, arquivoVO, nomeArquivo);
+				return setResposta(null, nomeArquivo);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-				return setResposta(usuario, arquivoVO, nomeArquivo);
+				return setResposta(usuario, nomeArquivo);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_REMESSA)) {
 				return mensagemServicoIndisponivel(usuario);
@@ -76,10 +75,7 @@ public class RemessaService extends CraWebService {
 				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
 			AbstractMensagemVO mensagemCra = remessaReceiver.receber(usuario, nomeArquivo, dados);
-			String resposta =  gerarMensagemRelatorio(mensagemCra);
-			loggerCra.sucess(usuario, CraAcao.ENVIO_ARQUIVO_REMESSA, resposta,
-		               "Arquivo " + nomeArquivo + ", enviado por " + usuario.getInstituicao().getNomeFantasia() + ", recebido com sucesso.");
-			return resposta;
+			return gerarMensagemRelatorio(mensagemCra);
 			 
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
@@ -101,7 +97,7 @@ public class RemessaService extends CraWebService {
 
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
+				return setResposta(null, nomeArquivo);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.DOWNLOAD_ARQUIVO_REMESSA)) {
 				return mensagemServicoIndisponivel(usuario);
@@ -115,10 +111,10 @@ public class RemessaService extends CraWebService {
 			if (remessaVO == null) {
 				return setRespostaPadrao(usuario, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 			}
-			String resposta = gerarRespostaArquivo(remessaVO, nomeArquivo, CONSTANTE_REMESSA_XML);
-			loggerCra.sucess(usuario, getCraAcao(), "Arquivo de Remessa " + nomeArquivo +
+            loggerCra.sucess(usuario, getCraAcao(), "Arquivo de Remessa " + nomeArquivo +
                     " recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
-			return resposta;
+			return gerarRespostaArquivo(remessaVO, nomeArquivo, CONSTANTE_REMESSA_XML);
+
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo de Remessa " + nomeArquivo + 
@@ -144,16 +140,10 @@ public class RemessaService extends CraWebService {
 			writer.close();
 			return msg;
 
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		}
+            logger.error(e.getMessage(), e);
+            new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
+        }
 		return null;
 	}
 
@@ -178,12 +168,6 @@ public class RemessaService extends CraWebService {
 			writer.close();
 			return msg;
 
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
@@ -202,10 +186,9 @@ public class RemessaService extends CraWebService {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_REMESSA;
 		this.nomeArquivo = CONSTANTE_CONVENIO;
 
-		ArquivoGenericoVO arquivoVO = new ArquivoGenericoVO();
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, arquivoVO, nomeArquivo);
+				return setResposta(usuario, nomeArquivo);
 			}
 			Arquivo arquivoJaEnviado = arquivoMediator.buscarArquivoEnviadoConvenio(usuario);
 			if (arquivoJaEnviado != null) {
@@ -215,10 +198,7 @@ public class RemessaService extends CraWebService {
 				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
 			}
 			AbstractMensagemVO mensagemCra = remessaReceiver.receberRemessaConvenio(usuario, nomeArquivo, dados);
-			String resposta =  gerarMensagemRelatorio(mensagemCra);
-			loggerCra.sucess(usuario, CraAcao.ENVIO_ARQUIVO_REMESSA, resposta,
-		               "Arquivo de Remessa Convênio enviado por " + usuario.getInstituicao().getNomeFantasia() + ", recebido com sucesso.");
-			return resposta;
+			return gerarMensagemRelatorio(mensagemCra);
 			 
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);

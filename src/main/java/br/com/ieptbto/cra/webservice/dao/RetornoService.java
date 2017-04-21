@@ -54,13 +54,12 @@ public class RetornoService extends CraWebService {
 		this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_RETORNO;
 		this.nomeArquivo = nomeArquivo;
 
-		ArquivoGenericoVO arquivoVO = null;
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, arquivoVO, nomeArquivo);
+				return setResposta(null, nomeArquivo);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-				return setResposta(usuario, arquivoVO, nomeArquivo);
+				return setResposta(usuario, nomeArquivo);
 			}
 			if (craServiceMediator.verificarServicoIndisponivel(CraServices.DOWNLOAD_ARQUIVO_RETORNO)) {
 				return mensagemServicoIndisponivel(usuario);
@@ -68,15 +67,14 @@ public class RetornoService extends CraWebService {
 			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
 				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
 			}
-
 			List<RemessaVO> remessas = arquivoMediator.buscarArquivos(nomeArquivo, usuario.getInstituicao());
 			if (remessas.isEmpty()) {
 				return setRespostaArquivoEmProcessamento(usuario, nomeArquivo);
 			}
-			String resposta = gerarResposta(usuario, remessas, nomeArquivo, CONSTANTE_RETORNO_XML);
-			loggerCra.sucess(usuario, getCraAcao(),
-					"Arquivo de Retorno " + nomeArquivo + " recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
-			return resposta;
+            loggerCra.sucess(usuario, getCraAcao(), "Arquivo de Retorno " + nomeArquivo + " recebido com sucesso por "
+                    + usuario.getInstituicao().getNomeFantasia() + ".");
+			return gerarResposta(usuario, remessas, nomeArquivo, CONSTANTE_RETORNO_XML);
+
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo de Retorno " + nomeArquivo + " recebido por "
@@ -86,7 +84,7 @@ public class RetornoService extends CraWebService {
 	}
 
 	private String gerarResposta(Usuario usuario, List<RemessaVO> remessas, String nomeArquivo, String constanteRetornoXml) {
-		StringBuffer conteudo = new StringBuffer();
+		StringBuilder conteudo = new StringBuilder();
 		String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
 
 		conteudo.append("<retorno>\r\n");
@@ -127,7 +125,7 @@ public class RetornoService extends CraWebService {
 
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
+				return setResposta(null, nomeArquivo);
 			}
 			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
 				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
@@ -140,10 +138,7 @@ public class RetornoService extends CraWebService {
 				return setRespostaArquivoJaEnviadoCartorio(usuario, nomeArquivo, arquivoJaEnviado);
 			}
 			AbstractMensagemVO mensagemCra = retornoReceiver.receber(usuario, nomeArquivo, dados);
-			String resposta = gerarMensagemRelatorio(mensagemCra);
-			loggerCra.sucess(usuario, CraAcao.ENVIO_ARQUIVO_RETORNO, resposta,
-	                "Arquivo " + nomeArquivo + ", enviado por " + usuario.getInstituicao().getNomeFantasia() + ", recebido com sucesso.");
-			return resposta;
+			return gerarMensagemRelatorio(mensagemCra);
 			
 		} catch (InfraException ex) {
 			logger.info(ex.getMessage(), ex);
@@ -182,10 +177,7 @@ public class RetornoService extends CraWebService {
 			writer.close();
 			return msg;
 			
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage(), e.getCause());
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		}
@@ -207,12 +199,6 @@ public class RetornoService extends CraWebService {
 			writer.close();
 			return writer.toString();
 			
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e.getCause());
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e.getCause());
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());

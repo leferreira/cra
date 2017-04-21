@@ -43,9 +43,7 @@ import net.sf.jasperreports.engine.JasperReport;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class RelatorioRetornoPage extends BasePage<Retorno> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
-
 	private Arquivo arquivo;
 	private Retorno retorno;
 	private String pageName;
@@ -80,7 +78,6 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 	private void linkRelatorioRetornoLiberado() {
 		Link<Retorno> linkRelatorioRetornoLiberado = new Link<Retorno>("relatorioRetornoLiberado") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -98,7 +95,7 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 							+ "ieptb.gif")));
 					parametros.put("DATA_GERACAO", new LocalDate().toDate());
 
-					String urlJasper = "../../relatorio/RelatorioRetornoLiberado.jrxml";
+					String urlJasper = "../../report/RelatorioRetornoLiberado.jrxml";
 					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(urlJasper));
 					jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, connection);
 
@@ -127,18 +124,14 @@ public class RelatorioRetornoPage extends BasePage<Retorno> {
 	private void linkDownloadRelatorioRetornoCartorio() {
 		Link<Arquivo> linkDownloadRelatorioRetornoCartorio = new Link<Arquivo>("relatorioRetornoCartorio") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick() {
-				Remessa retorno = null;
-				for (Remessa r : getArquivo().getRemessas()) {
-					retorno = r;
-				}
 
-				try {
-					JasperPrint jasperPrint = new RelatorioUtil().relatorioArquivoCartorio(retorno);
+                try {
+                    Remessa retorno = arquivo.getRemessas().get(0);
+                    JasperPrint jasperPrint = new RelatorioUtil().relatorioArquivoCartorio(retorno);
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);

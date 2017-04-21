@@ -137,7 +137,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
-        getRequestCycleSettings().setTimeout(Duration.minutes(30));
+        getRequestCycleSettings().setTimeout(Duration.minutes(10));
 
         // don't throw exceptions for missing translations
         getResourceSettings().setThrowExceptionOnMissingResource(false);

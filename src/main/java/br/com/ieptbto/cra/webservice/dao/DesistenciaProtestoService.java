@@ -74,34 +74,31 @@ public class DesistenciaProtestoService extends CraWebService {
 		this.craAcao = CraAcao.ENVIO_ARQUIVO_DESISTENCIA_PROTESTO;
 		this.nomeArquivo = nomeArquivo;
 
-		MensagemXmlVO mensagemCra = null;
 		try {
-			if (usuario == null) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
-			}
-			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
-			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_DESISTENCIA_PROTESTO)) {
-				return mensagemServicoIndisponivel(usuario);
-			}
-			if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
-				return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
-			}
-			if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
-				return setRespostaArquivoEmBranco(usuario, nomeArquivo);
-			}
-			Arquivo arquivoJaEnviado = desistenciaMediator.verificarDesistenciaJaEnviadaAnteriormente(nomeArquivo, usuario.getInstituicao());
-			if (arquivoJaEnviado != null) {
-				return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
-			}
-			Arquivo arquivo = desistenciaMediator.processarDesistencia(nomeArquivo, dados, getErros(), usuario);
-			if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
-				return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
-			}
-			mensagemCra = gerarResposta(arquivo, usuario);
-			loggerCra.sucess(usuario, getCraAcao(), "O arquivo de Desistência de Protesto " + nomeArquivo + ", enviado por "
-					+ usuario.getInstituicao().getNomeFantasia() + ", foi processado com sucesso.");
+            if (usuario == null) {
+                return setResposta(null, nomeArquivo);
+            }
+            if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
+                return setResposta(usuario, nomeArquivo);
+            }
+            if (craServiceMediator.verificarServicoIndisponivel(CraServices.ENVIO_ARQUIVO_DESISTENCIA_PROTESTO)) {
+                return mensagemServicoIndisponivel(usuario);
+            }
+            if (!nomeArquivo.contains(usuario.getInstituicao().getCodigoCompensacao())) {
+                return setRespostaUsuarioDiferenteDaInstituicaoDoArquivo(usuario, nomeArquivo);
+            }
+            if (dados == null || StringUtils.EMPTY.equals(dados.trim())) {
+                return setRespostaArquivoEmBranco(usuario, nomeArquivo);
+            }
+            Arquivo arquivoJaEnviado = desistenciaMediator.verificarDesistenciaJaEnviadaAnteriormente(nomeArquivo, usuario.getInstituicao());
+            if (arquivoJaEnviado != null) {
+                return setRespostaArquivoJaEnviadoAnteriormente(usuario, nomeArquivo, arquivoJaEnviado);
+            }
+            Arquivo arquivo = desistenciaMediator.processarDesistencia(nomeArquivo, dados, getErros(), usuario);
+            if (usuario.getInstituicao().getLayoutPadraoXML().equals(LayoutPadraoXML.SERPRO)) {
+                return gerarMensagemSerpro(arquivo, CONSTANTE_RELATORIO_XML);
+            }
+            MensagemXmlVO mensagemCra = gerarResposta(arquivo, usuario);
 			return gerarMensagemRelatorio(mensagemCra);
 
 		} catch (InfraException ex) {
@@ -204,30 +201,26 @@ public class DesistenciaProtestoService extends CraWebService {
 	public String buscarDesistenciaCancelamento(String nomeArquivo, Usuario usuario) {
 		this.nomeArquivo = nomeArquivo;
 
-		RemessaDesistenciaProtestoVO remessaVO = null;
 		try {
-			if (usuario == null) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
-			}
-			if (nomeArquivo.contains(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO.getConstante())) {
-				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO;
-			} else if (nomeArquivo.contains(TipoArquivoFebraban.CANCELAMENTO_DE_PROTESTO.getConstante())) {
-				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO;
-			} else if (nomeArquivo.contains(TipoArquivoFebraban.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
-				this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO;
-			}
-			if (craServiceMediator.verificarServicoIndisponivel(CraServices.DOWNLOAD_ARQUIVO_DESISTENCIA_CANCELAMENTO)) {
-				return mensagemServicoIndisponivel(usuario);
-			}
-			remessaVO = desistenciaCancelamentoMediator.buscarDesistenciaCancelamentoCartorio(usuario.getInstituicao(), nomeArquivo);
+            if (usuario == null) {
+                return setResposta(null, nomeArquivo);
+            }
+            if (nomeArquivo.contains(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO.getConstante())) {
+                this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_DESISTENCIA_PROTESTO;
+            } else if (nomeArquivo.contains(TipoArquivoFebraban.CANCELAMENTO_DE_PROTESTO.getConstante())) {
+                this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_CANCELAMENTO_PROTESTO;
+            } else if (nomeArquivo.contains(TipoArquivoFebraban.AUTORIZACAO_DE_CANCELAMENTO.getConstante())) {
+                this.craAcao = CraAcao.DOWNLOAD_ARQUIVO_AUTORIZACAO_CANCELAMENTO;
+            }
+            if (craServiceMediator.verificarServicoIndisponivel(CraServices.DOWNLOAD_ARQUIVO_DESISTENCIA_CANCELAMENTO)) {
+                return mensagemServicoIndisponivel(usuario);
+            }
+            RemessaDesistenciaProtestoVO remessaVO = desistenciaCancelamentoMediator.buscarDesistenciaCancelamentoCartorio(usuario.getInstituicao(), nomeArquivo);
 			if (remessaVO == null) {
 				return setRespostaPadrao(usuario, nomeArquivo, CodigoErro.CARTORIO_ARQUIVO_NAO_EXISTE);
 			}
-			String resposta = gerarResposta(remessaVO, nomeArquivo);
-			loggerCra.sucess(usuario, getCraAcao(),
-					"Arquivo " + nomeArquivo + ", recebido com sucesso por " + usuario.getInstituicao().getNomeFantasia() + ".");
-			return resposta;
-			
+			return gerarResposta(remessaVO, nomeArquivo);
+
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			loggerCra.error(usuario, getCraAcao(), "Erro interno ao construir o arquivo " + nomeArquivo + "." + e.getMessage(), e);
@@ -265,10 +258,10 @@ public class DesistenciaProtestoService extends CraWebService {
 
 		try {
 			if (usuario == null) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
+				return setResposta(null, nomeArquivo);
 			}
 			if (nomeArquivo == null || StringUtils.EMPTY.equals(nomeArquivo.trim())) {
-				return setResposta(usuario, new ArquivoGenericoVO(), nomeArquivo);
+				return setResposta(usuario, nomeArquivo);
 			}
 
 			if (nomeArquivo.contains(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO.getConstante())) {
@@ -336,12 +329,6 @@ public class DesistenciaProtestoService extends CraWebService {
 			writer.close();
 			return msg;
 
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
@@ -363,12 +350,6 @@ public class DesistenciaProtestoService extends CraWebService {
 			writer.close();
 			return writer.toString();
 
-		} catch (JAXBException e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			new InfraException(CodigoErro.CRA_ERRO_NO_PROCESSAMENTO_DO_ARQUIVO.getDescricao(), e.getCause());
@@ -377,7 +358,7 @@ public class DesistenciaProtestoService extends CraWebService {
 	}
 	
 	
-	public List<Exception> getErros() {
+	private List<Exception> getErros() {
 		if (erros == null) {
 			erros = new ArrayList<Exception>();
 		}
