@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
@@ -18,7 +17,7 @@
 	http://www.springframework.org/schema/util
 	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<context:component-scan base-package="br.com.ieptbto.cra.dao, br.com.ieptbto.cra.mediator, br.com.ieptbto.cra.processador,
+<context:component-scan base-package="br.com.ieptbto.cra.dao, br.com.ieptbto.cra.mediator, br.com.ieptbto.cra.processador,
 		br.com.ieptbto.cra.conversor, br.com.ieptbto.cra.fabrica, br.com.ieptbto.cra.gerador, br.com.ieptbto.cra.regra, 
 		br.com.ieptbto.cra.webservice, br.com.ieptbto.cra.slip, br.com.ieptbto.cra.logger, br.com.ieptbto.cra.dataProvider" />
 	 
