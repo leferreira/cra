@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.AbstractArquivoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;

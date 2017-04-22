@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -8,7 +7,6 @@ import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
@@ -24,7 +22,6 @@ import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaDesistenciaProtestoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServices;

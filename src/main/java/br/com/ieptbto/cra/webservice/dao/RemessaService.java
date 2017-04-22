@@ -1,12 +1,10 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServices;

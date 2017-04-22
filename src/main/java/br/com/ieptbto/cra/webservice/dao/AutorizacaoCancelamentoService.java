@@ -24,7 +24,6 @@ import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.vo.ArquivoGenericoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServices;
 import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
