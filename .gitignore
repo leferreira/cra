@@ -20,3 +20,5 @@ hs_err_pid*
 /README.md
 /META-INF/
 /build.properties
+/.idea/
+/cra.iml
