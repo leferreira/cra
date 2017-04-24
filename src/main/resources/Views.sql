@@ -144,7 +144,8 @@ SELECT 'B'::text AS tipo_arquivo,
     ins_des.id_instituicao AS idinstituicao_cartorio,
     ins_des.nome_fantasia AS nomefantasia_cartorio,
     mun.nome_municipio AS nomemunicipio_municipio,
-    mun.cod_ibge AS cod_ibge_municipio
+    mun.cod_ibge AS cod_ibge_municipio,
+    ins_ori.versao as versao_instituicao
    FROM tb_titulo tit
      JOIN tb_remessa rem ON tit.remessa_id = rem.id_remessa
      JOIN tb_instituicao ins_ori ON rem.instituicao_origem_id = ins_ori.id_instituicao
@@ -178,7 +179,8 @@ CREATE OR REPLACE VIEW view_desistencia_pendente AS
     ins_des.id_instituicao AS idinstituicao_cartorio,
     ins_des.nome_fantasia AS nomefantasia_cartorio,
     mun.nome_municipio AS nomemunicipio_municipio,
-    mun.cod_ibge AS cod_ibge_municipio
+    mun.cod_ibge AS cod_ibge_municipio,
+    ins_ori.versao as versao_instituicao
    FROM tb_desistencia_protesto dp
      JOIN tb_remessa_desistencia_protesto rem ON dp.remessa_desistencia_protesto_id = rem.id_remessa_desistencia_protesto
      JOIN tb_cabecalho_arquivo_desistencia_cancelamento cab_arq ON cab_arq.id_cabecalho_arquivo_dp = rem.cabecalho_desistencia_protesto_id
@@ -212,7 +214,8 @@ SELECT 'CP'::text AS tipo_arquivo,
     ins_des.id_instituicao AS idinstituicao_cartorio,
     ins_des.nome_fantasia AS nomefantasia_cartorio,
     mun.nome_municipio AS nomemunicipio_municipio,
-    mun.cod_ibge AS cod_ibge_municipio
+    mun.cod_ibge AS cod_ibge_municipio,
+    ins_ori.versao as versao_instituicao
    FROM tb_cancelamento_protesto cp
      JOIN tb_remessa_cancelamento_protesto rem ON cp.remessa_cancelamento_protesto_id = rem.id_remessa_cancelamento_protesto
      JOIN tb_cabecalho_arquivo_desistencia_cancelamento cab_arq ON cab_arq.id_cabecalho_arquivo_dp = rem.cabecalho_cancelamento_protesto_id
@@ -246,7 +249,8 @@ SELECT 'AC'::text AS tipo_arquivo,
     ins_des.id_instituicao AS idinstituicao_cartorio,
     ins_des.nome_fantasia AS nomefantasia_cartorio,
     mun.nome_municipio AS nomemunicipio_municipio,
-    mun.cod_ibge AS cod_ibge_municipio
+    mun.cod_ibge AS cod_ibge_municipio,
+    ins_ori.versao as versao_instituicao
    FROM tb_autorizacao_cancelamento ac
      JOIN tb_remessa_autorizacao_cancelamento rem ON ac.remessa_autorizacao_cancelamento_protesto_id = rem.id_remessa_autorizacao_cancelamento
      JOIN tb_cabecalho_arquivo_desistencia_cancelamento cab_arq ON cab_arq.id_cabecalho_arquivo_dp = rem.cabecalho_autorizacao_cancelamento_id

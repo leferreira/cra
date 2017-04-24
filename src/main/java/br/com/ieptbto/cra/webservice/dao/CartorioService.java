@@ -1,36 +1,9 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.beans.PropertyDescriptor;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-
-import org.joda.time.LocalDateTime;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.PropertyAccessorFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import br.com.ieptbto.cra.conversor.CampoArquivo;
 import br.com.ieptbto.cra.conversor.arquivo.FabricaConversor;
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
-import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.TipoInstituicao;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.view.AutorizacaoPendente;
-import br.com.ieptbto.cra.entidade.view.CancelamentoPendente;
-import br.com.ieptbto.cra.entidade.view.DesistenciaPendente;
-import br.com.ieptbto.cra.entidade.view.RemessaPendente;
-import br.com.ieptbto.cra.entidade.view.ViewArquivoPendente;
+import br.com.ieptbto.cra.entidade.*;
+import br.com.ieptbto.cra.entidade.view.*;
 import br.com.ieptbto.cra.entidade.vo.InstituicaoVO;
 import br.com.ieptbto.cra.enumeration.CraServices;
 import br.com.ieptbto.cra.enumeration.TipoCampo51;
@@ -42,11 +15,24 @@ import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
-import br.com.ieptbto.cra.webservice.vo.RelatorioAutorizacaoPendenteVO;
-import br.com.ieptbto.cra.webservice.vo.RelatorioCancelamentoPendenteVO;
-import br.com.ieptbto.cra.webservice.vo.RelatorioDesistenciaPendenteVO;
-import br.com.ieptbto.cra.webservice.vo.RelatorioPendentesVO;
-import br.com.ieptbto.cra.webservice.vo.RelatorioRemessaPendenteVO;
+import br.com.ieptbto.cra.webservice.vo.*;
+import org.joda.time.LocalDateTime;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Aráujo
@@ -88,7 +74,7 @@ public class CartorioService extends CraWebService {
 		RelatorioPendentesVO relatorioArquivosPendentes = new RelatorioPendentesVO();
 		
 		RelatorioRemessaPendenteVO remessas = new RelatorioRemessaPendenteVO();
-		remessas.setNomeArquivos(new ArrayList<String>());
+		remessas.setArquivoRemessaPendente(new ArrayList<ArquivoRemessaPendente>());
 		relatorioArquivosPendentes.setRemessas(remessas);
 		RelatorioDesistenciaPendenteVO desistencias = new RelatorioDesistenciaPendenteVO();
 		desistencias.setArquivos(new ArrayList<String>());
@@ -103,7 +89,12 @@ public class CartorioService extends CraWebService {
 		for (ViewArquivoPendente object : arquivosPendentes) {
 			if (RemessaPendente.class.isInstance(object)) {
 				RemessaPendente arquivo = RemessaPendente.class.cast(object);
-				remessas.getNomeArquivos().add(arquivo.getNomeArquivo_Arquivo());
+
+                ArquivoRemessaPendente remessaPendente = new ArquivoRemessaPendente();
+                remessaPendente.setNomeArquivo(arquivo.getNomeArquivo_Arquivo());
+                remessaPendente.setCodigoApresentante(arquivo.getCodigoCompensacao_Instituicao());
+                remessaPendente.setVersaoAtualizacao(arquivo.getVersao_Instituicao());
+                remessas.getArquivosRemessaPendente().add(remessaPendente);
 			} else if (DesistenciaPendente.class.isInstance(object)) {
 				DesistenciaPendente arquivo = DesistenciaPendente.class.cast(object);
 				desistencias.getArquivos().add(arquivo.getNomeArquivo_Arquivo());
