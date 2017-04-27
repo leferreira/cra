@@ -1,11 +1,11 @@
 package br.com.ieptbto.cra.webservice.dao;
 
+import org.springframework.stereotype.Repository;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.GET;
-
-import org.springframework.stereotype.Repository;
 
 /**
  * @author Thasso Araújo

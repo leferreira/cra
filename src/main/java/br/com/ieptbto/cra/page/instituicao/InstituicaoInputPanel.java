@@ -1,22 +1,5 @@
 package br.com.ieptbto.cra.page.instituicao;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.CompoundValidator;
-
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
@@ -26,6 +9,16 @@ import br.com.ieptbto.cra.enumeration.TipoCampo51;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.validador.EmailValidator;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.CompoundValidator;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class InstituicaoInputPanel extends Panel {
 

@@ -1,5 +1,9 @@
 package br.com.ieptbto.cra.page.tipoInstituicao;
 
+import br.com.ieptbto.cra.entidade.TipoInstituicao;
+import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -8,11 +12,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import br.com.ieptbto.cra.entidade.TipoInstituicao;
-import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
 
 /**
  * @author Thasso Araújo

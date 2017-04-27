@@ -1,9 +1,17 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-
+import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.MotivoSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.enumeration.TipoSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
+import br.com.ieptbto.cra.enumeration.regra.TipoOcorrencia;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.SolicitacaoDesistenciaCancelamentoMediator;
+import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -23,18 +31,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 import org.joda.time.LocalTime;
 
-import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.MotivoSolicitacaoDesistenciaCancelamento;
-import br.com.ieptbto.cra.enumeration.TipoSolicitacaoDesistenciaCancelamento;
-import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
-import br.com.ieptbto.cra.enumeration.regra.TipoOcorrencia;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.SolicitacaoDesistenciaCancelamentoMediator;
-import br.com.ieptbto.cra.mediator.TituloMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * @author Thasso Araújo

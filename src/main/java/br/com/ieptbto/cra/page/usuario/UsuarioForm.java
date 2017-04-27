@@ -1,12 +1,11 @@
 package br.com.ieptbto.cra.page.usuario;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class UsuarioForm extends BaseForm<Usuario> {
 

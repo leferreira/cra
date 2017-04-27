@@ -1,8 +1,11 @@
 package br.com.ieptbto.cra.page.administracao;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.AdministracaoMediator;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -12,12 +15,8 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.AdministracaoMediator;
-import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.util.DataUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

@@ -1,11 +1,10 @@
 package br.com.ieptbto.cra.page.base;
 
+import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 
 /**
  * @author Thasso Araújo

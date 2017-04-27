@@ -1,9 +1,11 @@
 package br.com.ieptbto.cra.page.relatorio;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import br.com.ieptbto.cra.beans.ArquivoBean;
+import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.enumeration.NivelDetalhamentoRelatorio;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
@@ -16,12 +18,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.beans.ArquivoBean;
-import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.enumeration.NivelDetalhamentoRelatorio;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
-import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RelatorioArquivosInputPanel extends Panel {
 

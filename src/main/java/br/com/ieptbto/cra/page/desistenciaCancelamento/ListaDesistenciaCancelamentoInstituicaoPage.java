@@ -1,8 +1,15 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento;
 
-import java.io.File;
-import java.util.List;
-
+import br.com.ieptbto.cra.beans.ArquivoBean;
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -20,16 +27,8 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.beans.ArquivoBean;
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.ArquivoMediator;
-import br.com.ieptbto.cra.mediator.DownloadMediator;
-import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
+import java.io.File;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

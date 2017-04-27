@@ -17,10 +17,9 @@
  */
 package br.com.ieptbto.cra.app;
 
-import org.apache.wicket.Component;
-
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
+import org.apache.wicket.Component;
 
 public interface IWebApplication {
 	/**

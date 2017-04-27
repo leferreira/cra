@@ -1,10 +1,9 @@
 package br.com.ieptbto.cra.hibernate;
 
-import org.apache.wicket.protocol.http.WebSession;
-import org.hibernate.envers.RevisionListener;
-
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.security.UserSession;
+import org.apache.wicket.protocol.http.WebSession;
+import org.hibernate.envers.RevisionListener;
 
 /**
  * 

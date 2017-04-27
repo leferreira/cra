@@ -1,8 +1,17 @@
 package br.com.ieptbto.cra.page.titulo.historico;
 
-import java.io.File;
-import java.math.BigDecimal;
-
+import br.com.ieptbto.cra.component.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Anexo;
+import br.com.ieptbto.cra.entidade.Municipio;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
+import br.com.ieptbto.cra.enumeration.regra.TipoOcorrencia;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.MunicipioMediator;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -16,18 +25,8 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.component.LabelValorMonetario;
-import br.com.ieptbto.cra.entidade.Anexo;
-import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
-import br.com.ieptbto.cra.enumeration.regra.TipoOcorrencia;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.MunicipioMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.mediator.TituloMediator;
-import br.com.ieptbto.cra.util.DataUtil;
+import java.io.File;
+import java.math.BigDecimal;
 
 /**
  * @author Thasso Araújo

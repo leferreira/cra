@@ -1,13 +1,5 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.CraAcao;
@@ -21,6 +13,13 @@ import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
 import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
 import br.com.ieptbto.cra.webservice.vo.ErroVO;
 import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo
@@ -218,7 +217,7 @@ public abstract class CraWebService {
 	}
 
 	private CodigoErro getCodigoErroEmProcessamentoSerpro(String nomeArquivo) {
-		TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.getTipoArquivoFebraban(nomeArquivo);
+		TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.get(nomeArquivo);
 
 		CodigoErro codigoErro = null;
 		if (TipoArquivoFebraban.CONFIRMACAO.equals(tipoArquivo)) {
@@ -232,7 +231,7 @@ public abstract class CraWebService {
 	}
 
 	private CodigoErro getCodigoErroEmProcessamentoCra(String nomeArquivo) {
-		TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.getTipoArquivoFebraban(nomeArquivo);
+		TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.get(nomeArquivo);
 
 		CodigoErro codigoErro = null;
 		if (TipoArquivoFebraban.CONFIRMACAO.equals(tipoArquivo)) {
@@ -246,7 +245,7 @@ public abstract class CraWebService {
 	}
 
 	private CodigoErro getCodigoErroNomeInvalidoSerpro(String nomeArquivo) {
-		TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.getTipoArquivoFebraban(nomeArquivo);
+		TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.get(nomeArquivo);
 
 		CodigoErro codigoErro = null;
 		if (TipoArquivoFebraban.REMESSA.equals(tipoArquivo) || TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO.equals(tipoArquivo)

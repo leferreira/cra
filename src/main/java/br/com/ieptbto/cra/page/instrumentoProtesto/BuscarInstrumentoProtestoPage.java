@@ -1,20 +1,5 @@
 package br.com.ieptbto.cra.page.instrumentoProtesto;
 
-import org.apache.log4j.Logger;
-import org.apache.wicket.authorization.Action;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
-
 import br.com.ieptbto.cra.component.DateTextField;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.Municipio;
@@ -23,6 +8,16 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
+import org.apache.log4j.Logger;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 /**
  * @author Thasso Araújo

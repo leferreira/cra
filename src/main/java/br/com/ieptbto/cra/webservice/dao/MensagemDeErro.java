@@ -1,21 +1,15 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.error.CodigoErro;
+import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.webservice.vo.*;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.error.CodigoErro;
-import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.webservice.vo.ComarcaDetalhamentoSerproVO;
-import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
-import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
-import br.com.ieptbto.cra.webservice.vo.MensagemVO;
-import br.com.ieptbto.cra.webservice.vo.MensagemXmlSerproVO;
-import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 

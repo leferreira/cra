@@ -1,18 +1,5 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.RemessaVO;
@@ -27,6 +14,17 @@ import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
 import br.com.ieptbto.cra.webservice.receiver.ConfirmacaoReceiver;
 import br.com.ieptbto.cra.webservice.vo.AbstractMensagemVO;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.List;
 
 /**
  * 

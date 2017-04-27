@@ -1,8 +1,17 @@
 package br.com.ieptbto.cra.page.titulo;
 
-import java.math.BigDecimal;
-import java.util.List;
-
+import br.com.ieptbto.cra.beans.TituloBean;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Retorno;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
+import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -16,18 +25,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.beans.TituloBean;
-import br.com.ieptbto.cra.component.LabelValorMonetario;
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Retorno;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.mediator.TituloMediator;
-import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
-import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Thasso Araújo
@@ -37,7 +36,6 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
@@ -49,7 +47,6 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 	public ListaTitulosPage(TituloBean tituloBean) {
 		this.tituloBean = tituloBean;
 		this.usuario = getUser();
-
 		adicionarComponentes();
 	}
 
@@ -61,13 +58,11 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 	private ListView<TituloRemessa> listaTitulos() {
 		return new ListView<TituloRemessa>("listViewTitulos", buscarTitulos()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
 				final TituloRemessa tituloRemessa = item.getModelObject();
-
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloRemessa.getSaldoTitulo()));
 				item.add(new Label("nossoNumero", tituloRemessa.getNossoNumero()));
 
@@ -76,7 +71,6 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 					municipio = municipio.substring(0, 19);
 				}
 				item.add(new Label("pracaProtesto", municipio.toUpperCase()));
-
 				item.add(new Label("numeroControleDevedor", tituloRemessa.getNumeroControleDevedor()));
 				if (tituloRemessa.isDevedorPrincipal()) {
 					if (tituloRemessa.getConfirmacao() == null) {
@@ -93,7 +87,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 						item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia())));
 
 					} else if (tituloRemessa.getRetorno() != null) {
-						item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
+					    item.add(new Label("numeroTitulo", tituloRemessa.getNumeroTitulo()));
 						item.add(new Label("dataConfirmacao",
 								DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));

@@ -1,8 +1,5 @@
 package br.com.ieptbto.cra.page.cartorio;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
@@ -11,6 +8,8 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.TipoInstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * @author Thasso Araújo

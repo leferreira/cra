@@ -1,7 +1,13 @@
 package br.com.ieptbto.cra.page.cra;
 
-import java.util.List;
-
+import br.com.ieptbto.cra.entidade.Confirmacao;
+import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -16,14 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.Confirmacao;
-import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.ConfirmacaoMediator;
-import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

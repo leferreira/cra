@@ -1,16 +1,5 @@
 package br.com.ieptbto.cra.report;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.HashMap;
-
-import javax.imageio.ImageIO;
-
-import org.apache.log4j.Logger;
-import org.joda.time.LocalDate;
-
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Remessa;
@@ -21,11 +10,16 @@ import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
 import br.com.ieptbto.cra.page.base.BasePage;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.*;
+import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
+
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.HashMap;
 
 /**
  * @author Thasso Aráujo

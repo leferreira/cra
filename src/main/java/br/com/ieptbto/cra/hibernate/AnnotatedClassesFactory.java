@@ -10,66 +10,11 @@
 
 package br.com.ieptbto.cra.hibernate;
 
+import br.com.ieptbto.cra.entidade.*;
+import br.com.ieptbto.cra.entidade.view.*;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import br.com.ieptbto.cra.entidade.AgenciaBancoDoBrasil;
-import br.com.ieptbto.cra.entidade.AgenciaBradesco;
-import br.com.ieptbto.cra.entidade.AgenciaCAF;
-import br.com.ieptbto.cra.entidade.Anexo;
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
-import br.com.ieptbto.cra.entidade.Avalista;
-import br.com.ieptbto.cra.entidade.Batimento;
-import br.com.ieptbto.cra.entidade.BatimentoDeposito;
-import br.com.ieptbto.cra.entidade.CabecalhoArquivo;
-import br.com.ieptbto.cra.entidade.CabecalhoCartorio;
-import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
-import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
-import br.com.ieptbto.cra.entidade.Confirmacao;
-import br.com.ieptbto.cra.entidade.CraServiceConfig;
-import br.com.ieptbto.cra.entidade.Deposito;
-import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
-import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
-import br.com.ieptbto.cra.entidade.EtiquetaSLIP;
-import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.GrupoUsuario;
-import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
-import br.com.ieptbto.cra.entidade.LayoutFiliado;
-import br.com.ieptbto.cra.entidade.LogCra;
-import br.com.ieptbto.cra.entidade.LoteCnp;
-import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
-import br.com.ieptbto.cra.entidade.PedidoCancelamento;
-import br.com.ieptbto.cra.entidade.PedidoDesistencia;
-import br.com.ieptbto.cra.entidade.RegistroCnp;
-import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.RemessaAutorizacaoCancelamento;
-import br.com.ieptbto.cra.entidade.RemessaCancelamentoProtesto;
-import br.com.ieptbto.cra.entidade.RemessaDesistenciaProtesto;
-import br.com.ieptbto.cra.entidade.Retorno;
-import br.com.ieptbto.cra.entidade.Rodape;
-import br.com.ieptbto.cra.entidade.RodapeArquivo;
-import br.com.ieptbto.cra.entidade.RodapeCartorio;
-import br.com.ieptbto.cra.entidade.SetorFiliado;
-import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
-import br.com.ieptbto.cra.entidade.StatusArquivo;
-import br.com.ieptbto.cra.entidade.TaxaCra;
-import br.com.ieptbto.cra.entidade.TipoArquivo;
-import br.com.ieptbto.cra.entidade.TipoInstituicao;
-import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.entidade.TituloRetornoCancelamento;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
-import br.com.ieptbto.cra.entidade.UsuarioFiliado;
-import br.com.ieptbto.cra.entidade.view.AutorizacaoPendente;
-import br.com.ieptbto.cra.entidade.view.CancelamentoPendente;
-import br.com.ieptbto.cra.entidade.view.DesistenciaPendente;
-import br.com.ieptbto.cra.entidade.view.RemessaPendente;
-import br.com.ieptbto.cra.entidade.view.ViewBatimentoRetorno;
-import br.com.ieptbto.cra.entidade.view.ViewTitulo;
 
 /**
  * 
@@ -150,7 +95,7 @@ public class AnnotatedClassesFactory {
         classesHibernate.add(DesistenciaPendente.class);
         classesHibernate.add(CancelamentoPendente.class);
         classesHibernate.add(AutorizacaoPendente.class);
-        classesHibernate.add(TituloRetornoCancelamento.class);
+        classesHibernate.add(RetornoCancelamento.class);
     }
 
     /**

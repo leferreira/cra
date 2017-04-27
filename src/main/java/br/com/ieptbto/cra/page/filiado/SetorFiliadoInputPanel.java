@@ -1,7 +1,8 @@
 package br.com.ieptbto.cra.page.filiado;
 
-import java.util.List;
-
+import br.com.ieptbto.cra.entidade.Filiado;
+import br.com.ieptbto.cra.entidade.SetorFiliado;
+import br.com.ieptbto.cra.exception.InfraException;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -10,9 +11,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.SetorFiliado;
-import br.com.ieptbto.cra.exception.InfraException;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

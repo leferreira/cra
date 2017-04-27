@@ -1,9 +1,8 @@
 package br.com.ieptbto.cra.page.home;
 
-import org.apache.wicket.markup.html.panel.Panel;
-
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import org.apache.wicket.markup.html.panel.Panel;
 
 public class InformacoesCraPanel extends Panel {
 

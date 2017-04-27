@@ -1,15 +1,5 @@
 package br.com.ieptbto.cra.page.titulo.historico;
 
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import br.com.ieptbto.cra.beans.TituloOcorrenciaBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
@@ -20,6 +10,15 @@ import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancela
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
 import br.com.ieptbto.cra.util.DataUtil;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * @author Thasso Araújo

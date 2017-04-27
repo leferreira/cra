@@ -1,8 +1,11 @@
 package br.com.ieptbto.cra.page.filiado;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.ieptbto.cra.entidade.Filiado;
+import br.com.ieptbto.cra.entidade.SetorFiliado;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.FiliadoMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -15,12 +18,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.SetorFiliado;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.FiliadoMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

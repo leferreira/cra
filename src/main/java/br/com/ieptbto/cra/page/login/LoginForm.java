@@ -1,13 +1,12 @@
 package br.com.ieptbto.cra.page.login;
 
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
 import br.com.ieptbto.cra.page.home.HomePage;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 @SuppressWarnings("serial")
 public class LoginForm extends BaseForm<Usuario> {

@@ -1,10 +1,21 @@
 package br.com.ieptbto.cra.page.home;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Date;
-import java.util.List;
-
+import br.com.ieptbto.cra.entidade.*;
+import br.com.ieptbto.cra.entidade.view.*;
+import br.com.ieptbto.cra.enumeration.StatusDownload;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.*;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
+import br.com.ieptbto.cra.report.RelatorioUtil;
+import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.util.PeriodoDataUtil;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -18,35 +29,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
-import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
-import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
-import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.entidade.view.AutorizacaoPendente;
-import br.com.ieptbto.cra.entidade.view.CancelamentoPendente;
-import br.com.ieptbto.cra.entidade.view.DesistenciaPendente;
-import br.com.ieptbto.cra.entidade.view.RemessaPendente;
-import br.com.ieptbto.cra.entidade.view.ViewArquivoPendente;
-import br.com.ieptbto.cra.enumeration.StatusDownload;
-import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
-import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
-import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
-import br.com.ieptbto.cra.mediator.DownloadMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
-import br.com.ieptbto.cra.report.RelatorioUtil;
-import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.util.PeriodoDataUtil;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

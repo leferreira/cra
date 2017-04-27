@@ -1,10 +1,9 @@
 package br.com.ieptbto.cra.page.centralDeAcoes;
 
+import br.com.ieptbto.cra.entidade.LogCra;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-
-import br.com.ieptbto.cra.entidade.LogCra;
 
 /**
  * @author Thasso Araújo

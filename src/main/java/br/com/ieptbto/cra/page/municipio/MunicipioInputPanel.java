@@ -1,13 +1,12 @@
 package br.com.ieptbto.cra.page.municipio;
 
+import br.com.ieptbto.cra.entidade.Municipio;
+import br.com.ieptbto.cra.util.EstadoUtils;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
-import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.util.EstadoUtils;
 
 /**
  * @author Thasso Araújo

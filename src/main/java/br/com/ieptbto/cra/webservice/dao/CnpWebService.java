@@ -1,21 +1,5 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-
-import org.apache.log4j.Logger;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import br.com.ieptbto.cra.entidade.LoteCnp;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.error.CodigoErro;
@@ -27,6 +11,20 @@ import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
 import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
 import br.com.ieptbto.cra.webservice.vo.MensagemVO;
 import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
+import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
 
 /**
  * @author Thasso Araújo

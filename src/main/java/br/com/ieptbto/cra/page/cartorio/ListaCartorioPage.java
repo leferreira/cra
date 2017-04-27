@@ -1,7 +1,9 @@
 package br.com.ieptbto.cra.page.cartorio;
 
-import java.util.List;
-
+import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -14,10 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

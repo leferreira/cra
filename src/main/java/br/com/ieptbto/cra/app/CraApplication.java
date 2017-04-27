@@ -1,20 +1,5 @@
 package br.com.ieptbto.cra.app;
 
-import java.util.Locale;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.Component;
-import org.apache.wicket.Page;
-import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.Session;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
-import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
-import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.util.time.Duration;
-import org.joda.time.DateTimeZone;
-
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
@@ -22,22 +7,10 @@ import br.com.ieptbto.cra.page.administracao.IncluirTaxaCraPage;
 import br.com.ieptbto.cra.page.administracao.ListaRemoverArquivoPage;
 import br.com.ieptbto.cra.page.administracao.RemoverArquivoPage;
 import br.com.ieptbto.cra.page.administracao.WebServiceConfiguracaoPage;
-import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
-import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
-import br.com.ieptbto.cra.page.arquivo.ListaArquivoCartorioPage;
-import br.com.ieptbto.cra.page.arquivo.ListaArquivoInstituicaoPage;
-import br.com.ieptbto.cra.page.arquivo.TitulosArquivoInstituicaoPage;
-import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
+import br.com.ieptbto.cra.page.arquivo.*;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.base.SobreCraPage;
-import br.com.ieptbto.cra.page.batimento.BatimentoPage;
-import br.com.ieptbto.cra.page.batimento.BuscarDepositoPage;
-import br.com.ieptbto.cra.page.batimento.ConflitoDepositosArquivoRetornoPage;
-import br.com.ieptbto.cra.page.batimento.ImportarExtratoPage;
-import br.com.ieptbto.cra.page.batimento.IncluirDepositoPage;
-import br.com.ieptbto.cra.page.batimento.LiberarRetornoPage;
-import br.com.ieptbto.cra.page.batimento.ListaDepositoPage;
-import br.com.ieptbto.cra.page.batimento.RetornosLiberadosPage;
+import br.com.ieptbto.cra.page.batimento.*;
 import br.com.ieptbto.cra.page.cartorio.IncluirCartorioPage;
 import br.com.ieptbto.cra.page.cartorio.ListaCartorioPage;
 import br.com.ieptbto.cra.page.centralDeAcoes.CentralDeAcoesPage;
@@ -48,11 +21,7 @@ import br.com.ieptbto.cra.page.cra.GerarConfirmacaoPage;
 import br.com.ieptbto.cra.page.cra.GerarDesistenciasCancelamentosPage;
 import br.com.ieptbto.cra.page.cra.GerarRetornoPage;
 import br.com.ieptbto.cra.page.cra.RelatorioRetornoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.BuscarDesistenciaCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.ListaDesistenciaCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosAutorizacaoCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.TitulosDesistenciaPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.*;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.DownloadOficioIrregularidadePage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.EnviarSolicitacaoDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.SolicitarDesistenciaCancelamentoPage;
@@ -90,6 +59,16 @@ import br.com.ieptbto.cra.security.UserSession;
 import br.com.ieptbto.cra.util.CargaInicialPage;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.webpage.AbstractWebPage;
+import org.apache.wicket.*;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.time.Duration;
+import org.joda.time.DateTimeZone;
+
+import java.util.Locale;
 
 /**
  * @author Lefer

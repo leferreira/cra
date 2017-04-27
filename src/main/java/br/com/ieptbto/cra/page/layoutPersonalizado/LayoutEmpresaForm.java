@@ -1,9 +1,8 @@
 package br.com.ieptbto.cra.page.layoutPersonalizado;
 
+import br.com.ieptbto.cra.entidade.LayoutFiliado;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
-
-import br.com.ieptbto.cra.entidade.LayoutFiliado;
 
 @SuppressWarnings("serial")
 public class LayoutEmpresaForm extends Form<LayoutFiliado> {

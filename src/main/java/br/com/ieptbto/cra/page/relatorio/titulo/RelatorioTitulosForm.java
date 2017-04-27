@@ -1,15 +1,5 @@
 package br.com.ieptbto.cra.page.relatorio.titulo;
 
-import java.io.File;
-import java.io.FileOutputStream;
-
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
-import org.joda.time.LocalDate;
-
 import br.com.ieptbto.cra.beans.RelatorioBean;
 import br.com.ieptbto.cra.enumeration.TipoExportacaoRelatorio;
 import br.com.ieptbto.cra.exception.InfraException;
@@ -18,6 +8,15 @@ import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.joda.time.LocalDate;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class RelatorioTitulosForm extends BaseForm<RelatorioBean> {
 

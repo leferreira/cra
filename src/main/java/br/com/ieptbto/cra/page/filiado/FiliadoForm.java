@@ -1,15 +1,14 @@
 package br.com.ieptbto.cra.page.filiado;
 
-import java.util.List;
-
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.List;
 
 public class FiliadoForm extends BaseForm<Filiado> {
 

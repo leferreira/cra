@@ -1,5 +1,13 @@
 package br.com.ieptbto.cra.webservice.dao;
 
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.mediator.UsuarioMediator;
+import br.com.ieptbto.cra.util.DataUtil;
+import org.apache.log4j.Logger;
+import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -7,15 +15,6 @@ import javax.jws.WebService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.xml.ws.WebServiceContext;
-
-import org.apache.log4j.Logger;
-import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.mediator.UsuarioMediator;
-import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * 

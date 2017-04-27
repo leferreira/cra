@@ -1,8 +1,15 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao;
 
-import java.math.BigDecimal;
-import java.util.List;
-
+import br.com.ieptbto.cra.beans.TituloBean;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
+import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -16,16 +23,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.beans.TituloBean;
-import br.com.ieptbto.cra.component.LabelValorMonetario;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
-import br.com.ieptbto.cra.mediator.TituloMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
-import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

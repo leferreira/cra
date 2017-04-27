@@ -1,14 +1,5 @@
 package br.com.ieptbto.cra.page.relatorio;
 
-import java.io.File;
-import java.io.FileOutputStream;
-
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
-import org.joda.time.LocalDate;
-
 import br.com.ieptbto.cra.beans.ArquivoBean;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.enumeration.NivelDetalhamentoRelatorio;
@@ -19,6 +10,14 @@ import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.joda.time.LocalDate;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * @author Thasso Araújo

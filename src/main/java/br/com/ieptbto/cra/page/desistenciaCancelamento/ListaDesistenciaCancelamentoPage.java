@@ -1,9 +1,13 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.ieptbto.cra.beans.DesistenciaCancelamentoBean;
+import br.com.ieptbto.cra.entidade.*;
+import br.com.ieptbto.cra.enumeration.StatusDownload;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
+import br.com.ieptbto.cra.mediator.*;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -18,24 +22,9 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.beans.DesistenciaCancelamentoBean;
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.AutorizacaoCancelamento;
-import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
-import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
-import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.StatusDownload;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
-import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
-import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
-import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
-import br.com.ieptbto.cra.mediator.DownloadMediator;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

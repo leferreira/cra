@@ -1,8 +1,18 @@
 package br.com.ieptbto.cra.page.arquivo;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
+import br.com.ieptbto.cra.error.CodigoErro;
+import br.com.ieptbto.cra.exception.*;
+import br.com.ieptbto.cra.mediator.ArquivoMediator;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.cra.RelatorioRetornoPage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.Action;
@@ -19,23 +29,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
-import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.error.CodigoErro;
-import br.com.ieptbto.cra.exception.ArquivoException;
-import br.com.ieptbto.cra.exception.CabecalhoRodapeException;
-import br.com.ieptbto.cra.exception.DesistenciaCancelamentoException;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.exception.TituloException;
-import br.com.ieptbto.cra.mediator.ArquivoMediator;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.cra.RelatorioRetornoPage;
-import br.com.ieptbto.cra.security.CraRoles;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo
@@ -122,7 +117,7 @@ public class EnviarArquivoPage extends BasePage<Arquivo> {
 			}
 
 			private void gerarMensagemErros(Arquivo arquivo, List<Exception> erros) {
-				TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.getTipoArquivoFebraban(arquivo);
+				TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.get(arquivo);
 				String mensagemErro = null;
 				mensagemErro =
 						"<span class=\"alert-link\">Por favor, corrija a(s) ocorrência(s) e(ou) erros encontrado(s) no arquivo e o envie novamente:</span>";

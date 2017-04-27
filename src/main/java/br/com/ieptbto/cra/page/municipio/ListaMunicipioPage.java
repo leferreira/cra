@@ -1,8 +1,11 @@
 package br.com.ieptbto.cra.page.municipio;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.ieptbto.cra.component.dataTable.CraDataTable;
+import br.com.ieptbto.cra.dataProvider.MunicipioProvider;
+import br.com.ieptbto.cra.entidade.Municipio;
+import br.com.ieptbto.cra.mediator.MunicipioMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -17,12 +20,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.component.dataTable.CraDataTable;
-import br.com.ieptbto.cra.dataProvider.MunicipioProvider;
-import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.mediator.MunicipioMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

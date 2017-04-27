@@ -1,12 +1,11 @@
 package br.com.ieptbto.cra.menu;
 
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.PermissaoUsuario;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.security.CraRoles;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * 

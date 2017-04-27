@@ -1,13 +1,12 @@
 package br.com.ieptbto.cra.component.dataTable;
 
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
-
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoPage;
 import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
 
 /**
  * @author Thasso Araújo

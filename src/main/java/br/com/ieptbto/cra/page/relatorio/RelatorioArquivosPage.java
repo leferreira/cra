@@ -1,15 +1,14 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import br.com.ieptbto.cra.beans.ArquivoBean;
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-
-import br.com.ieptbto.cra.beans.ArquivoBean;
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
 
 /**
  * @author Thasso Araújo

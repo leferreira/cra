@@ -1,12 +1,11 @@
 package br.com.ieptbto.cra.page.instituicao;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class InstituicaoForm extends BaseForm<Instituicao> {
 

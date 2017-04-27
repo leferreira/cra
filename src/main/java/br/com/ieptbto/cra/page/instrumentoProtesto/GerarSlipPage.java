@@ -1,18 +1,17 @@
 package br.com.ieptbto.cra.page.instrumentoProtesto;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.imageio.ImageIO;
-
+import br.com.ieptbto.cra.component.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.*;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
+import br.com.ieptbto.cra.security.CraRoles;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -26,26 +25,17 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
-import br.com.ieptbto.cra.component.LabelValorMonetario;
-import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
-import br.com.ieptbto.cra.entidade.EtiquetaSLIP;
-import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
-import br.com.ieptbto.cra.entidade.Retorno;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.InstrumentoProtestoMediator;
-import br.com.ieptbto.cra.mediator.TituloMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
-import br.com.ieptbto.cra.security.CraRoles;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

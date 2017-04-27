@@ -1,10 +1,8 @@
 package br.com.ieptbto.cra.component.dataTable;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import br.com.ieptbto.cra.component.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.view.ViewTitulo;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -15,10 +13,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.component.LabelValorMonetario;
-import br.com.ieptbto.cra.component.dataTable.CraLinksPanel;
-import br.com.ieptbto.cra.entidade.view.ViewTitulo;
-import br.com.ieptbto.cra.util.DataUtil;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class TituloViewColumns {
 

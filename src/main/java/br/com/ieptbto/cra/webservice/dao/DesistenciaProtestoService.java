@@ -1,27 +1,6 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-
-import org.apache.commons.lang.StringUtils;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
-import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.PedidoDesistencia;
-import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.entidade.*;
 import br.com.ieptbto.cra.entidade.vo.RemessaDesistenciaProtestoVO;
 import br.com.ieptbto.cra.enumeration.CraAcao;
 import br.com.ieptbto.cra.enumeration.CraServices;
@@ -35,13 +14,22 @@ import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.XmlFormatterUtil;
-import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
-import br.com.ieptbto.cra.webservice.vo.DetalhamentoVO;
-import br.com.ieptbto.cra.webservice.vo.ErroVO;
-import br.com.ieptbto.cra.webservice.vo.MensagemVO;
-import br.com.ieptbto.cra.webservice.vo.MensagemXmlDesistenciaCancelamentoSerproVO;
-import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
-import br.com.ieptbto.cra.webservice.vo.TituloDetalhamentoSerproVO;
+import br.com.ieptbto.cra.webservice.vo.*;
+import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

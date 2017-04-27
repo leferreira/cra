@@ -1,9 +1,10 @@
 package br.com.ieptbto.cra.page.layoutPersonalizado;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.LayoutFiliado;
+import br.com.ieptbto.cra.enumeration.CampoLayoutPersonalizado;
+import br.com.ieptbto.cra.enumeration.LayoutArquivo;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -21,11 +22,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.LayoutFiliado;
-import br.com.ieptbto.cra.enumeration.CampoLayoutPersonalizado;
-import br.com.ieptbto.cra.enumeration.LayoutArquivo;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 

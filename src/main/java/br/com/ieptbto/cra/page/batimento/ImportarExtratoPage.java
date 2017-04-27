@@ -1,5 +1,11 @@
 package br.com.ieptbto.cra.page.batimento;
 
+import br.com.ieptbto.cra.entidade.Batimento;
+import br.com.ieptbto.cra.enumeration.LayoutArquivo;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.DepositoMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.Action;
@@ -14,13 +20,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
-
-import br.com.ieptbto.cra.entidade.Batimento;
-import br.com.ieptbto.cra.enumeration.LayoutArquivo;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.DepositoMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
 
 /**
  * @author Thasso Araújo

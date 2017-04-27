@@ -1,19 +1,5 @@
 package br.com.ieptbto.cra.page.relatorio.titulo;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
-
 import br.com.ieptbto.cra.beans.TituloCsvBean;
 import br.com.ieptbto.cra.component.dataTable.CustomCraDataTable;
 import br.com.ieptbto.cra.dataProvider.TituloCsvProvider;
@@ -25,6 +11,19 @@ import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

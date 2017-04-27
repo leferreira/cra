@@ -1,5 +1,9 @@
 package br.com.ieptbto.cra.page.tipoArquivo;
 
+import br.com.ieptbto.cra.entidade.TipoArquivo;
+import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -12,11 +16,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
-
-import br.com.ieptbto.cra.entidade.TipoArquivo;
-import br.com.ieptbto.cra.mediator.TipoArquivoMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
 
 /**
  * @author Thasso Araújo

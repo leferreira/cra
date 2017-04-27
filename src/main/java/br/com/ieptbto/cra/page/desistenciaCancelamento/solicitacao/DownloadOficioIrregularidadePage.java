@@ -1,7 +1,13 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao;
 
-import java.io.File;
-
+import br.com.ieptbto.cra.component.CustomFeedbackPanel;
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.TipoSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
+import br.com.ieptbto.cra.webpage.AbstractWebPage;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -14,14 +20,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
-import br.com.ieptbto.cra.component.CustomFeedbackPanel;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.TipoSolicitacaoDesistenciaCancelamento;
-import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
-import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.DownloadMediator;
-import br.com.ieptbto.cra.webpage.AbstractWebPage;
+import java.io.File;
 
 @SuppressWarnings("serial")
 public class DownloadOficioIrregularidadePage extends AbstractWebPage<Usuario> {
@@ -89,7 +88,7 @@ public class DownloadOficioIrregularidadePage extends AbstractWebPage<Usuario> {
 		
 		try {
 			if (StringUtils.isNotBlank(tipoSolicitacao)) {
-				TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.getTipoArquivoFebraban(tipoSolicitacao.toUpperCase().trim());
+				TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.get(tipoSolicitacao.toUpperCase().trim());
 				
 				if (tipoArquivo.equals(TipoArquivoFebraban.DEVOLUCAO_DE_PROTESTO)) {
 					if (getCodigoIrregularidade() == CodigoIrregularidade.IRREGULARIDADE_0) {

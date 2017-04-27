@@ -1,15 +1,14 @@
 package br.com.ieptbto.cra.page.base;
 
-import static br.com.ieptbto.cra.util.MessageUtils._;
-
+import br.com.ieptbto.cra.app.CraApplication;
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.security.UserSession;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
-import br.com.ieptbto.cra.app.CraApplication;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.security.UserSession;
+import static br.com.ieptbto.cra.util.MessageUtils._;
 
 public abstract class BaseForm<T> extends Form<T> {
 

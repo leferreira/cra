@@ -1,23 +1,5 @@
 package br.com.ieptbto.cra.page.arquivo;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.List;
-
-import org.apache.wicket.authorization.Action;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
-
 import br.com.ieptbto.cra.component.dataTable.CraDataTable;
 import br.com.ieptbto.cra.component.dataTable.TituloViewColumns;
 import br.com.ieptbto.cra.dataProvider.TituloProvider;
@@ -35,6 +17,23 @@ import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
 
 /**
  * @author Thasso Araújo
@@ -45,11 +44,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class TitulosArquivoPage extends BasePage<Remessa> {
 
 	@SpringBean
-	RemessaMediator remessaMediator;
+    private RemessaMediator remessaMediator;
 	@SpringBean
-	DownloadMediator downloadMediator;
+    private DownloadMediator downloadMediator;
 	@SpringBean
-	TituloMediator tituloMediator;
+    private TituloMediator tituloMediator;
 
 	private static final long serialVersionUID = 1L;
 	private Remessa remessa;
@@ -113,7 +112,6 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 
 		Link<Remessa> linkAnexos = new Link<Remessa>("downloadAnexos") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -143,7 +141,6 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	private Link<Remessa> botaoGerarRelatorio() {
 		return new Link<Remessa>("gerarRelatorio") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -160,7 +157,7 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 					error(ex.getMessage());
 				} catch (Exception e) {
 					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
-					e.printStackTrace();
+					logger.info(e.getMessage(), e);
 				}
 			}
 		};
@@ -169,7 +166,6 @@ public class TitulosArquivoPage extends BasePage<Remessa> {
 	private Link<Remessa> botaoDownloadArquivoTXT() {
 		return new Link<Remessa>("downloadArquivo") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

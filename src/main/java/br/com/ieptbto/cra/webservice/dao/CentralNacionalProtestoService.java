@@ -1,22 +1,5 @@
 package br.com.ieptbto.cra.webservice.dao;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-
-import org.apache.commons.lang.StringUtils;
-import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.vo.ArquivoCnpVO;
@@ -28,12 +11,22 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CentralNacionalProtestoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.util.DataUtil;
-import br.com.ieptbto.cra.webservice.vo.CnpCartorioVO;
-import br.com.ieptbto.cra.webservice.vo.CnpCartoriosConsultaXmlVO;
-import br.com.ieptbto.cra.webservice.vo.CnpCartoriosConteudoVO;
-import br.com.ieptbto.cra.webservice.vo.CnpMunicipioCartorioVO;
-import br.com.ieptbto.cra.webservice.vo.DescricaoVO;
-import br.com.ieptbto.cra.webservice.vo.MensagemXmlVO;
+import br.com.ieptbto.cra.webservice.vo.*;
+import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

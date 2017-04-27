@@ -1,9 +1,9 @@
 package br.com.ieptbto.cra.menu;
 
-import java.util.Set;
-
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+
+import java.util.Set;
 
 /**
  * 

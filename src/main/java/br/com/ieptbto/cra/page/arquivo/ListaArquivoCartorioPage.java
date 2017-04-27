@@ -1,9 +1,22 @@
 package br.com.ieptbto.cra.page.arquivo;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.List;
-
+import br.com.ieptbto.cra.beans.ArquivoBean;
+import br.com.ieptbto.cra.entidade.Anexo;
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.enumeration.TipoCampo51;
+import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
+import br.com.ieptbto.cra.mediator.InstituicaoMediator;
+import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.report.RelatorioUtil;
+import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -23,23 +36,9 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.beans.ArquivoBean;
-import br.com.ieptbto.cra.entidade.Anexo;
-import br.com.ieptbto.cra.entidade.Arquivo;
-import br.com.ieptbto.cra.entidade.Remessa;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.TipoCampo51;
-import br.com.ieptbto.cra.enumeration.regra.TipoArquivoFebraban;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.DownloadMediator;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.report.RelatorioUtil;
-import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

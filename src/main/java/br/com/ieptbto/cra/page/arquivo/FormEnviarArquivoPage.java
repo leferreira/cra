@@ -1,10 +1,9 @@
 package br.com.ieptbto.cra.page.arquivo;
 
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.model.IModel;
-
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.page.base.BaseForm;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.IModel;
 
 /**
  * 
