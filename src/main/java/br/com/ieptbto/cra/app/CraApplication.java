@@ -115,14 +115,13 @@ public class CraApplication extends WebApplication implements ISecureApplication
         getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
 
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
-
         getRequestCycleSettings().setTimeout(Duration.minutes(10));
 
         // don't throw exceptions for missing translations
         getResourceSettings().setThrowExceptionOnMissingResource(false);
         getApplicationSettings().setPageExpiredErrorPage(LoginPage.class);
         getApplicationSettings().setAccessDeniedPage(NotFoundPage.class);
-        getApplicationSettings().setInternalErrorPage(NotFoundPage.class);
+        getApplicationSettings().setInternalErrorPage(HomePage.class);
 
         // customized auth strategy
         getSecuritySettings().setAuthorizationStrategy(new UserRoleAuthorizationStrategy(new UserRolesAuthorizer()));
@@ -132,6 +131,7 @@ public class CraApplication extends WebApplication implements ISecureApplication
 
         if (isDevelopmentMode()) {
             // enable ajax debug etc.
+            mountPage("CargaInicial", CargaInicialPage.class);
             getDebugSettings().setDevelopmentUtilitiesEnabled(true);
             getDebugSettings().setAjaxDebugModeEnabled(true);
             System.out.println(RuntimeConfigurationType.DEVELOPMENT);
@@ -145,7 +145,6 @@ public class CraApplication extends WebApplication implements ISecureApplication
         mountPage("SobreCra", SobreCraPage.class);
         mountPage("CentralDeAcoes", CentralDeAcoesPage.class);
         mountPage("CentralNacionalProtesto", CentralNacionalProtestoPage.class);
-        mountPage("CargaInicial", CargaInicialPage.class);
         mountPage("RemoverArquivo", RemoverArquivoPage.class);
         mountPage("ListaArquivosRemover", ListaRemoverArquivoPage.class);
         mountPage("WebServiceConfiguracao", WebServiceConfiguracaoPage.class);
@@ -205,7 +204,6 @@ public class CraApplication extends WebApplication implements ISecureApplication
         mountPage("GerarSlip", GerarSlipPage.class);
         mountPage("BuscarInstrumentoProtesto", BuscarInstrumentoProtestoPage.class);
         mountPage("ImportarArquivoDePara", ImportarArquivoDeParaPage.class);
-
     }
 
     /**

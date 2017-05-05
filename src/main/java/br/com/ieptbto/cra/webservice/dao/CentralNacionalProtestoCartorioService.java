@@ -144,7 +144,7 @@ public class CentralNacionalProtestoCartorioService extends CnpWebService {
 	/**
 	 * Consultar Protesto WS
 	 * 
-	 * @param dados
+	 * @param documentoDevedor
 	 * @return
 	 */
 	public String consultarProtesto(String documentoDevedor) {
