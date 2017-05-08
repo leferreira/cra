@@ -22,8 +22,6 @@ public class RelatorioTitulosForm extends BaseForm<RelatorioBean> {
 
 	private static final long serialVersionUID = 1L;
 	private FileUploadField fileUploadField;
-	private LocalDate dataInicio;
-	private LocalDate dataFim;
 
 	public RelatorioTitulosForm(String id, IModel<RelatorioBean> model, FileUploadField fileUploadField) {
 		super(id, model);
@@ -35,22 +33,17 @@ public class RelatorioTitulosForm extends BaseForm<RelatorioBean> {
 		RelatorioBean bean = getModelObject();
 
 		try {
-			if (bean.getBancoConvenio() == null && bean.getCartorio() == null && fileUploadField.getFileUpload() == null && bean.getDataInicio() == null) {
-				throw new InfraException("Por favor, informe o Banco/Convênio, o Município ou anexe uma planilha de pendências !");
-			}
-			if (bean.getDataInicio() != null) {
-				if (bean.getDataFim() != null) {
-					dataInicio = new LocalDate(bean.getDataInicio());
-					dataFim = new LocalDate(bean.getDataFim());
-					if (!dataInicio.isBefore(dataFim))
-						if (!dataInicio.isEqual(dataFim))
-							throw new InfraException("A data de início deve ser antes da data fim.");
-				} else
-					throw new InfraException("As duas datas devem ser preenchidas.");
-			}
+            DataUtil.validarPeriodoDataInicialFinal(bean.getDataInicio(), bean.getDataFim());
+            if (bean.getBancoConvenio() == null && bean.getCartorio() == null && fileUploadField.getFileUpload() == null && bean.getDataInicio() == null) {
+                throw new InfraException("Por favor, informe o Banco/Convênio, o Município ou anexe uma planilha de pendências !");
+            }
 
 			if (bean.getTipoExportacao().equals(TipoExportacaoRelatorio.PDF.toString())) {
-				JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosPorSituacao(bean.getSituacaoTituloRelatorio(), bean.getBancoConvenio(), dataInicio, dataFim);
+				JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosPorSituacao(bean.getSituacaoTituloRelatorio(), bean.getBancoConvenio(),
+                        new LocalDate(bean.getDataInicio()), new LocalDate(bean.getDataFim()));
+				if (jasperPrint.getPages().isEmpty()) {
+				    throw new InfraException("O relatório não encontrou registros no período selecionado!");
+                }
 				File pdf = File.createTempFile("report", ".pdf");
 				JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 				IResourceStream resourceStream = new FileResourceStream(pdf);
@@ -65,7 +58,7 @@ public class RelatorioTitulosForm extends BaseForm<RelatorioBean> {
 					setResponsePage(new RelatorioTitulosCsvPage(fileUploadField.getFileUpload()));
 				} else {
 					setResponsePage(new RelatorioTitulosCsvPage(bean.getSituacaoTituloRelatorio(), bean.getTipoInstituicao(), bean.getBancoConvenio(),
-							bean.getCartorio(), dataInicio, dataFim));
+							bean.getCartorio(), new LocalDate(bean.getDataInicio()), new LocalDate(bean.getDataFim())));
 				}
 			}
 

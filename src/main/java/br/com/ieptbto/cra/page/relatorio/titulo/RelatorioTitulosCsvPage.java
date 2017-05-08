@@ -31,15 +31,14 @@ import java.util.List;
  */
 public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
-	RelatorioMediator relatorioMediator;
-	@SpringBean
-	TituloMediator tituloMediator;
+	private RelatorioMediator relatorioMediator;
+    @SpringBean
+    private TituloMediator tituloMediator;
 
-	private List<ViewTitulo> titulos;
-	private Boolean relatorioCraPendencias;
+    private static final long serialVersionUID = 1L;
+    private List<ViewTitulo> titulos;
+    private Boolean relatorioCraPendencias;
 
 	public RelatorioTitulosCsvPage(SituacaoTituloRelatorio situacaoTitulo, TipoInstituicaoCRA tipoInstituicao, Instituicao instituicao, 
 			Instituicao cartorio, LocalDate dataInicio, LocalDate dataFim) {
@@ -119,7 +118,7 @@ public class RelatorioTitulosCsvPage extends BasePage<TituloRemessa> {
 				return "text-center valor";
 			}
 		});
-		if (relatorioCraPendencias == false) {
+		if (!relatorioCraPendencias) {
 			columns.add(new PropertyColumn<TituloCsvBean, String>(new Model<String>("CONFIR."), "dataConfirmacao") {
 				
 				private static final long serialVersionUID = 1L;

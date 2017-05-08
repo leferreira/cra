@@ -168,6 +168,7 @@ public class GerarRetornoPage extends BasePage<Retorno> {
 		            		JasperPrint jasperPrint = new RelatorioUtil().relatorioArquivoCartorio(remessa);
 		            		File pdf = File.createTempFile("report", ".pdf");
 		            		JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+
 		            		IResourceStream resourceStream = new FileResourceStream(pdf);
 		            		getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
 		            				"CRA_RELATORIO_" + remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));

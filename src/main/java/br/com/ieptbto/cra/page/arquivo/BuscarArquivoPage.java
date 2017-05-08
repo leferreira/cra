@@ -7,6 +7,7 @@ import br.com.ieptbto.cra.enumeration.TipoVisualizacaoArquivos;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -46,34 +47,24 @@ public class BuscarArquivoPage extends BasePage<Arquivo> {
 
 			@Override
 			protected void onSubmit() {
-				ArquivoBean arquivoFormBean = getModelObject();
+				ArquivoBean arquivoBean = getModelObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 
 				try {
-					if (arquivoFormBean.getNomeArquivo() == null && arquivoFormBean.getDataInicio() == null) {
+					if (arquivoBean.getNomeArquivo() == null && arquivoBean.getDataInicio() == null) {
 						throw new InfraException("Por favor, informe o 'Nome do Arquivo' ou 'Período de datas' como parâmetro!");
-					} else if (arquivoFormBean.getNomeArquivo() != null) {
-						if (arquivoFormBean.getNomeArquivo().length() < 4) {
+					} else if (arquivoBean.getNomeArquivo() != null) {
+						if (arquivoBean.getNomeArquivo().length() < 4) {
 							throw new InfraException("Por favor, informe ao menos 4 caracteres!");
 						}
 					}
 
-					if (arquivoFormBean.getDataInicio() != null) {
-						if (arquivoFormBean.getDataFim() != null) {
-							dataInicio = new LocalDate(arquivoFormBean.getDataInicio());
-							dataFim = new LocalDate(arquivoFormBean.getDataFim());
-							if (!dataInicio.isBefore(dataFim))
-								if (!dataInicio.isEqual(dataFim))
-									throw new InfraException("A data de início deve ser antes da data fim.");
-						} else
-							throw new InfraException("As duas datas devem ser preenchidas.");
-					}
-
-					if (TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS.equals(arquivoFormBean.getTipoVisualizacaoArquivos())) {
-						setResponsePage(new ListaArquivoCartorioPage(arquivoFormBean, usuario));
-					} else if (TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS.equals(arquivoFormBean.getTipoVisualizacaoArquivos())) {
-						setResponsePage(new ListaArquivoInstituicaoPage(arquivoFormBean, usuario));
+                    DataUtil.validarPeriodoDataInicialFinal(arquivoBean.getDataInicio(), arquivoBean.getDataFim());
+					if (TipoVisualizacaoArquivos.ARQUIVOS_CARTORIOS.equals(arquivoBean.getTipoVisualizacaoArquivos())) {
+						setResponsePage(new ListaArquivoCartorioPage(arquivoBean, usuario));
+					} else if (TipoVisualizacaoArquivos.ARQUIVOS_BANCOS_CONVENIOS.equals(arquivoBean.getTipoVisualizacaoArquivos())) {
+						setResponsePage(new ListaArquivoInstituicaoPage(arquivoBean, usuario));
 					}
 				} catch (InfraException ex) {
 					error(ex.getMessage());

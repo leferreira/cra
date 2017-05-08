@@ -31,7 +31,6 @@ public interface IRemessaWS {
 	
 	/**
 	 * 
-	 * @param nomeArquivo
 	 * @param login
 	 * @param senha
 	 * @param dados
@@ -204,8 +203,7 @@ public interface IRemessaWS {
 	 * 
 	 * @param login
 	 * @param senha
-	 * @param codigo
-	 *            apresentante
+	 * @param codigoApresentante
 	 * @return
 	 */
 	@WebMethod(operationName = "comarcasHomologadas")

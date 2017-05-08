@@ -27,7 +27,9 @@ import java.util.HashMap;
  */
 public class RelatorioUtil implements Serializable {
 
+    private static final RelatorioPropertiesImpl loader = new RelatorioPropertiesImpl();
 	protected static final Logger logger = Logger.getLogger(BasePage.class);
+
 	private static final long serialVersionUID = 1L;
 	private HashMap<String, Object> params;
 	private Instituicao instituicao;
@@ -43,15 +45,20 @@ public class RelatorioUtil implements Serializable {
 		this.params.put("DATA_FIM", new java.sql.Date(getDataFim().toDate().getTime()));
 	}
 
-	public JasperPrint relatorioArquivoCartorio(Remessa remessa) throws JRException {
+    /**
+     * @param remessa
+     * @return
+     * @throws JRException
+     */
+    public JasperPrint relatorioArquivoCartorio(Remessa remessa) throws JRException {
 		this.params = new HashMap<String, Object>();
 		this.params.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
 		this.params.put("ID_REMESSA", Long.parseLong(Integer.toString(remessa.getId())));
 		this.params.put("INSTITUICAO_ENVIO", remessa.getInstituicaoOrigem().getNomeFantasia());
 		this.params.put("NOME_ARQUIVO", remessa.getArquivo().getNomeArquivo());
-		TipoArquivoFebraban tipoArquivo = remessa.getArquivo().getTipoArquivo().getTipoArquivo();
-		JasperReport jasperReport = null;
 
+		TipoArquivoFebraban tipoArquivo = TipoArquivoFebraban.get(remessa.getArquivo());
+		JasperReport jasperReport = null;
 		try {
 			this.params.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
 
@@ -66,11 +73,47 @@ public class RelatorioUtil implements Serializable {
 		return JasperFillManager.fillReport(jasperReport, params, getConnection());
 	}
 
-	public JasperPrint relatorioArquivoInstiuicao(Arquivo arquivo) {
+    /**
+     * Gera relatório de retorno exportado por data
+     *
+     * @param data
+     * @return
+     * @throws JRException
+     */
+    public JasperPrint relatorioRetornoLiberadoGeral(LocalDate data) throws JRException {
+        this.params = new HashMap<String, Object>();
+        this.params.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
+        this.params.put("DATA_GERACAO", data.toDate());
+
+        JasperReport jasperReport = null;
+        try {
+            this.params.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
+            jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioRetornoLiberado.jrxml"));
+
+        } catch (IOException | JRException e) {
+            throw new InfraException("Não foi possível localizar o arquivo passado como parâmetro!");
+        }
+        return JasperFillManager.fillReport(jasperReport, params, getConnection());
+    }
+
+    /**
+     * @param arquivo
+     * @return
+     */
+    public JasperPrint relatorioArquivoInstiuicao(Arquivo arquivo) {
 		return null;
 	}
 
-	public JasperPrint gerarRelatorioArquivos(TipoArquivoFebraban tipoArquivo, NivelDetalhamentoRelatorio tipoRelatorio, Instituicao instituicao, LocalDate dataInicio,
+    /**
+     * @param tipoArquivo
+     * @param tipoRelatorio
+     * @param instituicao
+     * @param dataInicio
+     * @param dataFim
+     * @return
+     * @throws JRException
+     */
+    public JasperPrint gerarRelatorioArquivos(TipoArquivoFebraban tipoArquivo, NivelDetalhamentoRelatorio tipoRelatorio, Instituicao instituicao, LocalDate dataInicio,
 			LocalDate dataFim) throws JRException {
 		this.instituicao = instituicao;
 		this.dataInicio = dataInicio;
@@ -92,7 +135,15 @@ public class RelatorioUtil implements Serializable {
 		return null;
 	}
 
-	public JasperPrint gerarRelatorioTitulosPorSituacao(SituacaoTituloRelatorio situacaoTitulosRelatorio, Instituicao instituicao,
+    /**
+     * @param situacaoTitulosRelatorio
+     * @param instituicao
+     * @param dataInicio
+     * @param dataFim
+     * @return
+     * @throws JRException
+     */
+    public JasperPrint gerarRelatorioTitulosPorSituacao(SituacaoTituloRelatorio situacaoTitulosRelatorio, Instituicao instituicao,
 			LocalDate dataInicio, LocalDate dataFim) throws JRException {
 		this.instituicao = instituicao;
 		this.dataInicio = dataInicio;
@@ -337,11 +388,8 @@ public class RelatorioUtil implements Serializable {
 
 	private Connection getConnection() {
 		try {
-			Class.forName("org.postgresql.Driver");
-			return DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
-			// return
-			// DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra",
-			// "postgres", "1234");
+			Class.forName(loader.getDriver());
+			return DriverManager.getConnection(loader.getHost(), loader.getUser(), loader.getPassword());
 		} catch (Exception e) {
 			throw new InfraException("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
 		}

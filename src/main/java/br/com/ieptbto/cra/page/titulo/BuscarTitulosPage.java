@@ -5,13 +5,13 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.joda.time.LocalDate;
 
 /**
  * @author Thasso Aráujo
@@ -23,13 +23,11 @@ public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-
 	private TituloRemessa titulo;
 	private Form<TituloBean> form;
 
 	public BuscarTitulosPage() {
 		this.titulo = new TituloRemessa();
-
 		adicionarComponentes();
 	}
 
@@ -50,19 +48,9 @@ public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 				TituloBean tituloFormBean = getModelObject();
 
 				try {
-					if (tituloFormBean.getDataInicio() != null) {
-						if (tituloFormBean.getDataFim() != null) {
-							LocalDate dataInicio = new LocalDate(tituloFormBean.getDataInicio());
-							LocalDate dataFim = new LocalDate(tituloFormBean.getDataFim());
-							if (!dataInicio.isBefore(dataFim))
-								if (!dataInicio.isEqual(dataFim))
-									throw new InfraException("A data de início deve ser antes da data fim.");
-						} else
-							throw new InfraException("As duas datas devem ser preenchidas.");
-					}
+                    DataUtil.validarPeriodoDataInicialFinal(tituloFormBean.getDataInicio(), tituloFormBean.getDataFim());
 					if (tituloFormBean.isTodosCamposEmBranco()) {
-						throw new InfraException(
-								"Por favor, preencha um ou mais campos para realizar a busca, ou informe o período com um Banco/Convênio ou Município!");
+						throw new InfraException("Por favor, preencha um ou mais campos para realizar a busca, ou informe o período com um Banco/Convênio ou Município!");
 					}
 
 					setResponsePage(new ListaTitulosPage(tituloFormBean));
